@@ -1,0 +1,10 @@
+RUN strict / base
+RUN strict / high_cost
+RUN strict / delayed
+RUN flat_inclusive_weekdays / base
+RUN flat_inclusive_weekdays / high_cost
+RUN flat_inclusive_weekdays / delayed
+RUN inclusive_irregular / base
+RUN inclusive_irregular / high_cost
+RUN inclusive_irregular / delayed
+{"complete": true, "failed_model_trials": 0, "model_trials": 72, "portfolios": 45, "reproducibility_sha256": "9d1dd43c124757fcc59ea5f26d7386e859d1c5d2a3501d73b5fe8464a4e8239c", "seconds": 30.319}
