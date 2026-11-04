@@ -1,0 +1,93 @@
+{
+  "phase": "B only",
+  "recorded_at_utc": "2026-11-04T08:07:35.481808+00:00",
+  "python": "3.12.14",
+  "dependency_policy": "Python standard library only; no installs or network in audit/test code",
+  "unit_tests": {
+    "command": "python -B -m unittest discover -s tests -v",
+    "tests_run": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true,
+    "log_file": "reports/unit-tests.log",
+    "log_sha256": "5d8d4b38446096bc48e7d59908d5bc99a8bd7ed2d59e039618a8b7da77a6f111"
+  },
+  "audit_commands": [
+    "python -B validate_data.py --input <LOCAL_CSV> --schema data_schema.json --manifest data_manifest.json --output reports/local-audit-run-1.json",
+    "python -B validate_data.py --input <LOCAL_CSV> --schema data_schema.json --manifest data_manifest.json --output reports/local-audit-run-2.json"
+  ],
+  "command_redaction": "Only absolute machine-specific input/runtime paths are replaced with placeholders; all flags and configuration files are exact. Both CLI runs returned exit 0.",
+  "audit_runs": [
+    {
+      "generated_at_utc": "2026-11-04T08:05:52.352086+00:00",
+      "duration_seconds": 0.234378,
+      "exit_code": 0,
+      "report_sha256": "8ba277098a2c8c9948a2b42334402537b1c4a140851ec29fa5e7d8b45c362054",
+      "reproducible_content_sha256": "8058a7263edd4e0975856960fefd546a6322ec729b4ec5d9133fbf4a945a5edf"
+    },
+    {
+      "generated_at_utc": "2026-11-04T08:06:00.713217+00:00",
+      "duration_seconds": 0.232983,
+      "exit_code": 0,
+      "report_sha256": "3e0ceca8d1fecfc57dae94b5a67189e606613f3f486de5e12ad3a30317ed2195",
+      "reproducible_content_sha256": "8058a7263edd4e0975856960fefd546a6322ec729b4ec5d9133fbf4a945a5edf"
+    }
+  ],
+  "reproducible_audit_content_matches": true,
+  "input_before_after": {
+    "name": "xauusd-m15-bid-2025-11-04-2026-11-03.csv",
+    "before": {
+      "sha256": "8a0ecb9bf47096541bd581b5c21c3cc355930f8a110cad21cc64f6235fe13cdd",
+      "bytes": 1461540
+    },
+    "after": {
+      "sha256": "8a0ecb9bf47096541bd581b5c21c3cc355930f8a110cad21cc64f6235fe13cdd",
+      "bytes": 1461540
+    },
+    "unchanged": true
+  },
+  "original_local_files_unchanged": {
+    "analyze.py": {
+      "sha256": "aafe7747392f45cfcd65cd4e67b0d17d1ee68030dc92237e11d2a939ddd1e135",
+      "matches_pre_stage_b": true,
+      "bytes": 2831
+    },
+    "run_windows.bat": {
+      "sha256": "00afa7bbd4b077fb4cfc2c62450e1d38331cbe9edd73d1ec6f63c162717b2a1c",
+      "matches_pre_stage_b": true,
+      "bytes": 401
+    },
+    "README_FA.txt": {
+      "sha256": "37e6ef929b26e9762ca19901449f224f14ea75d64a76dd2bc7097ba3bbf00631",
+      "matches_pre_stage_b": true,
+      "bytes": 972
+    },
+    "strategy_results.csv": {
+      "sha256": "cab63f089ca0fd53abe086731f770bc9fd159b8da8e9dff082f00ac15d05353c",
+      "matches_pre_stage_b": true,
+      "bytes": 2530
+    },
+    "original_zip": {
+      "sha256": "f1dda8a0bc16860b99d548e7dbf8a4f64317a802412db5799d71a1ee6ad9a392",
+      "matches_pre_stage_b": true,
+      "bytes": 2952
+    }
+  },
+  "code_and_config_sha256": {
+    "validate_data.py": "9c7b576676a137971894679c77127721352e46ccf64b22562bb7682dcb442163",
+    "data_schema.json": "c957cb2fafd988f5f950b5d4820ad3039eeb4c5506e6ca932492fbde60c20c4e",
+    "data_manifest.json": "d28e70494475553f75efdc7c68681e07414e4d85f86e086e724b97fa3f5f168c",
+    "tests/test_validate_data.py": "652e648d567b633ad0935a57a5f4eb6ea1ec7d7dbb2bb04efb34c436fb76d869",
+    "README_STAGE_B_FA.md": "da99b0f6b970c73be646e009d735459fb58c136c8c58faac8a71c99281fa75c0"
+  },
+  "financial_use_authorized": false,
+  "scope_preserved": {
+    "raw_csv_repaired": false,
+    "strategy_run": false,
+    "original_batch_run": false,
+    "broker_connected_by_audit": false,
+    "stage_a_snapshot_modified": false
+  },
+  "safety_test_method": "Synthetic temporary files; mocked change detection and exclusive-create race; real OS hardlink preservation and separate CLI process. No malicious changes to actual dataset."
+}

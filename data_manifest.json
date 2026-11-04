@@ -1,0 +1,60 @@
+{
+  "manifest_version": 1,
+  "dataset_id": "local-xauusd-m15-20251104-20261103-existing-exposed",
+  "expected_input": {
+    "bytes": 1461540,
+    "sha256": "8a0ecb9bf47096541bd581b5c21c3cc355930f8a110cad21cc64f6235fe13cdd"
+  },
+  "evidence": {
+    "source_provenance": {
+      "status": "UNVERIFIED",
+      "reason": "Batch names dukascopy-node, but download version, log and raw-source chain have not been recovered.",
+      "references": ["Issue 1: read-only Codex review; source_snapshot/run_windows.bat in PR 2"]
+    },
+    "bar_timing": {
+      "status": "UNVERIFIED",
+      "reason": "Unix-ms interpretation is explicit; source confirmation of bar-open versus bar-close labels is absent.",
+      "references": ["Issue 1: three timestamp examples; numerical interpretation is not source-clock proof"]
+    },
+    "timezone": {
+      "status": "UNVERIFIED",
+      "reason": "UTC conversion is an arithmetic interpretation, not independently certified feed timing.",
+      "references": []
+    },
+    "session_calendar": {
+      "status": "UNVERIFIED",
+      "reason": "No source-bound calendar or flat-bar generation policy is available; gaps and Sunday flats remain observations.",
+      "references": []
+    },
+    "price_side": {
+      "status": "UNVERIFIED",
+      "reason": "The filename says bid; no independent side-of-price or instrument/feed metadata has been recovered.",
+      "references": []
+    },
+    "data_license": {
+      "status": "UNVERIFIED",
+      "reason": "Applicable source license and permitted redistribution for this exact dataset have not been documented.",
+      "references": []
+    }
+  },
+  "source_claims": {
+    "instrument_claim": "XAUUSD",
+    "feed_claim": "Dukascopy via dukascopy-node (batch text only)",
+    "price_side_claim": "bid (filename only)",
+    "historical_download_version": null,
+    "historical_download_log": null,
+    "raw_source_sample_comparison": null
+  },
+  "calendar": {
+    "coverage_start_ms": null,
+    "coverage_end_ms": null,
+    "closed_intervals": [],
+    "synthetic": false
+  },
+  "review_notes": [
+    "Manifest was constructed from the existing local file; this is not a historical download receipt.",
+    "This dataset and the forty previous strategy results have already been exposed; it is not an untouched holdout.",
+    "Stage B never authorizes financial evaluation or trading, including when structure passes.",
+    "Raw CSV, ZIP and price values are not included in this repository."
+  ]
+}

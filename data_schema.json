@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "encoding": "utf-8",
+  "delimiter": ",",
+  "columns": ["timestamp", "open", "high", "low", "close"],
+  "timestamp": {
+    "unit": "ms",
+    "origin": "unix",
+    "interval_ms": 900000,
+    "minimum_ms": 1762214400000,
+    "maximum_ms_exclusive": 1793664000000
+  },
+  "price": {"require_positive": true, "require_finite": true},
+  "max_input_bytes": 16777216,
+  "max_examples_per_category": 12
+}
