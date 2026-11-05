@@ -37,3 +37,7 @@ test('reconnect never certifies guardian',()=>assert.equal(C.transition(C.initia
 test('approved thumbnail matches reference Git blob',()=>{const b=fs.readFileSync(path.join(__dirname,'../approved-logo-thumbnail.webp'));const h=require('crypto').createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');assert.equal(h,'49fa298d57f98168177c18c29f404b9a442d559c');assert.equal(b.toString('ascii',8,12),'WEBP');});
 test('runtime has no remote font or asset URL',()=>{for(const f of ['index.html','style.css','app.js','compare.html','compare.css'])assert.doesNotMatch(fs.readFileSync(path.join(__dirname,'..',f),'utf8'),/https?:\/\//);});
 test('gesture threshold and diagonal boundary',()=>{assert.equal(C.swipe(59,0),null);assert.equal(C.swipe(60,0),'swipeRight');assert.equal(C.swipe(-60,0),'swipeLeft');assert.equal(C.swipe(90,60),null);});
+
+test('both client contracts expose all eight page capabilities equally',()=>{assert.deepEqual(C.parity.windows.capabilities,C.pages);assert.deepEqual(C.parity.android.capabilities,C.pages);});
+test('neither client contract requires the other personal device',()=>{assert.equal(C.parity.windows.requiresOtherPersonalDevice,false);assert.equal(C.parity.android.requiresOtherPersonalDevice,false);});
+test('contract does not claim operational parity or deployed hosting',()=>{assert.equal(C.parity.operationalEquivalenceVerified,false);assert.equal(C.parity.managedEngine,'CANDIDATE_NOT_DEPLOYED');});

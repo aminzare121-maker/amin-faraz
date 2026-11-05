@@ -48,6 +48,7 @@ const Cabin = (() => {
    seen.set(id,result);journal.push({id,...result});return result;
   }};
  }
- return {pages,initial,fixture,gate,transition,navigate,swipe,pnl,simulator};
+ const parity=Object.freeze({windows:Object.freeze({requiresOtherPersonalDevice:false,capabilities:Object.freeze([...pages])}),android:Object.freeze({requiresOtherPersonalDevice:false,capabilities:Object.freeze([...pages])}),operationalEquivalenceVerified:false,managedEngine:'CANDIDATE_NOT_DEPLOYED'});
+ return {pages,initial,fixture,gate,transition,navigate,swipe,pnl,simulator,parity};
 })();
 if(typeof module!=='undefined')module.exports=Cabin;

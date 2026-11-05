@@ -2,291 +2,309 @@ TAP version 13
 # Subtest: browser script parses before UI testing
 ok 1 - browser script parses before UI testing
   ---
-  duration_ms: 1.217
+  duration_ms: 1.2727
   type: 'test'
   ...
 # Subtest: default unknown cannot pass
 ok 2 - default unknown cannot pass
   ---
-  duration_ms: 0.1944
+  duration_ms: 0.1884
   type: 'test'
   ...
 # Subtest: complete synthetic fixture can pass pure gate only
 ok 3 - complete synthetic fixture can pass pure gate only
   ---
-  duration_ms: 0.1129
+  duration_ms: 0.112
   type: 'test'
   ...
 # Subtest: unknown terminal blocks
 ok 4 - unknown terminal blocks
   ---
-  duration_ms: 0.0792
+  duration_ms: 0.0973
   type: 'test'
   ...
 # Subtest: unknown broker_demo blocks
 ok 5 - unknown broker_demo blocks
   ---
-  duration_ms: 0.0767
+  duration_ms: 0.0977
   type: 'test'
   ...
 # Subtest: unknown engine blocks
 ok 6 - unknown engine blocks
   ---
-  duration_ms: 0.0838
+  duration_ms: 0.0944
   type: 'test'
   ...
 # Subtest: unknown api blocks
 ok 7 - unknown api blocks
   ---
-  duration_ms: 0.0548
+  duration_ms: 0.0967
   type: 'test'
   ...
 # Subtest: unknown guardian blocks
 ok 8 - unknown guardian blocks
   ---
-  duration_ms: 0.0556
+  duration_ms: 0.0662
   type: 'test'
   ...
 # Subtest: unknown data_fresh blocks
 ok 9 - unknown data_fresh blocks
   ---
-  duration_ms: 0.6434
+  duration_ms: 0.0632
   type: 'test'
   ...
 # Subtest: bad or expired time 15001
 ok 10 - bad or expired time 15001
   ---
-  duration_ms: 0.2064
+  duration_ms: 0.1515
   type: 'test'
   ...
 # Subtest: bad or expired time 9999
 ok 11 - bad or expired time 9999
   ---
-  duration_ms: 0.0987
+  duration_ms: 0.0889
   type: 'test'
   ...
 # Subtest: bad or expired time NaN
 ok 12 - bad or expired time NaN
   ---
-  duration_ms: 0.054
+  duration_ms: 0.0426
   type: 'test'
   ...
 # Subtest: bad or expired time Infinity
 ok 13 - bad or expired time Infinity
   ---
-  duration_ms: 0.0263
+  duration_ms: 0.0435
   type: 'test'
   ...
 # Subtest: freshness boundary inclusive
 ok 14 - freshness boundary inclusive
   ---
-  duration_ms: 0.0363
+  duration_ms: 0.0436
   type: 'test'
   ...
 # Subtest: cost unknown blocks
 ok 15 - cost unknown blocks
   ---
-  duration_ms: 0.0279
+  duration_ms: 0.0308
   type: 'test'
   ...
 # Subtest: unresolved or unsafe fixture limit null
 ok 16 - unresolved or unsafe fixture limit null
   ---
-  duration_ms: 0.0268
+  duration_ms: 0.0297
   type: 'test'
   ...
 # Subtest: unresolved or unsafe fixture limit NaN
 ok 17 - unresolved or unsafe fixture limit NaN
   ---
-  duration_ms: 0.0185
+  duration_ms: 0.0169
   type: 'test'
   ...
 # Subtest: unresolved or unsafe fixture limit 0
 ok 18 - unresolved or unsafe fixture limit 0
   ---
-  duration_ms: 0.0161
+  duration_ms: 0.0167
   type: 'test'
   ...
 # Subtest: unresolved or unsafe fixture limit -1
 ok 19 - unresolved or unsafe fixture limit -1
   ---
-  duration_ms: 0.0157
+  duration_ms: 0.0182
   type: 'test'
   ...
 # Subtest: unresolved or unsafe fixture limit 0.06
 ok 20 - unresolved or unsafe fixture limit 0.06
   ---
-  duration_ms: 0.0164
+  duration_ms: 0.0158
   type: 'test'
   ...
 # Subtest: emergency persists through recovery
 ok 21 - emergency persists through recovery
   ---
-  duration_ms: 0.0676
+  duration_ms: 0.0623
   type: 'test'
   ...
 # Subtest: disconnect then reconnect then reconcile never rearms
 ok 22 - disconnect then reconnect then reconcile never rearms
   ---
-  duration_ms: 0.0483
+  duration_ms: 0.045
   type: 'test'
   ...
 # Subtest: stale transition disarms
 ok 23 - stale transition disarms
   ---
-  duration_ms: 0.0256
+  duration_ms: 0.0313
   type: 'test'
   ...
 # Subtest: unknown account disarms
 ok 24 - unknown account disarms
   ---
-  duration_ms: 0.0228
+  duration_ms: 0.0205
   type: 'test'
   ...
 # Subtest: mobile loss leaves engine independent
 ok 25 - mobile loss leaves engine independent
   ---
-  duration_ms: 0.0294
+  duration_ms: 0.0297
   type: 'test'
   ...
 # Subtest: manual requires confirmation
 ok 26 - manual requires confirmation
   ---
-  duration_ms: 0.1004
+  duration_ms: 0.0934
   type: 'test'
   ...
 # Subtest: semi requires confirmation
 ok 27 - semi requires confirmation
   ---
-  duration_ms: 0.0476
+  duration_ms: 0.0348
   type: 'test'
   ...
 # Subtest: semi model unknown blocks
 ok 28 - semi model unknown blocks
   ---
-  duration_ms: 0.0328
+  duration_ms: 0.0313
   type: 'test'
   ...
 # Subtest: auto unknown model blocks
 ok 29 - auto unknown model blocks
   ---
-  duration_ms: 0.0251
+  duration_ms: 0.0262
   type: 'test'
   ...
 # Subtest: auto synthetic decision sends zero orders
 ok 30 - auto synthetic decision sends zero orders
   ---
-  duration_ms: 0.0328
+  duration_ms: 0.0307
   type: 'test'
   ...
 # Subtest: idempotent retry does not append journal or re-evaluate
 ok 31 - idempotent retry does not append journal or re-evaluate
   ---
-  duration_ms: 0.0708
+  duration_ms: 0.0394
   type: 'test'
   ...
 # Subtest: rejected id remains rejected after conditions improve
 ok 32 - rejected id remains rejected after conditions improve
   ---
-  duration_ms: 0.0385
+  duration_ms: 0.0304
   type: 'test'
   ...
 # Subtest: invalid id cannot enter journal
 ok 33 - invalid id cannot enter journal
   ---
-  duration_ms: 0.0473
+  duration_ms: 0.0322
   type: 'test'
   ...
 # Subtest: RTL arrows and swipe direction agree
 ok 34 - RTL arrows and swipe direction agree
   ---
-  duration_ms: 0.0553
+  duration_ms: 0.0658
   type: 'test'
   ...
 # Subtest: navigation boundaries and direct page
 ok 35 - navigation boundaries and direct page
   ---
-  duration_ms: 0.0445
+  duration_ms: 0.0294
   type: 'test'
   ...
 # Subtest: vertical and short gestures ignored
 ok 36 - vertical and short gestures ignored
   ---
-  duration_ms: 0.0488
+  duration_ms: 0.0378
   type: 'test'
   ...
 # Subtest: 1 lot illustrative USD accounting
 ok 37 - 1 lot illustrative USD accounting
   ---
-  duration_ms: 0.5722
+  duration_ms: 0.5269
   type: 'test'
   ...
 # Subtest: 0.01 lot illustrative USD accounting
 ok 38 - 0.01 lot illustrative USD accounting
   ---
-  duration_ms: 0.0623
+  duration_ms: 0.0568
   type: 'test'
   ...
 # Subtest: invalid illustrative numbers rejected
 ok 39 - invalid illustrative numbers rejected
   ---
-  duration_ms: 0.1294
+  duration_ms: 0.1219
   type: 'test'
   ...
 # Subtest: eight required pages
 ok 40 - eight required pages
   ---
-  duration_ms: 0.0294
+  duration_ms: 0.026
   type: 'test'
   ...
 # Subtest: offline CSP rejects all connection destinations
 ok 41 - offline CSP rejects all connection destinations
   ---
-  duration_ms: 0.7803
+  duration_ms: 0.2897
   type: 'test'
   ...
 # Subtest: no network/execution imports in prototype logic
 ok 42 - no network/execution imports in prototype logic
   ---
-  duration_ms: 0.5923
+  duration_ms: 0.5961
   type: 'test'
   ...
 # Subtest: mobile loss preserves independent guardian and API
 ok 43 - mobile loss preserves independent guardian and API
   ---
-  duration_ms: 0.0521
+  duration_ms: 0.0566
   type: 'test'
   ...
 # Subtest: reconnect never certifies guardian
 ok 44 - reconnect never certifies guardian
   ---
-  duration_ms: 0.0365
+  duration_ms: 0.0432
   type: 'test'
   ...
 # Subtest: approved thumbnail matches reference Git blob
 ok 45 - approved thumbnail matches reference Git blob
   ---
-  duration_ms: 2.621
+  duration_ms: 2.9526
   type: 'test'
   ...
 # Subtest: runtime has no remote font or asset URL
 ok 46 - runtime has no remote font or asset URL
   ---
-  duration_ms: 1.1328
+  duration_ms: 0.836
   type: 'test'
   ...
 # Subtest: gesture threshold and diagonal boundary
 ok 47 - gesture threshold and diagonal boundary
   ---
-  duration_ms: 0.0632
+  duration_ms: 0.0762
   type: 'test'
   ...
-1..47
-# tests 47
+# Subtest: both client contracts expose all eight page capabilities equally
+ok 48 - both client contracts expose all eight page capabilities equally
+  ---
+  duration_ms: 0.0579
+  type: 'test'
+  ...
+# Subtest: neither client contract requires the other personal device
+ok 49 - neither client contract requires the other personal device
+  ---
+  duration_ms: 0.0261
+  type: 'test'
+  ...
+# Subtest: contract does not claim operational parity or deployed hosting
+ok 50 - contract does not claim operational parity or deployed hosting
+  ---
+  duration_ms: 0.0508
+  type: 'test'
+  ...
+1..50
+# tests 50
 # suites 0
-# pass 47
+# pass 50
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 84.3133
+# duration_ms 74.8799
