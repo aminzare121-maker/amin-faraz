@@ -1,0 +1,61 @@
+{
+  "synthetic": true,
+  "run_id": "176fa446046a35ea4012fa740cd38bf9e94ac177a5369579eb791f36d099bb24",
+  "action": "EXECUTED",
+  "candidates": 3,
+  "validation_scenario_rows": 578,
+  "control_scenario_rows": 2890,
+  "comparable": 334,
+  "incomparable": 2556,
+  "ranking": {
+    "rows": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "worst_case_net": -14.4,
+        "max_drawdown": 14.4,
+        "score": null,
+        "reasons": [
+          "NONPOSITIVE_WORST_CASE",
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "worst_case_net": null,
+        "max_drawdown": null,
+        "score": null,
+        "reasons": [
+          "UNKNOWN_COST_OR_PATH",
+          "INSUFFICIENT_TRADES",
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "worst_case_net": 18.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      }
+    ],
+    "scenario_nominee": null,
+    "verified_best": null,
+    "selection_uses_holdout": false,
+    "comparable": true
+  },
+  "failed_fixture": {
+    "action": "FAILED_RECORDED",
+    "reason": "SPREAD_UNKNOWN"
+  },
+  "market_profitability_verified": false,
+  "trade_allowed": false,
+  "note": "Counts include repeated scenario/policy evaluations, not independent trades; no post-hoc filtering"
+}

@@ -71,7 +71,13 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
     from research_engine.experiments import run_experiment as scenario_runner
     from scenario_segment import evaluate_segment
     local=Path(__file__).resolve().parent
+    # Fixed control design is part of the run identity; no adaptive seed search.
+    if protocol.get('matched_controls') is not None:
+        from matched_controls import SPEC
+        if protocol['matched_controls']!=SPEC:raise ValueError('CONTROL_PROTOCOL_CHANGED')
+        contexts={name:dict(ctx,matched_control_spec=SPEC) for name,ctx in contexts.items()}
     files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'carry_costs.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'research_protocol.py',local/'holdout_guard.py',local/'vendor/research_ledger.py']
+    files.append(local/'matched_controls.py')
     code=digest({'engine':engine_fingerprint(),'research':{str(p.relative_to(local)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}})
     from amin_mt5.strategy import candidates
     spec=dict(code_sha256=code,datasets={dataset_id:digest(bars)},settings={'strategies':[asdict(c) for c in candidates()], 'scope':'SYNTHETIC_DIAGNOSTIC'},costs=contexts,

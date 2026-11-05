@@ -1,0 +1,41 @@
+test_variable_volume_and_duration_trace (test_matched_controls.ControlTests.test_variable_volume_and_duration_trace) ... ok
+test_actual_unmocked_signals_and_adaptive_exit (test_selector.SelectorTests.test_actual_unmocked_signals_and_adaptive_exit) ... ok
+test_cache_exact (test_selector.SelectorTests.test_cache_exact) ... ok
+test_cost_hash_changes (test_selector.SelectorTests.test_cost_hash_changes) ... ok
+test_different_assumptions_not_comparable (test_selector.SelectorTests.test_different_assumptions_not_comparable) ... ok
+test_end_to_end_three_methods (test_selector.SelectorTests.test_end_to_end_three_methods) ... ok
+test_future_news_blocked (test_selector.SelectorTests.test_future_news_blocked) ... ok
+test_future_quote_not_verified (test_selector.SelectorTests.test_future_quote_not_verified) ... ok
+test_gap_open_proves_stop_before_range_target (test_selector.SelectorTests.test_gap_open_proves_stop_before_range_target) ... ok
+test_holdout_change_does_not_change_selection (test_selector.SelectorTests.test_holdout_change_does_not_change_selection) ... ok
+test_invalid_dataset_cannot_reuse (test_selector.SelectorTests.test_invalid_dataset_cannot_reuse) ... ok
+test_missing_spread_failure_recorded (test_selector.SelectorTests.test_missing_spread_failure_recorded) ... ok
+test_net_arithmetic_no_double_cost (test_selector.SelectorTests.test_net_arithmetic_no_double_cost) ... ok
+test_no_signal_from_delayed_bar (test_selector.SelectorTests.test_no_signal_from_delayed_bar) ... ok
+test_out_of_order_recorded_failed (test_selector.SelectorTests.test_out_of_order_recorded_failed) ... ok
+test_real_year_blocked (test_selector.SelectorTests.test_real_year_blocked) ... ok
+test_same_bar_unknown_pnl_none (test_selector.SelectorTests.test_same_bar_unknown_pnl_none) ... ok
+test_unknown_swap_blocks_even_with_assumed_profit (test_selector.SelectorTests.test_unknown_swap_blocks_even_with_assumed_profit) ... ok
+test_unmocked_existing_candidates (test_selector.SelectorTests.test_unmocked_existing_candidates) ... ok
+test_variable_quote_trace (test_selector.SelectorTests.test_variable_quote_trace) ... ok
+test_adjacent_unseen_period_allowed (test_holdout_guard.SharedExposureTests.test_adjacent_unseen_period_allowed) ... ok
+test_cannot_provision_over_existing (test_holdout_guard.SharedExposureTests.test_cannot_provision_over_existing) ... ok
+test_check_blocks_training_on_exposed_period (test_holdout_guard.SharedExposureTests.test_check_blocks_training_on_exposed_period) ... ok
+test_invalid_interval (test_holdout_guard.SharedExposureTests.test_invalid_interval) ... ok
+test_missing_journal_blocks_without_recreating (test_holdout_guard.SharedExposureTests.test_missing_journal_blocks_without_recreating) ... ok
+test_new_bank_cannot_reset_shared_journal (test_holdout_guard.SharedExposureTests.test_new_bank_cannot_reset_shared_journal) ... ok
+test_overlap_even_when_old_holdout_is_now_training (test_holdout_guard.SharedExposureTests.test_overlap_even_when_old_holdout_is_now_training) ... ok
+test_racing_seals_only_one_wins (test_holdout_guard.SharedExposureTests.test_racing_seals_only_one_wins) ... ok
+test_renamed_or_repriced_dataset_same_interval_blocked (test_holdout_guard.SharedExposureTests.test_renamed_or_repriced_dataset_same_interval_blocked) ... ok
+test_actual_runner_seals_holdout (test_validity_carry_protocol.ProtocolTests.test_actual_runner_seals_holdout) ... ok
+test_budget_no_cherry_pick (test_validity_carry_protocol.ProtocolTests.test_budget_no_cherry_pick) ... ok
+test_holdout_blocks_new_tuning (test_validity_carry_protocol.ProtocolTests.test_holdout_blocks_new_tuning) ... ok
+test_overlap_rejected (test_validity_carry_protocol.ProtocolTests.test_overlap_rejected) ... ok
+test_protocol_cannot_mutate (test_validity_carry_protocol.ProtocolTests.test_protocol_cannot_mutate) ... ok
+test_rename_does_not_refresh_holdout (test_validity_carry_protocol.ProtocolTests.test_rename_does_not_refresh_holdout) ... ok
+test_reuse_does_not_spend_trial (test_validity_carry_protocol.ProtocolTests.test_reuse_does_not_spend_trial) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 13.079s
+
+OK

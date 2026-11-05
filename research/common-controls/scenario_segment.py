@@ -11,7 +11,7 @@ from amin_mt5.risk import update_stage
 from execution_scenarios import replay,spread_at
 
 def evaluate_segment(bars,start,end,context,candidate,model=None,intrabar_policy='stop_first'):
-    candidate.validate();i=max(start,candidate.lookback+4);rows=[];equity=10000.0
+    candidate.validate();i=max(start,candidate.lookback+4);rows=[];equity=10000.0;control_equities={}
     policy=Policy();spec=SymbolSpec(contract_size='100')
     day=datetime.fromtimestamp(bars[i]['time'],timezone.utc).date().isoformat()
     stage=Stage.initial(day,Account('research','10000','10000','demo'))
@@ -42,6 +42,10 @@ def evaluate_segment(bars,start,end,context,candidate,model=None,intrabar_policy
         result=replay(bars[entry_index:end],order,**kwargs,intrabar_policy=intrabar_policy,adaptive=adaptive)
         net=result['net_with_known_costs']
         row=dict(time=result['exit_time'],entry_time=entry_time,signal_time=setup['signal_time'],net=None if net is None else float(net),learning_features=setup['learning_features'],trace=result,order=order)
+        if context.get('matched_control_spec') is not None:
+            from matched_controls import SPEC,paired
+            if context['matched_control_spec']!=SPEC:raise ValueError('CONTROL_PROTOCOL_CHANGED')
+            row['matched_controls']=paired(bars[entry_index:end],order,context,adaptive,intrabar_policy,result,equity,control_equities)
         rows.append(row)
         # Cannot safely size or learn subsequent orders from an unknown equity path.
         if net is None:break

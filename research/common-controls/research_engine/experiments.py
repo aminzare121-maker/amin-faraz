@@ -16,10 +16,14 @@ def metrics(rows):
     equity=peak=dd=Decimal(0)
     for v in values:
         equity+=v;peak=max(peak,equity);dd=max(dd,peak-equity)
-    return dict(trades=len(rows),net_usd=float(equity) if resolved else None,
+    output=dict(trades=len(rows),net_usd=float(equity) if resolved else None,
         max_drawdown_usd=float(dd) if resolved else None,unknown=sum(r['net'] is None for r in rows),
         unclosed=sum(r['trace']['exit_reason']=='DATA_END_MARK' for r in rows),
         rows=rows)
+    if any('matched_controls' in r for r in rows):
+        from matched_controls import summarize
+        output['matched_controls']=summarize(rows)
+    return output
 
 def rank(records,minimum_trades=8):
     """Only validation enters this function. Unknown costs/path never become zero."""
@@ -34,12 +38,18 @@ def rank(records,minimum_trades=8):
         worst=None if any(s['net_usd'] is None for s in scenarios.values()) else min(s['net_usd'] for s in scenarios.values())
         dd=None if any(s['max_drawdown_usd'] is None for s in scenarios.values()) else max(s['max_drawdown_usd'] for s in scenarios.values())
         if worst is not None and worst<=0:reasons.append('NONPOSITIVE_WORST_CASE')
+        if r.get('controls_required'):
+            comparisons=[s.get('matched_controls') for s in scenarios.values()]
+            if any(c is None or not c['comparable'] for c in comparisons):reasons.append('INCOMPARABLE_RANDOM_CONTROL')
+            elif any(s['net_usd']<=max(t['net_usd'] for t in s['matched_controls']['trials']) for s in scenarios.values()):
+                reasons.append('NO_ADVANTAGE_OVER_FIXED_CONTROLS')
         ranked.append(dict(id=r['id'],worst_case_net=worst,max_drawdown=dd,score=None if reasons else worst-dd,
             reasons=reasons,status='BLOCKED' if reasons else 'HYPOTHETICAL_SCENARIO_ONLY',profitability_verified=False))
     eligible=[r for r in ranked if r['score'] is not None]
     eligible.sort(key=lambda r:(-r['score'],r['id']))
     return dict(rows=ranked,scenario_nominee=eligible[0]['id'] if eligible else None,
-        verified_best=None,selection_uses_holdout=False,comparable=comparable)
+        verified_best=None,selection_uses_holdout=False,context_comparable=comparable,
+        comparable=comparable and not any('INCOMPARABLE_RANDOM_CONTROL' in r['reasons'] for r in ranked))
 
 def run_experiment(bars,contexts,*,evaluate,minimum_trades=8,before_holdout=None):
     """Migrate the existing selector to all three execution policies and stresses.
@@ -64,6 +74,7 @@ def run_experiment(bars,contexts,*,evaluate,minimum_trades=8,before_holdout=None
             ident=candidate.id+('-learned' if learned else '-rules')
             validation=scenarios(train_end+embargo,validation_end,candidate,fitted)
             record=dict(id=ident,candidate=asdict(candidate),model=fitted,train=train,validation=validation,comparison_hash=comparison_hash)
+            record['controls_required']=any(c.get('matched_control_spec') is not None for c in contexts.values())
             results.append(record);private[ident]=(candidate,fitted)
     ranking=rank(results,minimum_trades);selected=ranking['scenario_nominee']
     if before_holdout is not None:before_holdout()
