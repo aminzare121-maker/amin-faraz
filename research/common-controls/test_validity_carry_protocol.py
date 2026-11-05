@@ -77,6 +77,12 @@ class ProtocolTests(unittest.TestCase):
         expose_holdout(self.bank,'p')
         with self.assertRaisesRegex(ValueError,'RENAMED'):freeze(self.bank,'another',PROTOCOL)
     def test_actual_runner_seals_holdout(self):
+        from unittest.mock import patch
+        import holdout_guard
+        authority=Path(self.tmp.name)/'authority.sqlite'
+        holdout_guard.provision(authority)
+        patcher=patch.object(holdout_guard,'AUTHORITY',authority)
+        patcher.start();self.addCleanup(patcher.stop)
         from test_selector import bars,CONTEXTS,PROTOCOL as execution_protocol
         from engine_bridge import evaluate_strategies
         from registry import digest
@@ -87,6 +93,18 @@ class ProtocolTests(unittest.TestCase):
         result=evaluate_strategies(self.bank,data,'fixture',CONTEXTS,p)
         self.assertEqual(result['action'],'EXECUTED')
         self.assertEqual(evaluate_strategies(self.bank,data,'fixture',CONTEXTS,p)['action'],'REUSE')
+        # A fresh ledger and a small valid price edit cannot refresh the period.
+        other=Registry(Path(self.tmp.name)/'renamed-bank.sqlite')
+        edited=copy.deepcopy(data);edited[0]['high']+=.001
+        other.artifact('renamed-fixture',digest(edited),{},True)
+        changed_body=dict(body,holdout_fingerprint=digest({'dataset':digest(edited),'range':split['holdout']}))
+        changed_protocol=dict(execution_protocol,preregistered={'id':'renamed','body':changed_body})
+        with patch('research_engine.experiments.run_experiment') as runner:
+            with self.assertRaisesRegex(ValueError,'GLOBAL_HOLDOUT_ALREADY_EXPOSED'):
+                evaluate_strategies(other,edited,'renamed-fixture',CONTEXTS,changed_protocol)
+            runner.assert_not_called()
+        with other.connect() as db:
+            self.assertEqual(db.execute('SELECT state FROM reusable_runs').fetchone()[0],'FAILED')
         changed=copy.deepcopy(CONTEXTS);changed['stress']['slippage']=.3
         with self.assertRaisesRegex(ValueError,'HOLDOUT'):evaluate_strategies(self.bank,data,'fixture',changed,p)
 

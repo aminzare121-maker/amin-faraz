@@ -71,7 +71,7 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
     from research_engine.experiments import run_experiment as scenario_runner
     from scenario_segment import evaluate_segment
     local=Path(__file__).resolve().parent
-    files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'carry_costs.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'research_protocol.py',local/'vendor/research_ledger.py']
+    files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'carry_costs.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'research_protocol.py',local/'holdout_guard.py',local/'vendor/research_ledger.py']
     code=digest({'engine':engine_fingerprint(),'research':{str(p.relative_to(local)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}})
     from amin_mt5.strategy import candidates
     spec=dict(code_sha256=code,datasets={dataset_id:digest(bars)},settings={'strategies':[asdict(c) for c in candidates()], 'scope':'SYNTHETIC_DIAGNOSTIC'},costs=contexts,
@@ -86,7 +86,12 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
         expected_holdout=digest({'dataset':digest(bars),'range':expected_split['holdout']})
         if body['split']!=expected_split or body['holdout_fingerprint']!=expected_holdout:raise ValueError('PROTOCOL_DATA_SPLIT_MISMATCH')
         freeze(bank,name,body);reserve_trial(bank,name,spec)
-        before_holdout=lambda:expose_holdout(bank,name)
+        def before_holdout():
+            from holdout_guard import seal
+            from registry import identity
+            seal(identity(spec),bars[0]['time'],bars[-1]['time']+900,
+                 bars[expected_split['holdout'][0]]['time'],bars[-1]['time']+900)
+            expose_holdout(bank,name)
     reservation=bank.start(spec)
     if reservation['action']!='EXECUTE':return reservation
     try:
@@ -108,6 +113,9 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
             if ctx.get('cost_basis')!='ASSUMPTION':raise ValueError('COST_EVIDENCE_NOT_CERTIFIED')
             if ctx.get('commission') is None or ctx.get('slippage') is None:raise ValueError('COST_UNKNOWN')
             if float(ctx['commission'])<0 or float(ctx['slippage'])<0:raise ValueError('NEGATIVE_COST')
+        if preregistered is not None:
+            from holdout_guard import check
+            check(bars[0]['time'],bars[-1]['time']+900)
         report=scenario_runner(bars,contexts,evaluate=evaluate_segment,before_holdout=before_holdout)
         report.update(registry_run_id=reservation['id'],dependency_spec=spec)
         bank.finish_run(reservation['id'],report,True)

@@ -1,0 +1,15 @@
+test_adjacent_unseen_period_allowed (test_holdout_guard.SharedExposureTests.test_adjacent_unseen_period_allowed) ... ok
+test_cannot_provision_over_existing (test_holdout_guard.SharedExposureTests.test_cannot_provision_over_existing) ... ok
+test_check_blocks_training_on_exposed_period (test_holdout_guard.SharedExposureTests.test_check_blocks_training_on_exposed_period) ... ok
+test_invalid_interval (test_holdout_guard.SharedExposureTests.test_invalid_interval) ... ok
+test_missing_journal_blocks_without_recreating (test_holdout_guard.SharedExposureTests.test_missing_journal_blocks_without_recreating) ... ok
+test_new_bank_cannot_reset_shared_journal (test_holdout_guard.SharedExposureTests.test_new_bank_cannot_reset_shared_journal) ... ok
+test_overlap_even_when_old_holdout_is_now_training (test_holdout_guard.SharedExposureTests.test_overlap_even_when_old_holdout_is_now_training) ... ok
+test_racing_seals_only_one_wins (test_holdout_guard.SharedExposureTests.test_racing_seals_only_one_wins) ... ok
+test_renamed_or_repriced_dataset_same_interval_blocked (test_holdout_guard.SharedExposureTests.test_renamed_or_repriced_dataset_same_interval_blocked) ... ok
+test_actual_runner_seals_holdout (test_validity_carry_protocol.ProtocolTests.test_actual_runner_seals_holdout) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.438s
+
+OK
