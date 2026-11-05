@@ -1,0 +1,481 @@
+{
+  "schema": 1,
+  "status": "EXPLORATORY_ONLY",
+  "action": "EXECUTED",
+  "identity": "07a5996cd4bb0a66d621307eb1bc1739b5c084a0373b1ec23984cba59a9bf1c1",
+  "policy": {
+    "schema": 1,
+    "window_start": "2026-11-04T00:00:00Z",
+    "window_end": "2026-11-04T22:00:00Z",
+    "offset_seconds": -7200,
+    "time_evidence": "CONDITIONAL",
+    "spread": "0.3",
+    "slippage": "0.1",
+    "commission_roundtrip_per_lot": "0",
+    "lots": "0.01",
+    "contract": "100",
+    "stop_distance": "5",
+    "target_distance": "10",
+    "max_holding_bars": 12,
+    "rollover_exposure": "UNKNOWN",
+    "policies": [
+      "stop_first",
+      "target_first",
+      "unknown"
+    ],
+    "candidate_definitions": [
+      {
+        "family": "breakout",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      {
+        "family": "breakout",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      },
+      {
+        "family": "rejection",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      {
+        "family": "rejection",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      },
+      {
+        "family": "retest",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      {
+        "family": "retest",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      }
+    ],
+    "note": "Original six entry rules and original stop; diagnostic fixed lot/target/horizon, NOT full production sizing/adaptive exit."
+  },
+  "code_hashes": {
+    "historical_engine.py": "48cd55fe777cf0ac2d1c55d4af9e5c0070a77307214041a70c8049d320cfde90",
+    "historical_runner.py": "4d4aaccb8e596eaf86bcf587e4e1b8cae25903019ba821c55fbd8a4500853e4c",
+    "historical_candidates.py": "75ffaeb82dabc1015a5a7298e7ea272bf930e771303f5b926d5a720e768424f0",
+    "historical_windows_run.py": "71d9f9a029f983127daaad7d079ad2d951e9004953f95ee374f30731b859e7cb",
+    "amin_mt5/strategy.py": "af60ba9edaa8b547cd2302ddcb7df9c5d1dd944c3b2283fa9afc47c46452ff77",
+    "amin_mt5/analysis.py": "dde7ec19594ace129a878c57eb9fafb5aaed34542eec0451015caf96319793f1",
+    "amin_mt5/model.py": "fb4953193d70b63ffa647a246b1424acbd63709f44bf1eae21f0da025fe07fb8"
+  },
+  "source_manifest_sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07",
+  "data_sha256": "88e71b8008079bf0e0d8c2a4800f22940d9bec90576ef40954a9d4300e9bb31c",
+  "rows_loaded": 23643,
+  "window_bars": 88,
+  "segments": 1,
+  "results": {
+    "baselines": {
+      "SMA_5_20": {
+        "stop_first": {
+          "positions": 6,
+          "resolved": 5,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "4.5000",
+          "signal_counts": {
+            "opportunities": 84,
+            "signals": 6
+          },
+          "resolved_win_rate": "0.4",
+          "trace_sha256": "e154c3a568e8e4e64896d60244651a5bbadd0273598fd79cc1dcad667550e445"
+        },
+        "target_first": {
+          "positions": 6,
+          "resolved": 5,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "4.5000",
+          "signal_counts": {
+            "opportunities": 84,
+            "signals": 6
+          },
+          "resolved_win_rate": "0.4",
+          "trace_sha256": "e154c3a568e8e4e64896d60244651a5bbadd0273598fd79cc1dcad667550e445"
+        },
+        "unknown": {
+          "positions": 6,
+          "resolved": 5,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "4.5000",
+          "signal_counts": {
+            "opportunities": 84,
+            "signals": 6
+          },
+          "resolved_win_rate": "0.4",
+          "trace_sha256": "e154c3a568e8e4e64896d60244651a5bbadd0273598fd79cc1dcad667550e445"
+        }
+      },
+      "buy_after21": {
+        "stop_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.9000",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.9000",
+          "signal_counts": {
+            "opportunities": 86,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "315e16d232882310670fcdad122d3d029d819ea3fc64ce749fdba67550b81f6a"
+        },
+        "target_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.9000",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.9000",
+          "signal_counts": {
+            "opportunities": 86,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "315e16d232882310670fcdad122d3d029d819ea3fc64ce749fdba67550b81f6a"
+        },
+        "unknown": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.9000",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.9000",
+          "signal_counts": {
+            "opportunities": 86,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "315e16d232882310670fcdad122d3d029d819ea3fc64ce749fdba67550b81f6a"
+        }
+      },
+      "sell_after21": {
+        "stop_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-5.1000",
+          "scenario_max_drawdown_usd": "5.1000",
+          "known_partial_net_usd": "-5.1000",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 1
+          },
+          "resolved_win_rate": "0",
+          "trace_sha256": "d23d5a1379a28bff7bfeb7e00476786b0d34d5a47466f1f229a5f0c5a6cad1ef"
+        },
+        "target_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-5.1000",
+          "scenario_max_drawdown_usd": "5.1000",
+          "known_partial_net_usd": "-5.1000",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 1
+          },
+          "resolved_win_rate": "0",
+          "trace_sha256": "d23d5a1379a28bff7bfeb7e00476786b0d34d5a47466f1f229a5f0c5a6cad1ef"
+        },
+        "unknown": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-5.1000",
+          "scenario_max_drawdown_usd": "5.1000",
+          "known_partial_net_usd": "-5.1000",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 1
+          },
+          "resolved_win_rate": "0",
+          "trace_sha256": "d23d5a1379a28bff7bfeb7e00476786b0d34d5a47466f1f229a5f0c5a6cad1ef"
+        }
+      }
+    },
+    "existing_six_signals": {
+      "breakout-20-1.5": {
+        "stop_first": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        },
+        "target_first": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        },
+        "unknown": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        }
+      },
+      "breakout-40-1.5": {
+        "stop_first": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        },
+        "target_first": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        },
+        "unknown": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        }
+      },
+      "rejection-20-1.5": {
+        "stop_first": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        },
+        "target_first": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        },
+        "unknown": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        }
+      },
+      "rejection-40-1.5": {
+        "stop_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        },
+        "target_first": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        },
+        "unknown": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        }
+      },
+      "retest-20-1.5": {
+        "stop_first": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "target_first": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "unknown": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      },
+      "retest-40-1.5": {
+        "stop_first": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "target_first": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "unknown": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      }
+    }
+  },
+  "financial_profitability_verified": false,
+  "holdout_certified": false,
+  "orders": 0,
+  "no_trade_baseline_usd": "0",
+  "raw_or_prices_published": false
+}

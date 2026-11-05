@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "window_start": "2026-11-04T00:00:00Z",
+  "window_end": "2026-11-04T22:00:00Z",
+  "offset_seconds": -7200,
+  "time_evidence": "CONDITIONAL",
+  "spread": "0.3",
+  "slippage": "0.1",
+  "commission_roundtrip_per_lot": "0",
+  "lots": "0.01",
+  "contract": "100",
+  "stop_distance": "5",
+  "target_distance": "10",
+  "max_holding_bars": 12,
+  "rollover_exposure": "UNKNOWN",
+  "policies": [
+    "stop_first",
+    "target_first",
+    "unknown"
+  ],
+  "candidate_definitions": [
+    {
+      "family": "breakout",
+      "lookback": 20,
+      "stop_multiple": 1.5
+    },
+    {
+      "family": "breakout",
+      "lookback": 40,
+      "stop_multiple": 1.5
+    },
+    {
+      "family": "rejection",
+      "lookback": 20,
+      "stop_multiple": 1.5
+    },
+    {
+      "family": "rejection",
+      "lookback": 40,
+      "stop_multiple": 1.5
+    },
+    {
+      "family": "retest",
+      "lookback": 20,
+      "stop_multiple": 1.5
+    },
+    {
+      "family": "retest",
+      "lookback": 40,
+      "stop_multiple": 1.5
+    }
+  ],
+  "note": "Original six entry rules and original stop; diagnostic fixed lot/target/horizon, NOT full production sizing/adaptive exit."
+}

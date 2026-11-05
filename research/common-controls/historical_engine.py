@@ -34,7 +34,9 @@ def canonical_bars(records, *, offset_seconds=None, offset_evidence='UNKNOWN'):
     bars = []
     previous = None
     for rec in sorted(records, key=lambda x: int(x['time'])):
-        t = int(rec['time']); u = t + offset_seconds
+        raw_number=num(rec['time'])
+        if raw_number!=raw_number.to_integral_value():raise ValueError('INTEGER_TIMESTAMP_REQUIRED')
+        t = int(raw_number); u = t + offset_seconds
         if t % SECONDS or u % SECONDS or (previous is not None and t <= previous):
             raise ValueError('DUPLICATE_OR_TIME_ALIGNMENT')
         o, h, l, c = (num(rec[k]) for k in ('open','high','low','close'))
@@ -42,6 +44,7 @@ def canonical_bars(records, *, offset_seconds=None, offset_evidence='UNKNOWN'):
             raise ValueError('BAD_OHLC')
         bars.append(dict(time=u, raw_time=t, open=o, high=h, low=l, close=c,
                          time_evidence=offset_evidence))
+        if 'tick_volume' in rec:bars[-1]['tick_volume']=num(rec['tick_volume'])
         previous=t
     return bars
 
@@ -59,7 +62,7 @@ def segments(bars):
 
 
 def sha_bars(bars):
-    body=[{k: str(v) for k,v in b.items() if k in ('time','raw_time','open','high','low','close')}
+    body=[{k: str(v) for k,v in b.items() if k in ('time','raw_time','open','high','low','close','tick_volume','time_evidence')}
           for b in bars]
     return sha256(json.dumps(body,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
@@ -106,19 +109,21 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
         raise ValueError('INVALID_COST_RISK_OR_LOT')
     if type(max_holding_bars) is not int or max_holding_bars<1 or type(max_history) is not int or max_history<2:
         raise ValueError('HORIZON')
-    rows=[];segment_count=0;gap_count=0
+    rows=[];segment_count=0;gap_count=0;unresolved_position=False
     prev_end=None
     for part in segments(bars):
         segment_count+=1
         if prev_end is not None:
             gap_count+=1
         prev_end=part[-1]['time']
+        if unresolved_position:continue
         # Warm-up is local to each segment. No training across unknown gaps.
         i=1
         while i < len(part):
             # The callback sees only bars closed prior to the next bar's OPEN.
             history=part[max(0,i-max_history):i]
-            side=signal(tuple(history))
+            setup=signal(tuple(history))
+            side=setup.get('side') if isinstance(setup,dict) else setup
             if side not in (None,'buy','sell'):
                 raise ValueError('SIGNAL')
             if side is None:
@@ -127,6 +132,11 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
             entry_open=part[i]['open']
             entry=entry_open+(sp if side=='buy' else D(0))+direction*sl
             stop=entry-direction*stop_d
+            if isinstance(setup,dict):
+                if setup['signal_time']+SECONDS>part[i]['time']:raise ValueError('LOOKAHEAD_SIGNAL')
+                stop=num(setup['stop_loss'])
+                if direction*(entry-stop)<=0:
+                    i+=1;continue  # Already crossed stop at entry; no invented risk level.
             target=entry+direction*target_d
             exit_price=None; exit_reason='UNRESOLVED_BOUNDARY'; last_idx=None
             for k in range(i,min(len(part),i+max_holding_bars)):
@@ -160,7 +170,7 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                 last_idx=len(part)-1
             # If position touches an unknown overnight rollover, never assume 0 swap.
             exposed=(rollover_exposure=='UNKNOWN' and
-                     part[i]['time']//86400 != part[last_idx]['time']//86400)
+                     part[i]['raw_time']//86400 != (part[last_idx]['raw_time']+SECONDS)//86400)
             resolved=(exit_price is not None and not exposed)
             gross=direction*(exit_price-entry)*mult*vol if resolved else None
             net=gross-fee*vol if resolved else None
@@ -169,9 +179,12 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                 entry=str(entry),exit=str(exit_price) if resolved else None,
                 reason='ROLLOVER_COST_UNKNOWN' if exposed else exit_reason,
                 net_scenario_usd=str(net) if resolved else None,
-                gross_scenario_usd=str(gross) if resolved else None))
+                gross_scenario_usd=str(gross) if resolved else None,
+                stop=str(stop),target=str(target),lots=str(vol),
+                signal_candidate=setup.get('candidate') if isinstance(setup,dict) else None))
             # Block new positions across uncertain unresolved exposure.
             if not resolved:
+                unresolved_position=True
                 break
             i=last_idx+1
     values=[num(r['net_scenario_usd']) for r in rows if r['net_scenario_usd'] is not None]
@@ -191,3 +204,4 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
         no_trade_baseline_usd='0',
         market_profitability_verified=False,holdout_certified=False,
         live_trade_allowed=False,rows=rows)
+

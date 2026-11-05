@@ -1,0 +1,23 @@
+test_basic_win (test_historical_engine.ResearchTests.test_basic_win) ... ok
+test_gap_no_crossing_and_unresolved_open_position (test_historical_engine.ResearchTests.test_gap_no_crossing_and_unresolved_open_position) ... ok
+test_intrabar_ambiguity_unknown (test_historical_engine.ResearchTests.test_intrabar_ambiguity_unknown) ... ok
+test_missing_clock_rejected (test_historical_engine.ResearchTests.test_missing_clock_rejected) ... ok
+test_no_signal_zero_no_trades (test_historical_engine.ResearchTests.test_no_signal_zero_no_trades) ... ok
+test_open_stop_gap_no_favorable_stop_fill (test_historical_engine.ResearchTests.test_open_stop_gap_no_favorable_stop_fill) ... ok
+test_overlap_duplicate_rejected (test_historical_engine.ResearchTests.test_overlap_duplicate_rejected) ... ok
+test_raw_broker_offset_preserved (test_historical_engine.ResearchTests.test_raw_broker_offset_preserved) ... ok
+test_rollover_unknown_blocks_net (test_historical_engine.ResearchTests.test_rollover_unknown_blocks_net) ... ok
+test_short_spread_cost_not_zero (test_historical_engine.ResearchTests.test_short_spread_cost_not_zero) ... ok
+test_signal_only_prior_closed_bars (test_historical_engine.ResearchTests.test_signal_only_prior_closed_bars) ... ok
+test_sma_requires_history_and_does_not_optimize (test_historical_engine.ResearchTests.test_sma_requires_history_and_does_not_optimize) ... ok
+test_spread_cannot_be_unknown (test_historical_engine.ResearchTests.test_spread_cannot_be_unknown) ... ok
+test_stop_and_target_policies (test_historical_engine.ResearchTests.test_stop_and_target_policies) ... ok
+test_existing_window_is_exploratory_even_when_cost_supplied (test_historical_runner.RunnerTests.test_existing_window_is_exploratory_even_when_cost_supplied) ... ok
+test_no_data (test_historical_runner.RunnerTests.test_no_data) ... ok
+test_raw_time_filter (test_historical_runner.RunnerTests.test_raw_time_filter) ... ok
+test_window_must_be_utc (test_historical_runner.RunnerTests.test_window_must_be_utc) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.003s
+
+OK
