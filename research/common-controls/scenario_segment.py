@@ -36,7 +36,7 @@ def evaluate_segment(bars,start,end,context,candidate,model=None,intrabar_policy
         if context.get('exit_policy','adaptive_existing') not in ('adaptive_existing','fixed_sltp'):raise ValueError('EXIT_POLICY')
         target=sizing.get('take_profit') if context.get('exit_policy')=='fixed_sltp' else None
         order=dict(side=setup['side'],signal_available=entry_time,lots=sizing['volume'],contract=100,stop=sizing['stop_loss'],target=target)
-        kwargs={k:context[k] for k in ('quotes','receipt_ids','assumed_spread','slippage','swap','assumed_swap','commission') if k in context}
+        kwargs={k:context[k] for k in ('quotes','receipt_ids','assumed_spread','slippage','swap','assumed_swap','commission','swap_schedule') if k in context}
         # Existing strategies have adaptive stops and no fixed TP; controlled tests may use TP.
         adaptive=None if order['target'] is not None else dict(initial_atr=max(float(setup['features']['range_atr_proxy']),.01),tick_size=spec.tick_size,minimum_stop_distance=spec.minimum_stop_distance)
         result=replay(bars[entry_index:end],order,**kwargs,intrabar_policy=intrabar_policy,adaptive=adaptive)

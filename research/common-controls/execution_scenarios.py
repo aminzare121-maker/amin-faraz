@@ -19,7 +19,7 @@ def spread_at(t,quotes,assumed_spread,receipt_ids):
     if value<0:raise ValueError('NEGATIVE_SPREAD')
     return value,'ASSUMPTION'
 
-def replay(bars,order,*,quotes=None,receipt_ids=(),assumed_spread=None,slippage=None,swap=None,assumed_swap=None,commission=None,intrabar_policy='stop_first',adaptive=None):
+def replay(bars,order,*,quotes=None,receipt_ids=(),assumed_spread=None,slippage=None,swap=None,assumed_swap=None,commission=None,intrabar_policy='stop_first',adaptive=None,swap_schedule=None):
     """Replay an externally frozen order, not choose a strategy. No order API exists.
 
     Quotes are synchronous bar-open observations, not full intrabar paths.
@@ -72,6 +72,14 @@ def replay(bars,order,*,quotes=None,receipt_ids=(),assumed_spread=None,slippage=
             update=exit_plan(str(entry),str(initial_stop),order['side'],str(c),str(stop),str(peak),str(atr),adaptive['tick_size'],adaptive['minimum_stop_distance'],str(fee/100+slip))
             if update['should_modify']:stop=number(update['stop_loss'])
     gross=side*(exit-entry)*100*lot
+    carry_trace=None
+    if swap_schedule is not None:
+        if swap is not None or assumed_swap is not None:raise ValueError('CONFLICTING_SWAP_INPUTS')
+        from carry_costs import carry
+        carry_trace=carry(bars[0]['time'],b['time']+900,str(lot),order['side'],swap_schedule)
+        # Assumed dated costs are allowed only in a separately labelled scenario result.
+        if carry_trace['status']=='VERIFIED':swap=carry_trace['cashflow']
+        elif carry_trace['status']=='ASSUMPTION':assumed_swap=carry_trace['cashflow']
     # Spread/slippage are already in entry/exit; never subtract them twice.
     known=net_cost(gross,0,fee*lot,swap,0)
     scenario=net_cost(gross,0,fee*lot,assumed_swap,0) if swap is None and assumed_swap is not None else known
@@ -80,4 +88,4 @@ def replay(bars,order,*,quotes=None,receipt_ids=(),assumed_spread=None,slippage=
         'scenario_net_usd':None if unresolved else scenario['net'],'swap_status':'UNKNOWN' if swap is None else 'CALLER_INPUT_NOT_HISTORICALLY_ATTESTED',
         'cost_basis':'ASSUMPTION','slippage_basis':'ASSUMPTION','intrabar_path':'UNKNOWN','intrabar_policy':intrabar_policy,
         'ambiguous_sl_tp':ambiguity,'exit_reason':reason,'spread_trace':trace,'entry_spread_basis':entry_basis,
-        'profitability_verified':False,'trade_allowed':False,'no_trade_baseline_usd':'0'}
+        'carry':carry_trace,'profitability_verified':False,'trade_allowed':False,'no_trade_baseline_usd':'0'}

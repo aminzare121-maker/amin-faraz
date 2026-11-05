@@ -22,7 +22,7 @@ def replay_registered(bank,bars,dataset_id,order,cost_inputs):
     """Attach the execution-scenario extension to the same ledger, without trading runtime."""
     from execution_scenarios import replay
     local=Path(__file__).resolve().parent
-    source_hash=digest({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (Path(__file__),local/'execution_scenarios.py',local/'comparison.py',local/'registry.py')})
+    source_hash=digest({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (Path(__file__),local/'execution_scenarios.py',local/'carry_costs.py',local/'comparison.py',local/'registry.py',local/'vendor/research_ledger.py')})
     spec=dict(code_sha256=source_hash,datasets={dataset_id:digest(bars)},settings={'frozen_order':order,'kind':'EXECUTION_FIXTURE'},
         costs=cost_inputs,protocol_sha256=digest({'intrabar':'stop-first','cost_basis':'ASSUMPTION','strategy_selection':False}),
         environment={'python':platform.python_version()},metrics_version='execution-scenarios-v1',
@@ -71,12 +71,22 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
     from research_engine.experiments import run_experiment as scenario_runner
     from scenario_segment import evaluate_segment
     local=Path(__file__).resolve().parent
-    files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'vendor/research_ledger.py']
+    files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'carry_costs.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'research_protocol.py',local/'vendor/research_ledger.py']
     code=digest({'engine':engine_fingerprint(),'research':{str(p.relative_to(local)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}})
     from amin_mt5.strategy import candidates
     spec=dict(code_sha256=code,datasets={dataset_id:digest(bars)},settings={'strategies':[asdict(c) for c in candidates()], 'scope':'SYNTHETIC_DIAGNOSTIC'},costs=contexts,
         protocol_sha256=digest(protocol),environment={'python':platform.python_version()},metrics_version='selector-scenarios-v1',
         split={'n':len(bars),'train':.5,'validation':.25,'holdout':.25,'embargo':8,'time_interpretation_hash':digest(protocol.get('time_interpretation'))},seed=581)
+    preregistered=protocol.get('preregistered')
+    before_holdout=None
+    if preregistered is not None:
+        from research_protocol import freeze,reserve_trial,expose_holdout
+        name=preregistered['id'];body=preregistered['body']
+        expected_split={'train':[44,len(bars)//2],'validation':[len(bars)//2+8,len(bars)*3//4],'holdout':[len(bars)*3//4+8,len(bars)]}
+        expected_holdout=digest({'dataset':digest(bars),'range':expected_split['holdout']})
+        if body['split']!=expected_split or body['holdout_fingerprint']!=expected_holdout:raise ValueError('PROTOCOL_DATA_SPLIT_MISMATCH')
+        freeze(bank,name,body);reserve_trial(bank,name,spec)
+        before_holdout=lambda:expose_holdout(bank,name)
     reservation=bank.start(spec)
     if reservation['action']!='EXECUTE':return reservation
     try:
@@ -98,7 +108,7 @@ def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
             if ctx.get('cost_basis')!='ASSUMPTION':raise ValueError('COST_EVIDENCE_NOT_CERTIFIED')
             if ctx.get('commission') is None or ctx.get('slippage') is None:raise ValueError('COST_UNKNOWN')
             if float(ctx['commission'])<0 or float(ctx['slippage'])<0:raise ValueError('NEGATIVE_COST')
-        report=scenario_runner(bars,contexts,evaluate=evaluate_segment)
+        report=scenario_runner(bars,contexts,evaluate=evaluate_segment,before_holdout=before_holdout)
         report.update(registry_run_id=reservation['id'],dependency_spec=spec)
         bank.finish_run(reservation['id'],report,True)
         return {'action':'EXECUTED','id':reservation['id'],'result':report}

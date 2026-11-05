@@ -1,0 +1,53 @@
+{
+  "period_start": "2026-11-05T00:00:00Z",
+  "period_end_exclusive": "2026-11-05T09:00:00Z",
+  "status": "CONDITIONAL_PRICE_DIAGNOSTIC_NOT_VALIDATED_DATA",
+  "mapping": "-7200 for this Nov05 sample only, fixed by prior live clock/support winter statement; not price-fit",
+  "source_sha256": "817d3f1059740b2339c4c7b6cc4ccb109be74c1c8b4eb6122e6276ceaf648960",
+  "downloaded_rows": 0,
+  "existing_m1_rows": 683,
+  "selected_m1_rows": 540,
+  "eplanet_m15": 36,
+  "dukascopy_m15": 36,
+  "common_m15": 36,
+  "left_only": [],
+  "right_only": [],
+  "excluded": [],
+  "metrics": {
+    "open": {
+      "signed_mean": "0.1606666666666666666666666667",
+      "signed_median": "0.1725",
+      "mean_absolute": "0.1678888888888888888888888889",
+      "median_absolute": "0.1725",
+      "max_absolute": "0.45",
+      "count_abs_gt_1_usd_per_oz": 0
+    },
+    "high": {
+      "signed_mean": "0.1120555555555555555555555556",
+      "signed_median": "0.110",
+      "mean_absolute": "0.1237222222222222222222222222",
+      "median_absolute": "0.114",
+      "max_absolute": "0.268",
+      "count_abs_gt_1_usd_per_oz": 0
+    },
+    "low": {
+      "signed_mean": "0.1586388888888888888888888889",
+      "signed_median": "0.150",
+      "mean_absolute": "0.1586388888888888888888888889",
+      "median_absolute": "0.150",
+      "max_absolute": "0.315",
+      "count_abs_gt_1_usd_per_oz": 0
+    },
+    "close": {
+      "signed_mean": "0.1615833333333333333333333333",
+      "signed_median": "0.1675",
+      "mean_absolute": "0.1645833333333333333333333333",
+      "median_absolute": "0.1675",
+      "max_absolute": "0.366",
+      "count_abs_gt_1_usd_per_oz": 0
+    }
+  },
+  "spread_comparison": "UNKNOWN_NO_SYNCHRONOUS_COMMON_QUOTES",
+  "year_certified": false,
+  "financial_backtest": false
+}

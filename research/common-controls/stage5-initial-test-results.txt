@@ -1,0 +1,150 @@
+test_contract_pnl_scales_all_lots (test_validity_carry_protocol.CarryTests.test_contract_pnl_scales_all_lots) ... ok
+test_duplicate_events_rejected (test_validity_carry_protocol.CarryTests.test_duplicate_events_rejected) ... ok
+test_incomplete_calendar_unknown (test_validity_carry_protocol.CarryTests.test_incomplete_calendar_unknown) ... ok
+test_invalid_lot_grid (test_validity_carry_protocol.CarryTests.test_invalid_lot_grid) ... ok
+test_lot_scaling_001_01_1 (test_validity_carry_protocol.CarryTests.test_lot_scaling_001_01_1) ... ok
+test_no_double_swap (test_validity_carry_protocol.CarryTests.test_no_double_swap) ... ok
+test_partial_coverage_unknown (test_validity_carry_protocol.CarryTests.test_partial_coverage_unknown) ... ok
+test_positive_short_credit (test_validity_carry_protocol.CarryTests.test_positive_short_credit) ... ok
+test_replay_carry_assumption_not_known_net (test_validity_carry_protocol.CarryTests.test_replay_carry_assumption_not_known_net) ... ok
+test_start_excluded_end_included (test_validity_carry_protocol.CarryTests.test_start_excluded_end_included) ... ok
+test_unattested_verified_rejected (test_validity_carry_protocol.CarryTests.test_unattested_verified_rejected) ... ok
+test_unknown_not_zero (test_validity_carry_protocol.CarryTests.test_unknown_not_zero) ... ok
+test_conditional_not_verified (test_validity_carry_protocol.ContractTests.test_conditional_not_verified) ... ok
+test_fingerprint_changes_with_interpretation (test_validity_carry_protocol.ContractTests.test_fingerprint_changes_with_interpretation) ... ok
+test_known_contract_does_not_authorize_trade (test_validity_carry_protocol.ContractTests.test_known_contract_does_not_authorize_trade) ... ok
+test_session_unknown_blocks_strategy (test_validity_carry_protocol.ContractTests.test_session_unknown_blocks_strategy) ... ok
+test_unknown_clock_blocks (test_validity_carry_protocol.ContractTests.test_unknown_clock_blocks) ... ok
+test_unreviewed_receipt_rejected (test_validity_carry_protocol.ContractTests.test_unreviewed_receipt_rejected) ... ok
+test_actual_runner_seals_holdout (test_validity_carry_protocol.ProtocolTests.test_actual_runner_seals_holdout) ... ok
+test_budget_no_cherry_pick (test_validity_carry_protocol.ProtocolTests.test_budget_no_cherry_pick) ... ok
+test_holdout_blocks_new_tuning (test_validity_carry_protocol.ProtocolTests.test_holdout_blocks_new_tuning) ... ok
+test_overlap_rejected (test_validity_carry_protocol.ProtocolTests.test_overlap_rejected) ... ok
+test_protocol_cannot_mutate (test_validity_carry_protocol.ProtocolTests.test_protocol_cannot_mutate) ... ok
+test_rename_does_not_refresh_holdout (test_validity_carry_protocol.ProtocolTests.test_rename_does_not_refresh_holdout) ... ok
+test_reuse_does_not_spend_trial (test_validity_carry_protocol.ProtocolTests.test_reuse_does_not_spend_trial) ... ok
+test_corrupt_snapshot_rejected (test_recovery.RecoveryTests.test_corrupt_snapshot_rejected) ... ERROR
+test_restore_never_overwrites (test_recovery.RecoveryTests.test_restore_never_overwrites) ... ERROR
+test_snapshot_restore_after_disconnect (test_recovery.RecoveryTests.test_snapshot_restore_after_disconnect) ... ERROR
+test_tampered_result_not_valid (test_recovery.RecoveryTests.test_tampered_result_not_valid) ... ok
+test_actual_unmocked_signals_and_adaptive_exit (test_selector.SelectorTests.test_actual_unmocked_signals_and_adaptive_exit) ... ok
+test_cache_exact (test_selector.SelectorTests.test_cache_exact) ... ok
+test_cost_hash_changes (test_selector.SelectorTests.test_cost_hash_changes) ... ok
+test_different_assumptions_not_comparable (test_selector.SelectorTests.test_different_assumptions_not_comparable) ... ok
+test_end_to_end_three_methods (test_selector.SelectorTests.test_end_to_end_three_methods) ... ok
+test_future_news_blocked (test_selector.SelectorTests.test_future_news_blocked) ... ok
+test_future_quote_not_verified (test_selector.SelectorTests.test_future_quote_not_verified) ... ok
+test_gap_open_proves_stop_before_range_target (test_selector.SelectorTests.test_gap_open_proves_stop_before_range_target) ... ok
+test_holdout_change_does_not_change_selection (test_selector.SelectorTests.test_holdout_change_does_not_change_selection) ... ok
+test_invalid_dataset_cannot_reuse (test_selector.SelectorTests.test_invalid_dataset_cannot_reuse) ... ok
+test_missing_spread_failure_recorded (test_selector.SelectorTests.test_missing_spread_failure_recorded) ... ok
+test_net_arithmetic_no_double_cost (test_selector.SelectorTests.test_net_arithmetic_no_double_cost) ... ok
+test_no_signal_from_delayed_bar (test_selector.SelectorTests.test_no_signal_from_delayed_bar) ... ok
+test_out_of_order_recorded_failed (test_selector.SelectorTests.test_out_of_order_recorded_failed) ... ok
+test_real_year_blocked (test_selector.SelectorTests.test_real_year_blocked) ... ok
+test_same_bar_unknown_pnl_none (test_selector.SelectorTests.test_same_bar_unknown_pnl_none) ... ok
+test_unknown_swap_blocks_even_with_assumed_profit (test_selector.SelectorTests.test_unknown_swap_blocks_even_with_assumed_profit) ... ok
+test_unmocked_existing_candidates (test_selector.SelectorTests.test_unmocked_existing_candidates) ... ok
+test_variable_quote_trace (test_selector.SelectorTests.test_variable_quote_trace) ... ok
+test_future_signal (test_stage3.ExecutionTests.test_future_signal) ... ok
+test_missing_swap_not_zero (test_stage3.ExecutionTests.test_missing_swap_not_zero) ... ok
+test_no_double_cost (test_stage3.ExecutionTests.test_no_double_cost) ... ok
+test_no_session_gap_bridge (test_stage3.ExecutionTests.test_no_session_gap_bridge) ... ok
+test_no_slippage_default (test_stage3.ExecutionTests.test_no_slippage_default) ... ok
+test_no_spread_reject (test_stage3.ExecutionTests.test_no_spread_reject) ... ok
+test_optimistic_is_only_scenario (test_stage3.ExecutionTests.test_optimistic_is_only_scenario) ... ok
+test_path_policy_changes_cache_identity (test_stage3.ExecutionTests.test_path_policy_changes_cache_identity) ... ok
+test_register_reuse_negative_scenario (test_stage3.ExecutionTests.test_register_reuse_negative_scenario) ... ok
+test_short_ask_stop (test_stage3.ExecutionTests.test_short_ask_stop) ... ok
+test_sl_tp_stop_first_unknown (test_stage3.ExecutionTests.test_sl_tp_stop_first_unknown) ... ok
+test_stop_gap_adverse_fill (test_stage3.ExecutionTests.test_stop_gap_adverse_fill) ... ok
+test_target_no_gap_bonus (test_stage3.ExecutionTests.test_target_no_gap_bonus) ... ok
+test_unknown_path_has_no_selected_pnl (test_stage3.ExecutionTests.test_unknown_path_has_no_selected_pnl) ... ok
+test_unverified_quote_fallback (test_stage3.ExecutionTests.test_unverified_quote_fallback) ... ok
+test_variable_real_quote_spread (test_stage3.ExecutionTests.test_variable_real_quote_spread) ... ok
+
+======================================================================
+ERROR: test_corrupt_snapshot_rejected (test_recovery.RecoveryTests.test_corrupt_snapshot_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmp6ewh5ixk\\bank.sqlite'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pixel\Documents\Codex\2026-11-05\faraz-common-research\test_recovery.py", line 11, in tearDown
+    def tearDown(self):self.tmp.cleanup()
+                       ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmp6ewh5ixk\\bank.sqlite'
+
+======================================================================
+ERROR: test_restore_never_overwrites (test_recovery.RecoveryTests.test_restore_never_overwrites)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmpdjmd54ai\\bank.sqlite'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pixel\Documents\Codex\2026-11-05\faraz-common-research\test_recovery.py", line 11, in tearDown
+    def tearDown(self):self.tmp.cleanup()
+                       ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmpdjmd54ai\\bank.sqlite'
+
+======================================================================
+ERROR: test_snapshot_restore_after_disconnect (test_recovery.RecoveryTests.test_snapshot_restore_after_disconnect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmpswyahf4a\\bank.sqlite'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pixel\Documents\Codex\2026-11-05\faraz-common-research\test_recovery.py", line 11, in tearDown
+    def tearDown(self):self.tmp.cleanup()
+                       ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\Pixel\\AppData\\Local\\Temp\\tmpswyahf4a\\bank.sqlite'
+
+----------------------------------------------------------------------
+Ran 64 tests in 12.265s
+
+FAILED (errors=3)

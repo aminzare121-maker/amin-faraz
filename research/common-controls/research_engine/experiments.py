@@ -41,7 +41,7 @@ def rank(records,minimum_trades=8):
     return dict(rows=ranked,scenario_nominee=eligible[0]['id'] if eligible else None,
         verified_best=None,selection_uses_holdout=False,comparable=comparable)
 
-def run_experiment(bars,contexts,*,evaluate,minimum_trades=8):
+def run_experiment(bars,contexts,*,evaluate,minimum_trades=8,before_holdout=None):
     """Migrate the existing selector to all three execution policies and stresses.
     Fit is train-only and conservative; holdout is consumed only after selection.
     """
@@ -66,6 +66,7 @@ def run_experiment(bars,contexts,*,evaluate,minimum_trades=8):
             record=dict(id=ident,candidate=asdict(candidate),model=fitted,train=train,validation=validation,comparison_hash=comparison_hash)
             results.append(record);private[ident]=(candidate,fitted)
     ranking=rank(results,minimum_trades);selected=ranking['scenario_nominee']
+    if before_holdout is not None:before_holdout()
     # Sealed here by control flow. Diagnostics on holdout must not reselect.
     holdout=scenarios(validation_end+embargo,n,*private[selected]) if selected else None
     baseline=scenarios(validation_end+embargo,n,candidates()[0])

@@ -1,0 +1,371 @@
+[
+  {
+    "contract": {
+      "schema": "faraz-data-v1",
+      "source": "EplanetDemo",
+      "version": "2026-11-05-existing",
+      "raw_sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07",
+      "kind": "M15",
+      "rows": 23643,
+      "hash_scope": "manifest_or_repair_receipt_with_child_file_hashes",
+      "price_side": {
+        "value": "BID",
+        "status": "CONDITIONAL",
+        "reason": "Prior source/quote evidence; not a new whole-year certification"
+      },
+      "time": {
+        "value": "BROKER_SERVER",
+        "status": "UNKNOWN"
+      },
+      "candle_completeness": {
+        "status": "CONDITIONAL",
+        "reason": "Observed rows checked previously; scheduled coverage not certified"
+      },
+      "session": {
+        "status": "UNKNOWN"
+      },
+      "bid_ask": {
+        "status": "UNKNOWN"
+      },
+      "provenance": {
+        "status": "CONDITIONAL",
+        "reason": "Private research scope only; original sources preserved"
+      },
+      "evidence": {}
+    },
+    "gates": {
+      "raw_inventory": {
+        "contract_sha256": "db74014248c2e33de40893f77856839b41f2c0eefcec91918bd799f2315d0878",
+        "purpose": "raw_inventory",
+        "allowed": true,
+        "blocked_by": [],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "price_comparison": {
+        "contract_sha256": "db74014248c2e33de40893f77856839b41f2c0eefcec91918bd799f2315d0878",
+        "purpose": "price_comparison",
+        "allowed": false,
+        "blocked_by": [
+          "TIME_NOT_UTC",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "strategy_research": {
+        "contract_sha256": "db74014248c2e33de40893f77856839b41f2c0eefcec91918bd799f2315d0878",
+        "purpose": "strategy_research",
+        "allowed": false,
+        "blocked_by": [
+          "TIME_NOT_UTC",
+          "bid_ask",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "session",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      }
+    }
+  },
+  {
+    "contract": {
+      "schema": "faraz-data-v1",
+      "source": "EplanetDemo",
+      "version": "2026-11-05-existing",
+      "raw_sha256": "03d6be8ed6929cfcc4dc0191e194451e2b8e96b1090f12004b5583812dd3c067",
+      "kind": "TICK",
+      "rows": 7946,
+      "hash_scope": "manifest_or_repair_receipt_with_child_file_hashes",
+      "price_side": {
+        "value": "BID_ASK",
+        "status": "CONDITIONAL",
+        "reason": "Prior source/quote evidence; not a new whole-year certification"
+      },
+      "time": {
+        "value": "BROKER_SERVER",
+        "status": "UNKNOWN"
+      },
+      "candle_completeness": {
+        "status": "CONDITIONAL",
+        "reason": "Observed rows checked previously; scheduled coverage not certified"
+      },
+      "session": {
+        "status": "UNKNOWN"
+      },
+      "bid_ask": {
+        "status": "CONDITIONAL"
+      },
+      "provenance": {
+        "status": "CONDITIONAL",
+        "reason": "Private research scope only; original sources preserved"
+      },
+      "evidence": {}
+    },
+    "gates": {
+      "raw_inventory": {
+        "contract_sha256": "c087b7211cef627eb2ed368da8e0b26d76a98567011d0fa11339f348f2d90b3b",
+        "purpose": "raw_inventory",
+        "allowed": true,
+        "blocked_by": [],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "price_comparison": {
+        "contract_sha256": "c087b7211cef627eb2ed368da8e0b26d76a98567011d0fa11339f348f2d90b3b",
+        "purpose": "price_comparison",
+        "allowed": false,
+        "blocked_by": [
+          "TIME_NOT_UTC",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "strategy_research": {
+        "contract_sha256": "c087b7211cef627eb2ed368da8e0b26d76a98567011d0fa11339f348f2d90b3b",
+        "purpose": "strategy_research",
+        "allowed": false,
+        "blocked_by": [
+          "TIME_NOT_UTC",
+          "bid_ask",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "session",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      }
+    }
+  },
+  {
+    "contract": {
+      "schema": "faraz-data-v1",
+      "source": "Dukascopy",
+      "version": "2026-11-05-existing",
+      "raw_sha256": "7866d3a24764d049023e0934e81655c01b329c1df63b5ad7c4aa1aaf2e002484",
+      "kind": "M1",
+      "rows": 1380,
+      "hash_scope": "original_csv_bytes",
+      "price_side": {
+        "value": "BID",
+        "status": "CONDITIONAL",
+        "reason": "Prior source/quote evidence; not a new whole-year certification"
+      },
+      "time": {
+        "value": "UTC",
+        "status": "CONDITIONAL"
+      },
+      "candle_completeness": {
+        "status": "CONDITIONAL",
+        "reason": "Observed rows checked previously; scheduled coverage not certified"
+      },
+      "session": {
+        "status": "UNKNOWN"
+      },
+      "bid_ask": {
+        "status": "UNKNOWN"
+      },
+      "provenance": {
+        "status": "CONDITIONAL",
+        "reason": "Private research scope only; original sources preserved"
+      },
+      "evidence": {}
+    },
+    "gates": {
+      "raw_inventory": {
+        "contract_sha256": "cd5c1d58153271912c23b47461a9bbf4eb049ea84468fd99389569c2f9b89078",
+        "purpose": "raw_inventory",
+        "allowed": true,
+        "blocked_by": [],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "price_comparison": {
+        "contract_sha256": "cd5c1d58153271912c23b47461a9bbf4eb049ea84468fd99389569c2f9b89078",
+        "purpose": "price_comparison",
+        "allowed": false,
+        "blocked_by": [
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "strategy_research": {
+        "contract_sha256": "cd5c1d58153271912c23b47461a9bbf4eb049ea84468fd99389569c2f9b89078",
+        "purpose": "strategy_research",
+        "allowed": false,
+        "blocked_by": [
+          "bid_ask",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "session",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      }
+    }
+  },
+  {
+    "contract": {
+      "schema": "faraz-data-v1",
+      "source": "Dukascopy",
+      "version": "2026-11-05-existing",
+      "raw_sha256": "fb27741a462c4392c847700c174ffcb0603db55845caa588442fc15734e802ad",
+      "kind": "M1",
+      "rows": 1380,
+      "hash_scope": "original_csv_bytes",
+      "price_side": {
+        "value": "ASK",
+        "status": "CONDITIONAL",
+        "reason": "Prior source/quote evidence; not a new whole-year certification"
+      },
+      "time": {
+        "value": "UTC",
+        "status": "CONDITIONAL"
+      },
+      "candle_completeness": {
+        "status": "CONDITIONAL",
+        "reason": "Observed rows checked previously; scheduled coverage not certified"
+      },
+      "session": {
+        "status": "UNKNOWN"
+      },
+      "bid_ask": {
+        "status": "UNKNOWN"
+      },
+      "provenance": {
+        "status": "CONDITIONAL",
+        "reason": "Private research scope only; original sources preserved"
+      },
+      "evidence": {}
+    },
+    "gates": {
+      "raw_inventory": {
+        "contract_sha256": "c09af3cfcb3a67d8287900d0e31fca82d0b4687392dac08676079ceaf784a8e2",
+        "purpose": "raw_inventory",
+        "allowed": true,
+        "blocked_by": [],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "price_comparison": {
+        "contract_sha256": "c09af3cfcb3a67d8287900d0e31fca82d0b4687392dac08676079ceaf784a8e2",
+        "purpose": "price_comparison",
+        "allowed": false,
+        "blocked_by": [
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "strategy_research": {
+        "contract_sha256": "c09af3cfcb3a67d8287900d0e31fca82d0b4687392dac08676079ceaf784a8e2",
+        "purpose": "strategy_research",
+        "allowed": false,
+        "blocked_by": [
+          "bid_ask",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "session",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      }
+    }
+  },
+  {
+    "contract": {
+      "schema": "faraz-data-v1",
+      "source": "Dukascopy",
+      "version": "2026-11-05-existing",
+      "raw_sha256": "817d3f1059740b2339c4c7b6cc4ccb109be74c1c8b4eb6122e6276ceaf648960",
+      "kind": "M1",
+      "rows": 683,
+      "hash_scope": "original_csv_bytes",
+      "price_side": {
+        "value": "BID",
+        "status": "CONDITIONAL",
+        "reason": "Prior source/quote evidence; not a new whole-year certification"
+      },
+      "time": {
+        "value": "UTC",
+        "status": "CONDITIONAL"
+      },
+      "candle_completeness": {
+        "status": "CONDITIONAL",
+        "reason": "Observed rows checked previously; scheduled coverage not certified"
+      },
+      "session": {
+        "status": "UNKNOWN"
+      },
+      "bid_ask": {
+        "status": "UNKNOWN"
+      },
+      "provenance": {
+        "status": "CONDITIONAL",
+        "reason": "Private research scope only; original sources preserved"
+      },
+      "evidence": {}
+    },
+    "gates": {
+      "raw_inventory": {
+        "contract_sha256": "813478297d54afd00601e8e5fbcab0dbdb470432c56ac05d301cb0079ac7fcef",
+        "purpose": "raw_inventory",
+        "allowed": true,
+        "blocked_by": [],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "price_comparison": {
+        "contract_sha256": "813478297d54afd00601e8e5fbcab0dbdb470432c56ac05d301cb0079ac7fcef",
+        "purpose": "price_comparison",
+        "allowed": false,
+        "blocked_by": [
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      },
+      "strategy_research": {
+        "contract_sha256": "813478297d54afd00601e8e5fbcab0dbdb470432c56ac05d301cb0079ac7fcef",
+        "purpose": "strategy_research",
+        "allowed": false,
+        "blocked_by": [
+          "bid_ask",
+          "candle_completeness",
+          "price_side",
+          "provenance",
+          "session",
+          "time"
+        ],
+        "trade_allowed": false,
+        "financial_approval": false
+      }
+    }
+  }
+]
