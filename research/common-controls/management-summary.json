@@ -1,0 +1,899 @@
+{
+  "identity": "1c7096859e25804cafb5e7f77e6fadd2492ca0b114d3d420be009a75b2d67985",
+  "action": "EXECUTED",
+  "status": "EXPLORATORY_ONLY",
+  "policy": {
+    "window_start": "2026-11-04T00:00:00Z",
+    "window_end": "2026-11-04T22:00:00Z",
+    "initial_capital": "10000",
+    "initial_capital_basis": "ASSUMPTION",
+    "policy": {
+      "stage_loss_fraction": "0.03",
+      "stage_reduction": "0.5",
+      "max_daily_drawdown": "0.03",
+      "max_total_drawdown": "0.10",
+      "max_order_risk_fraction": "0.005",
+      "max_portfolio_risk_fraction": "0.01",
+      "max_notional_multiple": "2",
+      "max_positions": null,
+      "max_daily_orders": null,
+      "max_spread": "0.50",
+      "max_slippage": "0.20",
+      "max_jump_fraction": "0.005",
+      "max_age_ms": 2000,
+      "max_future_ms": 250,
+      "max_roundtrip_ms": 750,
+      "minimum_active": "25",
+      "daily_profit_target": "0.10",
+      "daily_profit_target_halts": false,
+      "commission_per_lot": "10",
+      "entry_context_mode": "directional-confirmation"
+    },
+    "spec": {
+      "symbol": "XAUUSD",
+      "currency_profit": "USD",
+      "contract_size": "100",
+      "tick_size": "0.01",
+      "volume_min": "0.01",
+      "volume_max": "10",
+      "volume_step": "0.01",
+      "minimum_stop_distance": "0.10",
+      "trading_enabled": true
+    },
+    "spec_basis": "SOURCE_DEFAULTS_NOT_HISTORICAL_ATTESTATION",
+    "execution_costs": {
+      "spread": "0.3",
+      "slippage": "0.1",
+      "commission_roundtrip_per_lot": "0"
+    },
+    "cost_basis": "ASSUMPTION",
+    "sizing_cost_basis": "ORIGINAL_POLICY_CONSERVATIVE_ENVELOPE",
+    "stop_update": "CLOSED_BAR_EFFECTIVE_NEXT_BAR",
+    "fixed_target": null,
+    "fixed_horizon": null,
+    "offset_seconds": -7200,
+    "time_basis": "CONDITIONAL",
+    "swap": "UNKNOWN",
+    "train_cutoff": "2026-11-04T00:00:00Z",
+    "training": "NO_OPTIMIZATION_ON_OBSERVED_DAY"
+  },
+  "code_hashes": {
+    "historical_engine.py": "4921327d3b7a8754c1b408666d676a77a25fa65124d3c45638d5d601d34589be",
+    "historical_management.py": "31f4666e183b64e420e32ee9578efcc2d5c87519b16403b9c43740c4c9345f03",
+    "historical_management_run.py": "701e734127ad21e3db0e080f565f17ad725372e251480ba196473d0d586d5633",
+    "historical_candidates.py": "75ffaeb82dabc1015a5a7298e7ea272bf930e771303f5b926d5a720e768424f0",
+    "historical_windows_run.py": "71d9f9a029f983127daaad7d079ad2d951e9004953f95ee374f30731b859e7cb",
+    "historical_runner.py": "4d4aaccb8e596eaf86bcf587e4e1b8cae25903019ba821c55fbd8a4500853e4c",
+    "offline_evidence.py": "5506018fa4f220117bc503853cad0de1cf40f6ab8f9dd08336039c9dbb776fbd",
+    "registry.py": "3bf60f5382f255adb3b8ba1b9d3b80eccaf7c70014d937fed28d61f3887bf5ae",
+    "vendor/research_ledger.py": "0a5ff406c88050cdd32917e762bb5b3c19038ffa528d40c81e76fa32bf31d703",
+    "amin_mt5/strategy.py": "af60ba9edaa8b547cd2302ddcb7df9c5d1dd944c3b2283fa9afc47c46452ff77",
+    "amin_mt5/analysis.py": "dde7ec19594ace129a878c57eb9fafb5aaed34542eec0451015caf96319793f1",
+    "amin_mt5/model.py": "fb4953193d70b63ffa647a246b1424acbd63709f44bf1eae21f0da025fe07fb8",
+    "amin_mt5/auto_sizing.py": "1257bf4bfbcb3830bb8b7f40939447f6324c8cee8dce203cd30889c92676346b",
+    "amin_mt5/risk.py": "fdb5ab2c6f87ce22680ce6bf08b1b1149722e6b1ae9c733a8ddee87656c2e804",
+    "amin_mt5/adaptive_exit.py": "6ff30e46a6f89931bc490508bda1c2f379acc9e3a239a821488e02859ce4b668",
+    "amin_mt5/learning.py": "85d6392fb53b67d60a0e95c6d099d36acc944df2abd45b6f4d4c8c9ecbb0561f"
+  },
+  "data_sha256": "88e71b8008079bf0e0d8c2a4800f22940d9bec90576ef40954a9d4300e9bb31c",
+  "manifest_sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07",
+  "window_bars": 88,
+  "results": {
+    "breakout-20-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        },
+        "risk_aware": {
+          "positions": 2,
+          "resolved": 1,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "76.1600",
+          "ending_realized_equity": "10076.1600"
+        },
+        "gross_resolved_scenario_usd": "76.1600",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "40.6200",
+            "equity_before": "10000",
+            "gross_scenario_usd": "76.1600",
+            "net_scenario_usd": "76.1600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10076.1600",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 17,
+        "trace_sha256": "301132669e1d43692df4c0b2d632e5e9c2556fd79715a2fd8d837c9304e20b70",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        },
+        "risk_aware": {
+          "positions": 2,
+          "resolved": 1,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "76.1600",
+          "ending_realized_equity": "10076.1600"
+        },
+        "gross_resolved_scenario_usd": "76.1600",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "40.6200",
+            "equity_before": "10000",
+            "gross_scenario_usd": "76.1600",
+            "net_scenario_usd": "76.1600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10076.1600",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 17,
+        "trace_sha256": "b9654f3b039610a025c7e44ca6b93cef6d470c9c5bd1338221e0f16226989d2d",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 7,
+          "resolved": 7,
+          "unresolved": 0,
+          "scenario_net_usd": "31.3500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "31.3500",
+          "signal_counts": {
+            "opportunities": 54,
+            "signals": 7
+          },
+          "resolved_win_rate": "0.7142857142857142857142857143",
+          "trace_sha256": "900959c01af9966a16243c152fec068c32016e2e78fbd4dd5df4dc27fbdc93cd"
+        },
+        "risk_aware": {
+          "positions": 2,
+          "resolved": 1,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "76.1600",
+          "ending_realized_equity": "10076.1600"
+        },
+        "gross_resolved_scenario_usd": "76.1600",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "40.6200",
+            "equity_before": "10000",
+            "gross_scenario_usd": "76.1600",
+            "net_scenario_usd": "76.1600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10076.1600",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 17,
+        "trace_sha256": "b09c211b292f1b78fefbee702a9c107d4c3d782f68d0d5d6de89387d8bdb93fb",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    },
+    "breakout-40-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 0,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10000",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "822770a052302e076c2a8f7f140d939e956b0e881fcf6109416abe79f8007697",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 0,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10000",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "651b44f69e07dfb6e32a3b65f798303cfcadae09c350ebc9ba2b48e80a5a8e8f",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 2,
+          "resolved": 2,
+          "unresolved": 0,
+          "scenario_net_usd": "0.7500",
+          "scenario_max_drawdown_usd": "9.1500",
+          "known_partial_net_usd": "0.7500",
+          "signal_counts": {
+            "opportunities": 73,
+            "signals": 2
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "f33162d3a5dc095c5f4ed204fcd7bbe93de3cdc252e340e982761533f909ed81"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 0,
+          "unresolved": 1,
+          "scenario_net_usd": null,
+          "scenario_max_drawdown_usd": null,
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [
+          {
+            "lots": "0.02",
+            "initial_risk_usd": "34.2200",
+            "equity_before": "10000",
+            "gross_scenario_usd": null,
+            "net_scenario_usd": null,
+            "reason": "ROLLOVER_COST_UNKNOWN",
+            "price_exit_reason": "UNRESOLVED_BOUNDARY"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "045ae40a79114d9790adbf63146b01fcaa659b70eefcbfacb663ab342d553818",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    },
+    "rejection-20-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        },
+        "risk_aware": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "50.0800",
+          "scenario_max_drawdown_usd": "42.2000",
+          "known_partial_net_usd": "50.0800",
+          "ending_realized_equity": "10050.0800"
+        },
+        "gross_resolved_scenario_usd": "50.0800",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.7600",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-26.9600",
+            "net_scenario_usd": "-26.9600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "12.0000",
+            "equity_before": "9973.0400",
+            "gross_scenario_usd": "-11.2000",
+            "net_scenario_usd": "-11.2000",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "9961.8400",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.0400",
+            "equity_before": "9957.8000",
+            "gross_scenario_usd": "92.2800",
+            "net_scenario_usd": "92.2800",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 16,
+        "trace_sha256": "171a9d2559e6e8084ff3e3e156e884e23aeb3b7e3e418279cf905296f65051fa",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        },
+        "risk_aware": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "50.0800",
+          "scenario_max_drawdown_usd": "42.2000",
+          "known_partial_net_usd": "50.0800",
+          "ending_realized_equity": "10050.0800"
+        },
+        "gross_resolved_scenario_usd": "50.0800",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.7600",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-26.9600",
+            "net_scenario_usd": "-26.9600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "12.0000",
+            "equity_before": "9973.0400",
+            "gross_scenario_usd": "-11.2000",
+            "net_scenario_usd": "-11.2000",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "9961.8400",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.0400",
+            "equity_before": "9957.8000",
+            "gross_scenario_usd": "92.2800",
+            "net_scenario_usd": "92.2800",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 16,
+        "trace_sha256": "4026e2de60ee7a84885ed2ea158169edd2474958b2b1acc5d4e7bd1c72b3712e",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "10.2600",
+          "scenario_max_drawdown_usd": "9.5400",
+          "known_partial_net_usd": "10.2600",
+          "signal_counts": {
+            "opportunities": 77,
+            "signals": 4
+          },
+          "resolved_win_rate": "0.5",
+          "trace_sha256": "5015b6d5c1caf9fc0db5fc7a94e04a5d81fc740980beea6a10b591c209dd10d9"
+        },
+        "risk_aware": {
+          "positions": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "scenario_net_usd": "50.0800",
+          "scenario_max_drawdown_usd": "42.2000",
+          "known_partial_net_usd": "50.0800",
+          "ending_realized_equity": "10050.0800"
+        },
+        "gross_resolved_scenario_usd": "50.0800",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.7600",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-26.9600",
+            "net_scenario_usd": "-26.9600",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "12.0000",
+            "equity_before": "9973.0400",
+            "gross_scenario_usd": "-11.2000",
+            "net_scenario_usd": "-11.2000",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "9961.8400",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          },
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "27.0400",
+            "equity_before": "9957.8000",
+            "gross_scenario_usd": "92.2800",
+            "net_scenario_usd": "92.2800",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 16,
+        "trace_sha256": "3e4d937f550c5cee9b04e69932a9aa9ffd6cc10008a0d37efa6fb223fc09d65a",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    },
+    "rejection-40-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-4.0400",
+          "scenario_max_drawdown_usd": "4.0400",
+          "known_partial_net_usd": "-4.0400",
+          "ending_realized_equity": "9995.9600"
+        },
+        "gross_resolved_scenario_usd": "-4.0400",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 1,
+        "trace_sha256": "5e7197036ce8c3b62eaa7a7b09f7630f39227f2755125ad7496be0ae16b5286b",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-4.0400",
+          "scenario_max_drawdown_usd": "4.0400",
+          "known_partial_net_usd": "-4.0400",
+          "ending_realized_equity": "9995.9600"
+        },
+        "gross_resolved_scenario_usd": "-4.0400",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 1,
+        "trace_sha256": "9c2e3f6f51bc5367fbe3db1265ce4a10c206edc6b9913b380d6381c7970db4a6",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "9.900",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "9.900",
+          "signal_counts": {
+            "opportunities": 81,
+            "signals": 1
+          },
+          "resolved_win_rate": "1",
+          "trace_sha256": "cd8dabed86555faa5e19b9697a030b9c33e40d4734241cd2088900c1c99085b2"
+        },
+        "risk_aware": {
+          "positions": 1,
+          "resolved": 1,
+          "unresolved": 0,
+          "scenario_net_usd": "-4.0400",
+          "scenario_max_drawdown_usd": "4.0400",
+          "known_partial_net_usd": "-4.0400",
+          "ending_realized_equity": "9995.9600"
+        },
+        "gross_resolved_scenario_usd": "-4.0400",
+        "trades": [
+          {
+            "lots": "0.04",
+            "initial_risk_usd": "17.2800",
+            "equity_before": "10000",
+            "gross_scenario_usd": "-4.0400",
+            "net_scenario_usd": "-4.0400",
+            "reason": "STOP",
+            "price_exit_reason": "STOP"
+          }
+        ],
+        "failure_counts": {},
+        "stop_updates": 1,
+        "trace_sha256": "454d9d46219fee0a11064eeee4bd4e9dca1c9628238501c53d636a32a332712f",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    },
+    "retest-20-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "6568d19fcf5fe961768a889189fcc93c45cf35030124c0ee876dfa0a94c7ff38",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "d9c152aecd9c2bb13336aafd6d331754b7a654d8eed9c0e8c53694c7b1f21692",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "5b0cc5b47b50df6165c9f257123cf800e208bba81e21360cf8351cab80241291",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    },
+    "retest-40-1.5": {
+      "stop_first": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "6568d19fcf5fe961768a889189fcc93c45cf35030124c0ee876dfa0a94c7ff38",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "target_first": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "d9c152aecd9c2bb13336aafd6d331754b7a654d8eed9c0e8c53694c7b1f21692",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      },
+      "unknown": {
+        "fixed_overlay": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "signal_counts": {
+            "opportunities": 87,
+            "signals": 0
+          },
+          "resolved_win_rate": null,
+          "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "risk_aware": {
+          "positions": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "scenario_net_usd": "0",
+          "scenario_max_drawdown_usd": "0",
+          "known_partial_net_usd": "0",
+          "ending_realized_equity": "10000"
+        },
+        "gross_resolved_scenario_usd": "0",
+        "trades": [],
+        "failure_counts": {},
+        "stop_updates": 0,
+        "trace_sha256": "5b0cc5b47b50df6165c9f257123cf800e208bba81e21360cf8351cab80241291",
+        "mtm_max_drawdown": "UNKNOWN_TICK_PATH_AND_QUOTE_UNVERIFIED"
+      }
+    }
+  },
+  "learning": {
+    "status": "NO_TRAIN/INSUFFICIENT_SAMPLE",
+    "train_rows": 0,
+    "cutoff": 1793750400,
+    "model": null
+  },
+  "operational_guards_unassessed": [
+    "DEMO_ACCOUNT_REQUIRED",
+    "DISCONNECTED",
+    "MARGIN_LIMIT",
+    "MARKET_CLOSED",
+    "NEWS_NOT_CLEARED",
+    "RECONCILIATION_REQUIRED"
+  ],
+  "financial_approval": false,
+  "holdout_certified": false,
+  "orders": 0,
+  "broker_modules_loaded": false
+}

@@ -87,7 +87,7 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
              lots='0.01', contract='100', stop_distance='5', target_distance='10',
              max_holding_bars=12, policy='unknown', cost_basis='ASSUMPTION',
              rollover_exposure='UNKNOWN', time_basis='CONDITIONAL',
-             max_history=120):
+             max_history=120, management=None):
     """One position at a time; all decisions use only previously CLOSED candles.
 
     PnL is scenario-specific and cannot be used as a verified trading result.
@@ -138,13 +138,20 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                 if direction*(entry-stop)<=0:
                     i+=1;continue  # Already crossed stop at entry; no invented risk level.
             target=entry+direction*target_d
+            initial_stop=stop; sizing=None; adjustments=[]
+            if management is not None:
+                sizing=management.prepare(setup,entry,part[i],history,sp)
+                if sizing is None:
+                    i+=1;continue
+                vol=num(sizing['volume']);target=None
+            horizon=len(part)-i if management is not None else max_holding_bars
             exit_price=None; exit_reason='UNRESOLVED_BOUNDARY'; last_idx=None
-            for k in range(i,min(len(part),i+max_holding_bars)):
+            for k in range(i,min(len(part),i+horizon)):
                 b=part[k]
                 # Long exits use Bid; short exits use ASSUMED Ask from Bid.
                 o,h,l,c=(b[x]+(sp if side=='sell' else D(0)) for x in ('open','high','low','close'))
                 stop_at_open=o<=stop if side=='buy' else o>=stop
-                target_at_open=o>=target if side=='buy' else o<=target
+                target_at_open=target is not None and (o>=target if side=='buy' else o<=target)
                 # A gap at open chooses the observed opening quote, no optimistic fill.
                 if stop_at_open:
                     exit_price=o-direction*sl;exit_reason='STOP_OPEN_GAP'
@@ -152,7 +159,7 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                     exit_price=target-direction*sl;exit_reason='TARGET_AT_OPEN_CAPPED'
                 else:
                     hit_stop=l<=stop if side=='buy' else h>=stop
-                    hit_target=h>=target if side=='buy' else l<=target
+                    hit_target=target is not None and (h>=target if side=='buy' else l<=target)
                     if hit_stop and hit_target and policy=='unknown':
                         exit_reason='AMBIGUOUS_SL_TP'
                     elif hit_stop and (not hit_target or policy=='stop_first'):
@@ -161,7 +168,15 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                         exit_price=target-direction*sl;exit_reason='TARGET'
                 if exit_reason!='UNRESOLVED_BOUNDARY':
                     last_idx=k;break
-            if last_idx is None and i+max_holding_bars<=len(part):
+                if management is not None:
+                    # Close-only observation. The newly calculated stop is effective
+                    # at the NEXT bar; never replay this bar using its future high.
+                    update=management.on_close(entry,initial_stop,side,c,stop,
+                        part[max(0,k-13):k+1],vol,fee,sl)
+                    if update['should_modify']:
+                        stop=num(update['stop_loss'])
+                        adjustments.append(dict(effective_time=b['time']+SECONDS,stop=str(stop)))
+            if management is None and last_idx is None and i+max_holding_bars<=len(part):
                 last_idx=i+max_holding_bars-1
                 last_bar=part[last_idx]
                 exit_price=last_bar['close']+(sp if side=='sell' else D(0))-direction*sl
@@ -178,10 +193,15 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                 entry_time=part[i]['time'],exit_time=part[last_idx]['time']+SECONDS,
                 entry=str(entry),exit=str(exit_price) if resolved else None,
                 reason='ROLLOVER_COST_UNKNOWN' if exposed else exit_reason,
+                price_exit_reason=exit_reason,
                 net_scenario_usd=str(net) if resolved else None,
                 gross_scenario_usd=str(gross) if resolved else None,
-                stop=str(stop),target=str(target),lots=str(vol),
+                stop=str(stop),target=str(target) if target is not None else None,lots=str(vol),
+                initial_stop=str(initial_stop),initial_risk_usd=sizing['initial_risk_usd'] if sizing else None,
+                equity_before=sizing['equity_before'] if sizing else None,stop_adjustments=adjustments,
                 signal_candidate=setup.get('candidate') if isinstance(setup,dict) else None))
+            if management is not None:
+                management.settle(net,part[last_idx]['time']+SECONDS)
             # Block new positions across uncertain unresolved exposure.
             if not resolved:
                 unresolved_position=True
