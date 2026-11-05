@@ -1,0 +1,25 @@
+test_double_finish_rejected (test_controls.BankTests.test_double_finish_rejected) ... ok
+test_every_dependency_changes_identity (test_controls.BankTests.test_every_dependency_changes_identity) ... ok
+test_failed_not_reused (test_controls.BankTests.test_failed_not_reused) ... ok
+test_immutable_artifact (test_controls.BankTests.test_immutable_artifact) ... ok
+test_indicator_invalid_hash (test_controls.BankTests.test_indicator_invalid_hash) ... ok
+test_invalidation_retains_reason_and_blocks_finish (test_controls.BankTests.test_invalidation_retains_reason_and_blocks_finish) ... ok
+test_negative_result_reused_after_restart (test_controls.BankTests.test_negative_result_reused_after_restart) ... ok
+test_result_tamper (test_controls.BankTests.test_result_tamper) ... ok
+test_running_not_reexecuted (test_controls.BankTests.test_running_not_reexecuted) ... ok
+test_unknown_dependency_rejected (test_controls.BankTests.test_unknown_dependency_rejected) ... ok
+test_unvalidated_real_data_blocked (test_controls.BankTests.test_unvalidated_real_data_blocked) ... ok
+test_bad_cost (test_controls.ComparisonTests.test_bad_cost) ... ok
+test_bad_rows (test_controls.ComparisonTests.test_bad_rows) ... ok
+test_exact_overlap_and_differences (test_controls.ComparisonTests.test_exact_overlap_and_differences) ... ok
+test_future_news_never_available (test_controls.ComparisonTests.test_future_news_never_available) ... ok
+test_no_overlap (test_controls.ComparisonTests.test_no_overlap) ... ok
+test_side_mismatch (test_controls.ComparisonTests.test_side_mismatch) ... ok
+test_signed_swap (test_controls.ComparisonTests.test_signed_swap) ... ok
+test_unknown_cost_not_zero (test_controls.ComparisonTests.test_unknown_cost_not_zero) ... ok
+test_unknown_session (test_controls.ComparisonTests.test_unknown_session) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.555s
+
+OK
