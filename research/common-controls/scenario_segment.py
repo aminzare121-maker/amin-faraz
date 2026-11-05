@@ -11,16 +11,16 @@ from amin_mt5.risk import update_stage
 from execution_scenarios import replay,spread_at
 
 def evaluate_segment(bars,start,end,context,candidate,model=None,intrabar_policy='stop_first'):
-    candidate.validate();i=max(start,candidate.lookback+4);rows=[];equity=10000.0;control_equities={}
+    candidate.validate();i=max(start,candidate.lookback+4);rows=[];equity=Decimal('10000');control_equities={}
     policy=Policy();spec=SymbolSpec(contract_size='100')
     day=datetime.fromtimestamp(bars[i]['time'],timezone.utc).date().isoformat()
     stage=Stage.initial(day,Account('research','10000','10000','demo'))
     while i<end-1:
         entry_index=i+1;entry_time=bars[entry_index]['time']
         stage=update_stage(stage,str(equity),entry_time*1000,policy)
-        if equity<=10000*(1-float(policy.max_total_drawdown)) or float(stage.active_capital)<float(policy.minimum_active):break
-        if (equity<=float(stage.day_start_equity)*(1-float(policy.max_daily_drawdown)) or
-            (policy.daily_profit_target_halts and equity>=float(stage.day_start_equity)*(1+float(policy.daily_profit_target))) or
+        if equity<=Decimal('10000')*(1-Decimal(str(policy.max_total_drawdown))) or Decimal(str(stage.active_capital))<Decimal(str(policy.minimum_active)):break
+        if (equity<=Decimal(str(stage.day_start_equity))*(1-Decimal(str(policy.max_daily_drawdown))) or
+            (policy.daily_profit_target_halts and equity>=Decimal(str(stage.day_start_equity))*(1+Decimal(str(policy.daily_profit_target)))) or
             (policy.max_daily_orders is not None and stage.daily_orders>=policy.max_daily_orders)):
             i+=1;continue
         # Pass only information actually available by the decision boundary.
@@ -49,6 +49,6 @@ def evaluate_segment(bars,start,end,context,candidate,model=None,intrabar_policy
         rows.append(row)
         # Cannot safely size or learn subsequent orders from an unknown equity path.
         if net is None:break
-        equity+=float(net);stage=replace(stage,daily_orders=stage.daily_orders+1)
+        equity+=Decimal(str(net));stage=replace(stage,daily_orders=stage.daily_orders+1)
         i=next((k for k in range(entry_index,end) if bars[k]['time']+900==result['exit_time']),end-1)+1
     return rows
