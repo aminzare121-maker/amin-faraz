@@ -16,7 +16,9 @@ UNASSESSED = frozenset(('DEMO_ACCOUNT_REQUIRED','DISCONNECTED','MARKET_CLOSED',
     'NEWS_NOT_CLEARED','RECONCILIATION_REQUIRED','MARGIN_LIMIT'))
 
 class Management:
-    def __init__(self, capital='10000', policy=None, spec=None):
+    def __init__(self, capital='10000', policy=None, spec=None, adaptive_exit=True):
+        if type(adaptive_exit) is not bool:raise ValueError('EXIT_MODE')
+        self.adaptive_exit=adaptive_exit
         self.policy=policy or Policy(); self.spec=spec or SymbolSpec()
         self.equity=D(capital)
         if not self.equity.is_finite() or self.equity<=0:raise ValueError('CAPITAL')
@@ -50,7 +52,7 @@ class Management:
             self.failures.append(dict(time=bar['time'],reasons=failures));return None
         self.stage=replace(self.stage,daily_orders=self.stage.daily_orders+1)
         self.peak=entry
-        return dict(volume=str(vol),initial_risk_usd=str(risk),equity_before=str(self.equity))
+        return dict(volume=str(vol),stop_loss=str(stop),initial_risk_usd=str(risk),equity_before=str(self.equity))
 
     def on_close(self,entry,initial,side,quote,old,closed,vol,fee,slip):
         if any(b['time']>closed[-1]['time'] for b in closed):raise ValueError('LOOKAHEAD_CLOSE')
@@ -62,6 +64,7 @@ class Management:
             return dict(should_modify=False,reason='NONPOSITIVE_SCENARIO_EQUITY')
         self.stage=update_stage(self.stage,str(marked),(closed[-1]['time']+900)*1000,self.policy)
         self.stage_trace.append(asdict(self.stage))
+        if not self.adaptive_exit:return dict(should_modify=False,reason='FIXED_EXIT_CONTROL')
         if len(closed)<14:return dict(should_modify=False,reason='ATR_WARMUP')
         atr=sum((b['high']-b['low'] for b in closed[-14:]),D(0))/14
         if atr<=0:return dict(should_modify=False,reason='ATR_ZERO')

@@ -1,0 +1,27 @@
+{
+  "before_identity": "81a11e869cb5c6a842baa13729263d963bf41f55295dc96d84f7bedea838dbb1",
+  "after_identity": "2ea6f75ab110d871a6f349de554506e749391630014bb77a2bba0dbfd75c913e",
+  "matrix_cells": 144,
+  "compared_cells": 144,
+  "changed_financial_cells": [],
+  "rational_resolved_row_checks": 120,
+  "unknown_row_checks": 12,
+  "note": "Checks across scenario variants, NOT independent market trades",
+  "evidence_hashes_verified": {
+    "terminal-clock-sanitized.json": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018",
+    "tick-side-after-repair.json": "e2c1ecc29bcda7cdff7855838597503bf7ad44defc71f8d35c514bd41ee8aeda",
+    "real-comparison-sanitized.json": "cdcbfa1301fd6326877b20d357e943b16605f808d344d6583ff16889c06a3d52",
+    "comparison-nov05-sanitized.json": "9213238d0c5c571bdf1bb800249a0ded6de5f8072bc6479c31734b7d9b607aec",
+    "data-validity-inventory.json": "71156bfb2714b1880eca25e34bda776ede97a3f55fb9334e00e95d4a00134ec8",
+    "limited-window-rights-receipt.json": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a"
+  },
+  "corrected_tick_count": 7946,
+  "tick_coverage": "Nov05 08:30-09:00 CONDITIONAL_UTC only",
+  "Nov04_ticks": 0,
+  "session": "UNKNOWN",
+  "historical_slippage": "UNKNOWN",
+  "historical_rollover": "UNKNOWN",
+  "mtm_drawdown": "UNKNOWN",
+  "original_trading_modules_loaded": false,
+  "status": "ARITHMETIC_CHECKS_PASS_NOT_FINANCIAL_APPROVAL"
+}

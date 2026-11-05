@@ -1,0 +1,32 @@
+{
+  "policy_sha256": "02ef22d8d205e15c84d75a76b292cfdaa80caa39fe5bd4911b3296f4a1070c8b",
+  "raw_rows": 23643,
+  "raw_gaps": 260,
+  "windows": [
+    {
+      "id": "observed-Nov04",
+      "start": 1793750400,
+      "end": 1793829600,
+      "bars": 88,
+      "data_sha256": "88e71b8008079bf0e0d8c2a4800f22940d9bec90576ef40954a9d4300e9bb31c",
+      "missing": 0,
+      "clock": "CONDITIONAL",
+      "session": "UNKNOWN",
+      "costs": "ASSUMPTION",
+      "holdout": "OBSERVED_NOT_FRESH"
+    },
+    {
+      "id": "observed-Nov05",
+      "start": 1793836800,
+      "end": 1793869200,
+      "bars": 36,
+      "data_sha256": "0ddd19c2174dcf978ba57a124841d85174fdd531ebb807835d0ed8a68364c44a",
+      "missing": 0,
+      "clock": "CONDITIONAL",
+      "session": "UNKNOWN",
+      "costs": "ASSUMPTION",
+      "holdout": "OBSERVED_NOT_FRESH"
+    }
+  ],
+  "annual_result": "NO_RESULT_HISTORICAL_OFFSET_AND_SESSION_UNPROVEN"
+}

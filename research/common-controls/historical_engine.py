@@ -140,11 +140,17 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
             target=entry+direction*target_d
             initial_stop=stop; sizing=None; adjustments=[]
             if management is not None:
-                sizing=management.prepare(setup,entry,part[i],history,sp)
+                # Only the current OPEN is available to entry sizing, not its HLC.
+                available_open={key:part[i][key] for key in ('time','raw_time','open','time_evidence')}
+                sizing=management.prepare(setup,entry,available_open,history,sp)
                 if sizing is None:
                     i+=1;continue
-                vol=num(sizing['volume']);target=None
-            horizon=len(part)-i if management is not None else max_holding_bars
+                vol=num(sizing['volume']);stop=num(sizing['stop_loss'])
+                if vol<=0 or stop<=0 or direction*(entry-stop)<=0:raise ValueError('MANAGEMENT_EXECUTION_CONTRACT')
+                initial_stop=stop
+                if management.adaptive_exit:target=None
+            adaptive=management is not None and management.adaptive_exit
+            horizon=len(part)-i if adaptive else max_holding_bars
             exit_price=None; exit_reason='UNRESOLVED_BOUNDARY'; last_idx=None
             for k in range(i,min(len(part),i+horizon)):
                 b=part[k]
@@ -176,7 +182,7 @@ def simulate(bars, signal, *, spread, slippage, commission_roundtrip_per_lot,
                     if update['should_modify']:
                         stop=num(update['stop_loss'])
                         adjustments.append(dict(effective_time=b['time']+SECONDS,stop=str(stop)))
-            if management is None and last_idx is None and i+max_holding_bars<=len(part):
+            if not adaptive and last_idx is None and i+max_holding_bars<=len(part):
                 last_idx=i+max_holding_bars-1
                 last_bar=part[last_idx]
                 exit_price=last_bar['close']+(sp if side=='sell' else D(0))-direction*sl

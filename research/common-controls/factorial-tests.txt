@@ -1,0 +1,49 @@
+test_cost_envelope_not_equal_scenario_fee (test_factorial_controls.Tests.test_cost_envelope_not_equal_scenario_fee) ... ok
+test_fixed_exit_survives_variable_sizing (test_factorial_controls.Tests.test_fixed_exit_survives_variable_sizing) ... ok
+test_fixed_veto_difference_explicit (test_factorial_controls.Tests.test_fixed_veto_difference_explicit) ... ok
+test_fixed_volume_adaptive_no_horizon (test_factorial_controls.Tests.test_fixed_volume_adaptive_no_horizon) ... ok
+test_matching_uses_entry_not_trade_ordinal (test_factorial_controls.Tests.test_matching_uses_entry_not_trade_ordinal) ... ok
+test_overlap_blocked (test_factorial_controls.Tests.test_overlap_blocked) ... ok
+test_daily_loss_and_stage_reduction (test_historical_management.Tests.test_daily_loss_and_stage_reduction) ... ok
+test_daily_order_cap (test_historical_management.Tests.test_daily_order_cap) ... ok
+test_exposure_budget_veto (test_historical_management.Tests.test_exposure_budget_veto) ... ok
+test_no_broker_module_loaded (test_historical_management.Tests.test_no_broker_module_loaded) ... ok
+test_no_forced_horizon_or_gap_reentry (test_historical_management.Tests.test_no_forced_horizon_or_gap_reentry) ... ok
+test_real_trailing_never_weakens_stop (test_historical_management.Tests.test_real_trailing_never_weakens_stop) ... ok
+test_spread_and_stop_distance_vetoes (test_historical_management.Tests.test_spread_and_stop_distance_vetoes) ... ok
+test_total_loss_limit (test_historical_management.Tests.test_total_loss_limit) ... ok
+test_trailing_effective_next_bar_not_same_bar (test_historical_management.Tests.test_trailing_effective_next_bar_not_same_bar) ... ok
+test_training_excludes_future_and_insufficient (test_historical_management.Tests.test_training_excludes_future_and_insufficient) ... ok
+test_unknown_rollover_blocks_new_position (test_historical_management.Tests.test_unknown_rollover_blocks_new_position) ... ok
+test_unprotected_exposure (test_historical_management.Tests.test_unprotected_exposure) ... ok
+test_variable_volume_from_capital (test_historical_management.Tests.test_variable_volume_from_capital) ... ok
+test_basic_win (test_historical_engine.ResearchTests.test_basic_win) ... ok
+test_gap_no_crossing_and_unresolved_open_position (test_historical_engine.ResearchTests.test_gap_no_crossing_and_unresolved_open_position) ... ok
+test_intrabar_ambiguity_unknown (test_historical_engine.ResearchTests.test_intrabar_ambiguity_unknown) ... ok
+test_missing_clock_rejected (test_historical_engine.ResearchTests.test_missing_clock_rejected) ... ok
+test_no_signal_zero_no_trades (test_historical_engine.ResearchTests.test_no_signal_zero_no_trades) ... ok
+test_open_stop_gap_no_favorable_stop_fill (test_historical_engine.ResearchTests.test_open_stop_gap_no_favorable_stop_fill) ... ok
+test_overlap_duplicate_rejected (test_historical_engine.ResearchTests.test_overlap_duplicate_rejected) ... ok
+test_raw_broker_offset_preserved (test_historical_engine.ResearchTests.test_raw_broker_offset_preserved) ... ok
+test_rollover_unknown_blocks_net (test_historical_engine.ResearchTests.test_rollover_unknown_blocks_net) ... ok
+test_short_spread_cost_not_zero (test_historical_engine.ResearchTests.test_short_spread_cost_not_zero) ... ok
+test_signal_only_prior_closed_bars (test_historical_engine.ResearchTests.test_signal_only_prior_closed_bars) ... ok
+test_sma_requires_history_and_does_not_optimize (test_historical_engine.ResearchTests.test_sma_requires_history_and_does_not_optimize) ... ok
+test_spread_cannot_be_unknown (test_historical_engine.ResearchTests.test_spread_cannot_be_unknown) ... ok
+test_stop_and_target_policies (test_historical_engine.ResearchTests.test_stop_and_target_policies) ... ok
+test_existing_window_is_exploratory_even_when_cost_supplied (test_historical_runner.RunnerTests.test_existing_window_is_exploratory_even_when_cost_supplied) ... ok
+test_no_data (test_historical_runner.RunnerTests.test_no_data) ... ok
+test_raw_time_filter (test_historical_runner.RunnerTests.test_raw_time_filter) ... ok
+test_window_must_be_utc (test_historical_runner.RunnerTests.test_window_must_be_utc) ... ok
+test_adapter_actual_signal_stop_preserved (test_historical_windows.WindowsTests.test_adapter_actual_signal_stop_preserved) ... ok
+test_callback_sees_only_closed_input (test_historical_windows.WindowsTests.test_callback_sees_only_closed_input) ... ok
+test_fractional_timestamp_rejected (test_historical_windows.WindowsTests.test_fractional_timestamp_rejected) ... ok
+test_rollover_server_midnight_not_utc (test_historical_windows.WindowsTests.test_rollover_server_midnight_not_utc) ... ok
+test_six_frozen_candidates_and_direct_plan_equivalence (test_historical_windows.WindowsTests.test_six_frozen_candidates_and_direct_plan_equivalence) ... ok
+test_unresolved_position_prevents_next_segment_entry (test_historical_windows.WindowsTests.test_unresolved_position_prevents_next_segment_entry) ... ok
+test_utc_midnight_alone_not_server_rollover (test_historical_windows.WindowsTests.test_utc_midnight_alone_not_server_rollover) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.050s
+
+OK
