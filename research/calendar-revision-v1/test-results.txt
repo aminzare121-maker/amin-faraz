@@ -1,0 +1,45 @@
+test_asof_no_future_revision (test_calendar_revision.RevisionTests.test_asof_no_future_revision) ... ok
+test_before_stale_fixed (test_calendar_revision.RevisionTests.test_before_stale_fixed) ... ok
+test_caller_boolean_not_proof (test_calendar_revision.RevisionTests.test_caller_boolean_not_proof) ... ok
+test_condition_conjunction (test_calendar_revision.RevisionTests.test_condition_conjunction) ... ok
+test_conflicting_republication_blocks (test_calendar_revision.RevisionTests.test_conflicting_republication_blocks) ... ok
+test_cumulative_lags (test_calendar_revision.RevisionTests.test_cumulative_lags) ... ok
+test_cycle_rejected (test_calendar_revision.RevisionTests.test_cycle_rejected) ... ok
+test_disk_restart (test_calendar_revision.RevisionTests.test_disk_restart) ... ok
+test_dst_offsets (test_calendar_revision.RevisionTests.test_dst_offsets) ... ok
+test_duplicate_idempotent (test_calendar_revision.RevisionTests.test_duplicate_idempotent) ... ok
+test_early_outcome (test_calendar_revision.RevisionTests.test_early_outcome) ... ok
+test_exact_numbers (test_calendar_revision.RevisionTests.test_exact_numbers) ... ok
+test_farsi_sections (test_calendar_revision.RevisionTests.test_farsi_sections) ... ok
+test_frozen_edit_rejected (test_calendar_revision.RevisionTests.test_frozen_edit_rejected) ... ok
+test_frozen_outcome_review (test_calendar_revision.RevisionTests.test_frozen_outcome_review) ... ok
+test_future_actual_blocked (test_calendar_revision.RevisionTests.test_future_actual_blocked) ... ok
+test_future_forecast (test_calendar_revision.RevisionTests.test_future_forecast) ... ok
+test_horizon_mismatch (test_calendar_revision.RevisionTests.test_horizon_mismatch) ... ok
+test_integration_stale_rejected (test_calendar_revision.RevisionTests.test_integration_stale_rejected) ... ok
+test_lag (test_calendar_revision.RevisionTests.test_lag) ... ok
+test_missing_not_zero (test_calendar_revision.RevisionTests.test_missing_not_zero) ... ok
+test_multi_horizon_chain (test_calendar_revision.RevisionTests.test_multi_horizon_chain) ... ok
+test_naive_rejected (test_calendar_revision.RevisionTests.test_naive_rejected) ... ok
+test_nan (test_calendar_revision.RevisionTests.test_nan) ... ok
+test_no_probability (test_calendar_revision.RevisionTests.test_no_probability) ... ok
+test_old_report_integration (test_calendar_revision.RevisionTests.test_old_report_integration) ... ok
+test_old_revision_rejected (test_calendar_revision.RevisionTests.test_old_revision_rejected) ... ok
+test_opposed_rules_block_descendants (test_calendar_revision.RevisionTests.test_opposed_rules_block_descendants) ... ok
+test_regime_changes_result (test_calendar_revision.RevisionTests.test_regime_changes_result) ... ok
+test_restart_same (test_calendar_revision.RevisionTests.test_restart_same) ... ok
+test_retract_removes_chain (test_calendar_revision.RevisionTests.test_retract_removes_chain) ... ok
+test_retraction_persists_restart (test_calendar_revision.RevisionTests.test_retraction_persists_restart) ... ok
+test_revision_recomputes (test_calendar_revision.RevisionTests.test_revision_recomputes) ... ok
+test_same_receipt_expiry_changes_inference (test_calendar_revision.RevisionTests.test_same_receipt_expiry_changes_inference) ... ok
+test_source_mismatch (test_calendar_revision.RevisionTests.test_source_mismatch) ... ok
+test_stale_fact_cannot_refresh (test_calendar_revision.RevisionTests.test_stale_fact_cannot_refresh) ... ok
+test_syndication_not_independent (test_calendar_revision.RevisionTests.test_syndication_not_independent) ... ok
+test_tamper (test_calendar_revision.RevisionTests.test_tamper) ... ok
+test_tehran_utc (test_calendar_revision.RevisionTests.test_tehran_utc) ... ok
+test_zero_negative (test_calendar_revision.RevisionTests.test_zero_negative) ... ok
+
+----------------------------------------------------------------------
+Ran 40 tests in 0.023s
+
+OK
