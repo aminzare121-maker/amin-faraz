@@ -1,0 +1,48 @@
+✔ browser script parses before UI testing (1.1482ms)
+✔ default unknown cannot pass (0.1724ms)
+✔ complete synthetic fixture can pass pure gate only (0.1021ms)
+✔ unknown terminal blocks (0.0667ms)
+✔ unknown broker_demo blocks (0.1322ms)
+✔ unknown engine blocks (0.0819ms)
+✔ unknown data_fresh blocks (0.0856ms)
+✔ bad or expired time 15001 (0.0914ms)
+✔ bad or expired time 9999 (0.0768ms)
+✔ bad or expired time NaN (0.0911ms)
+✔ bad or expired time Infinity (0.0665ms)
+✔ freshness boundary inclusive (0.0998ms)
+✔ cost unknown blocks (0.0607ms)
+✔ unresolved or unsafe fixture limit null (0.0541ms)
+✔ unresolved or unsafe fixture limit NaN (0.0197ms)
+✔ unresolved or unsafe fixture limit 0 (0.0172ms)
+✔ unresolved or unsafe fixture limit -1 (0.0154ms)
+✔ unresolved or unsafe fixture limit 0.06 (0.0143ms)
+✔ emergency persists through recovery (0.0568ms)
+✔ disconnect then reconnect then reconcile never rearms (0.0399ms)
+✔ stale transition disarms (0.0209ms)
+✔ unknown account disarms (0.0206ms)
+✔ mobile loss leaves engine independent (0.0265ms)
+✔ manual requires confirmation (0.0827ms)
+✔ semi requires confirmation (0.0316ms)
+✔ semi model unknown blocks (0.0251ms)
+✔ auto unknown model blocks (0.0207ms)
+✔ auto synthetic decision sends zero orders (0.0256ms)
+✔ idempotent retry does not append journal or re-evaluate (0.0298ms)
+✔ rejected id remains rejected after conditions improve (0.026ms)
+✔ invalid id cannot enter journal (0.0285ms)
+✔ RTL arrows and swipe direction agree (0.045ms)
+✔ navigation boundaries and direct page (0.0605ms)
+✔ vertical and short gestures ignored (0.047ms)
+✔ 1 lot illustrative USD accounting (0.4811ms)
+✔ 0.01 lot illustrative USD accounting (0.0646ms)
+✔ invalid illustrative numbers rejected (0.1378ms)
+✔ eight required pages (0.0357ms)
+✔ offline CSP rejects all connection destinations (0.2436ms)
+✔ no network/execution imports in prototype logic (0.5124ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.0505
