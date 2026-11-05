@@ -1,0 +1,496 @@
+{
+  "schema": 1,
+  "policy_sha": "2b6b99ffb21b2e7a32fb592c86ff1b23957e02765b12cd4af72405eef91d17d2",
+  "raw_rows": {
+    "m15": 23643,
+    "ticks": 7946
+  },
+  "source_hashes": [
+    {
+      "source": "EplanetDemo",
+      "kind": "M15",
+      "sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07"
+    },
+    {
+      "source": "EplanetDemo",
+      "kind": "TICK",
+      "sha256": "03d6be8ed6929cfcc4dc0191e194451e2b8e96b1090f12004b5583812dd3c067"
+    },
+    {
+      "source": "Dukascopy",
+      "kind": "M1",
+      "sha256": "7866d3a24764d049023e0934e81655c01b329c1df63b5ad7c4aa1aaf2e002484"
+    },
+    {
+      "source": "Dukascopy",
+      "kind": "M1",
+      "sha256": "fb27741a462c4392c847700c174ffcb0603db55845caa588442fc15734e802ad"
+    },
+    {
+      "source": "Dukascopy",
+      "kind": "M1",
+      "sha256": "817d3f1059740b2339c4c7b6cc4ccb109be74c1c8b4eb6122e6276ceaf648960"
+    }
+  ],
+  "evidence_hashes": {
+    "terminal-clock-sanitized.json": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018",
+    "tick-side-after-repair.json": "e2c1ecc29bcda7cdff7855838597503bf7ad44defc71f8d35c514bd41ee8aeda",
+    "real-comparison-sanitized.json": "cdcbfa1301fd6326877b20d357e943b16605f808d344d6583ff16889c06a3d52",
+    "comparison-nov05-sanitized.json": "9213238d0c5c571bdf1bb800249a0ded6de5f8072bc6479c31734b7d9b607aec",
+    "data-validity-inventory.json": "71156bfb2714b1880eca25e34bda776ede97a3f55fb9334e00e95d4a00134ec8",
+    "limited-window-rights-receipt.json": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a"
+  },
+  "windows": [
+    {
+      "window": {
+        "id": "NOV04_00_22",
+        "start": 1793750400,
+        "end": 1793829600,
+        "start_label": "2026-11-04T00:00:00Z",
+        "end_label": "2026-11-04T22:00:00Z",
+        "labels": "CONDITIONAL_UTC_FROM_EXISTING_SAMPLE_MAPPING",
+        "m15": 88,
+        "ticks": 0,
+        "sample_hash": "bf1cc11f9bff2703ff1c5214d002fa02843b475f27cd077f796b5222694ab208",
+        "tick_sample_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "missing_slots": 0,
+        "duplicate_times": 0,
+        "evidence": {
+          "rights": {
+            "status": "VERIFIED",
+            "start": 1793750400,
+            "end": 1793829600,
+            "receipt_sha256": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a",
+            "reason": "Eplanet ticket207852 and owner authorization: existing private research only; no raw redistribution"
+          },
+          "clock": {
+            "status": "CONDITIONAL",
+            "reason": "Existing same-day live offset and winter support statement; not exact window attestation",
+            "receipt_sha256": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018"
+          },
+          "session": {
+            "status": "UNKNOWN",
+            "reason": "No dated broker symbol session receipt; observed continuous quotes are not a full session calendar"
+          },
+          "ohlc": {
+            "status": "VERIFIED",
+            "receipt_sha256": "bf1cc11f9bff2703ff1c5214d002fa02843b475f27cd077f796b5222694ab208",
+            "start": 1793750400,
+            "end": 1793829600
+          },
+          "price_side": {
+            "status": "CONDITIONAL",
+            "reason": "BID chart mode and two repaired tick bars corroborate Bid; only sampled period"
+          },
+          "contract": {
+            "status": "CONDITIONAL",
+            "reason": "Support:100oz,.01tick,1USD per lot tick; no dated full-window execution receipt"
+          },
+          "costs": {
+            "status": "UNKNOWN",
+            "reason": "Commission zero stated; Bid/Ask only30min; historical slippage bounds and rollover history absent"
+          },
+          "execution": {
+            "status": "UNKNOWN",
+            "reason": "Tick path only30min; M15 assumptions do not prove fills"
+          }
+        },
+        "exposure": "PREVIOUSLY_OBSERVED_DIAGNOSTIC",
+        "rollback": "ROLLBACK_PROTECTION_UNVERIFIED",
+        "engine_ready": false,
+        "engine_blockers": [
+          "Current selector accepts synthetic scope only",
+          "Current split runner needs >=240 bars; historical-session gaps adapter absent"
+        ]
+      },
+      "diagnostic_gate": {
+        "schema": 1,
+        "window_id": "NOV04_00_22",
+        "window_hash": "ef9658a0745458178432ac39fc280e1e1b47f34426c482c125314f95846043f7",
+        "mode": "DIAGNOSTIC",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      },
+      "sealed_gate": {
+        "schema": 1,
+        "window_id": "NOV04_00_22",
+        "window_hash": "ef9658a0745458178432ac39fc280e1e1b47f34426c482c125314f95846043f7",
+        "mode": "SEALED_HOLDOUT",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED",
+          "FRESH_HOLDOUT_UNVERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      }
+    },
+    {
+      "window": {
+        "id": "NOV04_23_24",
+        "start": 1793833200,
+        "end": 1793836800,
+        "start_label": "2026-11-04T23:00:00Z",
+        "end_label": "2026-11-05T00:00:00Z",
+        "labels": "CONDITIONAL_UTC_FROM_EXISTING_SAMPLE_MAPPING",
+        "m15": 4,
+        "ticks": 0,
+        "sample_hash": "5dc74104215bae90115726e71de425c750004de7820a871d7fb9dcb46ff19c35",
+        "tick_sample_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "missing_slots": 0,
+        "duplicate_times": 0,
+        "evidence": {
+          "rights": {
+            "status": "VERIFIED",
+            "start": 1793833200,
+            "end": 1793836800,
+            "receipt_sha256": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a",
+            "reason": "Eplanet ticket207852 and owner authorization: existing private research only; no raw redistribution"
+          },
+          "clock": {
+            "status": "CONDITIONAL",
+            "reason": "Existing same-day live offset and winter support statement; not exact window attestation",
+            "receipt_sha256": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018"
+          },
+          "session": {
+            "status": "UNKNOWN",
+            "reason": "No dated broker symbol session receipt; observed continuous quotes are not a full session calendar"
+          },
+          "ohlc": {
+            "status": "VERIFIED",
+            "receipt_sha256": "5dc74104215bae90115726e71de425c750004de7820a871d7fb9dcb46ff19c35",
+            "start": 1793833200,
+            "end": 1793836800
+          },
+          "price_side": {
+            "status": "CONDITIONAL",
+            "reason": "BID chart mode and two repaired tick bars corroborate Bid; only sampled period"
+          },
+          "contract": {
+            "status": "CONDITIONAL",
+            "reason": "Support:100oz,.01tick,1USD per lot tick; no dated full-window execution receipt"
+          },
+          "costs": {
+            "status": "UNKNOWN",
+            "reason": "Commission zero stated; Bid/Ask only30min; historical slippage bounds and rollover history absent"
+          },
+          "execution": {
+            "status": "UNKNOWN",
+            "reason": "Tick path only30min; M15 assumptions do not prove fills"
+          }
+        },
+        "exposure": "PREVIOUSLY_OBSERVED_DIAGNOSTIC",
+        "rollback": "ROLLBACK_PROTECTION_UNVERIFIED",
+        "engine_ready": false,
+        "engine_blockers": [
+          "Current selector accepts synthetic scope only",
+          "Current split runner needs >=240 bars; historical-session gaps adapter absent"
+        ]
+      },
+      "diagnostic_gate": {
+        "schema": 1,
+        "window_id": "NOV04_23_24",
+        "window_hash": "5c3baf942f3ee6f0c2404bc81c2242e53491d1d86851e6ab25c098671a0b1cf1",
+        "mode": "DIAGNOSTIC",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      },
+      "sealed_gate": {
+        "schema": 1,
+        "window_id": "NOV04_23_24",
+        "window_hash": "5c3baf942f3ee6f0c2404bc81c2242e53491d1d86851e6ab25c098671a0b1cf1",
+        "mode": "SEALED_HOLDOUT",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED",
+          "FRESH_HOLDOUT_UNVERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      }
+    },
+    {
+      "window": {
+        "id": "NOV05_00_09",
+        "start": 1793836800,
+        "end": 1793869200,
+        "start_label": "2026-11-05T00:00:00Z",
+        "end_label": "2026-11-05T09:00:00Z",
+        "labels": "CONDITIONAL_UTC_FROM_EXISTING_SAMPLE_MAPPING",
+        "m15": 36,
+        "ticks": 7946,
+        "sample_hash": "f2851b66a319d294521ac183cbe04e51c82f75b8742a85bb438ed4e9146b1094",
+        "tick_sample_hash": "dbc2f4dfcad6851b3178b07a998894d9cb2121ced8fe77f5aaee0e0c6c9b7c30",
+        "missing_slots": 0,
+        "duplicate_times": 0,
+        "evidence": {
+          "rights": {
+            "status": "VERIFIED",
+            "start": 1793836800,
+            "end": 1793869200,
+            "receipt_sha256": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a",
+            "reason": "Eplanet ticket207852 and owner authorization: existing private research only; no raw redistribution"
+          },
+          "clock": {
+            "status": "CONDITIONAL",
+            "reason": "Existing same-day live offset and winter support statement; not exact window attestation",
+            "receipt_sha256": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018"
+          },
+          "session": {
+            "status": "UNKNOWN",
+            "reason": "No dated broker symbol session receipt; observed continuous quotes are not a full session calendar"
+          },
+          "ohlc": {
+            "status": "VERIFIED",
+            "receipt_sha256": "f2851b66a319d294521ac183cbe04e51c82f75b8742a85bb438ed4e9146b1094",
+            "start": 1793836800,
+            "end": 1793869200
+          },
+          "price_side": {
+            "status": "CONDITIONAL",
+            "reason": "BID chart mode and two repaired tick bars corroborate Bid; only sampled period"
+          },
+          "contract": {
+            "status": "CONDITIONAL",
+            "reason": "Support:100oz,.01tick,1USD per lot tick; no dated full-window execution receipt"
+          },
+          "costs": {
+            "status": "UNKNOWN",
+            "reason": "Commission zero stated; Bid/Ask only30min; historical slippage bounds and rollover history absent"
+          },
+          "execution": {
+            "status": "UNKNOWN",
+            "reason": "Tick path only30min; M15 assumptions do not prove fills"
+          }
+        },
+        "exposure": "PREVIOUSLY_OBSERVED_DIAGNOSTIC",
+        "rollback": "ROLLBACK_PROTECTION_UNVERIFIED",
+        "engine_ready": false,
+        "engine_blockers": [
+          "Current selector accepts synthetic scope only",
+          "Current split runner needs >=240 bars; historical-session gaps adapter absent"
+        ]
+      },
+      "diagnostic_gate": {
+        "schema": 1,
+        "window_id": "NOV05_00_09",
+        "window_hash": "3dbc72db4571f92932d53578c9482d3ec9b0e3fbc2d8850d667c6019eaf6cb9e",
+        "mode": "DIAGNOSTIC",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      },
+      "sealed_gate": {
+        "schema": 1,
+        "window_id": "NOV05_00_09",
+        "window_hash": "3dbc72db4571f92932d53578c9482d3ec9b0e3fbc2d8850d667c6019eaf6cb9e",
+        "mode": "SEALED_HOLDOUT",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED",
+          "FRESH_HOLDOUT_UNVERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      }
+    },
+    {
+      "window": {
+        "id": "NOV05_TICK_0830_0900",
+        "start": 1793867400,
+        "end": 1793869200,
+        "start_label": "2026-11-05T08:30:00Z",
+        "end_label": "2026-11-05T09:00:00Z",
+        "labels": "CONDITIONAL_UTC_FROM_EXISTING_SAMPLE_MAPPING",
+        "m15": 2,
+        "ticks": 7946,
+        "sample_hash": "c5db0e0ccb85dd8d01a90bf7e93ad5b7efc3904704090507115610b49ea96079",
+        "tick_sample_hash": "dbc2f4dfcad6851b3178b07a998894d9cb2121ced8fe77f5aaee0e0c6c9b7c30",
+        "missing_slots": 0,
+        "duplicate_times": 0,
+        "evidence": {
+          "rights": {
+            "status": "VERIFIED",
+            "start": 1793867400,
+            "end": 1793869200,
+            "receipt_sha256": "1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a",
+            "reason": "Eplanet ticket207852 and owner authorization: existing private research only; no raw redistribution"
+          },
+          "clock": {
+            "status": "CONDITIONAL",
+            "reason": "Existing same-day live offset and winter support statement; not exact window attestation",
+            "receipt_sha256": "3c774a9af56fed67295a1a5fef28cf3104ff337d1a1c33b75f7ac1573da36018"
+          },
+          "session": {
+            "status": "UNKNOWN",
+            "reason": "No dated broker symbol session receipt; observed continuous quotes are not a full session calendar"
+          },
+          "ohlc": {
+            "status": "VERIFIED",
+            "receipt_sha256": "c5db0e0ccb85dd8d01a90bf7e93ad5b7efc3904704090507115610b49ea96079",
+            "start": 1793867400,
+            "end": 1793869200
+          },
+          "price_side": {
+            "status": "CONDITIONAL",
+            "reason": "BID chart mode and two repaired tick bars corroborate Bid; only sampled period"
+          },
+          "contract": {
+            "status": "CONDITIONAL",
+            "reason": "Support:100oz,.01tick,1USD per lot tick; no dated full-window execution receipt"
+          },
+          "costs": {
+            "status": "UNKNOWN",
+            "reason": "Commission zero stated; Bid/Ask only30min; historical slippage bounds and rollover history absent"
+          },
+          "execution": {
+            "status": "UNKNOWN",
+            "reason": "Tick path only30min; M15 assumptions do not prove fills"
+          }
+        },
+        "exposure": "PREVIOUSLY_OBSERVED_DIAGNOSTIC",
+        "rollback": "ROLLBACK_PROTECTION_UNVERIFIED",
+        "engine_ready": false,
+        "engine_blockers": [
+          "Current selector accepts synthetic scope only",
+          "Current split runner needs >=240 bars; historical-session gaps adapter absent"
+        ]
+      },
+      "diagnostic_gate": {
+        "schema": 1,
+        "window_id": "NOV05_TICK_0830_0900",
+        "window_hash": "59a46c6a1f89d28ba6f4d6e3cba99062c08c9f0cef8014b4fa4a298b4d2ee86f",
+        "mode": "DIAGNOSTIC",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      },
+      "sealed_gate": {
+        "schema": 1,
+        "window_id": "NOV05_TICK_0830_0900",
+        "window_hash": "59a46c6a1f89d28ba6f4d6e3cba99062c08c9f0cef8014b4fa4a298b4d2ee86f",
+        "mode": "SEALED_HOLDOUT",
+        "status": "EXPLORATORY_ONLY",
+        "blockers": [
+          "CLOCK_NOT_VERIFIED",
+          "SESSION_NOT_VERIFIED",
+          "PRICE_SIDE_NOT_VERIFIED",
+          "CONTRACT_NOT_VERIFIED",
+          "COSTS_NOT_VERIFIED",
+          "EXECUTION_NOT_VERIFIED",
+          "FRESH_HOLDOUT_UNVERIFIED"
+        ],
+        "engine_ready": false,
+        "backtest_allowed": false,
+        "result": "NO_RESULT",
+        "fresh_holdout": false,
+        "annual_certified": false,
+        "profitability_verified": false,
+        "trade_allowed": false
+      }
+    }
+  ],
+  "counts": {
+    "eligible": 0,
+    "exploratory": 4,
+    "blocked_backtests": 4
+  },
+  "historical_backtests_executed": 0,
+  "financial_metrics": null,
+  "annual_gaps_unknown": 260,
+  "downloaded_rows": 0,
+  "raw_modified": false,
+  "year_inventory": {
+    "continuous_observed_segments": 261,
+    "largest_segment_bars": 92,
+    "segments_at_least_240_bars": 0,
+    "all_segment_timestamp_interpretations": "RAW_SERVER_UNATTESTED",
+    "source_rows_covered": 23643,
+    "classification": "NO_ADDITIONAL_DATED_CLOCK_SESSION_EVIDENCE_AVAILABLE"
+  },
+  "note": "Four overlapping evidence windows, not four independent experiments. Other annual segments have no independent dated clock/session certificate; no PnL used for selection."
+}
