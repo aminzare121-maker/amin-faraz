@@ -18,6 +18,25 @@ def engine_fingerprint():
     sources['bridge']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     return digest(sources)
 
+def replay_registered(bank,bars,dataset_id,order,cost_inputs):
+    """Attach the execution-scenario extension to the same ledger, without trading runtime."""
+    from execution_scenarios import replay
+    local=Path(__file__).resolve().parent
+    source_hash=digest({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (Path(__file__),local/'execution_scenarios.py',local/'comparison.py',local/'registry.py')})
+    spec=dict(code_sha256=source_hash,datasets={dataset_id:digest(bars)},settings={'frozen_order':order,'kind':'EXECUTION_FIXTURE'},
+        costs=cost_inputs,protocol_sha256=digest({'intrabar':'stop-first','cost_basis':'ASSUMPTION','strategy_selection':False}),
+        environment={'python':platform.python_version()},metrics_version='execution-scenarios-v1',
+        split={'start':bars[0]['time'],'end':bars[-1]['time']+900,'selection':'NONE_FIXED_ORDER'},seed=0)
+    reserved=bank.start(spec)
+    if reserved['action']!='EXECUTE':return reserved
+    try:
+        report=replay(bars,order,**cost_inputs)
+        bank.finish_run(reserved['id'],report,True)
+        return {'action':'EXECUTED','id':reserved['id'],'result':report}
+    except Exception as exc:
+        bank.finish_run(reserved['id'],{'error_type':type(exc).__name__},False)
+        raise
+
 def execute(bank,bars,dataset_id,costs,protocol,*,scope):
     if scope not in ('SYNTHETIC_DIAGNOSTIC','HYPOTHETICAL_COST_RESEARCH'):raise ValueError('RESEARCH_SCOPE_REQUIRED')
     if set(costs)!=COST_KEYS or any(v is None for v in costs.values()):raise ValueError('ALL_COSTS_EXPLICIT_REQUIRED')
