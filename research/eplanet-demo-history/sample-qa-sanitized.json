@@ -1,0 +1,93 @@
+{
+  "stage": "sample",
+  "mode": "DEMO",
+  "sdk_version": "5.0.6231",
+  "requested_from_utc": "2026-10-29T11:00:00+00:00",
+  "requested_end_exclusive_utc": "2026-11-05T11:00:00+00:00",
+  "qa": {
+    "rows": 460,
+    "invalid_ohlc": 0,
+    "duplicates": 0,
+    "out_of_order": 0,
+    "outside_or_unclosed": 0,
+    "first_utc": "2026-10-29T11:00:00+00:00",
+    "last_open_utc": "2026-11-05T10:45:00+00:00",
+    "gaps": [
+      {
+        "from_utc": "2026-10-30T00:00:00+00:00",
+        "to_utc": "2026-10-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-31T00:00:00+00:00",
+        "to_utc": "2026-11-02T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-03T00:00:00+00:00",
+        "to_utc": "2026-11-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-04T00:00:00+00:00",
+        "to_utc": "2026-11-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-05T00:00:00+00:00",
+        "to_utc": "2026-11-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      }
+    ],
+    "structural_pass": true,
+    "complete_session_coverage": "UNKNOWN",
+    "spread_cost_validated": false
+  },
+  "boundary_tolerance_pass": true,
+  "sample_or_year_structural_acceptance": true,
+  "not_full_completeness_certificate": true,
+  "tick_chunks": [
+    {
+      "start": "2026-11-05T10:50:00+00:00",
+      "end": "2026-11-05T10:55:00+00:00",
+      "qa": {
+        "rows": 1340,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "f45831974b5e6def9118b165ff823d09dee6fd175a632d929fe01b88268ce57b"
+    },
+    {
+      "start": "2026-11-05T10:55:00+00:00",
+      "end": "2026-11-05T11:00:00+00:00",
+      "qa": {
+        "rows": 1160,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "460a45b932cb132890fd9354e65f9b6a32f11631f874e86b8382b63aedad26ab"
+    }
+  ],
+  "new_sdk_history_calls": 9,
+  "elapsed_seconds": 34.468,
+  "same_terminal_process": true,
+  "orders_sent": 0,
+  "account_changed": false,
+  "raw_uploaded": false,
+  "missingness_note": "All gaps unclassified until official session/holiday calendar; leading/trailing absence also requires review",
+  "manifest_sha256": "5b219fa4e88c2452907ab0ccfd7c799c3c62acc896ee7a7c66b7008383a4f63e",
+  "collector_sha256": "6e1b0bd8bac4cc4daae78ff8b925eed9a8846e0abe963c2f87ea83a2e4796c3e"
+}

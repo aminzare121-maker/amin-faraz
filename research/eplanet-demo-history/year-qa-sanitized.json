@@ -1,0 +1,1679 @@
+{
+  "stage": "year",
+  "mode": "DEMO",
+  "sdk_version": "5.0.6231",
+  "requested_from_utc": "2025-11-05T11:00:00+00:00",
+  "requested_end_exclusive_utc": "2026-11-05T11:00:00+00:00",
+  "qa": {
+    "rows": 23643,
+    "invalid_ohlc": 0,
+    "duplicates": 0,
+    "out_of_order": 0,
+    "outside_or_unclosed": 0,
+    "first_utc": "2025-11-05T11:00:00+00:00",
+    "last_open_utc": "2026-11-05T10:45:00+00:00",
+    "gaps": [
+      {
+        "from_utc": "2025-11-06T00:00:00+00:00",
+        "to_utc": "2025-11-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-07T00:00:00+00:00",
+        "to_utc": "2025-11-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-08T00:00:00+00:00",
+        "to_utc": "2025-11-10T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-11T00:00:00+00:00",
+        "to_utc": "2025-11-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-12T00:00:00+00:00",
+        "to_utc": "2025-11-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-13T00:00:00+00:00",
+        "to_utc": "2025-11-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-14T00:00:00+00:00",
+        "to_utc": "2025-11-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-15T00:00:00+00:00",
+        "to_utc": "2025-11-17T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-18T00:00:00+00:00",
+        "to_utc": "2025-11-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-19T00:00:00+00:00",
+        "to_utc": "2025-11-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-20T00:00:00+00:00",
+        "to_utc": "2025-11-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-21T00:00:00+00:00",
+        "to_utc": "2025-11-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-22T00:00:00+00:00",
+        "to_utc": "2025-11-24T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-25T00:00:00+00:00",
+        "to_utc": "2025-11-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-26T00:00:00+00:00",
+        "to_utc": "2025-11-26T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-27T00:00:00+00:00",
+        "to_utc": "2025-11-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-27T21:45:00+00:00",
+        "to_utc": "2025-11-28T01:00:00+00:00",
+        "missing_slots": 13,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-28T11:00:00+00:00",
+        "to_utc": "2025-11-28T11:15:00+00:00",
+        "missing_slots": 1,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-11-28T22:00:00+00:00",
+        "to_utc": "2025-12-01T01:00:00+00:00",
+        "missing_slots": 204,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-02T00:00:00+00:00",
+        "to_utc": "2025-12-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-03T00:00:00+00:00",
+        "to_utc": "2025-12-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-04T00:00:00+00:00",
+        "to_utc": "2025-12-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-05T00:00:00+00:00",
+        "to_utc": "2025-12-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-06T00:00:00+00:00",
+        "to_utc": "2025-12-08T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-09T00:00:00+00:00",
+        "to_utc": "2025-12-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-10T00:00:00+00:00",
+        "to_utc": "2025-12-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-11T00:00:00+00:00",
+        "to_utc": "2025-12-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-12T00:00:00+00:00",
+        "to_utc": "2025-12-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-13T00:00:00+00:00",
+        "to_utc": "2025-12-15T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-16T00:00:00+00:00",
+        "to_utc": "2025-12-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-17T00:00:00+00:00",
+        "to_utc": "2025-12-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-18T00:00:00+00:00",
+        "to_utc": "2025-12-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-19T00:00:00+00:00",
+        "to_utc": "2025-12-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-20T00:00:00+00:00",
+        "to_utc": "2025-12-22T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-23T00:00:00+00:00",
+        "to_utc": "2025-12-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-24T00:00:00+00:00",
+        "to_utc": "2025-12-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-24T21:00:00+00:00",
+        "to_utc": "2025-12-26T01:00:00+00:00",
+        "missing_slots": 112,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-27T00:00:00+00:00",
+        "to_utc": "2025-12-29T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-30T00:00:00+00:00",
+        "to_utc": "2025-12-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2025-12-31T00:00:00+00:00",
+        "to_utc": "2025-12-31T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-01T00:00:00+00:00",
+        "to_utc": "2026-01-02T01:00:00+00:00",
+        "missing_slots": 100,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-03T00:00:00+00:00",
+        "to_utc": "2026-01-05T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-06T00:00:00+00:00",
+        "to_utc": "2026-01-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-07T00:00:00+00:00",
+        "to_utc": "2026-01-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-08T00:00:00+00:00",
+        "to_utc": "2026-01-08T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-09T00:00:00+00:00",
+        "to_utc": "2026-01-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-10T00:00:00+00:00",
+        "to_utc": "2026-01-12T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-13T00:00:00+00:00",
+        "to_utc": "2026-01-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-14T00:00:00+00:00",
+        "to_utc": "2026-01-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-15T00:00:00+00:00",
+        "to_utc": "2026-01-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-16T00:00:00+00:00",
+        "to_utc": "2026-01-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-17T00:00:00+00:00",
+        "to_utc": "2026-01-19T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-19T22:00:00+00:00",
+        "to_utc": "2026-01-20T01:00:00+00:00",
+        "missing_slots": 12,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-21T00:00:00+00:00",
+        "to_utc": "2026-01-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-22T00:00:00+00:00",
+        "to_utc": "2026-01-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-23T00:00:00+00:00",
+        "to_utc": "2026-01-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-24T00:00:00+00:00",
+        "to_utc": "2026-01-26T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-27T00:00:00+00:00",
+        "to_utc": "2026-01-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-28T00:00:00+00:00",
+        "to_utc": "2026-01-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-29T00:00:00+00:00",
+        "to_utc": "2026-01-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-30T00:00:00+00:00",
+        "to_utc": "2026-01-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-01-31T00:00:00+00:00",
+        "to_utc": "2026-02-02T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-03T00:00:00+00:00",
+        "to_utc": "2026-02-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-04T00:00:00+00:00",
+        "to_utc": "2026-02-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-05T00:00:00+00:00",
+        "to_utc": "2026-02-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-06T00:00:00+00:00",
+        "to_utc": "2026-02-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-07T00:00:00+00:00",
+        "to_utc": "2026-02-09T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-10T00:00:00+00:00",
+        "to_utc": "2026-02-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-11T00:00:00+00:00",
+        "to_utc": "2026-02-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-12T00:00:00+00:00",
+        "to_utc": "2026-02-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-13T00:00:00+00:00",
+        "to_utc": "2026-02-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-14T00:00:00+00:00",
+        "to_utc": "2026-02-16T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-16T21:45:00+00:00",
+        "to_utc": "2026-02-17T01:00:00+00:00",
+        "missing_slots": 13,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-18T00:00:00+00:00",
+        "to_utc": "2026-02-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-19T00:00:00+00:00",
+        "to_utc": "2026-02-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-20T00:00:00+00:00",
+        "to_utc": "2026-02-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-21T00:00:00+00:00",
+        "to_utc": "2026-02-23T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-24T00:00:00+00:00",
+        "to_utc": "2026-02-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-25T00:00:00+00:00",
+        "to_utc": "2026-02-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-26T00:00:00+00:00",
+        "to_utc": "2026-02-26T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-27T00:00:00+00:00",
+        "to_utc": "2026-02-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-02-28T00:00:00+00:00",
+        "to_utc": "2026-03-02T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-03T00:00:00+00:00",
+        "to_utc": "2026-03-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-04T00:00:00+00:00",
+        "to_utc": "2026-03-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-05T00:00:00+00:00",
+        "to_utc": "2026-03-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-06T00:00:00+00:00",
+        "to_utc": "2026-03-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-07T00:00:00+00:00",
+        "to_utc": "2026-03-09T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-10T00:00:00+00:00",
+        "to_utc": "2026-03-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-11T00:00:00+00:00",
+        "to_utc": "2026-03-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-12T00:00:00+00:00",
+        "to_utc": "2026-03-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-13T00:00:00+00:00",
+        "to_utc": "2026-03-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-14T00:00:00+00:00",
+        "to_utc": "2026-03-16T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-17T00:00:00+00:00",
+        "to_utc": "2026-03-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-18T00:00:00+00:00",
+        "to_utc": "2026-03-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-19T00:00:00+00:00",
+        "to_utc": "2026-03-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-20T00:00:00+00:00",
+        "to_utc": "2026-03-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-21T00:00:00+00:00",
+        "to_utc": "2026-03-23T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-24T00:00:00+00:00",
+        "to_utc": "2026-03-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-25T00:00:00+00:00",
+        "to_utc": "2026-03-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-26T00:00:00+00:00",
+        "to_utc": "2026-03-26T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-27T00:00:00+00:00",
+        "to_utc": "2026-03-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-28T00:00:00+00:00",
+        "to_utc": "2026-03-30T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-03-31T00:00:00+00:00",
+        "to_utc": "2026-03-31T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-01T00:00:00+00:00",
+        "to_utc": "2026-04-01T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-02T00:00:00+00:00",
+        "to_utc": "2026-04-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-03T00:00:00+00:00",
+        "to_utc": "2026-04-06T01:00:00+00:00",
+        "missing_slots": 292,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-07T00:00:00+00:00",
+        "to_utc": "2026-04-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-08T00:00:00+00:00",
+        "to_utc": "2026-04-08T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-09T00:00:00+00:00",
+        "to_utc": "2026-04-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-10T00:00:00+00:00",
+        "to_utc": "2026-04-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-11T00:00:00+00:00",
+        "to_utc": "2026-04-13T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-14T00:00:00+00:00",
+        "to_utc": "2026-04-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-15T00:00:00+00:00",
+        "to_utc": "2026-04-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-16T00:00:00+00:00",
+        "to_utc": "2026-04-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-17T00:00:00+00:00",
+        "to_utc": "2026-04-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-18T00:00:00+00:00",
+        "to_utc": "2026-04-20T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-21T00:00:00+00:00",
+        "to_utc": "2026-04-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-22T00:00:00+00:00",
+        "to_utc": "2026-04-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-23T00:00:00+00:00",
+        "to_utc": "2026-04-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-24T00:00:00+00:00",
+        "to_utc": "2026-04-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-25T00:00:00+00:00",
+        "to_utc": "2026-04-27T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-28T00:00:00+00:00",
+        "to_utc": "2026-04-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-29T00:00:00+00:00",
+        "to_utc": "2026-04-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-04-30T00:00:00+00:00",
+        "to_utc": "2026-04-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-01T00:00:00+00:00",
+        "to_utc": "2026-05-01T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-02T00:00:00+00:00",
+        "to_utc": "2026-05-04T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-05T00:00:00+00:00",
+        "to_utc": "2026-05-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-06T00:00:00+00:00",
+        "to_utc": "2026-05-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-07T00:00:00+00:00",
+        "to_utc": "2026-05-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-08T00:00:00+00:00",
+        "to_utc": "2026-05-08T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-09T00:00:00+00:00",
+        "to_utc": "2026-05-11T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-12T00:00:00+00:00",
+        "to_utc": "2026-05-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-13T00:00:00+00:00",
+        "to_utc": "2026-05-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-14T00:00:00+00:00",
+        "to_utc": "2026-05-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-15T00:00:00+00:00",
+        "to_utc": "2026-05-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-16T00:00:00+00:00",
+        "to_utc": "2026-05-18T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-19T00:00:00+00:00",
+        "to_utc": "2026-05-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-20T00:00:00+00:00",
+        "to_utc": "2026-05-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-21T00:00:00+00:00",
+        "to_utc": "2026-05-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-22T00:00:00+00:00",
+        "to_utc": "2026-05-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-23T00:00:00+00:00",
+        "to_utc": "2026-05-25T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-25T22:00:00+00:00",
+        "to_utc": "2026-05-25T22:15:00+00:00",
+        "missing_slots": 1,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-25T22:30:00+00:00",
+        "to_utc": "2026-05-26T01:00:00+00:00",
+        "missing_slots": 10,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-27T00:00:00+00:00",
+        "to_utc": "2026-05-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-28T00:00:00+00:00",
+        "to_utc": "2026-05-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-29T00:00:00+00:00",
+        "to_utc": "2026-05-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-05-30T00:00:00+00:00",
+        "to_utc": "2026-06-01T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-02T00:00:00+00:00",
+        "to_utc": "2026-06-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-03T00:00:00+00:00",
+        "to_utc": "2026-06-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-04T00:00:00+00:00",
+        "to_utc": "2026-06-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-05T00:00:00+00:00",
+        "to_utc": "2026-06-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-06T00:00:00+00:00",
+        "to_utc": "2026-06-08T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-09T00:00:00+00:00",
+        "to_utc": "2026-06-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-10T00:00:00+00:00",
+        "to_utc": "2026-06-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-11T00:00:00+00:00",
+        "to_utc": "2026-06-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-12T00:00:00+00:00",
+        "to_utc": "2026-06-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-13T00:00:00+00:00",
+        "to_utc": "2026-06-15T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-16T00:00:00+00:00",
+        "to_utc": "2026-06-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-17T00:00:00+00:00",
+        "to_utc": "2026-06-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-18T00:00:00+00:00",
+        "to_utc": "2026-06-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-19T00:00:00+00:00",
+        "to_utc": "2026-06-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-19T20:15:00+00:00",
+        "to_utc": "2026-06-22T01:00:00+00:00",
+        "missing_slots": 211,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-23T00:00:00+00:00",
+        "to_utc": "2026-06-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-24T00:00:00+00:00",
+        "to_utc": "2026-06-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-25T00:00:00+00:00",
+        "to_utc": "2026-06-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-26T00:00:00+00:00",
+        "to_utc": "2026-06-26T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-27T00:00:00+00:00",
+        "to_utc": "2026-06-29T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-06-30T00:00:00+00:00",
+        "to_utc": "2026-06-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-01T00:00:00+00:00",
+        "to_utc": "2026-07-01T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-02T00:00:00+00:00",
+        "to_utc": "2026-07-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-03T00:00:00+00:00",
+        "to_utc": "2026-07-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-03T20:15:00+00:00",
+        "to_utc": "2026-07-06T01:00:00+00:00",
+        "missing_slots": 211,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-07T00:00:00+00:00",
+        "to_utc": "2026-07-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-08T00:00:00+00:00",
+        "to_utc": "2026-07-08T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-09T00:00:00+00:00",
+        "to_utc": "2026-07-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-10T00:00:00+00:00",
+        "to_utc": "2026-07-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-11T00:00:00+00:00",
+        "to_utc": "2026-07-13T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-14T00:00:00+00:00",
+        "to_utc": "2026-07-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-15T00:00:00+00:00",
+        "to_utc": "2026-07-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-16T00:00:00+00:00",
+        "to_utc": "2026-07-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-17T00:00:00+00:00",
+        "to_utc": "2026-07-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-18T00:00:00+00:00",
+        "to_utc": "2026-07-20T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-21T00:00:00+00:00",
+        "to_utc": "2026-07-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-22T00:00:00+00:00",
+        "to_utc": "2026-07-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-23T00:00:00+00:00",
+        "to_utc": "2026-07-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-24T00:00:00+00:00",
+        "to_utc": "2026-07-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-25T00:00:00+00:00",
+        "to_utc": "2026-07-27T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-28T00:00:00+00:00",
+        "to_utc": "2026-07-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-29T00:00:00+00:00",
+        "to_utc": "2026-07-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-30T00:00:00+00:00",
+        "to_utc": "2026-07-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-07-31T00:00:00+00:00",
+        "to_utc": "2026-07-31T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-01T00:00:00+00:00",
+        "to_utc": "2026-08-03T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-04T00:00:00+00:00",
+        "to_utc": "2026-08-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-05T00:00:00+00:00",
+        "to_utc": "2026-08-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-06T00:00:00+00:00",
+        "to_utc": "2026-08-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-07T00:00:00+00:00",
+        "to_utc": "2026-08-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-08T00:00:00+00:00",
+        "to_utc": "2026-08-10T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-11T00:00:00+00:00",
+        "to_utc": "2026-08-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-12T00:00:00+00:00",
+        "to_utc": "2026-08-12T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-13T00:00:00+00:00",
+        "to_utc": "2026-08-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-14T00:00:00+00:00",
+        "to_utc": "2026-08-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-15T00:00:00+00:00",
+        "to_utc": "2026-08-17T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-18T00:00:00+00:00",
+        "to_utc": "2026-08-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-19T00:00:00+00:00",
+        "to_utc": "2026-08-19T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-20T00:00:00+00:00",
+        "to_utc": "2026-08-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-21T00:00:00+00:00",
+        "to_utc": "2026-08-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-22T00:00:00+00:00",
+        "to_utc": "2026-08-24T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-25T00:00:00+00:00",
+        "to_utc": "2026-08-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-26T00:00:00+00:00",
+        "to_utc": "2026-08-26T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-27T00:00:00+00:00",
+        "to_utc": "2026-08-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-28T00:00:00+00:00",
+        "to_utc": "2026-08-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-08-29T00:00:00+00:00",
+        "to_utc": "2026-08-31T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-01T00:00:00+00:00",
+        "to_utc": "2026-09-01T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-02T00:00:00+00:00",
+        "to_utc": "2026-09-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-03T00:00:00+00:00",
+        "to_utc": "2026-09-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-04T00:00:00+00:00",
+        "to_utc": "2026-09-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-05T00:00:00+00:00",
+        "to_utc": "2026-09-07T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-07T21:45:00+00:00",
+        "to_utc": "2026-09-08T01:00:00+00:00",
+        "missing_slots": 13,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-09T00:00:00+00:00",
+        "to_utc": "2026-09-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-10T00:00:00+00:00",
+        "to_utc": "2026-09-10T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-11T00:00:00+00:00",
+        "to_utc": "2026-09-11T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-12T00:00:00+00:00",
+        "to_utc": "2026-09-14T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-15T00:00:00+00:00",
+        "to_utc": "2026-09-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-16T00:00:00+00:00",
+        "to_utc": "2026-09-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-17T00:00:00+00:00",
+        "to_utc": "2026-09-17T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-18T00:00:00+00:00",
+        "to_utc": "2026-09-18T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-19T00:00:00+00:00",
+        "to_utc": "2026-09-21T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-22T00:00:00+00:00",
+        "to_utc": "2026-09-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-23T00:00:00+00:00",
+        "to_utc": "2026-09-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-24T00:00:00+00:00",
+        "to_utc": "2026-09-24T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-25T00:00:00+00:00",
+        "to_utc": "2026-09-25T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-26T00:00:00+00:00",
+        "to_utc": "2026-09-28T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-29T00:00:00+00:00",
+        "to_utc": "2026-09-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-09-30T00:00:00+00:00",
+        "to_utc": "2026-09-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-01T00:00:00+00:00",
+        "to_utc": "2026-10-01T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-02T00:00:00+00:00",
+        "to_utc": "2026-10-02T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-03T00:00:00+00:00",
+        "to_utc": "2026-10-05T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-06T00:00:00+00:00",
+        "to_utc": "2026-10-06T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-07T00:00:00+00:00",
+        "to_utc": "2026-10-07T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-08T00:00:00+00:00",
+        "to_utc": "2026-10-08T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-09T00:00:00+00:00",
+        "to_utc": "2026-10-09T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-10T00:00:00+00:00",
+        "to_utc": "2026-10-12T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-13T00:00:00+00:00",
+        "to_utc": "2026-10-13T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-14T00:00:00+00:00",
+        "to_utc": "2026-10-14T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-15T00:00:00+00:00",
+        "to_utc": "2026-10-15T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-16T00:00:00+00:00",
+        "to_utc": "2026-10-16T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-17T00:00:00+00:00",
+        "to_utc": "2026-10-19T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-20T00:00:00+00:00",
+        "to_utc": "2026-10-20T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-21T00:00:00+00:00",
+        "to_utc": "2026-10-21T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-22T00:00:00+00:00",
+        "to_utc": "2026-10-22T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-23T00:00:00+00:00",
+        "to_utc": "2026-10-23T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-24T00:00:00+00:00",
+        "to_utc": "2026-10-26T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-27T00:00:00+00:00",
+        "to_utc": "2026-10-27T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-28T00:00:00+00:00",
+        "to_utc": "2026-10-28T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-29T00:00:00+00:00",
+        "to_utc": "2026-10-29T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-30T00:00:00+00:00",
+        "to_utc": "2026-10-30T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-10-31T00:00:00+00:00",
+        "to_utc": "2026-11-02T01:00:00+00:00",
+        "missing_slots": 196,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-03T00:00:00+00:00",
+        "to_utc": "2026-11-03T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-04T00:00:00+00:00",
+        "to_utc": "2026-11-04T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      },
+      {
+        "from_utc": "2026-11-05T00:00:00+00:00",
+        "to_utc": "2026-11-05T01:00:00+00:00",
+        "missing_slots": 4,
+        "classification": "UNKNOWN_SESSION"
+      }
+    ],
+    "structural_pass": true,
+    "complete_session_coverage": "UNKNOWN",
+    "spread_cost_validated": false
+  },
+  "boundary_tolerance_pass": true,
+  "sample_or_year_structural_acceptance": true,
+  "not_full_completeness_certificate": true,
+  "tick_chunks": [
+    {
+      "start": "2026-11-05T10:50:00+00:00",
+      "end": "2026-11-05T10:55:00+00:00",
+      "qa": {
+        "rows": 1340,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "f45831974b5e6def9118b165ff823d09dee6fd175a632d929fe01b88268ce57b"
+    },
+    {
+      "start": "2026-11-05T10:55:00+00:00",
+      "end": "2026-11-05T11:00:00+00:00",
+      "qa": {
+        "rows": 1160,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "460a45b932cb132890fd9354e65f9b6a32f11631f874e86b8382b63aedad26ab"
+    },
+    {
+      "start": "2026-11-05T10:30:00+00:00",
+      "end": "2026-11-05T10:35:00+00:00",
+      "qa": {
+        "rows": 1383,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "7780ec1565cdd373e5200673c6b12de6f5e3013993aef8ac09b59aeda3c59d54"
+    },
+    {
+      "start": "2026-11-05T10:35:00+00:00",
+      "end": "2026-11-05T10:40:00+00:00",
+      "qa": {
+        "rows": 1445,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "57c639181b69e4b72baf24d32a6c2facaafa5a3f8c80127e132cfb2e6e617a80"
+    },
+    {
+      "start": "2026-11-05T10:40:00+00:00",
+      "end": "2026-11-05T10:45:00+00:00",
+      "qa": {
+        "rows": 1327,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "3bf8e0a4ae50511b53307c72120858084389d54ac0263a4bb52287d7b93c35c0"
+    },
+    {
+      "start": "2026-11-05T10:45:00+00:00",
+      "end": "2026-11-05T10:50:00+00:00",
+      "qa": {
+        "rows": 1260,
+        "invalid_bid_ask": 0,
+        "outside": 0,
+        "out_of_order": 0,
+        "identical_quote_records": 0,
+        "same_millisecond_records_retained": true,
+        "structural_pass": true
+      },
+      "sha256": "0e528ed1e9eb36f85325a3efa2ba3eeb266165c67ecaa80dad5cdc5be89d37b3"
+    }
+  ],
+  "new_sdk_history_calls": 17,
+  "elapsed_seconds": 6.25,
+  "same_terminal_process": true,
+  "orders_sent": 0,
+  "account_changed": false,
+  "raw_uploaded": false,
+  "missingness_note": "All gaps unclassified until official session/holiday calendar; leading/trailing absence also requires review",
+  "manifest_sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07",
+  "collector_sha256": "6e1b0bd8bac4cc4daae78ff8b925eed9a8846e0abe963c2f87ea83a2e4796c3e"
+}
