@@ -12,6 +12,9 @@ _bound_identity=None  # transient only; never serialized or printed
 
 def utc(t):return datetime.fromtimestamp(t,timezone.utc).isoformat()
 def hashfile(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def require_utc_quote(quote_msc,wall_seconds):
+    if quote_msc is None or abs(quote_msc/1000-wall_seconds)>60:
+        raise RuntimeError('HISTORICAL_TIME_MAPPING_REQUIRED_NO_UTC_ASSUMPTION')
 def write_json(path,value):
     tmp=path.with_suffix('.tmp');tmp.write_text(json.dumps(value,indent=2,allow_nan=False),encoding='utf-8');os.replace(tmp,path)
 def pids():
@@ -71,7 +74,7 @@ def chunk(mt5,folder,manifest,kind,start,end):
         return existing,False
     check(mt5)
     raw_rows=(mt5.copy_rates_range(SYMBOL,mt5.TIMEFRAME_M15,datetime.fromtimestamp(start,timezone.utc),datetime.fromtimestamp(end-1,timezone.utc)) if kind=='M15' else
-              mt5.copy_ticks_range(SYMBOL,datetime.fromtimestamp(start,timezone.utc),datetime.fromtimestamp(end-0.001,timezone.utc),mt5.COPY_TICKS_ALL))
+              mt5.copy_ticks_range(SYMBOL,datetime.fromtimestamp(start,timezone.utc),datetime.fromtimestamp(end,timezone.utc),mt5.COPY_TICKS_ALL))
     if raw_rows is None:raise RuntimeError('SDK_HISTORY_ERROR_'+str(mt5.last_error()[0]))
     check(mt5)
     if len(raw_rows)>100000:raise RuntimeError('CHUNK_LIMIT_EXCEEDED')
@@ -108,6 +111,11 @@ def run(stage,folder):
     try:
         check(mt5)
         if pids()!=before:raise RuntimeError('TERMINAL_PROCESS_CHANGED')
+        # The old run assumed raw broker epochs were UTC. Actual quote/wall-clock
+        # evidence disproved that for this terminal. Do not extend/resume with
+        # guessed offsets; a separately reviewed historical time map is required.
+        quote=mt5.symbol_info_tick(SYMBOL)
+        require_utc_quote(quote.time_msc if quote else None,time.time())
         end=manifest['end'];sample_start=end-7*86400
         if stage=='year' and not manifest.get('sample_pass'):raise RuntimeError('SAMPLE_PASS_REQUIRED')
         start=sample_start if stage=='sample' else manifest['start']

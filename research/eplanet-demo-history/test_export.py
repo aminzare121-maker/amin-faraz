@@ -1,5 +1,5 @@
 import ast,copy,pathlib,unittest
-from export_readonly import bar_qa,tick_qa
+from export_readonly import bar_qa,tick_qa,require_utc_quote
 BAR={'time':900,'open':100.,'high':102.,'low':99.,'close':101.}
 TICK={'time_msc':900000,'bid':100.,'ask':101.,'flags':6}
 class Checks(unittest.TestCase):
@@ -12,8 +12,12 @@ class Checks(unittest.TestCase):
     def test_tick_crossed(self):self.assertFalse(tick_qa([{**TICK,'ask':99}],900,1200)['structural_pass'])
     def test_tick_equal_time_retained(self):self.assertTrue(tick_qa([TICK,{**TICK,'bid':100.1}],900,1200)['structural_pass'])
     def test_tick_boundary(self):self.assertFalse(tick_qa([TICK],600,900)['structural_pass'])
+    def test_broker_shift_prevents_utc_assumption(self):
+        with self.assertRaisesRegex(RuntimeError,'TIME_MAPPING'):require_utc_quote((10000+7200)*1000,10000)
+    def test_stale_quote_cannot_validate_clock(self):
+        with self.assertRaises(RuntimeError):require_utc_quote(9000*1000,10000)
     def test_sdk_allowlist(self):
         tree=ast.parse(pathlib.Path('export_readonly.py').read_text())
         calls={n.func.attr for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and isinstance(n.func.value,ast.Name) and n.func.value.id=='mt5'}
-        self.assertLessEqual(calls,{'initialize','terminal_info','account_info','symbol_info','copy_rates_range','copy_ticks_range','last_error','shutdown'})
+        self.assertLessEqual(calls,{'initialize','terminal_info','account_info','symbol_info','symbol_info_tick','copy_rates_range','copy_ticks_range','last_error','shutdown'})
 if __name__=='__main__':unittest.main(verbosity=2)
