@@ -1,0 +1,4363 @@
+{
+  "activity_budgets": {
+    "WF1": {
+      "M1_cal": 0.0,
+      "M1_raw": 0.046511627906976744,
+      "M2_cal": 0.0,
+      "M2_raw": 0.3488372093023256
+    },
+    "WF2": {
+      "M1_cal": 0.6296296296296297,
+      "M1_raw": 0.0,
+      "M2_cal": 0.2777777777777778,
+      "M2_raw": 0.07407407407407407
+    },
+    "WF3": {
+      "M1_cal": 0.0,
+      "M1_raw": 0.0,
+      "M2_cal": 0.0,
+      "M2_raw": 0.23684210526315788
+    },
+    "WF4": {
+      "M1_cal": 0.0,
+      "M1_raw": 0.0,
+      "M2_cal": 0.0,
+      "M2_raw": 0.25862068965517243
+    }
+  },
+  "comparisons": [
+    {
+      "arm": "M1_raw",
+      "baseline": "B0",
+      "baseline_kind": "fixed_no_trade",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.19488000000000466,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.5846400000000139,
+            0.0
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -73.08000000000175,
+            0.0
+          ],
+          "total_net_delta": -24.360000000000582,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.19488000000000466,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.5846400000000139,
+            0.0
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -73.08000000000175,
+            0.0
+          ],
+          "total_net_delta": -24.360000000000582,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.19488000000000466,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.5846400000000139,
+            0.0
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -73.08000000000175,
+            0.0
+          ],
+          "total_net_delta": -24.360000000000582,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M1_raw",
+      "baseline": "B1",
+      "baseline_kind": "frozen_rules",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.6223200000000215,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            2.0625600000000706,
+            7.306480000000025
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            257.8200000000088,
+            913.3100000000031
+          ],
+          "total_net_delta": 577.7900000000027,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.6223200000000215,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            2.0908000000000175,
+            7.123599999999977
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            261.3500000000022,
+            890.4499999999971
+          ],
+          "total_net_delta": 577.7900000000027,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.6223200000000215,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            1.9259200000000418,
+            7.068239999999961
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            240.74000000000524,
+            883.5299999999952
+          ],
+          "total_net_delta": 577.7900000000027,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M1_raw",
+      "baseline": "R_M1_raw_mean5",
+      "baseline_kind": "equal_weight_mean_of_five_fixed_seeds",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.17321600000000617,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.6820480000000155,
+            0.15161599999999742
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -85.25600000000195,
+            18.95199999999968
+          ],
+          "total_net_delta": -21.652000000000772,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.17321600000000617,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.6586240000000136,
+            0.11353599999999568
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -82.32800000000171,
+            14.19199999999946
+          ],
+          "total_net_delta": -21.652000000000772,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.17321600000000617,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.6163360000000132,
+            0.10158399999999673
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -77.04200000000165,
+            12.697999999999592
+          ],
+          "total_net_delta": -21.652000000000772,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M1_cal",
+      "baseline": "B0",
+      "baseline_kind": "fixed_no_trade",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.5839999999999854,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -1.3289599999999337,
+            0.05792000000002736
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -166.1199999999917,
+            7.24000000000342
+          ],
+          "total_net_delta": -72.99999999999818,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.5839999999999854,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -1.3899199999999254,
+            0.0
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -173.7399999999907,
+            0.0
+          ],
+          "total_net_delta": -72.99999999999818,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.5839999999999854,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -1.5433599999999714,
+            0.0
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -192.91999999999643,
+            0.0
+          ],
+          "total_net_delta": -72.99999999999818,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M1_cal",
+      "baseline": "B1",
+      "baseline_kind": "frozen_rules",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.233200000000041,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            1.7991200000001555,
+            6.780960000000152
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            224.89000000001943,
+            847.620000000019
+          ],
+          "total_net_delta": 529.1500000000051,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.233200000000041,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            1.5793600000000878,
+            6.887999999999942
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            197.420000000011,
+            860.9999999999927
+          ],
+          "total_net_delta": 529.1500000000051,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.233200000000041,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            1.5500000000000291,
+            6.822160000000047
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            193.75000000000364,
+            852.7700000000059
+          ],
+          "total_net_delta": 529.1500000000051,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M1_cal",
+      "baseline": "R_M1_cal_mean5",
+      "baseline_kind": "equal_weight_mean_of_five_fixed_seeds",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.11687999999999012,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.8089279999999592,
+            0.5239520000000019
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -101.1159999999949,
+            65.49400000000023
+          ],
+          "total_net_delta": -14.609999999998765,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.11687999999999012,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.9944479999999603,
+            0.6513760000000154
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -124.30599999999504,
+            81.42200000000193
+          ],
+          "total_net_delta": -14.609999999998765,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.11687999999999012,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.9452639999999549,
+            0.6364319999999802
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -118.15799999999436,
+            79.55399999999753
+          ],
+          "total_net_delta": -14.609999999998765,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_raw",
+      "baseline": "B0",
+      "baseline_kind": "fixed_no_trade",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -2.312400000000052,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -4.0215200000000335,
+            -0.7632000000000698
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -502.6900000000042,
+            -95.40000000000873
+          ],
+          "total_net_delta": -289.05000000000655,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -2.312400000000052,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -4.22856000000007,
+            -0.5077600000000384
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -528.5700000000088,
+            -63.4700000000048
+          ],
+          "total_net_delta": -289.05000000000655,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -2.312400000000052,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -4.422480000000069,
+            -0.20688000000001922
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -552.8100000000086,
+            -25.8600000000024
+          ],
+          "total_net_delta": -289.05000000000655,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_raw",
+      "baseline": "B1",
+      "baseline_kind": "frozen_rules",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": 2.5047999999999737,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            0.08255999999996856,
+            4.942479999999996
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            10.319999999996071,
+            617.8099999999995
+          ],
+          "total_net_delta": 313.0999999999967,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": 2.5047999999999737,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.012560000000012223,
+            4.974400000000053
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -1.570000000001528,
+            621.8000000000065
+          ],
+          "total_net_delta": 313.0999999999967,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": 2.5047999999999737,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            0.06560000000003492,
+            4.953199999999954
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            8.200000000004366,
+            619.1499999999942
+          ],
+          "total_net_delta": 313.0999999999967,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_raw",
+      "baseline": "R_M2_raw_mean5",
+      "baseline_kind": "equal_weight_mean_of_five_fixed_seeds",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.1651040000000241,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -1.8808000000000349,
+            1.5320959999999177
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -235.10000000000437,
+            191.5119999999897
+          ],
+          "total_net_delta": -20.63800000000301,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.1651040000000241,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -2.051760000000082,
+            1.836272000000006
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -256.47000000001026,
+            229.53400000000073
+          ],
+          "total_net_delta": -20.63800000000301,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.1651040000000241,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -2.225056000000064,
+            2.064959999999998
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -278.13200000000796,
+            258.1199999999997
+          ],
+          "total_net_delta": -20.63800000000301,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_cal",
+      "baseline": "B0",
+      "baseline_kind": "fixed_no_trade",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.08144000000000233,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.44559999999996214,
+            0.22767999999994937
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -55.69999999999527,
+            28.45999999999367
+          ],
+          "total_net_delta": -10.180000000000291,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.08144000000000233,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.3697599999999802,
+            0.1799999999999709
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -46.219999999997526,
+            22.499999999996362
+          ],
+          "total_net_delta": -10.180000000000291,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": -0.08144000000000233,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.39023999999997616,
+            0.17711999999996625
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -48.77999999999702,
+            22.13999999999578
+          ],
+          "total_net_delta": -10.180000000000291,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_cal",
+      "baseline": "B1",
+      "baseline_kind": "frozen_rules",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.735760000000024,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            2.193279999999999,
+            7.413760000000024
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            274.15999999999985,
+            926.720000000003
+          ],
+          "total_net_delta": 591.970000000003,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.735760000000024,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            2.0283200000001234,
+            7.388079999999914
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            253.54000000001543,
+            923.5099999999893
+          ],
+          "total_net_delta": 591.970000000003,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": 4.735760000000024,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            1.8856000000000204,
+            7.316319999999992
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            235.70000000000255,
+            914.539999999999
+          ],
+          "total_net_delta": 591.970000000003,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    },
+    {
+      "arm": "M2_cal",
+      "baseline": "R_M2_cal_mean5",
+      "baseline_kind": "equal_weight_mean_of_five_fixed_seeds",
+      "inference": "Exploratory, unadjusted, already-seen retrospective simulation; no confirmatory edge or deployment permission",
+      "matching_note": "Common UTC days including zeros; expected C-only activity budget, not matched realized E exposure",
+      "paired_ci": [
+        {
+          "approx_nonoverlap_blocks": 125.0,
+          "block_days": 1,
+          "calendar_days": 125,
+          "daily_delta_mean": 0.32988799999998886,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.17679999999997964,
+            0.8700319999999861
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -22.099999999997454,
+            108.75399999999827
+          ],
+          "total_net_delta": 41.235999999998604,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 25.0,
+          "block_days": 5,
+          "calendar_days": 125,
+          "daily_delta_mean": 0.32988799999998886,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.08244799999999522,
+            0.8155199999999749
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -10.305999999999402,
+            101.93999999999687
+          ],
+          "total_net_delta": 41.235999999998604,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        },
+        {
+          "approx_nonoverlap_blocks": 12.5,
+          "block_days": 10,
+          "calendar_days": 125,
+          "daily_delta_mean": 0.32988799999998886,
+          "independent_future_test": false,
+          "mean_daily_delta_ci95": [
+            -0.10150399999999493,
+            0.9058240000000048
+          ],
+          "minimum_effect_power_plan_locked": false,
+          "resamples": 1000,
+          "seed": 1729,
+          "status": "exploratory_previously_seen_development",
+          "total_delta_ci95": [
+            -12.687999999999366,
+            113.2280000000006
+          ],
+          "total_net_delta": 41.235999999998604,
+          "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+        }
+      ]
+    }
+  ],
+  "portfolios": [
+    {
+      "arm": "B0",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 0,
+          "candidate_count": 0,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 0,
+          "candidate_count": 0,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 0,
+          "candidate_count": 0,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 0,
+          "candidate_count": 0,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 0,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 0,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 0,
+        "no_trade": 0,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": true,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": null,
+        "exposure_seconds": 0,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 0,
+        "gross_market_pnl": 0,
+        "gross_profit": 0,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "n_signals": 0,
+        "net_pnl": 0.0,
+        "no_trade": 0,
+        "num_trades": 0,
+        "period_net_pnl": 0.0,
+        "post_end_pnl": 0.0,
+        "profit_factor": null,
+        "return_pct": 0.0,
+        "total_commission": 0,
+        "total_swap": 0,
+        "trades": 0,
+        "turnover_lots": 0,
+        "worst_day": 0.0
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 0,
+        "descriptive_only": true,
+        "exposure_hours": 0.0,
+        "exposure_seconds": 0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0,
+        "net_over_planned_risk": null,
+        "net_per_exposure_hour": null,
+        "net_per_lot_hour": null,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "undefined_zero_exposure_or_risk"
+      }
+    },
+    {
+      "arm": "B1",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 40,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 62,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 53,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 52,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 0,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 89,
+        "entry_after_window": 0,
+        "entry_expired": 2,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 2,
+        "min_volume_no_trade": 22,
+        "n_signals": 207,
+        "no_trade": 118,
+        "overlap_position_or_pending": 92,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -215.44000000000233,
+        "WF2": -96.65000000000146,
+        "WF3": -75.21000000000095,
+        "WF4": -214.84999999999854
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -6.765730337078688,
+        "exposure_seconds": 1178100,
+        "flat_exposure_trades": 31,
+        "forced_final_liquidations": 1,
+        "gap_exposure_trades": 4,
+        "gross_loss": 1061.039999999999,
+        "gross_market_pnl": -586.7499999999982,
+        "gross_profit": 458.8900000000008,
+        "max_drawdown": 628.1300000000028,
+        "max_drawdown_pct": 6.271103186219236,
+        "n_signals": 207,
+        "net_pnl": -602.1500000000033,
+        "no_trade": 118,
+        "num_trades": 89,
+        "period_net_pnl": -602.1500000000033,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.432490763778935,
+        "return_pct": -6.021500000000035,
+        "total_commission": 15.4,
+        "total_swap": 0.0,
+        "trades": 89,
+        "turnover_lots": 3.08,
+        "worst_day": -42.720000000001164
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 1693.6900000000014,
+        "descriptive_only": true,
+        "exposure_hours": 327.25,
+        "exposure_seconds": 1178100.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 5.2,
+        "net_over_planned_risk": -0.3555255093907402,
+        "net_per_exposure_hour": -1.8400305576776266,
+        "net_per_lot_hour": -115.79807692307755,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "B2",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 39,
+          "available_score_count": 39,
+          "candidate_count": 39,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 40,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 48,
+          "available_score_count": 48,
+          "candidate_count": 48,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 51,
+          "available_score_count": 51,
+          "candidate_count": 51,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 0,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 0,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 113,
+        "entry_after_window": 0,
+        "entry_expired": 2,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 3,
+        "min_volume_no_trade": 16,
+        "n_signals": 178,
+        "no_trade": 65,
+        "overlap_position_or_pending": 44,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -99.09000000000924,
+        "WF2": 41.61999999999716,
+        "WF3": -214.65000000000327,
+        "WF4": -156.2400000000016
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -3.790796460177141,
+        "exposure_seconds": 1846800,
+        "flat_exposure_trades": 48,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 8,
+        "gross_loss": 1244.2399999999975,
+        "gross_market_pnl": -407.2599999999984,
+        "gross_profit": 815.8799999999992,
+        "max_drawdown": 565.860000000017,
+        "max_drawdown_pct": 5.593801404530094,
+        "n_signals": 178,
+        "net_pnl": -428.36000000001695,
+        "no_trade": 65,
+        "num_trades": 113,
+        "period_net_pnl": -428.36000000001695,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.6557255834887167,
+        "return_pct": -4.283600000000165,
+        "total_commission": 21.1,
+        "total_swap": 0.0,
+        "trades": 113,
+        "turnover_lots": 4.22,
+        "worst_day": -68.7300000000032
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 2230.5599999999954,
+        "descriptive_only": true,
+        "exposure_hours": 513.0,
+        "exposure_seconds": 1846800.0,
+        "gap_associated_risk_overrun_trades": 3,
+        "gap_associated_risk_overrun_usd": 44.749999999999545,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 8.465,
+        "net_over_planned_risk": -0.19204146044043552,
+        "net_per_exposure_hour": -0.835009746588727,
+        "net_per_lot_hour": -50.60366213821819,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 3,
+        "risk_overrun_usd": 44.749999999999545,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "M1_raw",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 1,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 39,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 206,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 1,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 206,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -24.360000000000582,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -24.360000000000582,
+        "exposure_seconds": 900,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 24.360000000000948,
+        "gross_market_pnl": -23.960000000000946,
+        "gross_profit": 0,
+        "max_drawdown": 24.360000000000582,
+        "max_drawdown_pct": 0.24360000000000584,
+        "n_signals": 207,
+        "net_pnl": -24.360000000000582,
+        "no_trade": 206,
+        "num_trades": 1,
+        "period_net_pnl": -24.360000000000582,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.0,
+        "return_pct": -0.24360000000001047,
+        "total_commission": 0.4,
+        "total_swap": 0.0,
+        "trades": 1,
+        "turnover_lots": 0.08,
+        "worst_day": -24.360000000000582
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 24.360000000000948,
+        "descriptive_only": true,
+        "exposure_hours": 0.25,
+        "exposure_seconds": 900.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.01,
+        "net_over_planned_risk": -0.999999999999985,
+        "net_per_exposure_hour": -97.44000000000233,
+        "net_per_lot_hour": -2436.000000000058,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "M1_cal",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 18,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 44,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 188,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 6,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 4,
+        "n_signals": 207,
+        "no_trade": 201,
+        "overlap_position_or_pending": 7,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -72.99999999999818,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -12.166666666666364,
+        "exposure_seconds": 44100,
+        "flat_exposure_trades": 2,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 80.77999999999884,
+        "gross_market_pnl": -71.89999999999873,
+        "gross_profit": 7.7800000000001095,
+        "max_drawdown": 83.10999999999876,
+        "max_drawdown_pct": 0.830260606526789,
+        "n_signals": 207,
+        "net_pnl": -72.99999999999818,
+        "no_trade": 201,
+        "num_trades": 6,
+        "period_net_pnl": -72.99999999999818,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.09631096806140409,
+        "return_pct": -0.7299999999999862,
+        "total_commission": 1.1,
+        "total_swap": 0.0,
+        "trades": 6,
+        "turnover_lots": 0.22,
+        "worst_day": -24.119999999997162
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 110.06999999999844,
+        "descriptive_only": true,
+        "exposure_hours": 12.25,
+        "exposure_seconds": 44100.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.1975,
+        "net_over_planned_risk": -0.663214318161163,
+        "net_per_exposure_hour": -5.959183673469239,
+        "net_per_lot_hour": -369.62025316454776,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "M2_raw",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 12,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 28,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 14,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 48,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 15,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 7,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 45,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 150,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 30,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 177,
+        "overlap_position_or_pending": 21,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -109.600000000004,
+        "WF2": -79.37999999999738,
+        "WF3": -58.330000000003565,
+        "WF4": -41.7400000000016
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -9.635000000000218,
+        "exposure_seconds": 351900,
+        "flat_exposure_trades": 11,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 399.1200000000028,
+        "gross_market_pnl": -283.15000000000146,
+        "gross_profit": 110.07000000000134,
+        "max_drawdown": 314.8600000000042,
+        "max_drawdown_pct": 3.1433757095707358,
+        "n_signals": 207,
+        "net_pnl": -289.05000000000655,
+        "no_trade": 177,
+        "num_trades": 30,
+        "period_net_pnl": -289.05000000000655,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.27578171978352517,
+        "return_pct": -2.8905000000000625,
+        "total_commission": 5.9,
+        "total_swap": 0.0,
+        "trades": 30,
+        "turnover_lots": 1.18,
+        "worst_day": -45.66000000000349
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 576.9500000000033,
+        "descriptive_only": true,
+        "exposure_hours": 97.75,
+        "exposure_seconds": 351900.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.5875000000000001,
+        "net_over_planned_risk": -0.5009966201577344,
+        "net_per_exposure_hour": -2.9570332480819084,
+        "net_per_lot_hour": -182.07874015748442,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "M2_cal",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 14,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 48,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 187,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 4,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 203,
+        "overlap_position_or_pending": 11,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -10.480000000001382,
+        "WF3": 0.3000000000010914,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -2.5450000000000728,
+        "exposure_seconds": 146700,
+        "flat_exposure_trades": 4,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 18.359999999999673,
+        "gross_market_pnl": -9.480000000000473,
+        "gross_profit": 8.1799999999992,
+        "max_drawdown": 42.850000000000364,
+        "max_drawdown_pct": 0.42756534216203745,
+        "n_signals": 207,
+        "net_pnl": -10.180000000000291,
+        "no_trade": 203,
+        "num_trades": 4,
+        "period_net_pnl": -10.180000000000291,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.44553376906314524,
+        "return_pct": -0.10180000000000744,
+        "total_commission": 0.7,
+        "total_swap": 0.0,
+        "trades": 4,
+        "turnover_lots": 0.14,
+        "worst_day": -15.959999999999127
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 75.98000000000248,
+        "descriptive_only": true,
+        "exposure_hours": 40.75,
+        "exposure_seconds": 146700.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.0225,
+        "net_over_planned_risk": -0.1339826270071066,
+        "net_per_exposure_hour": -0.24981595092025255,
+        "net_per_lot_hour": -9.955990220049184,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "BASE_C",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 207,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 0,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 207,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": true,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": null,
+        "exposure_seconds": 0,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 0,
+        "gross_market_pnl": 0,
+        "gross_profit": 0,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "n_signals": 207,
+        "net_pnl": 0.0,
+        "no_trade": 207,
+        "num_trades": 0,
+        "period_net_pnl": 0.0,
+        "post_end_pnl": 0.0,
+        "profit_factor": null,
+        "return_pct": 0.0,
+        "total_commission": 0,
+        "total_swap": 0,
+        "trades": 0,
+        "turnover_lots": 0,
+        "worst_day": 0.0
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 0,
+        "descriptive_only": true,
+        "exposure_hours": 0.0,
+        "exposure_seconds": 0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0,
+        "net_over_planned_risk": null,
+        "net_per_exposure_hour": null,
+        "net_per_lot_hour": null,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "undefined_zero_exposure_or_risk"
+      }
+    },
+    {
+      "arm": "R_M1_raw_seed1729",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 3,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 37,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 203,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 2,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 1,
+        "n_signals": 207,
+        "no_trade": 205,
+        "overlap_position_or_pending": 1,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": true,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 52.710000000000946,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": 26.355000000000473,
+        "exposure_seconds": 17100,
+        "flat_exposure_trades": 1,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 0,
+        "gross_market_pnl": 53.10999999999967,
+        "gross_profit": 52.709999999999674,
+        "max_drawdown": 27.93000000000029,
+        "max_drawdown_pct": 0.27883824386815725,
+        "n_signals": 207,
+        "net_pnl": 52.710000000000946,
+        "no_trade": 205,
+        "num_trades": 2,
+        "period_net_pnl": 52.710000000000946,
+        "post_end_pnl": 0.0,
+        "profit_factor": null,
+        "return_pct": 0.5271000000000026,
+        "total_commission": 0.4,
+        "total_swap": 0.0,
+        "trades": 2,
+        "turnover_lots": 0.08,
+        "worst_day": 0.0
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 33.78000000000056,
+        "descriptive_only": true,
+        "exposure_hours": 4.75,
+        "exposure_seconds": 17100.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.1275,
+        "net_over_planned_risk": 1.5603907637655439,
+        "net_per_exposure_hour": 11.096842105263358,
+        "net_per_lot_hour": 413.41176470588977,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_raw_seed2718",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 1,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 39,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 206,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 1,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 206,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -6.739999999999782,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -6.739999999999782,
+        "exposure_seconds": 14400,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 6.740000000000328,
+        "gross_market_pnl": -6.640000000000327,
+        "gross_profit": 0,
+        "max_drawdown": 21.55999999999949,
+        "max_drawdown_pct": 0.21549053081034325,
+        "n_signals": 207,
+        "net_pnl": -6.739999999999782,
+        "no_trade": 206,
+        "num_trades": 1,
+        "period_net_pnl": -6.739999999999782,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.0,
+        "return_pct": -0.06739999999999524,
+        "total_commission": 0.1,
+        "total_swap": 0.0,
+        "trades": 1,
+        "turnover_lots": 0.02,
+        "worst_day": -6.739999999999782
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 20.170000000000165,
+        "descriptive_only": true,
+        "exposure_hours": 4.0,
+        "exposure_seconds": 14400.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.04,
+        "net_over_planned_risk": -0.33415964303419565,
+        "net_per_exposure_hour": -1.6849999999999454,
+        "net_per_lot_hour": -168.49999999999454,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_raw_seed31415",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 2,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 205,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 2,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 205,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -38.27000000000044,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -19.13500000000022,
+        "exposure_seconds": 2700,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 38.2699999999998,
+        "gross_market_pnl": -37.9699999999998,
+        "gross_profit": 0,
+        "max_drawdown": 38.27000000000044,
+        "max_drawdown_pct": 0.38270000000000437,
+        "n_signals": 207,
+        "net_pnl": -38.27000000000044,
+        "no_trade": 205,
+        "num_trades": 2,
+        "period_net_pnl": -38.27000000000044,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.0,
+        "return_pct": -0.3827000000000025,
+        "total_commission": 0.30000000000000004,
+        "total_swap": 0.0,
+        "trades": 2,
+        "turnover_lots": 0.06,
+        "worst_day": -19.399999999999636
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 38.2699999999998,
+        "descriptive_only": true,
+        "exposure_hours": 0.75,
+        "exposure_seconds": 2700.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.0125,
+        "net_over_planned_risk": -1.0000000000000167,
+        "net_per_exposure_hour": -51.026666666667246,
+        "net_per_lot_hour": -3061.600000000035,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_raw_seed42017",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 207,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 0,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 207,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": true,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": null,
+        "exposure_seconds": 0,
+        "flat_exposure_trades": 0,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 0,
+        "gross_market_pnl": 0,
+        "gross_profit": 0,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "n_signals": 207,
+        "net_pnl": 0.0,
+        "no_trade": 207,
+        "num_trades": 0,
+        "period_net_pnl": 0.0,
+        "post_end_pnl": 0.0,
+        "profit_factor": null,
+        "return_pct": 0.0,
+        "total_commission": 0,
+        "total_swap": 0,
+        "trades": 0,
+        "turnover_lots": 0,
+        "worst_day": 0.0
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 0,
+        "descriptive_only": true,
+        "exposure_hours": 0.0,
+        "exposure_seconds": 0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0,
+        "net_over_planned_risk": null,
+        "net_per_exposure_hour": null,
+        "net_per_lot_hour": null,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "undefined_zero_exposure_or_risk"
+      }
+    },
+    {
+      "arm": "R_M1_raw_seed65537",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 2,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 0,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 62,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 205,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 2,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 0,
+        "n_signals": 207,
+        "no_trade": 205,
+        "overlap_position_or_pending": 0,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -21.23999999999978,
+        "WF2": 0.0,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -10.61999999999989,
+        "exposure_seconds": 15300,
+        "flat_exposure_trades": 1,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 21.239999999999235,
+        "gross_market_pnl": -20.839999999999236,
+        "gross_profit": 0,
+        "max_drawdown": 28.2599999999984,
+        "max_drawdown_pct": 0.282401753968698,
+        "n_signals": 207,
+        "net_pnl": -21.23999999999978,
+        "no_trade": 205,
+        "num_trades": 2,
+        "period_net_pnl": -21.23999999999978,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.0,
+        "return_pct": -0.21240000000000148,
+        "total_commission": 0.4,
+        "total_swap": 0.0,
+        "trades": 2,
+        "turnover_lots": 0.08,
+        "worst_day": -18.81999999999971
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 40.15999999999931,
+        "descriptive_only": true,
+        "exposure_hours": 4.25,
+        "exposure_seconds": 15300.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.085,
+        "net_over_planned_risk": -0.5288844621513981,
+        "net_per_exposure_hour": -4.997647058823478,
+        "net_per_lot_hour": -249.88235294117388,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_cal_seed1729",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 41,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 21,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 159,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 15,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 9,
+        "n_signals": 207,
+        "no_trade": 192,
+        "overlap_position_or_pending": 22,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -47.6200000000008,
+        "WF3": 0.3000000000010914,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -3.1546666666666474,
+        "exposure_seconds": 237600,
+        "flat_exposure_trades": 7,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 133.0799999999972,
+        "gross_market_pnl": -44.719999999997526,
+        "gross_profit": 85.75999999999968,
+        "max_drawdown": 147.47999999999956,
+        "max_drawdown_pct": 1.4617393588288599,
+        "n_signals": 207,
+        "net_pnl": -47.31999999999971,
+        "no_trade": 192,
+        "num_trades": 15,
+        "period_net_pnl": -47.31999999999971,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.6444244063721182,
+        "return_pct": -0.47319999999999585,
+        "total_commission": 2.6,
+        "total_swap": 0.0,
+        "trades": 15,
+        "turnover_lots": 0.52,
+        "worst_day": -26.459999999997308
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 284.5899999999998,
+        "descriptive_only": true,
+        "exposure_hours": 66.0,
+        "exposure_seconds": 237600.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.4525000000000001,
+        "net_over_planned_risk": -0.16627428932850677,
+        "net_per_exposure_hour": -0.7169696969696926,
+        "net_per_lot_hour": -32.57831325301184,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_cal_seed2718",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 36,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 26,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 163,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 15,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 7,
+        "n_signals": 207,
+        "no_trade": 192,
+        "overlap_position_or_pending": 21,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -81.85999999999876,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -5.457333333333251,
+        "exposure_seconds": 240300,
+        "flat_exposure_trades": 7,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 157.87999999999866,
+        "gross_market_pnl": -79.85999999999967,
+        "gross_profit": 76.01999999999899,
+        "max_drawdown": 111.07999999999993,
+        "max_drawdown_pct": 1.108377087686317,
+        "n_signals": 207,
+        "net_pnl": -81.85999999999876,
+        "no_trade": 192,
+        "num_trades": 15,
+        "period_net_pnl": -81.85999999999876,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.48150494046110737,
+        "return_pct": -0.8185999999999916,
+        "total_commission": 2.0,
+        "total_swap": 0.0,
+        "trades": 15,
+        "turnover_lots": 0.4,
+        "worst_day": -23.51000000000022
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 275.52999999999975,
+        "descriptive_only": true,
+        "exposure_hours": 66.75,
+        "exposure_seconds": 240300.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.8175,
+        "net_over_planned_risk": -0.29710013428664334,
+        "net_per_exposure_hour": -1.2263670411984833,
+        "net_per_lot_hour": -100.13455657492203,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_cal_seed31415",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 46,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 16,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 155,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 20,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 7,
+        "n_signals": 207,
+        "no_trade": 187,
+        "overlap_position_or_pending": 23,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -72.33999999999833,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -3.6169999999999165,
+        "exposure_seconds": 391500,
+        "flat_exposure_trades": 9,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 2,
+        "gross_loss": 200.8699999999979,
+        "gross_market_pnl": -69.13999999999851,
+        "gross_profit": 128.5299999999994,
+        "max_drawdown": 167.40999999999622,
+        "max_drawdown_pct": 1.6583342166027204,
+        "n_signals": 207,
+        "net_pnl": -72.33999999999833,
+        "no_trade": 187,
+        "num_trades": 20,
+        "period_net_pnl": -72.33999999999833,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.6398665803753709,
+        "return_pct": -0.7233999999999852,
+        "total_commission": 3.2,
+        "total_swap": 0.0,
+        "trades": 20,
+        "turnover_lots": 0.64,
+        "worst_day": -47.09999999999491
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 387.36000000000075,
+        "descriptive_only": true,
+        "exposure_hours": 108.75,
+        "exposure_seconds": 391500.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.905,
+        "net_over_planned_risk": -0.18675134242048272,
+        "net_per_exposure_hour": -0.6651954022988352,
+        "net_per_lot_hour": -37.97375328083901,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_cal_seed42017",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 36,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 26,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 159,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 13,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 9,
+        "n_signals": 207,
+        "no_trade": 194,
+        "overlap_position_or_pending": 24,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -104.50000000000182,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -8.038461538461679,
+        "exposure_seconds": 127800,
+        "flat_exposure_trades": 7,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 156.90000000000055,
+        "gross_market_pnl": -102.60000000000127,
+        "gross_profit": 52.399999999999274,
+        "max_drawdown": 136.03000000000065,
+        "max_drawdown_pct": 1.3560244548937268,
+        "n_signals": 207,
+        "net_pnl": -104.50000000000182,
+        "no_trade": 194,
+        "num_trades": 13,
+        "period_net_pnl": -104.50000000000182,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.333970681963028,
+        "return_pct": -1.0450000000000181,
+        "total_commission": 1.9000000000000001,
+        "total_swap": 0.0,
+        "trades": 13,
+        "turnover_lots": 0.38,
+        "worst_day": -23.159999999999854
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 228.9600000000004,
+        "descriptive_only": true,
+        "exposure_hours": 35.5,
+        "exposure_seconds": 127800.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.525,
+        "net_over_planned_risk": -0.4564116002795319,
+        "net_per_exposure_hour": -2.943661971831037,
+        "net_per_lot_hour": -199.0476190476225,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M1_cal_seed65537",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 40,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 22,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 161,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 13,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 8,
+        "n_signals": 207,
+        "no_trade": 194,
+        "overlap_position_or_pending": 24,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": 13.770000000000437,
+        "WF3": 0.3000000000010914,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": 1.0823076923078099,
+        "exposure_seconds": 158400,
+        "flat_exposure_trades": 7,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 72.74999999999783,
+        "gross_market_pnl": 15.970000000002074,
+        "gross_profit": 86.8199999999999,
+        "max_drawdown": 96.5099999999984,
+        "max_drawdown_pct": 0.9555663148764616,
+        "n_signals": 207,
+        "net_pnl": 14.070000000001528,
+        "no_trade": 194,
+        "num_trades": 13,
+        "period_net_pnl": 14.070000000001528,
+        "post_end_pnl": 0.0,
+        "profit_factor": 1.1934020618557044,
+        "return_pct": 0.1407000000000158,
+        "total_commission": 1.9000000000000001,
+        "total_swap": 0.0,
+        "trades": 13,
+        "turnover_lots": 0.38,
+        "worst_day": -26.459999999997308
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 255.7299999999981,
+        "descriptive_only": true,
+        "exposure_hours": 44.0,
+        "exposure_seconds": 158400.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.5575,
+        "net_over_planned_risk": 0.055018965314987026,
+        "net_per_exposure_hour": 0.319772727272762,
+        "net_per_lot_hour": 25.237668161437718,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_raw_seed1729",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 13,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 27,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 6,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 56,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 11,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 42,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 13,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 39,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 144,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 32,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 175,
+        "overlap_position_or_pending": 26,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -66.88000000000284,
+        "WF2": -63.6399999999976,
+        "WF3": -51.37000000000262,
+        "WF4": -79.81999999999971
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -8.178437500000086,
+        "exposure_seconds": 243900,
+        "flat_exposure_trades": 8,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 394.6000000000002,
+        "gross_market_pnl": -255.61000000000013,
+        "gross_profit": 132.89000000000004,
+        "max_drawdown": 293.28000000000065,
+        "max_drawdown_pct": 2.9235702885989,
+        "n_signals": 207,
+        "net_pnl": -261.71000000000276,
+        "no_trade": 175,
+        "num_trades": 32,
+        "period_net_pnl": -261.71000000000276,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.3367714140902179,
+        "return_pct": -2.6171000000000277,
+        "total_commission": 6.1000000000000005,
+        "total_swap": 0.0,
+        "trades": 32,
+        "turnover_lots": 1.22,
+        "worst_day": -24.150000000001455
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 607.1600000000013,
+        "descriptive_only": true,
+        "exposure_hours": 67.75,
+        "exposure_seconds": 243900.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.0025,
+        "net_over_planned_risk": -0.43103959417616805,
+        "net_per_exposure_hour": -3.8628782287823284,
+        "net_per_lot_hour": -261.0573566084816,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_raw_seed2718",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 18,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 22,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 6,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 56,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 15,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 16,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 36,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 126,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 39,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 7,
+        "n_signals": 207,
+        "no_trade": 168,
+        "overlap_position_or_pending": 33,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -143.63000000000102,
+        "WF2": -33.11999999999898,
+        "WF3": -102.47000000000116,
+        "WF4": -162.88999999999942
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -11.336153846153861,
+        "exposure_seconds": 398700,
+        "flat_exposure_trades": 10,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 558.1799999999989,
+        "gross_market_pnl": -434.3099999999972,
+        "gross_profit": 116.07000000000171,
+        "max_drawdown": 451.27000000000044,
+        "max_drawdown_pct": 4.50857014974284,
+        "n_signals": 207,
+        "net_pnl": -442.1100000000006,
+        "no_trade": 168,
+        "num_trades": 39,
+        "period_net_pnl": -442.1100000000006,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.2079436740836324,
+        "return_pct": -4.421100000000012,
+        "total_commission": 7.800000000000001,
+        "total_swap": 0.0,
+        "trades": 39,
+        "turnover_lots": 1.56,
+        "worst_day": -44.840000000000146
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 780.8699999999939,
+        "descriptive_only": true,
+        "exposure_hours": 110.75,
+        "exposure_seconds": 398700.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.6375,
+        "net_over_planned_risk": -0.566176188097896,
+        "net_per_exposure_hour": -3.9919638826185153,
+        "net_per_lot_hour": -269.99083969465687,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_raw_seed31415",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 11,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 29,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 6,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 56,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 14,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 39,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 17,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 35,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 141,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 34,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 3,
+        "n_signals": 207,
+        "no_trade": 173,
+        "overlap_position_or_pending": 28,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -53.73999999999978,
+        "WF2": -31.31999999999971,
+        "WF3": -116.21000000000822,
+        "WF4": -172.79000000000087
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -11.001764705882605,
+        "exposure_seconds": 278100,
+        "flat_exposure_trades": 13,
+        "forced_final_liquidations": 1,
+        "gap_exposure_trades": 0,
+        "gross_loss": 469.7700000000054,
+        "gross_market_pnl": -367.2600000000066,
+        "gross_profit": 95.70999999999876,
+        "max_drawdown": 404.950000000008,
+        "max_drawdown_pct": 4.040945318760265,
+        "n_signals": 207,
+        "net_pnl": -374.0600000000086,
+        "no_trade": 173,
+        "num_trades": 34,
+        "period_net_pnl": -374.0600000000086,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.20373799944653267,
+        "return_pct": -3.7406000000000827,
+        "total_commission": 6.8,
+        "total_swap": 0.0,
+        "trades": 34,
+        "turnover_lots": 1.36,
+        "worst_day": -45.66000000000349
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 660.4400000000027,
+        "descriptive_only": true,
+        "exposure_hours": 77.25,
+        "exposure_seconds": 278100.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.5025,
+        "net_over_planned_risk": -0.5663799890981877,
+        "net_per_exposure_hour": -4.842200647249302,
+        "net_per_lot_hour": -248.95840266223533,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_raw_seed42017",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 12,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 28,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 3,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 59,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 15,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 12,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 150,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 28,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 179,
+        "overlap_position_or_pending": 24,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -92.56000000000131,
+        "WF2": -28.110000000000582,
+        "WF3": -37.220000000001164,
+        "WF4": -15.040000000000873
+      },
+      "metrics": {
+        "ambiguous_trades": 1,
+        "expectancy": -6.176071428571569,
+        "exposure_seconds": 235800,
+        "flat_exposure_trades": 8,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 318.0200000000039,
+        "gross_market_pnl": -168.3300000000013,
+        "gross_profit": 145.0900000000026,
+        "max_drawdown": 191.7800000000043,
+        "max_drawdown_pct": 1.91696420360727,
+        "n_signals": 207,
+        "net_pnl": -172.93000000000393,
+        "no_trade": 179,
+        "num_trades": 28,
+        "period_net_pnl": -172.93000000000393,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.45622916797685936,
+        "return_pct": -1.7293000000000447,
+        "total_commission": 4.6000000000000005,
+        "total_swap": 0.0,
+        "trades": 28,
+        "turnover_lots": 0.92,
+        "worst_day": -36.73000000000138
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 506.6300000000002,
+        "descriptive_only": true,
+        "exposure_hours": 65.5,
+        "exposure_seconds": 235800.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.955,
+        "net_over_planned_risk": -0.3413339123226099,
+        "net_per_exposure_hour": -2.6401526717557853,
+        "net_per_lot_hour": -181.07853403141775,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_raw_seed65537",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 6,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 34,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 3,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 59,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 14,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 39,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 14,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 38,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 140,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 25,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 4,
+        "n_signals": 207,
+        "no_trade": 182,
+        "overlap_position_or_pending": 37,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": -49.54999999999927,
+        "WF2": 37.919999999998254,
+        "WF3": -88.90000000000146,
+        "WF4": 9.280000000000655
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -3.6500000000000727,
+        "exposure_seconds": 346500,
+        "flat_exposure_trades": 9,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 232.15999999999858,
+        "gross_market_pnl": -87.74999999999955,
+        "gross_profit": 140.90999999999903,
+        "max_drawdown": 132.27000000000044,
+        "max_drawdown_pct": 1.3217721159745903,
+        "n_signals": 207,
+        "net_pnl": -91.25000000000182,
+        "no_trade": 182,
+        "num_trades": 25,
+        "period_net_pnl": -91.25000000000182,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.6069521019986212,
+        "return_pct": -0.9125000000000161,
+        "total_commission": 3.5,
+        "total_swap": 0.0,
+        "trades": 25,
+        "turnover_lots": 0.7,
+        "worst_day": -35.36999999999898
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 463.7700000000009,
+        "descriptive_only": true,
+        "exposure_hours": 96.25,
+        "exposure_seconds": 346500.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.1975,
+        "net_over_planned_risk": -0.19675701317463754,
+        "net_per_exposure_hour": -0.9480519480519669,
+        "net_per_lot_hour": -76.20041753653597,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_cal_seed1729",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 25,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 37,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 172,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 13,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 1,
+        "min_volume_no_trade": 4,
+        "n_signals": 207,
+        "no_trade": 194,
+        "overlap_position_or_pending": 16,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -73.69999999999527,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -5.669230769230405,
+        "exposure_seconds": 242100,
+        "flat_exposure_trades": 6,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 118.83999999999506,
+        "gross_market_pnl": -71.49999999999454,
+        "gross_profit": 45.14000000000051,
+        "max_drawdown": 125.18999999999505,
+        "max_drawdown_pct": 1.2454869875013064,
+        "n_signals": 207,
+        "net_pnl": -73.69999999999527,
+        "no_trade": 194,
+        "num_trades": 13,
+        "period_net_pnl": -73.69999999999527,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.3798384382363042,
+        "return_pct": -0.7369999999999544,
+        "total_commission": 2.2,
+        "total_swap": 0.0,
+        "trades": 13,
+        "turnover_lots": 0.44,
+        "worst_day": -47.09999999999491
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 255.16999999999663,
+        "descriptive_only": true,
+        "exposure_hours": 67.25,
+        "exposure_seconds": 242100.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.4075,
+        "net_over_planned_risk": -0.2888270564721411,
+        "net_per_exposure_hour": -1.0959107806690747,
+        "net_per_lot_hour": -52.36234458258989,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_cal_seed2718",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 19,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 43,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 179,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 10,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 197,
+        "overlap_position_or_pending": 13,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -3.2700000000004366,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -0.32700000000004364,
+        "exposure_seconds": 190800,
+        "flat_exposure_trades": 5,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 90.85999999999913,
+        "gross_market_pnl": -1.7699999999999818,
+        "gross_profit": 87.58999999999915,
+        "max_drawdown": 56.63999999999942,
+        "max_drawdown_pct": 0.5641063436068887,
+        "n_signals": 207,
+        "net_pnl": -3.2700000000004366,
+        "no_trade": 197,
+        "num_trades": 10,
+        "period_net_pnl": -3.2700000000004366,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.9640105657054808,
+        "return_pct": -0.03270000000000772,
+        "total_commission": 1.5,
+        "total_swap": 0.0,
+        "trades": 10,
+        "turnover_lots": 0.3,
+        "worst_day": -23.51000000000022
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 188.06999999999925,
+        "descriptive_only": true,
+        "exposure_hours": 53.0,
+        "exposure_seconds": 190800.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.665,
+        "net_over_planned_risk": -0.017387143085023926,
+        "net_per_exposure_hour": -0.06169811320755541,
+        "net_per_lot_hour": -4.917293233083363,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_cal_seed31415",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 19,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 43,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 178,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 10,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 5,
+        "n_signals": 207,
+        "no_trade": 197,
+        "overlap_position_or_pending": 14,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -103.19999999999709,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -10.319999999999709,
+        "exposure_seconds": 214200,
+        "flat_exposure_trades": 6,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 1,
+        "gross_loss": 125.54999999999745,
+        "gross_market_pnl": -101.49999999999727,
+        "gross_profit": 22.350000000000183,
+        "max_drawdown": 123.52999999999702,
+        "max_drawdown_pct": 1.2327937303461762,
+        "n_signals": 207,
+        "net_pnl": -103.19999999999709,
+        "no_trade": 197,
+        "num_trades": 10,
+        "period_net_pnl": -103.19999999999709,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.17801672640382823,
+        "return_pct": -1.0319999999999663,
+        "total_commission": 1.7,
+        "total_swap": 0.0,
+        "trades": 10,
+        "turnover_lots": 0.34,
+        "worst_day": -24.119999999997162
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 182.0100000000004,
+        "descriptive_only": true,
+        "exposure_hours": 59.5,
+        "exposure_seconds": 214200.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 1.245,
+        "net_over_planned_risk": -0.5670018130871758,
+        "net_per_exposure_hour": -1.734453781512556,
+        "net_per_lot_hour": -82.89156626505789,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_cal_seed42017",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 13,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 49,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 188,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 6,
+        "entry_after_window": 0,
+        "entry_expired": 1,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 4,
+        "n_signals": 207,
+        "no_trade": 201,
+        "overlap_position_or_pending": 8,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -58.080000000001746,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -9.680000000000291,
+        "exposure_seconds": 54900,
+        "flat_exposure_trades": 3,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 84.8800000000012,
+        "gross_market_pnl": -57.280000000001564,
+        "gross_profit": 26.79999999999964,
+        "max_drawdown": 90.67000000000189,
+        "max_drawdown_pct": 0.9037546635515046,
+        "n_signals": 207,
+        "net_pnl": -58.080000000001746,
+        "no_trade": 201,
+        "num_trades": 6,
+        "period_net_pnl": -58.080000000001746,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.3157398680490016,
+        "return_pct": -0.5808000000000146,
+        "total_commission": 0.8,
+        "total_swap": 0.0,
+        "trades": 6,
+        "turnover_lots": 0.16,
+        "worst_day": -23.159999999999854
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 105.76000000000096,
+        "descriptive_only": true,
+        "exposure_hours": 15.25,
+        "exposure_seconds": 54900.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.2125,
+        "net_over_planned_risk": -0.549167927382765,
+        "net_per_exposure_hour": -3.808524590164049,
+        "net_per_lot_hour": -273.31764705883177,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    },
+    {
+      "arm": "R_M2_cal_seed65537",
+      "candidate_gate_counts": {
+        "WF1": {
+          "accepted_score_count": 0,
+          "available_score_count": 40,
+          "candidate_count": 40,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 40,
+          "unavailable_score_count": 0
+        },
+        "WF2": {
+          "accepted_score_count": 16,
+          "available_score_count": 62,
+          "candidate_count": 62,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 46,
+          "unavailable_score_count": 0
+        },
+        "WF3": {
+          "accepted_score_count": 0,
+          "available_score_count": 53,
+          "candidate_count": 53,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 53,
+          "unavailable_score_count": 0
+        },
+        "WF4": {
+          "accepted_score_count": 0,
+          "available_score_count": 52,
+          "candidate_count": 52,
+          "denominator": "All prospective E candidates before entry/portfolio/risk admission; labels not required",
+          "rejected_score_count": 52,
+          "unavailable_score_count": 0
+        }
+      },
+      "counters": {
+        "below_threshold": 180,
+        "daily_guard_days": 0,
+        "daily_guard_no_trade": 0,
+        "entries": 6,
+        "entry_after_window": 0,
+        "entry_expired": 0,
+        "invalid_candidate_index": 0,
+        "invalid_entry_or_stop": 0,
+        "min_volume_no_trade": 6,
+        "n_signals": 207,
+        "no_trade": 201,
+        "overlap_position_or_pending": 15,
+        "total_guard_no_trade": 0,
+        "total_guard_tripped": 0,
+        "unavailable_score": 0
+      },
+      "flags": {
+        "bid_bar_side_assumed_unverified": true,
+        "daily_guard_basis": "peak-to-conservative-MTM drawdown; blocks new entries, no forced close",
+        "drawdown_order": "favorable-before-adverse OHLC bound; intrabar order unobserved",
+        "hypothetical_research_policy_not_owner_policy": true,
+        "hypothetical_symbol_not_broker_spec": true,
+        "margin_and_liquidity_not_modelled": true,
+        "mtm_cost_basis": "liquidation-side quote incl adverse slip, full roundtrip commission and accrued swap",
+        "profit_factor_undefined": false,
+        "report_calendar": "UTC daily close; unobserved days carry last observed equity",
+        "risk_guard_calendar": "fixed UTC+03:30 research day",
+        "settlement_after_end": false
+      },
+      "fold_daily_net": {
+        "WF1": 0.0,
+        "WF2": -18.829999999999927,
+        "WF3": 0.0,
+        "WF4": 0.0
+      },
+      "metrics": {
+        "ambiguous_trades": 0,
+        "expectancy": -3.138333333333321,
+        "exposure_seconds": 84600,
+        "flat_exposure_trades": 4,
+        "forced_final_liquidations": 0,
+        "gap_exposure_trades": 0,
+        "gross_loss": 44.32000000000007,
+        "gross_market_pnl": -18.229999999999563,
+        "gross_profit": 25.49000000000051,
+        "max_drawdown": 40.399999999999636,
+        "max_drawdown_pct": 0.40329302732309896,
+        "n_signals": 207,
+        "net_pnl": -18.829999999999927,
+        "no_trade": 201,
+        "num_trades": 6,
+        "period_net_pnl": -18.829999999999927,
+        "post_end_pnl": 0.0,
+        "profit_factor": 0.5751353790613825,
+        "return_pct": -0.1882999999999968,
+        "total_commission": 0.6000000000000001,
+        "total_swap": 0.0,
+        "trades": 6,
+        "turnover_lots": 0.12,
+        "worst_day": -14.959999999999127
+      },
+      "normalization": {
+        "allocated_planned_stop_risk_usd": 101.4800000000001,
+        "descriptive_only": true,
+        "exposure_hours": 23.5,
+        "exposure_seconds": 84600.0,
+        "gap_associated_risk_overrun_trades": 0,
+        "gap_associated_risk_overrun_usd": 0,
+        "holding_time_note": "Frozen OHLC exit-time bounds and actual observed gaps; not tick timestamps",
+        "lot_hours": 0.23500000000000001,
+        "net_over_planned_risk": -0.18555380370516267,
+        "net_per_exposure_hour": -0.8012765957446778,
+        "net_per_lot_hour": -80.12765957446777,
+        "prospective_gate_uses_normalization": false,
+        "risk_note": "Allocated planned stop risk includes hypothetical adverse slip/fees/reserve, not guaranteed maximum gap loss",
+        "risk_overrun_trade_count": 0,
+        "risk_overrun_usd": 0,
+        "status": "defined_descriptive"
+      }
+    }
+  ],
+  "quality": "strict",
+  "randomization": {
+    "activity_matching": "expected acceptance budget only; no E count, return, exposure or seed-winner matching",
+    "bootstrap_blocks": [
+      1,
+      5,
+      10
+    ],
+    "bootstrap_repetitions": 1000,
+    "bootstrap_seed": 1729,
+    "common_draws": "Target/quality/cost absent from hash key; same seed/fold/index reuses the same uniform",
+    "common_utc_calendar_days": 125,
+    "ensembles": [
+      {
+        "arms": [
+          "R_M1_raw_seed1729",
+          "R_M1_raw_seed2718",
+          "R_M1_raw_seed31415",
+          "R_M1_raw_seed42017",
+          "R_M1_raw_seed65537"
+        ],
+        "exposure_hours_mean": 2.75,
+        "exposure_hours_range": [
+          0.0,
+          4.75
+        ],
+        "lot_hours_mean": 0.053000000000000005,
+        "lot_hours_range": [
+          0,
+          0.1275
+        ],
+        "net_pnl_mean": -2.707999999999811,
+        "net_pnl_range": [
+          -38.27000000000044,
+          52.710000000000946
+        ],
+        "seed_selection": "none; all five retained with equal weight",
+        "seeds": [
+          1729,
+          2718,
+          31415,
+          42017,
+          65537
+        ],
+        "target": "M1_raw",
+        "trades_mean": 1.4,
+        "trades_range": [
+          0,
+          2
+        ],
+        "uncertainty_note": "Five seeds are a limited fixed randomization, not an adequate-power claim"
+      },
+      {
+        "arms": [
+          "R_M1_cal_seed1729",
+          "R_M1_cal_seed2718",
+          "R_M1_cal_seed31415",
+          "R_M1_cal_seed42017",
+          "R_M1_cal_seed65537"
+        ],
+        "exposure_hours_mean": 64.2,
+        "exposure_hours_range": [
+          35.5,
+          108.75
+        ],
+        "lot_hours_mean": 1.0515,
+        "lot_hours_range": [
+          0.525,
+          1.905
+        ],
+        "net_pnl_mean": -58.38999999999942,
+        "net_pnl_range": [
+          -104.50000000000182,
+          14.070000000001528
+        ],
+        "seed_selection": "none; all five retained with equal weight",
+        "seeds": [
+          1729,
+          2718,
+          31415,
+          42017,
+          65537
+        ],
+        "target": "M1_cal",
+        "trades_mean": 15.2,
+        "trades_range": [
+          13,
+          20
+        ],
+        "uncertainty_note": "Five seeds are a limited fixed randomization, not an adequate-power claim"
+      },
+      {
+        "arms": [
+          "R_M2_raw_seed1729",
+          "R_M2_raw_seed2718",
+          "R_M2_raw_seed31415",
+          "R_M2_raw_seed42017",
+          "R_M2_raw_seed65537"
+        ],
+        "exposure_hours_mean": 83.5,
+        "exposure_hours_range": [
+          65.5,
+          110.75
+        ],
+        "lot_hours_mean": 1.259,
+        "lot_hours_range": [
+          0.955,
+          1.6375
+        ],
+        "net_pnl_mean": -268.41200000000356,
+        "net_pnl_range": [
+          -442.1100000000006,
+          -91.25000000000182
+        ],
+        "seed_selection": "none; all five retained with equal weight",
+        "seeds": [
+          1729,
+          2718,
+          31415,
+          42017,
+          65537
+        ],
+        "target": "M2_raw",
+        "trades_mean": 31.6,
+        "trades_range": [
+          25,
+          39
+        ],
+        "uncertainty_note": "Five seeds are a limited fixed randomization, not an adequate-power claim"
+      },
+      {
+        "arms": [
+          "R_M2_cal_seed1729",
+          "R_M2_cal_seed2718",
+          "R_M2_cal_seed31415",
+          "R_M2_cal_seed42017",
+          "R_M2_cal_seed65537"
+        ],
+        "exposure_hours_mean": 43.7,
+        "exposure_hours_range": [
+          15.25,
+          67.25
+        ],
+        "lot_hours_mean": 0.753,
+        "lot_hours_range": [
+          0.2125,
+          1.4075
+        ],
+        "net_pnl_mean": -51.415999999998895,
+        "net_pnl_range": [
+          -103.19999999999709,
+          -3.2700000000004366
+        ],
+        "seed_selection": "none; all five retained with equal weight",
+        "seeds": [
+          1729,
+          2718,
+          31415,
+          42017,
+          65537
+        ],
+        "target": "M2_cal",
+        "trades_mean": 9,
+        "trades_range": [
+          6,
+          13
+        ],
+        "uncertainty_note": "Five seeds are a limited fixed randomization, not an adequate-power claim"
+      }
+    ],
+    "missing_q": "unavailable/no-trade, distinct from an observed zero acceptance budget",
+    "no_new_fit_or_calibration": true,
+    "portfolios_per_condition": 28,
+    "q_source": "Acceptance fraction on original usable past C rows only, supplied frozen before E",
+    "seeds": [
+      1729,
+      2718,
+      31415,
+      42017,
+      65537
+    ],
+    "targets": [
+      "M1_raw",
+      "M1_cal",
+      "M2_raw",
+      "M2_cal"
+    ],
+    "threshold": 0.55,
+    "uniform_formula": "int.from_bytes(SHA256(ASCII phase2-v1|seed|fold_name|signal_index)[:8], big)/2**64"
+  },
+  "scenario": "base"
+}
