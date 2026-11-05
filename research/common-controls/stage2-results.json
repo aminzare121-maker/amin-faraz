@@ -1,0 +1,25 @@
+{
+  "tests": 36,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "engine_sha256": "4de29ec089958d829942693c1246aa41905d90078e38339526bbc94a00de80c4",
+  "integration_first_action": "EXECUTED",
+  "second_action": "REUSE",
+  "integration_scope": "SYNTHETIC_DIAGNOSTIC",
+  "real_market_strategy_runs": 0,
+  "source_sha256": {
+    "audit_free_sample.py": "d647b853646109dd997fd2a8368777116bf63d1f8fc9aeafca22dfc97613372c",
+    "comparison.py": "2af146c4363dd119d1e8f37bbafea5a9754fde836afeaf7d08cc9f92d4485bc1",
+    "engine_bridge.py": "9d030b0b5b648b4c3290ef0b2c93d10043debafb2b9f90d80bf0b8ebde79e6f0",
+    "inspect_terminal_clock.py": "e2136ec0b5f4f87f40c48ea5b3d6b9369c2c3683360b2966049aef2b9ea61493",
+    "offline_evidence.py": "5506018fa4f220117bc503853cad0de1cf40f6ab8f9dd08336039c9dbb776fbd",
+    "real_overlap.py": "76d061516790d426db22ba05fb50fc59d1f79c5e5f5314fcd592e2ab6b725652",
+    "registry.py": "3bf60f5382f255adb3b8ba1b9d3b80eccaf7c70014d937fed28d61f3887bf5ae",
+    "repair_tick_boundaries.py": "febc9810a1f0d45d1080a874760466e36ea2ed4c6fe46f2f087de04a71f87040",
+    "run_checks.py": "e4143e01d29e1caeae3dd691be49ef29764ef189b83222866c11fc09bc5385af",
+    "test_controls.py": "7766b95eea8732108f55a47190ce2c9fff1fca45e414ecc1af76c34ac2cdffe6",
+    "test_real_stage.py": "d683f88048b539f87256ecbe2abe6f5ea5f9f91a109424bc09347057071189f6",
+    "verify_stage.py": "01cf30d52cc5183f663f63df799934fec5237aa91350542b1381ee8716933b09"
+  }
+}

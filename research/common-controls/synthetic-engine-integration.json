@@ -1,0 +1,595 @@
+{
+  "action": "EXECUTED",
+  "id": "d010e8d0fa05f004fa6d75a38a1ff6a7dceb587d0c3104ffeba09bb219283256",
+  "result": {
+    "schema": 2,
+    "method": "purged-chronological-selection-v2",
+    "engine_sha256": "44b53d79127a0766e739b30703fe5c0f4f801c24a36af463b8d7f9bef34d0349",
+    "strategy_sha256": null,
+    "artifact": null,
+    "data_sha256": "f7b44277285227771be49e8d18ddc4558390daa3c74082b439178288cec8001a",
+    "selected_candidate": null,
+    "candidates": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        },
+        "validation": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        }
+      },
+      {
+        "id": "breakout-40-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        },
+        "validation": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        }
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 16,
+          "current_consecutive_losses": 16,
+          "trades": 16,
+          "net_usd": -174.08000000001076,
+          "win_rate": 0.0,
+          "max_drawdown_usd": 174.08000000001076,
+          "profit_factor": 0.0,
+          "unclosed_at_data_end": 1
+        },
+        "validation": {
+          "max_consecutive_losses": 9,
+          "current_consecutive_losses": 9,
+          "trades": 9,
+          "net_usd": -102.34000000000606,
+          "win_rate": 0.0,
+          "max_drawdown_usd": 102.34000000000606,
+          "profit_factor": 0.0,
+          "unclosed_at_data_end": 0
+        }
+      },
+      {
+        "id": "rejection-40-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        },
+        "validation": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        }
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        },
+        "validation": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        }
+      },
+      {
+        "id": "retest-40-1.5-rules",
+        "train": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        },
+        "validation": {
+          "max_consecutive_losses": 0,
+          "current_consecutive_losses": 0,
+          "trades": 0,
+          "net_usd": 0,
+          "win_rate": null,
+          "max_drawdown_usd": 0.0,
+          "profit_factor": null,
+          "unclosed_at_data_end": 0
+        }
+      }
+    ],
+    "split": {
+      "train_end": 160,
+      "validation_end": 240,
+      "holdout_start": 248,
+      "bars": 320,
+      "embargo_bars": 8
+    },
+    "selection_uses_holdout": false,
+    "sensitivity": {
+      "state": "waiting_candidate",
+      "scenarios": [],
+      "candidate_reselected": false,
+      "effect": "research-report-only; no automatic parameter retuning"
+    },
+    "out_of_sample": {
+      "max_consecutive_losses": 0,
+      "current_consecutive_losses": 0,
+      "trades": 0,
+      "net_usd": 0,
+      "win_rate": null,
+      "max_drawdown_usd": 0.0,
+      "profit_factor": null,
+      "unclosed_at_data_end": 0
+    },
+    "stress": {
+      "max_consecutive_losses": 0,
+      "current_consecutive_losses": 0,
+      "trades": 0,
+      "net_usd": 0,
+      "win_rate": null,
+      "max_drawdown_usd": 0.0,
+      "profit_factor": null,
+      "unclosed_at_data_end": 0
+    },
+    "holdout_block_bootstrap_lower_95_usd": null,
+    "fixed_breakout_baseline": {
+      "max_consecutive_losses": 0,
+      "current_consecutive_losses": 0,
+      "trades": 0,
+      "net_usd": 0,
+      "win_rate": null,
+      "max_drawdown_usd": 0.0,
+      "profit_factor": null,
+      "unclosed_at_data_end": 0
+    },
+    "no_trade_baseline_usd": 0,
+    "by_session": {
+      "Sydney": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "Tokyo": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "London": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "New_York": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      }
+    },
+    "by_hour": {
+      "0": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "1": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "2": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "3": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "4": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "5": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "6": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "7": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "8": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "9": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "10": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "11": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "12": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "13": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "14": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "15": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "16": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "17": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "18": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "19": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "20": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "21": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "22": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "23": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      }
+    },
+    "by_weekday": {
+      "0": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "1": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "2": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "3": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "4": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "5": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "6": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      }
+    },
+    "by_regime": {
+      "up": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      },
+      "down": {
+        "max_consecutive_losses": 0,
+        "current_consecutive_losses": 0,
+        "trades": 0,
+        "net_usd": 0,
+        "win_rate": null,
+        "max_drawdown_usd": 0.0,
+        "profit_factor": null,
+        "unclosed_at_data_end": 0
+      }
+    },
+    "status": "OFFLINE_DIAGNOSTIC_ONLY",
+    "demo_review_eligible": false,
+    "live_promotion": false,
+    "promotion_eligible": false,
+    "limitations": [
+      "Reusing overlapping holdout data is tracked and cannot confer fresh approval",
+      "OHLC cannot recover true intrabar tick order; stop-first convention applied",
+      "Fixed fee/spread/swap inputs require broker verification",
+      "Current context/news/timing overlays require forward-DEMO validation; no live claim"
+    ],
+    "scope": "SYNTHETIC_DIAGNOSTIC",
+    "cost_basis": "HYPOTHETICAL_EXPLICIT",
+    "market_profitability_verified": false,
+    "intrabar_path": "UNKNOWN_STOP_FIRST_CONVENTION",
+    "historical_swap_verified": false,
+    "variable_spread_supported": false,
+    "holdout_freshness": "NOT_CERTIFIED_BY_THIS_BRIDGE",
+    "registry_run_id": "d010e8d0fa05f004fa6d75a38a1ff6a7dceb587d0c3104ffeba09bb219283256"
+  }
+}

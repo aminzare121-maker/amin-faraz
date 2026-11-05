@@ -1,0 +1,41 @@
+test_double_finish_rejected (test_controls.BankTests.test_double_finish_rejected) ... ok
+test_every_dependency_changes_identity (test_controls.BankTests.test_every_dependency_changes_identity) ... ok
+test_failed_not_reused (test_controls.BankTests.test_failed_not_reused) ... ok
+test_immutable_artifact (test_controls.BankTests.test_immutable_artifact) ... ok
+test_indicator_invalid_hash (test_controls.BankTests.test_indicator_invalid_hash) ... ok
+test_invalidation_retains_reason_and_blocks_finish (test_controls.BankTests.test_invalidation_retains_reason_and_blocks_finish) ... ok
+test_negative_result_reused_after_restart (test_controls.BankTests.test_negative_result_reused_after_restart) ... ok
+test_result_tamper (test_controls.BankTests.test_result_tamper) ... ok
+test_running_not_reexecuted (test_controls.BankTests.test_running_not_reexecuted) ... ok
+test_unknown_dependency_rejected (test_controls.BankTests.test_unknown_dependency_rejected) ... ok
+test_unvalidated_real_data_blocked (test_controls.BankTests.test_unvalidated_real_data_blocked) ... ok
+test_bad_cost (test_controls.ComparisonTests.test_bad_cost) ... ok
+test_bad_rows (test_controls.ComparisonTests.test_bad_rows) ... ok
+test_exact_overlap_and_differences (test_controls.ComparisonTests.test_exact_overlap_and_differences) ... ok
+test_future_news_never_available (test_controls.ComparisonTests.test_future_news_never_available) ... ok
+test_no_overlap (test_controls.ComparisonTests.test_no_overlap) ... ok
+test_side_mismatch (test_controls.ComparisonTests.test_side_mismatch) ... ok
+test_signed_swap (test_controls.ComparisonTests.test_signed_swap) ... ok
+test_unknown_cost_not_zero (test_controls.ComparisonTests.test_unknown_cost_not_zero) ... ok
+test_unknown_session (test_controls.ComparisonTests.test_unknown_session) ... ok
+test_bad_ohlc (test_real_stage.AggregationTests.test_bad_ohlc) ... ok
+test_duplicate (test_real_stage.AggregationTests.test_duplicate) ... ok
+test_exact_ohlc (test_real_stage.AggregationTests.test_exact_ohlc) ... ok
+test_missing_not_filled (test_real_stage.AggregationTests.test_missing_not_filled) ... ok
+test_unclosed (test_real_stage.AggregationTests.test_unclosed) ... ok
+test_wrong_timezone (test_real_stage.AggregationTests.test_wrong_timezone) ... ok
+test_zero_volume_rejected (test_real_stage.AggregationTests.test_zero_volume_rejected) ... ok
+test_actual_engine_then_cached (test_real_stage.EngineBridgeTests.test_actual_engine_then_cached) ... ok
+test_existing_engine_contract_spread_slippage_arithmetic (test_real_stage.EngineBridgeTests.test_existing_engine_contract_spread_slippage_arithmetic) ... ok
+test_existing_statistics_retain_losses_and_wins (test_real_stage.EngineBridgeTests.test_existing_statistics_retain_losses_and_wins) ... ok
+test_future_availability (test_real_stage.EngineBridgeTests.test_future_availability) ... ok
+test_invalid_dataset_blocks_actual_runner (test_real_stage.EngineBridgeTests.test_invalid_dataset_blocks_actual_runner) ... ok
+test_unknown_cost_rejected (test_real_stage.EngineBridgeTests.test_unknown_cost_rejected) ... ok
+test_unknown_raw_time (test_real_stage.EngineBridgeTests.test_unknown_raw_time) ... ok
+test_variable_spread_not_falsely_supported (test_real_stage.EngineBridgeTests.test_variable_spread_not_falsely_supported) ... ok
+test_xau_contract_enforced (test_real_stage.EngineBridgeTests.test_xau_contract_enforced) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 1.380s
+
+OK
