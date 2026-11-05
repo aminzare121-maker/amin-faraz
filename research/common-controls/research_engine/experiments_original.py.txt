@@ -1,0 +1,85 @@
+"""Train/validation selection followed by a sealed, purged chronological holdout."""
+from dataclasses import asdict,replace
+import hashlib
+import json
+import random
+from .research import Costs,prepare,evaluate_segment,statistics,breakdown
+from .strategy import candidates,artifact_hash,version
+from .learning import fit
+
+
+def confidence_lower(rows,replications=400):
+    if len(rows)<10:return None
+    values=[r['net'] for r in rows];rng=random.Random(581);samples=[]
+    for _ in range(replications):
+        sample=[]
+        while len(sample)<len(values):
+            start=rng.randrange(len(values));sample.extend(values[(start+j)%len(values)] for j in range(3))
+        samples.append(sum(sample[:len(values)]))
+    return sorted(samples)[int(replications*.025)]
+
+
+def run_experiment(bars,costs=None,*,execution_context=None):
+    data=prepare(bars);costs=(costs or Costs()).validate();n=len(data)
+    if n<240:raise ValueError('At least 240 confirmed M15 bars needed for purged train/validation/holdout')
+    from functools import partial
+    from .model import Policy,SymbolSpec
+    context=execution_context
+    if context:
+        p=Policy(**context['policy']);capital=context['initial_capital']
+        evaluate=partial(evaluate_segment,policy=p,initial_capital=capital,spec=SymbolSpec(**context['spec']))
+        drawdown_limit=float(capital)*float(p.max_daily_drawdown)
+    else:evaluate=evaluate_segment;drawdown_limit=600
+    train_end=int(n*.5);validation_end=int(n*.75);embargo=8
+    results=[];choices=[]
+    # Exactly six predefined bounded method/parameter variants; external code is never executed.
+    for spec in candidates():
+        train=evaluate(data,44,train_end,costs,spec)
+        model=fit(train)
+        for learned in (False,True):
+            if learned and model is None:continue
+            fitted=model if learned else None
+            validation=evaluate(data,train_end+embargo,validation_end,costs,spec,fitted)
+            metric=statistics(validation)
+            from .adaptive_exit import VERSION as exit_version
+            artifact={'schema':3,'engine_sha256':version(),'candidate':asdict(spec),'model':fitted,
+                      'threshold':.55,'max_holding_bars':0,'exit_policy':exit_version,'costs':asdict(costs),'training_end_ms':(data[train_end-1]['time']+900)*1000}
+            if context:artifact['execution_context']=context
+            record={'id':spec.id+('-learned' if learned else '-rules'),'train':statistics(train),'validation':metric,'artifact':artifact}
+            results.append({k:v for k,v in record.items() if k!='artifact'})
+            if metric['trades']>=8 and metric['net_usd']>0 and metric['max_drawdown_usd']<drawdown_limit and metric['unclosed_at_data_end']==0:
+                choices.append((metric['net_usd']-metric['max_drawdown_usd'],record,spec,fitted))
+    chosen=max(choices,key=lambda x:(x[0],x[1]['id'])) if choices else None
+    selected=chosen[1] if chosen else None
+    test=[];stress=[]
+    if chosen:
+        test=evaluate(data,validation_end+embargo,n,costs,chosen[2],chosen[3])
+        stress=evaluate(data,validation_end+embargo,n,replace(costs,spread=costs.spread*1.5,slippage=costs.slippage*2),chosen[2],chosen[3])
+    sensitivity=[]
+    if chosen:
+        base_spec=chosen[2]
+        scenarios=[('lookback-neighbor',replace(base_spec,lookback=40 if base_spec.lookback==20 else 20),0),
+                   ('stop-neighbor',replace(base_spec,stop_multiple=2.0 if base_spec.stop_multiple==1.5 else 1.5),0),
+                   ('one-bar-delay',base_spec,1),('two-bar-delay',base_spec,2)]
+        for label,neighbor,delay in scenarios:
+            values=evaluate(data,validation_end+embargo,n,costs,neighbor,chosen[3],entry_delay_bars=delay)
+            sensitivity.append({'scenario':label,'statistics':statistics(values),'used_for_candidate_selection':False})
+    out=statistics(test);lower=confidence_lower(test);stress_stats=statistics(stress)
+    baseline=evaluate(data,validation_end+embargo,n,costs,candidates()[0])
+    eligible=bool(chosen and out['trades']>=30 and out['net_usd']>max(0,statistics(baseline)['net_usd'])
+                  and out['max_drawdown_usd']<drawdown_limit and lower is not None and lower>0 and stress_stats['net_usd']>0
+                  and out['unclosed_at_data_end']==0 and stress_stats['unclosed_at_data_end']==0)
+    artifact=selected['artifact'] if selected else None
+    return {'schema':2,'method':'purged-chronological-selection-v2','engine_sha256':version(),
+            'strategy_sha256':artifact_hash(artifact) if artifact else None,'artifact':artifact,
+            'data_sha256':hashlib.sha256(json.dumps(data,sort_keys=True).encode()).hexdigest(),
+            'selected_candidate':selected['id'] if selected else None,'candidates':results,
+            'split':{'train_end':train_end,'validation_end':validation_end,'holdout_start':validation_end+embargo,'bars':n,'embargo_bars':embargo},
+            'selection_uses_holdout':False,'sensitivity':{'state':'evaluated' if chosen else 'waiting_candidate','scenarios':sensitivity,'candidate_reselected':False,'effect':'research-report-only; no automatic parameter retuning'},'out_of_sample':out,'stress':stress_stats,'holdout_block_bootstrap_lower_95_usd':lower,
+            'fixed_breakout_baseline':statistics(baseline),'no_trade_baseline_usd':0,**breakdown(test),
+            'status':'ready_for_owner_demo_review' if eligible else 'insufficient_independent_evidence','demo_review_eligible':eligible,
+            'live_promotion':False,'promotion_eligible':False,
+            'limitations':['Reusing overlapping holdout data is tracked and cannot confer fresh approval',
+                           'OHLC cannot recover true intrabar tick order; stop-first convention applied',
+                           'Fixed fee/spread/swap inputs require broker verification',
+                           'Current context/news/timing overlays require forward-DEMO validation; no live claim']}

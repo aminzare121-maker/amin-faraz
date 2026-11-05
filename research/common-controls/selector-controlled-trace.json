@@ -1,0 +1,5235 @@
+{
+  "schema": 4,
+  "method": "existing-selector-cost-scenarios-research-revision",
+  "candidates": [
+    {
+      "id": "breakout-20-1.5-rules",
+      "candidate": {
+        "family": "breakout",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 58,
+          "net_usd": -11.6,
+          "max_drawdown_usd": 11.6,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 41400,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 43200,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "4e4c06ddb6cbb5b5b4335b908f87f41a20eee1010bddfc4aee1c804fc97d2ead",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 58,
+          "net_usd": -11.6,
+          "max_drawdown_usd": 11.6,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 41400,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 43200,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "01bd6fd38cfe8605f2a9413dc7cf6136e1dbdac903a2ee1ea7e1803b911203d5",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 58,
+          "net_usd": -11.6,
+          "max_drawdown_usd": 11.6,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 41400,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 43200,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "d0bcc8b27ff59c54a9aafb7db5388428fadf1792b13db2ace8bc91fb1cf5e1f1",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 58,
+          "net_usd": -23.2,
+          "max_drawdown_usd": 23.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 41400,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 43200,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "76a55a1c8f4a43613168b1dda25bdd1d7308e43ab02c95ea3a7cd5e649b4b0a9",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 58,
+          "net_usd": -23.2,
+          "max_drawdown_usd": 23.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 41400,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 43200,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "1ed6bf0ea850a63e7b5a1515eb6bf302bd6c8fb1f09d3ccc49fce474755f3dc7",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 58,
+          "net_usd": -23.2,
+          "max_drawdown_usd": 23.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 41400,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 43200,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "12cffc937e5bb286b70b46589d8a65cee69a1ca93882cf0736e4e234daf7af2c",
+          "retained_trace_examples": 2
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 36,
+          "net_usd": -7.2,
+          "max_drawdown_usd": 7.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 153000,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 154800,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "69703c9fd9ba836b88598a62aeb011103e8ac38b831f414fa5713bb6a3c63f9d",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 36,
+          "net_usd": -7.2,
+          "max_drawdown_usd": 7.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 153000,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 154800,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "2d506b8db52c2b150fa4f459c3d8745c3d20d6e17d433217e52ac375882f375e",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 36,
+          "net_usd": -7.2,
+          "max_drawdown_usd": 7.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 153000,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.5",
+                "exit_time": 154800,
+                "gross_usd": "0.200",
+                "net_with_known_costs": "-0.200",
+                "scenario_net_usd": "-0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "463a5edd363c4bbea5fb8a2bf4c62e80ad942a2d0cbd3474a2cb1f2a7d013f53",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 36,
+          "net_usd": -14.4,
+          "max_drawdown_usd": 14.4,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 153000,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 154800,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "855b312da1da39cc36c31dd29897cb2ad803c4746393b196d76a8b88c3090add",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 36,
+          "net_usd": -14.4,
+          "max_drawdown_usd": 14.4,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 153000,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 154800,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "255449fe207829174b4a4ce02c33ee25b1f96b2ea1d39e080ef2b4f33a471504",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 36,
+          "net_usd": -14.4,
+          "max_drawdown_usd": 14.4,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 153000,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -0.4,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.45",
+                "exit_time": 154800,
+                "gross_usd": "0.0000",
+                "net_with_known_costs": "-0.4000",
+                "scenario_net_usd": "-0.4000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "100.6"
+              }
+            }
+          ],
+          "all_rows_sha256": "fac629f9ba44e1b133e350fa172f725938d53891219d2ede5122839eb6d9fb61",
+          "retained_trace_examples": 2
+        }
+      },
+      "comparison_hash": "064ce3790367c56ed054b46fdfa4f4434f95b54abdbc7e2110f5f7171a248663"
+    },
+    {
+      "id": "rejection-20-1.5-rules",
+      "candidate": {
+        "family": "rejection",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 58,
+          "net_usd": -58.0,
+          "max_drawdown_usd": 58.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -1.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "99.7",
+                "exit_time": 41400,
+                "gross_usd": "-0.600",
+                "net_with_known_costs": "-1.000",
+                "scenario_net_usd": "-1.000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -1.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "99.7",
+                "exit_time": 43200,
+                "gross_usd": "-0.600",
+                "net_with_known_costs": "-1.000",
+                "scenario_net_usd": "-1.000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "3a37c49d07bca083f3752bef3d8bbc1d70936930cd079da9142594c8ad03c57a",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 58,
+          "net_usd": 11.6,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.9",
+                "exit_time": 41400,
+                "gross_usd": "0.600",
+                "net_with_known_costs": "0.200",
+                "scenario_net_usd": "0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.9",
+                "exit_time": 43200,
+                "gross_usd": "0.600",
+                "net_with_known_costs": "0.200",
+                "scenario_net_usd": "0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "d5b0eda2011150c7e93ee498d81400c523259619f0358bd802462f59543a88f3",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 1,
+          "net_usd": null,
+          "max_drawdown_usd": null,
+          "unknown": 1,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": null,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": null,
+                "exit_time": 41400,
+                "gross_usd": null,
+                "net_with_known_costs": null,
+                "scenario_net_usd": null,
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "3642f5006ef21fbbf20994bf0ecb947a87fec55d5465ef292ddde98feed61ca1",
+          "retained_trace_examples": 1
+        },
+        "stress:stop_first": {
+          "trades": 58,
+          "net_usd": -69.6,
+          "max_drawdown_usd": 69.6,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": -1.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "99.65",
+                "exit_time": 41400,
+                "gross_usd": "-0.8000",
+                "net_with_known_costs": "-1.2000",
+                "scenario_net_usd": "-1.2000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": -1.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "99.65",
+                "exit_time": 43200,
+                "gross_usd": "-0.8000",
+                "net_with_known_costs": "-1.2000",
+                "scenario_net_usd": "-1.2000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "12c4c3ee870a20ca599fd263a68595f1646ad0a53c412c283aef310bf7f4e7c4",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 58,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.85",
+                "exit_time": 41400,
+                "gross_usd": "0.4000",
+                "net_with_known_costs": "0.0000",
+                "scenario_net_usd": "0.0000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.85",
+                "exit_time": 43200,
+                "gross_usd": "0.4000",
+                "net_with_known_costs": "0.0000",
+                "scenario_net_usd": "0.0000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "d315dceaf52eab5d812d944a422b109982e4ff10d3b7c94feb890284472fcdd3",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 1,
+          "net_usd": null,
+          "max_drawdown_usd": null,
+          "unknown": 1,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": null,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": null,
+                "exit_time": 41400,
+                "gross_usd": null,
+                "net_with_known_costs": null,
+                "scenario_net_usd": null,
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "5cc0d22dd8db7bebe28c040ff6cf1892017aeed2280785421d49481511e9541b",
+          "retained_trace_examples": 1
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 36,
+          "net_usd": -36.0,
+          "max_drawdown_usd": 36.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -1.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "99.7",
+                "exit_time": 153000,
+                "gross_usd": "-0.600",
+                "net_with_known_costs": "-1.000",
+                "scenario_net_usd": "-1.000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -1.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "99.7",
+                "exit_time": 154800,
+                "gross_usd": "-0.600",
+                "net_with_known_costs": "-1.000",
+                "scenario_net_usd": "-1.000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "2d3e8c586d0d4e632ae8e14cbaddf096327cd5df038256808798d0dab15bb79d",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 36,
+          "net_usd": 7.2,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.9",
+                "exit_time": 153000,
+                "gross_usd": "0.600",
+                "net_with_known_costs": "0.200",
+                "scenario_net_usd": "0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "100.9",
+                "exit_time": 154800,
+                "gross_usd": "0.600",
+                "net_with_known_costs": "0.200",
+                "scenario_net_usd": "0.200",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "9e16661e36ed547d27920b0822997539a5c77d68adbce20525f06608213ca599",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 1,
+          "net_usd": null,
+          "max_drawdown_usd": null,
+          "unknown": 1,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": null,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": null,
+                "exit_time": 153000,
+                "gross_usd": null,
+                "net_with_known_costs": null,
+                "scenario_net_usd": null,
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "906bd0aa8103e969b1f53780fff5410661e6ca98d4e7be1a3e083f8a82378ef8",
+          "retained_trace_examples": 1
+        },
+        "stress:stop_first": {
+          "trades": 36,
+          "net_usd": -43.2,
+          "max_drawdown_usd": 43.2,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": -1.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "99.65",
+                "exit_time": 153000,
+                "gross_usd": "-0.8000",
+                "net_with_known_costs": "-1.2000",
+                "scenario_net_usd": "-1.2000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": -1.2,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "99.65",
+                "exit_time": 154800,
+                "gross_usd": "-0.8000",
+                "net_with_known_costs": "-1.2000",
+                "scenario_net_usd": "-1.2000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "a344ed4f10f48542de87eaf1ec50c21f5195462d41fde639aeeb3a06f5e934a5",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 36,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.85",
+                "exit_time": 153000,
+                "gross_usd": "0.4000",
+                "net_with_known_costs": "0.0000",
+                "scenario_net_usd": "0.0000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.0,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "100.85",
+                "exit_time": 154800,
+                "gross_usd": "0.4000",
+                "net_with_known_costs": "0.0000",
+                "scenario_net_usd": "0.0000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "TARGET_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "aea2e0a47910138799e63ee5411342de6adf572652e4aea6ac5b81121acc7ce4",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 1,
+          "net_usd": null,
+          "max_drawdown_usd": null,
+          "unknown": 1,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": null,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": null,
+                "exit_time": 153000,
+                "gross_usd": null,
+                "net_with_known_costs": null,
+                "scenario_net_usd": null,
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": true,
+                "exit_reason": "STOP_FIRST_AMBIGUOUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99.8",
+                "target": "101"
+              }
+            }
+          ],
+          "all_rows_sha256": "fae2f985833696591bb244b3c612686860171628991c5aa4e3b8d9a7ac846cb5",
+          "retained_trace_examples": 1
+        }
+      },
+      "comparison_hash": "064ce3790367c56ed054b46fdfa4f4434f95b54abdbc7e2110f5f7171a248663"
+    },
+    {
+      "id": "retest-20-1.5-rules",
+      "candidate": {
+        "family": "retest",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 58,
+          "net_usd": 40.6,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 41400,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 43200,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "a46a27ad189b1f135eb9d277f3db4d60e8c09ea39333554b5b3925e55e4841ab",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 58,
+          "net_usd": 40.6,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 41400,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 43200,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "f467c10a1a9a81fd888c2d04833109bfb669b2ea9add8da2004d77b969cfb969",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 58,
+          "net_usd": 40.6,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 41400,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 43200,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "20b763d00fb26637ed0aaaf2cc34d4e5554d1040bc8aeeddf821a7b1295d7493",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 58,
+          "net_usd": 29.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 41400,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 43200,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "c2cd389acafb0b9f435afa6264b9f2e677b033104157f001034e2e8c5253e0f6",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 58,
+          "net_usd": 29.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 41400,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 43200,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "1fdec0dfdee54dc8de92b5cef1bf5d8ae56a9ef189ee5bc93d193a894980ecd9",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 58,
+          "net_usd": 29.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 41400,
+              "entry_time": 40500,
+              "signal_time": 39600,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 41400,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 40500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 40500,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 43200,
+              "entry_time": 42300,
+              "signal_time": 41400,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 43200,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 42300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 42300,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "40a2058dd0e4122f4578b50ccbabb4abf9bb5e8020435567aafdff6181dfa5f9",
+          "retained_trace_examples": 2
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 36,
+          "net_usd": 25.2,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 153000,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 154800,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "cb52df323a79af9bc6a9c264fed2d1bc96debb12138c3b6c6f919b743365b080",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 36,
+          "net_usd": 25.2,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 153000,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 154800,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "be6f09b3c932d6722157edf7ba73aa40ec809deda5308f59921933ea3506f4cc",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 36,
+          "net_usd": 25.2,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 153000,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.7,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.3",
+                "exit": "101.4",
+                "exit_time": 154800,
+                "gross_usd": "1.100",
+                "net_with_known_costs": "0.700",
+                "scenario_net_usd": "0.700",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "9c022c7bb6f0d79276c71166fbd4ee85b7c64ed561d346a51f9943f2b7a1d741",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 36,
+          "net_usd": 18.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 153000,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 154800,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "81005b9e9eaf43d3b23bc57612f96b6c6ab28d07feb256177625d8c93d1bac9d",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 36,
+          "net_usd": 18.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 153000,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 154800,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "6c7ec5c2180de1165b45ab6f28d50203425d16e6f69307428e561a4391e0fbf6",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 36,
+          "net_usd": 18.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 153000,
+              "entry_time": 152100,
+              "signal_time": 151200,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 153000,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 152100,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 152100,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            },
+            {
+              "time": 154800,
+              "entry_time": 153900,
+              "signal_time": 153000,
+              "net": 0.5,
+              "learning_features": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "trace": {
+                "entry": "100.45",
+                "exit": "101.35",
+                "exit_time": 154800,
+                "gross_usd": "0.9000",
+                "net_with_known_costs": "0.5000",
+                "scenario_net_usd": "0.5000",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+                "spread_trace": [
+                  {
+                    "time": 153900,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "buy",
+                "signal_available": 153900,
+                "lots": ".01",
+                "contract": 100,
+                "stop": "99",
+                "target": "101.5"
+              }
+            }
+          ],
+          "all_rows_sha256": "d94b1f61b0097c7a7a866bc5b3ca54ccdf306304b3a2a3c65a717f5241fd585f",
+          "retained_trace_examples": 2
+        }
+      },
+      "comparison_hash": "064ce3790367c56ed054b46fdfa4f4434f95b54abdbc7e2110f5f7171a248663"
+    }
+  ],
+  "ranking": {
+    "rows": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "worst_case_net": -14.4,
+        "max_drawdown": 14.4,
+        "score": null,
+        "reasons": [
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "worst_case_net": null,
+        "max_drawdown": null,
+        "score": null,
+        "reasons": [
+          "UNKNOWN_COST_OR_PATH",
+          "INSUFFICIENT_TRADES"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "worst_case_net": 18.0,
+        "max_drawdown": 0.0,
+        "score": 18.0,
+        "reasons": [],
+        "status": "HYPOTHETICAL_SCENARIO_ONLY",
+        "profitability_verified": false
+      }
+    ],
+    "scenario_nominee": "retest-20-1.5-rules",
+    "verified_best": null,
+    "selection_uses_holdout": false,
+    "comparable": true
+  },
+  "scenario_nominee": "retest-20-1.5-rules",
+  "selected_candidate": null,
+  "out_of_sample": {
+    "base:stop_first": {
+      "trades": 36,
+      "net_usd": 25.2,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 225000,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 226800,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "f3e41f61a8489eb87ece389cd19fc58539d389a47d08d4f562965a6a51dcde51",
+      "retained_trace_examples": 2
+    },
+    "base:target_first": {
+      "trades": 36,
+      "net_usd": 25.2,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 225000,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 226800,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "7106a5a8e661669cc78b496245516433f8a3f33fd0938313463dd34220bdc4e6",
+      "retained_trace_examples": 2
+    },
+    "base:unknown": {
+      "trades": 36,
+      "net_usd": 25.2,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 225000,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.7,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "101.4",
+            "exit_time": 226800,
+            "gross_usd": "1.100",
+            "net_with_known_costs": "0.700",
+            "scenario_net_usd": "0.700",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "17308f0d1181833050cf1df8ae94a9dbcd49aaff3eb06e5548696e914d1b2869",
+      "retained_trace_examples": 2
+    },
+    "stress:stop_first": {
+      "trades": 36,
+      "net_usd": 18.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 225000,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 226800,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "227b063bf9138b1be485993fd2a6c300db01d80d28b97e860d07a61dbed09f2c",
+      "retained_trace_examples": 2
+    },
+    "stress:target_first": {
+      "trades": 36,
+      "net_usd": 18.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 225000,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 226800,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "f348f07cbf36ff77cb764dee9f324fb1b669a9bdcf1eef4744f0d86a54646672",
+      "retained_trace_examples": 2
+    },
+    "stress:unknown": {
+      "trades": 36,
+      "net_usd": 18.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 225000,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": 0.5,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "101.35",
+            "exit_time": 226800,
+            "gross_usd": "0.9000",
+            "net_with_known_costs": "0.5000",
+            "scenario_net_usd": "0.5000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "101.5"
+          }
+        }
+      ],
+      "all_rows_sha256": "5672046ce19435e00216feccbfdaaf205d0fb69b1534f785d2e32dfce63ae9fd",
+      "retained_trace_examples": 2
+    }
+  },
+  "fixed_breakout_baseline": {
+    "base:stop_first": {
+      "trades": 36,
+      "net_usd": -7.2,
+      "max_drawdown_usd": 7.2,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 225000,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 226800,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "59b4508d8973d0a35a72405bd7cb96c8531a83030e28d7ed9350d7585d56620a",
+      "retained_trace_examples": 2
+    },
+    "base:target_first": {
+      "trades": 36,
+      "net_usd": -7.2,
+      "max_drawdown_usd": 7.2,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 225000,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 226800,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "05d97c7aaf5569fac32e25dff108a44a67ad8993f5a33cf71ecceacce411eee6",
+      "retained_trace_examples": 2
+    },
+    "base:unknown": {
+      "trades": 36,
+      "net_usd": -7.2,
+      "max_drawdown_usd": 7.2,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 225000,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.2,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.3",
+            "exit": "100.5",
+            "exit_time": 226800,
+            "gross_usd": "0.200",
+            "net_with_known_costs": "-0.200",
+            "scenario_net_usd": "-0.200",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.2",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "69701856e00316f91bd800b3c1e24b4048f588553f5a43baa8ecc56474a0ca48",
+      "retained_trace_examples": 2
+    },
+    "stress:stop_first": {
+      "trades": 36,
+      "net_usd": -14.4,
+      "max_drawdown_usd": 14.4,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 225000,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 226800,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "stop_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "b31c35c84273e38b42d4d4dfb28b11f95888f8375c58fd534ff83192f4612d57",
+      "retained_trace_examples": 2
+    },
+    "stress:target_first": {
+      "trades": 36,
+      "net_usd": -14.4,
+      "max_drawdown_usd": 14.4,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 225000,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 226800,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "target_first",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "9d3ebc4bea6a550aec30f8d83c9d54d6f8a36f47f39984ef767aa25f294ca378",
+      "retained_trace_examples": 2
+    },
+    "stress:unknown": {
+      "trades": 36,
+      "net_usd": -14.4,
+      "max_drawdown_usd": 14.4,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": [
+        {
+          "time": 225000,
+          "entry_time": 224100,
+          "signal_time": 223200,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 225000,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 224100,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 224100,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        },
+        {
+          "time": 226800,
+          "entry_time": 225900,
+          "signal_time": 225000,
+          "net": -0.4,
+          "learning_features": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "trace": {
+            "entry": "100.45",
+            "exit": "100.45",
+            "exit_time": 226800,
+            "gross_usd": "0.0000",
+            "net_with_known_costs": "-0.4000",
+            "scenario_net_usd": "-0.4000",
+            "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+            "cost_basis": "ASSUMPTION",
+            "slippage_basis": "ASSUMPTION",
+            "intrabar_path": "UNKNOWN",
+            "intrabar_policy": "unknown",
+            "ambiguous_sl_tp": false,
+            "exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+            "spread_trace": [
+              {
+                "time": 225900,
+                "spread": "0.3",
+                "basis": "ASSUMPTION"
+              }
+            ],
+            "entry_spread_basis": "ASSUMPTION",
+            "profitability_verified": false,
+            "trade_allowed": false,
+            "no_trade_baseline_usd": "0"
+          },
+          "order": {
+            "side": "buy",
+            "signal_available": 225900,
+            "lots": ".01",
+            "contract": 100,
+            "stop": "99",
+            "target": "100.6"
+          }
+        }
+      ],
+      "all_rows_sha256": "030e91bdf45d812d04a591ba1144baa833b04000d9a910d5e1cb33a2d4ffde28",
+      "retained_trace_examples": 2
+    }
+  },
+  "no_trade_baseline_usd": 0,
+  "split": {
+    "train": [
+      44,
+      160
+    ],
+    "validation": [
+      168,
+      240
+    ],
+    "holdout": [
+      248,
+      320
+    ],
+    "embargo_bars": 8
+  },
+  "selection_uses_holdout": false,
+  "market_profitability_verified": false,
+  "final_year_validation": "BLOCKED",
+  "trade_allowed": false,
+  "demo_review_eligible": false,
+  "promotion_eligible": false,
+  "live_promotion": false,
+  "limitations": [
+    "Hypothetical research ranking only",
+    "Bar-open spread is not intrabar Ask history",
+    "Historical swap and server/session evidence remain unverified",
+    "Global fresh-holdout certification not provided"
+  ],
+  "registry_run_id": "905209c14b44e66e4669f819ee503065e207cd7d4c37ec1693be84a78d8f3cc1",
+  "dependency_spec": {
+    "code_sha256": "5f59789393efadb8ecce8fe3eda949c85cc59e84d5abb94a1868360804e006c7",
+    "datasets": {
+      "fixture": "f05ba07bd89236abafef9e42dc51325186109226038af604a79be2d63f900ed0"
+    },
+    "settings": {
+      "strategies": [
+        {
+          "family": "breakout",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "breakout",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "rejection",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "rejection",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "retest",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "retest",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        }
+      ],
+      "scope": "SYNTHETIC_DIAGNOSTIC"
+    },
+    "costs": {
+      "base": {
+        "cost_basis": "ASSUMPTION",
+        "exit_policy": "fixed_sltp",
+        "assumed_spread": 0.2,
+        "slippage": 0.1,
+        "commission": 40,
+        "swap": 0,
+        "assumed_swap": null
+      },
+      "stress": {
+        "cost_basis": "ASSUMPTION",
+        "exit_policy": "fixed_sltp",
+        "assumed_spread": 0.3,
+        "slippage": 0.15,
+        "commission": 40,
+        "swap": 0,
+        "assumed_swap": null
+      }
+    },
+    "protocol_sha256": "a14b86af0c73315912e789bba056f88098a90f37756720fbee213ee858de522a",
+    "environment": {
+      "python": "3.12.14"
+    },
+    "metrics_version": "selector-scenarios-v1",
+    "split": {
+      "n": 320,
+      "train": 0.5,
+      "validation": 0.25,
+      "holdout": 0.25,
+      "embargo": 8,
+      "time_interpretation_hash": "ba004f1ef0492e09f9f05c96d8f9d117455c970ae20a161d2d0ca1f6c15028ab"
+    },
+    "seed": 581
+  }
+}

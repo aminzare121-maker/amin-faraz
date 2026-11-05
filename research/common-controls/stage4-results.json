@@ -1,0 +1,68 @@
+{
+  "tests": 60,
+  "passed": 60,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "controlled_run_id": "905209c14b44e66e4669f819ee503065e207cd7d4c37ec1693be84a78d8f3cc1",
+  "controlled_action": "EXECUTED",
+  "repeated_action": "REUSE",
+  "ranking": {
+    "rows": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "worst_case_net": -14.4,
+        "max_drawdown": 14.4,
+        "score": null,
+        "reasons": [
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "worst_case_net": null,
+        "max_drawdown": null,
+        "score": null,
+        "reasons": [
+          "UNKNOWN_COST_OR_PATH",
+          "INSUFFICIENT_TRADES"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "worst_case_net": 18.0,
+        "max_drawdown": 0.0,
+        "score": 18.0,
+        "reasons": [],
+        "status": "HYPOTHETICAL_SCENARIO_ONLY",
+        "profitability_verified": false
+      }
+    ],
+    "scenario_nominee": "retest-20-1.5-rules",
+    "verified_best": null,
+    "selection_uses_holdout": false,
+    "comparable": true
+  },
+  "unknown_swap_nominee": null,
+  "unknown_swap_run_id": "1ed88ab532336673f242032c6f9c08f9c499c43393619db12e97ae78ef51ed9e",
+  "missing_spread_state": "BLOCKED_FAILED",
+  "actual_strategy_run_id": "0581ef2738d62677b368ca0bc594a6661313239c6d9904b1e3e02bb1a4dc92d2",
+  "actual_candidate_count": 6,
+  "actual_training_trade_rows": 96,
+  "official_historical_evidence_added": 0,
+  "gaps_unknown": 260,
+  "year_validation": "BLOCKED",
+  "real_market_strategy_runs": 0,
+  "sources": {
+    "engine_bridge.py": "ebcf22c83db952dc161473c1dfc30eb16e1b526d117c0a24eec6eebfce8edd4c",
+    "execution_scenarios.py": "601e0e4bc1a8d25a4fa6018c7db1592418e246bbda9808d20a14bd4d3a6954ba",
+    "scenario_segment.py": "f36d282211d52134046380ebd9568fe648aa868c52903b358afa0bdbb604b52a",
+    "research_engine\\experiments.py": "da574a708058e191b25a794198b1873ab8bf95a25f9338cf902d1131352b2b0a",
+    "test_selector.py": "be1074acdf814dad6551fcd2037b7fe2752f81a010d711967e774717392e9bd0",
+    "stage4_qa.py": "3d5029d2bfc3748a7052efa8d680934817199d79ef858b835a1978449b4cfeb1"
+  }
+}

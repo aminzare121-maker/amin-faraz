@@ -62,3 +62,46 @@ def execute(bank,bars,dataset_id,costs,protocol,*,scope):
     except Exception as exc:
         bank.finish_run(reservation['id'],{'error_type':type(exc).__name__,'scope':scope},False)
         raise
+
+def evaluate_strategies(bank,bars,dataset_id,contexts,protocol):
+    """Run the research revision of the actual selector through scenario execution.
+    Legacy execute remains reproducible, but cannot confer selection approval.
+    """
+    existing_engine()
+    from research_engine.experiments import run_experiment as scenario_runner
+    from scenario_segment import evaluate_segment
+    local=Path(__file__).resolve().parent
+    files=[local/'engine_bridge.py',local/'execution_scenarios.py',local/'scenario_segment.py',local/'research_engine/experiments.py',local/'registry.py',local/'comparison.py',local/'evidence_gates.py',local/'vendor/research_ledger.py']
+    code=digest({'engine':engine_fingerprint(),'research':{str(p.relative_to(local)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}})
+    from amin_mt5.strategy import candidates
+    spec=dict(code_sha256=code,datasets={dataset_id:digest(bars)},settings={'strategies':[asdict(c) for c in candidates()], 'scope':'SYNTHETIC_DIAGNOSTIC'},costs=contexts,
+        protocol_sha256=digest(protocol),environment={'python':platform.python_version()},metrics_version='selector-scenarios-v1',
+        split={'n':len(bars),'train':.5,'validation':.25,'holdout':.25,'embargo':8,'time_interpretation_hash':digest(protocol.get('time_interpretation'))},seed=581)
+    reservation=bank.start(spec)
+    if reservation['action']!='EXECUTE':return reservation
+    try:
+        # Only synthetic diagnostics are authorized on this entry point until year gates clear.
+        if protocol.get('scope')!='SYNTHETIC_DIAGNOSTIC' or protocol.get('time_interpretation')!='SYNTHETIC_UTC':raise ValueError('REAL_YEAR_GATE_BLOCKED')
+        if protocol.get('news') not in (None,[]):raise ValueError('NEWS_NOT_SUPPORTED_USE_POINT_IN_TIME_GATE')
+        previous=None
+        for b in bars:
+            t=b['time']
+            if type(t) is not int or t%900 or (previous is not None and t-previous!=900):raise ValueError('TIME_ORDER_OR_GAP')
+            if b.get('time_basis')!='synthetic-UTC' or not b.get('final') or b.get('observed_at',0)<t+900:raise ValueError('TIME_OR_CLOSURE_UNCONFIRMED')
+            if b.get('available')!=b['observed_at']:raise ValueError('AVAILABILITY_MISMATCH')
+            from execution_scenarios import number
+            o,h,l,c=(number(b[k]) for k in ('open','high','low','close'))
+            if min(o,h,l,c)<=0 or not l<=min(o,c)<=max(o,c)<=h:raise ValueError('OHLC')
+            previous=t
+        if set(contexts)!= {'base','stress'}:raise ValueError('SCENARIOS_REQUIRED')
+        for ctx in contexts.values():
+            if ctx.get('cost_basis')!='ASSUMPTION':raise ValueError('COST_EVIDENCE_NOT_CERTIFIED')
+            if ctx.get('commission') is None or ctx.get('slippage') is None:raise ValueError('COST_UNKNOWN')
+            if float(ctx['commission'])<0 or float(ctx['slippage'])<0:raise ValueError('NEGATIVE_COST')
+        report=scenario_runner(bars,contexts,evaluate=evaluate_segment)
+        report.update(registry_run_id=reservation['id'],dependency_spec=spec)
+        bank.finish_run(reservation['id'],report,True)
+        return {'action':'EXECUTED','id':reservation['id'],'result':report}
+    except Exception as exc:
+        bank.finish_run(reservation['id'],{'error_type':type(exc).__name__,'reason':str(exc),'profitability_verified':False},False)
+        raise

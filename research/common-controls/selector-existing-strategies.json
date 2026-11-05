@@ -1,0 +1,2115 @@
+{
+  "schema": 4,
+  "method": "existing-selector-cost-scenarios-research-revision",
+  "candidates": [
+    {
+      "id": "breakout-20-1.5-rules",
+      "candidate": {
+        "family": "breakout",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    },
+    {
+      "id": "breakout-40-1.5-rules",
+      "candidate": {
+        "family": "breakout",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    },
+    {
+      "id": "rejection-20-1.5-rules",
+      "candidate": {
+        "family": "rejection",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 16,
+          "net_usd": -198.08,
+          "max_drawdown_usd": 198.08,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.4",
+                "exit": "2011.11",
+                "exit_time": 1760051700,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.4",
+                "exit": "2012.11",
+                "exit_time": 1760053500,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "a258e7bef3671bcd9a79fe2c18f84dfd477ddf7697f47d53ce43e081dd64001e",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 16,
+          "net_usd": -198.08,
+          "max_drawdown_usd": 198.08,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.4",
+                "exit": "2011.11",
+                "exit_time": 1760051700,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.4",
+                "exit": "2012.11",
+                "exit_time": 1760053500,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "14caac7f241257bd01aea3ff6be62932b9e43b4be425e2b4f1b534ca11572e78",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 16,
+          "net_usd": -198.08,
+          "max_drawdown_usd": 198.08,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.4",
+                "exit": "2011.11",
+                "exit_time": 1760051700,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.4",
+                "exit": "2012.11",
+                "exit_time": 1760053500,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "faacc2d32d63b2277f631a362f52692f48a4ecbe9cdfb7b52069149adff5f008",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 16,
+          "net_usd": -211.28,
+          "max_drawdown_usd": 211.28,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.35",
+                "exit": "2011.16",
+                "exit_time": 1760051700,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.35",
+                "exit": "2012.16",
+                "exit_time": 1760053500,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "a3262716f451790f349a0a797d7ccbab12f0c15b1aca0d4d87fab49b5796bc79",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 16,
+          "net_usd": -211.28,
+          "max_drawdown_usd": 211.28,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.35",
+                "exit": "2011.16",
+                "exit_time": 1760051700,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.35",
+                "exit": "2012.16",
+                "exit_time": 1760053500,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "64b0d00baf16203a5d9666f5e8972933dedc2418bbbcda62b0369a615693f5d1",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 16,
+          "net_usd": -211.28,
+          "max_drawdown_usd": 211.28,
+          "unknown": 0,
+          "unclosed": 1,
+          "rows": [
+            {
+              "time": 1760051700,
+              "entry_time": 1760050800,
+              "signal_time": 1760049900,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2010.35",
+                "exit": "2011.16",
+                "exit_time": 1760051700,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760050800,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760050800,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2011.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760053500,
+              "entry_time": 1760052600,
+              "signal_time": 1760051700,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2011.35",
+                "exit": "2012.16",
+                "exit_time": 1760053500,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760052600,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760052600,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2012.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "0c3008397b3da268a7891934a2b83c9e72ae67d491a6a0c3bb315a4727338627",
+          "retained_trace_examples": 2
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 9,
+          "net_usd": -117.14,
+          "max_drawdown_usd": 117.14,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.4",
+                "exit": "2015.11",
+                "exit_time": 1760153400,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.4",
+                "exit": "2016.11",
+                "exit_time": 1760155200,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "411176ed844a7db3b1abe4d3c5a581371be3b301247ffb6ae3f9df9039749ccd",
+          "retained_trace_examples": 2
+        },
+        "base:target_first": {
+          "trades": 9,
+          "net_usd": -117.14,
+          "max_drawdown_usd": 117.14,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.4",
+                "exit": "2015.11",
+                "exit_time": 1760153400,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.4",
+                "exit": "2016.11",
+                "exit_time": 1760155200,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "3e925c2d0ccef884d40b494f7c60a867add66e69ca58902bc52ebebfef3ea09e",
+          "retained_trace_examples": 2
+        },
+        "base:unknown": {
+          "trades": 9,
+          "net_usd": -117.14,
+          "max_drawdown_usd": 117.14,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.4",
+                "exit": "2015.11",
+                "exit_time": 1760153400,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -9.99,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.4",
+                "exit": "2016.11",
+                "exit_time": 1760155200,
+                "gross_usd": "-6.3900",
+                "net_with_known_costs": "-9.9900",
+                "scenario_net_usd": "-9.9900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.2",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "2678a5d92745dd955d08bf7f331f6def9973814cf1667a82d011171d69ca37b8",
+          "retained_trace_examples": 2
+        },
+        "stress:stop_first": {
+          "trades": 9,
+          "net_usd": -124.54,
+          "max_drawdown_usd": 124.54,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.35",
+                "exit": "2015.16",
+                "exit_time": 1760153400,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.35",
+                "exit": "2016.16",
+                "exit_time": 1760155200,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "stop_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "4d2aa9569aa7fe5781d4374c68b6284c3539462bad39da56cef4060d6a693519",
+          "retained_trace_examples": 2
+        },
+        "stress:target_first": {
+          "trades": 9,
+          "net_usd": -124.54,
+          "max_drawdown_usd": 124.54,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.35",
+                "exit": "2015.16",
+                "exit_time": 1760153400,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.35",
+                "exit": "2016.16",
+                "exit_time": 1760155200,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "target_first",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "2217fda543ca64265ebb427a6bfbd4f0cc4de42c13b581d8da824c79f51f1e88",
+          "retained_trace_examples": 2
+        },
+        "stress:unknown": {
+          "trades": 9,
+          "net_usd": -124.54,
+          "max_drawdown_usd": 124.54,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": [
+            {
+              "time": 1760153400,
+              "entry_time": 1760152500,
+              "signal_time": 1760151600,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2014.35",
+                "exit": "2015.16",
+                "exit_time": 1760153400,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760152500,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760152500,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2015.01",
+                "target": null
+              }
+            },
+            {
+              "time": 1760155200,
+              "entry_time": 1760154300,
+              "signal_time": 1760153400,
+              "net": -10.89,
+              "learning_features": [
+                1.25,
+                0.1,
+                0.1,
+                1.0,
+                1.0,
+                2.7250000000000227,
+                -1.0
+              ],
+              "trace": {
+                "entry": "2015.35",
+                "exit": "2016.16",
+                "exit_time": 1760155200,
+                "gross_usd": "-7.2900",
+                "net_with_known_costs": "-10.8900",
+                "scenario_net_usd": "-10.8900",
+                "swap_status": "CALLER_INPUT_NOT_HISTORICALLY_ATTESTED",
+                "cost_basis": "ASSUMPTION",
+                "slippage_basis": "ASSUMPTION",
+                "intrabar_path": "UNKNOWN",
+                "intrabar_policy": "unknown",
+                "ambiguous_sl_tp": false,
+                "exit_reason": "STOP",
+                "spread_trace": [
+                  {
+                    "time": 1760154300,
+                    "spread": "0.3",
+                    "basis": "ASSUMPTION"
+                  }
+                ],
+                "entry_spread_basis": "ASSUMPTION",
+                "profitability_verified": false,
+                "trade_allowed": false,
+                "no_trade_baseline_usd": "0"
+              },
+              "order": {
+                "side": "sell",
+                "signal_available": 1760154300,
+                "lots": "0.09",
+                "contract": 100,
+                "stop": "2016.01",
+                "target": null
+              }
+            }
+          ],
+          "all_rows_sha256": "8c0ee0b387a354fe74e8964787ebc834d6c3925e1041605f01a13b5fec136a8b",
+          "retained_trace_examples": 2
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    },
+    {
+      "id": "rejection-40-1.5-rules",
+      "candidate": {
+        "family": "rejection",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    },
+    {
+      "id": "retest-20-1.5-rules",
+      "candidate": {
+        "family": "retest",
+        "lookback": 20,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    },
+    {
+      "id": "retest-40-1.5-rules",
+      "candidate": {
+        "family": "retest",
+        "lookback": 40,
+        "stop_multiple": 1.5
+      },
+      "model": null,
+      "train": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "validation": {
+        "base:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "base:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:stop_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:target_first": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        },
+        "stress:unknown": {
+          "trades": 0,
+          "net_usd": 0.0,
+          "max_drawdown_usd": 0.0,
+          "unknown": 0,
+          "unclosed": 0,
+          "rows": []
+        }
+      },
+      "comparison_hash": "6b1c3ddba83272dd477577f4a28f0a376a31ce9edb4695b84dca177efdf9e320"
+    }
+  ],
+  "ranking": {
+    "rows": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "worst_case_net": 0.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INSUFFICIENT_TRADES",
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "breakout-40-1.5-rules",
+        "worst_case_net": 0.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INSUFFICIENT_TRADES",
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "worst_case_net": -124.54,
+        "max_drawdown": 124.54,
+        "score": null,
+        "reasons": [
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-40-1.5-rules",
+        "worst_case_net": 0.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INSUFFICIENT_TRADES",
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "worst_case_net": 0.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INSUFFICIENT_TRADES",
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-40-1.5-rules",
+        "worst_case_net": 0.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INSUFFICIENT_TRADES",
+          "NONPOSITIVE_WORST_CASE"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      }
+    ],
+    "scenario_nominee": null,
+    "verified_best": null,
+    "selection_uses_holdout": false,
+    "comparable": true
+  },
+  "scenario_nominee": null,
+  "selected_candidate": null,
+  "out_of_sample": null,
+  "fixed_breakout_baseline": {
+    "base:stop_first": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    },
+    "base:target_first": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    },
+    "base:unknown": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    },
+    "stress:stop_first": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    },
+    "stress:target_first": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    },
+    "stress:unknown": {
+      "trades": 0,
+      "net_usd": 0.0,
+      "max_drawdown_usd": 0.0,
+      "unknown": 0,
+      "unclosed": 0,
+      "rows": []
+    }
+  },
+  "no_trade_baseline_usd": 0,
+  "split": {
+    "train": [
+      44,
+      160
+    ],
+    "validation": [
+      168,
+      240
+    ],
+    "holdout": [
+      248,
+      320
+    ],
+    "embargo_bars": 8
+  },
+  "selection_uses_holdout": false,
+  "market_profitability_verified": false,
+  "final_year_validation": "BLOCKED",
+  "trade_allowed": false,
+  "demo_review_eligible": false,
+  "promotion_eligible": false,
+  "live_promotion": false,
+  "limitations": [
+    "Hypothetical research ranking only",
+    "Bar-open spread is not intrabar Ask history",
+    "Historical swap and server/session evidence remain unverified",
+    "Global fresh-holdout certification not provided"
+  ],
+  "registry_run_id": "0581ef2738d62677b368ca0bc594a6661313239c6d9904b1e3e02bb1a4dc92d2",
+  "dependency_spec": {
+    "code_sha256": "5f59789393efadb8ecce8fe3eda949c85cc59e84d5abb94a1868360804e006c7",
+    "datasets": {
+      "synthetic-320-actual-strategies": "75529abd11b0a26485d1cd2db21e31573a7d01158c1e2997b629b3257685a4b0"
+    },
+    "settings": {
+      "strategies": [
+        {
+          "family": "breakout",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "breakout",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "rejection",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "rejection",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "retest",
+          "lookback": 20,
+          "stop_multiple": 1.5
+        },
+        {
+          "family": "retest",
+          "lookback": 40,
+          "stop_multiple": 1.5
+        }
+      ],
+      "scope": "SYNTHETIC_DIAGNOSTIC"
+    },
+    "costs": {
+      "base": {
+        "cost_basis": "ASSUMPTION",
+        "exit_policy": "adaptive_existing",
+        "assumed_spread": 0.2,
+        "slippage": 0.1,
+        "commission": 40,
+        "swap": 0,
+        "assumed_swap": null
+      },
+      "stress": {
+        "cost_basis": "ASSUMPTION",
+        "exit_policy": "adaptive_existing",
+        "assumed_spread": 0.3,
+        "slippage": 0.15,
+        "commission": 40,
+        "swap": 0,
+        "assumed_swap": null
+      }
+    },
+    "protocol_sha256": "f6cb985904e75fa73044de4dcd7f1e26f6726e76b86affcf3613c9fd749ca67e",
+    "environment": {
+      "python": "3.12.14"
+    },
+    "metrics_version": "selector-scenarios-v1",
+    "split": {
+      "n": 320,
+      "train": 0.5,
+      "validation": 0.25,
+      "holdout": 0.25,
+      "embargo": 8,
+      "time_interpretation_hash": "ba004f1ef0492e09f9f05c96d8f9d117455c970ae20a161d2d0ca1f6c15028ab"
+    },
+    "seed": 581
+  }
+}
