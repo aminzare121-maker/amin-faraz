@@ -1,0 +1,238 @@
+{
+  "fixture": "ALL_SYNTHETIC_NO_MODEL",
+  "hypothetical_cost_per_trade": "0.38",
+  "hypothetical_gross_per_trade": "-0.62",
+  "ai_one": {
+    "synthetic_only": true,
+    "trades": 1,
+    "opportunities": 100,
+    "activity": 0.01,
+    "no_trade": 99,
+    "independent_blocks_assumed": 1,
+    "independence_empirically_verified": false,
+    "exposure_seconds": 900,
+    "lot_hours": "0.0025",
+    "risk_usd_hours": "2.5",
+    "notional_usd_hours": "1000",
+    "turnover_lots_roundtrip": "0.02",
+    "turnover_usd_roundtrip": "8000",
+    "net_hypothetical_usd": "-1",
+    "maxdd_step_usd": "1",
+    "maxdd_over_initial_percent": "0.01",
+    "per_trade_sharpe_descriptive_not_time_sharpe": null,
+    "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+    "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+    "edge_established": false
+  },
+  "unmatched_100": {
+    "synthetic_only": true,
+    "trades": 100,
+    "opportunities": 100,
+    "activity": 1.0,
+    "no_trade": 0,
+    "independent_blocks_assumed": 100,
+    "independence_empirically_verified": false,
+    "exposure_seconds": 90000,
+    "lot_hours": "0.2500",
+    "risk_usd_hours": "250.0",
+    "notional_usd_hours": "100000",
+    "turnover_lots_roundtrip": "2.00",
+    "turnover_usd_roundtrip": "800000",
+    "net_hypothetical_usd": "-100",
+    "maxdd_step_usd": "100",
+    "maxdd_over_initial_percent": "1",
+    "per_trade_sharpe_descriptive_not_time_sharpe": null,
+    "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+    "inference": "SYNTHETIC_NOT_MARKET_EVIDENCE",
+    "edge_established": false
+  },
+  "matched_controls": [
+    {
+      "seed": 1729,
+      "keys": [
+        "op-032"
+      ],
+      "metrics": {
+        "synthetic_only": true,
+        "trades": 1,
+        "opportunities": 100,
+        "activity": 0.01,
+        "no_trade": 99,
+        "independent_blocks_assumed": 1,
+        "independence_empirically_verified": false,
+        "exposure_seconds": 900,
+        "lot_hours": "0.0025",
+        "risk_usd_hours": "2.5",
+        "notional_usd_hours": "1000",
+        "turnover_lots_roundtrip": "0.02",
+        "turnover_usd_roundtrip": "8000",
+        "net_hypothetical_usd": "-1",
+        "maxdd_step_usd": "1",
+        "maxdd_over_initial_percent": "0.01",
+        "per_trade_sharpe_descriptive_not_time_sharpe": null,
+        "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+        "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+        "edge_established": false
+      }
+    },
+    {
+      "seed": 2718,
+      "keys": [
+        "op-007"
+      ],
+      "metrics": {
+        "synthetic_only": true,
+        "trades": 1,
+        "opportunities": 100,
+        "activity": 0.01,
+        "no_trade": 99,
+        "independent_blocks_assumed": 1,
+        "independence_empirically_verified": false,
+        "exposure_seconds": 900,
+        "lot_hours": "0.0025",
+        "risk_usd_hours": "2.5",
+        "notional_usd_hours": "1000",
+        "turnover_lots_roundtrip": "0.02",
+        "turnover_usd_roundtrip": "8000",
+        "net_hypothetical_usd": "-1",
+        "maxdd_step_usd": "1",
+        "maxdd_over_initial_percent": "0.01",
+        "per_trade_sharpe_descriptive_not_time_sharpe": null,
+        "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+        "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+        "edge_established": false
+      }
+    },
+    {
+      "seed": 31415,
+      "keys": [
+        "op-044"
+      ],
+      "metrics": {
+        "synthetic_only": true,
+        "trades": 1,
+        "opportunities": 100,
+        "activity": 0.01,
+        "no_trade": 99,
+        "independent_blocks_assumed": 1,
+        "independence_empirically_verified": false,
+        "exposure_seconds": 900,
+        "lot_hours": "0.0025",
+        "risk_usd_hours": "2.5",
+        "notional_usd_hours": "1000",
+        "turnover_lots_roundtrip": "0.02",
+        "turnover_usd_roundtrip": "8000",
+        "net_hypothetical_usd": "-1",
+        "maxdd_step_usd": "1",
+        "maxdd_over_initial_percent": "0.01",
+        "per_trade_sharpe_descriptive_not_time_sharpe": null,
+        "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+        "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+        "edge_established": false
+      }
+    },
+    {
+      "seed": 42017,
+      "keys": [
+        "op-012"
+      ],
+      "metrics": {
+        "synthetic_only": true,
+        "trades": 1,
+        "opportunities": 100,
+        "activity": 0.01,
+        "no_trade": 99,
+        "independent_blocks_assumed": 1,
+        "independence_empirically_verified": false,
+        "exposure_seconds": 900,
+        "lot_hours": "0.0025",
+        "risk_usd_hours": "2.5",
+        "notional_usd_hours": "1000",
+        "turnover_lots_roundtrip": "0.02",
+        "turnover_usd_roundtrip": "8000",
+        "net_hypothetical_usd": "-1",
+        "maxdd_step_usd": "1",
+        "maxdd_over_initial_percent": "0.01",
+        "per_trade_sharpe_descriptive_not_time_sharpe": null,
+        "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+        "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+        "edge_established": false
+      }
+    },
+    {
+      "seed": 65537,
+      "keys": [
+        "op-083"
+      ],
+      "metrics": {
+        "synthetic_only": true,
+        "trades": 1,
+        "opportunities": 100,
+        "activity": 0.01,
+        "no_trade": 99,
+        "independent_blocks_assumed": 1,
+        "independence_empirically_verified": false,
+        "exposure_seconds": 900,
+        "lot_hours": "0.0025",
+        "risk_usd_hours": "2.5",
+        "notional_usd_hours": "1000",
+        "turnover_lots_roundtrip": "0.02",
+        "turnover_usd_roundtrip": "8000",
+        "net_hypothetical_usd": "-1",
+        "maxdd_step_usd": "1",
+        "maxdd_over_initial_percent": "0.01",
+        "per_trade_sharpe_descriptive_not_time_sharpe": null,
+        "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+        "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+        "edge_established": false
+      }
+    }
+  ],
+  "no_trade": {
+    "synthetic_only": true,
+    "trades": 0,
+    "opportunities": 100,
+    "activity": 0.0,
+    "no_trade": 100,
+    "independent_blocks_assumed": 0,
+    "independence_empirically_verified": false,
+    "exposure_seconds": 0,
+    "lot_hours": "0",
+    "risk_usd_hours": "0",
+    "notional_usd_hours": "0",
+    "turnover_lots_roundtrip": "0",
+    "turnover_usd_roundtrip": "0",
+    "net_hypothetical_usd": "0",
+    "maxdd_step_usd": "0",
+    "maxdd_over_initial_percent": "0",
+    "per_trade_sharpe_descriptive_not_time_sharpe": null,
+    "time_sharpe": "NOT_EVALUATED_NO_REGULAR_MARK_TO_MARKET",
+    "inference": "INSUFFICIENT_INDEPENDENT_BLOCKS",
+    "edge_established": false
+  },
+  "ci_reused_diagnostic_only": {
+    "status": "exploratory_previously_seen_development",
+    "daily_delta_mean": 0.0,
+    "total_net_delta": 0.0,
+    "mean_daily_delta_ci95": [
+      -0.03,
+      0.03
+    ],
+    "total_delta_ci95": [
+      -3.0,
+      3.0
+    ],
+    "calendar_days": 100,
+    "block_days": 5,
+    "approx_nonoverlap_blocks": 20.0,
+    "resamples": 1000,
+    "seed": 1729,
+    "independent_future_test": false,
+    "minimum_effect_power_plan_locked": false,
+    "warning": "Unverified feed/cost/session and prior exposure prevent confirmatory inference"
+  },
+  "ci_inference": "NOT_VALIDATED_FOR_MARKET; sparse outcomes, no edge claim",
+  "real_data_used": false,
+  "model_fit": false,
+  "order_authority": false
+}
