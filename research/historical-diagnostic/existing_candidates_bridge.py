@@ -7,6 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 from historical_diagnostic import bars_from_rows,segments,num
 
+
 def bridge_existing(rows, contexts, *, candidates=None, evaluator=None):
     """Injectable evaluator for tests; on Windows use original candidate modules.
 
