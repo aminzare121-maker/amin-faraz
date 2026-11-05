@@ -1,0 +1,122 @@
+{
+  "project": "Amin MT5 — Faraz",
+  "scope": "offline synthetic prototype only",
+  "project_version": "0.1.2",
+  "python": "3.12.14",
+  "code_and_test_sha256": "c9bf38b8c9204d2938ac78623a8eb50287eb1bb10fd1cdffafcd71356b4e91ff",
+  "source_hashes": {
+    "faraz_core/__init__.py": "c304150668b343a9c4d1f595543c666fd8879dcb138d84027eee052608a9701a",
+    "faraz_core/authorization.py": "cc52afc1278e95562e34e648afe59c43a151cc6e5dd10837632170823189da17",
+    "faraz_core/decision.py": "f4be10172a62e3ad5d8a811ec3d4e586930832dc1e8cca45df64c1c8525a0bff",
+    "faraz_core/execution.py": "bd9d231b394047da074fc9978ee4fe65d41779ddb11664bdc376cb59e150e6ed",
+    "faraz_core/exits.py": "4dd5c2d8a64dc981269c4ad2a79b5d6f5283c075b058c798a04b74ceb2651af7",
+    "faraz_core/money.py": "63064e365ce5370df614dfdee6a09ca412406a5af792bbb4b2a7130a55d0edc4",
+    "faraz_core/numbers.py": "3182bb6b11134ee62e5a88e0ccbc2b829dd738c93de1ce4ee5c4f7251d3519de",
+    "faraz_core/risk.py": "2ffb68dfadc39748d0a4bc39d737bdf8e3d9f679437ea98645adee7f350ee273",
+    "faraz_core/temporal.py": "3dbf3a9586d03df1788b902405a54ccc2719ef6595298997228d300db0980382",
+    "tests/__init__.py": "7213c84bc97cf9f4e20abbce9b41a69fe233baa3e42d6b2d92feaa5b451c9f03",
+    "tests/test_authorization.py": "ebfc532c9940563cc48d6c61dad14d90624e061ec9bee5a18aeaa5eb7367ddb1",
+    "tests/test_boundaries.py": "656496c51da4e421b1c5e40baaf99bb94dd5a49c509554870a2858664630af56",
+    "tests/test_decision.py": "fe80a9fcb90d773463c0e135e88bee97b8ebf052df0b7f5a2a71343847589548",
+    "tests/test_execution.py": "fee982a1593cd6e46469fc71066b351dd368c691f288a200793d8bbbefb1c012",
+    "tests/test_exits_time.py": "39fd54eb0935c669bac799bc74f9d414544b14f466a208f0abd491b12bba5ee9",
+    "tests/test_integration.py": "0a49ea70d31581e8a8ae5d7cad9b55d4480cd5969951c467923793131f274f15",
+    "tests/test_notional.py": "7d7bbd84bf060ce8e01220882d68b340d3e5cdec845fa42ddfedc11678c5f561",
+    "tests/test_risk_money.py": "65b02232f85fadebe824f367bfbe290073c5e6efaa39dbb76210a27b3f8d1703",
+    "tools/check_import_boundary.py": "f5f26109c252f7237be503a498710539dac8038be1bde05ce4d35e73fe265165",
+    "tools/run_offline_demo.py": "ed15107b1a1165f77fc3c3a13f36fe57e60a70dfd62073f48f82d8beea0577f5",
+    "tools/run_tests.py": "db17f556cda60893fbaafa752777a47c0a1dc44c471e08f5bb7da84fa23e2862"
+  },
+  "inputs_unchanged": true,
+  "tests_run": 142,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "expected_failures": 0,
+  "unexpected_successes": 0,
+  "duration_seconds": 0.984,
+  "success": true,
+  "broker_or_mt5_called": false,
+  "private_market_data_used": false,
+  "market_performance_validated": false,
+  "limitations": [
+    "Memory replay is not disk durability.",
+    "Synthetic execution is not a broker execution test.",
+    "No market edge, profitability, or installed deployment is established."
+  ],
+  "fresh_process_import_probe": {
+    "all_core_imports_fresh": true,
+    "bytecode_disabled": true,
+    "forbidden_attempts_during_core": [],
+    "fresh_core_imports": [
+      "faraz_core",
+      "faraz_core.authorization",
+      "faraz_core.decision",
+      "faraz_core.execution",
+      "faraz_core.exits",
+      "faraz_core.money",
+      "faraz_core.numbers",
+      "faraz_core.risk",
+      "faraz_core.temporal"
+    ],
+    "guard_self_checks": [
+      {
+        "blocked": true,
+        "method": "builtin",
+        "module": "socket"
+      },
+      {
+        "blocked": true,
+        "method": "importlib",
+        "module": "socket"
+      },
+      {
+        "blocked": true,
+        "method": "builtin",
+        "module": "MetaTrader5"
+      },
+      {
+        "blocked": true,
+        "method": "importlib",
+        "module": "MetaTrader5"
+      },
+      {
+        "blocked": true,
+        "method": "builtin",
+        "module": "amin_mt5"
+      },
+      {
+        "blocked": true,
+        "method": "importlib",
+        "module": "amin_mt5"
+      },
+      {
+        "blocked": true,
+        "method": "builtin",
+        "module": "tools.run_offline_demo"
+      },
+      {
+        "blocked": true,
+        "method": "importlib",
+        "module": "tools.run_offline_demo"
+      }
+    ],
+    "guard_still_installed": true,
+    "imported_core_modules": [
+      "faraz_core",
+      "faraz_core.authorization",
+      "faraz_core.decision",
+      "faraz_core.execution",
+      "faraz_core.exits",
+      "faraz_core.money",
+      "faraz_core.numbers",
+      "faraz_core.risk",
+      "faraz_core.temporal"
+    ],
+    "isolated": true,
+    "preloaded_core_modules": [],
+    "site_disabled": true,
+    "socket_audit_guard_verified": true,
+    "success": true
+  }
+}
