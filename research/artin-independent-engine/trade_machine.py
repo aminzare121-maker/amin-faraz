@@ -36,7 +36,7 @@ class TradeMachine:
         if type(at) is not int or at<0 or (self.last_at is not None and at<self.last_at):
             raise ValueError('nondecreasing explicit observation time required')
 
-    def prepare(self,rule_id,observation,entry_price,initial_stop,target_price,aggregate_risk_remaining):
+    def prepare(self,rule_id,observation,entry_price,initial_stop,target_price,aggregate_risk_remaining,fixed_lots=None):
         self._fixed()
         if self.state!='NEW':raise ValueError('trade already prepared')
         for v in (entry_price,initial_stop,target_price):number(v)
@@ -53,9 +53,19 @@ class TradeMachine:
         budget=min(self.box.risk_budget,aggregate_risk_remaining)
         sized=size_position(observation.side,entry_price,initial_stop,budget,self.instrument,self.costs)
         if sized['status']!='ACCEPT':return self._event('REJECT',reason=sized['reason'])
+        if fixed_lots is not None:
+            number(fixed_lots)
+            if fixed_lots<self.instrument.min_lot or fixed_lots%self.instrument.lot_step:
+                return self._event('REJECT',reason='FIXED_LOT_OUTSIDE_CONTRACT_GRID')
+            if fixed_lots>sized['lots']:
+                return self._event('REJECT',reason='REQUESTED_FIXED_LOT_EXCEEDS_DECLARED_RISK_BUDGET')
+            fixed_loss=sized['modeled_loss']/sized['lots']*fixed_lots
+            sized={**sized,'lots':fixed_lots,'modeled_loss':fixed_loss,'volume_policy':'EXPLICIT_FIXED_LOT',
+                   'maximum_budget_lots':sized['lots']}
         self.plan=MappingProxyType(dict(side=observation.side,entry=entry_price,stop=initial_stop,target=target_price,
                        lots=sized['lots'],risk_budget=budget,box_fingerprint=self._box_fp,
-                       target_definition=self.box.target_definition))
+                       target_definition=self.box.target_definition,
+                       volume_policy='EXPLICIT_FIXED_LOT' if fixed_lots is not None else 'RISK_BUDGET_SIZING'))
         self.last_at=observation.at;self.current_stop=initial_stop;self.state='PREPARED'
         return self._event('PAPER_ENTRY_INTENT',plan=self.plan.copy(),entry_decision=decision,
                            sizing=sized,execution_authorized=False)
@@ -64,6 +74,8 @@ class TradeMachine:
         self._fixed()
         if self.state!='PREPARED':raise ValueError('prepared intent required')
         number(fill_price);number(lots)
+        if self.plan['volume_policy']=='EXPLICIT_FIXED_LOT' and lots!=self.plan['lots']:
+            raise ValueError('fixed-lot paper replay must retain requested volume')
         if lots>self.plan['lots'] or lots<self.instrument.min_lot or lots%self.instrument.lot_step:
             raise ValueError('fill volume outside planned contract grid')
         self.fill=MappingProxyType(dict(entry=fill_price,lots=lots))

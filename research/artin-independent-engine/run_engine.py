@@ -27,7 +27,8 @@ def run_paper_trade(engine,case,observation):
     box=BoxPlan(b['box_id'],money(b['risk_budget']),b['target_definition'],tuple(b['management_choices']),b['declared_before_box'])
     trade=TradeMachine(engine,box,instrument,costs)
     initial=trade.prepare(case['rule_id'],observation,money(t['entry_price']),money(t['initial_stop']),
-                          money(t['target_price']),money(t['aggregate_risk_remaining']))
+                          money(t['target_price']),money(t['aggregate_risk_remaining']),
+                          None if t.get('fixed_lots') is None else money(t['fixed_lots']))
     if initial['status']=='PAPER_ENTRY_INTENT':
         for event in t['events']:
             kind=event['event']
