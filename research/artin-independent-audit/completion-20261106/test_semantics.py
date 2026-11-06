@@ -57,6 +57,22 @@ class Semantics(unittest.TestCase):
         # Never substitute the inverse-fitted low for the teacher's marked line.
         origin,entry,stop=map(D,('4642.989','4681.455','4668.633'))
         self.assertGreater(stop,origin+(entry-origin)/3)
+    def test_entry_price_stop_is_not_net_breakeven_with_costs(self):
+        # Entirely synthetic: 10 units, actual entry100, exit slippage0.05,
+        # fixed round-trip fee2; no separate spread charge in this model.
+        entry,units,stop,slip,fee=map(D,('100','10','100','0.05','2'))
+        exit_fill=stop-slip
+        self.assertEqual((exit_fill-entry)*units-fee,D('-2.50'))
+    def test_net_breakeven_requires_cost_compensation_in_declared_model(self):
+        entry,units,slip,fee=map(D,('100','10','0.05','2'))
+        stop=entry+slip+fee/units
+        self.assertEqual(stop,D('100.25'))
+        self.assertEqual(((stop-slip)-entry)*units-fee,D('0'))
+    def test_gap_can_defeat_nominal_protected_profit(self):
+        # Assumed executable gap fill already includes the price jump;
+        # do not add the same slippage a second time.
+        entry,units,stop,gap_fill,fee=map(D,('100','10','101','99.5','2'))
+        self.assertGreater((stop-entry)*units,0)
+        self.assertEqual((gap_fill-entry)*units-fee,D('-7'))
 
 if __name__=='__main__': unittest.main(verbosity=2)
-
