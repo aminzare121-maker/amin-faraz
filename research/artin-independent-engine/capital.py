@@ -122,7 +122,13 @@ class BoxPlan:
     @property
     def fingerprint(self):
         def canonical(v):
-            return format(v.normalize(),'f')
+            # as_tuple is exact and independent of Decimal context precision.
+            sign,digits,exponent=v.as_tuple()
+            digits=list(digits)
+            if not any(digits):return '0'
+            while digits[-1]==0:
+                digits.pop();exponent+=1
+            return ('-' if sign else '')+''.join(str(x) for x in digits)+'e'+str(exponent)
         payload=dict(box_id=self.box_id,risk_budget=canonical(self.risk_budget),
                      target_definition=self.target_definition,management_choices=self.management_choices,
                      declared_before_box=self.declared_before_box)

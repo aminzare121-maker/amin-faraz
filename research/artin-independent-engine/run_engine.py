@@ -7,7 +7,7 @@ from pathlib import Path
 from entry_engine import Engine,Fact,Observation
 from examples import demo_document
 from capital import Instrument,Costs,BoxPlan
-from trade_machine import TradeMachine
+from trade_machine import TradeMachine,execution_event
 
 def money(value):
     if type(value) not in (str,int,Decimal):raise ValueError('Explicit exact decimal required')
@@ -30,15 +30,13 @@ def run_paper_trade(engine,case,observation):
                           money(t['target_price']),money(t['aggregate_risk_remaining']),
                           None if t.get('fixed_lots') is None else money(t['fixed_lots']))
     if initial['status']=='PAPER_ENTRY_INTENT':
+        last_available=observation.at
         for event in t['events']:
-            kind=event['event']
-            if kind=='fill_entry':trade.fill_entry(money(event['fill_price']),money(event['lots']))
-            elif kind=='quote':trade.quote(money(event['bid']),money(event['ask']),event['at'])
-            elif kind=='manage':
-                f=event['trigger'];trade.manage(event['label'],money(event['new_stop']),Fact(f['value'],f['known_at'],f['source']),event['at'])
-            elif kind=='close':trade.close(None if event.get('exit_fill') is None else money(event['exit_fill']),
-                                           None if event.get('actual_round_trip_fee') is None else money(event['actual_round_trip_fee']))
-            else:raise ValueError('Unknown local paper event; no generic dispatch')
+            available=event['known_at']
+            if type(available) is not int or available<last_available:
+                raise ValueError('annotated events require ascending explicit availability')
+            execution_event(trade,event,available)
+            last_available=available
     return {'final_state':trade.state,'trace':trade.trace,'orders_sent':0,'broker_connected':False}
 
 def run_document(document):

@@ -148,14 +148,9 @@
           15,
           2836,
           2897
-        ],
-        [
-          14,
-          3111,
-          3415
         ]
       ],
-      "input_fingerprint": "42fcf4426cec0281a9d2bd6f49f4a09d769a9885d1dcac942ebfe2b1bafca44f",
+      "input_fingerprint": "88290dce86ba3198542f3a5af1076ea9dcbeca79c2da26d474e6f063523b2edb",
       "order_created": false
     },
     {
@@ -174,14 +169,9 @@
           15,
           2836,
           2897
-        ],
-        [
-          14,
-          3111,
-          3415
         ]
       ],
-      "input_fingerprint": "2e3fd5c8dc47564d06b51d648de702fb7f3e743feeea5b2da247b1ddc04377f7",
+      "input_fingerprint": "255f7bd68169ac80e91f0032e9a863af2c1d66b304137714af31e9c80ed775da",
       "order_created": false
     },
     {
@@ -200,14 +190,9 @@
           15,
           2836,
           2897
-        ],
-        [
-          14,
-          3111,
-          3415
         ]
       ],
-      "input_fingerprint": "2e4e084c8a8c2629a3f1358314721179188dda264184ee7bdccc512864a9db2a",
+      "input_fingerprint": "bfb4253e2c314fa7df416e69926cbbd46fe80ec01d6dd066990f6d973d9f435e",
       "order_created": false
     },
     {
@@ -226,14 +211,9 @@
           15,
           2836,
           2897
-        ],
-        [
-          14,
-          3111,
-          3415
         ]
       ],
-      "input_fingerprint": "1253e768a4a24c1cb534d68e2a3b0d90372767c38292db55471515e39ca111db",
+      "input_fingerprint": "e071ec1d0b8c29ef8f37167c56318a2f2d9f2341d43fdedf921f30cf4fc4c403",
       "order_created": false
     },
     {
@@ -367,8 +347,9 @@
             "target": "108",
             "lots": "0.11",
             "risk_budget": "25",
-            "box_fingerprint": "2838f36d04bf2b5480c599be950650431bb0ecd96e66871323a6ecc4048d34aa",
-            "target_definition": "Explicit synthetic structural target, not a teacher default"
+            "box_fingerprint": "5fbc6755653065f6bc5666f9d311e8ab130af8af1a1548ffd5517e5b84408c90",
+            "target_definition": "Explicit synthetic structural target, not a teacher default",
+            "volume_policy": "RISK_BUDGET_SIZING"
           },
           "entry_decision": {
             "rule_id": "PULLBACK_STANDARD",
@@ -425,7 +406,10 @@
           },
           "modeled_loss": "24.200",
           "reason": "PAPER_FILL_RECORDED",
-          "realized_pnl": null
+          "realized_pnl": null,
+          "event_at": 100,
+          "event_known_at": 100,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "ACCEPT",
@@ -447,7 +431,10 @@
           "trigger_source": "SYNTHETIC_TRIGGER",
           "trigger_known_at": 101,
           "at": 101,
-          "realized_pnl": null
+          "realized_pnl": null,
+          "event_at": 101,
+          "event_known_at": 101,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "ACCEPT",
@@ -469,7 +456,10 @@
           "trigger_source": "SYNTHETIC_TRIGGER",
           "trigger_known_at": 102,
           "at": 102,
-          "realized_pnl": null
+          "realized_pnl": null,
+          "event_at": 102,
+          "event_known_at": 102,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "ACCEPT",
@@ -491,7 +481,10 @@
           "trigger_source": "SYNTHETIC_TRIGGER",
           "trigger_known_at": 103,
           "at": 103,
-          "realized_pnl": null
+          "realized_pnl": null,
+          "event_at": 103,
+          "event_known_at": 103,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "EXIT_TRIGGER",
@@ -502,7 +495,10 @@
           "quote_side": "BID",
           "at": 104,
           "realized_pnl": null,
-          "fill_assumed": false
+          "fill_assumed": false,
+          "event_at": 104,
+          "event_known_at": 104,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "UNKNOWN",
@@ -515,7 +511,10 @@
             "provenance": [
               "protected_float_not_realized_pnl"
             ]
-          }
+          },
+          "event_at": 105,
+          "event_known_at": 105,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         },
         {
           "status": "CLOSED",
@@ -529,7 +528,10 @@
             "provenance": [
               "protected_float_not_realized_pnl"
             ]
-          }
+          },
+          "event_at": 106,
+          "event_known_at": 106,
+          "event_source": "SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE"
         }
       ],
       "orders_sent": 0,

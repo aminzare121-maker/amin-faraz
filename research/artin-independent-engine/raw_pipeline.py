@@ -14,6 +14,8 @@ from entry_engine import Engine,Fact,Observation,RULE_IDS
 from raw_geometry import Candle,extract,geometry
 from teacher_features import candle_predicates
 from context_inputs import facts_as_of
+from zone_behavior import ZoneBehavior
+from punch_behavior import derive as derive_punch
 
 COMMON=('sentiment_permission','current_setup')
 FAMILY=('family_selection_context','trend_strength')
@@ -44,6 +46,8 @@ def read_csv(path,interval_seconds):
 
 def required_for(rule,facts):
     keys=list(COMMON)+([] if rule.startswith('STOPPUNCH_') else list(FAMILY))+list(REQUIRED[rule])
+    if rule.startswith('BREAK_') and facts.get('family_selection_context',Fact('',0,'DIAGNOSTIC')).value=='ZONE_CONTEXT':
+        keys=[k for k in keys if k!='trend_strength']
     if facts.get('sentiment_permission',Fact('',0,'DIAGNOSTIC')).value=='UNKNOWN':
         keys+=['direction_assessment','fixed_symbol_analysis','teacher_two_sided_branch_selected']
     if rule=='BREAK_STRONG':
@@ -63,20 +67,22 @@ class RawPipeline:
         self.engine=Engine(plan_id,tuple(allowed_rules));self.interval=interval_seconds
         self.source='CSV_SHA256:'+source_sha;self.contexts=tuple(contexts);self.bars=[]
         self.last_observations=MappingProxyType({})
+        self.branch_observations=MappingProxyType({});self.behavior=ZoneBehavior(interval_seconds,self.source)
         self.context_fingerprint=sha256(json.dumps([
             {'valid_from':c.valid_from,'valid_until':c.valid_until,'known_at':c.known_at,
              'source':c.source,'facts':{k:{'type':type(v).__name__,'value':str(v)} for k,v in sorted(c.facts.items())}}
             for c in self.contexts],sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 
-    def latest_observation(self,side):
+    def latest_observation(self,side,rule_id=None):
         if side not in ('BUY','SELL') or side not in self.last_observations:
             raise ValueError('processed raw candle and explicit side required')
-        return self.last_observations[side]
+        return self.branch_observations[(side,rule_id)] if rule_id is not None else self.last_observations[side]
 
     def step(self,bar):
         if not isinstance(bar,Candle):raise ValueError('Candle required')
         window=tuple(self.bars[-2:])+(bar,)
         raw=extract(window,at=bar.closed_at,interval_seconds=self.interval)
+        # Advance behaviour only after raw validation and context validation below.
         at=bar.closed_at
         supplied=facts_as_of(self.contexts,at)
         g=geometry(bar);predicates=candle_predicates(bar)
@@ -100,7 +106,9 @@ class RawPipeline:
         for k in generated.keys() & supplied.keys():
             if generated[k].value!=supplied[k].value:raise ValueError('context conflicts with measured fact: '+k)
         facts={**supplied,**generated}
-        decisions=[];observations={}
+        pending_behavior=self.behavior.fork()
+        behavior_events=pending_behavior.step(bar)
+        decisions=[];observations={};branch_observations={}
         for side,direction in (('BUY','UP'),('SELL','DOWN')):
             sf=dict(facts)
             # A downward fullbody above a level is not a BUY breakout candle.
@@ -110,24 +118,48 @@ class RawPipeline:
             if key in facts:sf['three_same_direction_sequence']=facts[key]
             o=Observation(side,at,sf);observations[side]=o
             for rule in self.engine.allowed_rules:
-                decision=self.engine.evaluate(rule,o)
-                required=required_for(rule,sf)
-                absent=[k for k in required if k not in sf]
-                future=[k for k in required if k in sf and sf[k].known_at>at]
+                rf=dict(sf);behavior_facts={};punch={};behavior_status='NOT_A_ZONE_BREAK_BRANCH'
+                if rule.startswith('BREAK_') and 'level_kind' not in supplied:
+                    behavior_facts,behavior_status=pending_behavior.reference_facts(behavior_events,side,at)
+                    for k,f in behavior_facts.items():
+                        if k in supplied and supplied[k].value!=f.value:raise ValueError('context conflicts with raw reference: '+k)
+                    rf.update(behavior_facts)
+                if rule in ('STOPPUNCH_DOJI_AHEAD','STOPPUNCH_DOJI_TIED'):
+                    if rule=='STOPPUNCH_DOJI_TIED':
+                        # Generic shape belongs to current candle, not the previous
+                        # pause. Explicit near-zero pause labels need timestamp binding.
+                        rf.pop('doji_confirmed',None)
+                    punch=derive_punch(rule,side,window,rf)
+                    for k,f in punch.items():
+                        if k in supplied and supplied[k].value!=f.value:raise ValueError('context conflicts with raw punch role: '+k)
+                    rf.update(punch);behavior_facts={**behavior_facts,**punch}
+                ro=Observation(side,at,rf);branch_observations[(side,rule)]=ro
+                decision=self.engine.evaluate(rule,ro)
+                required=required_for(rule,rf)
+                absent=[k for k in required if k not in rf]
+                future=[k for k in required if k in rf and rf[k].known_at>at]
                 decisions.append({**asdict(decision),'side':side,'missing_dependencies':absent,
                     'future_dependencies':future,'supplied_context_keys':sorted(supplied),
-                    'derived_required_keys':[k for k in required if k in generated or k=='three_same_direction_sequence' and key in facts],
-                    'context_required_keys':[k for k in required if k in supplied and k not in generated],
+                    'behavior_status':behavior_status,
+                    'derived_required_keys':[k for k in required if k in rf and (k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts)],
+                    'context_required_keys':[k for k in required if k in rf and k in supplied and k not in generated and k not in behavior_facts],
                     'dependency_facts':{k:{'value':f.value,'type':type(f.value).__name__,
                         'known_at':f.known_at,'source':f.source,
-                        'origin':'DERIVED_FROM_RAW' if k in generated or k=='three_same_direction_sequence' and key in facts else 'SOURCED_CONTEXT'}
-                        for k,f in sf.items() if k in required},
-                    'unresolved_reference_alternatives':(['zone_low+zone_high','line_level'] if rule=='BREAK_STRONG' and 'level_kind' not in sf else []),
+                        'origin':'DERIVED_MIXED' if k in punch else 'DERIVED_FROM_RAW' if k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts else 'SOURCED_CONTEXT'}
+                        for k,f in rf.items() if k in required},
+                    'behavior_parent_facts':{k:{'value':v.value,'known_at':v.known_at,'source':v.source}
+                        for k,v in supplied.items() if punch and k in ('day_correct_count','day_incorrect_count',
+                            'confirmation_region_low','confirmation_region_high','zone_low','zone_high',
+                            'reference_zone_validated','pause_doji_classified','pause_candle_opened_at')},
+                    'unresolved_reference_alternatives':(['zone_low+zone_high','line_level'] if rule=='BREAK_STRONG' and 'level_kind' not in rf else []),
                     'dependency_inventory_is_entry_coverage_not_proof_of_eligibility':True})
         self.bars.append(bar)
+        self.behavior=pending_behavior
         self.last_observations=MappingProxyType(observations)
+        self.branch_observations=MappingProxyType(branch_observations)
         return {'at':at,'bar_opened_at':bar.opened_at,'geometry':asdict(g),
                 'context_fingerprint':self.context_fingerprint,
+                'behavior_events':behavior_events,
                 'active_context_windows':[{'valid_from':c.valid_from,'valid_until':c.valid_until,
                     'known_at':c.known_at,'source':c.source} for c in self.contexts
                     if c.known_at<=at and c.valid_from<=at<c.valid_until],

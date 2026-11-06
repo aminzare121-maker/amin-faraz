@@ -129,7 +129,7 @@ class Engine:
           sort_keys=True,ensure_ascii=False).encode()).hexdigest()
         sources=list(SOURCES.get(rule_id,()))
         if 'current_setup' in reader.used:sources.append((15,2836,2897))
-        if 'family_selection_context' in reader.used:sources.append((14,3111,3415))
+        if 'trend_strength' in reader.used:sources.append((14,3111,3415))
         if 'teacher_prz_exception_confirmed' in reader.used:sources.append((15,3443,3512))
         if 'direction_assessment' in reader.used:sources.extend(((9,253,278.12),(9,363.64,387.96),(9,591.16,640)))
         return Decision(rule_id,status,reasons,tuple(sources),fingerprint)
@@ -139,6 +139,10 @@ class Engine:
         # It is not imposed on the separately introduced personal StopPunch models.
         if rule.startswith('STOPPUNCH_'):return
         context=r.label('family_selection_context',('TRENDLINE_ONLY','ZONE_CONTEXT'))
+        if context=='ZONE_CONTEXT' and rule.startswith('BREAK_'):
+            # S21:2387..2649 is the local zone-break candle branch. Do not add
+            # the separate trendline-strength selector as another global veto.
+            return
         strength=r.label('trend_strength',('WEAK','NORMAL','STRONG','NO_CONFIRMED_TREND'))
         reversal=rule.startswith('REVERSAL_')
         if reversal and strength=='STRONG':

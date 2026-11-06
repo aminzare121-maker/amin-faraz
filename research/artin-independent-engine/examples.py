@@ -35,4 +35,9 @@ def demo_document():
         {'event':'quote','bid':'108','ask':'108.2','at':104},
         {'event':'close','exit_fill':'108','actual_round_trip_fee':None},
         {'event':'close','exit_fill':'108','actual_round_trip_fee':'1.1'}]}
+    # Explicit synthetic fixture evidence; never inferred for user input events.
+    for index,event in enumerate(document['cases'][0]['paper_trade']['events']):
+        event.setdefault('at',100+index)
+        event['known_at']=event['at']
+        event['source']='SYNTHETIC_EXECUTION_EVENT_NOT_MARKET_EVIDENCE'
     return document

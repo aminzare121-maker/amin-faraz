@@ -20,6 +20,7 @@ class TradeMachine:
         self._box_fp,self._engine_fp=box.fingerprint,engine.fingerprint
         self._contract=instrument,costs
         self.state='NEW';self.trace=[];self.plan=None;self.fill=None;self.last_at=None;self.exit_fill=None
+        self.modeled_exposure=None;self.budget_overrun=False
 
     def _event(self,status,**fields):
         result=dict(status=status,state=self.state,order_created=False,**fields)
@@ -83,6 +84,8 @@ class TradeMachine:
         distance=sign*(fill_price-self.plan['stop'])
         modeled_loss=((distance+self.costs.adverse_price_allowance)*self.instrument.money_per_price_unit_per_lot+self.costs.round_trip_fee_per_lot)*lots
         invalid=distance<=0 or sign*(self.plan['target']-fill_price)<=0 or modeled_loss>self.plan['risk_budget']
+        self.modeled_exposure=max(Decimal(0),modeled_loss)
+        self.budget_overrun=modeled_loss>self.plan['risk_budget']
         self.state='OPEN_REVIEW' if invalid else 'OPEN'
         return self._event(self.state,fill=self.fill.copy(),modeled_loss=modeled_loss,
                            reason='FILL_RECORDED_REQUIRES_REVIEW' if invalid else 'PAPER_FILL_RECORDED',realized_pnl=None)
@@ -104,6 +107,8 @@ class TradeMachine:
     def manage(self,label,new_stop,trigger,at):
         self._fixed();self._time(at)
         if self.state not in ('OPEN','OPEN_REVIEW'):raise ValueError('open paper trade required')
+        if label=='fulltarget':
+            return self._event('REJECT',reason='FULLTARGET_IS_EXIT_OUTCOME_NOT_STOP_MOVE')
         if label not in self.box.management_choices:
             return self._event('REJECT',reason='MANAGEMENT_NOT_IN_FIXED_BOX')
         if not isinstance(trigger,Fact) or trigger.value is not True or trigger.known_at>at:
@@ -126,3 +131,40 @@ class TradeMachine:
             self.state='CLOSED_PENDING_COST'
         if result['status']=='CLOSED':self.state='CLOSED'
         return self._event(result['status'],accounting=result)
+
+def execution_event(trade,event,available_at,fill_lots=None):
+    """Shared timed/source-checked offline dispatch, never inventing fill evidence.
+
+    available_at is coordinator clock; event at is occurrence and known_at is
+    availability. Both paths require all three explicit timestamps/source fields.
+    """
+    def moment(v):
+        if type(v) is not int or v<0:raise ValueError('explicit nonnegative event time required')
+        return v
+    def exact(v):
+        if type(v) not in (str,int,Decimal):raise ValueError('exact event decimal required')
+        n=Decimal(v)
+        if not n.is_finite():raise ValueError('finite event decimal required')
+        return n
+    at=moment(event['at']);known=moment(event['known_at']);moment(available_at)
+    if known<at or known>available_at:raise ValueError('event availability inconsistent with coordinator clock')
+    source=event['source']
+    if not isinstance(source,str) or not source.strip():raise ValueError('execution event source required')
+    trade._time(at)
+    kind=event['event']
+    if kind=='fill_entry':
+        lots=exact(event['lots']) if fill_lots is None else fill_lots
+        r=trade.fill_entry(exact(event['fill_price']),lots)
+    elif kind=='quote':r=trade.quote(exact(event['bid']),exact(event['ask']),at)
+    elif kind=='manage':
+        trigger=event['trigger']
+        f=Fact(trigger['value'],trigger['known_at'],trigger['source']) if isinstance(trigger,dict) else Fact(trigger,known,source)
+        r=trade.manage(event['label'],exact(event['new_stop']),f,at)
+    elif kind=='close':
+        r=trade.close(None if event.get('exit_fill') is None else exact(event['exit_fill']),
+                      None if event.get('actual_round_trip_fee') is None else exact(event['actual_round_trip_fee']))
+    else:raise ValueError('unsupported execution event')
+    trade.last_at=at
+    metadata=dict(event_at=at,event_known_at=known,event_source=source)
+    r.update(metadata);trade.trace[-1].update(metadata)
+    return r

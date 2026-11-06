@@ -29,4 +29,8 @@ def candle_predicates(candle):
         'doubt_shape':Predicate(doubt,'BODY_VS_BOTH_SHADOW_READINGS',BODY_SHADOW),
         'fullbody_or_marubozu':Predicate(fullbody,'EXACT_NO_SHADOW_SUBSET_NOT_A_TOLERANCE',((21,2299,2307),(21,2345,2375))),
         'doji_confirmed':Predicate(doji,'EXACT_ZERO_BODY_SUBSET_NOT_NEAR_ZERO_CLASSIFIER',((21,3829.5,3848.5),)),
+        'marubozu_buy_form':Predicate(g.color=='UP' and g.lower_wick==0 and g.upper_wick>0,
+            'FORM_ONLY_GOOD_BODY_AND_RELATIVE_STRENGTH_NOT_ASSUMED',((21,2572.26,2613.38),)),
+        'marubozu_sell_form':Predicate(g.color=='DOWN' and g.upper_wick==0 and g.lower_wick>0,
+            'FORM_ONLY_GOOD_BODY_AND_RELATIVE_STRENGTH_NOT_ASSUMED',((21,2510.78,2572.26),)),
     }

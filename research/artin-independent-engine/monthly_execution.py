@@ -7,7 +7,7 @@ Missing specs block execution transparently rather than fabricate zero PnL.
 from decimal import Decimal
 from capital import Instrument,Costs,BoxPlan
 from entry_engine import Fact
-from trade_machine import TradeMachine
+from trade_machine import TradeMachine,execution_event
 
 def exact(v,positive=False):
     if type(v) not in (str,int,Decimal):raise ValueError('exact decimal required')
@@ -43,12 +43,26 @@ class MonthlyExecutor:
         r={'kind':kind,**values};self.records.append(r);return r
 
     def _reserved(self):
-        return sum((t.plan['risk_budget'] for t in self.trades.values() if t.state!='CLOSED'),Decimal(0))
+        return sum((max(t.plan['risk_budget'],t.modeled_exposure or Decimal(0))
+                    for t in self.trades.values() if t.state!='CLOSED'),Decimal(0))
 
     def accept(self,decision,observation):
         if self.finished:raise ValueError('replay already finished')
         if decision.status!='ELIGIBLE':return None
+        if self.last_at is not None and observation.at<self.last_at:
+            raise ValueError('entry observation precedes coordinator clock')
+        # Reconcile already available events before allocating another budget.
+        self.advance(observation.at)
         self.accepted_decisions+=1
+        if any(t.state in ('OPEN_REVIEW','CLOSED_PENDING_COST') and t.budget_overrun for t in self.trades.values()):
+            return self._record('EXECUTION_BLOCKED',at=observation.at,side=observation.side,
+                rule_id=decision.rule_id,reason='OVERBUDGET_FILL_REQUIRES_EXPLICIT_RECONCILIATION')
+        if any(t.state=='CLOSED_PENDING_COST' for t in self.trades.values()):
+            return self._record('EXECUTION_BLOCKED',at=observation.at,side=observation.side,
+                rule_id=decision.rule_id,reason='EXIT_COST_RECONCILIATION_REQUIRED')
+        if any(t.state=='OPEN_REVIEW' for t in self.trades.values()):
+            return self._record('EXECUTION_BLOCKED',at=observation.at,side=observation.side,
+                rule_id=decision.rule_id,reason='INVALID_FILL_REQUIRES_RECONCILIATION')
         key=(observation.at,observation.side,decision.rule_id);s=self.specs.get(key)
         if s is None:return self._record('EXECUTION_BLOCKED',at=observation.at,side=observation.side,
             rule_id=decision.rule_id,reason='MISSING_SOURCE_BACKED_EXECUTION_SPEC')
@@ -90,15 +104,7 @@ class MonthlyExecutor:
                 continue
             if e['at']<t.last_at:raise ValueError('execution event precedes known trade history')
             k=e['event']
-            if k=='fill_entry':r=t.fill_entry(exact(e['fill_price'],True),self.lots)
-            elif k=='quote':r=t.quote(exact(e['bid'],True),exact(e['ask'],True),e['at'])
-            elif k=='manage':
-                r=t.manage(e['label'],exact(e['new_stop'],True),Fact(e['trigger'],e['known_at'],e['source']),e['at'])
-            elif k=='close':r=t.close(None if e.get('exit_fill') is None else exact(e['exit_fill'],True),
-                None if e.get('actual_round_trip_fee') is None else exact(e['actual_round_trip_fee']))
-            else:raise ValueError('unsupported execution event')
-            # fill/close methods have no clock argument; the coordinator enforces it.
-            t.last_at=e['at']
+            r=execution_event(t,e,at,fill_lots=self.lots)
             if t.state=='CLOSED' and e['trade_id'] not in self.closed_ids:
                 self.cash+=r['accounting']['net_pnl'];self.closed_ids.add(e['trade_id'])
             self._record('EXECUTION_EVENT',trade_id=e['trade_id'],at=e['at'],known_at=e['known_at'],
