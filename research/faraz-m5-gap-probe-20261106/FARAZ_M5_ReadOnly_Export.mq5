@@ -140,6 +140,22 @@ void ProbeOne(int gap_id, string target_label)
 
 void OnStart()
 {
+   // Fail closed before creating outputs or requesting broker history.
+   string broker=AccountInfoString(ACCOUNT_COMPANY);
+   StringToLower(broker);
+   if(AccountInfoInteger(ACCOUNT_TRADE_MODE)!=ACCOUNT_TRADE_MODE_DEMO ||
+      StringFind(broker,"eplanet")<0 || InpSymbol!="XAUUSD.st")
+   {
+      Print("FARAZ_ABORT: requires Eplanet DEMO and exact XAUUSD.st. No requests made.");
+      return;
+   }
+   if(FileIsExist("FARAZ_probe_M15.csv",FILE_COMMON) ||
+      FileIsExist("FARAZ_probe_M5.csv",FILE_COMMON) ||
+      FileIsExist("FARAZ_probe_export_log.txt",FILE_COMMON))
+   {
+      Print("FARAZ_ABORT: archive prior Common Files outputs privately before a new run.");
+      return;
+   }
    if(SymbolInfoInteger(InpSymbol,SYMBOL_SELECT)==0)
    {
       Print("FARAZ_ABORT: exact symbol is not already selected in Market Watch: ",InpSymbol,". No symbol/settings modified.");

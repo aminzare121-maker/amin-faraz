@@ -1,0 +1,27 @@
+{
+  "M15": {
+    "raw_rows": 23735,
+    "invalid_ohlc": 0,
+    "duplicates": 0,
+    "zero_or_negative_tick_volume": 0,
+    "out_of_order": 0,
+    "binary_csv_exact": true
+  },
+  "M5": {
+    "raw_rows": 70974,
+    "invalid_ohlc": 0,
+    "duplicates": 0,
+    "zero_or_negative_tick_volume": 0,
+    "out_of_order": 0,
+    "binary_csv_exact": true
+  },
+  "missing_slots_m5_histogram": {
+    "0": 11397
+  },
+  "present_m15_m5_histogram": {
+    "3": 23514,
+    "2": 211,
+    "1": 10
+  },
+  "all_checks_passed": true
+}

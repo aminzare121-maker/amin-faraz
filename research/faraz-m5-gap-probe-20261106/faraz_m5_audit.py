@@ -30,7 +30,7 @@ def parse_dt(v: str) -> datetime:
     except ValueError as e: raise ValueError(f"unrecognised or timezone-bearing timestamp: {v}") from e
 
 
-def load_bars(path: Path, expected_symbol: str) -> dict[datetime,dict]:
+def load_bars(path: Path, expected_symbol: str, period_minutes: int | None = None) -> dict[datetime,dict]:
     out = {}
     with path.open(encoding="utf-8-sig",newline="") as f:
         reader=csv.DictReader(f)
@@ -44,6 +44,8 @@ def load_bars(path: Path, expected_symbol: str) -> dict[datetime,dict]:
             if symkey and row.get(symkey,"" ).strip()!=expected_symbol:
                 raise ValueError(f"symbol mismatch in {path.name} line {line}: {row.get(symkey)}")
             t=parse_dt(row[tm])
+            if period_minutes and (t.second or t.microsecond or t.minute % period_minutes):
+                raise ValueError(f"off-grid timestamp in {path.name} line {line}")
             try: r={p:Decimal(row[columns[p]]) for p in FIELDS}
             except (InvalidOperation,TypeError,KeyError) as e: raise ValueError(f"bad OHLC in {path.name} line {line}") from e
             if not all(v.is_finite() and v>0 for v in r.values()) or r["high"]<max(r["open"],r["close"]) or r["low"]>min(r["open"],r["close"]):
@@ -73,7 +75,7 @@ def calibration(m15:dict, m5:dict, tolerance:Decimal, min_checks:int=100):
         candidates=[candidates[i] for i in indices]
     good=sum(matched(m15[t],aggregate(t,m5),tolerance) for t in candidates)
     checked=len(candidates)
-    aligned=checked>=min_checks and good>=int(0.98*checked+0.999999)
+    aligned=checked>=max(100,min_checks) and good==checked
     return {"checked":checked,"matched":good,"mismatch":checked-good,"min_required":min_checks,"verified":aligned,
             "note":"Matches same-export M15 and M5 internally; does NOT verify match to old raw SDK timestamp labels or historical trading hours."}
 
@@ -113,9 +115,11 @@ def main():
     ap.add_argument("--min-checks",type=int,default=100)
     ap.add_argument("--tolerance",type=Decimal,default=Decimal("0.001"))
     args=ap.parse_args()
-    if args.min_checks<1:ap.error("min-checks must be positive")
-    m15=load_bars(args.m15,args.symbol)
-    m5=load_bars(args.m5,args.symbol)
+    if args.min_checks<100:ap.error("min-checks must be at least 100")
+    if not args.tolerance.is_finite() or args.tolerance < 0:
+        ap.error("tolerance must be finite and non-negative")
+    m15=load_bars(args.m15,args.symbol,15)
+    m5=load_bars(args.m5,args.symbol,5)
     c=calibration(m15,m5,args.tolerance,args.min_checks)
     if args.mode=="probe": gaps=[(i,parse_dt(t)) for i,t in TARGETS]
     elif args.gap_csv:gaps=gaps_from_csv(args.gap_csv)
@@ -130,7 +134,7 @@ def main():
         if t in m15:
             status="M15_PRESENT_IN_NEW_EXPORT"
         elif len(available)==3 and c["verified"]:
-            status="M5_3_OF_3_VERIFIED_SAME_EXPORT"
+            status="M5_3_OF_3_INTERNAL_MATCH_OLD_SOURCE_UNVERIFIED"
         elif len(available)==3:
             status="M5_3_OF_3_BLOCKED_ALIGNMENT"
         elif 0<len(available)<3:
@@ -142,13 +146,20 @@ def main():
             status="M5_0_WITH_LOCAL_NEIGHBORS" if before and after else "M5_HISTORY_UNAVAILABLE_OR_MARKET_CLOSED_UNKNOWN"
         counts[status]+=1
         items.append({"gap_id":gid,"time_source_label":t.isoformat(),"status":status,"m5_present":len(available),"m5_times":[x.isoformat() for x in available]})
-        if status=="M5_3_OF_3_VERIFIED_SAME_EXPORT":
-            recovered.append({"gap_id":gid,"time":t.isoformat(),"open":str(cand["open"]),"high":str(cand["high"]),"low":str(cand["low"]),"close":str(cand["close"]),"origin":"RECOVERED_FROM_M5_RESEARCH_ONLY"})
+        if cand is not None:
+            recovered.append({"gap_id":gid,"time":t.isoformat(),"open":str(cand["open"]),"high":str(cand["high"]),"low":str(cand["low"]),"close":str(cand["close"]),"origin":"M5_AGGREGATE_CANDIDATE_OLD_SOURCE_UNVERIFIED"})
     args.out.mkdir(parents=True,exist_ok=True)
+    # Do not leave a successful-looking recovery from an earlier invocation.
+    for name in ("faraz_m5_recovered_PRIVATE.csv", "faraz_m5_candidates_PRIVATE.csv"):
+        (args.out/name).unlink(missing_ok=True)
     def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
     metadata={"status":"OFFLINE_DIAGNOSTIC_ONLY", "symbol":args.symbol, "mode":args.mode,
               "m15_count":len(m15),"m5_count":len(m5),"target_slots":len(gaps),"classification_counts":dict(counts),
-              "calibration":c,
+              "calibration":c,"old_source_alignment_verified":False,"verified_recoverable_count":None,
+              "coverage":{"m15_first":min(m15).isoformat() if m15 else None,
+                          "m15_last":max(m15).isoformat() if m15 else None,
+                          "m5_first":min(m5).isoformat() if m5 else None,
+                          "m5_last":max(m5).isoformat() if m5 else None},
               "sources":{"m15_sha256":sha(args.m15),"m5_sha256":sha(args.m5)},
               "cautions":["Read-only export of same symbol/account must be confirmed by owner.",
                           "Verified refers only to internal M5/M15 OHLC consistency in this export; not old raw SDK labels.",
@@ -157,7 +168,7 @@ def main():
               "slots":items}
     (args.out/"faraz_m5_audit_report.json").write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding="utf-8")
     if recovered:
-        with (args.out/"faraz_m5_recovered_PRIVATE.csv").open("w",encoding="utf-8-sig",newline="") as f:
+        with (args.out/"faraz_m5_candidates_PRIVATE.csv").open("w",encoding="utf-8-sig",newline="") as f:
             w=csv.DictWriter(f,fieldnames=list(recovered[0]));w.writeheader();w.writerows(recovered)
     print(json.dumps({k:v for k,v in metadata.items() if k!="slots"},ensure_ascii=False,indent=2))
     print("Two targets:")
