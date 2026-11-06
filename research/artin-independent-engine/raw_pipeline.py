@@ -16,6 +16,7 @@ from teacher_features import candle_predicates
 from context_inputs import facts_as_of
 from zone_behavior import ZoneBehavior
 from punch_behavior import derive as derive_punch
+from pullback_bridge import ClosedPullbackBridge
 
 COMMON=('sentiment_permission','current_setup')
 FAMILY=('family_selection_context','trend_strength')
@@ -60,14 +61,17 @@ def required_for(rule,facts):
     return tuple(dict.fromkeys(keys))
 
 class RawPipeline:
-    def __init__(self,plan_id,allowed_rules,interval_seconds,source_sha,contexts=()):
+    def __init__(self,plan_id,allowed_rules,interval_seconds,source_sha,contexts=(),direction_plan=None):
         if type(interval_seconds) is not int or interval_seconds<=0:raise ValueError('explicit interval required')
         if not isinstance(source_sha,str) or len(source_sha)!=64 or any(c not in '0123456789abcdef' for c in source_sha):
             raise ValueError('CSV SHA256 required')
         self.engine=Engine(plan_id,tuple(allowed_rules));self.interval=interval_seconds
         self.source='CSV_SHA256:'+source_sha;self.contexts=tuple(contexts);self.bars=[]
+        self.direction_plan=direction_plan
+        self.direction_plan_fingerprint=None if direction_plan is None else direction_plan.fingerprint
         self.last_observations=MappingProxyType({})
         self.branch_observations=MappingProxyType({});self.behavior=ZoneBehavior(interval_seconds,self.source)
+        self.pullbacks=ClosedPullbackBridge(interval_seconds,self.source)
         self.context_fingerprint=sha256(json.dumps([
             {'valid_from':c.valid_from,'valid_until':c.valid_until,'known_at':c.known_at,
              'source':c.source,'facts':{k:{'type':type(v).__name__,'value':str(v)} for k,v in sorted(c.facts.items())}}
@@ -85,6 +89,12 @@ class RawPipeline:
         # Advance behaviour only after raw validation and context validation below.
         at=bar.closed_at
         supplied=facts_as_of(self.contexts,at)
+        context_keys=tuple(supplied)
+        if (None if self.direction_plan is None else self.direction_plan.fingerprint)!=self.direction_plan_fingerprint:
+            raise ValueError('predeclared direction plan changed during replay')
+        policy={} if self.direction_plan is None else self.direction_plan.derive(supplied,at)
+        original_direction=supplied.get('sentiment_permission')
+        supplied={**supplied,**policy}
         g=geometry(bar);predicates=candle_predicates(bar)
         source=self.source+':'+str(bar.opened_at)
         generated={
@@ -108,6 +118,8 @@ class RawPipeline:
         facts={**supplied,**generated}
         pending_behavior=self.behavior.fork()
         behavior_events=pending_behavior.step(bar)
+        pending_pullbacks=self.pullbacks.fork()
+        pullback_events=pending_pullbacks.step(bar,behavior_events)
         decisions=[];observations={};branch_observations={}
         for side,direction in (('BUY','UP'),('SELL','DOWN')):
             sf=dict(facts)
@@ -139,13 +151,14 @@ class RawPipeline:
                 absent=[k for k in required if k not in rf]
                 future=[k for k in required if k in rf and rf[k].known_at>at]
                 decisions.append({**asdict(decision),'side':side,'missing_dependencies':absent,
-                    'future_dependencies':future,'supplied_context_keys':sorted(supplied),
+                    'future_dependencies':future,'supplied_context_keys':sorted(context_keys),
                     'behavior_status':behavior_status,
                     'derived_required_keys':[k for k in required if k in rf and (k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts)],
-                    'context_required_keys':[k for k in required if k in rf and k in supplied and k not in generated and k not in behavior_facts],
+                    'context_required_keys':[k for k in required if k in rf and k in supplied and k not in policy and k not in generated and k not in behavior_facts],
+                    'policy_required_keys':[k for k in required if k in rf and k in policy],
                     'dependency_facts':{k:{'value':f.value,'type':type(f.value).__name__,
                         'known_at':f.known_at,'source':f.source,
-                        'origin':'DERIVED_MIXED' if k in punch else 'DERIVED_FROM_RAW' if k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts else 'SOURCED_CONTEXT'}
+                        'origin':'DECLARED_RESEARCH_POLICY' if k in policy else 'DERIVED_MIXED' if k in punch else 'DERIVED_FROM_RAW' if k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts else 'SOURCED_CONTEXT'}
                         for k,f in rf.items() if k in required},
                     'behavior_parent_facts':{k:{'value':v.value,'known_at':v.known_at,'source':v.source}
                         for k,v in supplied.items() if punch and k in ('day_correct_count','day_incorrect_count',
@@ -155,11 +168,16 @@ class RawPipeline:
                     'dependency_inventory_is_entry_coverage_not_proof_of_eligibility':True})
         self.bars.append(bar)
         self.behavior=pending_behavior
+        self.pullbacks=pending_pullbacks
         self.last_observations=MappingProxyType(observations)
         self.branch_observations=MappingProxyType(branch_observations)
         return {'at':at,'bar_opened_at':bar.opened_at,'geometry':asdict(g),
                 'context_fingerprint':self.context_fingerprint,
+                'direction_plan':None if self.direction_plan is None else self.direction_plan.serialize(),
+                'original_direction_evidence':None if original_direction is None else {'value':original_direction.value,
+                    'known_at':original_direction.known_at,'source':original_direction.source},
                 'behavior_events':behavior_events,
+                'pullback_core_candidates':pullback_events,
                 'active_context_windows':[{'valid_from':c.valid_from,'valid_until':c.valid_until,
                     'known_at':c.known_at,'source':c.source} for c in self.contexts
                     if c.known_at<=at and c.valid_from<=at<c.valid_until],

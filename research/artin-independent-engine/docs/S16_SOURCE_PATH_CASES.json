@@ -1,0 +1,165 @@
+{
+  "scope": "MANUALLY_ANNOTATED_TEACHER_SCHEMATIC_PATHS_NOT_RAW_MARKET_BARS",
+  "source_refs": [
+    [
+      16,
+      615,
+      708.12
+    ],
+    [
+      16,
+      780.16,
+      854.76
+    ],
+    [
+      16,
+      1065.72,
+      1109.76
+    ]
+  ],
+  "same_edit_group_not_independent_validation": true,
+  "source_role": "drawn hypothetical paths on FXCM chart, not broker fills",
+  "measurement_note": "Reference rows/line points checked against local source pixels; hand-placed vertices approximate. No literal strategy threshold inferred from pixels.",
+  "cases": [
+    {
+      "id": "S16_BUY_HORIZONTAL_FRAME780",
+      "source": "S16_VIDEO_FRAME:780:MANUAL_SCHEMATIC_ANNOTATION",
+      "source_frame_sha256": "740da7311ecda395d11906e94e64e59394c0a82b07158e29cbef4e0a8334015c",
+      "source_seconds": 780,
+      "side": "BUY",
+      "group": "S16_SAME_BUY_DRAWING_EDITS",
+      "reference": {
+        "anchor_at": 524,
+        "anchor_price": "545",
+        "known_at": 524
+      },
+      "points": [
+        {
+          "at": 548,
+          "price": "468",
+          "image_x": 548,
+          "image_y": 532
+        },
+        {
+          "at": 583,
+          "price": "580",
+          "image_x": 583,
+          "image_y": 420
+        },
+        {
+          "at": 598,
+          "price": "550",
+          "image_x": 598,
+          "image_y": 450
+        },
+        {
+          "at": 620,
+          "price": "590",
+          "image_x": 620,
+          "image_y": 410
+        }
+      ],
+      "units": "1000_MINUS_IMAGE_Y_NOT_USD",
+      "coordinate_domain": "IMAGE_X_NOT_MARKET_TIME",
+      "manual_vertical_uncertainty_px": 2,
+      "market_ohlc": false,
+      "complete_teacher_trade": false,
+      "expected": "S16_CORE_PATH_CONFIRMATION_ONLY",
+      "later_exception_scope_unresolved": true
+    },
+    {
+      "id": "S16_BUY_HORIZONTAL_FRAME670",
+      "source": "S16_VIDEO_FRAME:670:MANUAL_SCHEMATIC_ANNOTATION",
+      "source_frame_sha256": "9f1243d9070289dd89e2c5da6c362713fdc91bfd26fc7815ab396fd9a812c9eb",
+      "source_seconds": 670,
+      "side": "BUY",
+      "group": "S16_SAME_BUY_DRAWING_EDITS",
+      "reference": {
+        "anchor_at": 432,
+        "anchor_price": "485",
+        "known_at": 432
+      },
+      "points": [
+        {
+          "at": 451,
+          "price": "410",
+          "image_x": 451,
+          "image_y": 590
+        },
+        {
+          "at": 491,
+          "price": "520",
+          "image_x": 491,
+          "image_y": 480
+        },
+        {
+          "at": 509,
+          "price": "491",
+          "image_x": 509,
+          "image_y": 509
+        },
+        {
+          "at": 558,
+          "price": "608",
+          "image_x": 558,
+          "image_y": 392
+        }
+      ],
+      "units": "1000_MINUS_IMAGE_Y_NOT_USD",
+      "coordinate_domain": "IMAGE_X_NOT_MARKET_TIME",
+      "manual_vertical_uncertainty_px": 2,
+      "market_ohlc": false,
+      "complete_teacher_trade": false,
+      "expected": "S16_CORE_PATH_CONFIRMATION_ONLY",
+      "later_exception_scope_unresolved": true
+    },
+    {
+      "id": "S16_SELL_TRENDLINE_FRAME1080",
+      "source": "S16_VIDEO_FRAME:1080:MANUAL_SCHEMATIC_ANNOTATION",
+      "source_frame_sha256": "aa6b5740d9f278cea051223932174acdce2e2d36a526e561ee2e00afb1f62002",
+      "source_seconds": 1080,
+      "side": "SELL",
+      "group": "S16_SELL_TRENDLINE_DRAWING",
+      "reference": {
+        "anchor_at": 178,
+        "anchor_price": "469",
+        "second_at": 280,
+        "second_price": "505",
+        "known_at": 280
+      },
+      "points": [
+        {
+          "at": 281,
+          "price": "589",
+          "image_x": 281,
+          "image_y": 411
+        },
+        {
+          "at": 328,
+          "price": "493",
+          "image_x": 328,
+          "image_y": 507
+        },
+        {
+          "at": 346,
+          "price": "525",
+          "image_x": 346,
+          "image_y": 475
+        },
+        {
+          "at": 365,
+          "price": "474",
+          "image_x": 365,
+          "image_y": 526
+        }
+      ],
+      "units": "1000_MINUS_IMAGE_Y_NOT_USD",
+      "coordinate_domain": "IMAGE_X_NOT_MARKET_TIME",
+      "manual_vertical_uncertainty_px": 2,
+      "market_ohlc": false,
+      "complete_teacher_trade": false,
+      "expected": "S16_CORE_PATH_CONFIRMATION_ONLY",
+      "later_exception_scope_unresolved": true
+    }
+  ]
+}
