@@ -1,0 +1,30 @@
+{
+  "session": 21,
+  "rule_status": "SAME_COLOUR_OWN_CLOSE_FRAGMENT_TEXT_SUPPORTED_FULL_MAPPING_OPEN",
+  "segments": 27,
+  "cpu_threads": 1,
+  "source_video_available": false,
+  "elapsed_decode_seconds": 201.7,
+  "priority": {
+    "idle_request_succeeded": true,
+    "actual_priority_class": 64
+  },
+  "settings": {
+    "language": "fa",
+    "beam_size": 5,
+    "vad_filter": false,
+    "condition_on_previous_text": true,
+    "temperature": 0,
+    "word_timestamps": true
+  },
+  "source_interval": [
+    4597,
+    4661
+  ],
+  "pcm_sha256": "fcf205ffb2475b58348d9b2925416360dfc3aaef93951d958b97a8a2357e27b8",
+  "repeated_generated_tail_excluded_from_extra_evidence": true,
+  "model_snapshot": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+  "private_result_sha256": "a52dba23b1991c4fb90e70bcdf95391dc56907e889ee4ad4206eda18342dd56e",
+  "direct_audio_verified": false,
+  "raw_asr_published": false
+}

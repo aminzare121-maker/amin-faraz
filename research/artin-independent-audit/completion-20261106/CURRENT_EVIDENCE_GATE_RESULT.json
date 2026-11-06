@@ -1,0 +1,49 @@
+{
+  "scope": "Execution of existing evidence checker, not a new strategy, backtest or new test suite",
+  "gate_source_sha256": "8c8a4dc94c09ff88a3c372a5321dbe9be422d2db89bf30b399cf76faea691243",
+  "candidate": {
+    "source": {
+      "session": 23,
+      "start_seconds": 4690,
+      "end_seconds": 4735,
+      "symbol": "XAGUSD (OANDA chart)",
+      "timeframe": "M15"
+    },
+    "evidence": {
+      "original_audio_verified": false,
+      "same_time_frame_verified": true,
+      "same_symbol_and_timeframe_verified": true,
+      "audio_sha256": "835da54eb50ed41a7db2d8631fa4f9fc9406e1449d9a4bce18a7130603858a2f",
+      "frame_sha256": "044d467109e61f806efc1e4843b283ad6fe6740f99526c7df81199110c337c7b"
+    },
+    "definitions": {
+      "pivot_confirmation": null,
+      "trend_definition": null,
+      "entry_trigger": null,
+      "stop_placement": null,
+      "target_or_exit": null,
+      "invalidation": null,
+      "exceptions": null
+    },
+    "causal_availability_defined": false,
+    "derived_from_outcome": false,
+    "annotation": "Conditional between-preexisting-zones admission is text-supported; a full causal rule is not defined."
+  },
+  "result": {
+    "research_evidence_complete": false,
+    "reasons": [
+      "ORIGINAL_AUDIO_VERIFIED_REQUIRED",
+      "PIVOT_CONFIRMATION_UNDEFINED",
+      "TREND_DEFINITION_UNDEFINED",
+      "ENTRY_TRIGGER_UNDEFINED",
+      "STOP_PLACEMENT_UNDEFINED",
+      "TARGET_OR_EXIT_UNDEFINED",
+      "INVALIDATION_UNDEFINED",
+      "EXCEPTIONS_UNDEFINED",
+      "CAUSAL_TIMING_UNDEFINED"
+    ],
+    "engine_ready": false,
+    "orders_authorized": false,
+    "profitability_verified": false
+  }
+}
