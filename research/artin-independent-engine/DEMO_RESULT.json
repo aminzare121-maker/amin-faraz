@@ -1,0 +1,544 @@
+{
+  "mode": "ANNOTATED_OFFLINE",
+  "plan_fingerprint": "520d60780de75227b1db84e44bc54fbcde8d5759c3177c160ed2770354dbe035",
+  "synthetic_only": true,
+  "decisions": [
+    {
+      "rule_id": "PULLBACK_STANDARD",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          16,
+          615,
+          854
+        ],
+        [
+          16,
+          1003,
+          1109
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "2eea92e1d0d236b8bb7e8c885565b3ef6aaa764729df99fec6f3eec5afc3173b",
+      "order_created": false
+    },
+    {
+      "rule_id": "REVERSAL_CLASSIC",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          20,
+          2188.86,
+          2306.84
+        ],
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "4909d1c11a4c915c9c4a72b46550de79e093e6f4cc6c95fa8b824ece1280d84a",
+      "order_created": false
+    },
+    {
+      "rule_id": "REVERSAL_THREE",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "fa9a312095fae1c5fa470d474dac8199a09aa3256f824a9e6fca675e4e9e3f98",
+      "order_created": false
+    },
+    {
+      "rule_id": "REVERSAL_STAR",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          20,
+          4117.72,
+          4483.72
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "7f92b8ea93c2db04e811dd1f2da10bd28fdea26659457324b0f01db218787bae",
+      "order_created": false
+    },
+    {
+      "rule_id": "BREAK_STRONG",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          2105.04,
+          2261
+        ],
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "42fcf4426cec0281a9d2bd6f49f4a09d769a9885d1dcac942ebfe2b1bafca44f",
+      "order_created": false
+    },
+    {
+      "rule_id": "BREAK_WEAK_PIVOT",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "2e3fd5c8dc47564d06b51d648de702fb7f3e743feeea5b2da247b1ddc04377f7",
+      "order_created": false
+    },
+    {
+      "rule_id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "2e4e084c8a8c2629a3f1358314721179188dda264184ee7bdccc512864a9db2a",
+      "order_created": false
+    },
+    {
+      "rule_id": "BREAK_VERY_STRONG_RETEST",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          3162.56,
+          3473.88
+        ],
+        [
+          15,
+          2836,
+          2897
+        ],
+        [
+          14,
+          3111,
+          3415
+        ]
+      ],
+      "input_fingerprint": "1253e768a4a24c1cb534d68e2a3b0d90372767c38292db55471515e39ca111db",
+      "order_created": false
+    },
+    {
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          3947,
+          3975
+        ],
+        [
+          21,
+          4201.3,
+          4208.84
+        ],
+        [
+          21,
+          4597,
+          4661
+        ],
+        [
+          15,
+          2836,
+          2897
+        ]
+      ],
+      "input_fingerprint": "373715c55c915e35b9cdc17e9b25abb6dad2a6f0ec06ee6806003932c0fc9edf",
+      "order_created": false
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          3984.88,
+          4068.98
+        ],
+        [
+          21,
+          4210.14,
+          4214.52
+        ],
+        [
+          15,
+          2836,
+          2897
+        ]
+      ],
+      "input_fingerprint": "fbd1aa07b42c4f8c05721c5c94dc6dd92a3114468b93da4c169702feabc9b4fb",
+      "order_created": false
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          3984.88,
+          4068.98
+        ],
+        [
+          21,
+          4210.14,
+          4214.52
+        ],
+        [
+          15,
+          2836,
+          2897
+        ]
+      ],
+      "input_fingerprint": "42ba30d32d6ae9c3e0425f2681d4f0d4ca4ec8de4f85560d3a5bdaf78d575ff2",
+      "order_created": false
+    },
+    {
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+      ],
+      "sources": [
+        [
+          21,
+          4100,
+          4133
+        ],
+        [
+          21,
+          4214.52,
+          4223.26
+        ],
+        [
+          23,
+          4694,
+          4728
+        ],
+        [
+          15,
+          2836,
+          2897
+        ]
+      ],
+      "input_fingerprint": "be37e5bb95ad0061fdc12dfa09837bac24d207b28934d7cad6f6ce7fa3a7e624",
+      "order_created": false
+    }
+  ],
+  "paper_trades": [
+    {
+      "rule_id": "PULLBACK_STANDARD",
+      "final_state": "CLOSED",
+      "trace": [
+        {
+          "status": "PAPER_ENTRY_INTENT",
+          "state": "PREPARED",
+          "order_created": false,
+          "plan": {
+            "side": "BUY",
+            "entry": "102",
+            "stop": "100",
+            "target": "108",
+            "lots": "0.11",
+            "risk_budget": "25",
+            "box_fingerprint": "2838f36d04bf2b5480c599be950650431bb0ecd96e66871323a6ecc4048d34aa",
+            "target_definition": "Explicit synthetic structural target, not a teacher default"
+          },
+          "entry_decision": {
+            "rule_id": "PULLBACK_STANDARD",
+            "status": "ELIGIBLE",
+            "reasons": [
+              "SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS"
+            ],
+            "sources": [
+              [
+                16,
+                615,
+                854
+              ],
+              [
+                16,
+                1003,
+                1109
+              ],
+              [
+                15,
+                2836,
+                2897
+              ],
+              [
+                14,
+                3111,
+                3415
+              ]
+            ],
+            "input_fingerprint": "2eea92e1d0d236b8bb7e8c885565b3ef6aaa764729df99fec6f3eec5afc3173b",
+            "order_created": false
+          },
+          "sizing": {
+            "status": "ACCEPT",
+            "lots": "0.11",
+            "modeled_loss": "24.200",
+            "risk_budget": "25",
+            "unchanged_stop": "100",
+            "guarantee": false,
+            "provenance": [
+              "risk_distance_contract_position_size",
+              "risk_budget_minimum_lot_feasibility"
+            ]
+          },
+          "execution_authorized": false
+        },
+        {
+          "status": "OPEN",
+          "state": "OPEN",
+          "order_created": false,
+          "fill": {
+            "entry": "102",
+            "lots": "0.11"
+          },
+          "modeled_loss": "24.200",
+          "reason": "PAPER_FILL_RECORDED",
+          "realized_pnl": null
+        },
+        {
+          "status": "ACCEPT",
+          "state": "OPEN",
+          "order_created": false,
+          "management": {
+            "status": "ACCEPT",
+            "stop": "101",
+            "lots": "0.11",
+            "modeled_exit_net": "-13.200",
+            "realized_pnl": null,
+            "execution_guaranteed": false,
+            "note": "Nominal model only; gap/slippage/unknown costs may defeat protection.",
+            "provenance": [
+              "management_labels_are_sl_movements",
+              "protected_float_not_realized_pnl"
+            ]
+          },
+          "trigger_source": "SYNTHETIC_TRIGGER",
+          "trigger_known_at": 101,
+          "at": 101,
+          "realized_pnl": null
+        },
+        {
+          "status": "ACCEPT",
+          "state": "OPEN",
+          "order_created": false,
+          "management": {
+            "status": "ACCEPT",
+            "stop": "102.2",
+            "lots": "0.11",
+            "modeled_exit_net": "0.000",
+            "realized_pnl": null,
+            "execution_guaranteed": false,
+            "note": "Nominal model only; gap/slippage/unknown costs may defeat protection.",
+            "provenance": [
+              "management_labels_are_sl_movements",
+              "protected_float_not_realized_pnl"
+            ]
+          },
+          "trigger_source": "SYNTHETIC_TRIGGER",
+          "trigger_known_at": 102,
+          "at": 102,
+          "realized_pnl": null
+        },
+        {
+          "status": "ACCEPT",
+          "state": "OPEN",
+          "order_created": false,
+          "management": {
+            "status": "ACCEPT",
+            "stop": "104",
+            "lots": "0.11",
+            "modeled_exit_net": "19.800",
+            "realized_pnl": null,
+            "execution_guaranteed": false,
+            "note": "Nominal model only; gap/slippage/unknown costs may defeat protection.",
+            "provenance": [
+              "management_labels_are_sl_movements",
+              "protected_float_not_realized_pnl"
+            ]
+          },
+          "trigger_source": "SYNTHETIC_TRIGGER",
+          "trigger_known_at": 103,
+          "at": 103,
+          "realized_pnl": null
+        },
+        {
+          "status": "EXIT_TRIGGER",
+          "state": "OPEN",
+          "order_created": false,
+          "reason": "TARGET",
+          "exit_quote": "108",
+          "quote_side": "BID",
+          "at": 104,
+          "realized_pnl": null,
+          "fill_assumed": false
+        },
+        {
+          "status": "UNKNOWN",
+          "state": "CLOSED_PENDING_COST",
+          "order_created": false,
+          "accounting": {
+            "status": "UNKNOWN",
+            "net_pnl": null,
+            "reason": "ACTUAL_FILL_OR_FEE_MISSING",
+            "provenance": [
+              "protected_float_not_realized_pnl"
+            ]
+          }
+        },
+        {
+          "status": "CLOSED",
+          "state": "CLOSED",
+          "order_created": false,
+          "accounting": {
+            "status": "CLOSED",
+            "gross_pnl": "66.00",
+            "fee": "1.1",
+            "net_pnl": "64.90",
+            "provenance": [
+              "protected_float_not_realized_pnl"
+            ]
+          }
+        }
+      ],
+      "orders_sent": 0,
+      "broker_connected": false
+    }
+  ],
+  "broker_connected": false,
+  "orders_sent": 0,
+  "raw_chart_classifier_implemented": false,
+  "profitability_tested": false,
+  "existing_engine_connected": false
+}

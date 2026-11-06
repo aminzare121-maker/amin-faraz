@@ -1,0 +1,755 @@
+{
+  "scope": "PRIOR_REPORT_SUMMARY_REUSED_NOT_FRESH_LISTENING",
+  "sessions": [
+    {
+      "session": 2,
+      "title_fa": "چهار پایه و جهت نسبی",
+      "compressed_concepts_fa": "اقتصاد/سنتیمنت برای زمینه و جهت روند، تکنیکال برای محل ورود، مدیریت سرمایه برای ریسک و روان‌شناسی برای اجرای تکرارپذیر مطرح می‌شوند. قدرت نسبی ارز پایه و مقابل مهم است؛ مثال DXY/طلا رابطه قطعی همیشگی نمی‌سازد.",
+      "unknowns_fa": "منبع و زمان داده اقتصادی، شیوه ترکیب، trigger و تعریف دقیق حجم/SL/TP و نام اختصاری سبک روشن نشده‌اند.",
+      "references": [
+        "artin-session02-complete-transcript-reading.json",
+        "artin-session02-reading-000000-000600.json",
+        "artin-session02-reading-000600-001200.json",
+        "artin-session02-reading-001200-001800.json",
+        "artin-session02-reading-001800-002400.json",
+        "artin-session02-reading-002400-003000.json",
+        "artin-session02-reading-003000-003600.json",
+        "artin-session02-reading-003600-004200.json",
+        "artin-session02-reading-004200-004800.json",
+        "artin-session02-reading-004800-004820.json"
+      ]
+    },
+    {
+      "session": 3,
+      "title_fa": "قرارداد، پیپ، هزینه و حجم",
+      "compressed_concepts_fa": "لات با درصد سرمایه یکسان نیست؛ اندازه قرارداد از مشخصات نماد بروکر گرفته می‌شود. پیپ/پوینت و تبدیل حرکت قیمت به پول به دقت نماد، قرارداد، حجم و ارز حساب وابسته‌اند. اهرم ظرفیت مارجینی است، نه ریسک پذیرفته‌شده. Bid/Ask، اسپرد و کمیسیون و حجم مبتنی بر بودجه زیان و فاصله توقف آموزش داده می‌شوند.",
+      "unknowns_fa": "اعداد و ترتیب فرمول اندازه حجم در متن گاهی ناسازگارند. مثال سود۱۵ در برابر زیان۱۰ یا ریسک۱٪ قانون عمومی۱٫۵R یا preset موتور نیست؛ قرارداد طلا و تبدیل ارز نیاز به شاهد همان مثال دارند.",
+      "references": [
+        "artin-session03-complete-transcript-reading.json",
+        "artin-session03-reading-000000-000600.json",
+        "artin-session03-reading-000600-001200.json",
+        "artin-session03-reading-001200-001800.json",
+        "artin-session03-reading-001800-002400.json",
+        "artin-session03-reading-002400-003000.json",
+        "artin-session03-reading-003000-003600.json",
+        "artin-session03-reading-003600-004200.json",
+        "artin-session03-reading-004200-004800.json",
+        "artin-session03-reading-004800-005097.json"
+      ]
+    },
+    {
+      "session": 4,
+      "title_fa": "ابزار، واسطه و تعارض منافع",
+      "compressed_concepts_fa": "موضوع جلسه راه‌اندازی مسیر کیف پول/حساب MT5، واریز/برداشت و نقش بروکر، LP، تجمیع سفارش، A-book/B-book، هزینه و رابطه معرفی‌کننده است. C-book در گزارش به نام‌گذاری شخصی مدرس برای مدل ترکیبی نسبت داده شده است.",
+      "unknowns_fa": "این روایت تأیید اعتبار یا اتهام به بروکر خاص نیست. جزئیات حقوقی/هویتی، نرخ‌ها، تعرفه‌ها، نام پلتفرم‌ها و ادعاهای دستکاری مستقل تأیید نشده‌اند. این جلسه قانون ورود روش ارائه نمی‌کند.",
+      "references": [
+        "artin-session04-complete-transcript-reading.json",
+        "artin-session04-reading-000000-000600.json",
+        "artin-session04-reading-000600-001200.json",
+        "artin-session04-reading-001200-001800.json",
+        "artin-session04-reading-001800-002400.json",
+        "artin-session04-reading-002400-003000.json",
+        "artin-session04-reading-003000-003600.json",
+        "artin-session04-reading-003600-004200.json",
+        "artin-session04-reading-004200-004800.json",
+        "artin-session04-reading-004800-end.json"
+      ]
+    },
+    {
+      "session": 5,
+      "title_fa": "کار با MT5 و انواع سفارش",
+      "compressed_concepts_fa": "محیط دمو، Market Watch/Toolbox، نمودار و قالب، تاریخچه و بالانس/اکویتی مرور می‌شوند. خرید در Ask و خروج با Bid، فروش در Bid و خروج با Ask به‌صورت مفهوم آموزشی آمده است. Market در برابر Pending و Limit برای نمونه برگشتی و Stop برای نمونه ادامه حرکت شرح داده می‌شود؛ این‌ها آموزش ابزارند.",
+      "unknowns_fa": "اشاره به کلوز در مثال Buy Stop با فعال‌شدن هنگام لمس حل نشده است. Limit را همیشه خلاف روند ننامیم. محل SL/TP و اعداد حجم/پوینت نمونه‌اند، نه تعریف راهبرد. تکلیف تمرین دمو مجوز سفارش عامل نیست.",
+      "references": [
+        "artin-session05-complete-transcript-reading.json",
+        "artin-session05-reading-000000-000600.json",
+        "artin-session05-reading-000600-001200.json",
+        "artin-session05-reading-001200-001800.json",
+        "artin-session05-reading-001800-002400.json",
+        "artin-session05-reading-002400-003000.json",
+        "artin-session05-reading-003000-003600.json",
+        "artin-session05-reading-003600-004200.json",
+        "artin-session05-reading-004200-end.json"
+      ]
+    },
+    {
+      "session": 6,
+      "title_fa": "سنتیمنت، انتظار و عرضه/تقاضا",
+      "compressed_concepts_fa": "ترتیب روش: economic sentiment سپس technical analysis و capital management. سنتیمنت انتظار جمعی و زمینه جهت است و درون‌روز با خبر تغییر می‌کند؛ تکنیکال محل ورود همسو را تعیین می‌کند. انتخاب ارز قوی در مقابل ضعیف، عرضه/تقاضا، تعادل، هزینه فرصت و واکنش انتظاری بانک مرکزی به تورم مطرح‌اند. خلاف جمع‌بودن سرمایه‌گذاری بلندمدت با معامله همسو در افق دیگر مخلوط نشود.",
+      "unknowns_fa": "افق و مدل سنجش انتظار، surprise در برابر انتظار قیمت‌گذاری‌شده، معیار قدرت نسبی و زمان/منبع خبر تعیین نشده‌اند. درصدهای اهمیت۲۰/۳۰/۵۰ و موفقیت ادعایی وزن موتور یا نتیجه آزمون نیستند؛ مثال تورم بالا قانون خرید ثابت نیست.",
+      "references": [
+        "artin-session06-reading-000000-000600.json",
+        "artin-session06-reading-000600-001200.json",
+        "artin-session06-reading-001200-001800.json",
+        "artin-session06-reading-001800-002400.json",
+        "artin-session06-reading-002400-003000.json",
+        "artin-session06-reading-003000-003600.json",
+        "artin-session06-reading-003600-004200.json",
+        "artin-session06-reading-004200-end.json",
+        "artin-session06-text-reading-completed.json"
+      ]
+    },
+    {
+      "session": 7,
+      "title_fa": "سیاست اقتصادی و کانال انتظار نرخ",
+      "compressed_concepts_fa": "پنج رکن در مثال مدرس: دولت، بانک مرکزی، نیروی انسانی، تجارت بین‌الملل و بازارها. سیاست مالی دولت از سیاست پولی بانک مرکزی تفکیک می‌شود. انقباض/انبساط از مسیر نرخ، مالیات، مخارج و تقاضا، در کنار رشد عرضه، تورم/رکود و انتظار سیاست توضیح داده می‌شود. روایت PPI/CPI و GDP/اشتغال زمینه سنتیمنت است، نه سیگنال فوری.",
+      "unknowns_fa": "تصحیح جهت DXY/EURUSD در3191..3234 باید به‌عنوان اصلاح روایت حفظ شود. تعریف دقیق نرخ واقعی، تقدم همیشگیPPI، برچسب چهارمرحله‌ای و اعداد تاریخی روشن نیستند. ابزار داده، priced-in، افق، trigger و شروط ابطال عددی از این خلاصه به دست نمی‌آیند.",
+      "references": [
+        "artin-session07-reading-000000-001200.json",
+        "artin-session07-reading-001200-001800.json",
+        "artin-session07-reading-001800-002400.json",
+        "artin-session07-reading-002400-003000.json",
+        "artin-session07-reading-003000-003600.json",
+        "artin-session07-reading-003600-004200.json",
+        "artin-session07-reading-004200-004800.json",
+        "artin-session07-reading-004800-004823.json"
+      ]
+    },
+    {
+      "session": 15,
+      "title_fa": "ساختار جاری و استثنای PRZ",
+      "compressed_concepts_fa": "جهت سنتیمنت مقدم بر تأیید ورود تکنیکال است؛ base/rally و پیوت‌ها در sequence و تایم‌فریم انتخابی معنا دارند. سقف در حال رشد هنوز پیوت تکمیل‌شده نیست. ناحیه حساس اطراف خط، نقطه دقیق نیست؛ تغییر کوچک پیوت الزاماً به‌روزرسانی مهم نیست. شکست تاریخیِ پیش از مشاهده ورود تازه نیست. خبر می‌تواند جهت سنتیمنت را تغییر دهد. استثنای مهم3443..3512: در روند صعودی قوی، اصلاح تحت PRZ همراه همگرایی liquidity/FVG و تأیید ورود ممکن است واجد شرایط باشد؛ strong=breakout-only یک منع مطلق معتبر نیست.",
+      "unknowns_fa": "معیار عینی PRZ، همگرایی، تأیید ورود، تکمیل پیوت، عرض ناحیه و تغییر معنادار خط تعریف عددی نشده‌اند. ابهام sell در متن1111 و اشاره‌های تصویری نیاز به منبع دارند. این استثنا با آستانه دلخواه یا ورود خودکار جایگزین نشود.",
+      "references": [
+        "artin-session15-reading-000000-000600.json",
+        "artin-session15-reading-000600-001200.json",
+        "artin-session15-reading-001200-001800.json",
+        "artin-session15-reading-001800-002400.json",
+        "artin-session15-reading-002400-003000.json",
+        "artin-session15-reading-003000-003600.json",
+        "artin-session15-reading-003600-003735.json"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "session": 2,
+      "source_report": "artin-session02-complete-transcript-reading.json",
+      "report_sha256": "3f0494dd961c84f5b69f0010064367efb2d5a1e25c682cb31379353469e644b3",
+      "window_seconds": null,
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-000000-000600.json",
+      "report_sha256": "e7b1b20e9ee2df859048b524e1fed3f58485bb4716fa2245eb573e08d12226b8",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-000600-001200.json",
+      "report_sha256": "645367dbc1da1f78a7194aa7da0b6fb1a37dfce0cf77702db41195eaf0c73a95",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-001200-001800.json",
+      "report_sha256": "8632e4156dee98142dd39a51e952f88d2d3a97c3eb01231676e60f4561e1539e",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-001800-002400.json",
+      "report_sha256": "9f9d5e3903a2dd74a2b9e7ef80836eeecf5c4a690bdfa185c9dd00bc1dd03845",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-002400-003000.json",
+      "report_sha256": "1b238b3791e9c60f61b91bc8f9ae54dd5b691cd699aa32f6ac44276c62d02003",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-003000-003600.json",
+      "report_sha256": "7299bcf3b96c95513cb4f2b8ccf4590a2521353b00182e90b4828815b6f49774",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-003600-004200.json",
+      "report_sha256": "d9ebb5f25a75ae1bf9f5088f2741795cc91e2ccddfb082801ac877742e751b25",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-004200-004800.json",
+      "report_sha256": "1a476ab80cdb74a5727944c643682c0178b004ed57ff06a69bda48a5d5b28ab1",
+      "window_seconds": [
+        4200,
+        4800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 2,
+      "source_report": "artin-session02-reading-004800-004820.json",
+      "report_sha256": "51045884b590a576da4c2d94811e4ace3074d10f86f64f16637181de3fa61135",
+      "window_seconds": [
+        4800,
+        4820.3465
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-complete-transcript-reading.json",
+      "report_sha256": "e4a672f066525fd0728fc9274b7c5917ccb4825cfbd13aebfc8971813d889d4e",
+      "window_seconds": [
+        0,
+        5097.546313
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-000000-000600.json",
+      "report_sha256": "64d2941d2a4ef26d1e529b5a6137f3fe4753e3aafc99ae394bccfc68aa198687",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-000600-001200.json",
+      "report_sha256": "a6fe2e00b72435b12b10fdaecf1a06d5b3342af1c0a2769f4ab840fe59b806f8",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-001200-001800.json",
+      "report_sha256": "2aa2d995b78edca390d21749a06aa35cfe1e396422741d6f88f088fae864c821",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-001800-002400.json",
+      "report_sha256": "e7afcda689a2f86717c33f22a0671cd5b3fcd0e6a68922932a555e63d6c549fa",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-002400-003000.json",
+      "report_sha256": "c028a7e70131d73e358bcdfc36b135358d83825d53e9395b39f518e0e5b63c53",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-003000-003600.json",
+      "report_sha256": "8e0fd57a04569608c54932ce72332cd905ed469bf165d03a46384809671c5db7",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-003600-004200.json",
+      "report_sha256": "b76f829832e09da762b13410626ab591f1fe2b65a20518ddfcc55eb0f49a2a67",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-004200-004800.json",
+      "report_sha256": "8a7b5c6b7ba72befb3f887cae98ff118ec7fd3c2ff2d4681487b5b66ce381a43",
+      "window_seconds": [
+        4200,
+        4800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 3,
+      "source_report": "artin-session03-reading-004800-005097.json",
+      "report_sha256": "317305ac18be85025a3beb9f0478ea425a92edd003f1dbf6d5f8c28ba1714f13",
+      "window_seconds": [
+        4800,
+        5097.546313
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-complete-transcript-reading.json",
+      "report_sha256": "29b6ce0820984eaacff58ae477f6f5ceead9c9e8d48491b0a1df7b97d4e103cc",
+      "window_seconds": null,
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-000000-000600.json",
+      "report_sha256": "576c80423c997a9b022fa3d31e974b0034d4c1d784706fb5dea6ae9fa6ba04eb",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-000600-001200.json",
+      "report_sha256": "c314fc81d688f0bd0696db5ef5ab50745fb773475b46466e486680d06b17809d",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-001200-001800.json",
+      "report_sha256": "642be81429af88be5c8f315f2c4633be1aed990a2e433e4bd7b5ec774f7f853a",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-001800-002400.json",
+      "report_sha256": "5711bbda1b9103b538df874c1af833192e467b824dd2dab0244937af57eeb22f",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-002400-003000.json",
+      "report_sha256": "ad3db41023a1cf5d0681b13480551f673216271037df9bef3b47db507d8594c8",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-003000-003600.json",
+      "report_sha256": "0799f0057abc5cb251589d1eca3ad565eb8bfcfb531c20c754983ccd1744256c",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-003600-004200.json",
+      "report_sha256": "36111f5f6d2f22a6b1abf74ecfe8a3e7aba4dfe4ad58fff5d73674618bbd9e8c",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-004200-004800.json",
+      "report_sha256": "24db8de2bd638f7adb50ed161851d8ebffdb8d59c40850e3b68d1754f7fb7d62",
+      "window_seconds": [
+        4200,
+        4800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 4,
+      "source_report": "artin-session04-reading-004800-end.json",
+      "report_sha256": "a4d5416b532eefaf2afb089de7d34b6e093f0c37e258c5c302365c4bab944fa6",
+      "window_seconds": [
+        4800,
+        5157.198375
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-complete-transcript-reading.json",
+      "report_sha256": "efc8f4ff93658b952666125810679b7bac8ec3a38bd3cb0ccc6bfd401730d069",
+      "window_seconds": null,
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-000000-000600.json",
+      "report_sha256": "0b82d32841523597887d21f539f0f02eeac8dae3643b7c70b562e1dc2ecd146d",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-000600-001200.json",
+      "report_sha256": "00441debc97b37fa751ec418e9ec08cb9d19a268360e98dcdf5b557d4c7dc35c",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-001200-001800.json",
+      "report_sha256": "ef6b6a40b061fbed6f2acca7f6bb78e657169a2f667d2e85b63dc8cf41f25d2c",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-001800-002400.json",
+      "report_sha256": "0f36e07a006da56a4233a12298e0ecb8219fc3461b2cd112d4062d619d07a8a4",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-002400-003000.json",
+      "report_sha256": "5d284dba3012eeb34162f111b7f31fe62a50ee595c3fa67edac9b2b0f21774aa",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-003000-003600.json",
+      "report_sha256": "6c5104b2d578c4cc35b13b46952e84fe2538b350f149dfa1752015c71dc3d8ff",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-003600-004200.json",
+      "report_sha256": "8fbba4cde2fcae1017a89ce57b76735a8fad1795db64ece84190df39e53cca0c",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 5,
+      "source_report": "artin-session05-reading-004200-end.json",
+      "report_sha256": "29ec46c66842fe0f24c749eab3e56b5ee313fb64fb340f1bbe487502d1483207",
+      "window_seconds": [
+        4200,
+        4348.54025
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-000000-000600.json",
+      "report_sha256": "3b780c35edb0b5f327634f19a5955b839371b6ce58080a580dea60b453e7d754",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-000600-001200.json",
+      "report_sha256": "c9b0aa4d1b3f47411ff1bb8fee4b216d7f9f9b2e958d7e1987cf7a16d74ca4bb",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-001200-001800.json",
+      "report_sha256": "9bf4361fa4acab56b170d2cde8a39eb883a3d64fc6eff8921725d55571a076cf",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-001800-002400.json",
+      "report_sha256": "9fe98640f97b92d679f16cad149a357b375556d44257893f5c399f28d56653fa",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-002400-003000.json",
+      "report_sha256": "44b3aa03e5895d8da38c8ee77dd7ea5c52fe7df19909cc21d74f568497b64b5a",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-003000-003600.json",
+      "report_sha256": "36dba5e3341d97236de02fe61a0fb31afdbb28feb1801da4ff4d081f0be55a2f",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-003600-004200.json",
+      "report_sha256": "e13f0225a96addea6834ae83bbf1bcaeedc618b56ee17e0b16fb20632aff125c",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-reading-004200-end.json",
+      "report_sha256": "1a1ded9e38c585ae1bdf91985ff33c221b82e2a027c2919d17b08fecc13e1583",
+      "window_seconds": [
+        4200,
+        4588.634563
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 6,
+      "source_report": "artin-session06-text-reading-completed.json",
+      "report_sha256": "fd8679420ff95821dc1ebb0c29646368bc6d7622e92d6062fbb6a0639b5fdac5",
+      "window_seconds": null,
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-000000-001200.json",
+      "report_sha256": "2ef0e90c52e2cb85a5e8df53871d96a13e9f5c0e366575b8545a2c454c0370d0",
+      "window_seconds": [
+        0,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-001200-001800.json",
+      "report_sha256": "8d933394d55e97a250fd846f176fab045a059f4d64c18ffbdd85a5d590dce070",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-001800-002400.json",
+      "report_sha256": "742c82c3396c346ebc281c94c81f41aa415cac7c4a5d8e2af241c9b4344bf791",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-002400-003000.json",
+      "report_sha256": "3a410818a38a6f4707bec94522b7d739e4dfed0a5bf28fee5b36e96dc576b091",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-003000-003600.json",
+      "report_sha256": "2c2b95136fa31163c3f682d38587e2f71c532c0f2a5f3527b5ded0dfc3eacbe7",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-003600-004200.json",
+      "report_sha256": "b037197c5e439bb6bfe9dc47de66068d53c5ac2fc7cf0fa904bfb75408b3af70",
+      "window_seconds": [
+        3600,
+        4200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-004200-004800.json",
+      "report_sha256": "379d28137a381f50b174a9370342a8b43d8e4bdc9f11db3e5a3d0b07b58dea0f",
+      "window_seconds": [
+        4200,
+        4800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 7,
+      "source_report": "artin-session07-reading-004800-004823.json",
+      "report_sha256": "309b7b8d52c7d6a69e7f10be8758d93cef0c77bf016ca96865abaf2b57897ef5",
+      "window_seconds": [
+        4800,
+        4822.4
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-000000-000600.json",
+      "report_sha256": "b0884cfc59626c896b4e5712835b60517d44b84370de3da54796c92c49f139ff",
+      "window_seconds": [
+        0,
+        600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-000600-001200.json",
+      "report_sha256": "04d841ce39844e789025c30260695a8102e03eb4291828584c2364c4f10a7a6c",
+      "window_seconds": [
+        600,
+        1200
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-001200-001800.json",
+      "report_sha256": "5aa48c47a4ba08f7c2d8f3f401e062b25a44b8aeb0d8236b0555005e1de27d3f",
+      "window_seconds": [
+        1200,
+        1800
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-001800-002400.json",
+      "report_sha256": "f8e65733fda11754bb17b1cf2df5ef85fb110bfed8da1a9b72655d0f5c7d70f7",
+      "window_seconds": [
+        1800,
+        2400
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-002400-003000.json",
+      "report_sha256": "779271a39dedc6503d29e05a558e93a1b66acbfe4cb173053c449f24da7f83ab",
+      "window_seconds": [
+        2400,
+        3000
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-003000-003600.json",
+      "report_sha256": "ea7d88ef9eea438698ca9c8405099db422ed7f6786f069fabcfaca03b07d2632",
+      "window_seconds": [
+        3000,
+        3600
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    },
+    {
+      "session": 15,
+      "source_report": "artin-session15-reading-003600-003735.json",
+      "report_sha256": "2764372afc6c21418202afbba40b6420200b3167ea49fa0f179c374fa588b117",
+      "window_seconds": [
+        3600,
+        3735.928188
+      ],
+      "evidence_level": "prior_report_summary_not_fresh_direct_audio"
+    }
+  ],
+  "critical_exception": {
+    "session": 15,
+    "window_seconds": [
+      3443,
+      3512
+    ],
+    "source_report": "artin-session15-reading-003000-003600.json",
+    "meaning_fa": "جهت سنتیمنت مقدم بر تأیید ورود تکنیکال است؛ base/rally و پیوت‌ها در sequence و تایم‌فریم انتخابی معنا دارند. سقف در حال رشد هنوز پیوت تکمیل‌شده نیست. ناحیه حساس اطراف خط، نقطه دقیق نیست؛ تغییر کوچک پیوت الزاماً به‌روزرسانی مهم نیست. شکست تاریخیِ پیش از مشاهده ورود تازه نیست. خبر می‌تواند جهت سنتیمنت را تغییر دهد. استثنای مهم3443..3512: در روند صعودی قوی، اصلاح تحت PRZ همراه همگرایی liquidity/FVG و تأیید ورود ممکن است واجد شرایط باشد؛ strong=breakout-only یک منع مطلق معتبر نیست.",
+    "status": "prior_report_interpretation_criteria_not_formalized"
+  },
+  "current_extraction_limits_are_not_teacher_imprecision": true
+}

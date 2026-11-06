@@ -1,0 +1,184 @@
+{
+  "version": "0.1-annotated-offline",
+  "owner_authorization": "New independent Artin engine; no connections to any previous engine",
+  "runtime_scope": "RULE_EXECUTOR_AND_PAPER_LIFECYCLE_NOT_RAW_CHART_CLASSIFIER_OR_BROKER_EXECUTOR",
+  "test_suite": {
+    "run": 28,
+    "passed": 28,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "synthetic_entry_cases": 12,
+  "synthetic_paper_lifecycles": 1,
+  "market_profitability_test": false,
+  "old_15_semantics_tests_recounted": false,
+  "source_based_branches": 12,
+  "source_concepts_available": 62,
+  "automatic_sentiment_or_chart_classification": false,
+  "teacher_annotations_required": true,
+  "entry_inputs_sl_target_triggers_supplied_explicitly": true,
+  "exact_full_course_implementation_claimed": false,
+  "isolation_ast_import_audit": {
+    "capital.py": [
+      "dataclasses",
+      "decimal",
+      "hashlib",
+      "json"
+    ],
+    "entry_engine.py": [
+      "dataclasses",
+      "decimal",
+      "hashlib",
+      "json",
+      "types",
+      "typing"
+    ],
+    "examples.py": [
+      "entry_engine"
+    ],
+    "export_example.py": [
+      "examples",
+      "json",
+      "pathlib"
+    ],
+    "run_engine.py": [
+      "argparse",
+      "capital",
+      "dataclasses",
+      "decimal",
+      "entry_engine",
+      "examples",
+      "json",
+      "pathlib",
+      "trade_machine"
+    ],
+    "test_capital.py": [
+      "capital",
+      "dataclasses",
+      "decimal",
+      "unittest"
+    ],
+    "test_entry_examples.py": [
+      "entry_engine",
+      "examples",
+      "run_engine",
+      "unittest"
+    ],
+    "test_entry_review.py": [
+      "ast",
+      "dataclasses",
+      "decimal",
+      "entry_engine",
+      "pathlib",
+      "unittest"
+    ],
+    "test_trade_machine.py": [
+      "capital",
+      "decimal",
+      "entry_engine",
+      "trade_machine",
+      "unittest"
+    ],
+    "trade_machine.py": [
+      "capital",
+      "decimal",
+      "entry_engine",
+      "types"
+    ]
+  },
+  "outside_application_imports": [],
+  "broker_connected": false,
+  "orders_sent": 0,
+  "other_engine_connections": false,
+  "files": [
+    {
+      "path": "capital.py",
+      "sha256": "dc1ac8606ee690af6fed91f8da29f901014c45e33a505c74b3ad971ad483c944"
+    },
+    {
+      "path": "DEMO_RESULT.json",
+      "sha256": "20c56bcff8f60a2c2a10f80caf4a961baa613821384ed0250f98e3720140a0b5"
+    },
+    {
+      "path": "docs/ARTIN_HANDOFF_FA.md",
+      "sha256": "ff37dcc0eedbf3059d940b97788016449a5e43d5fbf594f770a7b43d4e2e3ad1"
+    },
+    {
+      "path": "docs/FOUNDATIONS_02_07_15_FA.md",
+      "sha256": "1e34829df565e5b9b4af8c7b6e35505bcaf8a4263a82c54d394685c9b1aaa833"
+    },
+    {
+      "path": "docs/FOUNDATIONS_REFERENCE.json",
+      "sha256": "4da7880abed84aa95d03ffde678e8b8ba45bc95ecd8237092c67f2e6ebf640b9"
+    },
+    {
+      "path": "docs/HANDOFF_VALIDATION.json",
+      "sha256": "453d6b6b876b4b2026558145e12594c8d24b18f7e8fa16393c8835f66a87293b"
+    },
+    {
+      "path": "docs/SOURCE21_CONTEXT_SUMMARY_FA.md",
+      "sha256": "dd1325c9a0ef2c3bdfdd3f588c0364169c49a7d88d22d13abdcf5d92967fd354"
+    },
+    {
+      "path": "docs/SOURCE_COVERAGE.json",
+      "sha256": "ce0fe607320bf69a17351e58630cd3e6600fc252064b917501570adcffb53632"
+    },
+    {
+      "path": "docs/TEACHER_RULE_COVERAGE_REVIEW.md",
+      "sha256": "667d801a204e764ac0c820d171dfe7b47e6350a3691b73f0fc91e3263c317dbb"
+    },
+    {
+      "path": "entry_engine.py",
+      "sha256": "af68539efe78f6709350c72947521517ae43e865b6b2fa27c54ac177a400bd45"
+    },
+    {
+      "path": "examples.py",
+      "sha256": "8e2f44c7a6cf74d442d8db221c7d746f72ba4136c34f32100a986ebbfbbaf3d5"
+    },
+    {
+      "path": "export_example.py",
+      "sha256": "f5412ff975d643dce32de9b795ad97b649926871953efa23e153e6278f77d6f9"
+    },
+    {
+      "path": "method_reference.json",
+      "sha256": "15c2a2f2093488ebd80e99e606bc4088376315021b169729a2ae1e57acabc391"
+    },
+    {
+      "path": "README_FA.md",
+      "sha256": "ad90b61c7298476a20e418bceb06f9b24c21d5fda4a2e468e5005708d2b7b6dd"
+    },
+    {
+      "path": "RUN_DEMO_WINDOWS.bat",
+      "sha256": "5a44e6e206ed992537a28aa1e6cd5fb7d3f8a02c00d8a6da294060b5986f4079"
+    },
+    {
+      "path": "run_engine.py",
+      "sha256": "5385aab6bca12645f5af91b9be2ba76caa21f4a847e1fe1ffbbd73ceb45f8b57"
+    },
+    {
+      "path": "SOURCE_TO_CODE_FA.md",
+      "sha256": "c8b87049717342f46bd7ffa206c7030548c02072d472fbfe108ee50f30bd02d5"
+    },
+    {
+      "path": "test_capital.py",
+      "sha256": "124b8e03bb1e4f84053cddd312db2657b82323bbb9bc94da9e79304f75edda5d"
+    },
+    {
+      "path": "test_entry_examples.py",
+      "sha256": "6856e646408d04e8cdf445b42344ec1432058ef001f4002927a9ca4bba40b3a9"
+    },
+    {
+      "path": "test_entry_review.py",
+      "sha256": "b4cde0402029531f5165c0ba20cacc697ec21a5ba373ab5b558076d0d30c7f7b"
+    },
+    {
+      "path": "test_trade_machine.py",
+      "sha256": "0771cf6c22ffb90ed5bda6922cd5e3c5ed1290f47b1ba33d5211e6fea79f8a78"
+    },
+    {
+      "path": "trade_machine.py",
+      "sha256": "ebb892885ed89704f07b9d7eb5317e9dd3be522c9c11f9d1204cc8d5a33b8ad1"
+    }
+  ]
+}

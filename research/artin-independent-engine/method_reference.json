@@ -1,0 +1,2367 @@
+{
+  "schema": 1,
+  "purpose": "SOURCE_FAITHFUL_DOCUMENTATION_FOR_FUTURE_ENGINE_DESIGN_NOT_A_TRADING_ENGINE",
+  "status": "AVAILABLE_EVIDENCE_HANDOFF",
+  "source_map_sha256": "f529d6979ccab5167633c985068e8e31130f1f72d7e0c719cecf2a0fa9305969",
+  "source_concept_count": 62,
+  "concepts": [
+    {
+      "id": "shock_origin",
+      "teacher_meaning_summary": "اول علت داده/خبر/تغییر را مشخص کن؛ صرف همزمانی دو نمودار رابطه علّی ثابت نیست.",
+      "sources": [
+        [
+          8,
+          2400,
+          2563
+        ],
+        [
+          8,
+          3312,
+          3406
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CONCEPT",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "production_trade_chain",
+      "teacher_meaning_summary": "مواد اولیه/انرژی→تولید→مصرف/تقاضای شریک تجاری؛ جهت اثر به جایگاه کشور و علت شوک وابسته است.",
+      "sources": [
+        [
+          8,
+          2567,
+          2722
+        ],
+        [
+          8,
+          2762,
+          3312
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CONCEPT",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "competing_drivers",
+      "teacher_meaning_summary": "محرک مستقل داخلی می‌تواند اثر منتقل‌شده از کالا/شریک را تضعیف، خنثی یا تقویت کند.",
+      "sources": [
+        [
+          8,
+          1912,
+          2023
+        ]
+      ],
+      "original_evidence_status": "CONCEPT_RESOLVED_OPERATIONAL_DEFINITION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "expectations_duration",
+      "teacher_meaning_summary": "انتظار وقوع/دوام اثر مهم است؛ شوک کوتاه و افزایش پایدار هزینه یک فرض نیستند.",
+      "sources": [
+        [
+          8,
+          3361,
+          3406
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_UNQUANTIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "relative_pair",
+      "teacher_meaning_summary": "تقویت ارز دوم با ثابت‌بودن ارز اول به کاهش نرخ جفت منجر می‌شود؛ هر دو طرف و محرکهایشان بررسی شوند.",
+      "sources": [
+        [
+          8,
+          1802,
+          1856
+        ],
+        [
+          8,
+          4591,
+          4612
+        ]
+      ],
+      "original_evidence_status": "CONCEPTUAL_PAIR_ORIENTATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "sentiment_not_entry",
+      "teacher_meaning_summary": "sentiment جهت/انتخاب نماد می‌دهد؛ زمان ورود/خروج دقیق به بحث تکنیکال واگذار شده و از این روابط نمی‌شود SLTP ساخت.",
+      "sources": [
+        [
+          8,
+          1855,
+          1861
+        ],
+        [
+          8,
+          2016,
+          2023
+        ],
+        [
+          8,
+          4622,
+          4659
+        ]
+      ],
+      "original_evidence_status": "EXPLICIT_LIMITATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "gold_USD_exception",
+      "teacher_meaning_summary": "رابطه معکوس معمول USD/طلا در روایت مدرس مطلق نیست؛ مثال همزمانی دو مسیر متفاوت دارد.",
+      "sources": [
+        [
+          8,
+          3429,
+          3541
+        ],
+        [
+          8,
+          3600,
+          3759
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_EXCEPTION_NOT_FACT_CERTIFICATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "alarm_vs_cause",
+      "teacher_meaning_summary": "علامت همزمانی CHF با طلا را با ادعای CHF علت حرکت طلاست یکی نکن.",
+      "sources": [
+        [
+          8,
+          2331,
+          2400
+        ]
+      ],
+      "original_evidence_status": "CONCEPTUALLY_CLARIFIED_FROM_LATER_TEXT",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "calendar_and_context",
+      "teacher_meaning_summary": "تقویم انتشار/پیش‌بینی داده زمینه برنامه‌ریزی است؛ روش عملی سایتها و استخراج sentiment در جلسه بعد وعده داده شده، در این جلسه تمام نشده است.",
+      "sources": [
+        [
+          8,
+          4164,
+          4293
+        ],
+        [
+          8,
+          4622,
+          4659
+        ]
+      ],
+      "original_evidence_status": "METHOD_INCOMPLETE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "intervention_risk",
+      "teacher_meaning_summary": "هشدار مداخله/تغییر سیاست ژاپن در روایت مدرس یک استثنای ریسک است؛ متن آشفته برای تبدیل به قاعده خروج کافی نیست.",
+      "sources": [
+        [
+          8,
+          3888,
+          4010
+        ]
+      ],
+      "original_evidence_status": "AUDIO_VERIFICATION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "three_way_direction_permission",
+      "teacher_meaning_summary": "خروجی sentiment در روایت مدرس سه‌حالته است: فقط خرید، فقط فروش، یا دوطرفه. نامعلوم‌بودن جهت به معنی اثبات نبود هر فرصت یا الزام معامله نیست؛ دوطرفه را با هج همزمان یکی نکن.",
+      "sources": [
+        [
+          9,
+          226,
+          405
+        ],
+        [
+          9,
+          547,
+          640
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CONCEPT",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "input_categories_priority",
+      "teacher_meaning_summary": "شاخص/رویداد/خبر سه نوع اطلاعات‌اند؛ اولویت باید اهمیت خود محتوا و استثنا را لحاظ کند، نه وزن ثابت نوع.",
+      "sources": [
+        [
+          9,
+          671,
+          1121
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_NO_FIXED_WEIGHTS",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "policy_reaction_intermediary",
+      "teacher_meaning_summary": "در این درس، جهت کوتاه‌مدت ارز از انتظار واکنش بانک مرکزی و مسیر نرخ به داده عبور می‌کند؛ رونق/تورم را مستقیم و همیشگی به ارزش ارز تبدیل نکن.",
+      "sources": [
+        [
+          9,
+          3600,
+          3822
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_MECHANISM_NOT_EMPIRICAL_CERTIFICATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "availability_phase",
+      "teacher_meaning_summary": "قبل انتشار actual، پیش‌خور F-P؛ بعد انتشار، غافلگیری A-F. A بالاتر ازP اما پایین‌تر ازF می‌تواند علامت واکنش متفاوتی بدهد.",
+      "sources": [
+        [
+          9,
+          2652,
+          2678
+        ],
+        [
+          9,
+          4200,
+          4334
+        ]
+      ],
+      "original_evidence_status": "TEXT_RULE_CLEAR_DIRECTIONAL_SLIP_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "indicator_definition_first",
+      "teacher_meaning_summary": "معنای شاخص، منبع، دوره، مؤلفه‌ها و جهت اثر معمول را اول بشناس؛ initialclaims نرخ بیکاری نیست و بیشترشدن هر عددی مثبت نیست.",
+      "sources": [
+        [
+          9,
+          2833,
+          3024
+        ],
+        [
+          9,
+          3144,
+          3246
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_DEFINITION_PATH",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "calendar_colors_separate",
+      "teacher_meaning_summary": "رنگ اهمیت تقویم با رنگ/علامت نتیجه منتشرشده یکی نیست؛ هیچکدام به‌تنهایی دستور خرید/فروش یا معیار موفقیت نیست.",
+      "sources": [
+        [
+          9,
+          1310,
+          1458
+        ],
+        [
+          9,
+          2485,
+          2544
+        ],
+        [
+          9,
+          3348,
+          3385
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CHART_NOT_VERIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "forecast_feedback_loop",
+      "teacher_meaning_summary": "داده امروز می‌تواند انتظار واکنش در نشست بعدی را عوض کند؛ این با نگاه صرف به مقدار actual امروز یکی نیست.",
+      "sources": [
+        [
+          9,
+          3623,
+          3677
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_UNQUANTIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "dynamic_policy_focus",
+      "teacher_meaning_summary": "اهمیت داده به کشور، تصمیم‌گیر و تمرکزِ همان تصمیم‌گیر در بازه زمانی وابسته است؛ اولویت ثابت نام شاخص کافی نیست.",
+      "sources": [
+        [
+          10,
+          237,
+          576
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CONTEXT_DEPENDENT_NOT_CURRENT_POLICY_CERTIFICATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "tone_before_rate_action",
+      "teacher_meaning_summary": "یک داده/شوک گذرا، روند پایدار، تغییر لحن و تغییر واقعی نرخ چهار چیز جدا هستند؛ از یک مقدار به اقدام قطعی نپر.",
+      "sources": [
+        [
+          10,
+          1454,
+          1743
+        ]
+      ],
+      "original_evidence_status": "ROLEPLAY_CONCEPT_NOT_UNIVERSAL_NUMERIC_RULE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "unchanged_vs_expected",
+      "teacher_meaning_summary": "نرخ بدون تغییر نسبت به previous می‌تواند کمتر از forecast افزایش باشد؛ در آن صورت خنثی‌بودن عددی نسبت انتظار غلط است.",
+      "sources": [
+        [
+          10,
+          1916,
+          2006
+        ]
+      ],
+      "original_evidence_status": "BENCHMARK_CLARIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "sequential_policy_updates",
+      "teacher_meaning_summary": "actualنرخ و نشست پس از آن دو خبر متوالی‌اند؛ دومی می‌تواند فرض جهت اول را تقویت یا نقض کند.",
+      "sources": [
+        [
+          10,
+          2009,
+          2133
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_SEQUENCE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "sentiment_not_candle_timing",
+      "teacher_meaning_summary": "جهت اقتصادی را به رنگ همه کندلهای۱۵دقیقه یا زمان ثابت اثر تبدیل نکن؛ مدرس ابتدای جلسه این قانون‌سازی را رد می‌کند.",
+      "sources": [
+        [
+          10,
+          64,
+          142
+        ]
+      ],
+      "original_evidence_status": "EXPLICIT_LIMITATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "level_trend_acceleration",
+      "teacher_meaning_summary": "سطح داده، روند آن و تغییر آهنگ حرکت سه مشاهده متفاوت‌اند؛ بالاتررفتن مقدار به‌تنهایی جهت واکنش را تعیین نمی‌کند.",
+      "sources": [
+        [
+          10,
+          2605,
+          2790
+        ],
+        [
+          10,
+          4131,
+          4154
+        ]
+      ],
+      "original_evidence_status": "TEXT_CONCEPT_CLARIFIED_GRAPH_NOT_VERIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "policy_effect_feedback",
+      "teacher_meaning_summary": "وقتی سیاست قبلی ظاهراً شتاب تورم را کم می‌کند، انتظار نیاز به اقدام بعدی با زمانی که روند شتاب می‌گیرد متفاوت است؛ روایت را به مسیر واکنش بانک وصل کن.",
+      "sources": [
+        [
+          10,
+          2742,
+          2790
+        ],
+        [
+          10,
+          3140,
+          3186
+        ]
+      ],
+      "original_evidence_status": "INSTRUCTOR_ROLEPLAY_MECHANISM_NOT_EMPIRICAL_CERTIFICATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "background_vs_session_horizon",
+      "teacher_meaning_summary": "تاریخچهٔ اقتصاد زمینه فهم است؛ برای تصمیم روزانه مدرس روی داده‌های همان روز و پیرامون آن تمرکز می‌کند. زمینه بلندمدت، زمان ورود مشخص امروز نیست.",
+      "sources": [
+        [
+          10,
+          3720,
+          4059
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_HORIZON_DISTINCTION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "session_start_evidence_pipeline",
+      "teacher_meaning_summary": "خبر مرتبط همان دارایی → تقویم و انتظارات/نتیجه نسبت به زمان معلوم‌شدن → تأییدهای بین‌بازاری → ثبت و تجمیع bias → ورود تکنیکال جدا؛ ترتیب معرفی‌شده است نه فرمول عددی کامل.",
+      "sources": [
+        [
+          11,
+          866,
+          1258
+        ],
+        [
+          11,
+          1340,
+          1802
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CONCEPT",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "pmi_context_and_sector_conflict",
+      "teacher_meaning_summary": "تفسیر PMI به ساختار اقتصاد و زمینه وابسته؛ در مثال تضاد خدمات/تولید، مدرس خدمات را مهم‌تر می‌گیرد؛ یک زیرشاخص مجوز معکوس‌کردن همیشگی headline نیست.",
+      "sources": [
+        [
+          11,
+          457,
+          650
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_NOT_UNIVERSAL_EMPIRICAL_RULE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "relative_performance_vs_intraday_path",
+      "teacher_meaning_summary": "عملکرد دیروز-تاامروز شاخص و مسیر هم‌مبنای درون‌روز دو مشاهده جدا هستند؛ قوت مستقل طرف پایه با حرکت طرف مقابل یکسان نیست.",
+      "sources": [
+        [
+          11,
+          1800,
+          2290
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_CHART_VERIFICATION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "time_bound_bias_and_regime",
+      "teacher_meaning_summary": "bias برای زمان تحلیل معتبر و قابل مرور است؛ توافق جهت یک‌طرفه، تضاد شواهد در مثال دوطرفه/رنج. نگاه H1 sentiment از نمودار تکنیکال M15 جداست؛ توصیه مرور۲تا۳ساعت expiry قطعی نیست.",
+      "sources": [
+        [
+          11,
+          2420,
+          2458
+        ],
+        [
+          11,
+          2533,
+          2649
+        ],
+        [
+          11,
+          3008,
+          3054
+        ],
+        [
+          11,
+          3174,
+          3182
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_OPERATIONAL_PARAMETERS_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "degraded_source_coverage_not_full_confirmation",
+      "teacher_meaning_summary": "حذف موقت تأییدهای unavailable در جلسه جبرانی واقعیت پوشش داده را کاهش می‌دهد؛ نمی‌توان آن را تأیید کامل یا کیفیت یکسان روش نامید. نبود جهت روشن در متن به خروجی دوطرفه منتهی می‌شود، نه جعل جهت و نه اثبات آماری رنج.",
+      "sources": [
+        [
+          12,
+          877,
+          972
+        ],
+        [
+          12,
+          1182,
+          1218
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_EXECUTION_POLICY_UNDEFINED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "price_stop_geometry_vs_monetary_risk",
+      "teacher_meaning_summary": "مکان ورود/حد روی نمودار از تحلیل تکنیکال است؛ اندازه پول، حجم و تقسیم اجرای معامله از مدیریت سرمایه. صرف حد تکنیکال مجوز حجم یا معامله نیست.",
+      "sources": [
+        [
+          13,
+          770,
+          937
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_FORMULAS_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "forming_candle_vs_closed_aggregation",
+      "teacher_meaning_summary": "رنگ/بدنه کندل پیش از close نهایی نیست؛ تایم‌فریم بالاتر تجمیع جزئیات مسیر است، نه بازار مستقل و نه مشاهده کامل ترتیب رخدادهای داخل کندل.",
+      "sources": [
+        [
+          13,
+          1200,
+          1354
+        ],
+        [
+          13,
+          1626,
+          1800
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_MEDIA_EXAMPLES_UNVERIFIED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "wick_body_context_uncertainty",
+      "teacher_meaning_summary": "Teacher doubt/confidence refers to recent price sequence, not guaranteed reversal; both continuation and reversal examples shown. Exact wick comparator undefined.",
+      "sources": [
+        [
+          13,
+          2259,
+          2517
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_MEDIA_AND_NUMERIC_RULE_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "sensitive_zone_direction_confirmation_s13",
+      "teacher_meaning_summary": "Sentiment selects allowed direction; sensitive zone locates candidate reaction; additional confirmation still unspecified. Bearish lower break/upper reversal vs two-sided either direction. Touch alone not entry.",
+      "sources": [
+        [
+          13,
+          3154,
+          3419
+        ],
+        [
+          13,
+          3655,
+          3710
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_MEDIA_AND_EXECUTION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "pivot_selection_asof_not_forced_symmetry",
+      "teacher_meaning_summary": "Select recent levels from the price location and information available at analysis time; upper/lower symmetric quota is not mandatory. Later changed levels must not rewrite prior evidence.",
+      "sources": [
+        [
+          14,
+          119,
+          294
+        ],
+        [
+          14,
+          630,
+          868
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_PIVOT_NUMERIC_CONFIRMATION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "base_rally_transition_relative_scale",
+      "teacher_meaning_summary": "Rally/base classification is relative to chosen recent sequence and timeframe. Continuing sideways is still base; eventual departure called rally does not predict timing or direction. Entry requires separate sentiment and future confirmation.",
+      "sources": [
+        [
+          14,
+          1200,
+          1446
+        ],
+        [
+          14,
+          1809,
+          1992
+        ],
+        [
+          14,
+          2195,
+          2384
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_NUMERIC_AND_MEDIA_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "trend_strength_selects_entry_family",
+      "teacher_meaning_summary": "Instructor bullish examples select entry family from relative second-low/first-high geometry: weak pullback reversal only, strong breakout only, normal both. This selects eligible family, not a fully specified entry trigger; normal tolerance undefined.",
+      "sources": [
+        [
+          14,
+          3111,
+          3415
+        ],
+        [
+          14,
+          3505,
+          3587
+        ]
+      ],
+      "original_evidence_status": "CONDITIONAL_HEURISTIC_REVISED_BY_SESSION15_PRZ_EXCEPTION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "completed_pullback_close_confirmation",
+      "teacher_meaning_summary": "Break, post-break pivot, retest, candle CLOSE beyond pivot in intended direction; horizontal or trendline with sentiment alignment.",
+      "sources": [
+        [
+          16,
+          615,
+          854
+        ],
+        [
+          16,
+          1003,
+          1109
+        ]
+      ],
+      "original_evidence_status": "TEXT_ONLY_NOT_FULL_EXECUTABLE_STRATEGY",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "pullback_retest_tolerance",
+      "teacher_meaning_summary": "بازآزمایی مدل پولبک می‌تواند بیرون، روی یا کمی داخل سطح قبلی رخ دهد؛ لمس دقیق خط شرط همگانی نیست. حدود عددی/مرز ابطال نامعلوم است.",
+      "sources": [
+        [
+          16,
+          1284,
+          1439
+        ],
+        [
+          16,
+          1536,
+          1700
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_TOLERANCE_UNDEFINED",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "liquidity_cluster_vs_single_pivot",
+      "teacher_meaning_summary": "تک‌پیوت از ناحیه فشردگی/واکنش‌های متعدد نقدینگی جداست؛ روایت سفارش‌های بزرگ مشاهده واقعی orderbook نیست. معیار عددی خوشه/پیوت باز است.",
+      "sources": [
+        [
+          16,
+          2112,
+          2216
+        ],
+        [
+          16,
+          3000,
+          3154
+        ],
+        [
+          17,
+          2281,
+          2505
+        ]
+      ],
+      "original_evidence_status": "TEXT_CONCEPT_ONLY_NO_ORDERFLOW_PROOF",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "confluence_zone_not_signal",
+      "teacher_meaning_summary": "هم‌پوشانی پیوت/ترند/نیمه لگ پتانسیل PRZ را نشان می‌دهد؛ رسیدن به آن خرید/فروش نیست. Golden zone در متن ناحیه نیمه لگ به بعد است و نسبت ثابت61.8به آن تحمیل نمی‌شود.",
+      "sources": [
+        [
+          17,
+          1210,
+          1258
+        ],
+        [
+          17,
+          1874,
+          2019
+        ],
+        [
+          17,
+          2562,
+          2585
+        ]
+      ],
+      "original_evidence_status": "TEXT_ONLY_BOUNDARIES_AND_TRIGGER_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "orderblock_relative_sequence",
+      "teacher_meaning_summary": "OB در مثال آخرین لگ: حرکت قوی، شک/بیس کوچک، حرکت قوی؛ در ابتدای لگ ممکن است حرکت قوی قبلی نباشد و چند کندل کوچک هم شک باشد. اندازه قوی/کوچک و مرز زون عددی نیست.",
+      "sources": [
+        [
+          18,
+          1636,
+          1796
+        ],
+        [
+          18,
+          1999,
+          2030
+        ],
+        [
+          18,
+          2917,
+          2960
+        ]
+      ],
+      "original_evidence_status": "TEXT_DEFINITION_MEDIA_GEOMETRY_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "fvg_three_candle_scope",
+      "teacher_meaning_summary": "FVG شکاف پوشانده‌نشده حرکت قوی است؛ مثال نزولی مرز سایه پایین کندل اول و بالای سوم را می‌گوید. اصلاح19محدودیت سه کندل اول بعد پیوت را برمی‌دارد: وسط لگ هم ممکن است. پرشدن اجباری نیست و FVGبدون جهت مستقل، سیگنال نیست.",
+      "sources": [
+        [
+          19,
+          2135,
+          2595
+        ],
+        [
+          19,
+          2900,
+          2999
+        ],
+        [
+          19,
+          3357,
+          3395
+        ],
+        [
+          19,
+          3761,
+          3814
+        ]
+      ],
+      "original_evidence_status": "TEXT_DEFINITION_PARTIAL_FILL_AND_TIMING_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "zone_priority_distance_context",
+      "teacher_meaning_summary": "نواحی نزدیک و هم‌نوع را با نواحی فاصله‌دار خلط نکن: OBنزدیک بر پیوت، FVGنزدیک برOB/پیوت ترجیح داده می‌شود؛ بینFVGهای نزدیکِ سکانس آخر، نزدیک‌تر/اولی مطرح است. گزاره20دورتر معتبرتر لغزش لفظی خوانده شد؛ چندFVGمتوالی با سوییچ بالا تجمیع می‌شوند. نقدینگی فاصله‌دار ممکن است همراهFVGباقی بماند؛ رتبه/فاصله ثابت جهانی نداریم.",
+      "sources": [
+        [
+          18,
+          2078,
+          2114
+        ],
+        [
+          18,
+          3000,
+          3221
+        ],
+        [
+          19,
+          3262,
+          3276
+        ],
+        [
+          19,
+          3740,
+          3761
+        ],
+        [
+          20,
+          2497,
+          2574.16
+        ],
+        [
+          23,
+          1964.06,
+          2197.44
+        ]
+      ],
+      "original_evidence_status": "CONTEXTUAL_PRIORITY_NO_NUMERIC_SELECTOR",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "zone_consumption_current_sequence",
+      "teacher_meaning_summary": "تصفیه در مثال19جمع‌شدن پشت/هانت ناحیه و مراجعه به سکانس جدید است، نه هر لمس. ناحیه قدیمی تسویه‌نشده اگر در سکانس جاری بماند قابل توجه است؛ انقضای روزانه ثابت ساخته نمی‌شود.",
+      "sources": [
+        [
+          19,
+          4308,
+          4493
+        ],
+        [
+          19,
+          4713,
+          4878
+        ]
+      ],
+      "original_evidence_status": "TEXT_SUPPORTED_EXPIRY_AND_HUNT_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "reference_timeframe_aggregation",
+      "teacher_meaning_summary": "تایم بالاتر تجمیع همان مسیر است: برایFVGهای متوالی/OBمتراکم یا دیدن base/Punch استفاده می‌شود؛ الگوی پایین‌تر دلیل مستقل تازه نیست و سوییچ برای تحمیل ساختار مجاز فرض نمی‌شود. نام دوقلو/مثلث جهت معامله مدرس را تعیین نمی‌کند.",
+      "sources": [
+        [
+          20,
+          1306,
+          1849.56
+        ],
+        [
+          22,
+          1258,
+          1533.24
+        ],
+        [
+          22,
+          1800,
+          1841.1
+        ],
+        [
+          22,
+          2005.66,
+          2307.5
+        ],
+        [
+          22,
+          3156.56,
+          3186.84
+        ]
+      ],
+      "original_evidence_status": "SCALE_RELATION_ASR_ONLY",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "reversal_three_star_branches",
+      "teacher_meaning_summary": "Reversalنسبت به لگ آخر و در جهتsentimentاست. کلاسیک:گره→شک→اولین اطمینان درکلوز؛Three:سه کندل هم‌جهت با دست‌کم یک شک/اطمینان و قید نیمه لگ؛Star:اطمینان ورودی→شک→اطمینان معامله با نفوذ بیش از نصف بدنه اول/پوشش کامل و قید نیمه لگ. نمونه فروش زیر/بالای نیمه درمتن متعارض است و اصلاح حدسی نمی‌شود.",
+      "sources": [
+        [
+          20,
+          2188.86,
+          2306.84
+        ],
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          20,
+          4117.72,
+          4483.72
+        ]
+      ],
+      "original_evidence_status": "EDUCATIONAL_BRANCHES_NOT_FULL_EXECUTABLE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "break_line_is_zone_edge",
+      "teacher_meaning_summary": "برای زونOB/FVG، دورترین لبه همان زون نسبت به قیمتِ نزدیک‌شونده خط شکست است؛ برای پیوت/نقدینگی خطی خودخط. دورترین لبه یک زون با انتخابFVGدورتر یکی نیست.",
+      "sources": [
+        [
+          21,
+          2105.04,
+          2261
+        ]
+      ],
+      "original_evidence_status": "TEXT_DEFINITION_MEDIA_BOUNDARIES_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "classical_break_strength_branches",
+      "teacher_meaning_summary": "کلاسیک مدرس:قوی(fullbody/marubozu)درکلوز آن‌سوی خط؛ضعیف پسpullbackبا کلوز فراترپیوت یا استثنایfullbody/marubozuپسpullbackپیش از عبورپیوت؛خیلی‌قوی نسبت به سکانس، روی بازگشت/touchنیمه بدنه بدون الگوی کندل تازه. ادامه قیمت تعقیب نمی‌شود. اینها باStopPunchشخصی یکی نیستند؛ تمام ورودها نیازمندclose/کندل تازه نیستند.",
+      "sources": [
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          21,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "original_evidence_status": "EXPLICIT_SCOPE_EXCEPTIONS_ASR_ONLY",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "stoppunch_conditional_admission",
+      "teacher_meaning_summary": "حرکت قوی هم‌جهت→مکث→پانچ/تأیید متناظر. فرم هم‌رنگ،دوجی و مخالف‌رنگ و وضعیت درست/غلط روز شروط متفاوت دارند؛ نگاشت تصویری کامل نیست. برخی فرم‌ها بین دوگره مجازند؛تأیید دیر/خیلی‌دور رد می‌شود. سقف بالاسر کاهش اعتبار، نه منع مطلق؛FVGبالاسر کمک توصیفی و نبودآن منع مطلق نیست.",
+      "sources": [
+        [
+          21,
+          3687.86,
+          4230
+        ],
+        [
+          21,
+          4303,
+          4597.9
+        ],
+        [
+          21,
+          4800,
+          4823.52
+        ],
+        [
+          21,
+          5135.04,
+          5142.8
+        ],
+        [
+          22,
+          2413,
+          2543.88
+        ]
+      ],
+      "original_evidence_status": "PARTIAL_FORM_MAPPING_MEDIA_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "asof_pivot_information_boundary",
+      "teacher_meaning_summary": "گره/پیوتی که پس از زمان ادعای ورود تشکیل شده نمی‌تواند ورودی همان تصمیم تاریخی باشد. نتیجه بعدی و دیدن الگوی موفق به‌تنهایی ورود مدل ایجاد نمی‌کند؛ تشخیصfirst-knownپیوت هنوز الگوریتم ندارد.",
+      "sources": [
+        [
+          21,
+          245.52,
+          309.28
+        ],
+        [
+          23,
+          1388.4,
+          1435.08
+        ],
+        [
+          22,
+          3080,
+          3156.56
+        ]
+      ],
+      "original_evidence_status": "NO_LOOKAHEAD_TEXT_CONSTRAINT_PIVOT_ALGORITHM_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "symbol_specific_direction_and_risk",
+      "teacher_meaning_summary": "جهت طلا جهت خودکار یورو نیست؛ هر نماد/دوارز و محرک مستقل بررسی شود. دو ستاپ همزمان مجوز دو ریسک نیست و به تریدپلن/ریسک مجموع وابسته است.",
+      "sources": [
+        [
+          23,
+          3855,
+          3897.28
+        ],
+        [
+          23,
+          3912.88,
+          4044.32
+        ],
+        [
+          25,
+          894.34,
+          1005.34
+        ]
+      ],
+      "original_evidence_status": "CONCEPT_SUPPORTED_AGGREGATION_LIMITS_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "precommitted_process_two_waits",
+      "teacher_meaning_summary": "تحلیل→انتظار رسیدن به ناحیه→انتظار تحقق شرط ورودِ همان شاخه؛ قوانین واکنش/سرمایه/روان پیش از معامله نوشته می‌شوند. ریتم حضور با الزام سفارش روزانه یکی نیست؛25شروع/شارژ پیش از قواعد باکس را رد می‌کند. اجرای درست فرایند از برد/باخت یک نمونه جداست.",
+      "sources": [
+        [
+          24,
+          1503,
+          1852
+        ],
+        [
+          24,
+          2457,
+          3101
+        ],
+        [
+          25,
+          3896.8,
+          4028.76
+        ]
+      ],
+      "original_evidence_status": "PROCESS_CONCEPT_NOT_OPERATIONAL_AUTHORIZATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "risk_distance_contract_position_size",
+      "teacher_meaning_summary": "ریسک پولی هدف و فاصله ورودتاSLبه حجم مربوط‌اند؛مشخصات قرارداد/ارزحساب/ارزش پوینت/حداقل لات/گردکردن/هزینه لازم‌اند. مثال ساده دلار/پوینت یا کالیبراسیون0.01لات، فرمول عمومی گواهی‌شده نیست و هیچ معامله کالیبراسیونی اجرا نشده.",
+      "sources": [
+        [
+          22,
+          866.48,
+          891.62
+        ],
+        [
+          25,
+          1015.34,
+          1282.14
+        ]
+      ],
+      "original_evidence_status": "SIZING_MECHANISM_UNITS_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "management_labels_are_sl_movements",
+      "teacher_meaning_summary": "در25reduceیعنیSLنزدیک‌تر به ورود برای زیان بالقوه کمتر با حجم ثابت؛riskfreeیعنیSLنزدیک ورود با هزینه طبق مدل؛saveprofitیعنیSLداخل سود با معامله باز؛fulltargetبرخوردTPنهایی. reduce/saveدراین تعریف بستن جزئی نیستند. مدل ساده یکTP/SLهم انتخاب مجازآموزشی است و نردبان اجباری واحد ساخته نمی‌شود.",
+      "sources": [
+        [
+          25,
+          1518.76,
+          2752.02
+        ],
+        [
+          25,
+          2868.34,
+          2919.22
+        ]
+      ],
+      "original_evidence_status": "LABELS_CLARIFIED_THRESHOLDS_AND_EXECUTION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "protected_float_not_realized_pnl",
+      "teacher_meaning_summary": "بردنSLداخل سود، سود شناورِ محافظت‌شده در مدل است؛ پیش ازfillخروج سود تحقق‌یافته حسابداری نیست. riskfreeنام اسمی مدل است، نه تضمین زیان واقعی صفر باگپ/لغزش/هزینه. تحقق حسابداری معمول را باRPبرداشت‌محورمدرس خلط نکن.",
+      "sources": [
+        [
+          25,
+          1907,
+          2643.92
+        ],
+        [
+          26,
+          4316.94,
+          4607.7
+        ]
+      ],
+      "original_evidence_status": "ACCOUNTING_DISTINCTION_NO_EXECUTION_GUARANTEE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "rr_definition_and_illustrative_policies",
+      "teacher_meaning_summary": "RRبیان نهایی سودهدف/ریسک پذیرفته‌شده است. بازهfulltarget0.8..1.3پیشنهاد تجربه مدرس است و26می‌گوید بالاتر ناممکن نیست. سطوح فیبو1.8/2.3درترسیم مساویRR1.8/2.3نیستند؛مثال‌هایمدیریت آلترناتیوند،نه سیاست مرکب نهایی.",
+      "sources": [
+        [
+          25,
+          2935.22,
+          3841.58
+        ],
+        [
+          26,
+          1247.3,
+          1267.3
+        ],
+        [
+          26,
+          2924.92,
+          3142.64
+        ]
+      ],
+      "original_evidence_status": "TEXT_NUMERICS_MEDIA_VALIDATION_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "box_fixed_rules_journal_review",
+      "teacher_meaning_summary": "Boxمجموعه معاملات با قواعد معلوم در بازه زمانی/تعداد مشخص است،نهbacktest. قوانین درون باکس ثابت؛ژورنال ثبت و بررسی جدا درپایان/توقف ازپیش‌تعیین‌شده؛اصلاح برایباکس بعد،یا تکراربی‌تغییر. درصدریسک پیشنهادشروع ازموجودی آغازباکس است،نه تغییرخودکارمبنا باهرنوسانبالانس.",
+      "sources": [
+        [
+          26,
+          1313.3,
+          2291.06
+        ]
+      ],
+      "original_evidence_status": "BOX_CONCEPT_CLARIFIED_VALIDATION_METHOD_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "risk_budget_minimum_lot_feasibility",
+      "teacher_meaning_summary": "SLساختاری+ریسک مجاز+حداقل حجم ممکن است ستاپ را غیرقابل‌اجراکند؛SLصرفاً برایجورکردن حجم جابه‌جا نمی‌شود. گزینه‌هایافزایشسرمایه/ریسک یا حذفنماد/ستاپ دردرس توصیه فعلی یا مجوز افزایشریسک نرم‌افزار نیستند.",
+      "sources": [
+        [
+          26,
+          2511.2,
+          2916.92
+        ]
+      ],
+      "original_evidence_status": "FEASIBILITY_CONSTRAINT_NOT_RISK_CHANGE_AUTHORIZATION",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "predeclared_limits_and_incomplete_tree",
+      "teacher_meaning_summary": "درخت،نتیجهبرد/باخت را بهریسک/RRبعدی وصل می‌کند؛حدزیانروز،زیانباکس وسقف‌سودروز جدا هستند. لمس حد طبقمدل توقف می‌آورد؛boxسقف سود کلی ندارد. کلشاخه‌ها/هزینه/مبنایequityوبالانس/پوزیشن‌باز درتوقف کاملنیست؛نمونهدرصدها سیاست معتبر عملیاتی نیستند.",
+      "sources": [
+        [
+          26,
+          440.1,
+          1125.76
+        ],
+        [
+          26,
+          3191.8,
+          3443.28
+        ],
+        [
+          26,
+          3736.54,
+          4313.78
+        ]
+      ],
+      "original_evidence_status": "INCOMPLETE_TREE_AND_STOP_SEMANTICS_OPEN",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "teacher_rp_urp_withdrawal_scope",
+      "teacher_meaning_summary": "RP/URPدر26اصطلاحخاصمدرس است:سودنگه‌داشتهدرحسابURP؛برداشتپسthresholdآنراRPمی‌نامد. اینباrealized/unrealizedمعمولِباز/بسته‌شدنمعامله یکی نیست. برداشتبهwalletدادهدرس است و اجرا/مجوزنرم‌افزار نیست؛رفتارحدودبعدبرداشت بازاست.",
+      "sources": [
+        [
+          26,
+          4316.94,
+          4607.7
+        ]
+      ],
+      "original_evidence_status": "TEACHER_TERMINOLOGY_NOT_ACCOUNTING_EQUIVALENCE",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    },
+    {
+      "id": "analysis_drawings_not_execution",
+      "teacher_meaning_summary": "فیبوی ترسیمی مدیریت/برداشت خودکار انجام نمی‌دهد؛ابزارتحلیل ازاجرا جداست. نامبردن ابزار/اکسپرت دردرس شاهدقابلیت،مجوزنصب یا آمادگی موتور ما نیست.",
+      "sources": [
+        [
+          26,
+          4979.36,
+          5045.58
+        ]
+      ],
+      "original_evidence_status": "EXPLICIT_ANALYSIS_EXECUTION_BOUNDARY",
+      "evidence_kind": "PRIOR_TEXT_STUDY_NOT_CURRENT_DIRECT_LISTENING",
+      "numeric_default": null
+    }
+  ],
+  "concept_relations": [
+    {
+      "from": "shock_origin",
+      "to": "production_trade_chain",
+      "relation": "علت را پیش از استنتاج انتقال تعیین کن"
+    },
+    {
+      "from": "production_trade_chain",
+      "to": "competing_drivers",
+      "relation": "اثر تجاری/کالایی با محرک مستقل مقصد ترکیب می‌شود، نه اینکه همیشه غلبه کند"
+    },
+    {
+      "from": "expectations_duration",
+      "to": "production_trade_chain",
+      "relation": "دوام موردانتظار شوک، مسیر هزینه و رشد را مشروط می‌کند"
+    },
+    {
+      "from": "competing_drivers",
+      "to": "relative_pair",
+      "relation": "دو ارز را مقایسه کن؛ نتیجه در تعارض مشخص‌نشده UNKNOWN است"
+    },
+    {
+      "from": "relative_pair",
+      "to": "sentiment_not_entry",
+      "relation": "جهت جفت، نقطه ورود عددی نیست"
+    },
+    {
+      "from": "alarm_vs_cause",
+      "to": "shock_origin",
+      "relation": "همبستگی برای انتساب علت کافی نیست"
+    },
+    {
+      "from": "gold_USD_exception",
+      "to": "competing_drivers",
+      "relation": "فرض همبستگی ثابت باید استثنا و علت مستقل را بپذیرد"
+    },
+    {
+      "from": "competing_drivers",
+      "to": "three_way_direction_permission",
+      "relation": "اگر جهت قابل جمع‌بندی نیست، آن را ساختگی قطعی نکن؛ مدرس روش دوطرفه را هم مجاز می‌داند، نه اینکه الزاماً هج یا معاملهٔ فوری کند."
+    },
+    {
+      "from": "three_way_direction_permission",
+      "to": "sentiment_not_entry",
+      "relation": "مجوز جهت، زمان ورود/SLTP و تأیید اجرایی نرم‌افزار نیست."
+    },
+    {
+      "from": "indicator_definition_first",
+      "to": "availability_phase",
+      "relation": "جهت عدد باید با تعریف و اطلاعات قابل‌دسترسی در همان زمان خوانده شود."
+    },
+    {
+      "from": "availability_phase",
+      "to": "policy_reaction_intermediary",
+      "relation": "غافلگیری یا انتظار داده، فرض مسیر سیاست را تغییر می‌دهد؛ شدت/قیمت‌گذاری هنوز باز است."
+    },
+    {
+      "from": "policy_reaction_intermediary",
+      "to": "competing_drivers",
+      "relation": "سخنرانی و دیگر محرکها می‌توانند جهت ساده شاخص را تغییر دهند."
+    },
+    {
+      "from": "forecast_feedback_loop",
+      "to": "expectations_duration",
+      "relation": "انتظار نشست آینده از داده فعلی تغذیه می‌کند؛ پنجره/وزن هنوز تعیین نشده."
+    },
+    {
+      "from": "dynamic_policy_focus",
+      "to": "policy_reaction_intermediary",
+      "relation": "چیزی که بانک در آن دوره دنبال می‌کند، اهمیت مشاهدهٔ داده را تغییر می‌دهد."
+    },
+    {
+      "from": "availability_phase",
+      "to": "unchanged_vs_expected",
+      "relation": "مقایسه انتشار با انتظار است، نه صرف نبود تغییر نسبت به قبل."
+    },
+    {
+      "from": "tone_before_rate_action",
+      "to": "sequential_policy_updates",
+      "relation": "لحن و عدد نرخ را در زمان معلوم‌شدن جدا به‌روزرسانی کن."
+    },
+    {
+      "from": "sequential_policy_updates",
+      "to": "three_way_direction_permission",
+      "relation": "جهت فعلی قابل نقض است؛ نگه‌داشتن برچسب قدیمی بدون بررسی خبر تازه درست نیست."
+    },
+    {
+      "from": "indicator_definition_first",
+      "to": "level_trend_acceleration",
+      "relation": "واحد/نوع داده و نسخه تاریخچه را بدان تا سطح و شیب اشتباه مخلوط نشوند."
+    },
+    {
+      "from": "level_trend_acceleration",
+      "to": "policy_effect_feedback",
+      "relation": "روند/تغییر روند در روایت مدرس نشانه‌ای برای اثر اقدامات قبلی و واکنش بعدی است."
+    },
+    {
+      "from": "policy_effect_feedback",
+      "to": "policy_reaction_intermediary",
+      "relation": "واکنش بعدی وابسته به مسیر سیاست و موقعیت چرخه است، نه فقط علامت آخرین عدد."
+    },
+    {
+      "from": "background_vs_session_horizon",
+      "to": "sentiment_not_candle_timing",
+      "relation": "حتی جهت روزانه هم قانون رنگ هر کندل نیست."
+    },
+    {
+      "from": "session_start_evidence_pipeline",
+      "to": "pmi_context_and_sector_conflict",
+      "relation": "تجمیع خبر/داده باید زمینه اقتصادی را حفظ کند و با جمع مکانیکی فلش‌ها یکسان نیست.",
+      "sources": [
+        [
+          11,
+          457,
+          650
+        ],
+        [
+          11,
+          866,
+          1258
+        ]
+      ]
+    },
+    {
+      "from": "session_start_evidence_pipeline",
+      "to": "time_bound_bias_and_regime",
+      "relation": "خروجی ثبت‌شده باید زمان/افق و اختلاف شواهد را حفظ کند؛ یک بار تحلیل، مجوز کل روز نیست.",
+      "sources": [
+        [
+          11,
+          2625,
+          2649
+        ],
+        [
+          11,
+          3008,
+          3031
+        ]
+      ]
+    },
+    {
+      "from": "session_start_evidence_pipeline",
+      "to": "degraded_source_coverage_not_full_confirmation",
+      "relation": "اجرای ناقص مسیر معرفی‌شده باید با منبع غایب و سطح اطمینان متفاوت ثبت شود؛ بازسازی داده یا تأیید گمشده ممنوع.",
+      "sources": [
+        [
+          11,
+          866,
+          1258
+        ],
+        [
+          12,
+          877,
+          972
+        ]
+      ]
+    },
+    {
+      "from": "time_bound_bias_and_regime",
+      "to": "price_stop_geometry_vs_monetary_risk",
+      "relation": "مجوز جهت، انتخاب نقطه و تخصیص ریسک سه تصمیم جدا هستند.",
+      "sources": [
+        [
+          13,
+          268,
+          396
+        ],
+        [
+          13,
+          770,
+          937
+        ]
+      ]
+    },
+    {
+      "from": "sensitive_zone_direction_confirmation_s13",
+      "to": "wick_body_context_uncertainty",
+      "relation": "Zone reaction and candle uncertainty both allow continuation/reversal; neither guarantees entry."
+    },
+    {
+      "from": "forming_candle_vs_closed_aggregation",
+      "to": "base_rally_transition_relative_scale",
+      "relation": "Same underlying movement may classify differently after aggregation; classification must retain analysis scale and as-of time.",
+      "sources": [
+        [
+          13,
+          1626,
+          1800
+        ],
+        [
+          14,
+          2195,
+          2384
+        ]
+      ]
+    },
+    {
+      "from": "price_stop_geometry_vs_monetary_risk",
+      "to": "trend_strength_selects_entry_family",
+      "relation": "Chosen timeframe and swing geometry constrain trade family and stop structure; smaller timeframe stop is a different model.",
+      "sources": [
+        [
+          14,
+          2408,
+          2588
+        ],
+        [
+          14,
+          3111,
+          3587
+        ]
+      ]
+    },
+    {
+      "from": "trend_strength_selects_entry_family",
+      "to": "A15-strong-trend-PRZ-exception",
+      "relation": "qualified_by_later_multifactor_context",
+      "sources": [
+        [
+          15,
+          3443,
+          3512
+        ]
+      ]
+    },
+    {
+      "from": "A15-pivot-causal-confirmation",
+      "to": "completed_pullback_close_confirmation",
+      "relation": "partial_refinement_not_full_pivot_algorithm"
+    },
+    {
+      "from": "completed_pullback_close_confirmation",
+      "to": "pullback_retest_tolerance",
+      "relation": "standard_branch_retest_is_not_exact_line_touch",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "completed_pullback_close_confirmation",
+      "to": "classical_break_strength_branches",
+      "relation": "qualified_by_weak_break_early_fullbody_exception_not_global_close_rule",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "liquidity_cluster_vs_single_pivot",
+      "to": "confluence_zone_not_signal",
+      "relation": "zone_contributors_do_not_supply_entry_timing",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "orderblock_relative_sequence",
+      "to": "zone_priority_distance_context",
+      "relation": "selection_depends_on_zone_type_proximity_and_current_sequence",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "fvg_three_candle_scope",
+      "to": "zone_priority_distance_context",
+      "relation": "FVG_priority_and_nearness_are_contextual_not_global_distance_rule",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "zone_priority_distance_context",
+      "to": "reference_timeframe_aggregation",
+      "relation": "adjacent_FVG_or_OB_can_aggregate_without_importing_future_information",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "zone_consumption_current_sequence",
+      "to": "asof_pivot_information_boundary",
+      "relation": "retain_only_information_available_in_current_asof_structure",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "forming_candle_vs_closed_aggregation",
+      "to": "reference_timeframe_aggregation",
+      "relation": "same_price_path_different_scale_not_independent_market_evidence",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "wick_body_context_uncertainty",
+      "to": "reversal_three_star_branches",
+      "relation": "doubt_confidence_definitions_refined_but_wick_comparator_unresolved",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "break_line_is_zone_edge",
+      "to": "classical_break_strength_branches",
+      "relation": "break_strength_branch_requires_specific_preidentified_break_line",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "classical_break_strength_branches",
+      "to": "stoppunch_conditional_admission",
+      "relation": "classical_branches_distinct_from_teacher_personal_model",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "sensitive_zone_direction_confirmation_s13",
+      "to": "stoppunch_conditional_admission",
+      "relation": "qualified_by_conditional_between_zone_admission_and_form_mapping",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "pivot_selection_asof_not_forced_symmetry",
+      "to": "asof_pivot_information_boundary",
+      "relation": "later_session_explicitly_rejects_future_pivot_at_claimed_entry",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "competing_drivers",
+      "to": "symbol_specific_direction_and_risk",
+      "relation": "each_symbol_and_independent_driver_retained_not_forced_cross_asset_direction",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "precommitted_process_two_waits",
+      "to": "reversal_three_star_branches",
+      "relation": "wait_for_branch_conditions_not_prediction_or_result_based_entry",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "price_stop_geometry_vs_monetary_risk",
+      "to": "risk_distance_contract_position_size",
+      "relation": "entry_stop_distance_and_monetary_budget_connect_through_contract_units",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "risk_distance_contract_position_size",
+      "to": "risk_budget_minimum_lot_feasibility",
+      "relation": "minimum_volume_can_reject_setup_without_moving_structural_stop",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "management_labels_are_sl_movements",
+      "to": "protected_float_not_realized_pnl",
+      "relation": "SL_change_does_not_realize_PnL_or_reduce_position_volume",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "protected_float_not_realized_pnl",
+      "to": "teacher_rp_urp_withdrawal_scope",
+      "relation": "standard_realization_vs_teacher_withdrawal_terminology_distinct",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "rr_definition_and_illustrative_policies",
+      "to": "box_fixed_rules_journal_review",
+      "relation": "choose_and_predeclare_one_policy_before_box_not_merge_all_examples",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "box_fixed_rules_journal_review",
+      "to": "predeclared_limits_and_incomplete_tree",
+      "relation": "fixed_rules_include_predeclared_early_stop_but_tree_not_complete",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "predeclared_limits_and_incomplete_tree",
+      "to": "symbol_specific_direction_and_risk",
+      "relation": "two_setups_do_not_authorize_two_simultaneous_risk_budgets",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "analysis_drawings_not_execution",
+      "to": "price_stop_geometry_vs_monetary_risk",
+      "relation": "analysis_geometry_does_not_authorize_execution_or_imply_engine_readiness",
+      "relation_level": "SYNTHESIS_FROM_TEXT_NOT_EXECUTABLE_RULE"
+    },
+    {
+      "from": "stoppunch_conditional_admission",
+      "to": "A22-zone-arrival-vs-entry-location",
+      "relation": "location_semantics_need_media_confirmation"
+    }
+  ],
+  "entry_branches": [
+    {
+      "id": "PULLBACK_STANDARD",
+      "concept_id": "completed_pullback_close_confirmation",
+      "teacher_meaning_summary_fa": "شکست، تشکیل پیوت بعد شکست، بازآزمایی و بسته‌شدن فراتر از پیوت در جهت مجاز.",
+      "decision_event_fa": "کلوز فراتر از پیوتِ پس از شکست؛ نه خودِ تماس با خط.",
+      "required_context_fa": [
+        "جهت sentiment",
+        "سطح و پیوتِ معلوم در همان زمان",
+        "بازآزمایی با تلورانس درسی"
+      ],
+      "open_operational_fields": [
+        "pivot_confirmation",
+        "retest_tolerance",
+        "invalidation"
+      ],
+      "sources": [
+        [
+          16,
+          615,
+          854
+        ],
+        [
+          16,
+          1003,
+          1109
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "pivot_confirmation",
+        "zone_geometry",
+        "zone_invalidation"
+      ]
+    },
+    {
+      "id": "REVERSAL_CLASSIC",
+      "concept_id": "reversal_three_star_branches",
+      "teacher_meaning_summary_fa": "رسیدن به گره، شک و اولین اطمینان در جهت sentiment؛ برگشت نسبت به لگ آخر است.",
+      "decision_event_fa": "کلوز اولین کندل اطمینان در شاخهٔ کلاسیک.",
+      "required_context_fa": [
+        "گره انتخاب‌شده",
+        "جهت sentiment",
+        "شک و اطمینان در زمینه"
+      ],
+      "open_operational_fields": [
+        "zone_geometry",
+        "doubt_confidence_definition"
+      ],
+      "sources": [
+        [
+          20,
+          2188.86,
+          2306.84
+        ],
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          20,
+          4117.72,
+          4483.72
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "candle_classes",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "REVERSAL_THREE",
+      "concept_id": "reversal_three_star_branches",
+      "teacher_meaning_summary_fa": "سه کندل هم‌جهت با شرط شک/اطمینان و قید نیمهٔ لگ؛ صرف سه کندل هم‌رنگ کافی نیست.",
+      "decision_event_fa": "تکمیل توالیِ مدل و کلوز متناظر طبق درس.",
+      "required_context_fa": [
+        "جهت sentiment",
+        "گره/زمینهٔ مدل",
+        "توالی و قید نیمهٔ لگ"
+      ],
+      "open_operational_fields": [
+        "doubt_confidence_definition",
+        "half_leg_reference",
+        "bearish_half_leg_conflict"
+      ],
+      "sources": [
+        [
+          20,
+          2188.86,
+          2306.84
+        ],
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          20,
+          4117.72,
+          4483.72
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "bearish_specifics",
+        "candle_classes",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "REVERSAL_STAR",
+      "concept_id": "reversal_three_star_branches",
+      "teacher_meaning_summary_fa": "اطمینانِ ورود به ناحیه، شک، سپس اطمینان معامله با نفوذِ توصیف‌شده در بدنهٔ اول؛ قید نیمهٔ لگ حفظ می‌شود.",
+      "decision_event_fa": "کلوز اطمینانِ کامل‌کنندهٔ مدل.",
+      "required_context_fa": [
+        "جهت sentiment",
+        "گره",
+        "ساختار سه‌مرحله‌ای"
+      ],
+      "open_operational_fields": [
+        "doubt_confidence_definition",
+        "body_penetration_variant",
+        "bearish_half_leg_conflict"
+      ],
+      "sources": [
+        [
+          20,
+          2188.86,
+          2306.84
+        ],
+        [
+          20,
+          2660.22,
+          3255.4
+        ],
+        [
+          20,
+          3440.82,
+          4048.72
+        ],
+        [
+          20,
+          4117.72,
+          4483.72
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "bearish_specifics",
+        "candle_classes"
+      ]
+    },
+    {
+      "id": "BREAK_STRONG",
+      "concept_id": "classical_break_strength_branches",
+      "teacher_meaning_summary_fa": "کندل قویِ fullbody/marubozu در آن‌سوی خط شکست؛ انتخاب خط برای زون، لبهٔ دورتر آن است.",
+      "decision_event_fa": "کلوز کندل شکستِ واجد شرط.",
+      "required_context_fa": [
+        "جهت مجاز",
+        "خط شکستِ درست",
+        "قدرت نسبت به سکانس"
+      ],
+      "open_operational_fields": [
+        "strong_candle_definition",
+        "zone_geometry"
+      ],
+      "sources": [
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          21,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "candle_classes",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "BREAK_WEAK_PIVOT",
+      "concept_id": "classical_break_strength_branches",
+      "teacher_meaning_summary_fa": "شکست ضعیف سپس پولبک؛ مسیر عادی با کلوز فراتر از پیوت تأیید می‌شود.",
+      "decision_event_fa": "کلوز فراتر از پیوت پس از پولبک.",
+      "required_context_fa": [
+        "شکست ضعیف",
+        "پولبک",
+        "پیوت در دسترس"
+      ],
+      "open_operational_fields": [
+        "weak_candle_definition",
+        "pivot_confirmation",
+        "retest_tolerance"
+      ],
+      "sources": [
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          21,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "candle_classes",
+        "pivot_confirmation",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "concept_id": "classical_break_strength_branches",
+      "teacher_meaning_summary_fa": "پس از پولبکِ شکست ضعیف، fullbody/marubozu می‌تواند پیش از عبور پیوت، استثنای ورودِ شرح‌داده‌شده باشد.",
+      "decision_event_fa": "کلوز fullbody/marubozu مربوط به همین استثنا.",
+      "required_context_fa": [
+        "جهت مجاز",
+        "شکست ضعیف و پولبک قبلی",
+        "شرط خاص کندل"
+      ],
+      "open_operational_fields": [
+        "weak_candle_definition",
+        "strong_candle_definition",
+        "exception_geometry"
+      ],
+      "sources": [
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          21,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "candle_classes",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "BREAK_VERY_STRONG_RETEST",
+      "concept_id": "classical_break_strength_branches",
+      "teacher_meaning_summary_fa": "برای شکست خیلی‌قوی نسبت به سکانس، بازگشت/تماس نیمهٔ بدنه مطرح است؛ کندل تأیید تازه همواره الزامی نیست و ادامهٔ دور تعقیب نمی‌شود.",
+      "decision_event_fa": "رویداد تماس با نیمهٔ بدنهٔ کندل مرجع، در شرایط همین شاخه.",
+      "required_context_fa": [
+        "طبقهٔ خیلی‌قویِ معتبر",
+        "بدنهٔ مرجع معلوم",
+        "بازگشت به نقطهٔ تعریف‌شده"
+      ],
+      "open_operational_fields": [
+        "very_strong_definition",
+        "touch_execution_semantics"
+      ],
+      "sources": [
+        [
+          21,
+          2274,
+          2649.38
+        ],
+        [
+          21,
+          2770.48,
+          3153.16
+        ],
+        [
+          21,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "scope": "SOURCE_DESCRIPTION_CURRENT_EXTRACTION",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "open_field_group_ids": [
+        "candle_classes",
+        "contract_cost_sizing"
+      ]
+    },
+    {
+      "id": "STOPPUNCH_SAME_COLOUR",
+      "concept_id": "stoppunch_conditional_admission",
+      "teacher_meaning_summary_fa": "حرکت قوی، مکث هم‌رنگ نسبت به حرکت قبلی و پانچ متناظر؛ ستون چپِ شکل جلسه۲۱ در زمینهٔ گره توضیح داده می‌شود.",
+      "decision_event_fa": "کلوز کندل مکث هم‌رنگ در شرایط مطرح‌شده؛ الزام عمومی به کندل اضافه ساخته نمی‌شود.",
+      "required_context_fa": [
+        "زمینهٔ گره",
+        "حرکت قوی",
+        "مکث هم‌رنگ",
+        "هم‌جهتی لازم"
+      ],
+      "open_operational_fields": [
+        "strong_candle_definition",
+        "same_colour_pause_geometry",
+        "zone_geometry"
+      ],
+      "sources": [
+        [
+          21,
+          3687.86,
+          4230
+        ],
+        [
+          21,
+          4303,
+          4597.9
+        ],
+        [
+          22,
+          2413,
+          2543.88
+        ]
+      ],
+      "scope": "SESSION21_UPWARD_DIAGRAM_AND_CONTEXT_NO_UNPROVEN_SELL_MIRROR",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "evidence_update": "STOPPUNCH_THREE_FORMS_FA.md: recovered video21 pointer mapping; original ASR status superseded for form/location only.",
+      "open_field_group_ids": [
+        "candle_classes",
+        "zone_geometry"
+      ]
+    },
+    {
+      "id": "STOPPUNCH_DOJI_AHEAD",
+      "concept_id": "stoppunch_conditional_admission",
+      "teacher_meaning_summary_fa": "ستون راست: دوجی در زمینهٔ گره و جلو بودنِ شمار تحلیل درست نسبت به غلط؛ این حالت، سود دلاری نیست.",
+      "decision_event_fa": "کلوز خود دوجی در حالت جلوِ شمارشیِ مطرح‌شده.",
+      "required_context_fa": [
+        "زمینهٔ گره",
+        "دوجی",
+        "day_state=AHEAD_BY_ANALYSIS_COUNT"
+      ],
+      "open_operational_fields": [
+        "doji_definition",
+        "day_count_increment",
+        "start_or_losing_day"
+      ],
+      "sources": [
+        [
+          21,
+          3687.86,
+          4230
+        ],
+        [
+          21,
+          4303,
+          4597.9
+        ],
+        [
+          22,
+          2413,
+          2543.88
+        ]
+      ],
+      "scope": "SESSION21_UPWARD_DIAGRAM_AND_CONTEXT_NO_UNPROVEN_SELL_MIRROR",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "evidence_update": "STOPPUNCH_THREE_FORMS_FA.md: recovered video21 pointer mapping; original ASR status superseded for form/location only.",
+      "open_field_group_ids": [
+        "candle_classes",
+        "day_count_state"
+      ]
+    },
+    {
+      "id": "STOPPUNCH_DOJI_TIED",
+      "concept_id": "stoppunch_conditional_admission",
+      "teacher_meaning_summary_fa": "ستون راست در حالت سربه‌سرِ شمارشی: کلوز بعدی بالای سایه و در نزدیکیِ محدودهٔ شرح‌داده‌شده.",
+      "decision_event_fa": "کلوز بعدیِ واجد شرط؛ صرف عبور دور از ناحیه کافی نیست.",
+      "required_context_fa": [
+        "زمینهٔ گره",
+        "دوجی",
+        "day_state=TIED_BY_ANALYSIS_COUNT",
+        "تأیید نزدیک"
+      ],
+      "open_operational_fields": [
+        "doji_definition",
+        "day_count_increment",
+        "near_confirmation_distance",
+        "start_or_losing_day"
+      ],
+      "sources": [
+        [
+          21,
+          3687.86,
+          4230
+        ],
+        [
+          21,
+          4303,
+          4597.9
+        ],
+        [
+          22,
+          2413,
+          2543.88
+        ]
+      ],
+      "scope": "SESSION21_UPWARD_DIAGRAM_AND_CONTEXT_NO_UNPROVEN_SELL_MIRROR",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "evidence_update": "STOPPUNCH_THREE_FORMS_FA.md: recovered video21 pointer mapping; original ASR status superseded for form/location only.",
+      "open_field_group_ids": [
+        "candle_classes",
+        "confirmation_distance",
+        "day_count_state"
+      ]
+    },
+    {
+      "id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "concept_id": "stoppunch_conditional_admission",
+      "teacher_meaning_summary_fa": "ستون وسط: حرکت قوی، مکث مخالف‌رنگ و تأیید بعدی در جهت sentiment؛ با تکمیل شروط، بین گره‌های قبلی نیز مطرح است.",
+      "decision_event_fa": "کلوز تأیید بعدی در محدودهٔ توصیف‌شده؛ هر مکث بین گره‌ها مجاز نیست.",
+      "required_context_fa": [
+        "جهت sentiment",
+        "توالی کامل",
+        "تأیید نزدیک",
+        "مکانِ واجد شرایطِ همان مدل"
+      ],
+      "open_operational_fields": [
+        "strong_candle_definition",
+        "opposite_pause_geometry",
+        "near_confirmation_distance"
+      ],
+      "sources": [
+        [
+          21,
+          3687.86,
+          4230
+        ],
+        [
+          21,
+          4303,
+          4597.9
+        ],
+        [
+          22,
+          2413,
+          2543.88
+        ],
+        [
+          23,
+          4694,
+          4728
+        ]
+      ],
+      "scope": "SESSION21_UPWARD_DIAGRAM_PLUS_SESSION23_EXAMPLE_NO_UNPROVEN_SELL_MIRROR",
+      "autonomous_entry_rule_complete": false,
+      "execution_fill_price_claimed": false,
+      "numeric_defaults_invented": false,
+      "evidence_update": "STOPPUNCH_THREE_FORMS_FA.md: recovered video21 pointer mapping; original ASR status superseded for form/location only.",
+      "open_field_group_ids": [
+        "candle_classes",
+        "confirmation_distance"
+      ]
+    }
+  ],
+  "source_scope_corrections": [
+    {
+      "id": "strong_prz_exception",
+      "sources": [
+        [
+          14,
+          3330,
+          3415
+        ],
+        [
+          15,
+          3443,
+          3512
+        ]
+      ],
+      "meaning": "Strong-trend pullback can be considered with PRZ/liquidity/FVG and entry confirmation; earlier breakout-only description is context-limited."
+    },
+    {
+      "id": "stoppunch_form_mapping",
+      "sources": [
+        [
+          21,
+          4201,
+          4223
+        ]
+      ],
+      "meaning": "Left same-colour and right doji use zone context; middle opposite-colour plus confirmation can occur between preexisting zones with conditions."
+    }
+  ],
+  "operational_fields_requiring_explicit_definition": [
+    {
+      "id": "bias_aggregation",
+      "current_extraction_question_fa": "تجمیع و حل تعارض خبر/داده/بین‌بازاری؛ وزن عددی ثابت از مدرس استخراج نشده.",
+      "concept_ids": [
+        "input_categories_priority",
+        "session_start_evidence_pipeline"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "pivot_confirmation",
+      "current_extraction_question_fa": "پیوت چه زمانی برای اولین بار معلوم است و معیار برگشت/تأیید آن چیست؟",
+      "concept_ids": [
+        "pivot_selection_asof_not_forced_symmetry",
+        "asof_pivot_information_boundary"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "zone_geometry",
+      "current_extraction_question_fa": "حدود ناحیه، خوشه، سکانس و فاصلهٔ معنی‌دار باید برچسب/تعریف شود؛ ATR یا تعداد بار دلخواه به مدرس نسبت داده نشود.",
+      "concept_ids": [
+        "liquidity_cluster_vs_single_pivot",
+        "zone_priority_distance_context"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "trend_strength",
+      "current_extraction_question_fa": "باند ضعیف/عادی/قوی و استثنای PRZ باید از قبل مشخص شوند؛ strong=breakout-only جهانی نیست.",
+      "concept_ids": [
+        "trend_strength_selects_entry_family"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "candle_classes",
+      "current_extraction_question_fa": "قدرت، شک، اطمینان، دوجی، fullbody و خیلی‌قوی نسبی‌اند؛ مرز عددیِ عمومی در شواهد حاضر گواهی نشده.",
+      "concept_ids": [
+        "wick_body_context_uncertainty",
+        "classical_break_strength_branches"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "confirmation_distance",
+      "current_extraction_question_fa": "نزدیکی، دیرشدن و فاصلهٔ بیش‌ازحد در تأیید؛ عدد عمومی تعیین نشده.",
+      "concept_ids": [
+        "stoppunch_conditional_admission"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "day_count_state",
+      "current_extraction_question_fa": "قاعدهٔ شمارش درست/غلط، حالت شروع/عقب‌بودن روز و نسبت آن با وضعیت باکس کامل نیست؛ با PnL جایگزین نشود.",
+      "concept_ids": [
+        "stoppunch_conditional_admission",
+        "box_fixed_rules_journal_review"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "one_third_stop",
+      "current_extraction_question_fa": "انتخاب مبدأ/انتها و نقطهٔ ناحیهٔ یک‌سوم هنوز فرمول عمومی ندارد؛ دو مثال سازگار مساوی اثبات فرمول نیست.",
+      "concept_ids": [
+        "price_stop_geometry_vs_monetary_risk",
+        "risk_distance_contract_position_size"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "target_policy",
+      "current_extraction_question_fa": "مدل هدف و نسبت انتخابی برای باکس باید پیشاپیش قفل شود؛ مثال‌های تجربه مدرس یک default همگانی نیست.",
+      "concept_ids": [
+        "rr_definition_and_illustrative_policies"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "management_triggers",
+      "current_extraction_question_fa": "آستانه و زمان فعال‌شدن reduce/riskfree/save و قیمت جدید SL برای سیاست منتخب باید مشخص شود.",
+      "concept_ids": [
+        "management_labels_are_sl_movements"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "contract_cost_sizing",
+      "current_extraction_question_fa": "قرارداد/ارز حساب/پوینت/گام حجم/حداقل حجم/هزینه مشخصات مستقل کارگزارند؛ تصویر ابزار نقاشی مدرک آن‌ها نیست.",
+      "concept_ids": [
+        "risk_distance_contract_position_size",
+        "risk_budget_minimum_lot_feasibility"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "risk_tree_stops",
+      "current_extraction_question_fa": "تمام شاخه‌های درخت، حد روز/باکس، مبنای حساب و رفتار پوزیشن باز هنگام توقف کامل نیست.",
+      "concept_ids": [
+        "predeclared_limits_and_incomplete_tree"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "zone_invalidation",
+      "current_extraction_question_fa": "پرشدن جزئی FVG، تصفیه، هانت و ابطال با هر لمس یا انقضای روزانه یکی نیست.",
+      "concept_ids": [
+        "fvg_three_candle_scope",
+        "zone_consumption_current_sequence"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "bearish_specifics",
+      "current_extraction_question_fa": "جزئیات فروش و تعارضِ نیمهٔ لگ فروش باید شاهد مستقل داشته باشد؛ از شکل صعودی خودکار قرینه نشود.",
+      "concept_ids": [
+        "reversal_three_star_branches",
+        "stoppunch_conditional_admission"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "bias_lifetime",
+      "current_extraction_question_fa": "مرور ۲تا۳ساعته expiry قطعی نیست؛ زمان اعتبار و رخداد نقض برای سیاست باید از قبل ثبت شود.",
+      "concept_ids": [
+        "time_bound_bias_and_regime"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "partial_sources",
+      "current_extraction_question_fa": "رفتار هنگام نبود تأییدهای منبع، unknown و دوطرفه باید تفکیک شود؛ کمبود داده تأیید کامل نیست.",
+      "concept_ids": [
+        "degraded_source_coverage_not_full_confirmation"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    },
+    {
+      "id": "box_definition",
+      "current_extraction_question_fa": "تعداد/مدت باکس، قواعد ثابت، بازبینی و اصلاح برای باکس بعد لازم است؛ همهٔ مثال‌های مدیریت با هم ترکیب نشوند.",
+      "concept_ids": [
+        "box_fixed_rules_journal_review",
+        "precommitted_process_two_waits"
+      ],
+      "implementation_default": null,
+      "blocks_teacher_documentation_delivery": false,
+      "teacher_condition_preserved": true,
+      "limitation_owner": "CURRENT_ASSISTANT_EXTRACTION_NOT_PROOF_TEACHER_LACKS_A_PRECISE_RULE",
+      "resolution": "FOLLOW_TEACHER_WORDS_AND_EXAMPLES; DO_NOT_REPLACE_UNDERSTANDING_WITH_UNRELATED_METHOD_OR_INVENTED_DEFAULT"
+    }
+  ],
+  "interpretation_contract": {
+    "unknown_is_not_teacher_no_trade_rule": true,
+    "unknown_is_not_two_sided_sentiment": true,
+    "decision_close_is_not_guaranteed_fill": true,
+    "day_count_is_not_dollar_pnl": true,
+    "no_unproven_sell_mirror": true,
+    "one_third_region_is_not_exact_equality": true,
+    "teacher_examples_are_not_automatic_global_defaults": true
+  },
+  "standalone_engine_ready": false,
+  "market_profitability_verified": false,
+  "orders_authorized": false,
+  "media_semantic_direct_listening_claimed": false
+}
