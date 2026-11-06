@@ -1,0 +1,17 @@
+{
+  "reviewer": "root_independent_read_and_hash_verification",
+  "scope": "audit code, numeric helper, atomic output guard, locked policy/addendum, fifteen test definitions, complete aggregate; not duplicate strategy execution",
+  "locked_source_sha256": "631d380b2d2cc8a6e06e7607ebf2c23fa58987facb3be66909013d3c06d0a77a",
+  "input_sha256": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "first_result_sha256": "9621d55b7fc797e83ee19c7c73533203fdf87bde55eb7e656a6f220e0903296c",
+  "audit_aggregate_sha256": "441bde770b0ae09ff4f38234709cd11cd7288a736aec104c4b7cfd1c4e639d04",
+  "original_hashes_rechecked_unchanged": true,
+  "cost_overlay_difference_per_closed_entry_usd": 0.9,
+  "actual_numeric_tolerance_affected_closed_cases_all_scenarios": 0,
+  "short_fixed_spread_stop_contract": "stopAsk = stopBid + spread; BidHigh >= stopBid iff AskHigh >= stopAsk",
+  "unknown_causes": "49/7/6 all history discontinuity before horizon in reference model; neither official closure nor broker intention established",
+  "no_full_year_pnl_or_annual_drawdown_claim": true,
+  "review_blocker_found": false,
+  "publication_documents_not_yet_reviewed": false,
+  "publication_document_review": "REPORT_FA.md and independent period plan read in full; requested finite total B+C+D collection budget and independent historical clock regime evidence before publication"
+}
