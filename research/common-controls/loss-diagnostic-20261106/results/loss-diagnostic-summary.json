@@ -1,0 +1,1767 @@
+{
+  "schema": 1,
+  "source_identity": "36dd53f0cee311b12cdf00b4133efd87537778d55b63f0faefdc4b2c5b7603db",
+  "protocol_sha256": "02470f3b25ab153f6f5770f45264e02243846e0cbfb3dd28962897c08f0ff92d",
+  "legacy_table_original_summary_byte_hash_verified": false,
+  "legacy_table_original_summary_claimed_hash": "d0d79c04e5382daeeabb707162286243ba5541807c66d554458c45c3be6addc1",
+  "table_numerically_reconciled_with_trace": true,
+  "hashes": {
+    "ff-session-replay-summary.json": "3ba733c7e292e4f429b209cac2467a01104ce179bc5ee2dd15780443fed6f07a",
+    "ff-session-results-table.json": "134d9860a71a783429d8a33bcf56cf8fdf4300046d5642817b8a3b99ea68acaf",
+    "ff-session-replay-by-segment.json": "c93286a677f87c1e73dcd8830ffc1d870f8aea2d75fd5db3ae31425166ba816a",
+    "ff-session-replay-policy.json": "4e6f3e2568e96984556a01ec5e3b8a05c6bcdda33164e59bccf057d231079eb7",
+    "ff-session-replay-selection.json": "541e7662db035581c8343befd7624de5825499415d8170e0e578d2a19a2be587",
+    "gap-classifications-v4.json": "cd50081f8b055729b301ab067684eb47c45b332ea8f2290d7b342639c50c6029",
+    "all-gap-neighbor-evidence-v1.json": "dca50ca48888b8250b44b92c07d24adebbfc285e8a4405d0c160738b8b17e2ee",
+    "36dd53f0cee311b12cdf00b4133efd87537778d55b63f0faefdc4b2c5b7603db.json": "736861224519ca66cc0d48ebf1d1f4fecb515bb39fa553366ef2c944c3b886e5"
+  },
+  "trace_content_digest": "05c6b2b323696ca2469fb0b5c3a7564ec07a5442eb80cfc797f6d202a2941ed9",
+  "recorded_engine_code_hash_checks": {
+    "historical_engine.py": true,
+    "historical_management.py": true,
+    "session_research.py": true,
+    "run_session_research.py": true,
+    "historical_candidates.py": true,
+    "offline_evidence.py": true
+  },
+  "checked_resolved_cash_identities": 7278,
+  "checked_unresolved_no_invented_exit": 415,
+  "eligible_cells": 3108,
+  "skipped_cells": 24,
+  "annual_replay_executed": false,
+  "decisions": [
+    {
+      "candidate": "breakout-20-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "decision": "STOP",
+      "market_approved": false,
+      "fresh_holdout": "NO_FRESH_HOLDOUT"
+    }
+  ],
+  "approved_methods": 0,
+  "scope": "EXPLORATORY_ACCOUNTING_ATTRIBUTION_NOT_MARKET_CAUSAL_IDENTIFICATION",
+  "metrics": [
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "base",
+      "positions": 1290,
+      "resolved": 1209,
+      "unresolved": 81,
+      "known_partial_net": "-784.4000",
+      "full_net": null,
+      "wins": 683,
+      "losses": 525,
+      "breakeven": 1,
+      "win_rate_resolved": "0.5649296939619520264681555004",
+      "win_loss_count_ratio": "1.300952380952380952380952381",
+      "positive_net_sum": "6597.1600",
+      "negative_net_sum": "-7381.5600",
+      "mean_win": "9.659092240117130307467057101",
+      "mean_loss_magnitude": "14.06011428571428571428571429",
+      "profit_factor": "0.8937351996055034437165043703",
+      "closed_pnl_distribution": {
+        "count": 1209,
+        "min": "-54.2200",
+        "q25": "-11.8900",
+        "median": "9.9000",
+        "q75": "9.9000",
+        "max": "9.9000",
+        "mean": "-0.6488006617038875103391232423"
+      },
+      "reasons": {
+        "MAX_HOLD_CLOSE_ASSUMED": 76,
+        "TARGET": 655,
+        "STOP": 477,
+        "ROLLOVER_COST_UNKNOWN": 70,
+        "UNRESOLVED_BOUNDARY": 1,
+        "AMBIGUOUS_SL_TP": 10,
+        "TARGET_AT_OPEN_CAPPED": 1
+      },
+      "resolved_exit_reasons": {
+        "MAX_HOLD_CLOSE_ASSUMED": 76,
+        "TARGET": 655,
+        "STOP": 477,
+        "TARGET_AT_OPEN_CAPPED": 1
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 70,
+        "UNRESOLVED_BOUNDARY": 1,
+        "AMBIGUOUS_SL_TP": 10
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 2,
+      "fully_resolved_segments": 179,
+      "unresolved_segments": 81,
+      "fully_resolved_segment_net": "-664.5000",
+      "resolved_prefix_in_unresolved_segments_net": "-119.9000",
+      "fully_resolved_segment_closed_positions": 809,
+      "unresolved_segment_closed_positions": 400,
+      "unresolved_share": "0.06279069767441860465116279070",
+      "worst_closed_dd_fully_resolved_segment": "86.3000",
+      "worst_observed_closed_prefix_dd": "89.2900",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-784.4000",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 81,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "105",
+          "max": "180",
+          "mean": "73.33333333333333333333333333"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 81,
+          "min": "15",
+          "q25": "45",
+          "median": "75",
+          "q75": "135",
+          "max": "855",
+          "mean": "123.1481481481481481481481481"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 81,
+          "min": "7.4300",
+          "q25": "9.8700",
+          "median": "11.8400",
+          "q75": "16.8800",
+          "max": "84.1700",
+          "mean": "16.30950617283950617283950617"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 1290,
+        "min": "5.9100",
+        "q25": "11.152500",
+        "median": "14.20000",
+        "q75": "19.295000",
+        "max": "96.0900",
+        "mean": "17.09544186046511627906976744"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 1209,
+        "min": "15",
+        "q25": "15",
+        "median": "45",
+        "q75": "75",
+        "max": "180",
+        "mean": "57.77915632754342431761786600"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 69,
+        "AMBIGUOUS_SL_TP": 10,
+        "MAX_HOLD_CLOSE_ASSUMED": 2
+      },
+      "monthly_positive_known_partial": 3,
+      "monthly_negative_known_partial": 10,
+      "entry_count": 1290,
+      "resolved_exit_count": 1209,
+      "signals_callback_count": 1290
+    },
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "envelope",
+      "positions": 1275,
+      "resolved": 1194,
+      "unresolved": 81,
+      "known_partial_net": "-1421.0900",
+      "full_net": null,
+      "wins": 661,
+      "losses": 533,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5536013400335008375209380235",
+      "win_loss_count_ratio": "1.240150093808630393996247655",
+      "positive_net_sum": "6256.0100",
+      "negative_net_sum": "-7677.1000",
+      "mean_win": "9.464462934947049924357034796",
+      "mean_loss_magnitude": "14.40356472795497185741088180",
+      "profit_factor": "0.8148923421604512120462153678",
+      "closed_pnl_distribution": {
+        "count": 1194,
+        "min": "-54.7200",
+        "q25": "-12.505000",
+        "median": "9.70000",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-1.190192629815745393634840871"
+      },
+      "reasons": {
+        "MAX_HOLD_CLOSE_ASSUMED": 78,
+        "TARGET": 636,
+        "STOP": 480,
+        "ROLLOVER_COST_UNKNOWN": 69,
+        "UNRESOLVED_BOUNDARY": 1,
+        "AMBIGUOUS_SL_TP": 11
+      },
+      "resolved_exit_reasons": {
+        "MAX_HOLD_CLOSE_ASSUMED": 78,
+        "TARGET": 636,
+        "STOP": 480
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 69,
+        "UNRESOLVED_BOUNDARY": 1,
+        "AMBIGUOUS_SL_TP": 11
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 2,
+      "fully_resolved_segments": 179,
+      "unresolved_segments": 81,
+      "fully_resolved_segment_net": "-1083.4300",
+      "resolved_prefix_in_unresolved_segments_net": "-337.6600",
+      "fully_resolved_segment_closed_positions": 803,
+      "unresolved_segment_closed_positions": 391,
+      "unresolved_share": "0.06352941176470588235294117647",
+      "worst_closed_dd_fully_resolved_segment": "87.6000",
+      "worst_observed_closed_prefix_dd": "90.4900",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-1301.6900",
+      "commission_from_trace_difference": "119.4000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 81,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "105",
+          "max": "180",
+          "mean": "71.66666666666666666666666667"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 81,
+          "min": "15",
+          "q25": "45",
+          "median": "75",
+          "q75": "135",
+          "max": "855",
+          "mean": "126.2962962962962962962962963"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 81,
+          "min": "7.6100",
+          "q25": "10.1400",
+          "median": "12.0600",
+          "q75": "17.0600",
+          "max": "84.2700",
+          "mean": "16.42197530864197530864197531"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 1275,
+        "min": "6.0100",
+        "q25": "11.38500",
+        "median": "14.3500",
+        "q75": "19.42500",
+        "max": "96.1900",
+        "mean": "17.22444705882352941176470588"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 1194,
+        "min": "15",
+        "q25": "15.00",
+        "median": "45.0",
+        "q75": "75.00",
+        "max": "180",
+        "mean": "58.66834170854271356783919598"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 68,
+        "AMBIGUOUS_SL_TP": 11,
+        "MAX_HOLD_CLOSE_ASSUMED": 2
+      },
+      "monthly_positive_known_partial": 3,
+      "monthly_negative_known_partial": 10,
+      "entry_count": 1275,
+      "resolved_exit_count": 1194,
+      "signals_callback_count": 1275
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "base",
+      "positions": 667,
+      "resolved": 624,
+      "unresolved": 43,
+      "known_partial_net": "-546.4300",
+      "full_net": null,
+      "wins": 359,
+      "losses": 264,
+      "breakeven": 1,
+      "win_rate_resolved": "0.5753205128205128205128205128",
+      "win_loss_count_ratio": "1.359848484848484848484848485",
+      "positive_net_sum": "3481.7500",
+      "negative_net_sum": "-4028.1800",
+      "mean_win": "9.698467966573816155988857939",
+      "mean_loss_magnitude": "15.25825757575757575757575758",
+      "profit_factor": "0.8643481671623413055027332443",
+      "closed_pnl_distribution": {
+        "count": 624,
+        "min": "-76.5000",
+        "q25": "-12.935000",
+        "median": "9.90000",
+        "q75": "9.900000",
+        "max": "9.9000",
+        "mean": "-0.8756891025641025641025641026"
+      },
+      "reasons": {
+        "STOP": 235,
+        "TARGET": 347,
+        "MAX_HOLD_CLOSE_ASSUMED": 41,
+        "ROLLOVER_COST_UNKNOWN": 36,
+        "AMBIGUOUS_SL_TP": 7,
+        "TARGET_AT_OPEN_CAPPED": 1
+      },
+      "resolved_exit_reasons": {
+        "STOP": 235,
+        "TARGET": 347,
+        "MAX_HOLD_CLOSE_ASSUMED": 41,
+        "TARGET_AT_OPEN_CAPPED": 1
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 36,
+        "AMBIGUOUS_SL_TP": 7
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 25,
+      "fully_resolved_segments": 215,
+      "unresolved_segments": 43,
+      "fully_resolved_segment_net": "-696.0200",
+      "resolved_prefix_in_unresolved_segments_net": "149.5900",
+      "fully_resolved_segment_closed_positions": 518,
+      "unresolved_segment_closed_positions": 106,
+      "unresolved_share": "0.06446776611694152923538230885",
+      "worst_closed_dd_fully_resolved_segment": "83.3100",
+      "worst_observed_closed_prefix_dd": "83.3100",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-546.4300",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 43,
+          "min": "15",
+          "q25": "30.0",
+          "median": "60",
+          "q75": "105.0",
+          "max": "165",
+          "mean": "65.93023255813953488372093023"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 43,
+          "min": "15",
+          "q25": "45.0",
+          "median": "75",
+          "q75": "127.5",
+          "max": "510",
+          "mean": "121.3953488372093023255813953"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 43,
+          "min": "7.4300",
+          "q25": "11.00000",
+          "median": "13.8900",
+          "q75": "19.21000",
+          "max": "37.7300",
+          "mean": "16.26232558139534883720930233"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 667,
+        "min": "6.0400",
+        "q25": "12.51000",
+        "median": "15.8900",
+        "q75": "20.88000",
+        "max": "96.0900",
+        "mean": "18.73038980509745127436281859"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 624,
+        "min": "15",
+        "q25": "15.00",
+        "median": "30.0",
+        "q75": "75.00",
+        "max": "180",
+        "mean": "52.88461538461538461538461538"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 36,
+        "AMBIGUOUS_SL_TP": 7
+      },
+      "monthly_positive_known_partial": 3,
+      "monthly_negative_known_partial": 10,
+      "entry_count": 667,
+      "resolved_exit_count": 624,
+      "signals_callback_count": 667
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "envelope",
+      "positions": 659,
+      "resolved": 616,
+      "unresolved": 43,
+      "known_partial_net": "-905.1600",
+      "full_net": null,
+      "wins": 345,
+      "losses": 271,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5600649350649350649350649351",
+      "win_loss_count_ratio": "1.273062730627306273062730627",
+      "positive_net_sum": "3293.0600",
+      "negative_net_sum": "-4198.2200",
+      "mean_win": "9.545101449275362318840579710",
+      "mean_loss_magnitude": "15.49158671586715867158671587",
+      "profit_factor": "0.7843943385530057976952136858",
+      "closed_pnl_distribution": {
+        "count": 616,
+        "min": "-77.0000",
+        "q25": "-13.570000",
+        "median": "9.70000",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-1.469415584415584415584415584"
+      },
+      "reasons": {
+        "STOP": 238,
+        "TARGET": 337,
+        "MAX_HOLD_CLOSE_ASSUMED": 41,
+        "ROLLOVER_COST_UNKNOWN": 35,
+        "AMBIGUOUS_SL_TP": 8
+      },
+      "resolved_exit_reasons": {
+        "STOP": 238,
+        "TARGET": 337,
+        "MAX_HOLD_CLOSE_ASSUMED": 41
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 35,
+        "AMBIGUOUS_SL_TP": 8
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 25,
+      "fully_resolved_segments": 215,
+      "unresolved_segments": 43,
+      "fully_resolved_segment_net": "-949.7700",
+      "resolved_prefix_in_unresolved_segments_net": "44.6100",
+      "fully_resolved_segment_closed_positions": 517,
+      "unresolved_segment_closed_positions": 99,
+      "unresolved_share": "0.06525037936267071320182094082",
+      "worst_closed_dd_fully_resolved_segment": "85.1100",
+      "worst_observed_closed_prefix_dd": "85.1100",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-843.5600",
+      "commission_from_trace_difference": "61.6000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 43,
+          "min": "15",
+          "q25": "30.0",
+          "median": "60",
+          "q75": "97.5",
+          "max": "165",
+          "mean": "63.13953488372093023255813953"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 43,
+          "min": "15",
+          "q25": "45.0",
+          "median": "75",
+          "q75": "127.5",
+          "max": "510",
+          "mean": "127.6744186046511627906976744"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 43,
+          "min": "7.7300",
+          "q25": "11.20000",
+          "median": "14.1900",
+          "q75": "19.41000",
+          "max": "37.8300",
+          "mean": "16.32558139534883720930232558"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 659,
+        "min": "6.1400",
+        "q25": "12.71000",
+        "median": "16.0100",
+        "q75": "20.99500",
+        "max": "96.1900",
+        "mean": "18.81324734446130500758725341"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 616,
+        "min": "15",
+        "q25": "15.00",
+        "median": "30.0",
+        "q75": "75.00",
+        "max": "180",
+        "mean": "53.93668831168831168831168831"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 35,
+        "AMBIGUOUS_SL_TP": 8
+      },
+      "monthly_positive_known_partial": 1,
+      "monthly_negative_known_partial": 12,
+      "entry_count": 659,
+      "resolved_exit_count": 616,
+      "signals_callback_count": 659
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "base",
+      "positions": 1025,
+      "resolved": 981,
+      "unresolved": 44,
+      "known_partial_net": "-952.1200",
+      "full_net": null,
+      "wins": 364,
+      "losses": 617,
+      "breakeven": 0,
+      "win_rate_resolved": "0.3710499490316004077471967380",
+      "win_loss_count_ratio": "0.5899513776337115072933549433",
+      "positive_net_sum": "3555.1000",
+      "negative_net_sum": "-4507.2200",
+      "mean_win": "9.766758241758241758241758242",
+      "mean_loss_magnitude": "7.305056726094003241491085900",
+      "profit_factor": "0.7887567059074107764875022741",
+      "closed_pnl_distribution": {
+        "count": 981,
+        "min": "-51.3200",
+        "q25": "-6.8200",
+        "median": "-3.8500",
+        "q75": "9.9000",
+        "max": "9.9000",
+        "mean": "-0.9705606523955147808358817533"
+      },
+      "reasons": {
+        "STOP": 602,
+        "TARGET": 355,
+        "MAX_HOLD_CLOSE_ASSUMED": 24,
+        "ROLLOVER_COST_UNKNOWN": 34,
+        "AMBIGUOUS_SL_TP": 10
+      },
+      "resolved_exit_reasons": {
+        "STOP": 602,
+        "TARGET": 355,
+        "MAX_HOLD_CLOSE_ASSUMED": 24
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 34,
+        "AMBIGUOUS_SL_TP": 10
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 4,
+      "fully_resolved_segments": 216,
+      "unresolved_segments": 44,
+      "fully_resolved_segment_net": "-790.3300",
+      "resolved_prefix_in_unresolved_segments_net": "-161.7900",
+      "fully_resolved_segment_closed_positions": 814,
+      "unresolved_segment_closed_positions": 167,
+      "unresolved_share": "0.04292682926829268292682926829",
+      "worst_closed_dd_fully_resolved_segment": "62.5300",
+      "worst_observed_closed_prefix_dd": "93.9300",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-952.1200",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 44,
+          "min": "15",
+          "q25": "30.00",
+          "median": "45.0",
+          "q75": "60.00",
+          "max": "165",
+          "mean": "53.18181818181818181818181818"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 44,
+          "min": "15",
+          "q25": "45.00",
+          "median": "60.0",
+          "q75": "150.00",
+          "max": "555",
+          "mean": "134.6590909090909090909090909"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 44,
+          "min": "1.7400",
+          "q25": "3.745000",
+          "median": "5.94000",
+          "q75": "9.947500",
+          "max": "49.3400",
+          "mean": "9.212045454545454545454545455"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 1025,
+        "min": "1.7400",
+        "q25": "4.5500",
+        "median": "6.7200",
+        "q75": "10.5300",
+        "max": "63.0900",
+        "mean": "8.802634146341463414634146341"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 981,
+        "min": "15",
+        "q25": "15",
+        "median": "30",
+        "q75": "45",
+        "max": "180",
+        "mean": "41.88073394495412844036697248"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 29,
+        "AMBIGUOUS_SL_TP": 10,
+        "STOP": 5
+      },
+      "monthly_positive_known_partial": 2,
+      "monthly_negative_known_partial": 11,
+      "entry_count": 1025,
+      "resolved_exit_count": 981,
+      "signals_callback_count": 1025
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "envelope",
+      "positions": 1025,
+      "resolved": 982,
+      "unresolved": 43,
+      "known_partial_net": "-1424.2200",
+      "full_net": null,
+      "wins": 357,
+      "losses": 625,
+      "breakeven": 0,
+      "win_rate_resolved": "0.3635437881873727087576374745",
+      "win_loss_count_ratio": "0.5712",
+      "positive_net_sum": "3401.2300",
+      "negative_net_sum": "-4825.4500",
+      "mean_win": "9.527254901960784313725490196",
+      "mean_loss_magnitude": "7.72072",
+      "profit_factor": "0.7048523971857546964531805324",
+      "closed_pnl_distribution": {
+        "count": 982,
+        "min": "-51.8200",
+        "q25": "-7.247500",
+        "median": "-4.35500",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-1.450325865580448065173116090"
+      },
+      "reasons": {
+        "STOP": 610,
+        "TARGET": 346,
+        "MAX_HOLD_CLOSE_ASSUMED": 26,
+        "AMBIGUOUS_SL_TP": 10,
+        "ROLLOVER_COST_UNKNOWN": 33
+      },
+      "resolved_exit_reasons": {
+        "STOP": 610,
+        "TARGET": 346,
+        "MAX_HOLD_CLOSE_ASSUMED": 26
+      },
+      "unresolved_reasons": {
+        "AMBIGUOUS_SL_TP": 10,
+        "ROLLOVER_COST_UNKNOWN": 33
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 4,
+      "fully_resolved_segments": 217,
+      "unresolved_segments": 43,
+      "fully_resolved_segment_net": "-1182.5000",
+      "resolved_prefix_in_unresolved_segments_net": "-241.7200",
+      "fully_resolved_segment_closed_positions": 818,
+      "unresolved_segment_closed_positions": 164,
+      "unresolved_share": "0.04195121951219512195121951220",
+      "worst_closed_dd_fully_resolved_segment": "64.8300",
+      "worst_observed_closed_prefix_dd": "94.9300",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-1326.0200",
+      "commission_from_trace_difference": "98.2000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 43,
+          "min": "15",
+          "q25": "30.0",
+          "median": "45",
+          "q75": "60.0",
+          "max": "165",
+          "mean": "53.02325581395348837209302326"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 43,
+          "min": "15",
+          "q25": "45.0",
+          "median": "60",
+          "q75": "150.0",
+          "max": "555",
+          "mean": "136.3953488372093023255813953"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 43,
+          "min": "1.9700",
+          "q25": "4.12000",
+          "median": "6.1800",
+          "q75": "10.54500",
+          "max": "49.6400",
+          "mean": "9.582790697674418604651162791"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 1025,
+        "min": "1.9000",
+        "q25": "4.7900",
+        "median": "6.8900",
+        "q75": "10.7200",
+        "max": "63.3900",
+        "mean": "9.008780487804878048780487805"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 982,
+        "min": "15",
+        "q25": "15.00",
+        "median": "30.0",
+        "q75": "45.00",
+        "max": "180",
+        "mean": "42.02138492871690427698574338"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "AMBIGUOUS_SL_TP": 10,
+        "UNRESOLVED_BOUNDARY": 28,
+        "STOP": 5
+      },
+      "monthly_positive_known_partial": 0,
+      "monthly_negative_known_partial": 13,
+      "entry_count": 1025,
+      "resolved_exit_count": 982,
+      "signals_callback_count": 1025
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "base",
+      "positions": 501,
+      "resolved": 480,
+      "unresolved": 21,
+      "known_partial_net": "-505.1000",
+      "full_net": null,
+      "wins": 192,
+      "losses": 288,
+      "breakeven": 0,
+      "win_rate_resolved": "0.4",
+      "win_loss_count_ratio": "0.6666666666666666666666666667",
+      "positive_net_sum": "1885.5400",
+      "negative_net_sum": "-2390.6400",
+      "mean_win": "9.820520833333333333333333333",
+      "mean_loss_magnitude": "8.300833333333333333333333333",
+      "profit_factor": "0.7887176655623598701602918047",
+      "closed_pnl_distribution": {
+        "count": 480,
+        "min": "-43.5900",
+        "q25": "-7.530000",
+        "median": "-3.83500",
+        "q75": "9.900000",
+        "max": "9.900",
+        "mean": "-1.052291666666666666666666667"
+      },
+      "reasons": {
+        "TARGET": 188,
+        "STOP": 280,
+        "AMBIGUOUS_SL_TP": 7,
+        "MAX_HOLD_CLOSE_ASSUMED": 12,
+        "ROLLOVER_COST_UNKNOWN": 14
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 188,
+        "STOP": 280,
+        "MAX_HOLD_CLOSE_ASSUMED": 12
+      },
+      "unresolved_reasons": {
+        "AMBIGUOUS_SL_TP": 7,
+        "ROLLOVER_COST_UNKNOWN": 14
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 40,
+      "fully_resolved_segments": 237,
+      "unresolved_segments": 21,
+      "fully_resolved_segment_net": "-479.8300",
+      "resolved_prefix_in_unresolved_segments_net": "-25.2700",
+      "fully_resolved_segment_closed_positions": 448,
+      "unresolved_segment_closed_positions": 32,
+      "unresolved_share": "0.04191616766467065868263473054",
+      "worst_closed_dd_fully_resolved_segment": "58.6400",
+      "worst_observed_closed_prefix_dd": "58.6400",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-505.1000",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 21,
+          "min": "15",
+          "q25": "15",
+          "median": "45",
+          "q75": "60",
+          "max": "165",
+          "mean": "50.71428571428571428571428571"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 21,
+          "min": "15",
+          "q25": "45",
+          "median": "75",
+          "q75": "240",
+          "max": "465",
+          "mean": "166.4285714285714285714285714"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 21,
+          "min": "1.8700",
+          "q25": "5.9800",
+          "median": "7.0100",
+          "q75": "13.1000",
+          "max": "49.3400",
+          "mean": "11.07952380952380952380952381"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 501,
+        "min": "1.8700",
+        "q25": "5.1300",
+        "median": "7.9000",
+        "q75": "12.5800",
+        "max": "63.0900",
+        "mean": "10.24606786427145708582834331"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 480,
+        "min": "15",
+        "q25": "15.00",
+        "median": "30.0",
+        "q75": "45.00",
+        "max": "180",
+        "mean": "39.1875"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "AMBIGUOUS_SL_TP": 7,
+        "UNRESOLVED_BOUNDARY": 12,
+        "STOP": 2
+      },
+      "monthly_positive_known_partial": 3,
+      "monthly_negative_known_partial": 10,
+      "entry_count": 501,
+      "resolved_exit_count": 480,
+      "signals_callback_count": 501
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "envelope",
+      "positions": 501,
+      "resolved": 480,
+      "unresolved": 21,
+      "known_partial_net": "-723.6000",
+      "full_net": null,
+      "wins": 189,
+      "losses": 291,
+      "breakeven": 0,
+      "win_rate_resolved": "0.39375",
+      "win_loss_count_ratio": "0.6494845360824742268041237113",
+      "positive_net_sum": "1809.8000",
+      "negative_net_sum": "-2533.4000",
+      "mean_win": "9.575661375661375661375661376",
+      "mean_loss_magnitude": "8.705841924398625429553264605",
+      "profit_factor": "0.7143759374753295965895634325",
+      "closed_pnl_distribution": {
+        "count": 480,
+        "min": "-44.0900",
+        "q25": "-7.887500",
+        "median": "-4.32500",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-1.5075"
+      },
+      "reasons": {
+        "TARGET": 184,
+        "STOP": 283,
+        "AMBIGUOUS_SL_TP": 7,
+        "MAX_HOLD_CLOSE_ASSUMED": 13,
+        "ROLLOVER_COST_UNKNOWN": 14
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 184,
+        "STOP": 283,
+        "MAX_HOLD_CLOSE_ASSUMED": 13
+      },
+      "unresolved_reasons": {
+        "AMBIGUOUS_SL_TP": 7,
+        "ROLLOVER_COST_UNKNOWN": 14
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 40,
+      "fully_resolved_segments": 237,
+      "unresolved_segments": 21,
+      "fully_resolved_segment_net": "-688.4300",
+      "resolved_prefix_in_unresolved_segments_net": "-35.1700",
+      "fully_resolved_segment_closed_positions": 448,
+      "unresolved_segment_closed_positions": 32,
+      "unresolved_share": "0.04191616766467065868263473054",
+      "worst_closed_dd_fully_resolved_segment": "60.6400",
+      "worst_observed_closed_prefix_dd": "60.6400",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-675.6000",
+      "commission_from_trace_difference": "48.0000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 21,
+          "min": "15",
+          "q25": "15",
+          "median": "45",
+          "q75": "60",
+          "max": "165",
+          "mean": "50.71428571428571428571428571"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 21,
+          "min": "15",
+          "q25": "45",
+          "median": "75",
+          "q75": "240",
+          "max": "465",
+          "mean": "166.4285714285714285714285714"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 21,
+          "min": "1.9700",
+          "q25": "6.0800",
+          "median": "7.3100",
+          "q75": "13.4000",
+          "max": "49.6400",
+          "mean": "11.26523809523809523809523810"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 501,
+        "min": "1.9700",
+        "q25": "5.3100",
+        "median": "8.1100",
+        "q75": "12.7300",
+        "max": "63.3900",
+        "mean": "10.44706586826347305389221557"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 480,
+        "min": "15",
+        "q25": "15.00",
+        "median": "30.0",
+        "q75": "45.00",
+        "max": "180",
+        "mean": "39.8125"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "AMBIGUOUS_SL_TP": 7,
+        "UNRESOLVED_BOUNDARY": 12,
+        "STOP": 2
+      },
+      "monthly_positive_known_partial": 3,
+      "monthly_negative_known_partial": 10,
+      "entry_count": 501,
+      "resolved_exit_count": 480,
+      "signals_callback_count": 501
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "base",
+      "positions": 262,
+      "resolved": 249,
+      "unresolved": 13,
+      "known_partial_net": "-88.0500",
+      "full_net": null,
+      "wins": 143,
+      "losses": 106,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5742971887550200803212851406",
+      "win_loss_count_ratio": "1.349056603773584905660377358",
+      "positive_net_sum": "1338.5300",
+      "negative_net_sum": "-1426.5800",
+      "mean_win": "9.360349650349650349650349650",
+      "mean_loss_magnitude": "13.45830188679245283018867925",
+      "profit_factor": "0.9382789608714548080023552833",
+      "closed_pnl_distribution": {
+        "count": 249,
+        "min": "-40.4100",
+        "q25": "-11.1900",
+        "median": "9.9000",
+        "q75": "9.9000",
+        "max": "9.9000",
+        "mean": "-0.3536144578313253012048192771"
+      },
+      "reasons": {
+        "TARGET": 133,
+        "ROLLOVER_COST_UNKNOWN": 12,
+        "STOP": 94,
+        "UNRESOLVED_BOUNDARY": 1,
+        "MAX_HOLD_CLOSE_ASSUMED": 22
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 133,
+        "STOP": 94,
+        "MAX_HOLD_CLOSE_ASSUMED": 22
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 12,
+        "UNRESOLVED_BOUNDARY": 1
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 102,
+      "fully_resolved_segments": 247,
+      "unresolved_segments": 13,
+      "fully_resolved_segment_net": "-124.8000",
+      "resolved_prefix_in_unresolved_segments_net": "36.7500",
+      "fully_resolved_segment_closed_positions": 233,
+      "unresolved_segment_closed_positions": 16,
+      "unresolved_share": "0.04961832061068702290076335878",
+      "worst_closed_dd_fully_resolved_segment": "46.1000",
+      "worst_observed_closed_prefix_dd": "46.1000",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-88.0500",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 13,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "60",
+          "max": "120",
+          "mean": "54.23076923076923076923076923"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 13,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "60",
+          "max": "120",
+          "mean": "54.23076923076923076923076923"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 13,
+          "min": "7.7800",
+          "q25": "9.1200",
+          "median": "10.3100",
+          "q75": "12.0400",
+          "max": "35.7200",
+          "mean": "12.28538461538461538461538462"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 262,
+        "min": "5.9800",
+        "q25": "10.430000",
+        "median": "13.36000",
+        "q75": "17.930000",
+        "max": "95.0500",
+        "mean": "16.31725190839694656488549618"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 249,
+        "min": "15",
+        "q25": "30",
+        "median": "45",
+        "q75": "90",
+        "max": "180",
+        "mean": "65.96385542168674698795180723"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 13
+      },
+      "monthly_positive_known_partial": 5,
+      "monthly_negative_known_partial": 8,
+      "entry_count": 262,
+      "resolved_exit_count": 249,
+      "signals_callback_count": 262
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "envelope",
+      "positions": 259,
+      "resolved": 246,
+      "unresolved": 13,
+      "known_partial_net": "-206.3800",
+      "full_net": null,
+      "wins": 136,
+      "losses": 110,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5528455284552845528455284553",
+      "win_loss_count_ratio": "1.236363636363636363636363636",
+      "positive_net_sum": "1267.1100",
+      "negative_net_sum": "-1473.4900",
+      "mean_win": "9.316985294117647058823529412",
+      "mean_loss_magnitude": "13.39536363636363636363636364",
+      "profit_factor": "0.8599379703968130085714867424",
+      "closed_pnl_distribution": {
+        "count": 246,
+        "min": "-40.7100",
+        "q25": "-11.627500",
+        "median": "9.70000",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-0.8389430894308943089430894309"
+      },
+      "reasons": {
+        "TARGET": 129,
+        "ROLLOVER_COST_UNKNOWN": 12,
+        "STOP": 95,
+        "MAX_HOLD_CLOSE_ASSUMED": 22,
+        "UNRESOLVED_BOUNDARY": 1
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 129,
+        "STOP": 95,
+        "MAX_HOLD_CLOSE_ASSUMED": 22
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 12,
+        "UNRESOLVED_BOUNDARY": 1
+      },
+      "eligible_segments": 260,
+      "skipped_segments": 1,
+      "zero_position_segments": 102,
+      "fully_resolved_segments": 247,
+      "unresolved_segments": 13,
+      "fully_resolved_segment_net": "-238.0300",
+      "resolved_prefix_in_unresolved_segments_net": "31.6500",
+      "fully_resolved_segment_closed_positions": 230,
+      "unresolved_segment_closed_positions": 16,
+      "unresolved_share": "0.05019305019305019305019305019",
+      "worst_closed_dd_fully_resolved_segment": "46.9000",
+      "worst_observed_closed_prefix_dd": "46.9000",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-181.7800",
+      "commission_from_trace_difference": "24.6000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 13,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "60",
+          "max": "120",
+          "mean": "54.23076923076923076923076923"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 13,
+          "min": "15",
+          "q25": "30",
+          "median": "60",
+          "q75": "60",
+          "max": "120",
+          "mean": "54.23076923076923076923076923"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 13,
+          "min": "8.0800",
+          "q25": "9.2200",
+          "median": "10.4400",
+          "q75": "12.1400",
+          "max": "36.0200",
+          "mean": "12.47769230769230769230769231"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 259,
+        "min": "6.2800",
+        "q25": "10.61000",
+        "median": "13.6500",
+        "q75": "18.20500",
+        "max": "95.1500",
+        "mean": "16.52451737451737451737451737"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 246,
+        "min": "15",
+        "q25": "30.00",
+        "median": "45.0",
+        "q75": "90.00",
+        "max": "180",
+        "mean": "66.28048780487804878048780488"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 13
+      },
+      "monthly_positive_known_partial": 4,
+      "monthly_negative_known_partial": 9,
+      "entry_count": 259,
+      "resolved_exit_count": 246,
+      "signals_callback_count": 259
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "base",
+      "positions": 115,
+      "resolved": 109,
+      "unresolved": 6,
+      "known_partial_net": "-88.8700",
+      "full_net": null,
+      "wins": 61,
+      "losses": 48,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5596330275229357798165137615",
+      "win_loss_count_ratio": "1.270833333333333333333333333",
+      "positive_net_sum": "576.7400",
+      "negative_net_sum": "-665.6100",
+      "mean_win": "9.454754098360655737704918033",
+      "mean_loss_magnitude": "13.866875",
+      "profit_factor": "0.8664833761511996514475443578",
+      "closed_pnl_distribution": {
+        "count": 109,
+        "min": "-29.4000",
+        "q25": "-11.6900",
+        "median": "9.9000",
+        "q75": "9.9000",
+        "max": "9.9000",
+        "mean": "-0.8153211009174311926605504587"
+      },
+      "reasons": {
+        "TARGET": 57,
+        "STOP": 40,
+        "MAX_HOLD_CLOSE_ASSUMED": 12,
+        "ROLLOVER_COST_UNKNOWN": 6
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 57,
+        "STOP": 40,
+        "MAX_HOLD_CLOSE_ASSUMED": 12
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 6
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 174,
+      "fully_resolved_segments": 252,
+      "unresolved_segments": 6,
+      "fully_resolved_segment_net": "-102.4900",
+      "resolved_prefix_in_unresolved_segments_net": "13.6200",
+      "fully_resolved_segment_closed_positions": 104,
+      "unresolved_segment_closed_positions": 5,
+      "unresolved_share": "0.05217391304347826086956521739",
+      "worst_closed_dd_fully_resolved_segment": "39.3900",
+      "worst_observed_closed_prefix_dd": "39.3900",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-88.8700",
+      "commission_from_trace_difference": "0.0000",
+      "cost_assumptions": {
+        "spread": ".3",
+        "slippage": ".1",
+        "commission_roundtrip_per_lot": "0"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 6,
+          "min": "15",
+          "q25": "33.75",
+          "median": "52.5",
+          "q75": "60.00",
+          "max": "120",
+          "mean": "55"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 6,
+          "min": "15",
+          "q25": "33.75",
+          "median": "52.5",
+          "q75": "60.00",
+          "max": "120",
+          "mean": "55"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 6,
+          "min": "7.7300",
+          "q25": "8.865000",
+          "median": "9.55000",
+          "q75": "10.340000",
+          "max": "13.7600",
+          "mean": "9.971666666666666666666666667"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 115,
+        "min": "7.6200",
+        "q25": "11.12000",
+        "median": "15.1000",
+        "q75": "19.78000",
+        "max": "66.8400",
+        "mean": "16.93443478260869565217391304"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 109,
+        "min": "15",
+        "q25": "30",
+        "median": "45",
+        "q75": "105",
+        "max": "180",
+        "mean": "69.22018348623853211009174312"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 6
+      },
+      "monthly_positive_known_partial": 5,
+      "monthly_negative_known_partial": 7,
+      "entry_count": 115,
+      "resolved_exit_count": 109,
+      "signals_callback_count": 115
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "envelope",
+      "positions": 114,
+      "resolved": 108,
+      "unresolved": 6,
+      "known_partial_net": "-105.0100",
+      "full_net": null,
+      "wins": 61,
+      "losses": 47,
+      "breakeven": 0,
+      "win_rate_resolved": "0.5648148148148148148148148148",
+      "win_loss_count_ratio": "1.297872340425531914893617021",
+      "positive_net_sum": "563.3400",
+      "negative_net_sum": "-668.3500",
+      "mean_win": "9.235081967213114754098360656",
+      "mean_loss_magnitude": "14.22021276595744680851063830",
+      "profit_factor": "0.8428817236477893319368594299",
+      "closed_pnl_distribution": {
+        "count": 108,
+        "min": "-29.7000",
+        "q25": "-12.025000",
+        "median": "9.70000",
+        "q75": "9.700000",
+        "max": "9.7000",
+        "mean": "-0.9723148148148148148148148148"
+      },
+      "reasons": {
+        "TARGET": 57,
+        "STOP": 39,
+        "MAX_HOLD_CLOSE_ASSUMED": 12,
+        "ROLLOVER_COST_UNKNOWN": 6
+      },
+      "resolved_exit_reasons": {
+        "TARGET": 57,
+        "STOP": 39,
+        "MAX_HOLD_CLOSE_ASSUMED": 12
+      },
+      "unresolved_reasons": {
+        "ROLLOVER_COST_UNKNOWN": 6
+      },
+      "eligible_segments": 258,
+      "skipped_segments": 3,
+      "zero_position_segments": 174,
+      "fully_resolved_segments": 252,
+      "unresolved_segments": 6,
+      "fully_resolved_segment_net": "-117.0300",
+      "resolved_prefix_in_unresolved_segments_net": "12.0200",
+      "fully_resolved_segment_closed_positions": 103,
+      "unresolved_segment_closed_positions": 5,
+      "unresolved_share": "0.05263157894736842105263157895",
+      "worst_closed_dd_fully_resolved_segment": "39.9900",
+      "worst_observed_closed_prefix_dd": "39.9900",
+      "continuous_annual_net": null,
+      "continuous_annual_dd": "UNMEASURABLE",
+      "unresolved_pnl_bound": "NOT_BOUNDED",
+      "spread_cash_component": "UNMEASURABLE",
+      "slippage_cash_component": "UNMEASURABLE",
+      "actual_historical_cost": "UNMEASURABLE",
+      "recorded_gross_embeds_spread_slippage": "-94.2100",
+      "commission_from_trace_difference": "10.8000",
+      "cost_assumptions": {
+        "spread": ".50",
+        "slippage": ".20",
+        "commission_roundtrip_per_lot": "10"
+      },
+      "missing_signal_conditions": [
+        "ATR",
+        "ADX",
+        "volatility_regime",
+        "signal_strength",
+        "historical_session_certification"
+      ],
+      "unresolved_profiles": {
+        "observed_minutes": {
+          "count": 6,
+          "min": "15",
+          "q25": "33.75",
+          "median": "52.5",
+          "q75": "60.00",
+          "max": "120",
+          "mean": "55"
+        },
+        "entry_minutes_until_segment_observed_end": {
+          "count": 6,
+          "min": "15",
+          "q25": "33.75",
+          "median": "52.5",
+          "q75": "60.00",
+          "max": "120",
+          "mean": "55"
+        },
+        "initial_risk_scenario_usd": {
+          "count": 6,
+          "min": "8.0300",
+          "q25": "8.965000",
+          "median": "9.65000",
+          "q75": "10.440000",
+          "max": "14.0600",
+          "mean": "10.13833333333333333333333333"
+        }
+      },
+      "initial_risk_from_recorded_fills_usd": {
+        "count": 114,
+        "min": "7.7200",
+        "q25": "11.405000",
+        "median": "15.26500",
+        "q75": "20.070000",
+        "max": "66.9400",
+        "mean": "17.12982456140350877192982456"
+      },
+      "resolved_observed_holding_minutes": {
+        "count": 108,
+        "min": "15",
+        "q25": "26.25",
+        "median": "45.0",
+        "q75": "105.00",
+        "max": "180",
+        "mean": "68.61111111111111111111111111"
+      },
+      "unresolved_recorded_price_exit_reasons": {
+        "UNRESOLVED_BOUNDARY": 6
+      },
+      "monthly_positive_known_partial": 5,
+      "monthly_negative_known_partial": 7,
+      "entry_count": 114,
+      "resolved_exit_count": 108,
+      "signals_callback_count": 114
+    }
+  ],
+  "cost_comparisons": [
+    {
+      "candidate": "breakout-20-1.5",
+      "entry_matched": 1271,
+      "base_only": 19,
+      "envelope_only": 4,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 1191,
+        "UNRESOLVED->UNRESOLVED": 79,
+        "RESOLVED->UNRESOLVED": 1
+      },
+      "both_resolved": 1191,
+      "paired_net_delta_envelope_minus_base": "-525.7900",
+      "paired_exit_time_changed": 47,
+      "paired_price_exit_reason_changed": 11,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "entry_matched": 658,
+      "base_only": 9,
+      "envelope_only": 1,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 615,
+        "UNRESOLVED->UNRESOLVED": 42,
+        "RESOLVED->UNRESOLVED": 1
+      },
+      "both_resolved": 615,
+      "paired_net_delta_envelope_minus_base": "-297.6400",
+      "paired_exit_time_changed": 19,
+      "paired_price_exit_reason_changed": 8,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "entry_matched": 1025,
+      "base_only": 0,
+      "envelope_only": 0,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 981,
+        "UNRESOLVED->UNRESOLVED": 43,
+        "UNRESOLVED->RESOLVED": 1
+      },
+      "both_resolved": 981,
+      "paired_net_delta_envelope_minus_base": "-469.3300",
+      "paired_exit_time_changed": 39,
+      "paired_price_exit_reason_changed": 10,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "entry_matched": 501,
+      "base_only": 0,
+      "envelope_only": 0,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 480,
+        "UNRESOLVED->UNRESOLVED": 21
+      },
+      "both_resolved": 480,
+      "paired_net_delta_envelope_minus_base": "-218.5000",
+      "paired_exit_time_changed": 18,
+      "paired_price_exit_reason_changed": 4,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "entry_matched": 259,
+      "base_only": 3,
+      "envelope_only": 0,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 246,
+        "UNRESOLVED->UNRESOLVED": 13
+      },
+      "both_resolved": 246,
+      "paired_net_delta_envelope_minus_base": "-138.0700",
+      "paired_exit_time_changed": 16,
+      "paired_price_exit_reason_changed": 4,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "entry_matched": 114,
+      "base_only": 1,
+      "envelope_only": 0,
+      "status_transitions": {
+        "RESOLVED->RESOLVED": 108,
+        "UNRESOLVED->UNRESOLVED": 6
+      },
+      "both_resolved": 108,
+      "paired_net_delta_envelope_minus_base": "-33.3000",
+      "paired_exit_time_changed": 6,
+      "paired_price_exit_reason_changed": 0,
+      "interpretation": "SCENARIO_SENSITIVITY_NOT_PURE_COST_CAUSAL_EFFECT"
+    }
+  ],
+  "warnings": [
+    "Two scenarios are not independent trades; never sum them as a larger sample.",
+    "UNKNOWN exit_time is observation endpoint, not execution.",
+    "Closed gross already includes spread/slippage; separate cash components not recorded.",
+    "Full-year equity/net/DD and unresolved bounds cannot be inferred from independent flat-reset segments.",
+    "Raw hour/day labels only; unusual gap neighborhoods are candidates, not official closure evidence.",
+    "No holdout fit or parameter change. M5 recovery closed at zero."
+  ]
+}

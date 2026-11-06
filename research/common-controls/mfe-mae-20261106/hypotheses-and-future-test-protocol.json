@@ -1,0 +1,37 @@
+{
+  "schema":1,
+  "status":"REGISTERED_NOT_EXECUTED_NO_FRESH_HOLDOUT",
+  "registration_note":"Registered after known baseline loss diagnosis and before any evaluation of these new configurations. Existing year is exposed discovery data.",
+  "hypotheses":[
+    {
+      "id":"H1_RISK_LINKED_TARGET_1P5R",
+      "logic":"Keep original six signal rules and initial stop. Replace fixed quote-distance10 target by exactly1.5 times actual entry-to-initial-stop distance. Keep maximum12M15 bars.",
+      "risk":"Laboratory only: risk budget min(0.25% of current equity, existing authorized risk cap), conservatively rounded down lots; skip when minimum lot exceeds budget. Never change installed risk rules.",
+      "comparison":"Frozen six FF baselines and one-factor target ablation with identical declared sizing overlay; do not attribute sizing changes to target.",
+      "falsification":"Fail promotion if conservative net expectancy<=0 or PF<=1.10, relative MTM DD>6%, negative worst calendar quarter, unknown full PnL, insufficient sample or no independent-period replication. Thresholds are research choices, not promised performance."
+    },
+    {
+      "id":"H2_PREDECLARED_SESSION_FLAT",
+      "logic":"Keep original signal/stop/target. Require complete12-bar holding horizon before next independently documented historical broker close; no new entry inside that horizon; close at final observed tradable quote before a documented session break.",
+      "risk":"Same laboratory risk budget and no exposure across undocumented gaps; missing contemporaneously knowable schedule or executable closing quote blocks that event.",
+      "comparison":"One-factor session rule against identically sized baseline, not retrospective deletion of unresolved trades. Actual future gaps may not be used as an ex-ante session calendar.",
+      "falsification":"No promotion if benefit disappears after counting all vetoed/blocked events, conservative expectancy<=0 or PF<=1.10, DD>6%, worst quarter<0, unbounded unresolved, or lack of independent-period replication."
+    }
+  ],
+  "future_test_protocol":{
+    "no_execution_in_this_stage":true,
+    "configuration_lock":"Hash signals, target/stop/session rules, sizing, costs, metrics, data split and code before a future test; no search over target multiples or time filters.",
+    "quote":"BID OHLC long entry Ask=Bid+declared spread, sell liquidation Ask; true historical Bid/Ask preferred. Fixed scenarios remain assumptions and cannot certify broker execution.",
+    "frozen_costs":{"base":{"spread":".30","slippage_each_side":".10","commission_roundtrip_per_lot":"0"},"conservative":{"spread":".50","slippage_each_side":".20","commission_roundtrip_per_lot":"10"}},
+    "stop_execution":"Observed open beyond stop uses adverse open plus slippage; no guaranteed stop-level fill. Unbounded slippage/tail risk must not be described as a hard risk cap.",
+    "intrabar":"Same-bar unresolved SL/TP ordering is AMBIGUOUS; no target-first selection. Report every unresolved case separately.",
+    "swap":"No zero swap assumption. Exposure over unverified rollover is unresolved; missing quote/swap bound => NOT_BOUNDED.",
+    "gap":"Never carry exposure into undocumented gaps; a post-hoc missing-bar map is not a tradable calendar.",
+    "capital":"Declared starting equity10000USD; fixed fractional laboratory budget<=0.25% and never above existing cap, no compounding on unknown equity. Unknown account equity blocks subsequent continuous sizing.",
+    "metrics":["executed simulated positions not callbacks","net expectancy","net PF","relative MTM and closed DD separately","worst raw-month and quarter with clock caveat","all rolling3-month periods","return distribution","cost sensitivity","unresolved/vetoed/no-trade counts"],
+    "promotion_gate":"At least100 resolved simulated positions per candidate per independent test period; conservative PF>1.10 and expectancy>0, relative MTM DD<=6%, nonnegative worst quarter, no unidentified complete PnL. A candidate passing discovery alone is not approved.",
+    "replication":"At least two nonoverlapping prelocked long periods, including a genuinely untouched prospective period. Any prior-year retrospective sample after discovery is external-time evaluation, not automatically a blind holdout. Freeze all revisions and account for multiple hypotheses.",
+    "current_data_split":"2025-2026 repeatedly exposed IN_SAMPLE; 104 old boundary bars insufficient; NO_FRESH_HOLDOUT",
+    "new_data_permission":"No connection/download now. A regular prior-year M15 collection requires separate explicit scope/time/size approval."
+  }
+}

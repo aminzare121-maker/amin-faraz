@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "modes": [
+    "FF",
+    "VF",
+    "FA",
+    "VA"
+  ],
+  "policies": [
+    "stop_first",
+    "target_first",
+    "unknown"
+  ],
+  "costs": {
+    "spread": "0.3",
+    "slippage": "0.1",
+    "commission_roundtrip_per_lot": "0"
+  },
+  "initial_capital": "10000",
+  "fixed_lots": "0.01",
+  "fixed_target_distance": "10",
+  "fixed_horizon": 12,
+  "risk_envelope": "ORIGINAL_DEFAULT_POLICY_COMMISSION_10_SLIPPAGE_0.2",
+  "windows": [
+    {
+      "id": "observed-Nov04",
+      "start": 1793750400,
+      "end": 1793829600
+    },
+    {
+      "id": "observed-Nov05",
+      "start": 1793836800,
+      "end": 1793869200
+    }
+  ],
+  "clock": "CONDITIONAL_MINUS7200_ONLY_THESE_TWO_WINDOWS_NOT_YEAR",
+  "selection": "Previously documented Nov04 00-22 and Nov05 00-09; fixed before new PnL; no overlap",
+  "warmup": "Original plan per segment; no fabricated history",
+  "capital_scope": "Each window isolated flat-start ASSUMPTION, NOT continuous portfolio or proven overnight liquidation",
+  "unseen_holdout": false,
+  "training": false,
+  "sensitivity": "NONE; keep prior costs unchanged"
+}

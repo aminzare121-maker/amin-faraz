@@ -1,0 +1,43 @@
+test_returned_sizing_stop_is_executed (test_independent_execution.Tests.test_returned_sizing_stop_is_executed) ... FAIL
+test_current_hlc_never_reaches_sizing (test_independent_execution.Tests.test_current_hlc_never_reaches_sizing) ... FAIL
+
+======================================================================
+FAIL: test_returned_sizing_stop_is_executed (test_independent_execution.Tests.test_returned_sizing_stop_is_executed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<research-workspace>\test_independent_execution.py", line 21, in test_returned_sizing_stop_is_executed
+    self.assertEqual(row['initial_stop'],'98')
+AssertionError: '95' != '98'
+- 95
++ 98
+
+
+======================================================================
+FAIL: test_current_hlc_never_reaches_sizing (test_independent_execution.Tests.test_current_hlc_never_reaches_sizing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<research-workspace>\test_independent_execution.py", line 32, in test_current_hlc_never_reaches_sizing
+    simulate(b,signal(),management=m,spread='.3',slippage='.1',commission_roundtrip_per_lot='0')
+  File "<research-workspace>\_audit_before_engine.py", line 143, in simulate
+    sizing=management.prepare(setup,entry,part[i],history,sp)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pixel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<research-workspace>\test_independent_execution.py", line 28, in checked
+    self.assertEqual(set(bar),{'time','raw_time','open','time_evidence'})
+AssertionError: Items in the first set but not the second:
+'high'
+'low'
+'close'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.022s
+
+FAILED (failures=2)

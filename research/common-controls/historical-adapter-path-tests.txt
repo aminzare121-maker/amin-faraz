@@ -1,0 +1,12 @@
+test_adapter_actual_signal_stop_preserved (test_historical_windows.WindowsTests.test_adapter_actual_signal_stop_preserved) ... ok
+test_callback_sees_only_closed_input (test_historical_windows.WindowsTests.test_callback_sees_only_closed_input) ... ok
+test_fractional_timestamp_rejected (test_historical_windows.WindowsTests.test_fractional_timestamp_rejected) ... ok
+test_rollover_server_midnight_not_utc (test_historical_windows.WindowsTests.test_rollover_server_midnight_not_utc) ... ok
+test_six_frozen_candidates_and_direct_plan_equivalence (test_historical_windows.WindowsTests.test_six_frozen_candidates_and_direct_plan_equivalence) ... ok
+test_unresolved_position_prevents_next_segment_entry (test_historical_windows.WindowsTests.test_unresolved_position_prevents_next_segment_entry) ... ok
+test_utc_midnight_alone_not_server_rollover (test_historical_windows.WindowsTests.test_utc_midnight_alone_not_server_rollover) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.014s
+
+OK

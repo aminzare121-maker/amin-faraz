@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "time_basis": "RAW_LABEL_UNVERIFIED_NO_OFFSET",
+  "risk_day": "NOT_USED_FIXED_VOLUME",
+  "select": "ALL_MAXIMAL_CONTIGUOUS_PARTS; eligible iff len>max(24,lookback+2)",
+  "initial_capital": "10000",
+  "initial_exposure": "FLAT_ASSUMPTION_PER_SEGMENT",
+  "costs": {
+    "base": {
+      "spread": ".3",
+      "slippage": ".1",
+      "commission_roundtrip_per_lot": "0"
+    },
+    "envelope": {
+      "spread": ".50",
+      "slippage": ".20",
+      "commission_roundtrip_per_lot": "10"
+    }
+  },
+  "cost_basis": "ASSUMPTION",
+  "sizing_envelope": "UNCHANGED_ORIGINAL_POLICY",
+  "intrabar": "unknown",
+  "exit": "EXISTING_FIXED_TARGET_10_HORIZON_12_LOT_0.01",
+  "uncertainty": "RAW_MIDNIGHT_SWAP_UNKNOWN; unresolved blocks net and further positions",
+  "gap_labels_never_authorize_carry": true,
+  "fit": false,
+  "fresh_holdout": false,
+  "mode": "FF"
+}

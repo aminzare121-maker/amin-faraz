@@ -1,0 +1,29 @@
+{
+  "output_sha256": "f79aca9a03c0c46eee2b6541a7366dd972bbc71171cb0d8e627fdc1e02d87963",
+  "code_sha256": "d51c5c01938fb77d484fe7186e88e298355686695aeb6c8a83303c49cb926a66",
+  "protocol_sha256": "02470f3b25ab153f6f5770f45264e02243846e0cbfb3dd28962897c08f0ff92d",
+  "output_artifacts": {
+    "loss-diagnostic-summary.json": "5e5a9c7be14966ac61a9c1971c9fba73251c8281299002f93c6f7e27b9a409ff",
+    "raw-time-cohorts.json": "386b8aa0525f8feec84f35676cd47e16c29b2d06d4346b9425a1120779caa175",
+    "daily-cohorts.json": "5be50acc887f22d5c34895b53c8089656ecfa51757cd247ebd0e432f422a48fd"
+  },
+  "input_hashes": {
+    "ff-session-replay-summary.json": "3ba733c7e292e4f429b209cac2467a01104ce179bc5ee2dd15780443fed6f07a",
+    "ff-session-results-table.json": "134d9860a71a783429d8a33bcf56cf8fdf4300046d5642817b8a3b99ea68acaf",
+    "ff-session-replay-by-segment.json": "c93286a677f87c1e73dcd8830ffc1d870f8aea2d75fd5db3ae31425166ba816a",
+    "ff-session-replay-policy.json": "4e6f3e2568e96984556a01ec5e3b8a05c6bcdda33164e59bccf057d231079eb7",
+    "ff-session-replay-selection.json": "541e7662db035581c8343befd7624de5825499415d8170e0e578d2a19a2be587",
+    "gap-classifications-v4.json": "cd50081f8b055729b301ab067684eb47c45b332ea8f2290d7b342639c50c6029",
+    "all-gap-neighbor-evidence-v1.json": "dca50ca48888b8250b44b92c07d24adebbfc285e8a4405d0c160738b8b17e2ee",
+    "36dd53f0cee311b12cdf00b4133efd87537778d55b63f0faefdc4b2c5b7603db.json": "736861224519ca66cc0d48ebf1d1f4fecb515bb39fa553366ef2c944c3b886e5"
+  },
+  "checks": {
+    "resolved": 7278,
+    "unresolved": 415,
+    "all_passed": true
+  },
+  "legacy_table_byte_link_verified": false,
+  "annual_replay_executed": false,
+  "orders": 0,
+  "mt5_execution": false
+}
