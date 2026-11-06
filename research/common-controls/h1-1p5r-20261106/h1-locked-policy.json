@@ -1,0 +1,35 @@
+{
+  "schema":1,
+  "instruction":"PR32#issuecomment-6683991123",
+  "hypothesis":"H1_RISK_LINKED_TARGET_1P5R",
+  "scope":"IN_SAMPLE_EXPLORATORY_PAIRED_REPLAY_NOT_DEPLOYMENT",
+  "signal_stop":"Original hash-verified candidate plan, closed history max120, same warmup/segments as frozen FF. No stop changes or parameter search.",
+  "targets":{"baseline":"entry +/-10","H1":"entry +/-1.5*abs(entry-initial_stop)"},
+  "horizon_bars":12,
+  "intrabar":"unknown",
+  "costs":{"base":{"spread":".3","slippage":".1","commission_roundtrip_per_lot":"0"},"envelope":{"spread":".50","slippage":".20","commission_roundtrip_per_lot":"10"}},
+  "sizing":{
+    "reference_capital":"10000",
+    "fraction":".0025",
+    "existing_cap_source":"Frozen management-policy.json max_order_risk_fraction=.005; existing provisional laboratory policy, not a live-account attestation",
+    "common_equity":"min(baseline cash equity,H1 cash equity) at a common flat entry; no future settlement recognized early",
+    "budget":"common_equity*min(.0025,existing max_order_risk_fraction)",
+    "risk_per_lot":"(max(abs(entry-stop),abs(side_quote-stop))+existing max_slippage)*contract + existing commission_per_lot",
+    "conservative_envelope":{"max_slippage":".20","commission_per_lot":"10"},
+    "volume":"round down by .01, min .01, max10; also existing max_notional_multiple2; reject if minimum lot breaches budget",
+    "same_volume_both_arms":true,
+    "risk_cap_is_not_guaranteed_loss_cap":true
+  },
+  "eligibility":"Both arms must be flat and both cash equities known. Generate same original plan on closed candles; any arm busy vetoes both. This joint cohort is a target ablation, not two independently scheduled strategy portfolios.",
+  "settlement":"Recorded outcome is scheduled for its bar-close timestamp; no equity update before that timestamp. Any unresolved outcome blocks both arms.",
+  "cohorts":{
+    "independent_segments":"Each original contiguous segment is an explicitly independent FLAT/10000 scenario. Unknown blocks remainder of that segment; next segment is a separate reset scenario, never continuation or annual compounding.",
+    "continuous_known_prefix":"Cash carried across flat segments only while both arms known; first unresolved blocks every later segment. No reset of unknown equity."
+  },
+  "mtm":"Observed bar-open liquidation and bar-close liquidation under frozen costs until earliest uncertain event. Report sampled-prefix MTM DD, never exact intrabar DD. Unknown exposure has no invented close or swap.",
+  "tick_grid":"Keep exact1.5R, no silent rounding; count targets off declared .01 tick as executable-price uncertainty",
+  "screening":"PF>1.10 and earlier protocol gates are descriptive screens only; no STOP uplift, no replication claim",
+  "H2":"BLOCKED_SCHEDULE",
+  "fresh_holdout":"NO_FRESH_HOLDOUT",
+  "strategy_or_robot_source_changes":false
+}

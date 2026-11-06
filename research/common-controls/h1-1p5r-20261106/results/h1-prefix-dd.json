@@ -1,0 +1,390 @@
+{
+  "replay_performed": false,
+  "metrics": [
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "73.7900",
+        "fraction": "0.007335077555597084657073444216"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "74.7900",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.007434482319868626663538730084",
+      "sample_points": 115,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "85.71000",
+        "fraction": "0.008515119528096864327848494256"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "86.71000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.008614467556659422539583980130",
+      "sample_points": 122,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "78.1900",
+        "fraction": "0.007781276372147827333089183638"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "80.1900",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.007980311450089963855229845708",
+      "sample_points": 116,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-20-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "90.41000",
+        "fraction": "0.009011810744996954863198101350"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "111.91000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.01113322967123595662109314766",
+      "sample_points": 129,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "150.8600",
+        "fraction": "0.015086"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "151.3600",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.015136",
+      "sample_points": 162,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "175.47000",
+        "fraction": "0.017547"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "177.54000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.017754",
+      "sample_points": 208,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "161.5700",
+        "fraction": "0.016157"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "162.5700",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.016257",
+      "sample_points": 162,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "breakout-40-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "189.39500",
+        "fraction": "0.0189395"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "191.46500",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.0191465",
+      "sample_points": 213,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "26.0000",
+        "fraction": "0.0026"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "26.0000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.0026",
+      "sample_points": 5,
+      "arm_path_censored": false,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "17.2400",
+        "fraction": "0.001724"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "19.2400",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.001924",
+      "sample_points": 4,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "28.4000",
+        "fraction": "0.00284"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "28.4000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.00284",
+      "sample_points": 5,
+      "arm_path_censored": false,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-20-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "18.4400",
+        "fraction": "0.001844"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "22.4400",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.002244",
+      "sample_points": 4,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "70.0600",
+        "fraction": "0.006978365671939121080521136300"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "85.9600",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.008548980606663351566384883143",
+      "sample_points": 50,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "88.02000",
+        "fraction": "0.008780487804878048780487804878"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "103.92000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.01035070070419028077968904073",
+      "sample_points": 46,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "80.2600",
+        "fraction": "0.007994979479619077977447503686"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "94.6600",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.009416844073934064184954537315",
+      "sample_points": 49,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "rejection-40-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "97.02000",
+        "fraction": "0.009678481290464172061889608252"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "111.42000",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.01110015242535640634806778445",
+      "sample_points": 48,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "0",
+        "fraction": "0"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "6.3600",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.0006353874864630496201661598219",
+      "sample_points": 14,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "0",
+        "fraction": "0"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "14.6200",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.001459512989865269580634598644",
+      "sample_points": 18,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "0",
+        "fraction": "0"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "6.3600",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.0006354509703616075710586053650",
+      "sample_points": 14,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-20-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "0",
+        "fraction": "0"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "14.6200",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.001459658707433277023654058890",
+      "sample_points": 18,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "base",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "83.0700",
+        "fraction": "0.008278843652737041322462305698"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "92.7900",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.009246001022351228465606251289",
+      "sample_points": 99,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "base",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "141.99500",
+        "fraction": "0.01415125130866311311583157225"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "153.78500",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.01532051949397505141790892368",
+      "sample_points": 158,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "envelope",
+      "arm": "baseline_overlay",
+      "observed_prefix_closed_dd": {
+        "usd": "87.1700",
+        "fraction": "0.008692998630780415273430059605"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "97.5900",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.009730305329583059557365329643",
+      "sample_points": 101,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    },
+    {
+      "candidate": "retest-40-1.5",
+      "cost": "envelope",
+      "arm": "H1_1p5R",
+      "observed_prefix_closed_dd": {
+        "usd": "149.34500",
+        "fraction": "0.01488635010059961055964482880"
+      },
+      "observed_prefix_sampled_mtm_dd_usd": "159.63500",
+      "observed_prefix_sampled_mtm_dd_fraction": "0.01590925738693923069295237886",
+      "sample_points": 158,
+      "arm_path_censored": true,
+      "shared_controller_blocked": true,
+      "full_year_dd": "UNKNOWN",
+      "exact_intrabar_mtm_dd": "UNMEASURABLE"
+    }
+  ],
+  "input_private_trace_sha256": "4b1f53f247c6a27794661750cf7368a911e76ae6bb8bc912c904100d97b01356"
+}
