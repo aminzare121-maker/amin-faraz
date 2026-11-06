@@ -1,0 +1,113 @@
+"""Synthetic-only tests for Artin source-bound M15 shadow ledger."""
+import csv
+import gzip
+import hashlib
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from decimal import Decimal
+from paper_m15_shadow import replay, evaluate_trade
+
+
+class M15PaperShadowTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name)
+        self.csv=self.root/'M15.csv'
+        self.trace=self.root/'PRIVATE_raw_decisions.jsonl.gz'
+        self.summary=self.root/'SUMMARY.json'
+        self.specs=self.root/'specs.json'
+
+    def make(self,bars,signal=900,status='ELIGIBLE',stop='9',target='13'):
+        with self.csv.open('w',newline='',encoding='utf8') as f:
+            w=csv.writer(f);w.writerow(['time_raw_epoch','open','high','low','close'])
+            w.writerows(bars)
+        with gzip.open(self.trace,'wt',encoding='utf8') as f:
+            for bar in bars:
+                t=int(bar[0])
+                f.write(json.dumps({'bar_opened_at':t,'at':t+900,'decisions':
+                    ([{'status':status,'side':'BUY','rule_id':'BREAK_STRONG'}] if t+900==signal else [])})+'\n')
+        self.summary.write_text(json.dumps({'csv_sha256':hashlib.sha256(self.csv.read_bytes()).hexdigest(),
+                                'interval_seconds':900,'observed_bars':len(bars)}))
+        self.specs.write_text(json.dumps({'specs':[{'known_at':signal,'signal_at':signal,'side':'BUY',
+            'rule_id':'BREAK_STRONG','source':'session21:200','stop_source':'session25:300',
+            'target_source':'session26:100','stop':stop,'target':target}]}),encoding='utf8')
+
+    def run_shadow(self):
+        return replay(self.csv,self.trace,self.summary,self.specs,'100','0.01','1')
+
+    def test_target_next_bar_after_signal_only(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        r=self.run_shadow()
+        self.assertEqual(r['completed_paper_trades'],1)
+        self.assertEqual(r['paper_net_usd_closed_only'],'2.99')
+        self.assertEqual(r['trades'][0]['exit_reason'],'TARGET')
+        self.assertEqual(r['orders_sent'],0)
+
+    def test_both_targets_conservatively_stop_and_annotates_ambiguity(self):
+        self.make([(0,10,11,9,10),(900,10,14,8,11)])
+        r=self.run_shadow()
+        self.assertEqual(r['trades'][0]['exit_reason'],'STOP')
+        self.assertTrue(r['trades'][0]['ambiguous_same_bar'])
+        self.assertEqual(r['paper_net_usd_closed_only'],'-1.01')
+
+    def test_requires_immediate_next_bar(self):
+        self.make([(0,10,11,9,10),(1800,10,14,9.5,13)])
+        r=self.run_shadow()
+        self.assertEqual(r['completed_paper_trades'],0)
+        self.assertEqual(r['blockers']['MISSING_IMMEDIATE_NEXT_M15_BAR'],1)
+
+    def test_source_missing_blocks_spec(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s=json.loads(self.specs.read_text());s['specs'][0].pop('stop_source')
+        self.specs.write_text(json.dumps(s))
+        with self.assertRaises(ValueError):self.run_shadow()
+
+    def test_unready_not_promoted_to_trade(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)],status='REVIEW')
+        r=self.run_shadow()
+        self.assertEqual(r['completed_paper_trades'],0)
+        self.assertEqual(r['eligible_decisions'],0)
+        self.assertEqual(len(r['orphan_specs']),1)
+
+    def test_sell_stop_or_target(self):
+        bars=[{'t':900,'o':Decimal(10),'h':Decimal('10.1'),'l':Decimal(7),'c':Decimal(8)}]
+        key=(900,'SELL','REVERSAL_CLASSIC')
+        s={'stop':'11','target':'8','source':'x','stop_source':'y','target_source':'z'}
+        x=evaluate_trade(bars,0,key,s,Decimal(100),Decimal('.01'),Decimal(1))
+        self.assertEqual(x['net_usd'],'1.99')
+        self.assertEqual(x['exit_reason'],'TARGET')
+
+    def test_gap_inside_open_trade_unresolved(self):
+        self.make([(0,10,11,9,10),(900,10,11,9.5,10),(2700,10,14,9,12)])
+        r=self.run_shadow()
+        self.assertEqual(r['trades'][0]['state'],'UNRESOLVED')
+        self.assertEqual(r['blockers']['GAP_DURING_OPEN_TRADE'],1)
+
+    def test_summary_wrong_csv_is_rejected(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s=json.loads(self.summary.read_text());s['csv_sha256']='0'*64
+        self.summary.write_text(json.dumps(s))
+        with self.assertRaises(ValueError):self.run_shadow()
+
+    def test_future_defined_stop_is_rejected(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s=json.loads(self.specs.read_text());s['specs'][0]['known_at']=1800
+        self.specs.write_text(json.dumps(s))
+        with self.assertRaises(ValueError):self.run_shadow()
+
+    def test_invalid_ohlc_rejected(self):
+        self.make([(0,10,9,9,10),(900,10,14,9.5,13)])
+        with self.assertRaises(ValueError):self.run_shadow()
+
+    def test_no_spec_is_visible_blocker(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        self.specs.write_text('{"specs":[]}')
+        r=self.run_shadow()
+        self.assertEqual(r['blockers']['MISSING_TEACHER_SOURCED_STOP_TARGET'],1)
+
+
+if __name__=='__main__':
+    unittest.main()
