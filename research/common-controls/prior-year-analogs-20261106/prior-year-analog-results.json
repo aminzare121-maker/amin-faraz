@@ -1,0 +1,1680 @@
+{
+  "schema": 1,
+  "status": "COMPLETED_LIMITED_BOUNDARY_COMPARISON",
+  "sample_gap_id": 18,
+  "stop_after_sample": false,
+  "sample_sdk_code": 1,
+  "symbol": "XAUUSD.st",
+  "mode": "DEMO",
+  "chart_mode": 0,
+  "current_quote_minus_wall_seconds": 7199.6999497413635,
+  "historical_utc_dst": "UNVERIFIED_NO_OFFSET_APPLIED",
+  "same_existing_process": true,
+  "target_csv_sha256": "0ee73917c30d7bc3f96c9316b6fa9ec63d0deea74346be22489dd694f45be5a2",
+  "requests": [
+    {
+      "request_id": 1,
+      "from_raw": "2024-11-29T10:30:00",
+      "end_raw_exclusive": "2024-11-29T11:45:00",
+      "sdk_code": 1,
+      "returned_count": 5,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 300,
+      "sha256": "4f5cceca13771d105713f541732bdbe40e70ab6749aaba04a975db20303c9387",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-11-29T10:30:00",
+      "last_raw": "2024-11-29T11:30:00"
+    },
+    {
+      "request_id": 2,
+      "from_raw": "2024-11-28T20:45:00",
+      "end_raw_exclusive": "2024-11-28T22:45:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "d90b2992afd5ba8b9cdead416de49b7fdeeaf6e15ce8960c4b2fe1087cc99f37",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-11-28T20:45:00",
+      "last_raw": "2024-11-28T21:30:00"
+    },
+    {
+      "request_id": 3,
+      "from_raw": "2024-11-29T00:00:00",
+      "end_raw_exclusive": "2024-11-29T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "5fe72dc3b2e3c3c598c839c42cd62ea22240c9deacd923b33df40872c0f2b6cf",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-11-29T01:00:00",
+      "last_raw": "2024-11-29T01:45:00"
+    },
+    {
+      "request_id": 4,
+      "from_raw": "2024-11-29T21:00:00",
+      "end_raw_exclusive": "2024-11-29T23:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "be71b0f16ee39f502a803de4e5ab6236cff11695cd577eee92ae6cad94a83777",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-11-29T21:00:00",
+      "last_raw": "2024-11-29T21:45:00"
+    },
+    {
+      "request_id": 5,
+      "from_raw": "2024-12-02T00:00:00",
+      "end_raw_exclusive": "2024-12-02T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "3f01c7de2fad67a3a8742e0419425315a494384800641b14766843994e202a45",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-12-02T01:00:00",
+      "last_raw": "2024-12-02T01:45:00"
+    },
+    {
+      "request_id": 6,
+      "from_raw": "2024-12-24T20:00:00",
+      "end_raw_exclusive": "2024-12-24T22:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "a688fe3492deb9d6e5ad76847595fbd7183512b03f5e6c47bc3442ab023bbcbe",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-12-24T20:00:00",
+      "last_raw": "2024-12-24T20:45:00"
+    },
+    {
+      "request_id": 7,
+      "from_raw": "2024-12-26T00:00:00",
+      "end_raw_exclusive": "2024-12-26T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "300790b2da762b3499621c87e4d09ae7484864b801c300f23fba357c28e70027",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-12-26T01:00:00",
+      "last_raw": "2024-12-26T01:45:00"
+    },
+    {
+      "request_id": 8,
+      "from_raw": "2024-12-31T23:00:00",
+      "end_raw_exclusive": "2025-01-01T01:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "617f5c678a3628936ba689e509d03d8ebe1c7dc969786d0aa130521df0a0b15e",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2024-12-31T23:00:00",
+      "last_raw": "2024-12-31T23:45:00"
+    },
+    {
+      "request_id": 9,
+      "from_raw": "2025-01-02T00:00:00",
+      "end_raw_exclusive": "2025-01-02T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "6f9e947428cbcf5331d08fed2112b2040df12185d3f24c7126b29766d04c1776",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-01-02T01:00:00",
+      "last_raw": "2025-01-02T01:45:00"
+    },
+    {
+      "request_id": 10,
+      "from_raw": "2025-01-20T21:00:00",
+      "end_raw_exclusive": "2025-01-20T23:00:00",
+      "sdk_code": 1,
+      "returned_count": 3,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 180,
+      "sha256": "fc720ea3f80e05a1c0af322775540cf30e2d72972e90f5727b44ae14a6f399dd",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-01-20T21:00:00",
+      "last_raw": "2025-01-20T21:30:00"
+    },
+    {
+      "request_id": 11,
+      "from_raw": "2025-01-21T00:00:00",
+      "end_raw_exclusive": "2025-01-21T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "cc546e0acf0bf8fd0d16b0daee653e382c769ef4070e7cf45ec55a588c66439e",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-01-21T01:00:00",
+      "last_raw": "2025-01-21T01:45:00"
+    },
+    {
+      "request_id": 12,
+      "from_raw": "2025-02-17T20:45:00",
+      "end_raw_exclusive": "2025-02-17T22:45:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "6bed6f78d21ab5248bcacbc2966d4bcd5ce2caa57434e4866f291684adf9c91b",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-02-17T20:45:00",
+      "last_raw": "2025-02-17T21:30:00"
+    },
+    {
+      "request_id": 13,
+      "from_raw": "2025-02-18T00:00:00",
+      "end_raw_exclusive": "2025-02-18T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "ed494f4ce4b8f60bdf3da6c0e4b779e6c0f5fcf8a74c61c97c0f77708e87bd15",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-02-18T01:00:00",
+      "last_raw": "2025-02-18T01:45:00"
+    },
+    {
+      "request_id": 14,
+      "from_raw": "2025-04-17T23:00:00",
+      "end_raw_exclusive": "2025-04-18T01:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "8b6d906817b2790bc1360740aea65bed80ed3fbbe2e5890111bb4b37eb2a79b2",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-04-17T23:00:00",
+      "last_raw": "2025-04-17T23:45:00"
+    },
+    {
+      "request_id": 15,
+      "from_raw": "2025-04-21T00:00:00",
+      "end_raw_exclusive": "2025-04-21T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "621ba6723e097972f2feaa639e995209e5ac0770bcee72f205e73f570141ccd7",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-04-21T01:00:00",
+      "last_raw": "2025-04-21T01:45:00"
+    },
+    {
+      "request_id": 16,
+      "from_raw": "2025-05-26T21:30:00",
+      "end_raw_exclusive": "2025-05-26T22:45:00",
+      "sdk_code": 1,
+      "returned_count": 3,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 180,
+      "sha256": "9806f3706a8f5bd1bf6665c6f7ccbd3809f20bf3f1364b7fd5c0d8b0a988a3f6",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-05-26T21:30:00",
+      "last_raw": "2025-05-26T22:00:00"
+    },
+    {
+      "request_id": 17,
+      "from_raw": "2025-05-26T21:30:00",
+      "end_raw_exclusive": "2025-05-26T23:30:00",
+      "sdk_code": 1,
+      "returned_count": 3,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 180,
+      "sha256": "9806f3706a8f5bd1bf6665c6f7ccbd3809f20bf3f1364b7fd5c0d8b0a988a3f6",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-05-26T21:30:00",
+      "last_raw": "2025-05-26T22:00:00"
+    },
+    {
+      "request_id": 18,
+      "from_raw": "2025-05-27T00:00:00",
+      "end_raw_exclusive": "2025-05-27T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "2fc13107538d5f12700d5574119eab2b4a3055c6ec0bcb9466d28b8af3736e46",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-05-27T01:00:00",
+      "last_raw": "2025-05-27T01:45:00"
+    },
+    {
+      "request_id": 19,
+      "from_raw": "2025-06-20T19:15:00",
+      "end_raw_exclusive": "2025-06-20T21:15:00",
+      "sdk_code": 1,
+      "returned_count": 8,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 480,
+      "sha256": "66091924d52b996ca844d508ee66e2a8cf2002426e02f9474e23a1e6db7efe87",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-06-20T19:15:00",
+      "last_raw": "2025-06-20T21:00:00"
+    },
+    {
+      "request_id": 20,
+      "from_raw": "2025-06-23T00:00:00",
+      "end_raw_exclusive": "2025-06-23T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "25f655480dcee94261b31d77da8996b8fe7c5fa1e5b7847169f3a96e5a16a9cf",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-06-23T01:00:00",
+      "last_raw": "2025-06-23T01:45:00"
+    },
+    {
+      "request_id": 21,
+      "from_raw": "2025-07-04T19:15:00",
+      "end_raw_exclusive": "2025-07-04T21:15:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "e429ed542e34e4a1f7f690ec1b1da24be3eb05f5a49d41efdb6b3e8eef920099",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-07-04T19:15:00",
+      "last_raw": "2025-07-04T20:00:00"
+    },
+    {
+      "request_id": 22,
+      "from_raw": "2025-07-07T00:00:00",
+      "end_raw_exclusive": "2025-07-07T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "2fb0078ca0bbc83db31afe00b73b534a43c228401ca9a3145af2c5649d35a440",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-07-07T01:00:00",
+      "last_raw": "2025-07-07T01:45:00"
+    },
+    {
+      "request_id": 23,
+      "from_raw": "2025-09-01T20:45:00",
+      "end_raw_exclusive": "2025-09-01T22:45:00",
+      "sdk_code": 1,
+      "returned_count": 5,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 300,
+      "sha256": "2eb23b14ae4463ef0e2e9d17c79027e70c67da24f3b1961d16a9d4352204be2b",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-09-01T20:45:00",
+      "last_raw": "2025-09-01T21:45:00"
+    },
+    {
+      "request_id": 24,
+      "from_raw": "2025-09-02T00:00:00",
+      "end_raw_exclusive": "2025-09-02T02:00:00",
+      "sdk_code": 1,
+      "returned_count": 4,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 240,
+      "sha256": "34eaace51456838ddf5dc5003c725ca1cbc0208444cc03eb0e9c30283714cad2",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-09-02T01:00:00",
+      "last_raw": "2025-09-02T01:45:00"
+    },
+    {
+      "request_id": 25,
+      "from_raw": "2025-06-19T19:15:00",
+      "end_raw_exclusive": "2025-06-19T21:15:00",
+      "sdk_code": 1,
+      "returned_count": 8,
+      "elapsed_seconds": 0.0,
+      "raw_bytes": 480,
+      "sha256": "eabee0fb0881dd9e8f0f54254145762ac566ed956ddea294bd1d019d7a73d5b8",
+      "dtype": [
+        [
+          "time",
+          "<i8"
+        ],
+        [
+          "open",
+          "<f8"
+        ],
+        [
+          "high",
+          "<f8"
+        ],
+        [
+          "low",
+          "<f8"
+        ],
+        [
+          "close",
+          "<f8"
+        ],
+        [
+          "tick_volume",
+          "<u8"
+        ],
+        [
+          "spread",
+          "<i4"
+        ],
+        [
+          "real_volume",
+          "<u8"
+        ]
+      ],
+      "invalid_rows": 0,
+      "first_raw": "2025-06-19T19:15:00",
+      "last_raw": "2025-06-19T21:00:00"
+    }
+  ],
+  "rows": [
+    {
+      "original_gap_id": 17,
+      "prior_year_analog_window": [
+        "2024-11-28T21:45:00",
+        "2024-11-29T01:00:00"
+      ],
+      "selection_basis": "Thanksgiving Thursday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2024-11-28T20:45:00",
+      "last_M15_raw": "2024-11-29T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        2,
+        3
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2024-11-28T20:45:00",
+          "2024-11-28T22:45:00"
+        ],
+        [
+          "2024-11-29T00:00:00",
+          "2024-11-29T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 18,
+      "prior_year_analog_window": [
+        "2024-11-29T11:00:00",
+        "2024-11-29T11:15:00"
+      ],
+      "selection_basis": "Friday after Thanksgiving",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 5,
+      "first_M15_raw": "2024-11-29T10:30:00",
+      "last_M15_raw": "2024-11-29T11:30:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_PRESENT",
+      "requests": [
+        1
+      ],
+      "observed_inside_sampled_target_count": 1,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2024-11-29T10:30:00",
+          "2024-11-29T11:45:00"
+        ]
+      ],
+      "sampled_inside_labels": [
+        "2024-11-29T11:00:00"
+      ],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 19,
+      "prior_year_analog_window": [
+        "2024-11-29T22:00:00",
+        "2024-12-02T01:00:00"
+      ],
+      "selection_basis": "Friday after Thanksgiving and weekend",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2024-11-29T21:00:00",
+      "last_M15_raw": "2024-12-02T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        4,
+        5
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2024-11-29T21:00:00",
+          "2024-11-29T23:00:00"
+        ],
+        [
+          "2024-12-02T00:00:00",
+          "2024-12-02T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 37,
+      "prior_year_analog_window": [
+        "2024-12-24T21:00:00",
+        "2024-12-26T01:00:00"
+      ],
+      "selection_basis": "Christmas Eve",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2024-12-24T20:00:00",
+      "last_M15_raw": "2024-12-26T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        6,
+        7
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2024-12-24T20:00:00",
+          "2024-12-24T22:00:00"
+        ],
+        [
+          "2024-12-26T00:00:00",
+          "2024-12-26T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 41,
+      "prior_year_analog_window": [
+        "2025-01-01T00:00:00",
+        "2025-01-02T01:00:00"
+      ],
+      "selection_basis": "New Year holiday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2024-12-31T23:00:00",
+      "last_M15_raw": "2025-01-02T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        8,
+        9
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2024-12-31T23:00:00",
+          "2025-01-01T01:00:00"
+        ],
+        [
+          "2025-01-02T00:00:00",
+          "2025-01-02T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 53,
+      "prior_year_analog_window": [
+        "2025-01-20T22:00:00",
+        "2025-01-21T01:00:00"
+      ],
+      "selection_basis": "MLK Monday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 7,
+      "first_M15_raw": "2025-01-20T21:00:00",
+      "last_M15_raw": "2025-01-21T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        10,
+        11
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-01-20T21:00:00",
+          "2025-01-20T23:00:00"
+        ],
+        [
+          "2025-01-21T00:00:00",
+          "2025-01-21T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 73,
+      "prior_year_analog_window": [
+        "2025-02-17T21:45:00",
+        "2025-02-18T01:00:00"
+      ],
+      "selection_basis": "Presidents Day Monday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2025-02-17T20:45:00",
+      "last_M15_raw": "2025-02-18T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        12,
+        13
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-02-17T20:45:00",
+          "2025-02-17T22:45:00"
+        ],
+        [
+          "2025-02-18T00:00:00",
+          "2025-02-18T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 106,
+      "prior_year_analog_window": [
+        "2025-04-18T00:00:00",
+        "2025-04-21T01:00:00"
+      ],
+      "selection_basis": "Good Friday (moved date)",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2025-04-17T23:00:00",
+      "last_M15_raw": "2025-04-21T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        14,
+        15
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-04-17T23:00:00",
+          "2025-04-18T01:00:00"
+        ],
+        [
+          "2025-04-21T00:00:00",
+          "2025-04-21T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 142,
+      "prior_year_analog_window": [
+        "2025-05-26T22:00:00",
+        "2025-05-26T22:15:00"
+      ],
+      "selection_basis": "Memorial Day Monday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 3,
+      "first_M15_raw": "2025-05-26T21:30:00",
+      "last_M15_raw": "2025-05-26T22:00:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_PRESENT",
+      "requests": [
+        16
+      ],
+      "observed_inside_sampled_target_count": 1,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-05-26T21:30:00",
+          "2025-05-26T22:45:00"
+        ]
+      ],
+      "sampled_inside_labels": [
+        "2025-05-26T22:00:00"
+      ],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 143,
+      "prior_year_analog_window": [
+        "2025-05-26T22:30:00",
+        "2025-05-27T01:00:00"
+      ],
+      "selection_basis": "Memorial Day Monday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 7,
+      "first_M15_raw": "2025-05-26T21:30:00",
+      "last_M15_raw": "2025-05-27T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        17,
+        18
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-05-26T21:30:00",
+          "2025-05-26T23:30:00"
+        ],
+        [
+          "2025-05-27T00:00:00",
+          "2025-05-27T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 162,
+      "prior_year_analog_window": [
+        "2025-06-20T20:15:00",
+        "2025-06-23T01:00:00"
+      ],
+      "selection_basis": "Friday after Juneteenth (2025 holiday itself Thu 2025-06-19)",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 12,
+      "first_M15_raw": "2025-06-20T19:15:00",
+      "last_M15_raw": "2025-06-23T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_PRESENT",
+      "requests": [
+        19,
+        20
+      ],
+      "observed_inside_sampled_target_count": 4,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-06-20T19:15:00",
+          "2025-06-20T21:15:00"
+        ],
+        [
+          "2025-06-23T00:00:00",
+          "2025-06-23T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [
+        "2025-06-20T20:15:00",
+        "2025-06-20T20:30:00",
+        "2025-06-20T20:45:00",
+        "2025-06-20T21:00:00"
+      ],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 172,
+      "prior_year_analog_window": [
+        "2025-07-04T20:15:00",
+        "2025-07-07T01:00:00"
+      ],
+      "selection_basis": "Independence Day Friday (2026 observed on Fri Jul 3)",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 8,
+      "first_M15_raw": "2025-07-04T19:15:00",
+      "last_M15_raw": "2025-07-07T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN",
+      "requests": [
+        21,
+        22
+      ],
+      "observed_inside_sampled_target_count": 0,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-07-04T19:15:00",
+          "2025-07-04T21:15:00"
+        ],
+        [
+          "2025-07-07T00:00:00",
+          "2025-07-07T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    },
+    {
+      "original_gap_id": 218,
+      "prior_year_analog_window": [
+        "2025-09-01T21:45:00",
+        "2025-09-02T01:00:00"
+      ],
+      "selection_basis": "Labor Day Monday",
+      "same_symbol_account_feed_provenance": "SAME_CURRENT_GUARDED_EPLANET_DEMO_TERMINAL",
+      "historical_utc_dst": "UNVERIFIED_RAW_LABEL_ONLY",
+      "ordinary_session_or_holiday_candidate": "HOLIDAY_OR_EVENT_WEEKDAY_ANALOG_NOT_CONFIRMED_CLOSED",
+      "actual_M15_returned_count": 9,
+      "first_M15_raw": "2025-09-01T20:45:00",
+      "last_M15_raw": "2025-09-02T01:45:00",
+      "OHLC_tick_volume_spread_validity": "VALID",
+      "status": "OBSERVED_PRESENT",
+      "requests": [
+        23,
+        24
+      ],
+      "observed_inside_sampled_target_count": 1,
+      "M15_around_start_seen": true,
+      "M15_around_end_seen": true,
+      "sampled_windows": [
+        [
+          "2025-09-01T20:45:00",
+          "2025-09-01T22:45:00"
+        ],
+        [
+          "2025-09-02T00:00:00",
+          "2025-09-02T02:00:00"
+        ]
+      ],
+      "sampled_inside_labels": [
+        "2025-09-01T21:45:00"
+      ],
+      "history_coverage": "SAMPLED_BOUNDARIES_ONLY_NOT_FULL_INTERVAL"
+    }
+  ],
+  "juneteenth_control": {
+    "date_raw": "2025-06-19",
+    "purpose": "JUNETEENTH_THURSDAY_SEPARATE_FROM_FRIDAY_2025_06_20",
+    "sampled_window": [
+      "2025-06-19T19:15:00",
+      "2025-06-19T21:15:00"
+    ],
+    "actual_M15_returned_count": 8,
+    "first_raw": "2025-06-19T19:15:00",
+    "last_raw": "2025-06-19T21:00:00",
+    "request_id": 25,
+    "status": "OBSERVED_PRESENT"
+  },
+  "query_count": 25,
+  "total_returned_rows": 107,
+  "raw_bytes": 6420,
+  "elapsed_seconds": 7.766,
+  "orders": 0,
+  "settings_changed": false,
+  "new_terminal_started": false,
+  "original_data_replaced": false,
+  "limitation": "Sample unavailable does not prove that every prior-year date is unavailable or officially closed.",
+  "strategy_test_performed": false,
+  "ff_decision": "ALL_SIX_REMAIN_STOP",
+  "unique_M15": 104,
+  "identical_overlap_records": 3,
+  "full_gap_interior_queried": false,
+  "prior_year_prices_used_to_fill_current": false,
+  "rows_with_inside_sample_present": 4,
+  "rows_with_inside_sample_absent_unknown": 9,
+  "transport_network_bytes": "UNMEASURED_RAW_BYTES_ARE_LOCAL_RESPONSE_PAYLOAD_ONLY"
+}

@@ -1,0 +1,109 @@
+{
+  "all_passed": true,
+  "requests": 25,
+  "returned_rows": 107,
+  "unique_M15": 104,
+  "identical_overlap_records": 3,
+  "raw_bytes": 6420,
+  "invalid_ohlc": 0,
+  "invalid_tick_volume": 0,
+  "negative_spread": 0,
+  "conflicting_duplicates": 0,
+  "binary_csv_exact": true,
+  "source_target_blob_verified": "6a709939b96e0bf621af7b8634ba0455380fd6fc",
+  "status_counts": {
+    "OBSERVED_ABSENT_BUT_CAUSE_UNKNOWN": 9,
+    "OBSERVED_PRESENT": 4
+  },
+  "per_case_comparison": [
+    {
+      "original_gap_id": 17,
+      "last_observed_before_start_raw": "2024-11-28T21:30:00",
+      "first_observed_at_or_after_end_raw": "2024-11-29T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 18,
+      "last_observed_before_start_raw": "2024-11-29T10:45:00",
+      "first_observed_at_or_after_end_raw": "2024-11-29T11:15:00",
+      "observed_inside_sampled_target_labels": [
+        "2024-11-29T11:00:00"
+      ]
+    },
+    {
+      "original_gap_id": 19,
+      "last_observed_before_start_raw": "2024-11-29T21:45:00",
+      "first_observed_at_or_after_end_raw": "2024-12-02T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 37,
+      "last_observed_before_start_raw": "2024-12-24T20:45:00",
+      "first_observed_at_or_after_end_raw": "2024-12-26T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 41,
+      "last_observed_before_start_raw": "2024-12-31T23:45:00",
+      "first_observed_at_or_after_end_raw": "2025-01-02T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 53,
+      "last_observed_before_start_raw": "2025-01-20T21:30:00",
+      "first_observed_at_or_after_end_raw": "2025-01-21T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 73,
+      "last_observed_before_start_raw": "2025-02-17T21:30:00",
+      "first_observed_at_or_after_end_raw": "2025-02-18T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 106,
+      "last_observed_before_start_raw": "2025-04-17T23:45:00",
+      "first_observed_at_or_after_end_raw": "2025-04-21T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 142,
+      "last_observed_before_start_raw": "2025-05-26T21:45:00",
+      "first_observed_at_or_after_end_raw": null,
+      "observed_inside_sampled_target_labels": [
+        "2025-05-26T22:00:00"
+      ]
+    },
+    {
+      "original_gap_id": 143,
+      "last_observed_before_start_raw": "2025-05-26T22:00:00",
+      "first_observed_at_or_after_end_raw": "2025-05-27T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 162,
+      "last_observed_before_start_raw": "2025-06-20T20:00:00",
+      "first_observed_at_or_after_end_raw": "2025-06-23T01:00:00",
+      "observed_inside_sampled_target_labels": [
+        "2025-06-20T20:15:00",
+        "2025-06-20T20:30:00",
+        "2025-06-20T20:45:00",
+        "2025-06-20T21:00:00"
+      ]
+    },
+    {
+      "original_gap_id": 172,
+      "last_observed_before_start_raw": "2025-07-04T20:00:00",
+      "first_observed_at_or_after_end_raw": "2025-07-07T01:00:00",
+      "observed_inside_sampled_target_labels": []
+    },
+    {
+      "original_gap_id": 218,
+      "last_observed_before_start_raw": "2025-09-01T21:30:00",
+      "first_observed_at_or_after_end_raw": "2025-09-02T01:00:00",
+      "observed_inside_sampled_target_labels": [
+        "2025-09-01T21:45:00"
+      ]
+    }
+  ]
+}
