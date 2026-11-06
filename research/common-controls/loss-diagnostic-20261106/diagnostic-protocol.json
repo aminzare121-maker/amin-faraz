@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "source_instruction": "PR32#issuecomment-6682894835",
+  "scope": "OFFLINE_EXISTING_FF_TRACE_ONLY_NO_ENGINE_REPLAY_NO_TUNING",
+  "registration_note": "Written before this detailed diagnostic; previously published negative ALL summaries were already known. This is a retrospective decision rubric, not a prospective strategy preregistration.",
+  "time_basis": "RAW_LABEL_ONLY_NOT_UTC_OR_TEHRAN",
+  "money": "Decimal, scenario USD, closed and known partial only",
+  "decisions": {
+    "STOP": "Both fixed costs have negative known-partial net AND negative sum of fully resolved segment net AND closed profit factor below 1. Stop promotion of this unchanged FF configuration; no claim that all future strategy variants are disproved.",
+    "CANDIDATE_FOR_FRESH_TEST": "Both costs have positive known-partial net AND positive fully resolved segment net AND closed profit factor above 1 AND no unresolved positions. Only eligibility for a new prospectively specified test, never market approval.",
+    "RESEARCH_ONLY": "All other cases, or required evidence unmeasurable."
+  },
+  "bounds": "NOT_BOUNDED for any unresolved exposure; no invented execution/quote/swap cap",
+  "proximity": {"near_gap_minutes": 60, "holiday_candidate_neighborhood_hours": 24},
+  "signal_features": "Only family, lookback, stop_multiple, side and observed holding/initial risk derived from recorded fields. ATR/ADX/regime/actual bid-ask and spread/slippage cash components absent in trace are UNMEASURABLE.",
+  "cost_comparison": "Descriptive scenario differences, with entry-matched cohorts; never interpret difference in aggregate net as pure friction when paths differ.",
+  "fresh_holdout": "NO_FRESH_HOLDOUT",
+  "fit": false,
+  "market_approval": false,
+  "m5_recovery": "CLOSED_ZERO_RECOVERABLE_NO_MORE_DOWNLOADS"
+}
