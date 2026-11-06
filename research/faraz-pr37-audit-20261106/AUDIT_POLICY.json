@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "task": "PR37 comment6687452748; Issue9 comment6687458288",
+  "status": "LOCK_BEFORE_SENSITIVITY_EXECUTION_NOT_BLIND_HOLDOUT",
+  "source_commit": "de94202d2da89e07c280a94108f73208c4fb2001",
+  "locked_program_sha256": "631d380b2d2cc8a6e06e7607ebf2c23fa58987facb3be66909013d3c06d0a77a",
+  "locked_first_result_sha256": "9621d55b7fc797e83ee19c7c73533203fdf87bde55eb7e656a6f220e0903296c",
+  "data_sha256": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "data_status": "IN_SAMPLE_REPEATEDLY_STUDIED_23643_M15_BARS",
+  "fixed_contract": {"ounces_per_lot": 100.0, "lot": 0.01, "risk_budget_usd": 25.0, "lot_feasibility_verified_from_historical_broker_specs": false},
+  "fixed_strategy": {"warmup_bars": 60, "stop_atr_multiple": 1.5, "horizon_bars": 8, "take_profit": null, "entry": "NEXT_BAR_OPEN_AFTER_CLOSED_SIGNAL", "families": ["trend_pullback", "range_reversion", "compression_expansion"], "signal_parameters_changed": false},
+  "cost_scenarios": [
+    {"name": "base_locked", "spread_price": 0.50, "slippage_each_side_price": 0.20, "commission_usd_per_lot_roundtrip": 10.0, "historical_swap_usd": null},
+    {"name": "conservative_predeclared", "spread_price": 1.00, "slippage_each_side_price": 0.40, "commission_usd_per_lot_roundtrip": 10.0, "historical_swap_usd": null}
+  ],
+  "execution_convention": "PRESERVE_V1_BID_REFERENCE_STOP_FOR_COST_COMPARISON; ASK_ORDER_STOP_DIFFERENCE_IS_EXPLICIT_DIAGNOSTIC_NOT_SILENT_FIX",
+  "comparisons": [
+    "Reconstruct original accepted-entry trace for audit, match its aggregate identities to immutable first result; do not replace or rerun the first CLI output.",
+    "Frozen v1 accepted-entry cohort: cost-overlay same entries, reference stop and outcome times. Separately count higher-cost risk inadmissibility; full frozen overlay is mathematical diagnostic, not executable-policy approval.",
+    "Common-risk-admissible frozen cohort: both scenarios must satisfy the same25USD rule. Report matched closed, all matched unknowns and excluded entries; do not hide selection.",
+    "If a genuine implementation defect needs correction, original source/results remain untouched; separate version and synthetic counterexample before/after are mandatory. No signal/indicator tuning."
+  ],
+  "unknown_audit": {"primary_causes": ["HISTORY_GAP_BEFORE_HORIZON", "SAMPLE_END_BEFORE_HORIZON"], "additional_flags": ["RAW_DAY_BOUNDARY_CROSSED_NOT_VERIFIED_ROLLOVER", "SHORT_ASK_ORDER_TRIGGER_UNVERIFIED", "NO_HISTORICAL_SWAP_OR_BIDASK"], "no_tp_ambiguity_claim": "V1 has no TP; this does not certify broker intrabar execution", "no_imputation": true, "private_per_entry_trace": true},
+  "rarity_audit": ["all_segments_and_short_warmup_segments", "post_warmup_ATR_positive_positions", "compression_gate", "range_expansion_gate", "directional_breakout_gate", "raw_signals", "signals_suppressed_by_open_trade_or_unknown_break", "accepted_entries", "closed_and_unknown_by_raw_quarter_and_segment_count_only"],
+  "risk_metrics": ["closed-known PF/expectancy/net", "max_closed_DD_per_independent_segment", "first-unknown continuous-prefix only as separate small diagnostic, never annual equity", "closed-only incremental-cost break-even", "algebraic mean-unknown-net needed for full-net-zero without assuming that unknown PnL is bounded"],
+  "decision_gate": {"minimum_closed_for_further_independent_validation": 100, "maximum_unknown_for_any_complete_sample_claim": 0, "negative_closed_known_net_in_both_costs": "STOP_RESEARCH_CURRENT_VERSION_NOT_PROOF_ALL_UNKNOWN_WOULD_BE_NEGATIVE", "insufficient_closed_or_any_unknown": "INSUFFICIENT_EVIDENCE", "no_strategy_approval_from_this_audit": true},
+  "independent_period_plan_only": {"target": "M15_2024_2025_EXACT_INTERVAL_TO_BE_PRELOCKED_BEFORE_ACQUISITION", "existing_sparse_prior_year_bars": 104, "continuous_download_or_MT5_SDK_connection_authorized": false, "no_download_in_this_task": true, "no_blind_holdout_claim": true},
+  "publication": "NON_RECONSTRUCTIVE_AGGREGATES_ONLY_NO_RAW_PRICES_TRADE_TIMES_PRIVATE_IDS_OR_ACCOUNT_DATA",
+  "no_trading_install_merge_operational_changes": true
+}

@@ -1,0 +1,69 @@
+{
+  "numeric_addendum_commit": "a5fae84239980f3e8a671628b5b65e537e6e8a22",
+  "policy_commit": "be6d1eb44d9b9c127da8c273a7d1a3efc636d08d",
+  "original_commit": "de94202d2da89e07c280a94108f73208c4fb2001",
+  "new_repair_tests": {
+    "skipped": 0,
+    "errors": 0,
+    "failed": 0,
+    "passed": 15
+  },
+  "mt5_sdk_network_newdata_trades_installs_merge": false,
+  "all_original_input_hashes_unchanged": true,
+  "data_sha256": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "files": [
+    {
+      "path": "AUDIT_POLICY.json",
+      "sha256": "19c8578141bc6b7b3f50377efbdbbdb933fe72f6e4063a3cc2117de92c37fdb6"
+    },
+    {
+      "path": "NUMERIC_AUDIT_ADDENDUM.json",
+      "sha256": "b2e6435bed90c30d818ea089aae4e903b8333876d767fd2749be160428dc18d2"
+    },
+    {
+      "path": "pr37_audit.py",
+      "sha256": "72b5dec6c6698f5840c0df9cfd72697853e5fdda387d50e83dd14fa4be23fa2c"
+    },
+    {
+      "path": "metric_revision_v2.py",
+      "sha256": "2b6c3847dff0390ac6383eeee3e6e3f32d5d9952216bb6aa3a0c6f4f9fe585ac"
+    },
+    {
+      "path": "safe_outputs_v2.py",
+      "sha256": "46d583e10cd2c02f7a356062fe8108ea3d1d8dec968d04554bc06bfa8c549ba4"
+    },
+    {
+      "path": "test_audit.py",
+      "sha256": "7ea2464a19a7542421983670be9693597b87f7df6179923ac7f9f6c12f2691fc"
+    },
+    {
+      "path": "audit-aggregate.json",
+      "sha256": "441bde770b0ae09ff4f38234709cd11cd7288a736aec104c4b7cfd1c4e639d04"
+    },
+    {
+      "path": "REPORT_FA.md",
+      "sha256": "642d7d8b9780ec23a584e0a345c702535006925a1abb5be46e7c1c420563696b"
+    },
+    {
+      "path": "INDEPENDENT_PERIOD_PLAN_FA.md",
+      "sha256": "3c96c8be9e4983589e6f138e2faa0e8c2d1b0f8b8ded00dcaeaf3ec628696c79"
+    },
+    {
+      "path": "README_FA.md",
+      "sha256": "4709b0f91e8edc681dd2145b05311c42b0574f0659cc47eff6c523f42692ad20"
+    },
+    {
+      "path": "ROOT_REVIEW_RECEIPT.json",
+      "sha256": "fce26d1c1d65ae8467fd8c3bd8faa9fa28cf6be19cc6585f01db302b2d82f521"
+    }
+  ],
+  "scope": "Separate offline audit; immutable initial source/result preserved",
+  "private_trace_published": false,
+  "independent_bid_ask_coordinate_checks": 4,
+  "audit_program_runs": 1,
+  "independent_locked_characterization_asserts": 11,
+  "first_result_sha256": "9621d55b7fc797e83ee19c7c73533203fdf87bde55eb7e656a6f220e0903296c",
+  "source_sha256": "631d380b2d2cc8a6e06e7607ebf2c23fa58987facb3be66909013d3c06d0a77a",
+  "private_trace_sha256": "834103c758138a13730029dc056d4162a1326f58d27eb1c4a70aa46ef8050480",
+  "actual_numeric_noise_cases_all_scenarios": 0
+}
