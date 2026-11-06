@@ -44,6 +44,8 @@ def read_csv(path,interval_seconds):
 
 def required_for(rule,facts):
     keys=list(COMMON)+([] if rule.startswith('STOPPUNCH_') else list(FAMILY))+list(REQUIRED[rule])
+    if facts.get('sentiment_permission',Fact('',0,'DIAGNOSTIC')).value=='UNKNOWN':
+        keys+=['direction_assessment','fixed_symbol_analysis','teacher_two_sided_branch_selected']
     if rule=='BREAK_STRONG':
         kind=facts.get('level_kind')
         if kind is None:pass # geometry alternatives are inventoried separately until level kind is known

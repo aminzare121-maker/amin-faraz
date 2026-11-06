@@ -109,7 +109,14 @@ class Engine:
         try:
             if rule_id not in self.allowed_rules:raise _Condition('REJECT','RULE_NOT_IN_FIXED_PLAN')
             bias=reader.label('sentiment_permission',('LONG_ONLY','SHORT_ONLY','TWO_SIDED','UNKNOWN'))
-            if bias=='UNKNOWN':raise _Condition('REVIEW','SENTIMENT_NOT_ESTABLISHED')
+            if bias=='UNKNOWN':
+                # S09 fixed-symbol fallback is an explicit analysis state, not
+                # a silent conversion of absent economic data into permission.
+                state=reader.label('direction_assessment',('REVIEWED_INCONCLUSIVE','MISSING_DATA','NOT_REVIEWED'))
+                if state!='REVIEWED_INCONCLUSIVE':raise _Condition('REVIEW','SENTIMENT_NOT_ESTABLISHED')
+                reader.yes('fixed_symbol_analysis','REVIEW','FIXED_SYMBOL_FALLBACK_NOT_APPLICABLE')
+                reader.yes('teacher_two_sided_branch_selected','REVIEW','TWO_SIDED_BRANCH_NOT_SELECTED')
+                bias='TWO_SIDED'
             if (bias=='LONG_ONLY' and observation.side!='BUY') or (bias=='SHORT_ONLY' and observation.side!='SELL'):
                 raise _Condition('REJECT','DIRECTION_NOT_PERMITTED')
             reader.yes('current_setup','REJECT','HISTORICAL_SETUP_NOT_FRESH')
@@ -124,6 +131,7 @@ class Engine:
         if 'current_setup' in reader.used:sources.append((15,2836,2897))
         if 'family_selection_context' in reader.used:sources.append((14,3111,3415))
         if 'teacher_prz_exception_confirmed' in reader.used:sources.append((15,3443,3512))
+        if 'direction_assessment' in reader.used:sources.extend(((9,253,278.12),(9,363.64,387.96),(9,591.16,640)))
         return Decision(rule_id,status,reasons,tuple(sources),fingerprint)
 
     def _family_admission(self,rule,r):
