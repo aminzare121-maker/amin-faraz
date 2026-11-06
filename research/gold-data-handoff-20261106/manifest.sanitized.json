@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "status": "LOCAL_READY_NOT_UPLOADED_RIGHTS_GATE",
+  "symbol": "XAUUSD.st",
+  "source": "Existing Eplanet DEMO MT5 export; no new terminal/SDK access",
+  "timeframe": "M15",
+  "rows": 23643,
+  "source_chunks": 20,
+  "source_manifest_sha256": "57d0734217b44ccdacbac58bd68f47e7706f3d0be71ffc1c4d735a1325a12a07",
+  "csv_filename": "XAUUSD.st_M15_23643_rawtime.csv",
+  "csv_sha256": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "csv_bytes": 1243328,
+  "columns": [
+    "time_raw_epoch",
+    "open",
+    "high",
+    "low",
+    "close",
+    "tick_volume",
+    "spread",
+    "real_volume"
+  ],
+  "time_contract": "RAW_SERVER_LABEL_UNVERIFIED; integer source epoch preserved; no verified UTC/DST conversion",
+  "first_raw_epoch": 1762340400,
+  "last_raw_epoch": 1793875500,
+  "first_naive_raw_label": "2025-11-05 11:00:00",
+  "last_naive_raw_label": "2026-11-05 10:45:00",
+  "gap_intervals": 260,
+  "missing_calendar_slots": 11397,
+  "market_closed_slots": "UNKNOWN; calendar gaps are not proof of broker deletion or closure",
+  "checks": {
+    "original_manifest_sha256": "PASS",
+    "all_40_source_file_sha256": "PASS",
+    "all_source_csv_values_match_binary_records": "PASS",
+    "duplicate_epochs": 0,
+    "invalid_ohlc": 0,
+    "off_grid_epochs": 0,
+    "textual_values_preserved": "PASS",
+    "saved_csv_reread_and_rowwise_compare": "PASS",
+    "pii_account_trade_fields": "ABSENT: fixed eight-column whitelist"
+  },
+  "external_transfer_authorization": "NOT_ESTABLISHED: local research permission does not document private GitHub/cloud sharing exception",
+  "raw_uploaded": false,
+  "sources": [
+    {
+      "csv": "M15-1793271600-1793358000.csv",
+      "csv_sha256": "77119c21c7056032c308cf8568296696fea49594319bc19ee1cc000414415a91",
+      "raw": "M15-1793271600-1793358000.bin",
+      "raw_sha256": "5e42aaa8cc450773ce19d94023e73430cde40e562354d90e5406ae242396d80a",
+      "raw_rows": 92
+    },
+    {
+      "csv": "M15-1793358000-1793444400.csv",
+      "csv_sha256": "1cc36b7993339b6a7bfee90ee005d8546de9e19a4e99e75cac9a973c4b023358",
+      "raw": "M15-1793358000-1793444400.bin",
+      "raw_sha256": "f731fbe43a50d3e828cbb8f11b998625f2a6fcbc3a356e5ce46d2a5ea7cc72a3",
+      "raw_rows": 52
+    },
+    {
+      "csv": "M15-1793444400-1793530800.csv",
+      "csv_sha256": "0357e4c029caa9179bfa1bcf84ea88dedb5cc42cca7b1fc756f48d891950dfa1",
+      "raw": "M15-1793444400-1793530800.bin",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_rows": 0
+    },
+    {
+      "csv": "M15-1793530800-1793617200.csv",
+      "csv_sha256": "d90fdbf9208514ef11cd05200aae79fb08bfedf0b3fcb0cb1945e84ad2c09569",
+      "raw": "M15-1793530800-1793617200.bin",
+      "raw_sha256": "0c2370b4be2d46b5096474f193ecb02c8b18e2e6c51ea1c6538a650035711cd8",
+      "raw_rows": 40
+    },
+    {
+      "csv": "M15-1793617200-1793703600.csv",
+      "csv_sha256": "961dee64edcbb5fc20604187fea5719d5cc0695edaede9903be6f3c29c27ae9d",
+      "raw": "M15-1793617200-1793703600.bin",
+      "raw_sha256": "bf5b561dfb969a6113b9202d47e744e89fb9610776abd05993cbe1ff08cf4142",
+      "raw_rows": 92
+    },
+    {
+      "csv": "M15-1793703600-1793790000.csv",
+      "csv_sha256": "35521bc6bd90745fed90e57d365689027a8a453d2d88eb8a747dfc7fd8030b0f",
+      "raw": "M15-1793703600-1793790000.bin",
+      "raw_sha256": "e67da4c7f08fca884a118adc4c7690daba8e0f77f7a9be6dd50c101eb302c035",
+      "raw_rows": 92
+    },
+    {
+      "csv": "M15-1793790000-1793876400.csv",
+      "csv_sha256": "6784a378daf12ea9c5433f14c720f4eb073b3511869f5d59b544ba5f2f1faed9",
+      "raw": "M15-1793790000-1793876400.bin",
+      "raw_sha256": "042af4a29095ad77583cb00a33bc21279368f6d7e8b8419075473f2008ddefa8",
+      "raw_rows": 92
+    },
+    {
+      "csv": "M15-1762340400-1764759600.csv",
+      "csv_sha256": "426b2405b9f4aff3eff583f3c57aa7aae97a6ac603ede2aa30429aad5c5b1f83",
+      "raw": "M15-1762340400-1764759600.bin",
+      "raw_sha256": "a971b4f189baa7de324a034c9c31170ef19d38875adb080dbc2222326c6f9138",
+      "raw_rows": 1822
+    },
+    {
+      "csv": "M15-1764759600-1767178800.csv",
+      "csv_sha256": "50d12ed48d2d2909edbbfe71b84da3a8a320bfd253911bf4234b38d68a5ed8dc",
+      "raw": "M15-1764759600-1767178800.bin",
+      "raw_sha256": "2358e57349bb1682d073745d483d1437b7dec2adc2d3bff5543b0a50719b1cdd",
+      "raw_rows": 1736
+    },
+    {
+      "csv": "M15-1767178800-1769598000.csv",
+      "csv_sha256": "2f7549f47300b1a1c205aee16d78a035ea6476bc40320c99ca549d9011b58960",
+      "raw": "M15-1767178800-1769598000.bin",
+      "raw_sha256": "628b459a3dbe0d9f9b8660aa518668c8416b63cbe5c596aa660614ec60a5245a",
+      "raw_rows": 1740
+    },
+    {
+      "csv": "M15-1769598000-1772017200.csv",
+      "csv_sha256": "bfbcc007340202f3858660ba143c7ae3f10f12b882abf78036d2e8d3ba58b02d",
+      "raw": "M15-1769598000-1772017200.bin",
+      "raw_sha256": "86c924d499c9a12d61538816b8b4dcebf4b90367789f9611d8ab2e2f8d539e51",
+      "raw_rows": 1831
+    },
+    {
+      "csv": "M15-1772017200-1774436400.csv",
+      "csv_sha256": "296099c837841eebe9e0eb46d2efaaa34532fb6888c0fe189ddb7a8f19888026",
+      "raw": "M15-1772017200-1774436400.bin",
+      "raw_sha256": "7929b4db70fc59cc2b0f0bb596f5b046380e8eb5ad84a826244ab305e77c39a2",
+      "raw_rows": 1840
+    },
+    {
+      "csv": "M15-1774436400-1776855600.csv",
+      "csv_sha256": "deb478749b7dec01272ae2af7e0379dc67aee1e125f98b37f280cdd636452b71",
+      "raw": "M15-1774436400-1776855600.bin",
+      "raw_sha256": "f4bf43ff26925e3a2d18616683fb49cde57c2c3b4e4e2a96eca2cbe65dfd1897",
+      "raw_rows": 1748
+    },
+    {
+      "csv": "M15-1776855600-1779274800.csv",
+      "csv_sha256": "cfc1cdb35a693cc31cddfd7055be7f728067392aca0755d9a98c6b9f67ec9c55",
+      "raw": "M15-1776855600-1779274800.bin",
+      "raw_sha256": "680aabdafc8e198a1dae73fa5d9df1c6d9afa53b964f41a4aa147066cdf0b95e",
+      "raw_rows": 1840
+    },
+    {
+      "csv": "M15-1779274800-1781694000.csv",
+      "csv_sha256": "6f09fb24f58db0ef33ac48d3f571f7896427615ee8d552b77d7870ee65be97e0",
+      "raw": "M15-1779274800-1781694000.bin",
+      "raw_sha256": "d5ab4da571210810871d8194dc56b5304c790a3703305e0b6c7fa444bd717e86",
+      "raw_rows": 1833
+    },
+    {
+      "csv": "M15-1781694000-1784113200.csv",
+      "csv_sha256": "382f62de8cdce740a8e42cceac24dc8004f9d9d5ceaab95bc6a0ce4b0d59ff01",
+      "raw": "M15-1781694000-1784113200.bin",
+      "raw_sha256": "98d29b38469de55db9e9f2a4c4f962c0a8685650edb901ba324827f75a5c5027",
+      "raw_rows": 1810
+    },
+    {
+      "csv": "M15-1784113200-1786532400.csv",
+      "csv_sha256": "2ae50af33d95a22b0a11224ca2e5e3ea3fe66217640b78fcac0ef11d1c97be75",
+      "raw": "M15-1784113200-1786532400.bin",
+      "raw_sha256": "5c8e9af165efe65f106458dcadc86a3a100f4eeddb3cfef0faeedd1e20b5434b",
+      "raw_rows": 1840
+    },
+    {
+      "csv": "M15-1786532400-1788951600.csv",
+      "csv_sha256": "cf4ae4ed7a461c8c7450f9436804805be51229b4fe6515691f4ef477508dc9f8",
+      "raw": "M15-1786532400-1788951600.bin",
+      "raw_sha256": "593b01ee00f9cf5e2ebbdb871368e3f07f75a3b44072e4844b80a5a5fdbead9a",
+      "raw_rows": 1831
+    },
+    {
+      "csv": "M15-1788951600-1791370800.csv",
+      "csv_sha256": "2f0a77d0d4e08eb30bad4879fcb5938550570a20f700cee406a737c21e93558c",
+      "raw": "M15-1788951600-1791370800.bin",
+      "raw_sha256": "daef3f065c2d287b9310a923c109ecce4198ec072b36cdfe01c074a6134bdb9a",
+      "raw_rows": 1840
+    },
+    {
+      "csv": "M15-1791370800-1793271600.csv",
+      "csv_sha256": "ada65a31f5bc0698c7f41cad35c367ddba32936d4ded5d3646eb04b3e08bd9d4",
+      "raw": "M15-1791370800-1793271600.bin",
+      "raw_sha256": "c5c44bc31a611daf4cd08ea4fc43702d2cc1b209dc9bf06cd3048d54e7718a85",
+      "raw_rows": 1472
+    }
+  ]
+}
+
