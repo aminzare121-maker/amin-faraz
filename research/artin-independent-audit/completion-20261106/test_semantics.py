@@ -40,6 +40,23 @@ class Semantics(unittest.TestCase):
         pivot_time, first_confirmation, proposed_entry = 10,12,11
         self.assertLess(pivot_time, proposed_entry)
         self.assertGreater(first_confirmation,proposed_entry)
+    def test_first_drawing_inside_origin_third_not_exact_boundary(self):
+        origin, entry, stop=map(D,('4665.048','4681.455','4668.633'))
+        boundary=origin+(entry-origin)/3
+        self.assertEqual(boundary,D('4670.517'))
+        self.assertLessEqual(origin,stop)
+        self.assertLessEqual(stop,boundary)
+        self.assertNotEqual(stop,boundary)
+    def test_second_visual_origin_bracket_is_consistent_with_region(self):
+        # A coarse axis bracket for the visible low, not a precise OHLC reading.
+        entry,stop=D('4566.101'),D('4545.735')
+        for origin in (D('4540'),D('4544')):
+            self.assertLessEqual(origin,stop)
+            self.assertLessEqual(stop,origin+(entry-origin)/3)
+    def test_deep_wick_changes_the_hypothesis(self):
+        # Never substitute the inverse-fitted low for the teacher's marked line.
+        origin,entry,stop=map(D,('4642.989','4681.455','4668.633'))
+        self.assertGreater(stop,origin+(entry-origin)/3)
 
 if __name__=='__main__': unittest.main(verbosity=2)
 
