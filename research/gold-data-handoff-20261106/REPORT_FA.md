@@ -20,3 +20,8 @@ CSV محلی با 23,643 ردیف از همان 20 قطعه قدیمی M15 نم�
 
 ## محدوده اجرا
 هیچ MT5/SDK، دریافت تازه، نصب، معامله، تغییر ربات، تغییر تنظیمات یا Merge انجام نشد. این شاخه مستقل فقط گزارش و مانیفست فاقد قیمت دارد. داده خام و شکاف‌های جزئی محلی باقی ماندند. نتیجه نهایی مأموریت «تحویل داده به ChatGPT» هنوز محقق نشده است.
+
+## اثر انگشت رسید محلی
+مسیر رسید روی دستگاه مالک: `C:/Users/Pixel/Documents/Codex/2026-11-05/faraz-common-research/limited-window-rights-receipt.json`.
+SHA256: `1ba56ae4436e4a3a478d8b501efae117e03b26771b34489b6fe0c1cd8e0d402a`.
+نقل کوتاه دامنه از رسید: “private local research and backtesting”. مقدار `public_raw_redistribution` برابر `false` است. رسید، خلاصه پاک‌سازی‌شده پاسخ پشتیبانی است و قرارداد کامل امضاشده نیست. نقل کوتاه از [ثبت پاسخ پشتیبانی](https://github.com/aminzare121-maker/amin-faraz/issues/9#issuecomment-6655856241): «بازتوزیع و انتشار عمومی feed خام مجاز نیست».
