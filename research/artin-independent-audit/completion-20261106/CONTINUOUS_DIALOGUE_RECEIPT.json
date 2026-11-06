@@ -1,0 +1,30 @@
+{
+  "duration_seconds": 204,
+  "pcm_sha256": "b0b6d668fdf089979c119e563135e345a0fb8bd1e5c20445c33fe71a03c24fba",
+  "session": 22,
+  "private_result_sha256": "416bd5d49ef007b7275f0cceb18620a6feaa95db3faaa0c66875ea81fc836ff7",
+  "raw_asr_published": false,
+  "direct_audio_semantics_verified": false,
+  "speaker_diarization": false,
+  "process_priority": "Normal observed for running attempt; initial untyped priority call was not verified. Helper corrected after launch, no ASR rerun.",
+  "limitation": "Same-model ASR agreement is not independent audio verification; overlapping voices not separated.",
+  "settings": {
+    "language": "fa",
+    "beam_size": 5,
+    "vad_filter": false,
+    "condition_on_previous_text": true,
+    "temperature": 0,
+    "word_timestamps": true
+  },
+  "elapsed_decode_seconds": 439.9,
+  "segments": 96,
+  "rule_verified": false,
+  "external_audio_transfer": false,
+  "cpu_threads": 1,
+  "model_snapshot": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+  "source_interval": [
+    2311,
+    2515
+  ]
+}
+
