@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "parent_policy_commit": "be6d1eb44d9b9c127da8c273a7d1a3efc636d08d",
+  "reason": "Independent read-only synthetic review found theoretical breakeven classified as losing due to floating residual -5.689893001203927e-15. No real sensitivity execution has occurred yet.",
+  "closed_net_zero_tolerance_usd": 1e-9,
+  "tolerance_scope": "NUMERIC_STATISTICS_ONLY_NOT_ORDER_PRICE_RISK_ADMISSION_OR_SIGNAL_TUNING",
+  "revision": "SEPARATE_V2_METRIC_NORMALIZATION_WITH_EXPLICIT_BREAKEVEN_COUNT",
+  "first_run_and_original_source_immutable": true,
+  "before_after": "Keep legacy first-run matching metrics and add v2 same-entry same-fill normalized metrics; count actual residual cases per cost scenario. Do not rerun the original CLI or replace original result.",
+  "PF": "Zero residuals contribute neither to gain nor loss; PF null if negative closed sum is zero. Never publish infinity as a finite result.",
+  "unresolved": "Never snap missing PnL to zero; unknown remains null.",
+  "synthetic_fixture_required": true,
+  "comparison_costs_contract_and_decision_thresholds_unchanged": true,
+  "short_stop": "Bid-coordinate convention contrasted with fixed-spread Ask-order stop; no silent execution semantics change."
+}
