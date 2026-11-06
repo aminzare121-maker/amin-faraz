@@ -1,0 +1,179 @@
+{
+  "verdict": "NOT_READY_FOR_METHOD_LEVEL_MONTHLY_BACKTEST",
+  "new_test_run": false,
+  "new_market_run": false,
+  "code_changed": false,
+  "runtime_modules": 12,
+  "runtime_classes": 19,
+  "runtime_functions_methods": 71,
+  "source_sessions_inventory": 26,
+  "known_registry_concepts": 62,
+  "entry_branches": 12,
+  "fully_raw_entry_branches": 0,
+  "concept_status_counts": {
+    "DOCUMENTED_ONLY": 29,
+    "READY_INPUT": 12,
+    "INCOMPLETE": 13,
+    "RAW_PARTIAL": 8
+  },
+  "blockers": [
+    {
+      "id": "B01",
+      "reason": "۰/۱۲شاخه تولیدکننده کامل خام ندارند؛ جهت و current_setup برای تمام شاخه‌ها از خام غایب‌اند.",
+      "exit": "برای هرشاخه عملیاتی، ورودی خام زمان‌دار بدون تزریق پرچم نهایی به تصمیم و SL/TP برسد."
+    },
+    {
+      "id": "B02",
+      "reason": "تشخیص پیوت/لگ/قدرت/بیس/OB/PRZ/اولویت ناحیه/StopPunch و نگاشت کامل شکل‌ها ناقص است.",
+      "exit": "مثال ورود و مثال رد خود مدرس برای هرشکل، متن+تصویر+زمان+ورودی‌های قابل بازتولید داشته باشد."
+    },
+    {
+      "id": "B03",
+      "reason": "روز/شمار تحلیل/ریست/درخت بردوباخت/حدود مجزای روزوباکس کامل نیست.",
+      "exit": "حالت و انتقال‌ها با ارجاع درس مشخص و رفتار توقف/معاملات باز/پایان باکس تعریف شود."
+    },
+    {
+      "id": "B04",
+      "reason": "SL/TP/trigger مدیریت و مدل اجرای تاریخی هنوز ورودی آماده هستند.",
+      "exit": "انتخاب ساختاری از منبع و واحد قرارداد/هزینه/قیمت/ترتیب رخداد روشن شود؛ ابهام OHLC گزارش شود."
+    },
+    {
+      "id": "B05",
+      "reason": "R1 رزرو ریسک بعد از fill نامطلوب و R2 زمان ناقص مسیر annotated رفع نشده‌اند.",
+      "exit": "کنترل ریسک مجموع و ساعت/منبع fill/close در همه مسیرها همسان و سپس آزمون هدفمند شود."
+    },
+    {
+      "id": "B06",
+      "reason": "پوشش کامل کل آموزش از موجودی۶۲مفهوم اثبات نمی‌شود؛ جلسه۱ منبع ندارد و ASRتأییدنشده است.",
+      "exit": "حدود پوشش صریح بماند و برای مفاهیم اجرایی مبهم به مثال اصلی مراجعه شود؛ برداشت جدید به‌نام مدرس جا زده نشود."
+    }
+  ],
+  "runtime_findings": [
+    {
+      "id": "R1",
+      "severity": "P1",
+      "kind": "definite_logic_gap",
+      "file": "monthly_execution.py",
+      "line": 45,
+      "related": [
+        "monthly_execution.py:71",
+        "trade_machine.py:84-86"
+      ],
+      "finding": "OPEN_REVIEW fill can exceed declared risk budget while aggregate reservation still counts only original plan risk_budget. Later trades may be admitted against understated modeled exposure.",
+      "static_example": "Cash100, planned budget40, fill modeled loss80 => reserved40; remaining60 permits another40 though modeled total120 exceeds cash100. No fixture executed.",
+      "fix": "Persist actual modeled fill exposure; reserve max(original reservation, positive actual modeled loss), or block all new entries while overbudget OPEN_REVIEW requires reconciliation. Keep realized gap risk explicitly uncapped."
+    },
+    {
+      "id": "R2",
+      "severity": "P1",
+      "kind": "causality_coverage_gap",
+      "file": "run_engine.py",
+      "line": 33,
+      "related": [
+        "run_engine.py:35-40",
+        "trade_machine.py:73",
+        "trade_machine.py:117",
+        "monthly_execution.py:91-101"
+      ],
+      "finding": "Annotated runner fill_entry/close consume no event timestamp, availability timestamp or source, and do not advance last_at. Direct TradeMachine fill/close have no clock argument. Thus annotated paper accounting has weaker causal evidence than monthly replay and cannot establish historical chronological fills.",
+      "fix": "Require sourced at/known_at for all annotated execution events; apply shared coordinator validation before dispatch and update trade clock. Do not infer timestamps/fills. Standalone TradeMachine should expose/document mandatory timed coordinator or accept explicit timestamps."
+    },
+    {
+      "id": "R3",
+      "severity": "P2",
+      "kind": "definite_dispatch_gap",
+      "file": "trade_machine.py",
+      "line": 107,
+      "related": [
+        "capital.py:119",
+        "capital.py:85-86",
+        "monthly_execution.py:95-96"
+      ],
+      "finding": "Box permits fulltarget as a management choice, manage checks membership then passes it to move_stop, which rejects unknown management choice via ValueError. A sourced manage/fulltarget event aborts replay instead of a structured rejected event. fulltarget is TP outcome, not an SL move.",
+      "fix": "Distinguish SL-management labels from target outcome; reject fulltarget in manage with explicit structured reason before move_stop, keeping target trigger/fill path separate."
+    },
+    {
+      "id": "R4",
+      "severity": "P2",
+      "kind": "input_preservation_gap",
+      "file": "run_raw.py",
+      "line": 25,
+      "related": [
+        "run_raw.py:49",
+        "run_raw.py:71",
+        "run_raw.py:82-85"
+      ],
+      "finding": "Output alias guard protects CSV only. CLI context/execution JSON may equal or hardlink SUMMARY.json or PRIVATE_execution.json in output_dir and is then overwritten after reading.",
+      "fix": "Pass all declared input paths into runner; check resolved/samefile aliases for all outputs against CSV/context/execution before writing; atomic replacement and explicit overwrite policy. Do not claim current guard protects all inputs."
+    },
+    {
+      "id": "R5",
+      "severity": "P2",
+      "kind": "numeric_fingerprint_gap_static_not_reproduced",
+      "file": "capital.py",
+      "line": 125,
+      "related": [
+        "capital.py:126-129"
+      ],
+      "finding": "Decimal.normalize() applies current decimal context precision. Distinct accepted high-precision risk_budget values can normalize to the same rounded string/fingerprint; fixed-plan comparison then cannot distinguish them. No runtime fixture run in this audit.",
+      "fix": "Canonicalize Decimal via exact as_tuple() coefficient/exponent with trailing-zero stripping, without context rounding; or explicitly reject unsupported precision before plan construction. Add near-boundary exact-decimal cases in next authorized test phase."
+    },
+    {
+      "id": "C1",
+      "severity": "LIMITATION",
+      "kind": "documented_incomplete_classifier",
+      "file": "raw_pipeline.py",
+      "line": 81,
+      "related": [
+        "raw_pipeline.py:20-32",
+        "raw_pipeline.py:93-110",
+        "entry_engine.py:137-216"
+      ],
+      "finding": "RawPipeline executes geometry/predicates and selected three-direction facts, but sentiment, trend, valid zones, pivots, half-leg, punch sequence and entry-specific proximity/timing remain sourced context dependencies. All 12 branch methods are callable conditional logic, not a complete autonomous raw classifier.",
+      "fix": "Report missing dependencies separately from rejected signals; resolve teacher evidence/classification definitions before claiming autonomous strategy/backtest completion. Preserve no invented thresholds."
+    },
+    {
+      "id": "C2",
+      "severity": "LIMITATION",
+      "kind": "external_evidence_dependency",
+      "file": "context_inputs.py",
+      "line": 70,
+      "related": [
+        "context_inputs.py:80-82",
+        "raw_pipeline.py:16",
+        "run_raw.py:82-84"
+      ],
+      "finding": "EconomicRelease comparison is operational as a standalone helper but not called by raw/monthly runner; context JSON supplies direction permissions externally. Vintage/source assertions are caller evidence, not verified network feed, UTC conversion or surprise-to-direction model.",
+      "fix": "Keep explicit dependency disclosure; require historical vintage, release availability, symbol driver and sourced interpretation before expanding economic automation. No fresh feed/connection is implied."
+    },
+    {
+      "id": "C3",
+      "severity": "LIMITATION",
+      "kind": "execution_model_boundary",
+      "file": "monthly_execution.py",
+      "line": 93,
+      "related": [
+        "monthly_execution.py:97-103",
+        "trade_machine.py:95-101",
+        "run_raw.py:62-67"
+      ],
+      "finding": "Only supplied execution events generate fills/PnL. OHLC touches alone do not close a position; Bid/Ask quotes only trigger intents. Monthly cash is closed-known bookkeeping, not marked equity, maximum realized risk, swap-complete return, margin model or complete strategy profit.",
+      "fix": "Retain closed-known/unresolved/pending-cost separation and execution-event completeness disclosure; never promote a cash slice to full strategy return."
+    },
+    {
+      "id": "C4",
+      "severity": "P2",
+      "kind": "provenance_coverage_gap",
+      "file": "run_raw.py",
+      "line": 53,
+      "related": [
+        "run_raw.py:49-50",
+        "raw_pipeline.py:66-69",
+        "monthly_execution.py:104-105"
+      ],
+      "finding": "CSV SHA and context fingerprint are emitted, but exact execution_document digest and code/runtime/Decimal-context fingerprint are absent from generated result. Source labels in execution records do not identify exact source-document bytes.",
+      "fix": "Record hashes of all declared execution/context inputs and frozen module files plus Python/Decimal context in run receipt; keep paths and raw traces private."
+    }
+  ],
+  "claim_boundary": "Audit of all explicit classes and available registered lessons; no new full audio/video review or guarantee of full course semantic completeness."
+}

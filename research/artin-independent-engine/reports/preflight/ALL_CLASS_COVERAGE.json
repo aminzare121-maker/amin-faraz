@@ -1,0 +1,391 @@
+[
+  {
+    "name": "Instrument",
+    "line": 32,
+    "end_line": 41,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "money_per_price_unit_per_lot",
+      "min_lot",
+      "lot_step"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "capital.py",
+    "role_fa": "مدل مشخصات قرارداد",
+    "status_fa": "پیاده با ورودی صریح",
+    "limitation_fa": "ارزش پولی/حداقل/گام را می‌سنجد؛ قرارداد تاریخی و تبدیل ارز را تولید نمی‌کند."
+  },
+  {
+    "name": "Costs",
+    "line": 44,
+    "end_line": 50,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "round_trip_fee_per_lot",
+      "adverse_price_allowance"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "capital.py",
+    "role_fa": "مدل هزینه",
+    "status_fa": "پیاده با ورودی صریح",
+    "limitation_fa": "هزینه/ذخیره لغزش را دریافت می‌کند؛ هزینه تاریخی را کشف نمی‌کند."
+  },
+  {
+    "name": "BoxPlan",
+    "line": 104,
+    "end_line": 134,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "box_id",
+      "risk_budget",
+      "target_definition",
+      "management_choices",
+      "declared_before_box"
+    ],
+    "methods": [
+      "__post_init__",
+      "fingerprint",
+      "validate_unchanged"
+    ],
+    "file": "capital.py",
+    "role_fa": "قواعد باکس",
+    "status_fa": "جزئی",
+    "limitation_fa": "freeze و fingerprint؛ طول/شمار/درخت و حدود روز/ژورنال کامل نیست؛ R3/R5."
+  },
+  {
+    "name": "Context",
+    "line": 15,
+    "end_line": 29,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "valid_from",
+      "valid_until",
+      "known_at",
+      "facts",
+      "source"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "context_inputs.py",
+    "role_fa": "زمینه زمان‌دار",
+    "status_fa": "ظرف ورودی آماده",
+    "limitation_fa": "اعتبار زمانی و تعارض؛ تولیدکننده اقتصاد/ستاپ/قدرت نیست."
+  },
+  {
+    "name": "EconomicValue",
+    "line": 44,
+    "end_line": 53,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "value",
+      "known_at",
+      "source",
+      "vintage_verified"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "context_inputs.py",
+    "role_fa": "عدد اقتصادی با زمان/نسخه",
+    "status_fa": "ظرف ورودی آماده",
+    "limitation_fa": "درستی metadata را می‌سنجد؛ گردآوری یا اثبات مستقل vintage نیست."
+  },
+  {
+    "name": "EconomicRelease",
+    "line": 56,
+    "end_line": 82,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "event_id",
+      "released_at",
+      "previous",
+      "forecast",
+      "actual"
+    ],
+    "methods": [
+      "__post_init__",
+      "comparison"
+    ],
+    "file": "context_inputs.py",
+    "role_fa": "مقایسه خبر",
+    "status_fa": "کمک‌محاسبه مستقل",
+    "limitation_fa": "F−P/A−F علّی؛ جهت نماد/ترکیب خبر و سیاست ساخته نمی‌شود."
+  },
+  {
+    "name": "Fact",
+    "line": 33,
+    "end_line": 43,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "value",
+      "known_at",
+      "source"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "entry_engine.py",
+    "role_fa": "حقیقت زمان‌دار",
+    "status_fa": "زیرساخت",
+    "limitation_fa": "نوع/زمان/نام منبع؛ صحت محتوای ادعا را از اصل درس اثبات نمی‌کند."
+  },
+  {
+    "name": "Observation",
+    "line": 46,
+    "end_line": 55,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "side",
+      "at",
+      "facts"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "entry_engine.py",
+    "role_fa": "نمای لحظه تصمیم",
+    "status_fa": "زیرساخت",
+    "limitation_fa": "بسته immutable ورودی‌ها؛ زمینه از خام نمی‌سازد."
+  },
+  {
+    "name": "Decision",
+    "line": 58,
+    "end_line": 64,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "rule_id",
+      "status",
+      "reasons",
+      "sources",
+      "input_fingerprint",
+      "order_created"
+    ],
+    "methods": [],
+    "file": "entry_engine.py",
+    "role_fa": "نتیجه ارزیابی",
+    "status_fa": "زیرساخت",
+    "limitation_fa": "status/reason/hash؛ مجوز ورود مبتنی بر صحت ورودی‌هاست."
+  },
+  {
+    "name": "_Condition",
+    "line": 66,
+    "end_line": 67,
+    "decorators": [],
+    "fields": [],
+    "methods": [
+      "__init__"
+    ],
+    "file": "entry_engine.py",
+    "role_fa": "توقف مسیر شرط",
+    "status_fa": "زیرساخت",
+    "limitation_fa": "کنترل خروج؛ نام یک کلاس شاهد پیاده‌شدن یک درس نیست."
+  },
+  {
+    "name": "_Reader",
+    "line": 69,
+    "end_line": 92,
+    "decorators": [],
+    "fields": [],
+    "methods": [
+      "__init__",
+      "value",
+      "yes",
+      "label",
+      "number"
+    ],
+    "file": "entry_engine.py",
+    "role_fa": "خواندن و کنترل Fact",
+    "status_fa": "زیرساخت",
+    "limitation_fa": "غیبت/زمان آینده/نوع را کنترل می‌کند؛ قاعده خام تولید نمی‌کند."
+  },
+  {
+    "name": "Engine",
+    "line": 95,
+    "end_line": 217,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "plan_id",
+      "allowed_rules"
+    ],
+    "methods": [
+      "__post_init__",
+      "fingerprint",
+      "evaluate",
+      "_family_admission",
+      "_entry"
+    ],
+    "file": "entry_engine.py",
+    "role_fa": "ارزیابی۱۲شاخه",
+    "status_fa": "متکی به ورودی آماده",
+    "limitation_fa": "بیشتر قواعد با پرچم‌های داده‌شده سنجیده می‌شوند؛۰/۱۲مسیر خام کامل."
+  },
+  {
+    "name": "MonthlyExecutor",
+    "line": 22,
+    "end_line": 123,
+    "decorators": [],
+    "fields": [],
+    "methods": [
+      "__init__",
+      "_record",
+      "_reserved",
+      "accept",
+      "advance",
+      "summary"
+    ],
+    "file": "monthly_execution.py",
+    "role_fa": "اتصال معاملات/دفتر",
+    "status_fa": "متصل ولی ناقص",
+    "limitation_fa": "spec و رخداد صریح؛ R1 رزرو پس از fill، خروج باکس/روز و انتخاب خودکار ناقص."
+  },
+  {
+    "name": "Candle",
+    "line": 25,
+    "end_line": 38,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "opened_at",
+      "closed_at",
+      "open",
+      "high",
+      "low",
+      "close"
+    ],
+    "methods": [
+      "__post_init__"
+    ],
+    "file": "raw_geometry.py",
+    "role_fa": "کندل خام",
+    "status_fa": "هندسه پیاده",
+    "limitation_fa": "OHLC/زمان معتبر؛ مبنای ساعت/چندتایم‌فریم/بروکر را احراز نمی‌کند."
+  },
+  {
+    "name": "Geometry",
+    "line": 41,
+    "end_line": 49,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "opened_at",
+      "known_at",
+      "body",
+      "upper_wick",
+      "lower_wick",
+      "range",
+      "color",
+      "body_midpoint"
+    ],
+    "methods": [],
+    "file": "raw_geometry.py",
+    "role_fa": "بدنه/سایه/نیمه/رنگ",
+    "status_fa": "هندسه پیاده",
+    "limitation_fa": "ویژگی عددی است؛ به‌تنهایی قدرت/مکث/تأیید درسی نیست."
+  },
+  {
+    "name": "Candidate",
+    "line": 52,
+    "end_line": 60,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "kind",
+      "direction",
+      "candle_open_times",
+      "known_at",
+      "low",
+      "high",
+      "sources",
+      "signal"
+    ],
+    "methods": [],
+    "file": "raw_geometry.py",
+    "role_fa": "نامزد هندسی",
+    "status_fa": "جزئی",
+    "limitation_fa": "FVG/سه‌هم‌رنگ با زمان؛ اعتبار ناحیه و تصمیم ورود نیست."
+  },
+  {
+    "name": "RawPipeline",
+    "line": 58,
+    "end_line": 139,
+    "decorators": [],
+    "fields": [],
+    "methods": [
+      "__init__",
+      "latest_observation",
+      "step"
+    ],
+    "file": "raw_pipeline.py",
+    "role_fa": "خام به Fact و Engine",
+    "status_fa": "ناقص و مسدودکننده",
+    "limitation_fa": "دو وابستگی عمومی را تولید نمی‌کند؛ ساختار/ناحیه/توالی/SLTP کامل نیست."
+  },
+  {
+    "name": "Predicate",
+    "line": 11,
+    "end_line": 14,
+    "decorators": [
+      "dataclass(frozen=True)"
+    ],
+    "fields": [
+      "value",
+      "reason",
+      "sources"
+    ],
+    "methods": [],
+    "file": "teacher_features.py",
+    "role_fa": "نتیجه شکل کندل",
+    "status_fa": "پوشش محدود",
+    "limitation_fa": "ناحیه مشترک تعبیرهای سایه و صفر دقیق؛ همه اشکال مدرس پوشش ندارند."
+  },
+  {
+    "name": "TradeMachine",
+    "line": 17,
+    "end_line": 128,
+    "decorators": [],
+    "fields": [],
+    "methods": [
+      "__init__",
+      "_event",
+      "_fixed",
+      "_time",
+      "prepare",
+      "fill_entry",
+      "quote",
+      "manage",
+      "close"
+    ],
+    "file": "trade_machine.py",
+    "role_fa": "چرخه یک معامله",
+    "status_fa": "با ورودی صریح",
+    "limitation_fa": "قصد/fill/trigger/SL/PnL؛ انتخاب ستاپ/SLTP ندارد و زمان fill/close باید یکسان‌سازی شود."
+  }
+]
