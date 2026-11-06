@@ -5,6 +5,7 @@ def demo_document():
     common={'sentiment_permission':'LONG_ONLY','current_setup':True,
             'family_selection_context':'ZONE_CONTEXT','trend_strength':'NORMAL'}
     specifics={
+      'STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':dict(sentiment_permission='SHORT_ONLY',teacher_model_variant='S22_AFTER_BREAK_CONFIRMED_PAUSE',strong_run_in_sentiment_direction=True,break_before_pause=True,pause_doubt_confirmed=True,pause_in_run_direction=True,confirmation_in_run_direction=True,following_confirmation_closed=True,confirmation_timely=True,confirmation_close='98',teacher_confirmation_reference='99'),
       'PULLBACK_STANDARD':dict(break_occurred=True,post_break_pivot_confirmed=True,retest_confirmed=True,decision_candle_closed=True,decision_close='102',post_break_pivot_level='101'),
       'REVERSAL_CLASSIC':dict(zone_context=True,reversal_relative_to_last_leg=True,decision_candle_closed=True,doubt_confirmed=True,first_confidence_confirmed=True),
       'REVERSAL_THREE':dict(zone_context=True,reversal_relative_to_last_leg=True,decision_candle_closed=True,three_same_direction_sequence=True,doubt_confidence_condition=True,half_leg_condition=True),
@@ -19,9 +20,18 @@ def demo_document():
       'STOPPUNCH_OPPOSITE_CONFIRMATION':dict(strong_run_in_sentiment_direction=True,opposite_colour_pause=True,complete_punch_sequence=True,following_confirmation_closed=True,entry_location='BETWEEN_PREEXISTING_ZONES',confirmation_near=True,confirmation_timely=True,confirmation_close='102',teacher_confirmation_reference='101')}
     document={'mode':'ANNOTATED_OFFLINE','plan_id':'synthetic-source-condition-check',
       'allowed_rules':list(RULE_IDS),'synthetic_only':True,
-      'cases':[{'rule_id':rule,'side':'BUY','at':100,
+      'cases':[{'rule_id':rule,'side':'SELL' if rule=='STOPPUNCH_S22_SELL_CONFIRMED_PAUSE' else 'BUY','at':100,
         'facts':{key:{'value':value,'known_at':100,'source':'SYNTHETIC_TEST_NOT_A_TEACHER_OR_MARKET_OBSERVATION'}
                  for key,value in {**common,**specifics[rule]}.items()}} for rule in RULE_IDS]}
+    s22=next(c for c in document['cases'] if c['rule_id']=='STOPPUNCH_S22_SELL_CONFIRMED_PAUSE')
+    for k,v in dict(confirmation_reference_kind='PAUSE_WICK_LOW_HYPOTHESIS',run_break_closed_at=40,
+                   pause_opened_at=40,pause_closed_at=70,confirmation_opened_at=70,confirmation_closed_at=100,
+                   pause_body_close='100',pause_wick_low='99').items():
+        s22['facts'][k]={'value':v,'known_at':100,'source':'SYNTHETIC_ROLE_CLOCK_FIXTURE'}
+    for k in ('confirmation_reference_kind','run_break_closed_at','teacher_model_variant','strong_run_in_sentiment_direction'):
+        s22['facts'][k]['known_at']=0
+    s22['facts']['run_break_closed_at']['known_at']=40
+    s22['facts']['strong_run_in_sentiment_direction']['known_at']=40
     document['cases'][0]['paper_trade']={
       'entry_price':'102','initial_stop':'100','target_price':'108','aggregate_risk_remaining':'25',
       'instrument':{'money_per_price_unit_per_lot':'100','min_lot':'0.01','lot_step':'0.01'},

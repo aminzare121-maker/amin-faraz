@@ -14,8 +14,9 @@ RULE_IDS=(
  'PULLBACK_STANDARD','REVERSAL_CLASSIC','REVERSAL_THREE','REVERSAL_STAR',
  'BREAK_STRONG','BREAK_WEAK_PIVOT','BREAK_WEAK_FULLBODY_EXCEPTION',
  'BREAK_VERY_STRONG_RETEST','STOPPUNCH_SAME_COLOUR','STOPPUNCH_DOJI_AHEAD',
- 'STOPPUNCH_DOJI_TIED','STOPPUNCH_OPPOSITE_CONFIRMATION')
+ 'STOPPUNCH_DOJI_TIED','STOPPUNCH_OPPOSITE_CONFIRMATION','STOPPUNCH_S22_SELL_CONFIRMED_PAUSE')
 SOURCES={
+ 'STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':((22,1888.1,1952.66),),
  'PULLBACK_STANDARD':((16,615,854),(16,1003,1109)),
  'REVERSAL_CLASSIC':((20,2188.86,2306.84),(20,2660.22,3255.4)),
  'REVERSAL_THREE':((20,2660.22,3255.4),(20,3440.82,4048.72)),
@@ -123,6 +124,8 @@ class Engine:
             self._family_admission(rule_id,reader)
             self._entry(rule_id,reader)
             status,reasons='ELIGIBLE',('SOURCE_CONDITIONS_SATISFIED_ON_SUPPLIED_OBSERVATIONS',)
+            if rule_id=='STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':
+                reasons=('EXPLICIT_S22_HYPOTHESIS_CONDITIONS_SATISFIED_NOT_VERIFIED_TEACHER_FORMULA',)
         except _Condition as e:status,reasons=e.status,(e.reason,)
         fingerprint=sha256(json.dumps({'plan':self.fingerprint,'rule':rule_id,'side':observation.side,'at':observation.at,
           'used':{k:{'value':str(v.value),'type':type(v.value).__name__,'known_at':v.known_at,'source':v.source} for k,v in sorted(reader.used.items())}},
@@ -196,6 +199,37 @@ class Engine:
             if not lo<=midpoint<=hi:raise _Condition('WAIT','HALF_BODY_NOT_TOUCHED')
             return # No demand for a new candle close in this specific teacher branch.
         if rule.startswith('STOPPUNCH_'):
+            if rule=='STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':
+                if r.o.side!='SELL':raise _Condition('REVIEW','S22_CASE_BUY_MAPPING_NOT_SELECTED')
+                r.label('teacher_model_variant',('S22_AFTER_BREAK_CONFIRMED_PAUSE',))
+                r.label('confirmation_reference_kind',('PAUSE_BODY_CLOSE_HYPOTHESIS','PAUSE_WICK_LOW_HYPOTHESIS'))
+                anchors={k:r.value(k) for k in ('run_break_closed_at','pause_opened_at','pause_closed_at',
+                    'confirmation_opened_at','confirmation_closed_at')}
+                if any(type(v) is not int or v<0 for v in anchors.values()):
+                    raise _Condition('REVIEW','INVALID_S22_ROLE_CLOCK')
+                if not (anchors['run_break_closed_at']<=anchors['pause_opened_at']<anchors['pause_closed_at']
+                        ==anchors['confirmation_opened_at']<anchors['confirmation_closed_at']<=r.o.at):
+                    raise _Condition('REVIEW','S22_ROLE_CLOCK_NOT_CAUSAL')
+                r.yes('strong_run_in_sentiment_direction')
+                if any(r.used[k].known_at>anchors['pause_opened_at'] for k in
+                       ('teacher_model_variant','confirmation_reference_kind','run_break_closed_at','strong_run_in_sentiment_direction')):
+                    raise _Condition('REVIEW','S22_PLAN_OR_RUN_SELECTED_AFTER_PAUSE')
+                if r.used['run_break_closed_at'].known_at<anchors['run_break_closed_at']:
+                    raise _Condition('REVIEW','S22_BREAK_KNOWN_BEFORE_OCCURRENCE')
+                require('strong_run_in_sentiment_direction','break_before_pause','pause_doubt_confirmed','pause_in_run_direction',
+                        'confirmation_in_run_direction',
+                        'following_confirmation_closed','confirmation_timely')
+                r.value('confirmation_close')
+                if r.used['confirmation_close'].known_at<anchors['confirmation_closed_at']:
+                    raise _Condition('REVIEW','S22_CLOSE_KNOWN_BEFORE_COMPLETION')
+                operand_key=('pause_body_close' if r.used['confirmation_reference_kind'].value=='PAUSE_BODY_CLOSE_HYPOTHESIS'
+                             else 'pause_wick_low')
+                selected=r.number(operand_key);reference=r.number('teacher_confirmation_reference')
+                if reference!=selected:
+                    raise _Condition('REVIEW','S22_REFERENCE_DOES_NOT_MATCH_SELECTED_OPERAND')
+                if any(r.used[k].known_at<anchors['pause_closed_at'] for k in (operand_key,'teacher_confirmation_reference')):
+                    raise _Condition('REVIEW','S22_PAUSE_PRICE_KNOWN_BEFORE_COMPLETION')
+                beyond('confirmation_close','teacher_confirmation_reference');return
             if r.o.side!='BUY':raise _Condition('REVIEW','SELL_FORM_MAPPING_NOT_ESTABLISHED_IN_REVIEWED_EXAMPLES')
             require('strong_run_in_sentiment_direction')
             if rule=='STOPPUNCH_SAME_COLOUR':

@@ -44,7 +44,10 @@ def assert_outputs_separate(targets,inputs):
                 raise ValueError('output aliases declared input')
 
 def run(csv_path,output_dir,interval_seconds,contexts=(),plan_id='ARTIN_RAW_DIAGNOSTIC',
-        execution_document=None,initial_cash='1000.00',fixed_lots='0.03',protected_inputs=(),input_receipts=None,direction_plan=None):
+        execution_document=None,initial_cash='1000.00',fixed_lots='0.03',protected_inputs=(),input_receipts=None,direction_plan=None,
+        allowed_rules=RULE_IDS):
+    if type(allowed_rules) is not tuple:
+        raise ValueError('predeclared immutable rule tuple required')
     contexts=tuple(contexts)
     candles,fingerprint=read_csv(csv_path,interval_seconds)
     if not candles:raise ValueError('empty monthly data')
@@ -53,7 +56,7 @@ def run(csv_path,output_dir,interval_seconds,contexts=(),plan_id='ARTIN_RAW_DIAG
     targets=[output_dir/n for n in ('SUMMARY.json','PRIVATE_raw_decisions.jsonl.gz','PRIVATE_execution.json')]
     assert_outputs_separate(targets,[Path(csv_path)]+[Path(x) for x in protected_inputs])
     output_dir.mkdir(parents=True,exist_ok=True)
-    pipeline=RawPipeline(plan_id,RULE_IDS,interval_seconds,fingerprint,contexts,direction_plan)
+    pipeline=RawPipeline(plan_id,allowed_rules,interval_seconds,fingerprint,contexts,direction_plan)
     executor=MonthlyExecutor(pipeline.engine,initial_cash,fixed_lots,execution_document)
     code_hashes={p.name:sha256(p.read_bytes()).hexdigest() for p in Path(__file__).resolve().parent.glob('*.py')
                  if not p.name.startswith('test_')}
@@ -62,6 +65,14 @@ def run(csv_path,output_dir,interval_seconds,contexts=(),plan_id='ARTIN_RAW_DIAG
         'module_sha256':code_hashes,'execution_document_typed_sha256':input_digest(execution_document),
         'context_typed_fingerprint':pipeline.context_fingerprint,'declared_input_receipts':input_receipts or {}}
     provenance['direction_permission_plan']=None if direction_plan is None else direction_plan.serialize()
+    # S22:1888..1929 separates the classic break-close route from the teacher's
+    # personal leg/pause/confirmation route. The runner must transport the same
+    # immutable rule selection already enforced by Engine, rather than force all
+    # twelve routes into every research replay. Selection is not raw perception.
+    provenance['entry_rule_plan']={'plan_id':pipeline.engine.plan_id,
+        'allowed_rules':pipeline.engine.allowed_rules,'fingerprint':pipeline.engine.fingerprint,
+        'all_branches_diagnostic':pipeline.engine.allowed_rules==RULE_IDS,
+        'teacher_personal_route_automatically_identified':False}
     statuses={side:Counter() for side in ('BUY','SELL')};missing=Counter();shapes=Counter();candidates=Counter()
     derived=Counter();gaps=0;eligible=[]
     with atomic_target(targets[1],compressed=True) as f:
@@ -88,7 +99,7 @@ def run(csv_path,output_dir,interval_seconds,contexts=(),plan_id='ARTIN_RAW_DIAG
         'observed_bars':len(candles),'csv_sha256':fingerprint,'interval_seconds':interval_seconds,
         'raw_open_first':candles[0].opened_at,'raw_open_last':candles[-1].opened_at,
         'clock_basis':'RAW_BROKER_LABELS_NOT_VERIFIED_UTC','gap_boundaries':gaps,
-        'actual_entry_evaluations':len(candles)*2*len(RULE_IDS),
+        'actual_entry_evaluations':len(candles)*2*len(pipeline.engine.allowed_rules),
         'decisions_by_side':{k:dict(v) for k,v in statuses.items()},
         'shape_results':dict(shapes),'new_geometric_candidates':dict(candidates),
         'missing_dependency_occurrences':dict(missing),'automatically_derived_dependency_occurrences':dict(derived),
@@ -116,6 +127,8 @@ def main():
     p.add_argument('--initial-cash',default='1000.00');p.add_argument('--fixed-lots',default='0.03')
     p.add_argument('--direction-policy',choices=('SOURCE_DATA_ONLY','S09_FIXED_SYMBOL_TWO_SIDED_ASSUMPTION'),default='SOURCE_DATA_ONLY')
     p.add_argument('--symbol',help='Exact fixed symbol, required for explicitly selected S09 assumption')
+    p.add_argument('--rule',action='append',choices=RULE_IDS,
+        help='Predeclare an entry route; repeat for a fixed set. Omit only for all-branch diagnostics.')
     args=p.parse_args();contexts=[];receipts={}
     def load_input(path,key):
         data=path.read_bytes();receipts[key]=sha256(data).hexdigest()
@@ -128,7 +141,8 @@ def main():
     direction=None if args.direction_policy=='SOURCE_DATA_ONLY' else DirectionPlan('OWNER_DECLARED_FIXED_SYMBOL_RESEARCH',args.symbol,args.direction_policy,True)
     result=run(args.csv,args.output_dir,args.interval_seconds,contexts,execution_document=execution,
         initial_cash=args.initial_cash,fixed_lots=args.fixed_lots,
-        protected_inputs=[x for x in (args.context,args.execution) if x],input_receipts=receipts,direction_plan=direction)
+        protected_inputs=[x for x in (args.context,args.execution) if x],input_receipts=receipts,direction_plan=direction,
+        allowed_rules=RULE_IDS if args.rule is None else tuple(args.rule))
     print(json.dumps({'bars':result['observed_bars'],'evaluations':result['actual_entry_evaluations'],
         'eligible':len(result['eligible_entries']),'full_backtest':False,'orders_sent':0}))
 

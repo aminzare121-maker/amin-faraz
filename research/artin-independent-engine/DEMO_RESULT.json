@@ -1,6 +1,6 @@
 {
   "mode": "ANNOTATED_OFFLINE",
-  "plan_fingerprint": "520d60780de75227b1db84e44bc54fbcde8d5759c3177c160ed2770354dbe035",
+  "plan_fingerprint": "6bbb0e1ad82f607692a791ff275253dbcef9cd6c9cdc81afb590bba950ae577b",
   "synthetic_only": true,
   "decisions": [
     {
@@ -31,7 +31,7 @@
           3415
         ]
       ],
-      "input_fingerprint": "2eea92e1d0d236b8bb7e8c885565b3ef6aaa764729df99fec6f3eec5afc3173b",
+      "input_fingerprint": "0ac64b232e7b8dbed8c3de57e93f261d7d1226d9c86860ccabb2527e4e450c03",
       "order_created": false
     },
     {
@@ -62,7 +62,7 @@
           3415
         ]
       ],
-      "input_fingerprint": "4909d1c11a4c915c9c4a72b46550de79e093e6f4cc6c95fa8b824ece1280d84a",
+      "input_fingerprint": "e06b95a6f9e8942b7d3955e761cbba8fdcfe09151cf3e4d004da6b70cab626d0",
       "order_created": false
     },
     {
@@ -93,7 +93,7 @@
           3415
         ]
       ],
-      "input_fingerprint": "fa9a312095fae1c5fa470d474dac8199a09aa3256f824a9e6fca675e4e9e3f98",
+      "input_fingerprint": "cc4b912b1a76b441d44b0c87197b9c58a11d0286bb72ff723f2d950ffd2d39d0",
       "order_created": false
     },
     {
@@ -124,7 +124,7 @@
           3415
         ]
       ],
-      "input_fingerprint": "7f92b8ea93c2db04e811dd1f2da10bd28fdea26659457324b0f01db218787bae",
+      "input_fingerprint": "65f6f3e2c52ee296f469b8497fa3c61551085f6cbf602505640778cf739587c0",
       "order_created": false
     },
     {
@@ -150,7 +150,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "88290dce86ba3198542f3a5af1076ea9dcbeca79c2da26d474e6f063523b2edb",
+      "input_fingerprint": "3c709290f78edf5e669b20b46b0bb546e7982d739f3d305e0e1d2663bc645ae5",
       "order_created": false
     },
     {
@@ -171,7 +171,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "255f7bd68169ac80e91f0032e9a863af2c1d66b304137714af31e9c80ed775da",
+      "input_fingerprint": "0b34712386bd26a11a602d39f203ca5deb747b6dc2ad9d0f6a8d8e7a38c588b3",
       "order_created": false
     },
     {
@@ -192,7 +192,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "bfb4253e2c314fa7df416e69926cbbd46fe80ec01d6dd066990f6d973d9f435e",
+      "input_fingerprint": "7199c123eed0ca3451e5d56456c46bac7ef4ced6d212d00b72f475ea9bba69fe",
       "order_created": false
     },
     {
@@ -213,7 +213,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "e071ec1d0b8c29ef8f37167c56318a2f2d9f2341d43fdedf921f30cf4fc4c403",
+      "input_fingerprint": "a9722a333915241fde45650995627fb82250231108e7172228c295086c6524a0",
       "order_created": false
     },
     {
@@ -244,7 +244,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "373715c55c915e35b9cdc17e9b25abb6dad2a6f0ec06ee6806003932c0fc9edf",
+      "input_fingerprint": "c991129f02bec01b267f4939bc9f0828b8b36abb93a455cbd0b351223eab10cf",
       "order_created": false
     },
     {
@@ -270,7 +270,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "fbd1aa07b42c4f8c05721c5c94dc6dd92a3114468b93da4c169702feabc9b4fb",
+      "input_fingerprint": "a8493e91217bed4f93202de15a35efa1ce4c2aa43b0174b39101b5fb2a260bc0",
       "order_created": false
     },
     {
@@ -296,7 +296,7 @@
           2897
         ]
       ],
-      "input_fingerprint": "42ba30d32d6ae9c3e0425f2681d4f0d4ca4ec8de4f85560d3a5bdaf78d575ff2",
+      "input_fingerprint": "f74d417b2875249cc1bda8a93f04641b3d413680ef13603632433b5fcc6a31f5",
       "order_created": false
     },
     {
@@ -327,7 +327,28 @@
           2897
         ]
       ],
-      "input_fingerprint": "be37e5bb95ad0061fdc12dfa09837bac24d207b28934d7cad6f6ce7fa3a7e624",
+      "input_fingerprint": "5afd3a6db6c7beeff25115e66af630a52fad54eda9fb6a1a2966362f132b16c0",
+      "order_created": false
+    },
+    {
+      "rule_id": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "status": "ELIGIBLE",
+      "reasons": [
+        "EXPLICIT_S22_HYPOTHESIS_CONDITIONS_SATISFIED_NOT_VERIFIED_TEACHER_FORMULA"
+      ],
+      "sources": [
+        [
+          22,
+          1888.1,
+          1952.66
+        ],
+        [
+          15,
+          2836,
+          2897
+        ]
+      ],
+      "input_fingerprint": "ad75661da9634438b32db6a7b8737199ade877c05009a04f37b46ac4bf18c7c7",
       "order_created": false
     }
   ],
@@ -379,7 +400,7 @@
                 3415
               ]
             ],
-            "input_fingerprint": "2eea92e1d0d236b8bb7e8c885565b3ef6aaa764729df99fec6f3eec5afc3173b",
+            "input_fingerprint": "0ac64b232e7b8dbed8c3de57e93f261d7d1226d9c86860ccabb2527e4e450c03",
             "order_created": false
           },
           "sizing": {

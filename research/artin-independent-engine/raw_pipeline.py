@@ -7,6 +7,7 @@ entry evaluator exits at its first gate. Missing data is never a negative setup.
 import csv,io,json
 from dataclasses import asdict
 from decimal import Decimal
+from fractions import Fraction
 from hashlib import sha256
 from pathlib import Path
 from types import MappingProxyType
@@ -17,10 +18,16 @@ from context_inputs import facts_as_of
 from zone_behavior import ZoneBehavior
 from punch_behavior import derive as derive_punch
 from pullback_bridge import ClosedPullbackBridge
+from confirmed_pause import derive as derive_confirmed_pause,ROLE_KEYS as CONFIRMED_PAUSE_ROLE_KEYS
+from relative_sequence import measure as measure_sequence
 
 COMMON=('sentiment_permission','current_setup')
 FAMILY=('family_selection_context','trend_strength')
 REQUIRED={
+ 'STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':('teacher_model_variant','strong_run_in_sentiment_direction',
+    'run_break_closed_at','confirmation_reference_kind','pause_opened_at','pause_closed_at','confirmation_opened_at','confirmation_closed_at','pause_body_close','pause_wick_low',
+    'break_before_pause','pause_doubt_confirmed','pause_in_run_direction','confirmation_in_run_direction','following_confirmation_closed','confirmation_timely',
+    'confirmation_close','teacher_confirmation_reference'),
  'PULLBACK_STANDARD':('break_occurred','post_break_pivot_confirmed','retest_confirmed','decision_candle_closed','decision_close','post_break_pivot_level'),
  'REVERSAL_CLASSIC':('zone_context','reversal_relative_to_last_leg','decision_candle_closed','doubt_confirmed','first_confidence_confirmed'),
  'REVERSAL_THREE':('zone_context','reversal_relative_to_last_leg','decision_candle_closed','three_same_direction_sequence','doubt_confidence_condition','half_leg_condition'),
@@ -89,6 +96,11 @@ class RawPipeline:
         # Advance behaviour only after raw validation and context validation below.
         at=bar.closed_at
         supplied=facts_as_of(self.contexts,at)
+        seq=measure_sequence(tuple(self.bars),bar,supplied.get('sequence_start_opened_at'),self.source,at,self.interval)
+        # Exact JSON rational values; these measurements are deliberately not
+        # promoted into strong/very-strong entry facts.
+        sequence_measurement={k:({'numerator':v.numerator,'denominator':v.denominator}
+                                if isinstance(v,Fraction) else v) for k,v in seq.items()}
         context_keys=tuple(supplied)
         if (None if self.direction_plan is None else self.direction_plan.fingerprint)!=self.direction_plan_fingerprint:
             raise ValueError('predeclared direction plan changed during replay')
@@ -136,14 +148,26 @@ class RawPipeline:
                     for k,f in behavior_facts.items():
                         if k in supplied and supplied[k].value!=f.value:raise ValueError('context conflicts with raw reference: '+k)
                     rf.update(behavior_facts)
-                if rule in ('STOPPUNCH_DOJI_AHEAD','STOPPUNCH_DOJI_TIED'):
+                if rule in ('STOPPUNCH_DOJI_AHEAD','STOPPUNCH_DOJI_TIED','STOPPUNCH_OPPOSITE_CONFIRMATION'):
                     if rule=='STOPPUNCH_DOJI_TIED':
                         # Generic shape belongs to current candle, not the previous
                         # pause. Explicit near-zero pause labels need timestamp binding.
                         rf.pop('doji_confirmed',None)
-                    punch=derive_punch(rule,side,window,rf)
+                    if rule=='STOPPUNCH_OPPOSITE_CONFIRMATION':
+                        for k in ('opposite_colour_pause','following_confirmation_closed','confirmation_close',
+                                  'teacher_confirmation_reference','confirmation_timely','current_setup','complete_punch_sequence'):
+                            rf.pop(k,None)
+                    punch=derive_punch(rule,side,window,rf,raw_source=self.source)
                     for k,f in punch.items():
                         if k in supplied and supplied[k].value!=f.value:raise ValueError('context conflicts with raw punch role: '+k)
+                    rf.update(punch);behavior_facts={**behavior_facts,**punch}
+                if rule=='STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':
+                    # No supplied role fallback when the raw chain is unknown.
+                    for k in CONFIRMED_PAUSE_ROLE_KEYS:rf.pop(k,None)
+                    punch=derive_confirmed_pause(side,window,rf,raw_source=self.source)
+                    for k,f in punch.items():
+                        if k in supplied and supplied[k].value!=f.value:
+                            raise ValueError('context conflicts with measured S22 role: '+k)
                     rf.update(punch);behavior_facts={**behavior_facts,**punch}
                 ro=Observation(side,at,rf);branch_observations[(side,rule)]=ro
                 decision=self.engine.evaluate(rule,ro)
@@ -153,6 +177,7 @@ class RawPipeline:
                 decisions.append({**asdict(decision),'side':side,'missing_dependencies':absent,
                     'future_dependencies':future,'supplied_context_keys':sorted(context_keys),
                     'behavior_status':behavior_status,
+                    'punch_role_chain_status':None if 'punch_role_chain_status' not in punch else punch['punch_role_chain_status'].value,
                     'derived_required_keys':[k for k in required if k in rf and (k in generated or k in behavior_facts or k=='three_same_direction_sequence' and key in facts)],
                     'context_required_keys':[k for k in required if k in rf and k in supplied and k not in policy and k not in generated and k not in behavior_facts],
                     'policy_required_keys':[k for k in required if k in rf and k in policy],
@@ -163,7 +188,8 @@ class RawPipeline:
                     'behavior_parent_facts':{k:{'value':v.value,'known_at':v.known_at,'source':v.source}
                         for k,v in supplied.items() if punch and k in ('day_correct_count','day_incorrect_count',
                             'confirmation_region_low','confirmation_region_high','zone_low','zone_high',
-                            'reference_zone_validated','pause_doji_classified','pause_candle_opened_at')},
+                            'reference_zone_validated','pause_doji_classified','pause_candle_opened_at',
+                            'teacher_model_variant','run_break_closed_at','strong_run_in_sentiment_direction','punch_run_end_opened_at')},
                     'unresolved_reference_alternatives':(['zone_low+zone_high','line_level'] if rule=='BREAK_STRONG' and 'level_kind' not in rf else []),
                     'dependency_inventory_is_entry_coverage_not_proof_of_eligibility':True})
         self.bars.append(bar)
@@ -172,6 +198,7 @@ class RawPipeline:
         self.last_observations=MappingProxyType(observations)
         self.branch_observations=MappingProxyType(branch_observations)
         return {'at':at,'bar_opened_at':bar.opened_at,'geometry':asdict(g),
+                'relative_sequence_measurement':sequence_measurement,
                 'context_fingerprint':self.context_fingerprint,
                 'direction_plan':None if self.direction_plan is None else self.direction_plan.serialize(),
                 'original_direction_evidence':None if original_direction is None else {'value':original_direction.value,
