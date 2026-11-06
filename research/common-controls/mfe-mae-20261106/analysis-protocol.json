@@ -1,0 +1,18 @@
+{
+  "schema":1,
+  "instruction":"PR32#issuecomment-6683758490",
+  "scope":"EXPLORATORY_IN_SAMPLE_EXISTING_ENTRIES_ONLY_NO_SIGNAL_REPLAY",
+  "data":"Original 23643 M15 and frozen FF trace; new 23735 export inventoried separately, not mixed into FF",
+  "time_basis":"RAW_LABEL_NOT_UTC_OR_TEHRAN",
+  "future_window_bars":12,
+  "full_window_gate":"12 consecutive existing M15 from recorded entry, no gap, no raw-day boundary including final close",
+  "excursion_cost":"Hypothetical liquidation using frozen scenario Bid/Ask shift, adverse exit slippage and roundtrip commission. MFE=max(0,max net), MAE=max(0,-min net); not broker-real costs.",
+  "trade_lifetime":"Resolved trace only; lower bounds use all bars strictly before terminal bar plus recorded exit net; upper envelopes also include terminal OHLC, whose extrema may occur after exit. Never label the envelope as exact trade MFE/MAE.",
+  "fixed_window":"Counterfactual 12-bar post-entry behavior, may continue after original exit; never call this actual trade-lifetime MFE or a new strategy return.",
+  "intrabar":"First SL and TP in same M15 = AMBIGUOUS unless observed open already crosses one threshold; no favorable ordering",
+  "normalization":"Initial recorded entry-to-stop distance * lots * contract100. Not worst-case loss bound.",
+  "aggregation":"All six candidates, both frozen costs, entry raw month and quarter, no hour/regime selection",
+  "unresolved":"Separate counts; no invented close, swap, full net or annual equity",
+  "fresh_holdout":"NO_FRESH_HOLDOUT",
+  "strategy_tests_executed":false
+}
