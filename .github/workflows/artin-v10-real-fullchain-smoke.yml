@@ -1,0 +1,86 @@
+name: Artin V10 end-to-end REAL video smoke (verified original 100s clip)
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v10-real-fullchain-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-asr-ocr-question-fidelity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      OMP_NUM_THREADS: '2'
+      TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install CPU Persian ASR and OCR plus source video decoder
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3' 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Download original user-provided source and cryptographically verify before cropping
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          from artin_ephemeral_remote_ingest import download,get_direct_url
+          root=Path('/tmp/artin_v10_smoke_private');root.mkdir(parents=True,exist_ok=True)
+          direct,_=get_direct_url(os.environ['TEACHER_VIDEO_PAGE'])
+          size,sha=download(direct,root/'full_original.mp4')
+          assert sha=='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff'
+          print('ARTIN_V10_ORIGINAL_SOURCE_PINNED='+sha,flush=True)
+          PY
+      - name: Create fast real 100-second PROVENANCE-LABELED smoke clip; not whole lesson
+        run: |
+          ffmpeg -hide_banner -loglevel error -nostdin -y -ss 3250 -i /tmp/artin_v10_smoke_private/full_original.mp4 -t 100 -map 0:v:0 -map 0:a:0 -c copy /tmp/artin_v10_smoke_private/source_100sec_clip.mp4
+      - name: Test WHOLE pipeline on REAL Persian teacher audio, real board and real chat
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_unified_session_v10.py \
+            --video /tmp/artin_v10_smoke_private/source_100sec_clip.mp4 \
+            --out /tmp/artin_v10_smoke_private/complete \
+            --sample-seconds 25 --model small
+      - name: Reject fake completion before all stages and check no trading permissions
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/artin_v10_smoke_private/complete')
+          x=json.loads((root/'safe_session_result.json').read_text(encoding='utf8'))
+          assert x['global_audio_chunks_total']==x['global_audio_chunks_asr_completed']>0
+          assert x['source_screenshots_ocr_completed']==x['original_source_chat_screenshots']>0
+          assert x['source_screenshots_ocr_errors']==0
+          assert x['all_source_coverage_stages_ran'] is True
+          assert x['source_verified_trading_rules']==0
+          assert x['human_verified_teacher_answer_count']==0
+          assert x['state']=='SOURCE_PIPELINE_DONE_SEMANTIC_TRUTH_NOT_CERTIFIED'
+          print('ARTIN_V10_REAL_WHOLE_CHAIN_SMOKE_SUCCESS='+json.dumps({
+             'duration_seconds':x['original_video_duration_seconds'],
+             'source_audio_parts':x['global_audio_chunks_asr_completed'],
+             'source_utterances':x['timestamped_source_asr_utterances'],
+             'source_screenshots_with_ocr':x['source_screenshots_ocr_completed'],
+             'provisional_QA_groups':x['provisional_question_groups'],
+             'RULES_NOT_VERIFIED':True},ensure_ascii=False))
+          PY
+      - name: Retain real private film-clipped speech/image/QA evidence (no public teacher content)
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v10-original-100sec-fullchain-PRIVATE
+          retention-days: 10
+          if-no-files-found: error
+          path: |
+            /tmp/artin_v10_smoke_private/complete/safe_session_result.json
+            /tmp/artin_v10_smoke_private/complete/private_original_asr_review.json
+            /tmp/artin_v10_smoke_private/complete/private_visual_timeline.json
+            /tmp/artin_v10_smoke_private/complete/private_question_audio_REVIEW_ONLY.json
+            /tmp/artin_v10_smoke_private/complete/private_unverified_rule_context.json
+            /tmp/artin_v10_smoke_private/complete/private_ocr/full_chat_ocr_candidates_PRIVATE.json
