@@ -13,7 +13,8 @@ from artin_student_chat_review_v6 import validate_visual_model_candidates,reconc
 
 
 def join_original_chat_qa(visual_index,full_ocr,asr_review):
-    if visual_index.get('schema')!='artin_classroom_visual_v6':
+    if visual_index.get('schema') not in ('artin_classroom_visual_v6',
+                                            'artin_change_selected_chat_v8'):
         raise ValueError('Authentic video screenshot timeline required')
     if full_ocr.get('schema')!='artin_full_original_chat_ocr_v7':
         raise ValueError('Authentic original screenshots OCR file required')
