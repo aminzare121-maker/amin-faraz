@@ -108,8 +108,46 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         raise RuntimeError("Original visual source incomplete")
     _write(output/"private_visual_timeline.json",visual)
     # Independent printed Persian OCR. Private textual evidence not printed in logs.
-    ocr=ocr_frames(output/"visual",visual,output/"private_ocr",
-                   ocr_factory=ocr_model_factory)
+    if ocr_model_factory is None:
+        # Crucial real-world fix: ctranslate2/Whisper and Paddle/oneDNN
+        # sometimes crash when invoked in the same Python interpreter.
+        # The REAL OCR engine therefore runs in a clean child process.
+        import gc
+        import subprocess
+        import sys
+        del asr_model
+        gc.collect()
+        ocr_script=Path(__file__).resolve().parent/"artin_persian_full_chat_ocr_v7.py"
+        cmd=[sys.executable,"-B",str(ocr_script),
+             "--visual-root",str(output/"visual"),
+             "--visual-index",str(output/"private_visual_timeline.json"),
+             "--out",str(output/"private_ocr")]
+        proc=subprocess.run(cmd,text=True,capture_output=True,
+                            timeout=max(420, len(visual["rows"])*38+420))
+        if proc.returncode:
+            diagnostics=""
+            private_errors=output/"private_ocr"/"full_chat_ocr_candidates_PRIVATE.json"
+            if private_errors.is_file():
+                try:
+                    failed=json.loads(private_errors.read_text(encoding="utf8"))
+                    errors=[x for x in failed.get("results",[])
+                            if x.get("state")=="OCR_FAILED_REVIEW_REQUIRED"]
+                    if errors:
+                        diagnostics="; ".join(
+                          str(x.get("error_type","?"))+":"+str(x.get("private_diagnostic",""))[:110]
+                          for x in errors[:2])
+                except (ValueError,OSError):
+                    pass
+            raise RuntimeError("Isolated original-frame OCR subprocess failed (exit "+
+                    str(proc.returncode)+"): "+diagnostics+" "+proc.stderr[-350:])
+        ocr_file=output/"private_ocr"/"full_chat_ocr_summary_safe.json"
+        if not ocr_file.is_file():
+            raise RuntimeError("OCR subprocess did not write source-checked summary")
+        ocr=json.loads(ocr_file.read_text(encoding="utf8"))
+    else:
+        # Only deterministic test injection may run an OCR model in-process.
+        ocr=ocr_frames(output/"visual",visual,output/"private_ocr",
+                       ocr_factory=ocr_model_factory)
     if ocr.get("ocr_failed_frames"):
         # A failed OCR must never be silently converted into "completed".
         # Keep technical error messages in PRIVATE job logs; never print student
