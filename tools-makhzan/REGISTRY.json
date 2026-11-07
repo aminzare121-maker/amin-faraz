@@ -112,7 +112,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "First inspect entire original 80m GitHub Action run 42405663580 from canonical hub. Only call fully source-processed if complete_session succeeded with 17/17 chunks, all original frames OCR-attempted, zero engine errors, full ASR + private QA + fidelity artifacts. Real 100sec source pipeline smoke 42405163226 already succeeded after fixing actual Paddle oneDNN runtime failure with process isolation; independent Persian WER/OCR accuracy, verified teacher role and chart semantics remain unmeasured, so no strategy or trade authorization.",
+      "next_action": "Check run 42405663580 to terminal conclusion and inspect its actual full-source output. Independently run and verify new checkpoint CI and actual cross-run restore on real media; no success claim before evidence. Build human-corrected Persian speech/chart/chat reference set; measure CER/WER and critical negation/action errors; validate speaker-role, Q&A, cross-lesson linking, and fail-closed executable rule gate. Do not reset the known source film as a new input.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -176,6 +176,30 @@
         "actual_rule_candidate_flags": 35,
         "actual_evidence_status": "SOURCE_LINKED_AND_GITHUB_PERSISTED_METADATA_ONLY_NOT_SEMANTICALLY_CERTIFIED",
         "last_source_seed_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42401986725"
+      },
+      "engineering_update_2026_11_07": {
+        "branch": "review/artin-fidelity-audit-v7-20261107",
+        "worktree_commits": [
+          "bb5a1636c644f49b7076458abb8976b3c76ffa1e",
+          "2fc453ac6f773862aa610fb7c0db872a1f586e86",
+          "9dc3d7bc7e4adbd50b111f1e036a83a9264a9cff",
+          "1f0d1600cb92a158a4c9cae1ef4c73724f485379",
+          "c77674145dfaf74b71770245876c6a4354dd27c8"
+        ],
+        "hub_workflow_commit": "b143523ff854bfa8fb50cffc574c4f8a065d0e25",
+        "improvements": [
+          "Resumable ASR chunks with source hash, audio hash, model, timeline, and source provenance validation; mismatches fail closed.",
+          "Persian-negation and action-word mismatch detection expanded; regression cases committed.",
+          "Hub runner now restores source-keyed private ASR checkpoint artifacts from earlier runs, and uploads finished chunks even when a later stage fails.",
+          "Runner no longer automatically restarts expensive source processing when editing workflow code; request-file push is the only trigger."
+        ],
+        "verification": "COMMITS_PRESENT; NEW CROSS-RUN-RESUME UNTESTED IN LIVE WORKFLOW; REGRESSION CI CONCLUSION NOT YET CONFIRMED",
+        "limitations": [
+          "Existing full 80-minute run 42405663580 began before workflow fix and cannot gain checkpoint persistence retroactively.",
+          "Artifact upload on a GitHub job timeout or cancellation is not guaranteed.",
+          "Private artifacts expire in 30 days and are not permanent content storage.",
+          "Semantic Persian ASR, image/chart understanding, speaker identity, matched questions/answers, and strategy rules have not passed independent reference testing."
+        ]
       }
     }
   ]
