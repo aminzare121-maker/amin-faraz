@@ -3,11 +3,12 @@ import csv
 import gzip
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
 from decimal import Decimal
-from paper_m15_shadow import replay, evaluate_trade
+from paper_m15_shadow import replay, evaluate_trade, validate_output_path, write_json_atomic
 
 
 class M15PaperShadowTests(unittest.TestCase):
@@ -107,6 +108,60 @@ class M15PaperShadowTests(unittest.TestCase):
         self.specs.write_text('{"specs":[]}')
         r=self.run_shadow()
         self.assertEqual(r['blockers']['MISSING_TEACHER_SOURCED_STOP_TARGET'],1)
+
+
+    def test_placeholder_source_is_rejected_before_any_trade(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s = json.loads(self.specs.read_text())
+        s['specs'][0]['source'] = 'VERIFY_LESSON_TIMESTAMP_ENTRY'
+        self.specs.write_text(json.dumps(s))
+        with self.assertRaisesRegex(ValueError, 'placeholder source reference'):
+            self.run_shadow()
+
+    def test_placeholder_stop_source_is_rejected(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s = json.loads(self.specs.read_text())
+        s['specs'][0]['stop_source'] = 'TODO: actual lesson screenshot'
+        self.specs.write_text(json.dumps(s))
+        with self.assertRaisesRegex(ValueError, 'placeholder source reference'):
+            self.run_shadow()
+
+    def test_nonstring_source_reference_is_rejected(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s = json.loads(self.specs.read_text())
+        s['specs'][0]['target_source'] = 123
+        self.specs.write_text(json.dumps(s))
+        with self.assertRaisesRegex(ValueError, 'invalid source reference'):
+            self.run_shadow()
+
+    def test_valid_looking_references_are_still_not_teacher_verified(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        s = json.loads(self.specs.read_text())
+        s['specs'][0]['source'] = 'session999:1'
+        self.specs.write_text(json.dumps(s))
+        r = self.run_shadow()
+        self.assertEqual(r['completed_paper_trades'], 1)
+        self.assertFalse(r['teacher_method_verified'])
+        self.assertFalse(r['declared_source_refs_independently_verified'])
+        self.assertEqual(r['teacher_verified_trade_count'], 0)
+        self.assertEqual(r['trades'][0]['source_evidence_status'], 'DECLARED_UNVERIFIED')
+        self.assertFalse(r['trades'][0]['teacher_rule_verified'])
+
+    def test_hardlink_output_to_input_is_rejected_without_damage(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        out = self.root/'shadow.json'
+        before = self.summary.read_bytes()
+        os.link(self.summary, out)
+        with self.assertRaisesRegex(ValueError, 'output may not overwrite'):
+            validate_output_path(out, (self.csv, self.summary, self.trace, self.specs))
+        self.assertEqual(self.summary.read_bytes(), before)
+
+    def test_safe_atomic_writer_roundtrips_json(self):
+        out = self.root/'shadow.json'
+        write_json_atomic(out, {'state':'DECLARED_UNVERIFIED','text':'مدرس'})
+        raw = out.read_bytes()
+        self.assertTrue(raw.endswith(b'\n'))
+        self.assertEqual(json.loads(raw.decode('utf8'))['text'], 'مدرس')
 
 
 if __name__=='__main__':
