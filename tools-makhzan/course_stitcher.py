@@ -209,12 +209,48 @@ def course_puzzle(doc):
     return result
 
 
+def hydrate_persistent_anchors(doc,root):
+    """Hydrate source-anchored metadata from the actual private Makhzan hub.
+
+    Catalogs contain timestamps, source hashes and evidence IDs only;
+    never raw student chat, original teacher speech or model-only labels.
+    """
+    nxt=copy.deepcopy(doc)
+    root=Path(root).resolve()
+    catalogs=nxt.get("evidence_catalogs",[])
+    _require(isinstance(catalogs,list),"Invalid persistent source catalog list")
+    sessions,_=validate_course(nxt)
+    used=set()
+    for entry in catalogs:
+        _require(isinstance(entry,str) and entry not in used,
+                 "Duplicate or invalid source evidence catalog")
+        used.add(entry)
+        target=(root/entry).resolve()
+        _require(target.is_relative_to(root) and target.is_file(),
+                 "Registered permanent source evidence catalog is missing")
+        item=json.loads(target.read_text(encoding="utf8"))
+        _require(item.get("schema")=="artin_source_anchor_catalog_v1" and
+                 item.get("contains_original_audio_or_classroom_chat_text") is False and
+                 item.get("all_personal_content_excluded") is True,
+                 "Source anchor catalog is not private-text safe")
+        sid=item.get("session_id")
+        _require(sid in sessions and
+                 item.get("source_video_sha256")==sessions[sid]["source_sha256"],
+                 "Permanent catalog source SHA/session identity mismatch")
+        nodes=item.get("evidence_nodes")
+        _require(isinstance(nodes,list) and bool(nodes),
+                 "Permanent source anchor list is empty")
+        nxt=append_evidence(nxt,nodes)
+    return nxt
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--registry",type=Path,required=True)
     parser.add_argument("--out",type=Path,required=True)
     args=parser.parse_args()
     doc=json.loads(args.registry.read_text(encoding="utf-8"))
+    doc=hydrate_persistent_anchors(doc,Path(__file__).resolve().parent.parent)
     report=course_puzzle(doc)
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
