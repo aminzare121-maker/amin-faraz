@@ -50,6 +50,38 @@ class RealAVReviewTests(unittest.TestCase):
         self.assertEqual(r['speech_lines'][0]['part_global'],3)
         self.assertFalse(r['complete_original_video_review'])
 
+    def test_boundary_conflicting_buy_sell_preserved_for_review(self):
+        m,sh,seg=fixture()
+        a=sh(1,[seg(300.1,302.1,'خرید')])
+        b=sh(2,[seg(300.1,302.1,'فروش')])
+        r=review_real_asr(m,[a,b])
+        self.assertEqual(len(r['speech_lines']),1)
+        self.assertEqual(r['speech_lines'][0]['text'],'فروش')
+        self.assertEqual(r['cross_boundary_conflicts'],1)
+        self.assertEqual(r['cross_boundary_asr_review'][0]['text_candidate'],'خرید')
+        self.assertEqual(r['cross_boundary_asr_review'][0]['review_status'],
+                         'CONFLICTING_ASR_TEXT_REQUIRES_AUDIO_REVIEW')
+        self.assertEqual(r['rules_executable'],0)
+
+    def test_boundary_agreement_is_not_proof_of_teacher(self):
+        m,sh,seg=fixture()
+        a=sh(1,[seg(300.1,302.1,'خرید')])
+        b=sh(2,[seg(300.1,302.1,'خرید')])
+        r=review_real_asr(m,[a,b])
+        self.assertEqual(r['cross_boundary_conflicts'],0)
+        self.assertEqual(r['cross_boundary_asr_review'][0]['review_status'],
+                         'AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION')
+        self.assertFalse(r['cross_boundary_asr_review'][0]['teacher_rule_verified'])
+
+    def test_partial_transcript_retains_overlapping_neighbor_words(self):
+        m,sh,seg=fixture()
+        a=sh(1,[seg(300.1,302.1,'خرید')])
+        r=review_real_asr(m,[a])
+        self.assertEqual(len(r['speech_lines']),0)
+        self.assertEqual(r['cross_boundary_conflicts'],1)
+        self.assertEqual(r['cross_boundary_asr_review'][0]['review_status'],
+                         'OWNER_PART_ASR_MISSING')
+
     def test_overlap_text_uses_time_owner(self):
         m,sh,seg=fixture()
         a=sh(1,[seg(300.1,302.1,'معامله')])
