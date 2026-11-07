@@ -9,6 +9,7 @@ This module deliberately emits candidates and review queues, not trade orders.
 from __future__ import annotations
 import argparse
 import hashlib
+from difflib import SequenceMatcher
 import json
 import math
 import re
@@ -55,6 +56,7 @@ def review_real_asr(manifest: dict, shards: list[dict],
         raise ValueError('Invalid visual evidence notes')
     seen_parts=set()
     raw=[]
+    overlap_alternatives=[]
     for shard in shards:
         if not isinstance(shard,dict) or shard.get('schema')!='artin_asr_shard_v5':
             raise ValueError('Invalid ASR shard')
@@ -91,6 +93,14 @@ def review_real_asr(manifest: dict, shards: list[dict],
             # The core owner, not completion order, determines deduplication at overlap.
             owner=min(len(parts),int(mid//300)+1)
             if owner!=n:
+                # Never discard transcript evidence from overlapping 12-second
+                # audio. It may disagree with the primary ASR for the adjacent
+                # core and may contain the only audible half of a correction.
+                overlap_alternatives.append({'source_part':n,'owner_part':owner,
+                    'start':round(s,3),'end':round(e,3),
+                    'text_candidate':_normalize(u['text']),
+                    'source_audio_sha256':part['audio_sha256'],
+                    'speaker_verified':False,'teacher_rule_verified':False})
                 continue
             txt=_normalize(u['text'])
             quality_flags=[]
@@ -119,6 +129,24 @@ def review_real_asr(manifest: dict, shards: list[dict],
     raw.sort(key=lambda u:(u['start'],u['part_global'],u['id']))
     if len({s['id'] for s in raw})!=len(raw):
         raise ValueError('ASR source-line identity collision')
+    boundary_review=[]
+    for alt in overlap_alternatives:
+        midpoint=(alt['start']+alt['end'])/2
+        nearby=[u for u in raw if u['part_global']==alt['owner_part']
+                and abs((u['start']+u['end'])/2-midpoint)<=6]
+        ranked=sorted(nearby,key=lambda u:(
+            -SequenceMatcher(None,alt['text_candidate'],u['text']).ratio(),
+            abs((u['start']+u['end'])/2-midpoint)))
+        best=ranked[0] if ranked else None
+        similarity=(SequenceMatcher(None,alt['text_candidate'],best['text']).ratio()
+                    if best is not None else None)
+        issue=('OWNER_PART_ASR_MISSING' if alt['owner_part'] not in seen_parts
+               else 'NO_MATCHING_OWNER_SEGMENT' if best is None
+               else 'CONFLICTING_ASR_TEXT_REQUIRES_AUDIO_REVIEW' if similarity<.7
+               else 'AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION')
+        boundary_review.append({**alt,'owner_segment_id':best['id'] if best else None,
+                'text_similarity':round(similarity,3) if similarity is not None else None,
+                'review_status':issue,'can_change_artin_engine':False})
     # Only exact supported frames can appear in the audiovisual references.
     frames={}
     for part in parts:
@@ -189,6 +217,8 @@ def review_real_asr(manifest: dict, shards: list[dict],
             'complete_original_video_review':False,
             'parts_missing_asr':sorted(set(by_id)-seen_parts),
             'speech_lines':raw,
+            'cross_boundary_asr_review':boundary_review,
+            'cross_boundary_conflicts':sum(x['review_status']!='AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION' for x in boundary_review),
             'suspect_asr_lines':[{'id':u['id'],'time':u['start'],
                   'flags':u['asr_quality_flags']} for u in raw if u['asr_quality_flags']],
             'possible_questions_and_following_utterances':qas['question_candidates'],
