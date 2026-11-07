@@ -1,9 +1,9 @@
-name: VIDEO-001 serial queued classroom movies (user submitted only)
+name: VIDEO-001 independent magazine serial video queue
 on:
   push:
     branches: [tools-makhzan-hub]
     paths:
-      - 'tools-makhzan/video_queue/entries/*.json'
+      - 'tools-makhzan/video_queue/magazines/*/entries/*.json'
 permissions:
   contents: write
   actions: read
@@ -27,42 +27,41 @@ jobs:
         run: |
           git fetch --no-tags origin tools-makhzan-hub
           git reset --hard origin/tools-makhzan-hub
-      - name: Never overlap unverified first in-flight session 2
+      - name: Enumerate only exact user-named magazines from latest branch
+        id: queue
+        run: |
+          python3 -u tools-makhzan/video_queue/load_queue.py --github-output "$GITHUB_OUTPUT"
+      - name: For Artin-only, never overlap the already running film #2
+        if: ${{ contains(steps.queue.outputs.items, 'artin-course-001') }}
         env:
           GH_TOKEN: ${{ github.token }}
-        shell: bash
         run: |
           python3 - <<'PY'
           import json,os,subprocess,time
           repo=os.environ['GITHUB_REPOSITORY']
-          # Film #2 was started from the registered hub before the serial queue existed.
-          prior_id=42423414479
-          for attempt in range(450):
+          run=42423414479
+          for attempt in range(440):
               s=json.loads(subprocess.check_output(
-                  ['gh','api',f'/repos/{repo}/actions/runs/{prior_id}'],text=True))
+                  ['gh','api',f'/repos/{repo}/actions/runs/{run}'],text=True))
               if s['status']=='completed':
                   if s.get('conclusion')!='success':
-                      raise RuntimeError(
-                          'Film #2 incomplete/failed; do NOT advance to #3 until source evidence is repaired')
-                  print('VIDEO001_PRIOR_SECOND_SOURCE_VERIFIED_SUCCESS=True')
+                      raise RuntimeError('Previously submitted Artin film #2 incomplete. Do not skip to #3.')
+                  print('VIDEO001_ARTIN_SESSION2_PRECEDES_MAGAZINE_NEXT=True')
                   break
-              if attempt==449:
-                  raise TimeoutError('Film #2 still running. Queue remains saved; no overlapping films.')
+              if attempt==439:
+                  raise TimeoutError('Artin session #2 still incomplete; queue preserved without skipping')
               time.sleep(12)
           PY
-      - name: Safely enumerate all user-submitted pending movies and skip immutable receipts
-        id: queue
-        run: |
-          python3 -u tools-makhzan/video_queue/load_queue.py --github-output "$GITHUB_OUTPUT"
   process-one-full-movie-at-a-time:
     needs: collect-and-order-pending-movies
     if: ${{ needs.collect-and-order-pending-movies.outputs.count != '0' }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       max-parallel: 1
       matrix: ${{ fromJSON(needs.collect-and-order-pending-movies.outputs.items) }}
     uses: ./.github/workflows/tools-makhzan-video001-fast-reusable.yml
     with:
+      magazine_id: ${{ matrix.magazine_id }}
       queue_id: ${{ matrix.queue_id }}
       source_page: ${{ matrix.source_page }}
       expected_sha256: ${{ matrix.expected_sha256 }}
