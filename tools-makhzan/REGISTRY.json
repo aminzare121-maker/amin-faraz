@@ -57,7 +57,7 @@
         "Reject duplicate/missing/mismatched parts and block unverified rules."
       ],
       "outstanding": [
-        "276 high-res original chat screenshots extracted successfully. Four-way CPU Persian OCR started in GitHub Actions run 42395611419; completion not yet verified.",
+        "An actual offline evidence reviewer for Android/Windows is delivered with 59 unverified question groups, 35 unverified rule fragments and 192 original source-hash screenshots. It is NOT an autonomous verified teacher rule engine.",
         "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
         "Speaker-to-role verified teacher/student: not demonstrated.",
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
@@ -106,9 +106,13 @@
         "change_selected_high_res_images": 276,
         "change_selected_high_res_verified_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392920286",
         "change_selected_high_res_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42395611419",
-        "change_selected_high_res_ocr_status": "FOUR_REAL_PARALLEL_WORKERS_STARTED_NOT_YET_VERIFIED"
+        "change_selected_high_res_ocr_status": "SUCCESS_SOURCE_HASH_MERGED_276_OF_276_FRAMES_275_TEXT_1_BLANK_ZERO_EXECUTION_ERRORS",
+        "review_package_status": "BUILT_VALIDATED_OFFLINE_HTML_59_QUESTIONS_35_RULE_FRAGMENTS_192_ORIGINAL_IMAGES",
+        "review_package_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42396381577",
+        "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
+        "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "First inspect four-worker OCR run 42395611419. Do not call it complete unless all four workers and strict source-hash merge succeeded; output artifact artin-v8-276-farsi-chat-ocr-complete-PRIVATE. Then compare 276+161 frames, deduplicate question candidates, measure source-checked OCR and teacher answer quality. All unverified rules stay review-only. Do not re-download teacher video."
+      "next_action": "Important: delivered downloadable offline index.html reviewer ZIP (59 provisional QA groups + 35 rule fragments + 192 verified real screenshots; user chooses source MP4 locally) from GitHub Actions run 42396381577; link to source in PR #54. Real source high-res OCR 276/276 succeeded in run 42395611419 (275 text/1 blank). Next step: integrate newly OCR-detected questions into reviewer package, compare against source-verified reference labels, verify exact teacher audio, speaker roles, and chart semantics; forbid automatic trading rules until independent validation."
     }
   ]
 }
