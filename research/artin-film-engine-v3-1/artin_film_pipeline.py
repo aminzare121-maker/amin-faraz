@@ -28,6 +28,7 @@ from pathlib import Path
 from artin_semantic_context import (
     validate_capsule, adjacent_context, quarantine_events, noise_risk
 )
+from artin_batch_slots import annotate_plan, artifact_path, batch_slot, batch_summary
 
 CHUNK_S = 300
 OVERLAP_S = 12
@@ -103,7 +104,7 @@ def chunk_plan(duration: float, chunk_s: int=CHUNK_S, overlap_s: int=OVERLAP_S):
                         "clip":f"clips/part_{i+1:02d}.mp4",
                         "transcript":f"transcripts/part_{i+1:02d}.json",
                         "analysis":f"analyses/part_{i+1:02d}.json"})
-    return results
+    return annotate_plan(results)
 
 
 def canonical_chunk_order(completed: list[dict], expected: list[dict]):
@@ -132,6 +133,10 @@ def canonical_chunk_order(completed: list[dict], expected: list[dict]):
         for key in ("clip","transcript","analysis"):
             if part.get(key)!=target[n][key]:
                 raise ValueError(f"Chunk {n:02d} has wrong numbered file: {key}")
+        if len(expected)>18 or any(k in part for k in ("batch","slot","global_index","unique_id")):
+            for key in ("batch","slot","global_index","unique_id"):
+                if part.get(key)!=target[n][key]:
+                    raise ValueError(f"Chunk {n:02d} has invalid batch/slot identity: {key}")
         found[n]=part
     missing=sorted(set(target)-set(found))
     if missing:
@@ -196,7 +201,9 @@ def _extract_one(video: Path, root: Path, part: dict, frames_per_chunk: int):
     if samples:
         for j in range(samples):
             at=part["core_start"]+(j+0.5)*(part["core_end"]-part["core_start"])/samples
-            image_path=root/"frames"/f"part_{part['chunk']:02d}_{j+1:02d}.jpg"
+            image_name=(f"part_{part['slot']:02d}_{j+1:02d}.jpg" if part['batch']==1
+                        else f"{part['unique_id']}_{j+1:02d}.jpg")
+            image_path=root/"frames"/image_name
             image_path.parent.mkdir(parents=True,exist_ok=True)
             run_cmd(["ffmpeg","-hide_banner","-loglevel","error","-nostdin","-y",
                      "-ss",str(round(at,3)),"-i",str(video),"-frames:v","1",
@@ -230,7 +237,9 @@ def prepare(video: Path, root: Path, workers=3, frames_per_chunk=3, chunk_s=CHUN
     atomic_json(root/"chunk_plan_pending.json",{
         "status":"PLANNED_NOT_FINISHED","video_sha256":video_digest,
         "source_duration":duration,"parts_expected":len(plan),
-        "sequence":[{"number":p["chunk"],"core_start":p["core_start"],
+        "batches":batch_summary(plan),
+        "sequence":[{"number":p["chunk"],"batch":p["batch"],"slot":p["slot"],
+                     "unique_id":p["unique_id"],"core_start":p["core_start"],
                      "core_end":p["core_end"],"clip":p["clip"]} for p in plan]})
     workers=min(max(1,int(workers)),len(plan))
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
@@ -242,7 +251,9 @@ def prepare(video: Path, root: Path, workers=3, frames_per_chunk=3, chunk_s=CHUN
     manifest={"schema":"artin_video_manifest_v1","video_path_private":str(video),
               "video_sha256":video_digest,"source_duration":duration,
               "source_streams":streams,"chunk_seconds":chunk_s,"overlap_seconds":effective_overlap,
-              "strict_chunk_order":True,"chunk_order_source":"FIVE_MINUTE_SOURCE_NUMBER_NOT_FINISH_TIME",
+              "strict_chunk_order":True,"batch_schema":"EIGHTEEN_SLOTS_WITH_GLOBAL_ID_V1",
+              "batches":batch_summary(parts),"batch_count":len(batch_summary(parts)),
+              "chunk_order_source":"GLOBAL_SOURCE_INDEX_AND_BATCH_SLOT_NOT_FINISH_TIME",
               "chunk_numbers_in_order":[p["chunk"] for p in parts],
               "preprocessing":"LOCAL_FFMPEG_NOT_SEMANTIC_UNDERSTANDING",
               "chunks":parts,"parts_ready":len(parts),"speech_transcribed":False,"teacher_rules_verified":0}
@@ -253,10 +264,13 @@ def prepare(video: Path, root: Path, workers=3, frames_per_chunk=3, chunk_s=CHUN
         "video_sha256":video_digest,"source_duration":duration,
         "expected_count":len(plan),"actual_count":len(parts),
         "chunk_numbers_in_source_order":[p["chunk"] for p in parts],
+        "batch_count":len(batch_summary(parts)),"batches":batch_summary(parts),
+        "unique_ids_in_source_order":[p["unique_id"] for p in parts],
         "no_missing_or_duplicate_numbers":True,
         "no_gap_or_overlap_in_original_five_minute_core_timeline":True,
         "analysis_overlap_is_context_only":True,
-        "parts":[{"number":c["chunk"],"clip":c["clip"],
+        "parts":[{"number":c["chunk"],"batch":c["batch"],
+                  "slot":c["slot"],"unique_id":c["unique_id"],"clip":c["clip"],
                   "clip_sha256":c["clip_sha256"],"start":c["core_start"],
                   "end":c["core_end"],
                   "previous":c["chunk"]-1 if c["chunk"]>1 else None,
@@ -446,7 +460,7 @@ def build_context_capsules(root:Path, model:str, workers=2,
         doc["source_core_segment_ids"]=[u["id"] for u in core]
         doc["rejected_candidates"]=rejected
         doc["model_name"]=model
-        atomic_json(root/"context_capsules"/f"part_{chunk['chunk']:02d}.json",doc)
+        atomic_json(root/artifact_path("context_capsules",chunk),doc)
         return doc
     max_workers=min(max(1,int(workers)),len(manifest["chunks"]))
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as ex:
@@ -537,7 +551,7 @@ def analyze(root:Path,model:str,workers=2,with_frames=False,
     all_segments,aliases=deduplicate_segments(all_segments)
     capsules={}
     for c in manifest["chunks"]:
-        path=root/"context_capsules"/f"part_{c['chunk']:02d}.json"
+        path=root/artifact_path("context_capsules",c)
         if not path.exists():
             if require_capsules:
                 raise FileNotFoundError(f"Missing first-pass context capsule for chunk {c['chunk']}")
@@ -564,7 +578,7 @@ def analyze(root:Path,model:str,workers=2,with_frames=False,
         local=text_context(all_segments,c)
         neighbors=adjacent_context(c["chunk"],capsules)
         neighbor_ids={a["id"] for v in neighbors.values() for a in v["anchors"]}
-        visual_path=root/"visual_scans"/f"part_{c['chunk']:02d}.json"
+        visual_path=root/artifact_path("visual_scans",c)
         visual_observations=[];vision_by_id={}
         if visual_path.exists():
             visual_doc=json.loads(visual_path.read_text(encoding="utf8"))
@@ -739,7 +753,7 @@ def merge(root:Path,require_all=True):
     # neighboring segment. It cannot be used as an exact quote from this chunk.
     anchor_by_id={}
     for c in m["chunks"]:
-        path=root/"context_capsules"/f"part_{c['chunk']:02d}.json"
+        path=root/artifact_path("context_capsules",c)
         if path.exists():
             capsule=json.loads(path.read_text(encoding="utf8"))
             for anchor in capsule.get("anchors",[]):
@@ -880,7 +894,7 @@ No narrative captions are burned into frames; sidecar JSON links Q&A and rules.
         lines.extend(["[CHAPTER]","TIMEBASE=1/1000",
                       f"START={round(chunk['core_start']*1000)}",
                       f"END={round(chunk['core_end']*1000)}",
-                      f"title=Part {chunk['chunk']:02d} - pending audiovisual validation"])
+                      f"title=Batch {chunk['batch']:03d} Slot {chunk['slot']:02d} Global {chunk['chunk']:04d} - unverified"])
     p=Path(root)/"chapters.ffmetadata"
     p.write_text("\n".join(lines)+"\n",encoding="utf8")
     return p
@@ -998,7 +1012,7 @@ def main(argv=None):
         report['global_reconcile']=reconcile_global(args.out,args.ollama_model,args.endpoint)
         report['vision_model_run']=visual_enabled
         report['original_video_fully_covered_by_visual_samples']=False
-        report['chaptered_video']=remux_chapters(args.out,Path(args.out)/'original_with_18_chapters.mp4')
+        report['chaptered_video']=remux_chapters(args.out,Path(args.out)/'original_with_numbered_chapters.mp4')
     else:report=remux_chapters(args.out,args.video_output)
     print(json.dumps(report,ensure_ascii=False,indent=2))
     return 0
