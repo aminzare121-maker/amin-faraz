@@ -1,0 +1,59 @@
+name: Artin V11 REAL existing-class Persian question dedupe
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/artin_question_dedupe_v11.py'
+      - 'research/artin-film-engine-v3-1/test_artin_question_dedupe_v11.py'
+      - '.github/workflows/artin-v11-real-question-dedupe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-existing-source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test Persian source-preserving clustering safety rules
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest -v test_artin_question_dedupe_v11
+      - name: Retrieve ACTUAL previously extracted source-audited Q&A privately
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-real-chat-speech-QA-REVIEW-ONLY
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42393181420
+          github-token: ${{ github.token }}
+          path: /tmp/artin_v11_original_qa
+      - name: Apply safe Persian OCR repetition grouping to REAL source-linked 59 groups
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -B artin_question_dedupe_v11.py \
+            --review /tmp/artin_v11_original_qa/qa_review_PRIVATE.json \
+            --out /tmp/artin_v11_private/dedupe_review_PRIVATE.json
+      - name: Enforce zero lost evidence and conservative output
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/artin_v11_private/dedupe_review_PRIVATE.json').read_text(encoding='utf8'))
+          assert x['original_review_groups']==59
+          assert x['conservative_near_duplicate_clusters']==28
+          assert x['original_groups_not_lost'] is True
+          assert sum(g['member_groups_count'] for g in x['review_clusters'])==59
+          assert x['verified_teacher_answers']==0 and x['verified_trading_rules']==0
+          assert x['semantic_gold_accuracy_measured'] is False
+          print('REAL_SOURCE_PERSIAN_QUESTION_DEDUP_SUCCESS=59 groups / 28 review clusters / no source observations discarded')
+          PY
+      - name: Save real private source-linked reviewer output, not student text in logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-V11-source-preserving-dedupe-PRIVATE
+          retention-days: 30
+          if-no-files-found: error
+          path: /tmp/artin_v11_private/dedupe_review_PRIVATE.json
