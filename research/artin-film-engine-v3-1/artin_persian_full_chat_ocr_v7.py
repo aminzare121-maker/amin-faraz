@@ -70,8 +70,14 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
             scores=list(first.get('rec_scores',[]))
             boxes=first.get('rec_boxes')
             if boxes is None:
-                raise ValueError('Missing OCR geometry for Persian reading order')
-            ordered=reading_order_fa(raw,scores,boxes)
+                # PaddleOCR returns no boxes for a legitimately empty chat.
+                # No detected text is NOT an OCR engine failure; only
+                # recognized text with absent source geometry is unsafe.
+                if raw:
+                    raise ValueError('Missing OCR geometry for recognized Persian text')
+                ordered=[]
+            else:
+                ordered=reading_order_fa(raw,scores,boxes)
             state='OCR_TEXT_CANDIDATES' if ordered else 'OCR_NO_READABLE_TEXT'
             candidates=[]
             for j,x in enumerate(ordered):
@@ -97,12 +103,15 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
                  'state':state})
         except Exception as exc:
             failed.append({'frame_id':row['frame_id'],
-                           'error_type':type(exc).__name__})
+                           'error_type':type(exc).__name__,
+                           'private_diagnostic':str(exc)[:360]})
             results.append({'frame_id':row['frame_id'],
                  'time_original_video_seconds':row['time_seconds'],
                  'global_chunk':row['global_chunk'],
                  'source_frame_sha256':row['chat']['sha256'],
                  'state':'OCR_FAILED_REVIEW_REQUIRED',
+                 'error_type':type(exc).__name__,
+                 'private_diagnostic':str(exc)[:360],
                  'source_text_verified':False,
                  'teacher_answer_verified':False})
         if i%checkpoint_every==0 or i==len(chosen):
@@ -124,6 +133,8 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
         'frames_with_some_ocr_text':sum(r['state']=='OCR_TEXT_CANDIDATES' for r in results),
         'frames_without_detected_text':sum(r['state']=='OCR_NO_READABLE_TEXT' for r in results),
         'ocr_failed_frames':len(failed),
+        'ocr_error_types':{key:sum(x['error_type']==key for x in failed)
+                           for key in sorted({x['error_type'] for x in failed})},
         'frames_with_question_mark_candidates':sum(bool(r.get('possible_typed_questions')) for r in results),
         'elapsed_seconds':round(time.monotonic()-started,2),
         'human_verified_typed_messages':0,
