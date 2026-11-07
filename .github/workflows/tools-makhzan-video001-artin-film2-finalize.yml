@@ -1,0 +1,72 @@
+name: VIDEO001 finish and register verified already-submitted Artin film 2
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/tools-makhzan-video001-artin-film2-finalize.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  confirm-real-original-and-register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Confirm source film #2 completed ALL processing stages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import os,subprocess,json
+          rid=42423414479
+          repo=os.environ['GITHUB_REPOSITORY']
+          r=json.loads(subprocess.check_output(['gh','api',f'/repos/{repo}/actions/runs/{rid}'],text=True))
+          assert r['status']=='completed' and r['conclusion']=='success'
+          print('VIDEO001_ARTIN_FILM2_ORIGINAL_RUN_CONFIRMED='+str(rid))
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42423414479
+          github-token: ${{ github.token }}
+          name: video001-fast-final-original-source-proof
+          path: /tmp/artin_film2/proof
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42423414479
+          github-token: ${{ github.token }}
+          name: video001-fast-source-summary
+          path: /tmp/artin_film2/summary
+      - name: Register only real SHA and source evidence as sequential session #2
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VIDEO001_MAGAZINE_ID: artin-course-001
+          VIDEO001_QUEUE_ID: video-q-0002-artin-dxvmy5xw
+          VIDEO001_SOURCE_PAGE: https://my.uupload.ir/p/dxvmY5xW
+          VIDEO001_SOURCE_PROOF: /tmp/artin_film2/proof/private_fast_verify_summary.json
+          VIDEO001_SOURCE_SUMMARY: /tmp/artin_film2/summary/safe_source_prep_summary.json
+          VIDEO001_ORIGINAL_SOURCE_RUN_ID: '42423414479'
+        run: |
+          python3 -u tools-makhzan/video_queue/register_course.py
+      - name: Prove new course still contains exactly the two user-submitted source videos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,base64,subprocess,os
+          r=os.environ['GITHUB_REPOSITORY']
+          d=json.loads(subprocess.check_output(['gh','api',f'/repos/{r}/contents/tools-makhzan/courses/artin/COURSE_REGISTRY.json?ref=tools-makhzan-hub'],text=True))
+          c=json.loads(base64.b64decode(d['content']))
+          sessions=c['registered_sessions']
+          assert len(sessions)>=2
+          assert sessions[0]['source_page']=='https://my.uupload.ir/p/aGgKYdpL'
+          assert sessions[1]['source_page']=='https://my.uupload.ir/p/dxvmY5xW'
+          assert sessions[0]['sequence']==1 and sessions[1]['sequence']==2
+          assert sessions[1]['verified_strategy_rules']==0
+          print('VIDEO001_ARTIN_ORIGINAL_TWO_SESSIONS_PRESERVED=True')
+          PY
