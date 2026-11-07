@@ -34,6 +34,27 @@ class ReferenceTests(unittest.TestCase):
         self.assertEqual(r['critical_term_mismatches'],30)
         self.assertFalse(r['sample_passes_quality_gate'])
 
+    def test_direct_buy_versus_do_not_buy_is_semantic_risk(self):
+        refs=[example(ref='در صورت شکست این ناحیه بخر',
+                      pred='در صورت شکست این ناحیه نخر',at=i)
+              for i in range(30)]
+        result=measure_reference(refs,max_cer=1,max_wer=1)
+        self.assertEqual(result['critical_term_mismatches'],30)
+        self.assertFalse(result['sample_passes_quality_gate'])
+
+    def test_negated_farsi_imperative_and_copula_are_critical(self):
+        refs=[example(ref='این وضعیت ورود نیست',
+                      pred='این وضعیت ورود است',at=i)
+              for i in range(30)]
+        result=measure_reference(refs,max_cer=1,max_wer=1)
+        self.assertEqual(result['critical_term_mismatches'],30)
+
+    def test_unrelated_word_containing_nah_does_not_trigger_negation(self):
+        from artin_reference_quality_gate_v8 import critical_presence
+        self.assertFalse(critical_presence('نه','خانه'))
+        self.assertTrue(critical_presence('نه','نه، خرید نکن'))
+        self.assertTrue(critical_presence('نمی',normal('نمی‌فروشیم')))
+
     def test_strict_three_human_checked_samples_can_pass_sample_only(self):
         refs=[example(at=i) for i in range(3)]
         r=measure_reference(refs,min_cases=3)
