@@ -1,0 +1,39 @@
+name: Artin V5 real teacher audio and images integrated evidence trial
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v5-real-integrated.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-class-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg and Persian ASR requirements
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Video download, fast visual sampling, strong speech and source-linked QA
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_real_integrated_v5.py --out /tmp/artin_v5_integrated_private --model large-v3-turbo --max-parts 1 --expected-sha256 b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff
+      - name: Retain only redacted report and candidate review, never original video or audio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v5-real-qa-integrated-private
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v5_integrated_private/public_safe_report.json
+            /tmp/artin_v5_integrated_private/unverified_teacher_evidence.json
