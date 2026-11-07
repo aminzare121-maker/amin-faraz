@@ -1,0 +1,114 @@
+name: Artin course puzzle - enroll actual original J2 source evidence
+on:
+  push:
+    branches:
+      - tools-makhzan-hub
+    paths:
+      - 'tools-makhzan/course_seed_from_evidence.py'
+      - '.github/workflows/artin-course-seed-real-original.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  enroll-real-first-lesson:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download original 17-part ASR source (private)
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_course/asr
+      - name: Download actual typed classroom question evidence (private)
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-real-chat-speech-QA-REVIEW-ONLY
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42393181420
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_course/qa
+      - name: Download source verified teaching rule fidelity audit (private)
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v7-fidelity-audit-original-lesson
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42389814966
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_course/fidelity
+      - name: Make real source-video metadata graph; no classroom text in Git
+        run: |
+          python3 -B tools-makhzan/course_seed_from_evidence.py \
+            --course tools-makhzan/courses/artin/COURSE_REGISTRY.json \
+            --asr /tmp/artin_real_course/asr/complete_unverified_qa_evidence.json \
+            --qa /tmp/artin_real_course/qa/qa_review_PRIVATE.json \
+            --fidelity /tmp/artin_real_course/fidelity/fidelity_candidates_PRIVATE.json \
+            --out /tmp/artin_real_course/output
+      - name: Enforce exact source-count/hash policy and persist safe source-graph to hub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, urllib.request
+          from pathlib import Path
+          from urllib.error import HTTPError
+          path=Path('/tmp/artin_real_course/output/J2_SOURCE_ANCHORS.json')
+          s=Path('/tmp/artin_real_course/output/J2_ANCHORS_SUMMARY_SAFE.json')
+          o=json.loads(path.read_text(encoding='utf8'))
+          summary=json.loads(s.read_text(encoding='utf8'))
+          assert summary['original_asr_utterances_source_linked']==2035
+          assert summary['original_classroom_question_groups_source_linked']==59
+          assert summary['unverified_rule_fragments_anchored_to_original_audio']==35
+          assert summary['total_persistent_source_anchors']==2094
+          assert o['contains_original_audio_or_classroom_chat_text'] is False
+          assert all('text' not in n and 'candidate_text' not in n for n in o['evidence_nodes'])
+          content=path.read_bytes()
+          assert len(content)<1800000
+          dest='tools-makhzan/courses/artin/J2_SOURCE_ANCHORS.json'
+          base_url='https://api.github.com/repos/aminzare121-maker/amin-faraz/contents/'+dest
+          headers={
+            'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28',
+            'User-Agent':'Artin-Source-Anchor-Persistence'}
+          ref_url=base_url+'?ref=tools-makhzan-hub'
+          sha=None
+          try:
+            with urllib.request.urlopen(urllib.request.Request(ref_url,headers=headers),timeout=25) as resp:
+              sha=json.load(resp)['sha']
+          except HTTPError as e:
+            if e.code!=404:raise
+          commit={
+             'message':'Persist 2094 source-hashed J2 anchors (2035 speech, 59 chat, 35 review tags), no private text',
+             'content':base64.b64encode(content).decode('ascii'),
+             'branch':'tools-makhzan-hub'
+          }
+          if sha:commit['sha']=sha
+          request=urllib.request.Request(base_url,
+              data=json.dumps(commit).encode('utf8'),
+              headers={**headers,'Content-Type':'application/json'},method='PUT')
+          with urllib.request.urlopen(request,timeout=45) as resp:
+            body=json.load(resp)
+          print('ARTIN_REAL_COURSE_PERSISTED: '+json.dumps({
+            'path':dest,
+            'source_nodes':summary['total_persistent_source_anchors'],
+            'original_video_sha256':summary['source_video_sha256'],
+            'original_text_in_git':False,
+            'commit':body['commit']['sha']}),flush=True)
+          PY
+      - name: Keep source anchor report to verify content before next video
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-real-j2-2094-provenance-anchors
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_real_course/output/J2_ANCHORS_SUMMARY_SAFE.json
+            /tmp/artin_real_course/output/J2_SOURCE_ANCHORS.json
