@@ -5,6 +5,8 @@ on:
       - review/artin-teacher-av-understanding-v5-20261107
     paths:
       - '.github/workflows/artin-v6-recheck-full-asr-boundaries.yml'
+      - 'research/artin-film-engine-v3-1/artin_parallel_asr_merge_v5.py'
+      - 'research/artin-film-engine-v3-1/artin_teacher_av_review_v5.py'
 permissions:
   contents: read
   actions: read
