@@ -24,6 +24,7 @@ from artin_teacher_av_review_v5 import review_real_asr
 from artin_visual_timeline_v6 import extract_visual_timeline
 from artin_persian_full_chat_ocr_v7 import ocr_frames
 from artin_ocr_asr_join_v8 import join_original_chat_qa
+from artin_question_dedupe_v11 import clustered_review
 from artin_fidelity_audit_v7 import audit_original_teacher_evidence
 
 
@@ -200,6 +201,12 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         raise RuntimeError("OCR checkpoint incomplete")
     chat_summary,chat_private=join_original_chat_qa(visual,full_ocr,review)
     _write(output/"private_question_audio_REVIEW_ONLY.json",chat_private)
+    deduped=clustered_review(chat_private)
+    if deduped["source_video_sha256"]!=source_hash or not deduped["original_groups_not_lost"]:
+        raise RuntimeError("Question review source integrity failed")
+    if deduped["original_review_groups"]!=chat_summary["provisional_distinct_question_groups"]:
+        raise RuntimeError("Question grouping lost unverified original evidence")
+    _write(output/"private_question_clusters_REVIEW_ONLY.json",deduped)
     fidelity_summary,fidelity_private=audit_original_teacher_evidence(review,visual)
     _write(output/"private_unverified_rule_context.json",fidelity_private)
     if chat_summary["verified_teacher_answers"] or fidelity_summary["verified_trading_rules"]:
@@ -215,6 +222,8 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         "source_screenshots_ocr_errors":ocr["ocr_failed_frames"],
         "screenshots_with_text_candidates":ocr["frames_with_some_ocr_text"],
         "provisional_question_groups":chat_summary["provisional_distinct_question_groups"],
+        "conservative_question_review_clusters":deduped["conservative_near_duplicate_clusters"],
+        "all_original_question_observations_retained":True,
         "rule_fragments_incomplete":fidelity_summary["legacy_rule_candidate_count"],
         "all_source_coverage_stages_ran":True,
         "human_verified_speech_accuracy":None,
