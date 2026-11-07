@@ -1,0 +1,39 @@
+name: Artin V5 original video Persian ASR stronger-model trial
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v5-real-asr-trial.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  asr-real:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install ffmpeg and faster whisper
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Process real user video audio with larger multilingual model
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_real_asr_trial_v5.py --model large-v3-turbo --minutes 5 --out /tmp/artin_private_v5
+      - name: Upload only private unverified ASR trial (one day)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v5-real-asr-five-minutes
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_private_v5/trial_report.json
+            /tmp/artin_private_v5/unverified_transcript.json
