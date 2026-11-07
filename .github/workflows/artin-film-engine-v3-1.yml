@@ -1,0 +1,33 @@
+name: Artin Film Engine V3.1 - isolated code tests
+on:
+  push:
+    branches:
+      - review/artin-film-engine-v3-1-repo-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/**'
+      - '.github/workflows/artin-film-engine-v3-1.yml'
+  pull_request:
+    branches:
+      - review/artin-private-media-manifest-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/**'
+      - '.github/workflows/artin-film-engine-v3-1.yml'
+permissions:
+  contents: read
+jobs:
+  code-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg tooling for synthetic regression only
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Run V3.1 tests with synthetic fixtures only
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest discover -p 'test_*.py' -v
