@@ -119,7 +119,9 @@
         "one_second_original_question_review_clusters": 33,
         "one_second_real_source_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42411436773",
         "fast_full_source_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42420443241",
-        "fast_independent_acceptance": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42421069807"
+        "fast_independent_acceptance": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42421069807",
+        "fast_gateway_smoke": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42423045278",
+        "fast_legacy_export_acceptance": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42422867789"
       },
       "next_action": "Do not restart original 80m source work. True 276 original one-second-selected images + OCR + original 17-part ASR review successful in 42411436773. Check prior end-to-end job 42405663580 separately; independent gold Persian speech/OCR and teacher Q&A/role verification remains. Actions artifacts expire; unverified long-term archive must not be called durable.",
       "executor": {
@@ -292,7 +294,7 @@
         ]
       },
       "fast_mode": {
-        "status": "INSTALLED_IN_V12_AND_REGISTERED_HUB_PATH_PENDING_HUB_SMOKE_TEST",
+        "status": "INSTALLED_REGISTERED_GATEWAY_AND_FULL_SOURCE_LEGACY_OUTPUTS_VERIFIED",
         "action": "complete_session_fast",
         "original_fallback_action": "complete_session",
         "source_once": true,
@@ -315,7 +317,13 @@
         "semantic_truth_certified": false,
         "verified_teacher_rules": 0,
         "original_video_permanent_backup": false,
-        "note": "Fast mode is additional and preferred. Legacy complete_session remains available; source-dependent retries never fabricate success."
+        "note": "Fast mode is additional and preferred. Legacy complete_session remains available; source-dependent retries never fabricate success.",
+        "hub_gateway_smoke": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42423045278",
+        "legacy_private_review_compatibility": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42422867789",
+        "production_code_synthetic_smoke": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42422784390",
+        "live_hub_next_video_not_yet_run": true,
+        "output_artifact_name": "makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE",
+        "technical_release_note": "The original registered V12 branch has installed source-once 17+16 engine and exporter. Hub has a distinct complete_session_fast action; default/preferred for future complete-session work, old complete_session remains usable. Confirm next real session end-to-end in hub. Accuracy of teacher speech/meanings requires independent gold review."
       }
     }
   ]
