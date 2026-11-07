@@ -33,7 +33,7 @@ class HighResPlannerTests(unittest.TestCase):
 
     def test_unknown_source_schema_rejected(self):
         m=data();m['schema']='unknown'
-        with self.assertRaisesRegex(ValueError,'original 1-second'):
+        with self.assertRaisesRegex(ValueError,'Original 1-second'):
             selected_times(m)
 
 
