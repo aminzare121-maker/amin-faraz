@@ -27,7 +27,7 @@ def validate_declared_source(value, field):
     """Basic input hygiene, NOT proof that a teacher actually said something."""
     if type(value) is not str or not value.strip():
         raise ValueError('missing or invalid source reference: ' + field)
-    if len(value) > 512 or any(x in value for x in ('\\x00', '\\n', '\\r')):
+    if len(value) > 512 or any(x in value for x in ('\x00', '\n', '\r')):
         raise ValueError('invalid source reference: ' + field)
     normalized = value.strip().upper()
     if any(marker in normalized for marker in PLACEHOLDER_MARKERS):
@@ -52,7 +52,7 @@ def write_json_atomic(output, payload):
     try:
         with os.fdopen(fd, 'w', encoding='utf8') as handle:
             json.dump(payload, handle, ensure_ascii=False, indent=2)
-            handle.write('\\n')
+            handle.write('\n')
         os.replace(temp_name, output)
     finally:
         if Path(temp_name).exists():
