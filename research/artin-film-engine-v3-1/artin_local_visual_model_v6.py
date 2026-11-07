@@ -29,7 +29,7 @@ An image remains UNVERIFIED even if the text looks readable.
 
 
 def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://127.0.0.1:11434',
-                      call_model=None):
+                      call_model=None,priority_frame_ids=None):
     if not isinstance(model,str) or not model.strip():
         raise ValueError('Vision model name required')
     if type(max_frames) is not int or not 1<=max_frames<=5000:
@@ -41,7 +41,14 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
     root=Path(root).resolve()
     proposals=[]
     failed=[]
-    chosen=visual_index['rows'][:max_frames]
+    if priority_frame_ids is not None:
+        selected=set(priority_frame_ids)
+        all_known={x['frame_id'] for x in visual_index['rows']}
+        if not selected or not selected<=all_known:
+            raise ValueError('Unknown or empty visual priority frame list')
+        chosen=[r for r in visual_index['rows'] if r['frame_id'] in selected][:max_frames]
+    else:
+        chosen=visual_index['rows'][:max_frames]
     for row in chosen:
         for channel in ('chat','board'):
             filename=(root/row[channel]['path']).resolve()
@@ -98,11 +105,18 @@ def main():
     p.add_argument('--out',required=True,type=Path)
     p.add_argument('--model',default='qwen2.5vl:3b')
     p.add_argument('--max-frames',type=int,default=5)
+    p.add_argument('--novelty-index',type=Path)
     p.add_argument('--endpoint',default='http://127.0.0.1:11434')
     a=p.parse_args()
     index=json.loads(a.visual_index.read_text(encoding='utf8'))
+    priority=None
+    if a.novelty_index:
+        novelty=json.loads(a.novelty_index.read_text(encoding='utf8'))
+        if novelty.get('schema')!='artin_visual_novelty_v6' or novelty.get('source_video_sha256')!=index.get('source_video_sha256'):
+            raise ValueError('Novelty priority belongs to another video')
+        priority={r['frame_id'] for r in novelty['rows'] if r.get('selected_for_priority_review')}
     report=scan_local_visual(a.visual_root,index,a.model,max_frames=a.max_frames,
-                             endpoint=a.endpoint)
+                             endpoint=a.endpoint,priority_frame_ids=priority)
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps({'status':'UNVERIFIED_IMAGE_TEXT_CANDIDATES',
