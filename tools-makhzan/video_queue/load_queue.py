@@ -13,6 +13,8 @@ from pathlib import Path
 import re
 from urllib.parse import urlsplit
 
+from magazines import enumerate_magazines
+
 ID=re.compile(r"video-q-([0-9]{4})-[a-z0-9-]{4,64}")
 SHARE=re.compile(r"/p/[A-Za-z0-9_-]{3,80}/?")
 
@@ -66,7 +68,9 @@ def main():
     p.add_argument("--root",type=Path,default=Path("tools-makhzan/video_queue"))
     p.add_argument("--github-output",type=Path)
     args=p.parse_args()
-    items=enumerate_queue(args.root)
+    # New named-magazine queue is the canonical path; keep the old flat queue
+    # validator available for migration tests, but never merge arbitrary films.
+    items=enumerate_magazines(args.root)
     matrix={"include":items}
     if args.github_output:
         with args.github_output.open("a",encoding="utf8") as out:
@@ -76,6 +80,8 @@ def main():
         "pending":len(items),"queue_ids":[x["queue_id"] for x in items],
         "source_content_claims":"NONE",
         "independent_source_sha_required":True,
-        "sequential_in_full_movie_order":True},ensure_ascii=False),flush=True)
+        "sequential_in_full_movie_order":True,
+        "magazines":sorted(set(x["magazine_id"] for x in items)),
+        "no_cross_magazine_evidence_links":True},ensure_ascii=False),flush=True)
 
 if __name__=="__main__":main()
