@@ -16,7 +16,7 @@ def example(ref='اگر خرید می‌کنیم',pred=None,channel='chat',at=30
 class ReferenceTests(unittest.TestCase):
     def test_persian_arabic_spelling_normalization(self):
         self.assertEqual(normal('عربي ك و ي  '), 'عربی ک و ی')
-        self.assertEqual(normal('سلام\\u200cعليكم'.replace('\\\\u200c','\u200c')),
+        self.assertEqual(normal('سلام‌عليكم'), 'سلام علیکم')
                          'سلام علیکم')
 
     def test_early_three_samples_never_certify_full_class(self):
