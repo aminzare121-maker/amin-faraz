@@ -164,5 +164,29 @@ class M15PaperShadowTests(unittest.TestCase):
         self.assertEqual(json.loads(raw.decode('utf8'))['text'], 'مدرس')
 
 
+    def test_strict_teacher_audit_blocks_profitable_synthetic_fill(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        r = replay(self.csv,self.trace,self.summary,self.specs,'100','0.01','1',
+                   strict_teacher_audit=True)
+        self.assertEqual(r['raw_eligible_decisions'],1)
+        self.assertEqual(r['eligible_decisions'],0)
+        self.assertEqual(r['completed_paper_trades'],0)
+        self.assertIsNone(r['paper_net_usd_closed_only'])
+        self.assertEqual(r['trades'][0]['state'],'REVIEW')
+        self.assertEqual(r['trades'][0]['reason'],'RAW_TRACE_PROVENANCE_FIELDS_MISSING')
+        self.assertEqual(r['teacher_gate_summary']['reviewed_candidates'],1)
+        self.assertEqual(r['orders_sent'],0)
+        self.assertFalse(r['teacher_method_verified'])
+
+    def test_strict_teacher_audit_does_not_mislabel_valid_specs_as_orphan(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        r = replay(self.csv,self.trace,self.summary,self.specs,'100','0.01','1',
+                   strict_teacher_audit=True)
+        self.assertEqual(r['orphan_specs'],[])
+        self.assertEqual(r['outcomes_by_state'],{'REVIEW':1})
+        self.assertEqual(r['blockers']['RAW_TRACE_PROVENANCE_FIELDS_MISSING'],1)
+
+
+
 if __name__=='__main__':
     unittest.main()

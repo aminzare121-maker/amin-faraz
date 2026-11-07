@@ -15,6 +15,7 @@ import tempfile
 from collections import Counter
 from decimal import Decimal
 from pathlib import Path
+from teacher_evidence_gate import audit_candidate, inventory, summarize_audits
 
 INTERVAL = 900
 PLACEHOLDER_MARKERS = (
@@ -85,8 +86,8 @@ def read_bars(path):
     return bars, hashlib.sha256(data).hexdigest()
 
 
-def read_eligible(path, bars):
-    out, counters = [], Counter()
+def read_eligible(path, bars, strict_teacher_audit=False):
+    out, audits, counters = [], [], Counter()
     n = -1
     with gzip.open(path, 'rt', encoding='utf8') as f:
         for n, line in enumerate(f):
@@ -97,12 +98,15 @@ def read_eligible(path, bars):
             for d in event['decisions']:
                 counters[d['status']] += 1
                 if d['status'] == 'ELIGIBLE':
-                    out.append((at, d['side'], d['rule_id']))
+                    if strict_teacher_audit:
+                        audits.append(audit_candidate(d, at))
+                    else:
+                        out.append((at, d['side'], d['rule_id']))
     if n + 1 != len(bars):
         raise ValueError('raw decision trace does not cover all CSV bars')
     if len(out) != len(set(out)):
         raise ValueError('duplicate eligible decision keys')
-    return out, dict(counters)
+    return out, dict(counters), audits
 
 
 def load_specs(path):
@@ -169,16 +173,20 @@ def evaluate_trade(bars, idx, key, spec, multiplier, lot, fee):
                 reason='NO_MARK_TO_MARKET_PNL_CLAIMED')
 
 
-def replay(csv_path,trace_path,summary_path,spec_path,contract_value,lot_size,roundtrip_fee):
+def replay(csv_path,trace_path,summary_path,spec_path,contract_value,lot_size,roundtrip_fee,
+           strict_teacher_audit=False):
     multiplier,lot,fee=(dec(contract_value,True),dec(lot_size,True),dec(roundtrip_fee))
     bars,csv_digest=read_bars(csv_path)
     summary=json.loads(Path(summary_path).read_text(encoding='utf-8-sig'))
     if summary.get('csv_sha256')!=csv_digest or summary.get('interval_seconds')!=INTERVAL or summary.get('observed_bars')!=len(bars):
         raise ValueError('raw diagnostic summary does not match this M15 CSV')
-    eligible,decision_counts=read_eligible(trace_path,bars)
+    eligible,decision_counts,teacher_audits=read_eligible(
+        trace_path,bars,strict_teacher_audit=strict_teacher_audit)
     specs=load_specs(spec_path)
     by_start={b['t']:i for i,b in enumerate(bars)}
-    outcomes=[]
+    # Strict mode reports every raw ELIGIBLE event as REVIEW with its exact
+    # missing proof. It deliberately never converts a citation string to trade permission.
+    outcomes=list(teacher_audits)
     for at,side,rule in eligible:
         key=at,side,rule
         s=specs.get(key)
@@ -193,21 +201,28 @@ def replay(csv_path,trace_path,summary_path,spec_path,contract_value,lot_size,ro
         outcome.setdefault('teacher_rule_verified', False)
         outcome.setdefault('source_evidence_status', 'DECLARED_UNVERIFIED' if
                            outcome.get('declared_source_refs') else 'NOT_EVALUATED')
-    eligible_set=set(eligible)
+    eligible_set=set(eligible) | {
+        (a['signal_at'],a['side'],a['rule_id']) for a in teacher_audits}
     orphan_specs=[list(k) for k in specs if k not in eligible_set]
     closed=[o for o in outcomes if o['state']=='CLOSED_PAPER']
     net=sum((Decimal(o['net_usd']) for o in closed),Decimal(0))
     by_state=Counter(o['state'] for o in outcomes)
-    blockers=Counter(o.get('reason') for o in outcomes if o['state'] in ('BLOCKED','UNRESOLVED'))
-    return dict(mode='OFFLINE_ASSUMPTION_NOT_TEACHER_COMPLETE_BACKTEST',
+    blockers=Counter(o.get('reason') for o in outcomes if o['state'] in ('BLOCKED','UNRESOLVED','REVIEW'))
+    return dict(mode=('TEACHER_EVIDENCE_GATE_DIAGNOSTIC_NO_EXECUTION' if strict_teacher_audit
+                      else 'OFFLINE_ASSUMPTION_NOT_TEACHER_COMPLETE_BACKTEST'),
                 csv_sha256=csv_digest, M15_bars=len(bars),
                 coverage_at_least_28_calendar_days=(bars[-1]['t']-bars[0]['t']+INTERVAL>=28*86400),
                 first_bar_at=bars[0]['t'],last_bar_at=bars[-1]['t'],
-                eligible_decisions=len(eligible), all_decision_statuses=decision_counts,
+                eligible_decisions=len(eligible),
+                raw_eligible_decisions=decision_counts.get('ELIGIBLE',0),
+                strict_teacher_audit=bool(strict_teacher_audit),
+                teacher_gate_summary=summarize_audits(teacher_audits),
+                classroom_source_inventory=inventory() if strict_teacher_audit else None,
+                all_decision_statuses=decision_counts,
                 outcomes_by_state=dict(by_state), blockers=dict(blockers),
                 orphan_specs=orphan_specs,
                 completed_paper_trades=len(closed),
-                paper_net_usd_closed_only=str(net),
+                paper_net_usd_closed_only=(None if strict_teacher_audit else str(net)),
                 ambiguous_stop_priority_count=sum(bool(o.get('ambiguous_same_bar')) for o in closed),
                 assumptions=['next_consecutive_M15_open_paper_fill',
                              'OHLC_same_bar_stop_before_target_if_order_unknown',
@@ -233,8 +248,11 @@ def main():
     p.add_argument('--lot',required=True)
     p.add_argument('--roundtrip-fee-per-lot',required=True)
     p.add_argument('--out',required=True,type=Path)
+    p.add_argument('--strict-teacher-audit',action='store_true',
+                   help='Do not paper-fill raw signals without independently reviewed lesson evidence')
     a=p.parse_args()
-    data=replay(a.csv,a.trace,a.summary,a.specs,a.contract_value_per_lot,a.lot,a.roundtrip_fee_per_lot)
+    data=replay(a.csv,a.trace,a.summary,a.specs,a.contract_value_per_lot,a.lot,a.roundtrip_fee_per_lot,
+                strict_teacher_audit=a.strict_teacher_audit)
     validate_output_path(a.out, (a.csv, a.trace, a.summary, a.specs))
     write_json_atomic(a.out, data)
     print(json.dumps({k:data[k] for k in ('M15_bars','eligible_decisions','completed_paper_trades','paper_net_usd_closed_only','blockers')},ensure_ascii=False))

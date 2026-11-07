@@ -1,0 +1,58 @@
+{
+  "schema": "artin_teacher_case_v1",
+  "scope": "REVIEW_TEMPLATE_NOT_EVIDENCE",
+  "status": "MISSING_INDEPENDENT_AUDIO_VIDEO_AND_DIALOGUE_CHECK",
+  "rule_id": "STOPPUNCH_DOJI_AHEAD",
+  "source_references": [
+    {
+      "session": 21,
+      "start_seconds": 3984.88,
+      "end_seconds": 4068.98,
+      "origin": "PREVIOUS_SOURCE_INDEX_NOT_RELISTENED"
+    }
+  ],
+  "media": {
+    "audio_sha256": null,
+    "video_sha256": null,
+    "transcript_sha256": null,
+    "offset_verified": false
+  },
+  "dialogue": {
+    "speaker_attribution_verified": false,
+    "student_questions": [],
+    "teacher_answers": [],
+    "teacher_corrections": [],
+    "superseded_rule": null,
+    "latest_rule": null
+  },
+  "visual": {
+    "frames_reviewed": [],
+    "candle_conditions_confirmed": false
+  },
+  "examples": {
+    "teacher_positive": {
+      "source_frame": null,
+      "raw_candles": null,
+      "expected": "UNVERIFIED"
+    },
+    "teacher_negative": {
+      "source_frame": null,
+      "raw_candles": null,
+      "expected": "UNVERIFIED"
+    }
+  },
+  "code": {
+    "rule_id": "STOPPUNCH_DOJI_AHEAD",
+    "module": "entry_engine.py",
+    "synthetic_tests": [
+      "test_entry_review.py::test_doji_ahead_count_not_money_and_unextracted_day"
+    ],
+    "automated_raw_feature_path_verified": false
+  },
+  "approval": {
+    "human_reviewer": null,
+    "reviewed_at": null,
+    "independent_signoff": false
+  },
+  "can_claim_teacher_method": false
+}

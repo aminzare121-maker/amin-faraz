@@ -77,6 +77,14 @@ def demo():
         assert result['teacher_method_verified'] is False
         assert result['teacher_verified_trade_count'] == 0
         assert result['strategy_pnl_verified'] is False
+        strict_result = replay(csv_file, trace, summary, specs,
+                               contract_value='100', lot_size='0.01',
+                               roundtrip_fee='6', strict_teacher_audit=True)
+        assert strict_result['raw_eligible_decisions'] == 3
+        assert strict_result['eligible_decisions'] == 0
+        assert strict_result['completed_paper_trades'] == 0
+        assert strict_result['paper_net_usd_closed_only'] is None
+        assert strict_result['outcomes_by_state'] == {'REVIEW': 3}
         return {
             'experiment': 'SYNTHETIC_XAUUSD_LIKE_SHADOW_DEMO_NOT_MARKET_BACKTEST',
             'data_source': 'MADE_UP_OFFLINE_BARS_AND_FORCED_ELIGIBLE_SIGNALS',
@@ -92,6 +100,14 @@ def demo():
             'teacher_method_verified': result['teacher_method_verified'],
             'orders_sent': result['orders_sent'],
             'trades': result['trades'],
+            'teacher_faithful_guard': {
+                'raw_eligible_decisions': strict_result['raw_eligible_decisions'],
+                'reviewed_as_unverified': strict_result['teacher_gate_summary']['reviewed_candidates'],
+                'trade_count': strict_result['completed_paper_trades'],
+                'net_usd': strict_result['paper_net_usd_closed_only'],
+                'reasons': strict_result['teacher_gate_summary']['reasons'],
+                'media_verified': False,
+            }
         }
 
 
