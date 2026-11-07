@@ -59,6 +59,7 @@ class RealAVReviewTests(unittest.TestCase):
         self.assertEqual(r['speech_lines'][0]['text'],'فروش')
         self.assertEqual(r['cross_boundary_conflicts'],1)
         self.assertEqual(r['cross_boundary_asr_review'][0]['text_candidate'],'خرید')
+        self.assertEqual(r['cross_boundary_high_priority_trade_mentions'],1)
         self.assertEqual(r['cross_boundary_asr_review'][0]['review_status'],
                          'CONFLICTING_ASR_TEXT_REQUIRES_AUDIO_REVIEW')
         self.assertEqual(r['rules_executable'],0)
@@ -69,6 +70,7 @@ class RealAVReviewTests(unittest.TestCase):
         b=sh(2,[seg(300.1,302.1,'خرید')])
         r=review_real_asr(m,[a,b])
         self.assertEqual(r['cross_boundary_conflicts'],0)
+        self.assertEqual(r['cross_boundary_high_priority_trade_mentions'],0)
         self.assertEqual(r['cross_boundary_asr_review'][0]['review_status'],
                          'AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION')
         self.assertFalse(r['cross_boundary_asr_review'][0]['teacher_rule_verified'])
