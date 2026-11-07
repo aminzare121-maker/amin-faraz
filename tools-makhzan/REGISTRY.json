@@ -193,13 +193,25 @@
           "Hub runner now restores source-keyed private ASR checkpoint artifacts from earlier runs, and uploads finished chunks even when a later stage fails.",
           "Runner no longer automatically restarts expensive source processing when editing workflow code; request-file push is the only trigger."
         ],
-        "verification": "COMMITS_PRESENT; NEW CROSS-RUN-RESUME UNTESTED IN LIVE WORKFLOW; REGRESSION CI CONCLUSION NOT YET CONFIRMED",
+        "verification": "GITHUB CI VERIFIED SUCCESS (unified pipeline regression and source-guard); actual 80-minute source pipeline still IN_PROGRESS; cross-run artifact resume UNTESTED; teacher semantics UNVERIFIED",
         "limitations": [
           "Existing full 80-minute run 42405663580 began before workflow fix and cannot gain checkpoint persistence retroactively.",
           "Artifact upload on a GitHub job timeout or cancellation is not guaranteed.",
           "Private artifacts expire in 30 days and are not permanent content storage.",
           "Semantic Persian ASR, image/chart understanding, speaker identity, matched questions/answers, and strategy rules have not passed independent reference testing."
-        ]
+        ],
+        "regression_ci": {
+          "unified_pipeline": {
+            "run": 42407450494,
+            "conclusion": "success",
+            "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42407450494"
+          },
+          "source_guard": {
+            "run": 42407455887,
+            "conclusion": "success",
+            "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42407455887"
+          }
+        }
       }
     }
   ]
