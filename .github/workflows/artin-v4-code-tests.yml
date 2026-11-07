@@ -1,0 +1,27 @@
+name: Artin V4 - fast pipeline and verified-rule safety tests
+on:
+  push:
+    branches:
+      - review/artin-fast-av-evidence-v4-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/**'
+      - '.github/workflows/artin-v4-code-tests.yml'
+  pull_request:
+    branches:
+      - review/artin-uupload-access-check-20261107
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure FFmpeg and FFprobe
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+      - name: Run all synthetic safety regression tests
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest discover -p 'test_*.py' -v
