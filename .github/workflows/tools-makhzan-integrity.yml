@@ -1,0 +1,20 @@
+name: Makhzan tools registry integrity check
+on:
+  push:
+    branches:
+      - tools-makhzan-hub
+    paths:
+      - 'tools-makhzan/**'
+      - '.github/workflows/tools-makhzan-integrity.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate persistent tool registry and truthful status
+        run: python3 tools-makhzan/validate_registry.py
