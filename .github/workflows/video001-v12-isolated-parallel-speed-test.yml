@@ -1,0 +1,176 @@
+name: VIDEO-001 V12 isolated 8x speed benchmark — original evidence untouched
+on:
+  push:
+    branches:
+      - experiment/video001-v12-speed-only-20261108
+    paths:
+      - '.github/workflows/video001-v12-isolated-parallel-speed-test.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: video001-v12-isolated-benchmark-only
+  cancel-in-progress: false
+env:
+  EXPECTED_SOURCE_SHA: b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff
+jobs:
+  eight-way-original-asr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 58
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        shard: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install unchanged original Whisper ASR engine
+        run: |
+          command -v ffmpeg || sudo apt-get update && sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'numpy>=1.24,<3' 'faster-whisper>=1.1,<2'
+      - name: Test 8-way original 80-minute speech; SHA-verified complete global chunks
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_parallel_asr_worker_v5.py \
+            --out /tmp/video001_asr_shard \
+            --index \${{ matrix.shard }} --partitions 8 --model large-v3-turbo \
+            --expected-sha256 "$EXPECTED_SOURCE_SHA"
+      - name: Retain PRIVATE source-hashed ASR report only, not the MP4
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: speed-V12-ASR-8-\${{ matrix.shard }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: /tmp/video001_asr_shard/asr_evidence/**
+  eight-way-original-ocr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 39
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        shard: [0,1,2,3,4,5,6,7]
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install unchanged original Persian OCR model
+        run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Reuse EXACT source-verified 276 high-res images from original film
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: \${{ github.token }}
+          path: /tmp/video001_source_frames
+      - name: Test 8-way exact coverage with original source image hashes
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_full_chat_ocr_v7.py \
+            --visual-root /tmp/video001_source_frames \
+            --visual-index /tmp/video001_source_frames/chat_selected_index.json \
+            --partition-index \${{ matrix.shard }} --partition-count 8 \
+            --out /tmp/video001_ocr_shard
+      - name: Retain PRIVATE OCR evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: speed-V12-OCR-8-\${{ matrix.shard }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            /tmp/video001_ocr_shard/full_chat_ocr_candidates_PRIVATE.json
+            /tmp/video001_ocr_shard/full_chat_ocr_summary_safe.json
+  verify-original-coverage-and-benchmark:
+    needs: [eight-way-original-asr,eight-way-original-ocr]
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Collect ALL eight ASR workers without duplicating private raw video
+        uses: actions/download-artifact@v4
+        with:
+          pattern: speed-V12-ASR-8-*
+          merge-multiple: true
+          path: /tmp/video001_all_asr
+      - name: Collect ALL eight independent OCR workers
+        uses: actions/download-artifact@v4
+        with:
+          pattern: speed-V12-OCR-8-*
+          merge-multiple: false
+          path: /tmp/video001_all_ocr
+      - name: Retrieve original 276 source image index and verify original identity
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: \${{ github.token }}
+          path: /tmp/video001_source_frames
+      - name: Reject missing/duplicated/mislabeled original ASR or OCR frames
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_parallel_asr_merge_v5.py --input /tmp/video001_all_asr --out /tmp/video001_merged_asr
+          python3 -u artin_highres_ocr_merge_v8.py \
+            --selected-index /tmp/video001_source_frames/chat_selected_index.json \
+            --parts-root /tmp/video001_all_ocr --partitions 8 --out /tmp/video001_merged_ocr
+      - name: Rejoin source-linked voice and image, preserve every original observation
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from artin_ocr_asr_join_v8 import join_original_chat_qa
+          from artin_question_dedupe_v11 import clustered_review
+          read=lambda p:json.loads(Path(p).read_text(encoding='utf8'))
+          image=read('/tmp/video001_source_frames/chat_selected_index.json')
+          ocr=read('/tmp/video001_merged_ocr/merged_source_chat_ocr_PRIVATE.json')
+          asr=read('/tmp/video001_merged_asr/complete_unverified_qa_evidence.json')
+          sha=image['source_video_sha256']
+          assert sha=='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff'
+          assert sha==ocr['source_video_sha256']==asr['source_video_sha256']
+          assert asr['parts_with_asr']==17 and asr['parts_missing_asr']==0
+          assert len(image['rows'])==len(ocr['results'])==276
+          assert ocr['complete'] is True and ocr['frames_attempted']==276
+          assert not any(x['state']=='OCR_FAILED_REVIEW_REQUIRED' for x in ocr['results'])
+          summary,private=join_original_chat_qa(image,ocr,asr)
+          clusters=clustered_review(private)
+          assert clusters['original_review_groups']==summary['provisional_distinct_question_groups']
+          assert sum(x['member_groups_count'] for x in clusters['review_clusters'])==len(private['question_groups'])
+          assert clusters['original_groups_not_lost']
+          assert summary['verified_teacher_answers']==clusters['verified_teacher_answers']==0
+          assert clusters['verified_trading_rules']==0
+          root=Path('/tmp/video001_speed_result');root.mkdir(exist_ok=True)
+          final={'schema':'VIDEO001_8X_ASR_8X_OCR_FULL_SOURCE_BENCHMARK_V1',
+                 'source_sha256':sha,'global_original_audio_parts':17,
+                 'original_highres_chat_images_checked':276,
+                 'source_speech_utterances':len(asr['speech_lines']),
+                 'source_typed_qa_groups_for_review':len(private['question_groups']),
+                 'source_preservation_verified':True,'processing_mode':'EXPERIMENT_ONLY',
+                 'models_and_beam_settings_unchanged':True,
+                 'teacher_semantic_accuracy_verified':False,
+                 'original_video_or_registered_V12_modified':False,
+                 'orders_sent':0}
+          (root/'safe_metrics.json').write_text(json.dumps(final,indent=2),encoding='utf8')
+          print('VIDEO001_ISOLATED_FAST_BENCHMARK_PASS='+json.dumps(final))
+          PY
+      - name: Keep source-safe benchmark proof, not source text or images
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-v12-8x8-isolated-safe-benchmark
+          retention-days: 14
+          path: /tmp/video001_speed_result/safe_metrics.json
