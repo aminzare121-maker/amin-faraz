@@ -23,11 +23,8 @@ jobs:
         with:
           ref: tools-makhzan-hub
           persist-credentials: false
-          fetch-depth: 0
-      - name: Read the LATEST canonical queue, not stale triggering commit
-        run: |
-          git fetch --no-tags origin tools-makhzan-hub
-          git reset --hard origin/tools-makhzan-hub
+      # Checkout explicitly follows the latest canonical branch at runner start.
+      # Do not issue a second unauthenticated git fetch with credentials disabled.
       - name: Enumerate only exact user-named magazines from latest branch
         id: queue
         run: |
