@@ -148,8 +148,9 @@ def main():
         status(reg,req,a.out)
     if a.execute_course:
         if action!="course_status":raise ValueError("Only course_status can inspect the course puzzle")
-        from course_stitcher import course_puzzle
+        from course_stitcher import course_puzzle,hydrate_persistent_anchors
         course=json.loads((ROOT/"tools-makhzan"/"courses"/"artin"/"COURSE_REGISTRY.json").read_text(encoding="utf8"))
+        course=hydrate_persistent_anchors(course,ROOT)
         report=course_puzzle(course)
         a.out.mkdir(parents=True,exist_ok=True)
         (a.out/"course_puzzle_status.json").write_text(
@@ -157,6 +158,7 @@ def main():
         print("MAKHZAN_COURSE_TOOL_EXECUTED="+json.dumps({
             "course_id":report["course_id"],
             "registered_source_videos":report["registered_user_submitted_sessions"],
+            "persisted_original_evidence_anchors":report["registered_original_source_evidence"],
             "next_video_status":report["current_status"],
             "cross_session_links":report["linked_cross_session_evidence_count"],
             "rules_ready":report["ready_to_issue_teacher_rules"],
