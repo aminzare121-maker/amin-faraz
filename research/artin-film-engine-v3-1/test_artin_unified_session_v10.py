@@ -115,6 +115,38 @@ class UnifiedPipelineContract(unittest.TestCase):
             self.run_with(false_teacher_answer=True)
         self.assertFalse((self.out/"safe_session_result.json").exists())
 
+    def test_restart_reuses_completed_source_verified_asr_checkpoint(self):
+        first=self.run_with()
+        self.assertEqual(first["global_audio_chunks_asr_completed"],1)
+        self.flags.clear()
+        second=self.run_with()
+        self.assertEqual(second["global_audio_chunks_asr_completed"],1)
+        self.assertNotIn("asr_model",self.flags)
+        self.assertNotIn("read_audio",self.flags)
+        self.assertIn("review_audio",self.flags)
+        self.assertIn("ocr",self.flags)
+
+    def test_corrupt_or_cross_source_checkpoint_is_never_accepted(self):
+        self.run_with()
+        checkpoint=self.out/"private_asr"/"chunk_0001_UNVERIFIED.json"
+        saved=json.loads(checkpoint.read_text(encoding="utf8"))
+        saved["source_audio_sha256"]="f"*64
+        checkpoint.write_text(json.dumps(saved),encoding="utf8")
+        self.flags.clear()
+        with self.assertRaisesRegex(ValueError,"ASR checkpoint provenance"):
+            self.run_with()
+        self.assertNotIn("asr_model",self.flags)
+        self.assertNotIn("read_audio",self.flags)
+
+    def test_wrong_asr_model_checkpoint_requires_reprocessing_or_refusal(self):
+        self.run_with()
+        checkpoint=self.out/"private_asr"/"chunk_0001_UNVERIFIED.json"
+        saved=json.loads(checkpoint.read_text(encoding="utf8"))
+        saved["model"]="incompatible-old-model"
+        checkpoint.write_text(json.dumps(saved),encoding="utf8")
+        with self.assertRaisesRegex(ValueError,"ASR checkpoint provenance"):
+            self.run_with()
+
     def test_no_source_video_no_session(self):
         self.video.unlink()
         with self.assertRaisesRegex(ValueError,"Source video not present"):
