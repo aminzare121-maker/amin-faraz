@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
       - name: Install official PaddleOCR Persian OCR on CPU
         run: |
-          python3 -m pip install --disable-pip-version-check 'paddlepaddle>=3.2,<4' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+          python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
       - name: Load a private source-hashed classroom screenshot from verified video
         uses: actions/download-artifact@v4
         with:
