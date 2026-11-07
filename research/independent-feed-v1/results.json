@@ -1,0 +1,108 @@
+{
+  "scope": "SYNTHETIC_ONLY",
+  "tests": 35,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "example": {
+    "status": "SYNTHETIC_PASS",
+    "real_data_used": false,
+    "trade_allowed": false,
+    "fit_allowed": false,
+    "bars": [
+      {
+        "open_ms": 1793491200000,
+        "close_ms": 1793492100000,
+        "available_ms": 1793492100000,
+        "source": "SYNTHETIC_DUKASCOPY_SHAPED",
+        "instrument": "FIXTURE_XAU/USD",
+        "canonical": "XAUUSD",
+        "timezone": "UTC",
+        "dst_policy": "NO_DST_UTC",
+        "session": "SYNTHETIC_OPEN",
+        "raw_sha256": "0807c89716abd016c2c01dce5102790ab60f9e62f842c37c72f1256c4a7c9a6d",
+        "licence_evidence": "SYNTHETIC_GENERATOR_NOT_MARKET_DATA",
+        "provenance": "fixture:v1",
+        "spread": {
+          "value": null,
+          "status": "UNKNOWN",
+          "reason": "OHLC_EXTREMA_NOT_SYNCHRONIZED_QUOTES"
+        },
+        "quality_flags": [
+          "SYNTHETIC_ONLY",
+          "NO_INTRABAR_PATH",
+          "SPREAD_UNKNOWN"
+        ],
+        "bid": {
+          "open": "100",
+          "high": "116",
+          "low": "99",
+          "close": "101"
+        },
+        "ask": {
+          "open": "101",
+          "high": "117",
+          "low": "100",
+          "close": "102"
+        }
+      }
+    ],
+    "quality_flags": [],
+    "coverage": {
+      "expected_open_minutes": 15,
+      "observed_minutes": 15,
+      "closed_minutes": 0,
+      "missing_minutes": 0,
+      "ratio": 1.0,
+      "calendar": "EXPLICIT_SYNTHETIC_ONLY"
+    },
+    "gate": {
+      "missing_or_unverified": [
+        "licence",
+        "provenance",
+        "session_calendar",
+        "timezone",
+        "dst_policy",
+        "commission",
+        "tick_size",
+        "tick_value",
+        "swap",
+        "slippage",
+        "volume_grid",
+        "account_currency"
+      ],
+      "real_data_authorized": false,
+      "fit_allowed": false,
+      "trade_allowed": false,
+      "status": "BLOCKED_CURRENT_SCOPE"
+    },
+    "raw_sha256_before": "0807c89716abd016c2c01dce5102790ab60f9e62f842c37c72f1256c4a7c9a6d",
+    "raw_sha256_after": "0807c89716abd016c2c01dce5102790ab60f9e62f842c37c72f1256c4a7c9a6d",
+    "metadata": {
+      "scope": "SYNTHETIC_ONLY",
+      "origin": "IN_MEMORY_FIXTURE",
+      "sha256": "0807c89716abd016c2c01dce5102790ab60f9e62f842c37c72f1256c4a7c9a6d",
+      "source": "SYNTHETIC_DUKASCOPY_SHAPED",
+      "instrument": "FIXTURE_XAU/USD",
+      "canonical": "XAUUSD",
+      "timezone": "UTC",
+      "dst_policy": "NO_DST_UTC",
+      "licence_evidence": "SYNTHETIC_GENERATOR_NOT_MARKET_DATA",
+      "provenance": "fixture:v1"
+    }
+  },
+  "not_executed": [
+    "REAL_PRICE_DOWNLOAD",
+    "TRAIN",
+    "BACKTEST",
+    "MT5",
+    "AWS",
+    "TRADE"
+  ],
+  "source_sha256": {
+    "adapter.py": "94414c98f65780483b0811949bc89c46eb05cf3526ecfa033b6173fa52eb37a6",
+    "run_checks.py": "322bec83db978e4cd9ac5c64c667990630b48de64a5e33c4aa91f7d3364fb0a7",
+    "test_adapter.py": "33facd1fa5e0e14be0b3f2eb64c2075c9d5247a7b9319904a5e65862916ffc12",
+    "vendor/feed_contract.py": "03ed5082a0af4bd11d2ddb4643c1dd75fc8ccaa22059f98b3989ec0c8ffe79ff"
+  }
+}
