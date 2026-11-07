@@ -54,7 +54,8 @@
         "Extract source-linked audio and video frames faster without re-encoding whole video.",
         "Run ASR over all 17 video parts and source-verified merge.",
         "Extract timestamped board and typed-chat cropped images, retain source frames.",
-        "Reject duplicate/missing/mismatched parts and block unverified rules."
+        "Reject duplicate/missing/mismatched parts and block unverified rules.",
+        "Reproducible source-preserving Persian OCR question dedup on real 59 groups -> 28 review clusters, with safety-word veto, Github Actions success 42409068623; this does NOT certify question identities or answers."
       ],
       "outstanding": [
         "An actual offline evidence reviewer for Android/Windows is delivered with 59 unverified question groups, 35 unverified rule fragments and 192 original source-hash screenshots. It is NOT an autonomous verified teacher rule engine.",
@@ -112,7 +113,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "Check run 42405663580 to terminal conclusion and inspect its actual full-source output. Independently run and verify new checkpoint CI and actual cross-run restore on real media; no success claim before evidence. Build human-corrected Persian speech/chart/chat reference set; measure CER/WER and critical negation/action errors; validate speaker-role, Q&A, cross-lesson linking, and fail-closed executable rule gate. Do not reset the known source film as a new input.",
+      "next_action": "Do not restart original source automatically. Check final result of 42405663580. V11 real question dedup SUCCESS on 42393181420 private output and unified E2E contract CI green; now execute independent speech+OCR gold-reference semantic accuracy and speaker-role QA benchmark on original media, with chart/teacher corrections before any verified strategy rule. Cross-run ASR resume still awaits actual recovery test.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -212,6 +213,31 @@
             "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42407455887"
           }
         }
+      },
+      "v11_real_source_reliability": {
+        "date": "2026-11-07",
+        "code_ref": "review/artin-fidelity-audit-v7-20261107",
+        "code_path": "research/artin-film-engine-v3-1/artin_question_dedupe_v11.py",
+        "integrated_entrypoint": "research/artin-film-engine-v3-1/artin_unified_session_v10.py",
+        "source_dataset": "PRIVATE Artifact artin-v8-real-chat-speech-QA-REVIEW-ONLY, original session source SHA b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+        "original_question_groups": 59,
+        "conservative_question_review_clusters": 28,
+        "source_groups_lost": 0,
+        "source_preservation_guarantee": "All original group members and frame/audio candidates remain reviewable in V11 private output; clustering does not certify either question or answer",
+        "regression_tests": 7,
+        "local_regression": "SUCCESS",
+        "github_real_source_workflow": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42409068623",
+        "github_real_source_conclusion": "success",
+        "github_unified_pipeline_workflow": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42409032218",
+        "github_unified_pipeline_conclusion": "success",
+        "github_source_guard_workflow": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42409037122",
+        "github_source_guard_conclusion": "success",
+        "live_original_80m_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42405663580",
+        "live_original_80m_status_last_checked": "in_progress — started before V11 integration, do not treat as V11 full run",
+        "private_source_reviews_expire": true,
+        "independently_measured_asr_ocr_and_qa_accuracy": false,
+        "verified_teacher_answers": 0,
+        "approved_teacher_trading_rules": 0
       }
     }
   ]
