@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import time
 
 from artin_film_pipeline import ollama_json
 from artin_student_chat_review_v6 import validate_visual_model_candidates
@@ -29,18 +30,21 @@ An image remains UNVERIFIED even if the text looks readable.
 
 
 def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://127.0.0.1:11434',
-                      call_model=None,priority_frame_ids=None):
+                      call_model=None,priority_frame_ids=None,channels=('chat','board')):
     if not isinstance(model,str) or not model.strip():
         raise ValueError('Vision model name required')
     if type(max_frames) is not int or not 1<=max_frames<=5000:
         raise ValueError('Invalid maximum frame count')
     if visual_index.get('schema')!='artin_classroom_visual_v6':
         raise ValueError('Original source-indexed images required')
+    if not isinstance(channels,(list,tuple)) or not channels or any(ch not in ('chat','board') for ch in channels) or len(channels)!=len(set(channels)):
+        raise ValueError('Only distinct chat/board channels permitted')
     if call_model is None:
         call_model=ollama_json
     root=Path(root).resolve()
     proposals=[]
     failed=[]
+    seconds_per_view=[]
     if priority_frame_ids is not None:
         selected=set(priority_frame_ids)
         all_known={x['frame_id'] for x in visual_index['rows']}
@@ -50,7 +54,7 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
     else:
         chosen=visual_index['rows'][:max_frames]
     for row in chosen:
-        for channel in ('chat','board'):
+        for channel in channels:
             filename=(root/row[channel]['path']).resolve()
             if not filename.is_relative_to(root) or not filename.is_file():
                 raise ValueError('Original image crop is missing or unsafe')
@@ -63,8 +67,11 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
                 'task':'Read only legible visible text from this crop. Never reconstruct missing letters.',
                 'do_not_infer_teacher_rules':True},ensure_ascii=False)
             try:
+                started_at=time.monotonic()
                 raw=call_model(model,prompt,frames=[str(filename)],
                     endpoint=endpoint,system_prompt=SYSTEM_PROMPT)
+                seconds_per_view.append({'frame_id':row['frame_id'],'channel':channel,
+                    'inference_seconds':round(time.monotonic()-started_at,2)})
                 if not isinstance(raw,dict):
                     raise ValueError('Invalid vision model JSON')
                 txt=raw.get('visible_text_candidate')
@@ -74,22 +81,28 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
                     failed.append({'frame_id':row['frame_id'],
                         'channel':channel,'status':'UNREADABLE_OR_NO_TEXT'})
                     continue
+                legibility=raw.get('legibility','UNKNOWN')
+                if not isinstance(legibility,str) or legibility.upper() not in ('HIGH','MEDIUM','LOW','UNKNOWN'):
+                    failed.append({'frame_id':row['frame_id'],'channel':channel,
+                        'status':'NONSTANDARD_MODEL_LEGIBILITY_CONVERTED_TO_UNKNOWN'})
+                    legibility='UNKNOWN'
                 proposals.append({'frame_id':row['frame_id'],'channel':channel,
                     'frame_sha256':row[channel]['sha256'],
                     'visible_text_candidate':txt,
-                    'legibility':raw.get('legibility','UNKNOWN')})
+                    'legibility':legibility.upper()})
             except Exception as exc:
                 # Explicit failure; do NOT fabricate text or silently continue
                 # as though the screenshot had been analyzed.
                 failed.append({'frame_id':row['frame_id'],'channel':channel,
                     'status':'MODEL_FAILED','error_type':type(exc).__name__})
-    if len(failed)==len(chosen)*2:
+    if not proposals:
         raise RuntimeError('Vision model yielded no usable text in selected source frames')
     valid=validate_visual_model_candidates(visual_index,proposals)
     return {'schema':'artin_visual_ai_candidate_scan_v6',
             'source_video_sha256':visual_index['source_video_sha256'],
             'model':model,'frames_requested':len(chosen),
-            'views_attempted':len(chosen)*2,
+            'views_attempted':len(chosen)*len(channels),
+            'channels':list(channels),'inference_per_view':seconds_per_view,
             'provisional_text_observations':valid['candidate_count'],
             'candidates':valid['candidates'],
             'missing_or_unreadable':failed,
@@ -107,6 +120,7 @@ def main():
     p.add_argument('--max-frames',type=int,default=5)
     p.add_argument('--novelty-index',type=Path)
     p.add_argument('--frame-id',type=str)
+    p.add_argument('--channels',default='chat,board')
     p.add_argument('--endpoint',default='http://127.0.0.1:11434')
     a=p.parse_args()
     index=json.loads(a.visual_index.read_text(encoding='utf8'))
@@ -120,8 +134,10 @@ def main():
         known={r['frame_id'] for r in index['rows']}
         if a.frame_id not in known:raise ValueError('Unknown source frame ID')
         priority={a.frame_id}
+    channels=tuple(x.strip() for x in a.channels.split(','))
     report=scan_local_visual(a.visual_root,index,a.model,max_frames=a.max_frames,
-                             endpoint=a.endpoint,priority_frame_ids=priority)
+                             endpoint=a.endpoint,priority_frame_ids=priority,
+                             channels=channels)
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps({'status':'UNVERIFIED_IMAGE_TEXT_CANDIDATES',
