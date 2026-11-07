@@ -1,0 +1,199 @@
+{
+  "domain": "TEACHER_DRAWING_GEOMETRY_ONLY",
+  "clock_basis": "EVIDENCE_BATCH_ORDER_NOT_MARKET_EPOCH",
+  "feature_schema": [
+    "drawing_body_range_fraction",
+    "drawing_close_overshoot_body_fraction"
+  ],
+  "samples": [
+    {
+      "id": "NORMAL_SELL_FULLBODY",
+      "label": "S21_STRONG_BRANCH_DRAWING",
+      "group": "S21_RED_FULLBODY_OBJECT",
+      "known_at": 1,
+      "source": "S21:2390:NORMAL_SELL_FULLBODY:FRAME_SHA256:53373cc64e097e2667c57aaece4cad2e9cde480bb49d64054a59803e06d0df28",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.878048780487804878048780487804878048780487804878048780487804",
+          "high": "0.974789915966386554621848739495798319327731092436974789915967"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.196428571428571428571428571428571428571428571428571428571428",
+          "high": "0.267857142857142857142857142857142857142857142857142857142858"
+        }
+      },
+      "source_frame_second": 2390,
+      "manual_y_bounds": {
+        "body_top": 409,
+        "body_bottom": 521,
+        "wick_top": 402,
+        "wick_bottom": 521,
+        "break_line": 495
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    },
+    {
+      "id": "NORMAL_BUY_FULLBODY",
+      "label": "S21_STRONG_BRANCH_DRAWING",
+      "group": "S21_GREEN_FULLBODY_OBJECT",
+      "known_at": 1,
+      "source": "S21:2460:NORMAL_BUY_FULLBODY:FRAME_SHA256:641e3ea319b24d4bbfd03093c23a4367bf7bffc743ec2a1724635ac555801bdf",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.931034482758620689655172413793103448275862068965517241379310",
+          "high": "1"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.133928571428571428571428571428571428571428571428571428571428",
+          "high": "0.205357142857142857142857142857142857142857142857142857142858"
+        }
+      },
+      "source_frame_second": 2460,
+      "manual_y_bounds": {
+        "body_top": 476,
+        "body_bottom": 588,
+        "wick_top": 476,
+        "wick_bottom": 588,
+        "break_line": 495
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    },
+    {
+      "id": "NORMAL_SELL_MARUBOZU",
+      "label": "S21_STRONG_BRANCH_DRAWING",
+      "group": "S21_RED_MARUBOZU_OBJECT",
+      "known_at": 1,
+      "source": "S21:2590:NORMAL_SELL_MARUBOZU:FRAME_SHA256:fbb2b4ba5f337a6df440f68299d47afed095367a6311c445b927d6bd63e7e600",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.602564102564102564102564102564102564102564102564102564102564",
+          "high": "0.671052631578947368421052631578947368421052631578947368421053"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.489795918367346938775510204081632653061224489795918367346938",
+          "high": "0.571428571428571428571428571428571428571428571428571428571429"
+        }
+      },
+      "source_frame_second": 2590,
+      "manual_y_bounds": {
+        "body_top": 425,
+        "body_bottom": 523,
+        "wick_top": 425,
+        "wick_bottom": 577,
+        "break_line": 471
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    },
+    {
+      "id": "VERY_STRONG_GREY_CONTEXT",
+      "label": "S21_VERY_STRONG_BRANCH_DRAWING",
+      "group": "S21_VERY_STRONG_EDITED_OBJECT",
+      "known_at": 1,
+      "source": "S21:3265:VERY_STRONG_GREY_CONTEXT:FRAME_SHA256:0dd36bcb6ee7da4f49f8ac94bf4b9efa97669562e7dfbfccbd1a5d4f0899911b",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.970479704797047970479704797047970479704797047970479704797047",
+          "high": "1"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.816479400749063670411985018726591760299625468164794007490636",
+          "high": "0.846441947565543071161048689138576779026217228464419475655431"
+        }
+      },
+      "source_frame_second": 3265,
+      "manual_y_bounds": {
+        "body_top": 521,
+        "body_bottom": 788,
+        "wick_top": 521,
+        "wick_bottom": 788,
+        "break_line": 566
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    },
+    {
+      "id": "VERY_STRONG_WHITE_CONTEXT",
+      "label": "S21_VERY_STRONG_BRANCH_DRAWING",
+      "group": "S21_VERY_STRONG_EDITED_OBJECT",
+      "known_at": 1,
+      "source": "S21:3338:VERY_STRONG_WHITE_CONTEXT:FRAME_SHA256:f28bd6313fc0c2ec7191be7e0460bd79f3e51a417bc7823aaa9d8281c9d0c190",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.974763406940063091482649842271293375394321766561514195583596",
+          "high": "1"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.715654952076677316293929712460063897763578274760383386581469",
+          "high": "0.741214057507987220447284345047923322683706070287539936102237"
+        }
+      },
+      "source_frame_second": 3338,
+      "manual_y_bounds": {
+        "body_top": 337,
+        "body_bottom": 650,
+        "wick_top": 337,
+        "wick_bottom": 650,
+        "break_line": 422
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    },
+    {
+      "id": "WEAK_INITIAL_BREAK",
+      "label": "S21_WEAK_BRANCH_DRAWING",
+      "group": "S21_WEAK_INITIAL_BREAK_OBJECT",
+      "known_at": 1,
+      "source": "S21:2940:WEAK_INITIAL_BREAK:FRAME_SHA256:630e4c9d3f13055c401fd3354e570cbea6e42b8a0d6772c5e0e58cdc2b920b06",
+      "features": {
+        "drawing_body_range_fraction": {
+          "low": "0.327272727272727272727272727272727272727272727272727272727272",
+          "high": "0.415094339622641509433962264150943396226415094339622641509434"
+        },
+        "drawing_close_overshoot_body_fraction": {
+          "low": "0.325",
+          "high": "0.525"
+        }
+      },
+      "source_frame_second": 2940,
+      "manual_y_bounds": {
+        "body_top": 517,
+        "body_bottom": 557,
+        "wick_top": 451,
+        "wick_bottom": 557,
+        "break_line": 534
+      },
+      "vertical_uncertainty_px": 2,
+      "relative_sequence_scale_available": false
+    }
+  ],
+  "measurement_scope": "Manual local frame annotation with pixel-check support; not independent market OHLC or exact teacher numerical thresholds.",
+  "label_scope": "Teaching episode branch labels from existing ASR plus inspected drawings; no new audio semantics verified.",
+  "grouping": "All edits of the same very-strong red object are one group; distinct red/green source objects are separate, not independent market trades.",
+  "source_refs": [
+    [
+      21,
+      2387.68,
+      2468.36
+    ],
+    [
+      21,
+      2510.78,
+      2613.38
+    ],
+    [
+      21,
+      2770.48,
+      3153.16
+    ],
+    [
+      21,
+      3199.56,
+      3343.04
+    ]
+  ],
+  "actionable": false,
+  "full_teacher_relative_strength_classifier": false
+}

@@ -1,0 +1,43 @@
+{
+  "source_case": "S22_HEADER_TRANSCRIBED_THREE_BARS",
+  "source_frame_sha256": {
+    "frame-1924.jpg": "06a050384ef7c11a08b05d664c6ae8436b329437a0962f0f5870c75380cb5bd8",
+    "frame-1926.jpg": "77c1fca3cb21bf65af252927258531ef873a4e3a43d969e8253f07d4e81ac882",
+    "frame-1927.jpg": "cff047b104eefd94108434958345c0c846e98577f7956fabb93e0fa236014b8d"
+  },
+  "transcribed_csv_sha256": "536dfbeff3df5fed26709c448c3153f5901ef913aaf3a300068e4728eedce1ce",
+  "comparisons": [
+    {
+      "operand": "UNKNOWN",
+      "prefix_statuses": [
+        "REVIEW",
+        "REVIEW",
+        "REVIEW"
+      ]
+    },
+    {
+      "operand": "PAUSE_BODY_CLOSE_HYPOTHESIS",
+      "prefix_statuses": [
+        "REVIEW",
+        "REVIEW",
+        "ELIGIBLE"
+      ]
+    },
+    {
+      "operand": "PAUSE_WICK_LOW_HYPOTHESIS",
+      "prefix_statuses": [
+        "REVIEW",
+        "REVIEW",
+        "WAIT"
+      ]
+    }
+  ],
+  "strict_wick_hypothesis_reproduces_teacher_marked_entry": false,
+  "body_hypothesis_compatible_with_this_entry": true,
+  "unique_teacher_reference_formula_verified": false,
+  "confirmation_shape_confidence": false,
+  "manual_plan_run_direction_assumptions": true,
+  "full_raw_teacher_model_complete": false,
+  "method_backtest": false,
+  "orders_sent": 0
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "STATIC_SOURCE_AND_DOCUMENT_CHECKS_NOT_UNIT_OR_MARKET_TESTS",
+  "checks": {
+    "all_62_original_concept_ids_once": true,
+    "all_54_original_relations_preserved": true,
+    "twelve_entry_branches_unique": true,
+    "every_branch_refs_existing_concept": true,
+    "all_source_ranges_well_formed": true,
+    "no_unattributed_numeric_defaults": true,
+    "all_17_operational_questions_linked": true,
+    "strong_prz_exception_present": true,
+    "no_unsupported_autonomous_or_profit_claim": true,
+    "26_sessions_inventory": true,
+    "session21_recovered_video_not_missing": true,
+    "legacy_semantics_file_matches_recorded_receipt": true
+  },
+  "passed": 12,
+  "failed": 0,
+  "source_map_sha256": "f529d6979ccab5167633c985068e8e31130f1f72d7e0c719cecf2a0fa9305969",
+  "registry_sha256": "15c2a2f2093488ebd80e99e606bc4088376315021b169729a2ae1e57acabc391",
+  "source_coverage_sha256": "ce0fe607320bf69a17351e58630cd3e6600fc252064b917501570adcffb53632",
+  "old_15_semantics_tests_not_rerun_or_counted_as_new": true,
+  "new_transcription_download_or_install": false,
+  "engine_or_mt5_or_orders_or_market_backtest": false
+}
