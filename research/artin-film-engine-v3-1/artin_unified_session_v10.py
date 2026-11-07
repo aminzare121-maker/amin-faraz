@@ -111,7 +111,14 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
     ocr=ocr_frames(output/"visual",visual,output/"private_ocr",
                    ocr_factory=ocr_model_factory)
     if ocr.get("ocr_failed_frames"):
-        raise RuntimeError("OCR failure: no whole-session completion allowed")
+        # A failed OCR must never be silently converted into "completed".
+        # Keep technical error messages in PRIVATE job logs; never print student
+        # or teacher text here.
+        failures=json.loads((output/"private_ocr"/"full_chat_ocr_candidates_PRIVATE.json").read_text(encoding="utf8"))
+        first=next((x for x in failures.get("results",[])
+                    if x.get("state")=="OCR_FAILED_REVIEW_REQUIRED"),{})
+        raise RuntimeError("OCR failure: "+str(first.get("error_type","unknown"))+
+            ": "+str(first.get("private_diagnostic","unavailable"))[:180])
     if ocr.get("frames_attempted")!=len(visual["rows"]):
         raise RuntimeError("OCR image coverage incomplete")
     full_ocr=json.loads((output/"private_ocr"/"full_chat_ocr_candidates_PRIVATE.json").read_text(encoding="utf8"))
