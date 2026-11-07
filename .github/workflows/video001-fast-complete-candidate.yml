@@ -36,7 +36,7 @@ jobs:
           p='/tmp/video001_fast/prepared/safe_source_prep_summary.json'
           m=json.load(open(p))
           a=m['source_audio_worker_count'];o=m['original_ocr_workers']
-          assert 1<=a<=8 and 1<=o<=16 and m['source_integrity_verified']
+          assert 1<=a<=17 and 1<=o<=16 and m['source_integrity_verified']
           outputs={'asr_count':a,'ocr_count':o,'asr_matrix':list(range(a)),'ocr_matrix':list(range(o))}
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               for k,v in outputs.items():f.write(k+'='+json.dumps(v,separators=(',',':'))+'\n')
@@ -121,6 +121,78 @@ jobs:
         with:
           name: video001-fast-original-audio-7
           path: /tmp/video001_fast/prepared/asr_shards/worker_07/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 8) }}
+        with:
+          name: video001-fast-original-audio-8
+          path: /tmp/video001_fast/prepared/asr_shards/worker_08/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 9) }}
+        with:
+          name: video001-fast-original-audio-9
+          path: /tmp/video001_fast/prepared/asr_shards/worker_09/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 10) }}
+        with:
+          name: video001-fast-original-audio-10
+          path: /tmp/video001_fast/prepared/asr_shards/worker_10/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 11) }}
+        with:
+          name: video001-fast-original-audio-11
+          path: /tmp/video001_fast/prepared/asr_shards/worker_11/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 12) }}
+        with:
+          name: video001-fast-original-audio-12
+          path: /tmp/video001_fast/prepared/asr_shards/worker_12/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 13) }}
+        with:
+          name: video001-fast-original-audio-13
+          path: /tmp/video001_fast/prepared/asr_shards/worker_13/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 14) }}
+        with:
+          name: video001-fast-original-audio-14
+          path: /tmp/video001_fast/prepared/asr_shards/worker_14/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 15) }}
+        with:
+          name: video001-fast-original-audio-15
+          path: /tmp/video001_fast/prepared/asr_shards/worker_15/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 16) }}
+        with:
+          name: video001-fast-original-audio-16
+          path: /tmp/video001_fast/prepared/asr_shards/worker_16/**
           retention-days: 7
           compression-level: 2
           if-no-files-found: error
@@ -258,7 +330,7 @@ jobs:
     timeout-minutes: 45
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 17
       matrix:
         index: ${{ fromJSON(needs.source-once.outputs.asr_matrix) }}
     steps:
