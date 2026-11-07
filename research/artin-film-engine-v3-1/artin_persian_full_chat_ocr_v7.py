@@ -31,8 +31,9 @@ def _valid_source_row(row,root):
     return f
 
 def ocr_frames(original_visual_root,index,output,*,max_frames=0,
-               ocr_factory=None,checkpoint_every=10):
-    if index.get('schema')!='artin_classroom_visual_v6':
+               ocr_factory=None,checkpoint_every=10,
+               partition_index=0,partition_count=1):
+    if index.get('schema') not in ('artin_classroom_visual_v6','artin_change_selected_chat_v8'):
         raise ValueError('Original video visual index required')
     video_sha=index.get('source_video_sha256')
     if not isinstance(video_sha,str) or len(video_sha)!=64:
@@ -42,9 +43,15 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
         raise ValueError('No original classroom screenshots')
     if type(max_frames) is not int or max_frames<0 or max_frames>100000:
         raise ValueError('Invalid frame limit')
+    if (type(partition_index) is not int or type(partition_count) is not int or
+        not 1<=partition_count<=16 or not 0<=partition_index<partition_count):
+        raise ValueError('Invalid independent OCR partition')
     root=Path(original_visual_root).resolve()
     out=Path(output).resolve();out.mkdir(parents=True,exist_ok=True)
-    chosen=rows if not max_frames else rows[:max_frames]
+    available=rows if not max_frames else rows[:max_frames]
+    chosen=[row for pos,row in enumerate(available)
+            if pos%partition_count==partition_index]
+    if not chosen:raise ValueError('Partition has no selected source frames')
     # Every frame must first pass source validation before importing a third
     # party OCR model. No mislabeled screenshot can silently enter output.
     files=[_valid_source_row(r,root) for r in chosen]
@@ -103,6 +110,7 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
                   'source_video_sha256':video_sha,
                   'frames_total':len(rows),'frames_targeted':len(chosen),
                   'frames_attempted':i,'complete':i==len(chosen),
+                  'partition_index':partition_index,'partition_count':partition_count,
                   'human_verified_chat_messages':0,'teacher_answers_verified':0,
                   'rules_executable':0,'results':results})
             print('ARTIN_CHAT_OCR_PROGRESS='+json.dumps({
@@ -111,6 +119,7 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
                   ensure_ascii=False),flush=True)
     summary={'schema':'artin_original_chat_ocr_coverage_v7',
         'source_video_sha256':video_sha,'source_frames_total':len(rows),
+        'partition_index':partition_index,'partition_count':partition_count,
         'frames_targeted':len(chosen),'frames_attempted':len(results),
         'frames_with_some_ocr_text':sum(r['state']=='OCR_TEXT_CANDIDATES' for r in results),
         'frames_without_detected_text':sum(r['state']=='OCR_NO_READABLE_TEXT' for r in results),
@@ -133,9 +142,12 @@ def main():
     p.add_argument('--visual-index',type=Path,required=True)
     p.add_argument('--out',type=Path,required=True)
     p.add_argument('--max-frames',type=int,default=0)
+    p.add_argument('--partition-index',type=int,default=0)
+    p.add_argument('--partition-count',type=int,default=1)
     a=p.parse_args()
     index=json.loads(a.visual_index.read_text(encoding='utf8'))
-    summary=ocr_frames(a.visual_root,index,a.out,max_frames=a.max_frames)
+    summary=ocr_frames(a.visual_root,index,a.out,max_frames=a.max_frames,
+                      partition_index=a.partition_index,partition_count=a.partition_count)
     if summary['ocr_failed_frames']:
         raise SystemExit(2)
 
