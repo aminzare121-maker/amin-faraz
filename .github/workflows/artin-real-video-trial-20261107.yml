@@ -1,0 +1,27 @@
+name: Artin V3.2 - one user-video split trial
+on:
+  push:
+    branches:
+      - review/artin-v3-2-variable-batches-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/real_video_link_trial_20261107.py'
+      - 'research/artin-film-engine-v3-1/source_link_trial_20261107.json'
+      - '.github/workflows/artin-real-video-trial-20261107.yml'
+permissions:
+  contents: read
+jobs:
+  try-user-original-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg and ffprobe
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+      - name: Download linked video to ephemeral runner, split with existing Artin V3.2, verify
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -B real_video_link_trial_20261107.py source_link_trial_20261107.json
