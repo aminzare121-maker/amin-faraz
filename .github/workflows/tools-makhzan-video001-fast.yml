@@ -1,0 +1,493 @@
+name: Makhzan VIDEO-001 V12 FAST complete session (17 ASR + 16 OCR)
+on:
+  push:
+    branches:
+      - tools-makhzan-hub
+    paths:
+      - 'tools-makhzan/requests/current.json'
+      - '.github/workflows/tools-makhzan-video001-fast.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: makhzan-video001-fast-request
+  cancel-in-progress: false
+jobs:
+  validate-fast-request:
+    runs-on: ubuntu-latest
+    outputs:
+      action: ${{ steps.request.outputs.action }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate source against registered VIDEO-001 tool and user inputs
+        id: request
+        run: |
+          python3 -B tools-makhzan/validate_registry.py
+          python3 -B tools-makhzan/executor.py --validate --github-output "$GITHUB_OUTPUT"
+  source-once:
+    needs: validate-fast-request
+    if: ${{ needs.validate-fast-request.outputs.action == 'complete_session_fast' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    outputs:
+      asr_count: ${{ steps.prep_meta.outputs.asr_count }}
+      ocr_count: ${{ steps.prep_meta.outputs.ocr_count }}
+      asr_matrix: ${{ steps.prep_meta.outputs.asr_matrix }}
+      ocr_matrix: ${{ steps.prep_meta.outputs.ocr_matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout registered V12 source engine with fast path
+        uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          path: artin-code
+          persist-credentials: false
+      - name: Convert validated hub VIDEO-001 request to exact source-once manifest
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          r=json.loads(Path('tools-makhzan/requests/current.json').read_text(encoding='utf8'))
+          assert r['tool_id']=='VIDEO-001' and r['action']=='complete_session_fast'
+          assert r['ingest_mode']=='SOURCE_AUDIO_AND_CHAT'
+          data={'schema':'video001_fast_source_request_v1',
+                'source_page':r['source_url'],
+                'expected_sha256':r.get('expected_sha256'),
+                'audio_workers':17,'ocr_workers':16,
+                'sample_seconds':30,'mode':'V12_FAST_SOURCE_ONLY_NO_TRADES'}
+          Path('/tmp/makhzan_fast_user_source.json').write_text(
+              json.dumps(data,ensure_ascii=False),encoding='utf8')
+          print('MAKHZAN_FAST_TYPED_REQUEST_SOURCE_SET=True')
+          PY
+      - name: Install original movie tools without changing ASR or OCR
+        run: |
+          command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Download original user MP4 ONCE and preserve ALL original audio + image evidence
+        working-directory: artin-code/research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_remote_prep_v1.py --request /tmp/makhzan_fast_user_source.json --out /tmp/video001_fast
+      - name: Determine actual source chunks and screenshot worker sets
+        id: prep_meta
+        run: |
+          python3 - <<'PY'
+          import json,os
+          p='/tmp/video001_fast/prepared/safe_source_prep_summary.json'
+          m=json.load(open(p))
+          a=m['source_audio_worker_count'];o=m['original_ocr_workers']
+          assert 1<=a<=17 and 1<=o<=16 and m['source_integrity_verified']
+          outputs={'asr_count':a,'ocr_count':o,'asr_matrix':list(range(a)),'ocr_matrix':list(range(o))}
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              for k,v in outputs.items():f.write(k+'='+json.dumps(v,separators=(',',':'))+'\n')
+          print('VIDEO001_FAST_SOURCE_WORKER_COUNT='+json.dumps({'audio':a,'ocr':o}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-board
+          path: /tmp/video001_fast/prepared/board_review/**
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-chat-index
+          path: /tmp/video001_fast/prepared/full_chat/chat_selected_index.json
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-source-summary
+          path: /tmp/video001_fast/prepared/safe_source_prep_summary.json
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 0) }}
+        with:
+          name: video001-fast-original-audio-0
+          path: /tmp/video001_fast/prepared/asr_shards/worker_00/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 1) }}
+        with:
+          name: video001-fast-original-audio-1
+          path: /tmp/video001_fast/prepared/asr_shards/worker_01/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 2) }}
+        with:
+          name: video001-fast-original-audio-2
+          path: /tmp/video001_fast/prepared/asr_shards/worker_02/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 3) }}
+        with:
+          name: video001-fast-original-audio-3
+          path: /tmp/video001_fast/prepared/asr_shards/worker_03/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 4) }}
+        with:
+          name: video001-fast-original-audio-4
+          path: /tmp/video001_fast/prepared/asr_shards/worker_04/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 5) }}
+        with:
+          name: video001-fast-original-audio-5
+          path: /tmp/video001_fast/prepared/asr_shards/worker_05/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 6) }}
+        with:
+          name: video001-fast-original-audio-6
+          path: /tmp/video001_fast/prepared/asr_shards/worker_06/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 7) }}
+        with:
+          name: video001-fast-original-audio-7
+          path: /tmp/video001_fast/prepared/asr_shards/worker_07/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 8) }}
+        with:
+          name: video001-fast-original-audio-8
+          path: /tmp/video001_fast/prepared/asr_shards/worker_08/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 9) }}
+        with:
+          name: video001-fast-original-audio-9
+          path: /tmp/video001_fast/prepared/asr_shards/worker_09/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 10) }}
+        with:
+          name: video001-fast-original-audio-10
+          path: /tmp/video001_fast/prepared/asr_shards/worker_10/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 11) }}
+        with:
+          name: video001-fast-original-audio-11
+          path: /tmp/video001_fast/prepared/asr_shards/worker_11/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 12) }}
+        with:
+          name: video001-fast-original-audio-12
+          path: /tmp/video001_fast/prepared/asr_shards/worker_12/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 13) }}
+        with:
+          name: video001-fast-original-audio-13
+          path: /tmp/video001_fast/prepared/asr_shards/worker_13/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 14) }}
+        with:
+          name: video001-fast-original-audio-14
+          path: /tmp/video001_fast/prepared/asr_shards/worker_14/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 15) }}
+        with:
+          name: video001-fast-original-audio-15
+          path: /tmp/video001_fast/prepared/asr_shards/worker_15/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 16) }}
+        with:
+          name: video001-fast-original-audio-16
+          path: /tmp/video001_fast/prepared/asr_shards/worker_16/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 0) }}
+        with:
+          name: video001-fast-original-ocr-0
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_00/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 1) }}
+        with:
+          name: video001-fast-original-ocr-1
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_01/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 2) }}
+        with:
+          name: video001-fast-original-ocr-2
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_02/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 3) }}
+        with:
+          name: video001-fast-original-ocr-3
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_03/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 4) }}
+        with:
+          name: video001-fast-original-ocr-4
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_04/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 5) }}
+        with:
+          name: video001-fast-original-ocr-5
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_05/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 6) }}
+        with:
+          name: video001-fast-original-ocr-6
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_06/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 7) }}
+        with:
+          name: video001-fast-original-ocr-7
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_07/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 8) }}
+        with:
+          name: video001-fast-original-ocr-8
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_08/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 9) }}
+        with:
+          name: video001-fast-original-ocr-9
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_09/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 10) }}
+        with:
+          name: video001-fast-original-ocr-10
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_10/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 11) }}
+        with:
+          name: video001-fast-original-ocr-11
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_11/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 12) }}
+        with:
+          name: video001-fast-original-ocr-12
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_12/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 13) }}
+        with:
+          name: video001-fast-original-ocr-13
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_13/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 14) }}
+        with:
+          name: video001-fast-original-ocr-14
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_14/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 15) }}
+        with:
+          name: video001-fast-original-ocr-15
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_15/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+  source-sharded-asr:
+    needs: source-once
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 17
+      matrix:
+        index: ${{ fromJSON(needs.source-once.outputs.asr_matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-audio-${{ matrix.index }}
+          path: /tmp/video001_source_audio
+      - name: Original unchanged Whisper Persian ASR
+        run: python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Original speech source, per-worker SHA and timestamp verification
+        working-directory: research/artin-film-engine-v3-1
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        run: |
+          python3 -u artin_parallel_asr_worker_v5.py \
+            --prepped-root /tmp/video001_source_audio \
+            --out /tmp/video001_fast_asr_worker \
+            --index ${{ matrix.index }} --partitions ${{ needs.source-once.outputs.asr_count }} \
+            --model large-v3-turbo \
+            --expected-sha256 "$(python3 -c 'import json;print(json.load(open("/tmp/video001_source_audio/fast_av_manifest.json"))["video_sha256"])')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-asr-${{ matrix.index }}
+          path: /tmp/video001_fast_asr_worker/asr_evidence/**
+          retention-days: 15
+          if-no-files-found: error
+  source-sharded-ocr:
+    needs: source-once
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        index: ${{ fromJSON(needs.source-once.outputs.ocr_matrix) }}
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-ocr-${{ matrix.index }}
+          path: /tmp/video001_source_ocr
+      - name: Original unchanged Persian PaddleOCR
+        run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: OCR all assigned original chat frames, reject source SHA mismatch
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_full_chat_ocr_v7.py \
+            --visual-root /tmp/video001_source_ocr \
+            --visual-index /tmp/video001_source_ocr/chat_selected_index.json \
+            --partition-index ${{ matrix.index }} --partition-count ${{ needs.source-once.outputs.ocr_count }} \
+            --out /tmp/video001_fast_ocr_worker
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-ocr-${{ matrix.index }}
+          path: /tmp/video001_fast_ocr_worker/full_chat_ocr_candidates_PRIVATE.json
+          retention-days: 15
+          if-no-files-found: error
+  independent-all-evidence-verification:
+    needs: [source-once,source-sharded-asr,source-sharded-ocr]
+    if: success()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: video001-fast-asr-*
+          merge-multiple: true
+          path: /tmp/video001_all_asr
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: video001-fast-ocr-*
+          merge-multiple: false
+          path: /tmp/video001_all_ocr
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-chat-index
+          path: /tmp/video001_source_chat_index
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-board
+          path: /tmp/video001_source_board
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-source-summary
+          path: /tmp/video001_source_summary
+      - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_verify_v1.py \
+            --asr-root /tmp/video001_all_asr \
+            --ocr-root /tmp/video001_all_ocr \
+            --source-index /tmp/video001_source_chat_index/chat_selected_index.json \
+            --board-root /tmp/video001_source_board \
+            --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
+            --out /tmp/video001_full_integrity \
+            --audio-workers ${{ needs.source-once.outputs.asr_count }} --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-final-original-source-proof
+          path: /tmp/video001_full_integrity/private_fast_verify_summary.json
+          retention-days: 15
+          if-no-files-found: error
