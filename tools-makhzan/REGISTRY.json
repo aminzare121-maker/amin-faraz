@@ -56,7 +56,8 @@
         "Extract timestamped board and typed-chat cropped images, retain source frames.",
         "Reject duplicate/missing/mismatched parts and block unverified rules.",
         "Reproducible source-preserving Persian OCR question dedup on real 59 groups -> 28 review clusters, with safety-word veto, Github Actions success 42409068623; this does NOT certify question identities or answers.",
-        "REAL full-film source verified OCR+ASR join completed: 276 high-resolution selected original chat screens and 2035 original speech utterances, 72 provisional questions, 33 conservative clusters, no source loss; run 42411436773."
+        "REAL full-film source verified OCR+ASR join completed: 276 high-resolution selected original chat screens and 2035 original speech utterances, 72 provisional questions, 33 conservative clusters, no source loss; run 42411436773.",
+        "FAST V12 17-ASR/16-OCR source-once original-video pipeline validated twice end to end, 4821 one-second source scans, 276 source-hashed chat images, 161 sampled board frames, 17 audio parts, no evidence loss; one full real run 14m31s (RUN 42420443241)."
       ],
       "outstanding": [
         "An actual offline evidence reviewer for Android/Windows is delivered with 59 unverified question groups, 35 unverified rule fragments and 192 original source-hash screenshots. It is NOT an autonomous verified teacher rule engine.",
@@ -65,7 +66,8 @@
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
         "Evidence audit of 35 legacy rule candidates: all 35 standalone utterances lack observable market condition, do not promote.",
         "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage.",
-        "No complete set of instructor lectures has been provided; the first received session is intentionally only part 1 of an open-ended course. Course synthesis waits for the other user-submitted videos."
+        "No complete set of instructor lectures has been provided; the first received session is intentionally only part 1 of an open-ended course. Course synthesis waits for the other user-submitted videos.",
+        "External Uupload direct link may become unavailable; bounded retry does not guarantee service uptime. FAST runtime for next new film must be measured independently."
       ],
       "last_verified": {
         "technical_tests": 194,
@@ -115,7 +117,9 @@
         "review_package_artifact_expires": "2026-12-07T17:27:34Z",
         "one_second_original_provisional_question_groups": 72,
         "one_second_original_question_review_clusters": 33,
-        "one_second_real_source_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42411436773"
+        "one_second_real_source_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42411436773",
+        "fast_full_source_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42420443241",
+        "fast_independent_acceptance": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42421069807"
       },
       "next_action": "Do not restart original 80m source work. True 276 original one-second-selected images + OCR + original 17-part ASR review successful in 42411436773. Check prior end-to-end job 42405663580 separately; independent gold Persian speech/OCR and teacher Q&A/role verification remains. Actions artifacts expire; unverified long-term archive must not be called durable.",
       "executor": {
@@ -130,7 +134,8 @@
           "course_status",
           "build_review",
           "source_ingest",
-          "complete_session"
+          "complete_session",
+          "complete_session_fast"
         ],
         "run_status_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397528098",
         "run_build_review_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512",
@@ -155,7 +160,9 @@
           "verified_teacher_rules": 0,
           "semantic_accuracy_verified": false
         },
-        "reliability_warning": "Complete-session runtime succeeded on a real 100-second source clip after two failed runs and fixes (blank chat boxes, Python OCR/Whisper process isolation); this does NOT certify 80-min whole-source reliability or accuracy of teacher meaning. FULL 80m run 42405663580 is IN_PROGRESS."
+        "reliability_warning": "Complete-session runtime succeeded on a real 100-second source clip after two failed runs and fixes (blank chat boxes, Python OCR/Whisper process isolation); this does NOT certify 80-min whole-source reliability or accuracy of teacher meaning. FULL 80m run 42405663580 is IN_PROGRESS.",
+        "preferred_complete_session_action": "complete_session_fast",
+        "original_complete_session_fallback_action": "complete_session"
       },
       "course": {
         "id": "ARTIN-COURSE-001",
@@ -283,6 +290,32 @@
           "final complete trading strategy",
           "indefinite media storage"
         ]
+      },
+      "fast_mode": {
+        "status": "INSTALLED_IN_V12_AND_REGISTERED_HUB_PATH_PENDING_HUB_SMOKE_TEST",
+        "action": "complete_session_fast",
+        "original_fallback_action": "complete_session",
+        "source_once": true,
+        "asr_workers_max": 17,
+        "ocr_workers_max": 16,
+        "workflow_path": ".github/workflows/tools-makhzan-video001-fast.yml",
+        "code_ref": "review/artin-fidelity-audit-v7-20261107",
+        "original_backup_refs": [
+          "backup/video001-v12-before-fast-20261108",
+          "backup/tools-hub-before-fast-20261108"
+        ],
+        "actual_independent_full_source_runs": [
+          "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42418849834",
+          "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42420443241"
+        ],
+        "independent_quality_gate": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42421069807",
+        "fastest_full_source_seconds": 871,
+        "benchmark_original_duration_seconds": 4820.5452,
+        "no_source_loss_verified": true,
+        "semantic_truth_certified": false,
+        "verified_teacher_rules": 0,
+        "original_video_permanent_backup": false,
+        "note": "Fast mode is additional and preferred. Legacy complete_session remains available; source-dependent retries never fabricate success."
       }
     }
   ]
