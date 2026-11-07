@@ -1,0 +1,91 @@
+name: Video V12 REAL 80min 1s Persian Chat OCR + original ASR evidence join
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v12-real-dense-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reconstruct-full-original-source-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Bring 276 source-hashed image timestamps
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_original/highres
+      - name: Bring original 276-frame PaddleOCR
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-farsi-chat-ocr-complete-PRIVATE
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42395611419
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_original/ocr
+      - name: Bring original 17-part ASR audio source review
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_original/asr
+      - name: Check original source identity; join all spoken and typed data; dedup safely
+        working-directory: research/artin-film-engine-v3-1
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from artin_ocr_asr_join_v8 import join_original_chat_qa
+          from artin_question_dedupe_v11 import clustered_review
+          p=Path('/tmp/makhzan_original')
+          j=lambda x:json.loads(x.read_text(encoding='utf8'))
+          v=j(p/'highres/chat_selected_index.json')
+          o=j(p/'ocr/merged_source_chat_ocr_PRIVATE.json')
+          s=j(p/'asr/complete_unverified_qa_evidence.json')
+          source=v['source_video_sha256']
+          assert source==o['source_video_sha256']==s['source_video_sha256']
+          assert len(v['rows'])==276 and len(o['results'])==276
+          assert o['frames_attempted']==276 and o['complete'] is True
+          assert len(s['speech_lines'])==2035 and s['parts_with_asr']==17
+          assert all(x['state']!='OCR_FAILED_REVIEW_REQUIRED' for x in o['results'])
+          safe,private=join_original_chat_qa(v,o,s)
+          dedup=clustered_review(private)
+          assert dedup['original_review_groups']==safe['provisional_distinct_question_groups']
+          assert sum(x['member_groups_count'] for x in dedup['review_clusters'])==dedup['original_review_groups']
+          assert dedup['original_groups_not_lost'] is True
+          assert safe['verified_teacher_answers']==dedup['verified_teacher_answers']==0
+          assert safe['verified_trading_rules']==dedup['verified_trading_rules']==0
+          out=Path('/tmp/makhzan_full_original_linked')
+          out.mkdir(parents=True,exist_ok=True)
+          (out/'source_qa_summary.json').write_text(json.dumps(safe,ensure_ascii=False,indent=2),encoding='utf8')
+          (out/'source_qa_REVIEW_ONLY_PRIVATE.json').write_text(json.dumps(private,ensure_ascii=False,indent=2),encoding='utf8')
+          (out/'source_qa_clusters_REVIEW_ONLY_PRIVATE.json').write_text(json.dumps(dedup,ensure_ascii=False,indent=2),encoding='utf8')
+          metrics={'source_video_sha256':source,'original_audio_parts':17,
+                   'original_audio_utterances':2035,'selected_1sec_chat_images':276,
+                   'provisional_questions':safe['provisional_distinct_question_groups'],
+                   'review_clusters':dedup['conservative_near_duplicate_clusters'],
+                   'speaker_identity_human_verified':False,
+                   'independent_semantic_accuracy_measured':False,
+                   'verified_teacher_answers':0,'verified_executable_rules':0}
+          print('FULL_SOURCE_1SEC_CHAT_AUDIO_LINK_SUCCESS='+json.dumps(metrics))
+          PY
+      - name: Retain source-verified full-film review evidence privately
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-V12-original-full-film-1sec-OCR-ASR-review-PRIVATE
+          retention-days: 30
+          if-no-files-found: error
+          path: /tmp/makhzan_full_original_linked/*.json
