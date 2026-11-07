@@ -1,0 +1,116 @@
+name: VIDEO-001 serial queue safety and ordering tests
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/tools-makhzan-video001-queue-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  validate-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Compile and parse both queue worker and scheduler
+        run: |
+          python3 -m pip -q install 'PyYAML>=6,<7'
+          python3 -m py_compile tools-makhzan/video_queue/load_queue.py tools-makhzan/video_queue/write_receipt.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml
+          root=Path('.github/workflows')
+          for p in ['tools-makhzan-video001-serial-queue.yml','tools-makhzan-video001-fast-reusable.yml']:
+              s=(root/p).read_text(encoding='utf8')
+              obj=yaml.safe_load(s)
+              assert isinstance(obj['jobs'],dict)
+              assert 'VIDEO-001' in s
+              print('VIDEO001_QUEUE_YAML_PARSES='+p)
+          queue=yaml.safe_load((root/'tools-makhzan-video001-serial-queue.yml').read_text())
+          assert queue['jobs']['process-one-full-movie-at-a-time']['strategy']['max-parallel']==1
+          assert queue['jobs']['process-one-full-movie-at-a-time']['strategy']['fail-fast'] is False
+          source=yaml.safe_load((root/'tools-makhzan-video001-fast-reusable.yml').read_text())
+          assert source['jobs']['source-sharded-asr']['strategy']['max-parallel']==17
+          assert source['jobs']['source-sharded-ocr']['strategy']['max-parallel']==16
+          assert 'record-verified-result' in source['jobs']
+          assert 'source-once' in source['jobs']
+          assert 'inputs.queue_id' in (root/'tools-makhzan-video001-fast-reusable.yml').read_text()
+          print('VIDEO001_QUEUE_SEQUENTIAL_AND_FULL_SPEED_CONTRACT_VALID=True')
+          PY
+      - name: Verify three queued films keep requested order and an immutable result is not repeated
+        run: |
+          python3 - <<'PY'
+          import importlib.util
+          import tempfile,json
+          from pathlib import Path
+          spec=importlib.util.spec_from_file_location('queue_loader','tools-makhzan/video_queue/load_queue.py')
+          loader=importlib.util.module_from_spec(spec);spec.loader.exec_module(loader)
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);(root/'entries').mkdir();(root/'receipts').mkdir()
+              ids=['video-q-0003-class-next','video-q-0004-class-next','video-q-0005-class-next']
+              for i,id in enumerate(ids,3):
+                  (root/'entries'/f'{id}.json').write_text(json.dumps({
+                      'schema':'makhzan_video001_user_queue_entry_v1',
+                      'queue_id':id,'source_page':f'https://my.uupload.ir/p/sample{i}',
+                      'submitted_by_user':True,'status':'PENDING_USER_AUTHORIZED',
+                      'expected_sha256':None}),encoding='utf8')
+              pending=loader.enumerate_queue(root)
+              assert [x['queue_id'] for x in pending]==ids
+              (root/'receipts'/f'{ids[0]}.json').write_text(json.dumps({
+                  'queue_id':ids[0],'source_page':'https://my.uupload.ir/p/sample3',
+                  'status':'COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED'}),encoding='utf8')
+              assert [x['queue_id'] for x in loader.enumerate_queue(root)]==ids[1:]
+              (root/'receipts'/f'{ids[1]}.json').write_text(json.dumps({
+                  'queue_id':ids[1],'source_page':'https://my.uupload.ir/p/sample4',
+                  'status':'FAILED_NEEDS_REVIEW'}),encoding='utf8')
+              assert [x['queue_id'] for x in loader.enumerate_queue(root)]==ids[2:]
+              (root/'entries'/f'{ids[2]}.json').write_text(json.dumps({
+                  'schema':'makhzan_video001_user_queue_entry_v1','queue_id':ids[2],
+                  'source_page':'https://my.uupload.ir/p/sample3',
+                  'submitted_by_user':True,'status':'PENDING_USER_AUTHORIZED'}))
+              try:loader.enumerate_queue(root)
+              except ValueError as e:assert 'Duplicate' in str(e)
+              else:raise AssertionError('Duplicate should not enter queue')
+          print('VIDEO001_QUEUE_ORDER_RECEIPTS_NO_DUPLICATE_SUCCESS=True')
+          PY
+      - name: Reject false success when original-source proof has missing or conflicting evidence
+        run: |
+          python3 - <<'PY'
+          import importlib.util,tempfile,json
+          from pathlib import Path
+          spec=importlib.util.spec_from_file_location('receipt','tools-makhzan/video_queue/write_receipt.py')
+          module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+          results={'source':'success','asr':'success','ocr':'success','verify':'success'}
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);(root/'proof').mkdir();(root/'source').mkdir()
+              original={'original_source_video_sha256':'a'*64,'source_evidence_loss':0,
+                  'independent_hash_and_time_evidence_complete':True,
+                  'original_five_minute_audio_parts':2,'original_screen_frames_scanned':400,
+                  'source_chat_highres_screenshots':5,'original_sampled_board_frames':12,
+                  'original_ocr_screenshots_finished':5,'provisional_chat_groups':4,
+                  'teacher_semantic_accuracy_independently_verified':False,'trading_allowed':False}
+              prep={'source_video_sha256':'a'*64,'source_integrity_verified':True,
+                  'all_original_audio_parts_assigned_once':True,'all_original_chat_images_assigned_once':True,
+                  'source_global_audio_chunks':2,'one_second_frames_scanned':400,
+                  'original_chat_images_selected':5,'original_board_frames':12,
+                  'original_duration_seconds':400.0}
+              def save():
+                  (root/'proof/private_fast_verify_summary.json').write_text(json.dumps(original))
+                  (root/'source/safe_source_prep_summary.json').write_text(json.dumps(prep))
+              save()
+              receipt=module.build_receipt('video-q-0003-class-next',
+                  'https://my.uupload.ir/p/sample3',101,results,root)
+              assert receipt['status']=='COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED'
+              original['original_ocr_screenshots_finished']=4;save()
+              try:module.build_receipt('video-q-0003-class-next',
+                  'https://my.uupload.ir/p/sample3',101,results,root)
+              except AssertionError:pass
+              else:raise AssertionError('Incomplete OCR was falsely certified')
+              failure=module.build_receipt('video-q-0003-class-next',
+                  'https://my.uupload.ir/p/sample3',101,{**results,'verify':'failure'},None)
+              assert failure['status']=='FAILED_NEEDS_REVIEW' and failure['source_evidence'] is None
+          print('VIDEO001_QUEUE_FAIL_CLOSED_SOURCE_RECEIPT_TEST_SUCCESS=True')
+          PY
