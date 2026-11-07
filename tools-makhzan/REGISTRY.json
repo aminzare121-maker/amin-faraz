@@ -107,12 +107,30 @@
         "change_selected_high_res_verified_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392920286",
         "change_selected_high_res_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42395611419",
         "change_selected_high_res_ocr_status": "SUCCESS_SOURCE_HASH_MERGED_276_OF_276_FRAMES_275_TEXT_1_BLANK_ZERO_EXECUTION_ERRORS",
-        "review_package_status": "BUILT_VALIDATED_OFFLINE_HTML_59_QUESTIONS_35_RULE_FRAGMENTS_192_ORIGINAL_IMAGES",
-        "review_package_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42396381577",
+        "review_package_status": "ACTUALLY_EXECUTED_FROM_CANONICAL_MAKHZAN_TOOL_HUB_59_QUESTION_GROUPS_35_UNVERIFIED_RULE_FRAGMENTS_192_ORIGINAL_IMAGES",
+        "review_package_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512",
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "Important: delivered downloadable offline index.html reviewer ZIP (59 provisional QA groups + 35 rule fragments + 192 verified real screenshots; user chooses source MP4 locally) from GitHub Actions run 42396381577; link to source in PR #54. Real source high-res OCR 276/276 succeeded in run 42395611419 (275 text/1 blank). Next step: integrate newly OCR-detected questions into reviewer package, compare against source-verified reference labels, verify exact teacher audio, speaker roles, and chart semantics; forbid automatic trading rules until independent validation."
+      "next_action": "Makhzan VIDEO-001 GitHub Actions executor is PROVEN: status action run 42397528098, build_review run 42397597512. For new chat, read tools-makhzan/REGISTRY.json then user request; update tools-makhzan/requests/current.json with allowlisted operation. Source_ingest for a new authorized Uupload share has not been end-to-end tested from this hub and is only source evidence preparation. Continue actual verified teacher-voice-and-screen rule fidelity research separately; no trading actions.",
+      "executor": {
+        "type": "github_actions_commit_request",
+        "operation_status": "LIVE_EXECUTED_SUCCESS",
+        "request_path": "tools-makhzan/requests/current.json",
+        "workflow_path": ".github/workflows/tools-makhzan-executor.yml",
+        "source": "tools-makhzan/executor.py",
+        "ref": "tools-makhzan-hub",
+        "allowed_actions": [
+          "status",
+          "build_review",
+          "source_ingest"
+        ],
+        "run_status_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397528098",
+        "run_build_review_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512",
+        "last_review_artifact": "makhzan-VIDEO-001-actual-mobile-desktop-review-PRIVATE",
+        "limits": "Execution success covers source preparation/reviewer, NOT verified teacher interpretation, speaker role, Q&A accuracy, or trading rule readiness.",
+        "user_activation": "When user explicitly asks to execute an operation in a ChatGPT conversation with connected GitHub, assistant updates current.json; github actions runs even if user's phone subsequently disconnects."
+      }
     }
   ]
 }
