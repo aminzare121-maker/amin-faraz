@@ -19,6 +19,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Install image/video test dependencies
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
       - name: Test all time/identity/role fail-closed guards
         working-directory: research/artin-film-engine-v3-1
         run: python3 -B -m unittest discover -p 'test_*.py' -v
