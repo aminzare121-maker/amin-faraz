@@ -123,6 +123,18 @@ class RealAVReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Frame missing'):
             review_real_asr(m,[sh(1,[seg(1,3,'خرید')])])
 
+    def test_long_asr_hallucination_is_not_candidate_rule(self):
+        m,sh,seg=fixture()
+        r=review_real_asr(m,[sh(1,[seg(25,88,'خرید خرید خرید خرید خرید خرید')])])
+        self.assertTrue(r['suspect_asr_lines'])
+        self.assertEqual(r['rule_candidates'],[])
+
+    def test_actual_class_screen_record_is_offtopic(self):
+        m,sh,seg=fixture()
+        r=review_real_asr(m,[sh(1,[seg(16,20,'اسکرین رکورد رو بزنید')])])
+        self.assertEqual(len(r['classroom_noise_or_mixed_review']),1)
+        self.assertEqual(r['rule_candidates'],[])
+
     def test_no_rules_even_with_complete_synthetic_transcripts(self):
         m,sh,seg=fixture()
         r=review_real_asr(m,[sh(1,[seg(1,3,'خرید')]),
