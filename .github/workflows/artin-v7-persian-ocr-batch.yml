@@ -5,6 +5,8 @@ on:
       - review/artin-fidelity-audit-v7-20261107
     paths:
       - '.github/workflows/artin-v7-persian-ocr-batch.yml'
+      - 'research/artin-film-engine-v3-1/artin_persian_chat_ocr_trial_v7.py'
+      - 'research/artin-film-engine-v3-1/artin_persian_ocr_batch_v7.py'
   workflow_dispatch:
 permissions:
   contents: read
