@@ -22,7 +22,7 @@
       "id": "VIDEO-001",
       "name_fa": "ابزار پردازش فیلم و کلاس",
       "purpose": "General-purpose video evidence extraction, speech and classroom visual analysis; Artin is one use, not an intrinsic limit.",
-      "status": "PARTIALLY_VALIDATED_RELIABLE_INGEST_ONLY",
+      "status": "REAL_SOURCE_PIPELINE_VALIDATED_SEMANTIC_ACCURACY_UNVERIFIED",
       "code": {
         "repository": "aminzare121-maker/amin-faraz",
         "ref": "review/artin-fidelity-audit-v7-20261107",
@@ -55,7 +55,8 @@
         "Run ASR over all 17 video parts and source-verified merge.",
         "Extract timestamped board and typed-chat cropped images, retain source frames.",
         "Reject duplicate/missing/mismatched parts and block unverified rules.",
-        "Reproducible source-preserving Persian OCR question dedup on real 59 groups -> 28 review clusters, with safety-word veto, Github Actions success 42409068623; this does NOT certify question identities or answers."
+        "Reproducible source-preserving Persian OCR question dedup on real 59 groups -> 28 review clusters, with safety-word veto, Github Actions success 42409068623; this does NOT certify question identities or answers.",
+        "REAL full-film source verified OCR+ASR join completed: 276 high-resolution selected original chat screens and 2035 original speech utterances, 72 provisional questions, 33 conservative clusters, no source loss; run 42411436773."
       ],
       "outstanding": [
         "An actual offline evidence reviewer for Android/Windows is delivered with 59 unverified question groups, 35 unverified rule fragments and 192 original source-hash screenshots. It is NOT an autonomous verified teacher rule engine.",
@@ -111,9 +112,12 @@
         "review_package_status": "ACTUALLY_EXECUTED_FROM_CANONICAL_MAKHZAN_TOOL_HUB_59_QUESTION_GROUPS_35_UNVERIFIED_RULE_FRAGMENTS_192_ORIGINAL_IMAGES",
         "review_package_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512",
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
-        "review_package_artifact_expires": "2026-12-07T17:27:34Z"
+        "review_package_artifact_expires": "2026-12-07T17:27:34Z",
+        "one_second_original_provisional_question_groups": 72,
+        "one_second_original_question_review_clusters": 33,
+        "one_second_real_source_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42411436773"
       },
-      "next_action": "Do not restart original source automatically. Check final result of 42405663580. V11 real question dedup SUCCESS on 42393181420 private output and unified E2E contract CI green; now execute independent speech+OCR gold-reference semantic accuracy and speaker-role QA benchmark on original media, with chart/teacher corrections before any verified strategy rule. Cross-run ASR resume still awaits actual recovery test.",
+      "next_action": "Do not restart original 80m source work. True 276 original one-second-selected images + OCR + original 17-part ASR review successful in 42411436773. Check prior end-to-end job 42405663580 separately; independent gold Persian speech/OCR and teacher Q&A/role verification remains. Actions artifacts expire; unverified long-term archive must not be called durable.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -238,6 +242,47 @@
         "independently_measured_asr_ocr_and_qa_accuracy": false,
         "verified_teacher_answers": 0,
         "approved_teacher_trading_rules": 0
+      },
+      "v12_acceptance_2026_11_07": {
+        "actual_100s_end_to_end_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42410447947",
+        "actual_full_original_80m_source_join_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42411436773",
+        "actual_full_source_check_conclusion": "success",
+        "real_100s_video_1sec_scanned": 100,
+        "real_100s_visual_ocr_frames": 4,
+        "real_100s_ocr_errors": 0,
+        "real_100s_asr_utterances": 17,
+        "full_original_global_audio_parts": 17,
+        "full_original_asr_utterances": 2035,
+        "full_original_1second_chat_selected_highres_ocr_frames": 276,
+        "full_original_provisional_question_groups": 72,
+        "full_original_review_clusters": 33,
+        "full_original_critical_ocr_word_conflict_count_after_spacing_fix": 0,
+        "full_original_source_records_lost": 0,
+        "checkpoint_ocr_resume_same_runner_ci": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42410720779",
+        "source_integrity_ci": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42410486946",
+        "semantic_accuracy_gold_label_status": "NOT_MEASURED",
+        "teacher_student_role_proven": "NO",
+        "verified_instructor_answers": 0,
+        "verified_executable_trading_rules": 0,
+        "cross_runner_resume_verified": false,
+        "permanent_private_media_backup_verified": false,
+        "transient_private_actions_artifact_retention_days": 30,
+        "code_changes": [
+          "one-second original chat sampling added into unified processing",
+          "source-hashed high-res chat images and Persian OCR now join source ASR in one pipeline",
+          "OCR source and time checked resume after interruption",
+          "safe Persian-question dedup catches conflicting buy/no-buy but normalizes comparison spacing",
+          "source-linked full original 80m 276 OCR / 17 audio part rehearsal successful"
+        ],
+        "not_claimed": [
+          "independent Persian ASR WER",
+          "independent screenshot OCR CER/WER",
+          "teacher/student voice attribution",
+          "correct question-answer semantics",
+          "meaning of all board or chart scenes",
+          "final complete trading strategy",
+          "indefinite media storage"
+        ]
       }
     }
   ]
