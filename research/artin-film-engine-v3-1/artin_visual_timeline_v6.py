@@ -42,7 +42,7 @@ def frame_times(parts, sample_s=20):
         # Start of every 5-minute section is included even when a final
         # incomplete section is only a few seconds long.
         step_count=max(1,math.ceil(duration/sample_s))
-        times=[min(end-.05,start+max(.05, (i+.5)*sample_s)) for i in range(step_count)]
+        times=[min(end-max(.05,min(1.0,duration/4)),start+max(.05, (i+.5)*sample_s)) for i in range(step_count)]
         times=sorted(set(round(x,3) for x in times))
         for pos,t in enumerate(times,1):
             result.append({'global_chunk':p['chunk'],
