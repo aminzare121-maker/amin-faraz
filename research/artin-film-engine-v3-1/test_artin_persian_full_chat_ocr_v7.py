@@ -48,6 +48,46 @@ class ChatOCRFullTests(unittest.TestCase):
         self.assertEqual(summary['verified_teacher_rules'],0)
         self.assertEqual(summary['frames_with_question_mark_candidates'],1)
 
+    def test_restart_after_partial_checkpoint_does_not_reocr_finished_frames(self):
+        import json
+        class GoodOCR:
+            def __init__(self):self.calls=0
+            def predict(self,path):
+                self.calls+=1
+                return [{'rec_texts':['این چه زمانی شروع میشه؟'],
+                         'rec_scores':[.96],
+                         'rec_boxes':[[1,2,160,40]]}]
+        output=self.root/'resumable'
+        first=GoodOCR()
+        ocr_frames(self.root,self.idx,output,ocr_factory=lambda **k:first,checkpoint_every=1)
+        self.assertEqual(first.calls,3)
+        p=output/'full_chat_ocr_candidates_PRIVATE.json'
+        saved=json.loads(p.read_text(encoding='utf8'))
+        saved['results']=saved['results'][:2]
+        saved['frames_attempted']=2
+        saved['complete']=False
+        p.write_text(json.dumps(saved),encoding='utf8')
+        second=GoodOCR()
+        result=ocr_frames(self.root,self.idx,output,ocr_factory=lambda **k:second,checkpoint_every=1)
+        self.assertEqual(second.calls,1)
+        self.assertEqual(result['frames_attempted'],3)
+        self.assertEqual(result['ocr_failed_frames'],0)
+
+    def test_swapped_checkpoint_source_image_hash_rejected_before_model(self):
+        import json
+        class GoodOCR:
+            def predict(self,path):
+                return [{'rec_texts':[],'rec_scores':[],'rec_boxes':None}]
+        output=self.root/'bad-checkpoint'
+        ocr_frames(self.root,self.idx,output,ocr_factory=lambda **k:GoodOCR())
+        p=output/'full_chat_ocr_candidates_PRIVATE.json'
+        saved=json.loads(p.read_text(encoding='utf8'))
+        saved['results'][0]['source_frame_sha256']='f'*64
+        p.write_text(json.dumps(saved),encoding='utf8')
+        with self.assertRaisesRegex(ValueError,'checkpoint original image'):
+            ocr_frames(self.root,self.idx,output,
+                ocr_factory=lambda **k:(_ for _ in ()).throw(AssertionError('bad')))
+
     def test_blank_real_chat_with_none_geometry_is_blank_not_model_failure(self):
         class NoPrintedChatOCR:
             def predict(self,path):
