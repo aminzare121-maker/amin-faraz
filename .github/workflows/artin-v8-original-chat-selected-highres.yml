@@ -1,0 +1,46 @@
+name: Artin V8 original high-res chat snapshots at detected 1-second changes
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v8-original-chat-selected-highres.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-verified-high-res:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install source-frame decoder and image tools
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Retrieve source-video 4821 frame change positions without private class content
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-one-second-real-chat-change-timeline
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392242222
+          github-token: ${{ github.token }}
+          path: /tmp/artin_1sec_chat_timestamp_index
+      - name: Sample all priority original-video high-res chat screenshots
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_chat_change_highres_v8.py \
+            --temporal-index /tmp/artin_1sec_chat_timestamp_index/full_second_by_second_chat_TIMES_ONLY.json \
+            --out /tmp/artin_1sec_chat_highres_private
+      - name: Retain only private question screenshots and index for downstream Persian OCR
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_1sec_chat_highres_private/chat_selected_index.json
+            /tmp/artin_1sec_chat_highres_private/chat/**

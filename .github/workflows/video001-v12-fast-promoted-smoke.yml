@@ -1,0 +1,174 @@
+name: VIDEO-001 V12 FAST installed source-once 17-ASR+16-OCR smoke and tamper gate
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/video001-v12-fast-promoted-smoke.yml'
+      - 'research/artin-film-engine-v3-1/video001_fast_*.py'
+      - 'research/artin-film-engine-v3-1/artin_parallel_asr_worker_v5.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-once-and-no-loss-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install original frame toolkit and Pillow only (no altered ASR/OCR models)
+        run: |
+          command -v ffmpeg || sudo apt-get update && sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Create synthetic movie strictly for codec/source-processing regression
+        run: |
+          ffmpeg -nostdin -hide_banner -loglevel error -y \
+            -f lavfi -i testsrc2=size=640x480:rate=5 \
+            -f lavfi -i sine=frequency=440:sample_rate=16000 \
+            -t 9 -pix_fmt yuv420p -c:v mpeg4 -c:a aac /tmp/video001_source_test.mp4
+          test -s /tmp/video001_source_test.mp4
+      - name: Run real unchanged FFmpeg full 5m-part prep + 1s scan + original board and chat SHA sharding
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_source_once_v1.py \
+            --video /tmp/video001_source_test.mp4 \
+            --out /tmp/video001_fast_smoke \
+            --audio-workers 1 --ocr-workers 1 --sample-seconds 30
+      - name: Prove short original movies automatically reduce worker count without losing source evidence
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_source_once_v1.py --video /tmp/video001_source_test.mp4 --out /tmp/video001_fast_auto
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/video001_fast_auto')
+          m=json.loads((root/'safe_source_prep_summary.json').read_text())
+          chat=json.loads((root/'full_chat'/'chat_selected_index.json').read_text())
+          assert m['source_audio_worker_count']==1
+          assert m['original_ocr_workers']==len(chat['rows'])>=1
+          assert m['all_original_audio_parts_assigned_once']
+          assert m['all_original_chat_images_assigned_once']
+          assert len(list((root/'ocr_shards').glob('worker_*')))==len(chat['rows'])
+          assert m['source_integrity_verified']
+          print('VIDEO001_FAST_AUTO_SHORT_MOVIE_SHARD_ASSIGNMENT_SUCCESS=True')
+          PY
+      - name: Compile entire fast candidate and independently exercise source-first no-speech merge
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -m py_compile video001_fast_source_once_v1.py video001_fast_remote_prep_v1.py video001_fast_verify_v1.py video001_fast_export_v12.py artin_parallel_asr_worker_v5.py
+          python3 -u test_video001_fast_source_once_v1.py /tmp/video001_fast_smoke
+      - name: Prove no source-chunk/image omission and detect tampered chunk and source SHA
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from artin_film_pipeline import file_sha256
+          from artin_fast_av_v4 import validate_fast
+          from artin_persian_full_chat_ocr_v7 import _valid_source_row
+          root=Path('/tmp/video001_fast_smoke')
+          doc=json.loads((root/'safe_source_prep_summary.json').read_text())
+          assert doc['source_integrity_verified'] and doc['source_global_audio_chunks']==1
+          assert doc['all_original_audio_parts_assigned_once']
+          assert doc['all_original_chat_images_assigned_once']
+          assert doc['original_chat_images_selected']>0 and doc['original_board_frames']>0
+          ar=root/'asr_shards'/'worker_00'
+          m=json.loads((ar/'fast_av_manifest.json').read_text())
+          assert validate_fast(ar,m,verify_files=False)
+          wav=ar/m['parts'][0]['audio']
+          assert file_sha256(wav)==m['parts'][0]['audio_sha256']
+          cr=root/'ocr_shards'/'worker_00'
+          visual=json.loads((cr/'chat_selected_index.json').read_text())
+          assert visual['source_video_sha256']==doc['source_video_sha256']
+          assert len(visual['rows'])==doc['original_chat_images_selected']
+          for image in visual['rows']:
+              assert _valid_source_row(image,cr).is_file()
+          assert not (root/'private_original.mp4').exists()
+          assert all(x['chat']['sha256'] for x in visual['rows'])
+          with wav.open('ab') as f:f.write(b'FORCED_TAMPER')
+          assert file_sha256(wav)!=m['parts'][0]['audio_sha256']
+          assert m['video_sha256']==doc['source_video_sha256']
+          print('VIDEO001_RC_SOURCE_ONCE_NO_LOSS_TAMPER_REJECTED=True')
+          PY
+      - name: Regression for a 90-minute original film preserving all 18 five-minute source chunks and board samples
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          from artin_fast_av_v4 import plan_fast
+          from artin_visual_timeline_v6 import frame_times
+          m=plan_fast(5400,frames_per_part=2,overlap=12)
+          assert len(m)==18
+          assert [p['chunk'] for p in m]==list(range(1,19))
+          assert m[0]['core_start']==0 and m[-1]['core_end']==5400
+          assert [p['core_end']-p['core_start'] for p in m]==[300]*18
+          assigned=[[p for p in m if (p['chunk']-1)%17==i] for i in range(17)]
+          assert sorted(p['chunk'] for shard in assigned for p in shard)==list(range(1,19))
+          board=frame_times(m,30)
+          assert len(board)==180
+          assert all(0<=x['time_seconds']<=5400 for x in board)
+          print('VIDEO001_90MIN_NO_MISSING_18_SOURCE_CHUNKS_180_BOARD_FRAMES=True')
+          PY
+      - name: Verify bounded Uupload source URL retries and correct fail-closed behavior
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import json,tempfile
+          from pathlib import Path
+          from unittest.mock import patch
+          import video001_fast_remote_prep_v1 as p
+          from video001_fast_remote_prep_v1 import remote_prepare
+          def jobfile(root):
+              req=root/'request.json'
+              req.write_text(json.dumps({
+                  'schema':'video001_fast_source_request_v1',
+                  'source_page':'https://my.uupload.ir/p/aGgKYdpL',
+                  'expected_sha256':'a'*64,
+                  'audio_workers':1,'ocr_workers':1,'sample_seconds':30}))
+              return req
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);req=jobfile(root)
+              mockprep={'elapsed_seconds':1,
+                        'source_integrity_verified':True}
+              with patch.object(p,'get_direct_url',side_effect=[
+                    ValueError('no mp4 yet'),ValueError('no mp4 yet'),
+                    ('https://s1.uupload.ir/test.mp4',None)]) as getter, \
+                   patch.object(p,'download_once',return_value=(12345,'a'*64)) as download, \
+                   patch.object(p,'prepare',return_value=mockprep) as prep, \
+                   patch.object(p.time,'sleep') as sleep:
+                  result=remote_prepare(req,root/'out')
+                  assert getter.call_count==3 and sleep.call_count==2
+                  assert download.call_count==1 and prep.call_count==1
+                  assert result['source_integrity_verified'] is True
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);req=jobfile(root)
+              with patch.object(p,'get_direct_url',side_effect=ValueError('no mp4')), \
+                   patch.object(p,'download_once') as download, \
+                   patch.object(p.time,'sleep') as sleep:
+                  try:
+                      remote_prepare(req,root/'out')
+                      raise AssertionError('Missing source must never pass')
+                  except RuntimeError as e:
+                      assert 'SOURCE_UNAVAILABLE' in str(e)
+                  assert download.call_count==0 and sleep.call_count==3
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);req=jobfile(root)
+              with patch.object(p,'get_direct_url',return_value=('https://s1.uupload.ir/test.mp4',None)), \
+                   patch.object(p,'download_once',return_value=(12345,'b'*64)), \
+                   patch.object(p,'prepare') as prep:
+                  try:
+                      remote_prepare(req,root/'out')
+                      raise AssertionError('Wrong SHA must be rejected')
+                  except ValueError as e:
+                      assert 'SHA' in str(e)
+                  assert prep.call_count==0
+          print('VIDEO001_SOURCE_LINK_RETRY_FAILCLOSED_REGRESSION_SUCCESS=True')
+          PY
+      - name: Keep only source-safe regression metrics, no synthetic media
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-rc-source-sha-smoke-no-private-media
+          retention-days: 7
+          if-no-files-found: error
+          path: /tmp/video001_fast_smoke/safe_source_prep_summary.json

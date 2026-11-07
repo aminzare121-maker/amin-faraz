@@ -1,0 +1,69 @@
+name: Artin V7 actual full-lesson fidelity audit and regression
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/artin_fidelity_audit_v7.py'
+      - 'research/artin-film-engine-v3-1/test_artin_fidelity_audit_v7.py'
+      - '.github/workflows/artin-v7-real-fidelity-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install image/video test dependencies
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Test all time/identity/role fail-closed guards
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest discover -p 'test_*.py' -v
+  real-source-evidence:
+    needs: regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Reuse private completed 17-part original audio review
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/artin_private_v7/audio
+      - name: Reuse private source-stamped original lesson board/chat frames
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_private_v7/images
+      - name: Audit 17 real audio sections and 161 actual chat/board images together
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_fidelity_audit_v7.py \
+            --review /tmp/artin_private_v7/audio/complete_unverified_qa_evidence.json \
+            --visual /tmp/artin_private_v7/images/visual/visual_timeline_v6.json \
+            --out /tmp/artin_private_v7/output
+      - name: Preserve safe summary and PRIVATE reviewer worklist for 30 days
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v7-fidelity-audit-original-lesson
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_private_v7/output/fidelity_summary_safe.json
+            /tmp/artin_private_v7/output/fidelity_candidates_PRIVATE.json

@@ -1,0 +1,51 @@
+name: Artin V7 Persian OCR on all 161 original classroom chat screenshots
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v7-full-original-chat-ocr.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  complete-typed-chat-ocr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install compatible CPU Persian OCR and image dependencies
+        run: |
+          python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Fetch existing private, source-verified original student-chat frames
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_original_chat_161
+      - name: Analyze every sampled classroom chat image with RTL geometry and checkpointing
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_full_chat_ocr_v7.py \
+            --visual-root /tmp/artin_original_chat_161/visual \
+            --visual-index /tmp/artin_original_chat_161/visual/visual_timeline_v6.json \
+            --out /tmp/artin_chat_ocr_161_private
+      - name: Store source-linked unverified typed chat evidence privately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v7-all-161-chat-ocr-private-review
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_chat_ocr_161_private/full_chat_ocr_candidates_PRIVATE.json
+            /tmp/artin_chat_ocr_161_private/full_chat_ocr_summary_safe.json

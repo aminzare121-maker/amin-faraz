@@ -30,7 +30,9 @@ def probable_question(text):
 
 def validate_visual_model_candidates(visual_index: dict, proposals: list[dict]):
     """Prevent ungrounded image labels and any false teacher/student attribution."""
-    if not isinstance(visual_index,dict) or visual_index.get('schema')!='artin_classroom_visual_v6':
+    if (not isinstance(visual_index,dict) or
+            visual_index.get('schema') not in ('artin_classroom_visual_v6',
+                                               'artin_change_selected_chat_v8')):
         raise ValueError('Visual timeline index missing')
     if not isinstance(proposals,list):
         raise ValueError('Model response must be list of observations')
@@ -44,6 +46,8 @@ def validate_visual_model_candidates(visual_index: dict, proposals: list[dict]):
         if frame_id not in known or channel not in _ALLOWED_CHANNELS:
             raise ValueError('Candidate references unknown frame or channel')
         src=known[frame_id]
+        if channel not in src:
+            raise ValueError('Requested channel missing from source frame')
         if p.get('frame_sha256')!=src[channel]['sha256']:
             raise ValueError('Candidate references another or altered source image')
         if p.get('teacher_verified') is True or p.get('student_verified') is True:

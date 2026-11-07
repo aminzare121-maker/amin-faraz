@@ -1,0 +1,51 @@
+name: Artin V7 real Persian printed student question OCR comparison
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v7-persian-ocr-trial.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-persian-ocr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: "True"
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: "True"
+      OMP_NUM_THREADS: "2"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install official PaddleOCR Persian OCR on CPU
+        run: |
+          python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Load a private source-hashed classroom screenshot from verified video
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_persian_ocr_visual
+      - name: Recognize only one user-provided video's actual typed question crop
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_chat_ocr_trial_v7.py \
+            --image /tmp/artin_persian_ocr_visual/visual/chat/b001_s12_g000012_t0003315000_chat.png \
+            --out /tmp/artin_persian_ocr_candidate \
+            --expected-sha256 3645f5b17a14c51e50de059b2c255a23ed492e08cb070608244a0da2baf1a291
+      - name: Private unverified textual evidence, short retention
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v7-persian-real-printed-chat-ocr
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_persian_ocr_candidate/ocr_PRIVATE_unverified.json
+            /tmp/artin_persian_ocr_candidate/ocr_summary_safe.json

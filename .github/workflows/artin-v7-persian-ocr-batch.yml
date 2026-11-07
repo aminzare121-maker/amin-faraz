@@ -1,0 +1,51 @@
+name: Artin V7 Persian OCR accuracy pilot across three authentic class messages
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v7-persian-ocr-batch.yml'
+      - 'research/artin-film-engine-v3-1/artin_persian_chat_ocr_trial_v7.py'
+      - 'research/artin-film-engine-v3-1/artin_persian_ocr_batch_v7.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  three-original-student-messages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install version-pinned Persian OCR with CPU compatibility
+        run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Reuse authentic source-sha-tagged Persian classroom frames
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_3_persian_visual
+      - name: Compare three separate original chat message crops
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_ocr_batch_v7.py --input-dir /tmp/artin_3_persian_visual/visual/chat --out /tmp/artin_3_persian_ocr_results
+      - name: Keep human-readable OCR candidates only in short-lived private artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v7-three-original-farsi-chat-ocr
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_3_persian_ocr_results/batch_safe_summary.json
+            /tmp/artin_3_persian_ocr_results/first_greeting/ocr_PRIVATE_unverified.json
+            /tmp/artin_3_persian_ocr_results/microphone_problem/ocr_PRIVATE_unverified.json
+            /tmp/artin_3_persian_ocr_results/typed_question/ocr_PRIVATE_unverified.json

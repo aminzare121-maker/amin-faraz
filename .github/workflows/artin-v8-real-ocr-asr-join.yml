@@ -1,0 +1,61 @@
+name: Artin V8 real all-161 typed student questions linked to original 17-part teacher speech
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v8-real-ocr-asr-join.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-matched-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch private OCR from all original 161 chat images
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v7-all-161-chat-ocr-private-review
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42391720989
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_ocr_join/chat
+      - name: Fetch original classroom video frames and source hashes
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_ocr_join/source
+      - name: Fetch all 17 source-verified ASR sections
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/artin_real_ocr_join/audio
+      - name: Reconcile actual typed chat and nearby spoken text for human review only
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_ocr_asr_join_v8.py \
+            --images-index /tmp/artin_real_ocr_join/source/visual/visual_timeline_v6.json \
+            --full-chat-ocr /tmp/artin_real_ocr_join/chat/full_chat_ocr_candidates_PRIVATE.json \
+            --speech-review /tmp/artin_real_ocr_join/audio/complete_unverified_qa_evidence.json \
+            --out /tmp/artin_real_ocr_join/output
+      - name: Retain source-linked QA reviewer packets privately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v8-real-chat-speech-QA-REVIEW-ONLY
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_real_ocr_join/output/qa_summary_safe.json
+            /tmp/artin_real_ocr_join/output/qa_review_PRIVATE.json

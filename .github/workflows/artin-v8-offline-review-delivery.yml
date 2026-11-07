@@ -1,0 +1,78 @@
+name: Artin V8 deliver offline mobile/desktop teacher evidence review application
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v8-offline-review-delivery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  deliver-practical-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve source-linked 59 typed question groups
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-real-chat-speech-QA-REVIEW-ONLY
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42393181420
+          github-token: ${{ github.token }}
+          path: /tmp/artin_offline_inputs/qa
+      - name: Retrieve 35 original-lesson rule fidelity packets
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v7-fidelity-audit-original-lesson
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42389814966
+          github-token: ${{ github.token }}
+          path: /tmp/artin_offline_inputs/claims
+      - name: Retrieve 17 full source-verified audio sections
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/artin_offline_inputs/audio
+      - name: Retrieve original student chat and teacher board screenshot images
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_offline_inputs/frames
+      - name: Build usable Persian-language offline review website with timestamps and original source image hashes
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -B artin_offline_review_package_v8.py \
+            --qa /tmp/artin_offline_inputs/qa/qa_review_PRIVATE.json \
+            --claims /tmp/artin_offline_inputs/claims/fidelity_candidates_PRIVATE.json \
+            --audio /tmp/artin_offline_inputs/audio/complete_unverified_qa_evidence.json \
+            --visual-index /tmp/artin_offline_inputs/frames/visual/visual_timeline_v6.json \
+            --visual-root /tmp/artin_offline_inputs/frames/visual \
+            --out /tmp/artin_offline_review_private
+      - name: Show only nonprivate final delivery counts
+        run: |
+          python3 - <<'PY'
+          import json
+          p='/tmp/artin_offline_review_private/summary_safe.json'
+          x=json.load(open(p,encoding='utf8'))
+          assert x['question_groups']>0 and x['unverified_rule_fragments']>0
+          assert x['source_images_copied']>0
+          assert x['standalone_html'] and x['executable_teacher_rules']==0
+          print('ARTIN_DELIVERY_VERIFIED='+json.dumps(x,ensure_ascii=False))
+          PY
+      - name: Deliver self-contained private offline interactive package for mobile/desktop
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-V8-practical-offline-review-mobile-desktop-PRIVATE
+          retention-days: 30
+          path: /tmp/artin_offline_review_private/**
