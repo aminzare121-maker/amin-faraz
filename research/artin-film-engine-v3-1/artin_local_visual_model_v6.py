@@ -91,9 +91,11 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
                     'visible_text_candidate':txt,
                     'legibility':legibility.upper()})
             except Exception as exc:
-                seconds_per_view.append({'frame_id':row['frame_id'],
-                    'channel':channel,'inference_seconds':round(time.monotonic()-started_at,2),
-                    'status':'MODEL_FAILED'})
+                if not any(x['frame_id']==row['frame_id'] and x['channel']==channel
+                           for x in seconds_per_view):
+                    seconds_per_view.append({'frame_id':row['frame_id'],
+                        'channel':channel,'inference_seconds':round(time.monotonic()-started_at,2),
+                        'status':'MODEL_FAILED'})
                 # Explicit failure; do NOT fabricate text or silently continue
                 # as though the screenshot had been analyzed.
                 failed.append({'frame_id':row['frame_id'],'channel':channel,
