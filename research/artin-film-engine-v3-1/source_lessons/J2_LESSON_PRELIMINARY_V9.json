@@ -1,0 +1,92 @@
+{
+  "schema": "artin_source_lesson_metadata_v9",
+  "video_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+  "movie_title": "J2_6-11-1404.mp4",
+  "objective": "Conservative source-derived lecture/topic classification; NOT a transcript accuracy or strategy verification claim.",
+  "classification": "PRELIMINARY_INTRODUCTORY_FOREX_LECTURE",
+  "source_evidence_type": "17 large-v3-turbo ASR chunks plus sampled original browser screen of Basics.pdf lecture notes",
+  "all_topics_human_verified": false,
+  "chapters": [
+    {
+      "start": 0,
+      "end": 900,
+      "topic": "شروع جلسه، مشکلات صدا و تصویر، معرفی دوره، آمادگی ذهنی معامله‌گر",
+      "content_human_verified": false
+    },
+    {
+      "start": 900,
+      "end": 1500,
+      "topic": "روان‌شناسی و مدیریت ترس، آشنایی مقدماتی با بازار فارکس و ساعت‌های معامله",
+      "content_human_verified": false
+    },
+    {
+      "start": 1500,
+      "end": 2100,
+      "topic": "مفهوم خرید و فروش ارز، جهت معامله، شاخص‌ها و کالاهای قابل معامله",
+      "content_human_verified": false
+    },
+    {
+      "start": 2100,
+      "end": 2700,
+      "topic": "جفت‌ارزهای ماژور، معرفی ارز پایه و ارز متقابل، مفاهیم اولیهٔ بازار",
+      "content_human_verified": false
+    },
+    {
+      "start": 2700,
+      "end": 3300,
+      "topic": "مثال‌های جفت‌ارز، رابطهٔ ارزهای پایه و متقابل، شاخص و رشد نسبی",
+      "content_human_verified": false
+    },
+    {
+      "start": 3300,
+      "end": 3900,
+      "topic": "مفاهیم شاخص‌ها، دلار آمریکا، طلا و رابطهٔ دارایی‌ها با ارز",
+      "content_human_verified": false
+    },
+    {
+      "start": 3900,
+      "end": 4500,
+      "topic": "تمرین‌های توضیحی خرید و فروش جفت‌ارز و تغییرات نسبت ارزها، اصطلاحات ابتدایی ریسک",
+      "content_human_verified": false
+    },
+    {
+      "start": 4500,
+      "end": 4820.5452,
+      "topic": "معانی اولیهٔ حد ضرر و افت سرمایه، پرسش‌های آخر جلسه و خاتمهٔ کلاس",
+      "content_human_verified": false
+    }
+  ],
+  "source_trace": [
+    {
+      "start": 25,
+      "end": 55,
+      "asr_topic": "درخواست روشن شدن تصویر و ضبط کلاس",
+      "not_execution_strategy": true
+    },
+    {
+      "start": 1380,
+      "end": 1500,
+      "asr_topic": "سشن‌های معاملاتی و مقدمات فارکس",
+      "not_execution_strategy": true
+    },
+    {
+      "start": 2610,
+      "end": 2940,
+      "asr_topic": "مفهوم ارزش ارز و خرید/فروش در جفت‌ارزها",
+      "not_execution_strategy": true
+    },
+    {
+      "start": 4200,
+      "end": 4450,
+      "asr_topic": "آموزش واژه‌ها و مثال‌های جفت‌ارز",
+      "not_execution_strategy": true
+    },
+    {
+      "start": 4500,
+      "end": 4820.5452,
+      "asr_topic": "حد ضرر، دراودان، سؤالات و جمع‌بندی",
+      "not_execution_strategy": true
+    }
+  ],
+  "caution": "Introductory classification is preliminary: some ASR is noisy, videos not independently speaker-labeled; absence of human-verified rules does not prove teacher never stated a condition."
+}
