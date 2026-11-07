@@ -102,6 +102,29 @@ def clustered_review(review: dict, *, ratio:float=.95, gap_seconds:float=120.0) 
             best['latest_seen_seconds']=max(best['latest_seen_seconds'],end)
             best['member_groups'].append(item)
             best['_variants'].append({'key':key,'safety_signature':signature})
+    # OCR near-duplicates with different negation/order polarity are neither
+    # automatically merged nor silently ignored. Surface the conflict with
+    # both original frame references so a reviewer can inspect source pixels.
+    conflict_pairs=[]
+    for i,a in enumerate(result):
+        for b in result[i+1:]:
+            if (a['first_seen_seconds']>b['latest_seen_seconds']+gap_seconds or
+                b['first_seen_seconds']>a['latest_seen_seconds']+gap_seconds):
+                continue
+            competing=any(
+                va['safety_signature']!=vb['safety_signature'] and
+                SequenceMatcher(None,va['key'],vb['key'],autojunk=False).ratio()>=.85
+                for va in a['_variants'] for vb in b['_variants'])
+            if competing:
+                conflict_pairs.append({
+                    'first_review_id':a['review_id'],
+                    'second_review_id':b['review_id'],
+                    'first_source_frames':a['member_groups'][0]['original_frame_sources'],
+                    'second_source_frames':b['member_groups'][0]['original_frame_sources'],
+                    'reason':'POSSIBLE_CRITICAL_PERSIAN_OCR_NEGATION_OR_ACTION_DISAGREEMENT',
+                    'must_review_original_images':True,
+                    'automatically_resolved':False,
+                    'can_issue_trading_rule':False})
     for c in result:
         del c['_variants']
         c['member_groups_count']=len(c['member_groups'])
@@ -112,6 +135,8 @@ def clustered_review(review: dict, *, ratio:float=.95, gap_seconds:float=120.0) 
             'source_video_sha256':sha,'original_review_groups':len(groups),
             'conservative_near_duplicate_clusters':len(result),
             'original_groups_not_lost':True,
+            'critical_word_conflicts_for_review':len(conflict_pairs),
+            'critical_word_conflict_evidence':conflict_pairs,
             'similarity_ratio':ratio,'max_adjacency_gap_seconds':gap_seconds,
             'semantic_gold_accuracy_measured':False,
             'verified_teacher_answers':0,'verified_trading_rules':0,
