@@ -5,6 +5,7 @@ on:
       - review/artin-teacher-av-understanding-v5-20261107
     paths:
       - '.github/workflows/artin-v5-real-asr-trial.yml'
+      - 'research/artin-film-engine-v3-1/artin_real_asr_trial_v5.py'
   workflow_dispatch:
 permissions:
   contents: read
