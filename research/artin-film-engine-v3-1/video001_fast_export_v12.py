@@ -41,7 +41,7 @@ def export(*,proof_path,source_path,asr_path,ocr_root,chat_index,board_root,
     if (audio_workers!=source["source_audio_worker_count"] or
         ocr_workers!=source["original_ocr_workers"] or
         speech["parts_with_asr"]!=source["source_global_audio_chunks"] or
-        speech["parts_missing_asr"]!=0):
+        bool(speech["parts_missing_asr"])):
         raise ValueError("V12 FAST missing source audio")
     results=[]
     for i in range(ocr_workers):
