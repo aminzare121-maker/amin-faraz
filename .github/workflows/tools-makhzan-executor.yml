@@ -144,6 +144,9 @@ jobs:
           assert x['original_source_chat_screenshots']==x['source_screenshots_ocr_completed']>0
           assert x['source_screenshots_ocr_errors']==0
           assert x['all_source_coverage_stages_ran'] is True
+          assert x['one_second_chat_frames_scanned'] >= x['one_second_chat_changed_frames'] >= 0
+          assert x['one_second_chat_frames_scanned'] > x['original_source_board_screenshots']
+          assert x['source_screenshots_ocr_completed'] == x['original_source_chat_screenshots']
           for path in ('private_original_asr_review.json','private_visual_timeline.json',
               'private_question_audio_REVIEW_ONLY.json','private_unverified_rule_context.json'):
               assert (p/path).is_file(), path
@@ -165,12 +168,15 @@ jobs:
             /tmp/makhzan_complete_session_private/complete_source_private/safe_session_result.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_original_asr_review.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_visual_timeline.json
+            /tmp/makhzan_complete_session_private/complete_source_private/private_second_by_second_chat_index.json
+            /tmp/makhzan_complete_session_private/complete_source_private/private_chat_capture_index.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_question_audio_REVIEW_ONLY.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_question_clusters_REVIEW_ONLY.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_unverified_rule_context.json
             /tmp/makhzan_complete_session_private/complete_source_private/private_ocr/full_chat_ocr_candidates_PRIVATE.json
             /tmp/makhzan_complete_session_private/complete_source_private/visual/board/**
             /tmp/makhzan_complete_session_private/complete_source_private/visual/chat/**
+            /tmp/makhzan_complete_session_private/complete_source_private/visual_change/chat/**
 
   course_status:
     needs: validate-request
