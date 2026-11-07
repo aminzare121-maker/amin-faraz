@@ -64,6 +64,10 @@ jobs:
           assert 'fromJSON(needs.source-once.outputs.asr_matrix)' in str(jobs['source-sharded-asr'])
           assert 'fromJSON(needs.source-once.outputs.ocr_matrix)' in str(jobs['source-sharded-ocr'])
           assert 'if' in str(jobs['source-once']['steps'])
+          assert jobs['source-sharded-asr']['strategy']['max-parallel']==17
+          assert jobs['source-sharded-ocr']['strategy']['max-parallel']==16
+          assert any('video001-fast-original-audio-16' in str(s) for s in jobs['source-once']['steps'])
+          assert sum('video001-fast-original-audio-' in str(s) for s in jobs['source-once']['steps'])==17
           print('VIDEO001_FAST_DYNAMIC_YAML_VALID=True')
           PY
       - name: Compile entire fast candidate and independently exercise source-first no-speech merge
