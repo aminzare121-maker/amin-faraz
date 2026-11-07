@@ -34,8 +34,8 @@ def critical_presence(term,text):
     never automatically supplies a trading decision.
     """
     if term=='نمی':
-        return bool(re.search(r'(?<!\\w)نمی(?=\\s|[آ-ی]|$)',text))
-    return bool(re.search(r'(?<!\\w)'+re.escape(term)+r'(?!\\w)',text))
+        return bool(re.search(r'(?<!\w)نمی(?=\s|[آ-ی]|$)',text))
+    return bool(re.search(r'(?<!\w)'+re.escape(term)+r'(?!\w)',text))
 
 
 def edit_distance(a,b):
