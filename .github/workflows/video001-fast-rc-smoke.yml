@@ -108,6 +108,24 @@ jobs:
           assert m['video_sha256']==doc['source_video_sha256']
           print('VIDEO001_RC_SOURCE_ONCE_NO_LOSS_TAMPER_REJECTED=True')
           PY
+      - name: Regression for a 90-minute original film preserving all 18 five-minute source chunks and board samples
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          from artin_fast_av_v4 import plan_fast
+          from artin_visual_timeline_v6 import frame_times
+          m=plan_fast(5400,frames_per_part=2,overlap=12)
+          assert len(m)==18
+          assert [p['chunk'] for p in m]==list(range(1,19))
+          assert m[0]['core_start']==0 and m[-1]['core_end']==5400
+          assert [p['core_end']-p['core_start'] for p in m]==[300]*18
+          assigned=[[p for p in m if (p['chunk']-1)%17==i] for i in range(17)]
+          assert sorted(p['chunk'] for shard in assigned for p in shard)==list(range(1,19))
+          board=frame_times(m,30)
+          assert len(board)==180
+          assert all(0<=x['time_seconds']<=5400 for x in board)
+          print('VIDEO001_90MIN_NO_MISSING_18_SOURCE_CHUNKS_180_BOARD_FRAMES=True')
+          PY
       - name: Keep only source-safe regression metrics, no synthetic media
         uses: actions/upload-artifact@v4
         with:
