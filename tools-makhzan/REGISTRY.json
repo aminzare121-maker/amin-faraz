@@ -25,10 +25,10 @@
       "status": "PARTIALLY_VALIDATED_RELIABLE_INGEST_ONLY",
       "code": {
         "repository": "aminzare121-maker/amin-faraz",
-        "ref": "review/artin-teacher-av-understanding-v5-20261107",
+        "ref": "review/artin-fidelity-audit-v7-20261107",
         "path": "research/artin-film-engine-v3-1",
-        "pull_request": 53,
-        "url": "https://github.com/aminzare121-maker/amin-faraz/pull/53",
+        "pull_request": 54,
+        "url": "https://github.com/aminzare121-maker/amin-faraz/pull/54",
         "merged_into_main": false
       },
       "state_path": "tools-makhzan/VIDEO_ENGINE_STATE_FA.md",
@@ -57,15 +57,17 @@
         "Reject duplicate/missing/mismatched parts and block unverified rules."
       ],
       "outstanding": [
-        "Reliable Persian handwriting and chat OCR on actual frames: not validated, real local vision test failed.",
-        "Teacher versus student reliable attribution: unverified.",
-        "Real question-answer correctness: unverified.",
-        "Correct execution-ready trading rules and reproducibility across sessions: none approved.",
-        "End-to-end unattended automatic processing of arbitrary shared URL from any chat: not available; requires connected workflow."
+        "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
+        "Independent Persian typed-chat and handwritten board OCR accuracy: not demonstrated; PaddleOCR real-frame pilot run 42390410975 pending.",
+        "Speaker-to-role verified teacher/student: not demonstrated.",
+        "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
+        "Teacher strategy rules with complete market triggers, all exceptions and counterexamples: none validated.",
+        "Evidence audit of 35 legacy rule candidates: all 35 standalone utterances lack observable market condition, do not promote.",
+        "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage."
       ],
       "last_verified": {
-        "technical_tests": 142,
-        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385977557",
+        "technical_tests": 155,
+        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42389814966",
         "complete_asr_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
         "evidence_reaudit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385531441",
         "audio_part_count": 17,
@@ -74,9 +76,16 @@
         "board_crops": 161,
         "unverified_question_candidates": 75,
         "unverified_rule_candidates": 35,
-        "verified_teacher_rules": 0
+        "verified_teacher_rules": 0,
+        "fidelity_audit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42389814966",
+        "reference_audio_utterances": 2035,
+        "reference_visual_frames": 161,
+        "legacy_candidate_without_observable_market_condition": 35,
+        "gold_transcription_accuracy": "NOT_MEASURED",
+        "gold_visual_text_accuracy": "NOT_MEASURED",
+        "gold_rule_precision_recall": "NOT_MEASURED"
       },
-      "next_action": "Do not rerun the same video as a new experiment; improve and measure actual Persian typed-chat OCR, identify speakers/teacher answer in authentic audio, then validate rule semantics against video timestamps and chart examples. Keep all outputs review-only until accuracy is independently established."
+      "next_action": "Start from V7 17-part original evidence and audited 35 claims, NOT a new video. Examine real PaddleOCR Persian test 42390410975, measure OCR against independently verified frame text, build speaker-corrected reference and require verified conditional market trigger before any candidate can become a demo trading rule. Until verified, emit REVIEW_REQUIRED only."
     }
   ]
 }
