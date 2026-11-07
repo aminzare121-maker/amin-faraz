@@ -1,0 +1,82 @@
+{
+  "schema": "makhzan_tools_registry_v1",
+  "hub_name_fa": "مخزن ابزارها",
+  "aliases_fa": [
+    "مخزن ابزارها",
+    "ابزار مخزن",
+    "مخزن ابزار",
+    "ابزارهای مخزن"
+  ],
+  "repository": "aminzare121-maker/amin-faraz",
+  "hub_ref": "tools-makhzan-hub",
+  "index_path": "tools-makhzan/INDEX_FA.md",
+  "updated_date": "2026-11-07",
+  "rules": {
+    "discovery": "First fetch this registry from connected GitHub in each new conversation that mentions the hub, then fetch tool state; never answer only from chat memory.",
+    "idempotency": "Known video source URL + recorded source SHA256 + existing results means continuation, NOT automatic restart.",
+    "no_false_success": "Technical test success is not equivalent to reliable video understanding.",
+    "no_live_trading_without_approval": true
+  },
+  "tools": [
+    {
+      "id": "VIDEO-001",
+      "name_fa": "ابزار پردازش فیلم و کلاس",
+      "purpose": "General-purpose video evidence extraction, speech and classroom visual analysis; Artin is one use, not an intrinsic limit.",
+      "status": "PARTIALLY_VALIDATED_RELIABLE_INGEST_ONLY",
+      "code": {
+        "repository": "aminzare121-maker/amin-faraz",
+        "ref": "review/artin-teacher-av-understanding-v5-20261107",
+        "path": "research/artin-film-engine-v3-1",
+        "pull_request": 53,
+        "url": "https://github.com/aminzare121-maker/amin-faraz/pull/53",
+        "merged_into_main": false
+      },
+      "state_path": "tools-makhzan/VIDEO_ENGINE_STATE_FA.md",
+      "continuation_path": "tools-makhzan/CONTINUATION_FA.md",
+      "known_sources": [
+        {
+          "id": "TEACHER_J2_2026_11_07",
+          "user_share_url": "https://my.uupload.ir/p/aGgKYdpL",
+          "source_name": "J2_6-11-1404.mp4",
+          "sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+          "bytes": 204789564,
+          "duration_seconds": 4820.5452,
+          "global_parts": 17,
+          "last_part_duration_seconds": 20.5452,
+          "status": "DOWNLOADED_PROCESSED_IN_EPHEMERAL_RUNNER_UNVERIFIED_SEMANTICS",
+          "main_source_not_committed": true
+        }
+      ],
+      "verified_functions": [
+        "Download source from tested Uupload link and verify SHA256.",
+        "Split any duration to globally numbered five-minute segments with short final segment.",
+        "Keep 18-slot batch numbers plus globally unique indexes.",
+        "Extract source-linked audio and video frames faster without re-encoding whole video.",
+        "Run ASR over all 17 video parts and source-verified merge.",
+        "Extract timestamped board and typed-chat cropped images, retain source frames.",
+        "Reject duplicate/missing/mismatched parts and block unverified rules."
+      ],
+      "outstanding": [
+        "Reliable Persian handwriting and chat OCR on actual frames: not validated, real local vision test failed.",
+        "Teacher versus student reliable attribution: unverified.",
+        "Real question-answer correctness: unverified.",
+        "Correct execution-ready trading rules and reproducibility across sessions: none approved.",
+        "End-to-end unattended automatic processing of arbitrary shared URL from any chat: not available; requires connected workflow."
+      ],
+      "last_verified": {
+        "technical_tests": 142,
+        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385977557",
+        "complete_asr_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
+        "evidence_reaudit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385531441",
+        "audio_part_count": 17,
+        "chat_full_frames": 161,
+        "chat_crops": 161,
+        "board_crops": 161,
+        "unverified_question_candidates": 75,
+        "unverified_rule_candidates": 35,
+        "verified_teacher_rules": 0
+      },
+      "next_action": "Do not rerun the same video as a new experiment; improve and measure actual Persian typed-chat OCR, identify speakers/teacher answer in authentic audio, then validate rule semantics against video timestamps and chart examples. Keep all outputs review-only until accuracy is independently established."
+    }
+  ]
+}
