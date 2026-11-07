@@ -1,0 +1,39 @@
+name: Artin V8 real 1-second classroom chat coverage diagnostic
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v8-real-chat-1second.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  one-second-real-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure FFmpeg is installed
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+      - name: Source-verify and decode original chat region at one-second intervals
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_chat_temporal_v8.py --out /tmp/artin_private_temporal_v8 \
+            --expected-sha256 b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff \
+            --duration-seconds 4820.5452
+      - name: Keep only private frame timestamps and numeric change metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v8-one-second-real-chat-change-timeline
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_private_temporal_v8/chat_change_summary_safe.json
+            /tmp/artin_private_temporal_v8/full_second_by_second_chat_TIMES_ONLY.json
