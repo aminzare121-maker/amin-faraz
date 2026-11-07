@@ -6,6 +6,8 @@ on:
     paths:
       - 'research/artin-film-engine-v3-1/artin_unified_session_v10.py'
       - 'research/artin-film-engine-v3-1/test_artin_unified_session_v10.py'
+      - 'research/artin-film-engine-v3-1/artin_reference_quality_gate_v8.py'
+      - 'research/artin-film-engine-v3-1/test_artin_reference_quality_gate_v8.py'
       - 'research/artin-film-engine-v3-1/artin_remote_complete_v10.py'
       - '.github/workflows/artin-v10-unified-contract.yml'
   workflow_dispatch:
