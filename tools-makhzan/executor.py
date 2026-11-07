@@ -162,7 +162,7 @@ def main():
             "rules_ready":report["ready_to_issue_teacher_rules"],
             "fake_source_count":0},ensure_ascii=False),flush=True)
     if a.validate:
-        print("MAKHZAN_EXECUTOR_REQUEST_VALIDATED=+json.dumps({"tool_id":req["tool_id"],"action":action,
+        print("MAKHZAN_EXECUTOR_REQUEST_VALIDATED="+json.dumps({"tool_id":req["tool_id"],"action":action,
              "job_id":req["job_id"],"registry_ref":reg["hub_ref"]},ensure_ascii=False),flush=True)
 
 if __name__=="__main__":main()
