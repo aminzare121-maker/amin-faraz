@@ -1,0 +1,76 @@
+name: VIDEO-001 independent original 8+8 final evidence and timing proof
+on:
+  push:
+    branches:
+      - experiment/video001-v12-speed-only-20261108
+    paths:
+      - '.github/workflows/video001-v12-verify-8x8-after-shards.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-original-8x8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Wait for 16 original-source, eight-way private ASR and OCR part artifacts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess,time
+          url=f"/repos/{os.environ['GITHUB_REPOSITORY']}/actions/runs/42414871797/artifacts?per_page=100"
+          names={f"speed-V12-ASR-8-{n}" for n in range(8)}
+          names|={f"speed-V12-OCR-8-{n}" for n in range(8)}
+          for i in range(100):
+              data=json.loads(subprocess.check_output(['gh','api',url],text=True))
+              available={a['name'] for a in data.get('artifacts',[]) if not a.get('expired',True)}
+              missing=names-available
+              if not missing:
+                  print('ALL_16_SOURCE_EVIDENCE_ARTIFACTS_AVAILABLE=True')
+                  break
+              if i==99:raise RuntimeError('Original 8-way audio/OCR artifact proofs incomplete; not a successful benchmark')
+              time.sleep(10)
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42414871797
+          github-token: ${{ github.token }}
+          pattern: speed-V12-ASR-8-*
+          merge-multiple: true
+          path: /tmp/video001_all_asr
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42414871797
+          github-token: ${{ github.token }}
+          pattern: speed-V12-OCR-8-*
+          merge-multiple: false
+          path: /tmp/video001_all_ocr
+      - uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: ${{ github.token }}
+          path: /tmp/video001_source_frames
+      - name: Prove all original source voice and OCR parts exist and match SHA/time
+        run: |
+          python3 -u experiments/video001-v12-speed/verify_parallel_evidence.py \
+            --asr-root /tmp/video001_all_asr \
+            --ocr-root /tmp/video001_all_ocr \
+            --source-index /tmp/video001_source_frames/chat_selected_index.json \
+            --out /tmp/video001_speed_result \
+            --asr-workers 8 --ocr-workers 8
+      - name: Save PRIVATE-source-safe actual 8x8 benchmark proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-V12-original-8x8-verified-standalone
+          retention-days: 14
+          if-no-files-found: error
+          path: /tmp/video001_speed_result/safe_speed_validation.json
