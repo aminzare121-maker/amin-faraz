@@ -10,11 +10,53 @@ import csv
 import gzip
 import hashlib
 import json
+import os
+import tempfile
 from collections import Counter
 from decimal import Decimal
 from pathlib import Path
 
 INTERVAL = 900
+PLACEHOLDER_MARKERS = (
+    'VERIFY_', 'PLACEHOLDER', 'TODO', 'TBD', 'SAMPLE_', 'EXAMPLE_',
+    'DUMMY_', 'FAKE_', 'UNKNOWN_', 'UNCONFIRMED_'
+)
+
+
+def validate_declared_source(value, field):
+    """Basic input hygiene, NOT proof that a teacher actually said something."""
+    if type(value) is not str or not value.strip():
+        raise ValueError('missing or invalid source reference: ' + field)
+    if len(value) > 512 or any(x in value for x in ('\\x00', '\\n', '\\r')):
+        raise ValueError('invalid source reference: ' + field)
+    normalized = value.strip().upper()
+    if any(marker in normalized for marker in PLACEHOLDER_MARKERS):
+        raise ValueError('placeholder source reference rejected: ' + field)
+    return value
+
+
+def validate_output_path(output, inputs):
+    """Reject both resolved aliases and existing hardlinks before any write."""
+    output = Path(output)
+    for source in map(Path, inputs):
+        if output.resolve() == source.resolve() or (
+            output.exists() and source.exists() and output.samefile(source)
+        ):
+            raise ValueError('output may not overwrite or alias an input')
+
+
+def write_json_atomic(output, payload):
+    """Replace a file atomically rather than modifying an input hardlink in place."""
+    output = Path(output)
+    fd, temp_name = tempfile.mkstemp(prefix='.artin-shadow-', suffix='.tmp', dir=output.parent)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf8') as handle:
+            json.dump(payload, handle, ensure_ascii=False, indent=2)
+            handle.write('\\n')
+        os.replace(temp_name, output)
+    finally:
+        if Path(temp_name).exists():
+            Path(temp_name).unlink()
 
 
 def dec(v, positive=False):
@@ -72,8 +114,8 @@ def load_specs(path):
             raise ValueError('duplicate trade specification')
         if s['side'] not in ('BUY','SELL') or not s['rule_id']:
             raise ValueError('invalid decision key')
-        if not s.get('source') or not s.get('stop_source') or not s.get('target_source'):
-            raise ValueError('teacher/source trace required for every specification')
+        for field in ('source', 'stop_source', 'target_source'):
+            validate_declared_source(s.get(field), field)
         if type(s.get('known_at')) is not int or s['known_at'] > key[0] or s['known_at'] < 0:
             raise ValueError('stop/target must be sourced and known at decision time')
         specs[key] = s
@@ -92,7 +134,9 @@ def evaluate_trade(bars, idx, key, spec, multiplier, lot, fee):
                     state='BLOCKED', reason='STOP_TARGET_NOT_BRACKETING_NEXT_OPEN',
                     paper_entry=str(entry))
     base = dict(signal_at=at, side=side, rule_id=rule,
-                teacher_sources=dict(entry=spec['source'],stop=spec['stop_source'],target=spec['target_source']),
+                declared_source_refs=dict(entry=spec['source'],stop=spec['stop_source'],target=spec['target_source']),
+                source_evidence_status='DECLARED_UNVERIFIED',
+                teacher_rule_verified=False,
                 paper_entry_at=at, paper_entry=str(entry), stop=str(stop), target=str(target))
     last_t = bars[idx]['t']
     for b in bars[idx:]:
@@ -143,6 +187,12 @@ def replay(csv_path,trace_path,summary_path,spec_path,contract_value,lot_size,ro
                                  reason='MISSING_TEACHER_SOURCED_STOP_TARGET'))
             continue
         outcomes.append(evaluate_trade(bars,by_start.get(at,len(bars)),key,s,multiplier,lot,fee))
+    # A string that looks like a citation is not authenticated teacher evidence.
+    # The replay cannot read or independently review the original classroom media.
+    for outcome in outcomes:
+        outcome.setdefault('teacher_rule_verified', False)
+        outcome.setdefault('source_evidence_status', 'DECLARED_UNVERIFIED' if
+                           outcome.get('declared_source_refs') else 'NOT_EVALUATED')
     eligible_set=set(eligible)
     orphan_specs=[list(k) for k in specs if k not in eligible_set]
     closed=[o for o in outcomes if o['state']=='CLOSED_PAPER']
@@ -166,7 +216,11 @@ def replay(csv_path,trace_path,summary_path,spec_path,contract_value,lot_size,ro
                              'unrealized_positions_excluded_from_closed_PnL',
                              'overlapping_signals_are_independent_not_portfolio_risk',
                              'not_teacher_approved_execution_model'],
-                strategy_pnl_verified=False, orders_sent=0, trades=outcomes)
+                strategy_pnl_verified=False,
+                teacher_method_verified=False,
+                teacher_verified_trade_count=0,
+                declared_source_refs_independently_verified=False,
+                orders_sent=0, trades=outcomes)
 
 
 def main():
@@ -181,9 +235,8 @@ def main():
     p.add_argument('--out',required=True,type=Path)
     a=p.parse_args()
     data=replay(a.csv,a.trace,a.summary,a.specs,a.contract_value_per_lot,a.lot,a.roundtrip_fee_per_lot)
-    if a.out.resolve() in [Path(x).resolve() for x in (a.csv,a.trace,a.summary,a.specs)]:
-        raise ValueError('output may not overwrite inputs')
-    a.out.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+    validate_output_path(a.out, (a.csv, a.trace, a.summary, a.specs))
+    write_json_atomic(a.out, data)
     print(json.dumps({k:data[k] for k in ('M15_bars','eligible_decisions','completed_paper_trades','paper_net_usd_closed_only','blockers')},ensure_ascii=False))
 
 
