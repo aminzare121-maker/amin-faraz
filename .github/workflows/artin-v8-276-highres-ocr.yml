@@ -1,0 +1,95 @@
+name: Artin V8 real Persian OCR on all 276 change-selected original chat screenshots
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - '.github/workflows/artin-v8-276-highres-ocr.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  ocr-original-video-chat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install source-preserving independent Persian OCR
+        run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: Recover verified original 276 chat screenshots without re-downloading 80-minute video
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: ${{ github.token }}
+          path: /tmp/artin_v8_change_selected
+      - name: Independently OCR every source screenshot assigned to this worker
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_full_chat_ocr_v7.py \
+            --visual-root /tmp/artin_v8_change_selected \
+            --visual-index /tmp/artin_v8_change_selected/chat_selected_index.json \
+            --partition-index ${{ matrix.shard }} --partition-count 4 \
+            --out /tmp/artin_v8_ocr_worker
+      - name: Retain review-only original source OCR records for merger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shard_${{ matrix.shard }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v8_ocr_worker/full_chat_ocr_candidates_PRIVATE.json
+            /tmp/artin_v8_ocr_worker/full_chat_ocr_summary_safe.json
+  strict-original-merge:
+    needs: [ocr-original-video-chat]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve source 276 original frame index
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-276-selected-original-chat-highres
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392920286
+          github-token: ${{ github.token }}
+          path: /tmp/artin_v8_index
+      - name: Collect four separate OCR worker outputs by worker index
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard_*
+          merge-multiple: false
+          path: /tmp/artin_v8_parts
+      - name: Verify every original timestamp SHA and four-way OCR ownership
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_highres_ocr_merge_v8.py \
+            --selected-index /tmp/artin_v8_index/chat_selected_index.json \
+            --parts-root /tmp/artin_v8_parts \
+            --partitions 4 \
+            --out /tmp/artin_v8_merge
+      - name: Store complete 276 original screenshot OCR evidence privately
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v8-276-farsi-chat-ocr-complete-PRIVATE
+          retention-days: 30
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v8_merge/merged_source_chat_ocr_summary_safe.json
+            /tmp/artin_v8_merge/merged_source_chat_ocr_PRIVATE.json
