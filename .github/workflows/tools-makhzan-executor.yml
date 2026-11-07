@@ -50,6 +50,24 @@ jobs:
           name: makhzan-VIDEO-001-executable-status
           retention-days: 30
           path: /tmp/makhzan_video_status/status.json
+  course_status:
+    needs: validate-request
+    if: ${{ needs.validate-request.outputs.action == 'course_status' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Execute actual Artin course puzzle from the central hub
+        run: |
+          python3 -B tools-makhzan/executor.py --execute-course --out /tmp/makhzan_artin_course
+      - name: Keep durable session summary without copying private class media
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO-001-multi-session-course-puzzle-status
+          retention-days: 30
+          path: /tmp/makhzan_artin_course/course_puzzle_status.json
   build_review:
     needs: validate-request
     if: ${{ needs.validate-request.outputs.action == 'build_review' }}
