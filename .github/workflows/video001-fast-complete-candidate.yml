@@ -1,0 +1,332 @@
+name: VIDEO001 FAST CANDIDATE FULL SOURCE ONCE (ISOLATED, NO PRODUCTION)
+on:
+  push:
+    branches: [experiment/video001-v12-speed-only-20261108]
+    paths: [experiments/video001-v12-speed/requests/current.json]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install original movie tools without changing ASR or OCR
+        run: |
+          command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Download original user MP4 ONCE and preserve ALL original audio + image evidence
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_remote_prep_v1.py --request ../../experiments/video001-v12-speed/requests/current.json --out /tmp/video001_fast
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-board
+          path: /tmp/video001_fast/prepared/board_review/**
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-chat-index
+          path: /tmp/video001_fast/prepared/full_chat/chat_selected_index.json
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-source-summary
+          path: /tmp/video001_fast/prepared/safe_source_prep_summary.json
+          retention-days: 15
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-0
+          path: /tmp/video001_fast/prepared/asr_shards/worker_00/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-1
+          path: /tmp/video001_fast/prepared/asr_shards/worker_01/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-2
+          path: /tmp/video001_fast/prepared/asr_shards/worker_02/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-3
+          path: /tmp/video001_fast/prepared/asr_shards/worker_03/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-4
+          path: /tmp/video001_fast/prepared/asr_shards/worker_04/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-5
+          path: /tmp/video001_fast/prepared/asr_shards/worker_05/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-6
+          path: /tmp/video001_fast/prepared/asr_shards/worker_06/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-audio-7
+          path: /tmp/video001_fast/prepared/asr_shards/worker_07/**
+          retention-days: 7
+          compression-level: 2
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-0
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_00/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-1
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_01/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-2
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_02/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-3
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_03/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-4
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_04/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-5
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_05/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-6
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_06/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-7
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_07/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-8
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_08/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-9
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_09/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-10
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_10/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-11
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_11/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-12
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_12/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-13
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_13/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-14
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_14/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-ocr-15
+          path: /tmp/video001_fast/prepared/ocr_shards/worker_15/**
+          retention-days: 7
+          compression-level: 1
+          if-no-files-found: error
+  source-sharded-asr:
+    needs: source-once
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        index: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-audio-${{ matrix.index }}
+          path: /tmp/video001_source_audio
+      - name: Original unchanged Whisper Persian ASR
+        run: python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Original speech source, per-worker SHA and timestamp verification
+        working-directory: research/artin-film-engine-v3-1
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        run: |
+          python3 -u artin_parallel_asr_worker_v5.py \
+            --prepped-root /tmp/video001_source_audio \
+            --out /tmp/video001_fast_asr_worker \
+            --index ${{ matrix.index }} --partitions 8 \
+            --model large-v3-turbo \
+            --expected-sha256 "$(python3 -c 'import json;print(json.load(open("/tmp/video001_source_audio/fast_av_manifest.json"))["video_sha256"])')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-asr-${{ matrix.index }}
+          path: /tmp/video001_fast_asr_worker/asr_evidence/**
+          retention-days: 15
+          if-no-files-found: error
+  source-sharded-ocr:
+    needs: source-once
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        index: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    env:
+      DISABLE_MODEL_SOURCE_CHECK: 'True'
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: 'True'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-ocr-${{ matrix.index }}
+          path: /tmp/video001_source_ocr
+      - name: Original unchanged Persian PaddleOCR
+        run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
+      - name: OCR all assigned original chat frames, reject source SHA mismatch
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_persian_full_chat_ocr_v7.py \
+            --visual-root /tmp/video001_source_ocr \
+            --visual-index /tmp/video001_source_ocr/chat_selected_index.json \
+            --partition-index ${{ matrix.index }} --partition-count 16 \
+            --out /tmp/video001_fast_ocr_worker
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-ocr-${{ matrix.index }}
+          path: /tmp/video001_fast_ocr_worker/full_chat_ocr_candidates_PRIVATE.json
+          retention-days: 15
+          if-no-files-found: error
+  independent-all-evidence-verification:
+    needs: [source-once,source-sharded-asr,source-sharded-ocr]
+    if: success()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: video001-fast-asr-*
+          merge-multiple: true
+          path: /tmp/video001_all_asr
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: video001-fast-ocr-*
+          merge-multiple: false
+          path: /tmp/video001_all_ocr
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-chat-index
+          path: /tmp/video001_source_chat_index
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-board
+          path: /tmp/video001_source_board
+      - uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-source-summary
+          path: /tmp/video001_source_summary
+      - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_verify_v1.py \
+            --asr-root /tmp/video001_all_asr \
+            --ocr-root /tmp/video001_all_ocr \
+            --source-index /tmp/video001_source_chat_index/chat_selected_index.json \
+            --board-root /tmp/video001_source_board \
+            --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
+            --out /tmp/video001_full_integrity \
+            --audio-workers 8 --ocr-workers 16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-final-original-source-proof
+          path: /tmp/video001_full_integrity/private_fast_verify_summary.json
+          retention-days: 15
+          if-no-files-found: error
