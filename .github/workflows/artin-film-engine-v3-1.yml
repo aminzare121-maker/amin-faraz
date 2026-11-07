@@ -30,6 +30,6 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
           ffmpeg -version
           ffprobe -version
-      - name: Run V3.2 tests: synthetic variable-length and original smoke fixtures
+      - name: "Run V3.2 tests: synthetic variable-length and original smoke fixtures"
         working-directory: research/artin-film-engine-v3-1
         run: python3 -B -m unittest discover -p 'test_*.py' -v
