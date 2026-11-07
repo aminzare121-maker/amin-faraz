@@ -7,7 +7,8 @@ import tempfile
 import unittest
 
 from course_stitcher import (
-    validate_course, register_lesson, append_evidence, link_lessons, course_puzzle
+    validate_course, register_lesson, append_evidence, link_lessons, course_puzzle,
+    hydrate_persistent_anchors
 )
 
 HERE=Path(__file__).resolve().parent
@@ -43,6 +44,25 @@ def demo_nodes():
     ]
 
 class MultiSessionPuzzleTests(unittest.TestCase):
+    def test_source_anchors_from_actual_first_video_are_not_empty_anymore(self):
+        live=hydrate_persistent_anchors(first(),HERE.parent)
+        report=course_puzzle(live)
+        self.assertEqual(report["registered_user_submitted_sessions"],1)
+        self.assertEqual(report["registered_original_source_evidence"],2094)
+        self.assertEqual(len(report["topic_chains"]),2)
+        self.assertFalse(report["ready_to_issue_teacher_rules"])
+        self.assertEqual(len(live["cross_session_links"]),0)
+
+    def test_actual_original_2035_speech_and_59_question_sources_have_no_private_text(self):
+        live=hydrate_persistent_anchors(first(),HERE.parent)
+        speech=[n for n in live["evidence_nodes"] if n["modality"]=="speech"]
+        chat=[n for n in live["evidence_nodes"] if n["modality"]=="chat"]
+        self.assertEqual(len(speech),2035)
+        self.assertEqual(len(chat),59)
+        self.assertEqual(sum("unverified_rule_candidate_id" in n for n in speech),35)
+        self.assertTrue(all("text" not in n and "candidate_text" not in n for n in live["evidence_nodes"]))
+        self.assertTrue(all(n["can_trade"] is False for n in live["evidence_nodes"]))
+
     def test_actual_first_video_registered_as_waiting_session_one(self):
         x=first()
         sessions,nodes=validate_course(x)
