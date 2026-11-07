@@ -15,8 +15,9 @@ jobs:
       - name: Inspect supplied video download page without uploading media
         env:
           TARGET_URL: https://my.uupload.ir/p/aGgKYdpL
-        shell: python
+        shell: bash
         run: |
+          python3 - <<'PY'
           import os
           import urllib.request
           import urllib.error
@@ -64,3 +65,4 @@ jobs:
           except Exception as exc:
               print('ARTIN_ACCESS_FAILED='+type(exc).__name__+': '+str(exc)[:300])
               raise
+          PY
