@@ -1,4 +1,4 @@
-name: Artin V5 Persian ASR speed comparison small model
+name: Artin V5 large-turbo beam-one ASR speed/fidelity trial
 on:
   push:
     branches:
@@ -27,12 +27,12 @@ jobs:
           HF_HUB_DISABLE_TELEMETRY: '1'
         working-directory: research/artin-film-engine-v3-1
         run: |
-          python3 -u artin_real_asr_trial_v5.py --model small --minutes 5 --out /tmp/artin_private_v5
+          python3 -u artin_real_asr_trial_v5.py --model large-v3-turbo --minutes 5 --beam-size 1 --out /tmp/artin_private_v5
       - name: Upload only private unverified ASR trial (one day)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: artin-v5-real-asr-five-minutes-small
+          name: artin-v5-real-asr-five-minutes-turbo-beam-one
           retention-days: 1
           if-no-files-found: ignore
           path: |
