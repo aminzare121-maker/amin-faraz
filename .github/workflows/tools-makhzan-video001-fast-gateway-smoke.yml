@@ -1,0 +1,70 @@
+name: VIDEO001 hub fast-action and legacy fallback contract smoke
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/tools-makhzan-video001-fast-gateway-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  verify-fast-gateway:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate canonical fast request, old fallback, and unsafe source rejection
+        run: |
+          python3 - <<'PY'
+          import sys,json
+          from pathlib import Path
+          sys.path.insert(0,str(Path('tools-makhzan').resolve()))
+          from executor import validate
+          reg=json.loads(Path('tools-makhzan/REGISTRY.json').read_text(encoding='utf8'))
+          tool=next(x for x in reg['tools'] if x['id']=='VIDEO-001')
+          assert tool['executor']['preferred_complete_session_action']=='complete_session_fast'
+          assert tool['executor']['original_complete_session_fallback_action']=='complete_session'
+          assert tool['fast_mode']['code_ref']==tool['code']['ref']
+          request={'schema':'makhzan_tool_execution_request_v1',
+                   'tool_id':'VIDEO-001','action':'complete_session_fast',
+                   'job_id':'safe-fast-test-20261108',
+                   'source_url':'https://my.uupload.ir/p/aGgKYdpL',
+                   'expected_sha256':'b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff',
+                   'ingest_mode':'SOURCE_AUDIO_AND_CHAT'}
+          assert validate(request,reg)=='complete_session_fast'
+          legacy=dict(request,action='complete_session')
+          assert validate(legacy,reg)=='complete_session'
+          try:
+              validate(dict(request,source_url='http://127.0.0.1/private'),reg)
+              raise AssertionError('Unapproved source URL was accepted')
+          except ValueError:pass
+          try:
+              validate(dict(request,ingest_mode='SOURCE_AND_FAST_AUDIO'),reg)
+              raise AssertionError('Fast complete source was allowed without OCR')
+          except ValueError:pass
+          print('VIDEO001_HUB_FAST_ACTION_AND_ORIGINAL_FALLBACK_VALIDATED=True')
+          PY
+      - name: Ensure original fallback preserved and fast integration has every source artifact
+        run: |
+          python3 -m pip -q install 'PyYAML>=6,<7'
+          python3 - <<'PY'
+          import yaml
+          from pathlib import Path
+          fast=Path('.github/workflows/tools-makhzan-video001-fast.yml').read_text()
+          slow=Path('.github/workflows/tools-makhzan-executor.yml').read_text()
+          doc=yaml.safe_load(fast)
+          jobs=doc['jobs']
+          assert {'validate-fast-request','source-once','source-sharded-asr',
+                  'source-sharded-ocr','independent-all-evidence-verification'}<=set(jobs)
+          assert "action == 'complete_session_fast'" in str(jobs['source-once']['if'])
+          assert jobs['source-sharded-asr']['strategy']['max-parallel']==17
+          assert jobs['source-sharded-ocr']['strategy']['max-parallel']==16
+          for required in ['video001-fast-original-temporal',
+                           'video001-fast-original-fullres-chat',
+                           'makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE',
+                           'video001_fast_export_v12.py','video001_fast_verify_v1.py']:
+              assert required in fast, required
+          assert "action == 'complete_session'" in slow
+          print('VIDEO001_FAST_WORKFLOW_FULL_PRIVATE_OUTPUTS_AND_LEGACY_ROLLBACK_PASS=True')
+          PY
