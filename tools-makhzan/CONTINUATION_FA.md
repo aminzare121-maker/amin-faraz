@@ -20,3 +20,28 @@ path       = tools-makhzan/REGISTRY.json
 
 ## رشتهٔ آماده برای گفت‌وگوی جدید
 «مخزن ابزارها را از GitHub `aminzare121-maker/amin-faraz`، شاخهٔ `tools-makhzan-hub` بخوان و کار `VIDEO-001` را از بخش NEXT_ACTION ادامه بده، بدون شروع دوبارهٔ همان فیلم.»
+
+
+## عملیات اجرایی ثبت‌شده — فقط بازیابی فایل‌ها کافی نیست
+
+پس از خواندن `REGISTRY.json`، اگر کاربر خواست **اجرا** شود، از طریق ابزار GitHub `mcp__GitHub__update_file` فایل `tools-makhzan/requests/current.json` در شاخهٔ `tools-makhzan-hub` را با SHA به‌روزرسانی کن. قالب فرمان:
+
+```json
+{
+  "schema": "makhzan_tool_execution_request_v1",
+  "tool_id": "VIDEO-001",
+  "action": "build_review",
+  "job_id": "artin-review-unique-20261107",
+  "source_id": "TEACHER_J2_2026_11_07"
+}
+```
+
+این تغییر `.github/workflows/tools-makhzan-executor.yml` را **واقعاً** فعال می‌کند. وضعیت اجرا را از GitHub Actions بررسی و نتیجهٔ موفق/ناموفق را با لینک واقعی اعلام کن؛ فقط ساختن فایل فرمان به معنی انجام عملیات نیست.
+
+برای بررسی زنده `action=status`، برای ساخت بستهٔ بازبینی `action=build_review` و برای لینک **جدید که کاربر اجازه داده** `action=source_ingest` به همراه `source_url` و `ingest_mode` استفاده کن. حالت سوم هنوز اجرای کامل گفتار و قواعد آرتین نیست.
+
+**آزمون‌های اجرایی موفق روی خود مخزن:**
+- وضعیت زنده: https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397528098
+- بازسازی واقعی بستهٔ آرتین: https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512
+
+اگر اتصال GitHub در یک گفت‌وگو در دسترس نبود، نمی‌توان فرمان صادر کرد؛ وضعیت را از حدس نساز. تغییر یا اجرای معاملهٔ واقعی همچنان خارج از مجوز است.
