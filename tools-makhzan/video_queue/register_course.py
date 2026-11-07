@@ -102,8 +102,14 @@ def record_session(session,token):
 
 def main():
     env=os.environ
+    queue_id=env["VIDEO001_QUEUE_ID"]
+    match=re.fullmatch(r"video-q-([0-9]{4})-[a-z0-9-]{4,64}",queue_id)
+    if not match:raise ValueError("Invalid queue session ID")
+    sequence=int(env.get("VIDEO001_SESSION_SEQUENCE",str(int(match.group(1)))))
+    if sequence!=int(match.group(1)):
+        raise ValueError("Session order cannot be different from its queue identity")
     session=session_from_original_evidence(
-        int(env["VIDEO001_SESSION_SEQUENCE"]),
+        sequence,
         env["VIDEO001_SOURCE_PAGE"],read(env["VIDEO001_SOURCE_SUMMARY"]),
         read(env["VIDEO001_SOURCE_PROOF"]),int(env["GITHUB_RUN_ID"]),
         env["VIDEO001_QUEUE_ID"])
