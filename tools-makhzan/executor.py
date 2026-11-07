@@ -20,7 +20,7 @@ from urllib.error import HTTPError,URLError
 
 REPO="aminzare121-maker/amin-faraz"
 SOURCE="TEACHER_J2_2026_11_07"
-ACTIONS={"status","build_review","source_ingest"}
+ACTIONS={"status","build_review","source_ingest","course_status"}
 ROOT=Path(__file__).resolve().parent.parent
 REQUEST=ROOT/"tools-makhzan"/"requests"/"current.json"
 REGISTRY=ROOT/"tools-makhzan"/"REGISTRY.json"
@@ -122,6 +122,7 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("--validate",action="store_true")
     p.add_argument("--execute-status",action="store_true")
+    p.add_argument("--execute-course",action="store_true")
     p.add_argument("--emit-job",action="store_true")
     p.add_argument("--out",type=Path,default=Path("/tmp/makhzan_exec"))
     p.add_argument("--github-output",type=Path)
@@ -145,8 +146,23 @@ def main():
     if a.execute_status:
         if action!="status":raise ValueError("Only status action permitted")
         status(reg,req,a.out)
+    if a.execute_course:
+        if action!="course_status":raise ValueError("Only course_status can inspect the course puzzle")
+        from course_stitcher import course_puzzle
+        course=json.loads((ROOT/"tools-makhzan"/"courses"/"artin"/"COURSE_REGISTRY.json").read_text(encoding="utf8"))
+        report=course_puzzle(course)
+        a.out.mkdir(parents=True,exist_ok=True)
+        (a.out/"course_puzzle_status.json").write_text(
+            json.dumps(report,ensure_ascii=False,indent=2),encoding="utf8")
+        print("MAKHZAN_COURSE_TOOL_EXECUTED="+json.dumps({
+            "course_id":report["course_id"],
+            "registered_source_videos":report["registered_user_submitted_sessions"],
+            "next_video_status":report["current_status"],
+            "cross_session_links":report["linked_cross_session_evidence_count"],
+            "rules_ready":report["ready_to_issue_teacher_rules"],
+            "fake_source_count":0},ensure_ascii=False),flush=True)
     if a.validate:
-        print("MAKHZAN_EXECUTOR_REQUEST_VALIDATED="+json.dumps({"tool_id":req["tool_id"],"action":action,
+        print("MAKHZAN_EXECUTOR_REQUEST_VALIDATED=+json.dumps({"tool_id":req["tool_id"],"action":action,
              "job_id":req["job_id"],"registry_ref":reg["hub_ref"]},ensure_ascii=False),flush=True)
 
 if __name__=="__main__":main()
