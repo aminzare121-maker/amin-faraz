@@ -1,0 +1,39 @@
+name: Artin V6 re-audit all 17 real ASR parts and boundary conflicts
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v6-recheck-full-asr-boundaries.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  full-recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download the four private completed ASR partition artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: artin-v5-shard-*
+          merge-multiple: true
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/artin_complete_asr_v6
+      - name: Verify original SHA, all seventeen parts and cross-boundary conflicts
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_parallel_asr_merge_v5.py --input /tmp/artin_complete_asr_v6 --out /tmp/artin_v6_rechecked
+      - name: Retain private reviewed metadata and source-linked candidate evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v6-rechecked-17part-conflict-review
+          retention-days: 1
+          path: |
+            /tmp/artin_v6_rechecked/merge_summary.json
+            /tmp/artin_v6_rechecked/complete_unverified_qa_evidence.json
