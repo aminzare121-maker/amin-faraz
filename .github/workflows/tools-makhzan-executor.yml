@@ -1,0 +1,159 @@
+name: Makhzan Tool Executor - GitHub operational hub
+on:
+  push:
+    branches:
+      - tools-makhzan-hub
+    paths:
+      - 'tools-makhzan/requests/current.json'
+      - 'tools-makhzan/executor.py'
+      - '.github/workflows/tools-makhzan-executor.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: makhzan-video-001
+  cancel-in-progress: false
+jobs:
+  validate-request:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      action: ${{ steps.request.outputs.action }}
+      job_id: ${{ steps.request.outputs.job_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: request
+        name: Validate executable request against canonical private tool registry
+        shell: bash
+        run: |
+          python3 -B tools-makhzan/validate_registry.py
+          python3 -B tools-makhzan/executor.py --validate --github-output "$GITHUB_OUTPUT"
+  status:
+    needs: validate-request
+    if: ${{ needs.validate-request.outputs.action == 'status' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Execute live tool status against connected PRIVATE GitHub evidence
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 -B tools-makhzan/executor.py --execute-status --out /tmp/makhzan_video_status
+      - name: Retain real execution report in the private hub
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO-001-executable-status
+          retention-days: 30
+          path: /tmp/makhzan_video_status/status.json
+  build_review:
+    needs: validate-request
+    if: ${{ needs.validate-request.outputs.action == 'build_review' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout registered tool SOURCE from pinned private working branch
+        uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          path: artin-code
+          persist-credentials: false
+      - name: Retrieve original 17-part audio AND 59 provisional question groups
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-v8-real-chat-speech-QA-REVIEW-ONLY
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42393181420
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_orig/qa
+      - uses: actions/download-artifact@v4
+        with:
+          name: artin-v7-fidelity-audit-original-lesson
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42389814966
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_orig/claims
+      - uses: actions/download-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42382408395
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_orig/audio
+      - uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/makhzan_orig/images
+      - name: REALLY EXECUTE original teacher evidence reviewer from tool repository
+        run: |
+          python3 -B artin-code/research/artin-film-engine-v3-1/artin_offline_review_package_v8.py \
+            --qa /tmp/makhzan_orig/qa/qa_review_PRIVATE.json \
+            --claims /tmp/makhzan_orig/claims/fidelity_candidates_PRIVATE.json \
+            --audio /tmp/makhzan_orig/audio/complete_unverified_qa_evidence.json \
+            --visual-index /tmp/makhzan_orig/images/visual/visual_timeline_v6.json \
+            --visual-root /tmp/makhzan_orig/images/visual \
+            --out /tmp/makhzan_VIDEO-001_review
+      - name: Verify actual 59 questions 35 rule-review packets with 192 original images
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/makhzan_VIDEO-001_review')
+          s=json.loads((p/'summary_safe.json').read_text())
+          assert s['question_groups']==59 and s['unverified_rule_fragments']==35
+          assert s['source_images_copied']>=100
+          assert s['executable_teacher_rules']==0
+          assert (p/'index.html').exists()
+          print('MAKHZAN_REAL_TOOL_EXECUTED='+json.dumps({
+               'tool_id':'VIDEO-001','action':'build_review',
+               'questions':s['question_groups'],'rule_review_packets':s['unverified_rule_fragments'],
+               'original_images':s['source_images_copied'],'verified_teacher_rules':0}))
+          PY
+      - name: Publish assistant-executed MOBILE and WINDOWS practical tool from Makhzan hub
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO-001-actual-mobile-desktop-review-PRIVATE
+          retention-days: 30
+          path: /tmp/makhzan_VIDEO-001_review/**
+  source_ingest:
+    needs: validate-request
+    if: ${{ needs.validate-request.outputs.action == 'source_ingest' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          path: artin-code
+          persist-credentials: false
+      - name: Install image/audio extraction dependencies for a new user-provided video
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Convert hub request into typed video-ingestion job
+        run: python3 -B tools-makhzan/executor.py --emit-job --out /tmp/makhzan_video_input
+      - name: REALLY PROCESS user-supplied source, not an invented project
+        run: |
+          python3 -B artin-code/research/artin-film-engine-v3-1/artin_generic_video_job_v6.py \
+            --request /tmp/makhzan_video_input/ingest_request.json \
+            --out /tmp/makhzan_video_source_private
+      - name: Keep hash-and-time validated intake result only; original media never committed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO-001-new-video-source-evidence
+          retention-days: 30
+          if-no-files-found: ignore
+          path: /tmp/makhzan_video_source_private/safe_result.json
