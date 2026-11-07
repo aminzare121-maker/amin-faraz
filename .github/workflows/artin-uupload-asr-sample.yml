@@ -37,6 +37,13 @@ jobs:
                             capture_output=True,text=True,timeout=360)
           if p.returncode:raise RuntimeError('Audio extraction failed: '+p.stderr[-500:])
           print('SAMPLE_AUDIO_EXTRACTED_BYTES='+str((root/'sample_0_5min.wav').stat().st_size),flush=True)
+          # Compatible with current runner PyAV builds lacking metadata_errors in av.open.
+          import av
+          _original_av_open=av.open
+          def _compatible_av_open(*args,**kwargs):
+              kwargs.pop('metadata_errors',None)
+              return _original_av_open(*args,**kwargs)
+          av.open=_compatible_av_open
           from faster_whisper import WhisperModel
           model=WhisperModel('base',device='cpu',compute_type='int8',cpu_threads=4)
           start=time.monotonic()
