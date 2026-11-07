@@ -89,6 +89,16 @@ def review_real_asr(manifest: dict, shards: list[dict],
             if owner!=n:
                 continue
             txt=_normalize(u['text'])
+            quality_flags=[]
+            if e-s>22:quality_flags.append('ASR_SEGMENT_UNUSUALLY_LONG_CHECK_SILENCE')
+            prob=u.get('avg_logprob')
+            if prob is not None:
+                if type(prob) not in (int,float) or not math.isfinite(prob):
+                    raise ValueError('Nonfinite ASR log probability')
+                if prob < -0.9:quality_flags.append('LOW_ASR_LOGPROB')
+            tokens=txt.split()
+            if len(tokens)>=6 and len(set(tokens))<=max(2,len(tokens)//4):
+                quality_flags.append('ASR_REPETITIVE_TEXT')
             source=f"{manifest['video_sha256']}|{n}|{pos}|{s:.3f}|{e:.3f}|{txt}"
             raw.append({'id':'asr_'+hashlib.sha256(source.encode('utf8')).hexdigest()[:24],
                         'start':round(s,3),'end':round(e,3),
@@ -100,6 +110,7 @@ def review_real_asr(manifest: dict, shards: list[dict],
                         'asr_model':shard.get('model','UNKNOWN'),
                         'noise_risk':noise_risk(txt),
                         'human_verified':False,
+                        'asr_quality_flags':quality_flags,
                         'can_change_artin_engine':False})
     raw.sort(key=lambda u:(u['start'],u['part_global'],u['id']))
     if len({s['id'] for s in raw})!=len(raw):
@@ -141,7 +152,8 @@ def review_real_asr(manifest: dict, shards: list[dict],
                                 'possible_later_correction':True,
                                 'superseded_rule_id':None,
                                 'requires_original_audio_review':True})
-        if any(w in u['text'] for w in TRADING_MARKERS):
+        if (not u['asr_quality_flags'] and u['noise_risk']=='NOT_IDENTIFIED'
+                and any(w in u['text'] for w in TRADING_MARKERS)):
             nearby=sorted(frames.values(),key=lambda f:abs(f['time_approx']-u['start']))
             review_rules.append({'candidate_id':'candidate_'+u['id'],
                  'source_utterance_id':u['id'],
@@ -162,6 +174,8 @@ def review_real_asr(manifest: dict, shards: list[dict],
             'complete_original_video_review':False,
             'parts_missing_asr':sorted(set(by_id)-seen_parts),
             'speech_lines':raw,
+            'suspect_asr_lines':[{'id':u['id'],'time':u['start'],
+                  'flags':u['asr_quality_flags']} for u in raw if u['asr_quality_flags']],
             'possible_questions_and_following_utterances':qas['question_candidates'],
             'possible_later_corrections':corrections,
             'classroom_noise_or_mixed_review':off_topic,
