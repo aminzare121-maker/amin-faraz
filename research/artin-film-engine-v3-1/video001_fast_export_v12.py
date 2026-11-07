@@ -10,6 +10,7 @@ import argparse
 import json
 from pathlib import Path
 import shutil
+from artin_film_pipeline import file_sha256
 
 from artin_highres_ocr_merge_v8 import merge as merge_ocr
 from artin_ocr_asr_join_v8 import join_original_chat_qa
@@ -80,8 +81,8 @@ def export(*,proof_path,source_path,asr_path,ocr_root,chat_index,board_root,
     # Fail if any source-selected image is missing after transfer.
     for row in index["rows"]:
         p=out/"visual_change"/row["chat"]["path"]
-        if not p.is_file():
-            raise ValueError("Source chat screenshot missing during V12 compatibility export")
+        if not p.is_file() or file_sha256(p)!=row["chat"]["sha256"]:
+            raise ValueError("Source chat screenshot missing/changed during V12 compatibility export")
     safe={
        "schema":"artin_unified_complete_session_v10",
        "source_video_sha256":sha,
