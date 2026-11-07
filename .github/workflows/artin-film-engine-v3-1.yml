@@ -22,8 +22,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Verify FFmpeg available (no media downloads)
+      - name: Install FFmpeg tooling for synthetic regression only
         run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
           ffmpeg -version
           ffprobe -version
       - name: Run V3.1 tests with synthetic fixtures only
