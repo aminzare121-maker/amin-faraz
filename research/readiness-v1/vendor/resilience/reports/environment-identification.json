@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-04",
+  "method": "Read-only Windows process metadata and selected non-secret installation manifests; no terminal/broker API",
+  "prior_project": "Amin-MT5-0.4.1/amin-mt5",
+  "configured_ui_version": "0.4.3.7",
+  "configured_ui_directory": "clients/windows-owner-0.4.3.7",
+  "configured_engine_release": "20261031T061122830201Z",
+  "configured_engine_identity_is_not_live_attestation": true,
+  "owner_ui_process_observed": false,
+  "existing_mt5_process_count": 2,
+  "terminals": [
+    {
+      "pid": 11648,
+      "start_time_utc": "2026-11-04T07:05:54.5775440Z"
+    },
+    {
+      "pid": 21192,
+      "start_time_utc": "2026-11-04T06:55:21.7804212Z"
+    }
+  ],
+  "legacy_python_background_services_observed": true,
+  "process_command_lines_not_published": true,
+  "private_account_state_read": false,
+  "installation_manifest_hashes": [
+    {
+      "relative_path": "runtime/owner-installation.json",
+      "sha256": "9d2d50f9354addc39469628aa4fd7b5967c10f93c2d46e6a8e7820be6ccccb9f"
+    },
+    {
+      "relative_path": "runtime/active-release.json",
+      "sha256": "80d2302f6c7f35f218db1fc11eb23bacd4546f1c2f6148b3be007b91341516de"
+    },
+    {
+      "relative_path": "runtime/continuity-policy.json",
+      "sha256": "a5fd1243428cf998b55cbfa1e4c686a22bd10508b2d7ee3482b634ac72ee8a1e"
+    }
+  ],
+  "new_project": "Amin-MT5-Faraz",
+  "new_engine_state": "fresh in-memory per scenario; no legacy state/model/data imports",
+  "new_broker_connection": false,
+  "new_order_authority": false,
+  "independent_mt5_installation_needed_for_offline_phase": false,
+  "demo_assessment": "Use independent synthetic in-memory environment now. MT5 terminal installation/adapter unnecessary for phase 1; no real DEMO account selected, connected, or authorized. Future terminal setup must avoid any second order writer on existing account."
+}

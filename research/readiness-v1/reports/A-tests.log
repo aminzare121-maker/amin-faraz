@@ -1,0 +1,21 @@
+test_boolean_budget_rejected (test_budget.BudgetTests.test_boolean_budget_rejected) ... ok
+test_ci_is_not_confirmation (test_budget.BudgetTests.test_ci_is_not_confirmation) ... ok
+test_duplicate_rejected (test_budget.BudgetTests.test_duplicate_rejected) ... ok
+test_equal_budget (test_budget.BudgetTests.test_equal_budget) ... ok
+test_future_outcome_changes_do_not_change_selection (test_budget.BudgetTests.test_future_outcome_changes_do_not_change_selection) ... ok
+test_independent_count_is_not_candidate_count (test_budget.BudgetTests.test_independent_count_is_not_candidate_count) ... ok
+test_matched_random_has_same_net_and_exposure (test_budget.BudgetTests.test_matched_random_has_same_net_and_exposure) ... ok
+test_no_outcome_argument (test_budget.BudgetTests.test_no_outcome_argument) ... ok
+test_no_trade_has_no_sharpe (test_budget.BudgetTests.test_no_trade_has_no_sharpe) ... ok
+test_nonfinite_outcome_rejected (test_budget.BudgetTests.test_nonfinite_outcome_rejected) ... ok
+test_one_vs_hundred_does_not_claim_edge (test_budget.BudgetTests.test_one_vs_hundred_does_not_claim_edge) ... ok
+test_oversized_budget_rejected (test_budget.BudgetTests.test_oversized_budget_rejected) ... ok
+test_reproducible_seeds (test_budget.BudgetTests.test_reproducible_seeds) ... ok
+test_unequal_duration_rejected (test_budget.BudgetTests.test_unequal_duration_rejected) ... ok
+test_unknown_risk_rejected (test_budget.BudgetTests.test_unknown_risk_rejected) ... ok
+test_zero_budget (test_budget.BudgetTests.test_zero_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.069s
+
+OK

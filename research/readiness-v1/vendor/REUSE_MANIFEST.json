@@ -1,0 +1,252 @@
+{
+  "resilience_commit": "72b51c49a38888a03d9b6455833086bcff196366",
+  "files": [
+    {
+      "path": ".gitignore",
+      "git_blob": "1901d0f5bb724d82fe70efbd208d2806738f8243",
+      "sha256": "0436bd901510b2035306462abd4fce59309840b1fbc6fa038a152dc551f7f208"
+    },
+    {
+      "path": "ACCEPTANCE_FA.md",
+      "git_blob": "3c449ededea57aa4e149dd511e11e649a843d9b5",
+      "sha256": "2d5146b9e61d69a3587d2cc1d3adef755b42a2c3418e7ce46849f1b37dfd5644"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "434ef144b02680649bb199845a41111fc09dbf4d",
+      "sha256": "a8d1a8690f283511ea4b4cd2bcd3c2a35a8f4fa67894a3281b82689dc0d5b931"
+    },
+    {
+      "path": "Run-Offline-Demo.cmd",
+      "git_blob": "bf3c89dac624717f47c854946114b958410144ef",
+      "sha256": "daade6a32fe30c101517440c74f33ed09649ab3ebf6093cfe8271a50343e839c"
+    },
+    {
+      "path": "faraz_core/__init__.py",
+      "git_blob": "cbc06df2109a3519f30d2c28ee4e6b23727d3c1b",
+      "sha256": "c304150668b343a9c4d1f595543c666fd8879dcb138d84027eee052608a9701a"
+    },
+    {
+      "path": "faraz_core/authorization.py",
+      "git_blob": "6b22cf3c441b7d42f927e7dfae111e7089076512",
+      "sha256": "cc52afc1278e95562e34e648afe59c43a151cc6e5dd10837632170823189da17"
+    },
+    {
+      "path": "faraz_core/decision.py",
+      "git_blob": "8ed04c2a26c887dd4797455710ea9868d321d6a4",
+      "sha256": "f4be10172a62e3ad5d8a811ec3d4e586930832dc1e8cca45df64c1c8525a0bff"
+    },
+    {
+      "path": "faraz_core/execution.py",
+      "git_blob": "79d3ceda142d98f868fd3f7b2874dddb6e36f5b0",
+      "sha256": "bd9d231b394047da074fc9978ee4fe65d41779ddb11664bdc376cb59e150e6ed"
+    },
+    {
+      "path": "faraz_core/exits.py",
+      "git_blob": "f3949c4ab7fc70a46d0ab6c34fd9cb23296f81e9",
+      "sha256": "4dd5c2d8a64dc981269c4ad2a79b5d6f5283c075b058c798a04b74ceb2651af7"
+    },
+    {
+      "path": "faraz_core/money.py",
+      "git_blob": "421f10c9a063baf36b0b088ae01b875a047f18bb",
+      "sha256": "63064e365ce5370df614dfdee6a09ca412406a5af792bbb4b2a7130a55d0edc4"
+    },
+    {
+      "path": "faraz_core/numbers.py",
+      "git_blob": "4b58035e4058467b1c6b813f3dbe9fc14a2cd5b5",
+      "sha256": "3182bb6b11134ee62e5a88e0ccbc2b829dd738c93de1ce4ee5c4f7251d3519de"
+    },
+    {
+      "path": "faraz_core/risk.py",
+      "git_blob": "ebd5f89a0945d43ec77412fea15e01cfe0246630",
+      "sha256": "2ffb68dfadc39748d0a4bc39d737bdf8e3d9f679437ea98645adee7f350ee273"
+    },
+    {
+      "path": "faraz_core/temporal.py",
+      "git_blob": "479c8cc50e1854708d9329f2851b01623e23d528",
+      "sha256": "3dbf3a9586d03df1788b902405a54ccc2719ef6595298997228d300db0980382"
+    },
+    {
+      "path": "faraz_lab/__init__.py",
+      "git_blob": "ad5628bc1a943827b7dc4536bc75163bfbd3776c",
+      "sha256": "303f8d1436849f846d6e3a07a96621a68e8bb15c7d4311c0bfda055d5aa30c63"
+    },
+    {
+      "path": "faraz_lab/authority.py",
+      "git_blob": "06e1e5da257b88ceb27aadfdace07350cf9c9dd2",
+      "sha256": "8ede9eb848f8749eb7aa691ec803fb62555392d56de31788fb6afd4a1cdc94f4"
+    },
+    {
+      "path": "faraz_lab/broker_contract.py",
+      "git_blob": "a24f12f169b7d81f155bea4ec91bfdff8e68c77a",
+      "sha256": "3bd8710aff5590366b5e399f8abc4686790256091696a48a687dc0b49b2ef39a"
+    },
+    {
+      "path": "faraz_lab/codec.py",
+      "git_blob": "6c69d632555aaa34125682c85e25ad3e7e217d79",
+      "sha256": "1884753f00a07ce9b13614332cbe76cbac44d6e0fcabcd1890df782beb3d935f"
+    },
+    {
+      "path": "faraz_lab/durable.py",
+      "git_blob": "168203c7d08c499f482cfed1ef3c2fa7d55db371",
+      "sha256": "3066c82a4a0eb1614f333e076cfee16af497dd976383078cf4ce56d9c637b853"
+    },
+    {
+      "path": "faraz_lab/fixtures.py",
+      "git_blob": "33f72b81d06c0bbedaf1243bb3062eff67aecf85",
+      "sha256": "aa79d269a60e2cd5d9b9edf36c8997d7c268ec96ad13ef46b2997303c281a3ab"
+    },
+    {
+      "path": "faraz_lab/journal.py",
+      "git_blob": "413551010759109555127ac6fbdb53fb183085ed",
+      "sha256": "5f51db4e49d9ab9076b0f88c138f1e2d845b991e42628211a7291a6e31449eb8"
+    },
+    {
+      "path": "lab_tests/__init__.py",
+      "git_blob": "39d17094095b04ff509aa0bc8b4010cfbc995a46",
+      "sha256": "22d683a3c715c3581df32632987f0a898ce27f1f6f80ceb87a20b4e825f453e3"
+    },
+    {
+      "path": "lab_tests/test_authority.py",
+      "git_blob": "5025933216cbccf6243b8aa750c523e87297490c",
+      "sha256": "b380f34ceb497f6034749a18e591196cd61065fc2240f8b47e00bdbfb5ccb018"
+    },
+    {
+      "path": "lab_tests/test_broker_contract.py",
+      "git_blob": "ff8706aba33eddb1bb49ebbfd94edc2d19393829",
+      "sha256": "20d03796b43ff676b20b54dee751d9b75ec48e7194bf8ea9db91ee1039ad7e85"
+    },
+    {
+      "path": "lab_tests/test_durable.py",
+      "git_blob": "18016d91eefc5c3ecfb2f1f146fc7108d3332688",
+      "sha256": "1ac76ec0f993987176c5e4e34345f6ef69ae4bc242e6bc7b9ff73d245abb40ef"
+    },
+    {
+      "path": "lab_tests/test_journal.py",
+      "git_blob": "f8fc92dc30819401309245307386f32ae37971db",
+      "sha256": "632a95d8b18860700145b0d6d8d18701c5334000b081b8b755999f63ec9522df"
+    },
+    {
+      "path": "lab_tests/test_lab_boundaries.py",
+      "git_blob": "b7925a29f7c638e09f7d41ec0e9942ecd4002756",
+      "sha256": "ed296998b22aed310fc337fbebcfe972384deea2d9595a116a2170bc77c1900d"
+    },
+    {
+      "path": "lab_tests/test_process_recovery.py",
+      "git_blob": "63890cede381868239b0a1840dfd3cca07dabe13",
+      "sha256": "fb793caf7b8c6cf6e3d808557845ed2d9a857f5e718ccd1377801460bbd3de51"
+    },
+    {
+      "path": "reports/TEST_REPORT_FA.md",
+      "git_blob": "ffb389a59b3a87b8f5da632990fc3dc3a3f5804a",
+      "sha256": "8e63e2e474c83b59b05fcc4850f3d9c7be864814b54990b17f41fdc049df8d4a"
+    },
+    {
+      "path": "reports/environment-identification.json",
+      "git_blob": "5a0baaa9e322f4a1bafcd133443e6d31b2410b87",
+      "sha256": "fee8b9a718aa1331ae5446219b2a0ca69ea6ce0f686039fec8a9c3b16d4b8170"
+    },
+    {
+      "path": "reports/environment-preservation.json",
+      "git_blob": "0fe8aa7b001fd189bb5f992077d574d2199169a4",
+      "sha256": "7b04f5d975d18f6d1b4992a77e950fc660e0d1ea0ec85fa873689d8fbdc3148f"
+    },
+    {
+      "path": "reports/resilience-lab/baseline-manifest.json",
+      "git_blob": "4e7bb308613c4e930b9a47cc542eb1ede73dbcb4",
+      "sha256": "daacbaa6779f157cf6a71cec48fb1cd3e6842770bb82d285907e5e29b2544bd9"
+    },
+    {
+      "path": "reports/source-inventory.json",
+      "git_blob": "39d185d1d3dc5240f140bf76dbfa95b1a4a22231",
+      "sha256": "0f253b757ca47271a7d2ddc2fe6fe015682788779788587d03c2e1ffe5190c2a"
+    },
+    {
+      "path": "reports/synthetic-demo.json",
+      "git_blob": "4bc4518e7272d67938d8d4bc9fa06428b44c7c34",
+      "sha256": "e56970d25a7979096e99559d2050357f1689757e8b6cd4b52fbf6e09d69872f4"
+    },
+    {
+      "path": "reports/test-results.json",
+      "git_blob": "58e7085d4d082ccade4491891753715fc3b4011f",
+      "sha256": "a287ea0a7e1c42d57952b30f86d58f2fa1171098ce3742067023509b1e9cbf62"
+    },
+    {
+      "path": "reports/unit-tests.log",
+      "git_blob": "9db85b5885b397889c525a3689a64fa5393b1efa",
+      "sha256": "07fe3832d832d3c5c9d003f79f87e884a800834c1aa197064069054b24cf2db3"
+    },
+    {
+      "path": "tests/__init__.py",
+      "git_blob": "243a949b591c751d9ad5a55a8ca5ca982b6612ac",
+      "sha256": "7213c84bc97cf9f4e20abbce9b41a69fe233baa3e42d6b2d92feaa5b451c9f03"
+    },
+    {
+      "path": "tests/test_authorization.py",
+      "git_blob": "c66d0a32caf8e5bfa4c6729f53b62eccbc3f04e7",
+      "sha256": "ebfc532c9940563cc48d6c61dad14d90624e061ec9bee5a18aeaa5eb7367ddb1"
+    },
+    {
+      "path": "tests/test_boundaries.py",
+      "git_blob": "eb7927e859d14c9066941666a84f5314f8b9b56f",
+      "sha256": "656496c51da4e421b1c5e40baaf99bb94dd5a49c509554870a2858664630af56"
+    },
+    {
+      "path": "tests/test_decision.py",
+      "git_blob": "834d035efbd75f7a850d08848f7fb26ec30ac5fc",
+      "sha256": "fe80a9fcb90d773463c0e135e88bee97b8ebf052df0b7f5a2a71343847589548"
+    },
+    {
+      "path": "tests/test_execution.py",
+      "git_blob": "b53516a68eabd6467bbf879af793541e3eb06d40",
+      "sha256": "fee982a1593cd6e46469fc71066b351dd368c691f288a200793d8bbbefb1c012"
+    },
+    {
+      "path": "tests/test_exits_time.py",
+      "git_blob": "6c772b7c9f999f9c06b5fd9bca589944f23800d1",
+      "sha256": "39fd54eb0935c669bac799bc74f9d414544b14f466a208f0abd491b12bba5ee9"
+    },
+    {
+      "path": "tests/test_integration.py",
+      "git_blob": "308314e18e263c8c34d2bab8b8ff71e0968360f6",
+      "sha256": "0a49ea70d31581e8a8ae5d7cad9b55d4480cd5969951c467923793131f274f15"
+    },
+    {
+      "path": "tests/test_notional.py",
+      "git_blob": "33124b54dd17b027769b4942ac8cde0d17e6dd56",
+      "sha256": "7d7bbd84bf060ce8e01220882d68b340d3e5cdec845fa42ddfedc11678c5f561"
+    },
+    {
+      "path": "tests/test_risk_money.py",
+      "git_blob": "4232d02c7df900b5e365bafe26d4174d51250c29",
+      "sha256": "65b02232f85fadebe824f367bfbe290073c5e6efaa39dbb76210a27b3f8d1703"
+    },
+    {
+      "path": "tools/check_import_boundary.py",
+      "git_blob": "bff70dc1cceaee2db30eb988b2b2b7d2a3ca64a4",
+      "sha256": "f5f26109c252f7237be503a498710539dac8038be1bde05ce4d35e73fe265165"
+    },
+    {
+      "path": "tools/lab_crash_worker.py",
+      "git_blob": "b36ae4ef308c199ce4a942d04dd84c981122ec90",
+      "sha256": "e6b399ffe73bfec4ca0ae08b7a9e89d81fdb660a07b33a30b07096d4fb4b96c1"
+    },
+    {
+      "path": "tools/run_offline_demo.py",
+      "git_blob": "67eb6d0ba688261c61d03aca72c477adbe0079a9",
+      "sha256": "ed15107b1a1165f77fc3c3a13f36fe57e60a70dfd62073f48f82d8beea0577f5"
+    },
+    {
+      "path": "tools/run_resilience_tests.py",
+      "git_blob": "e441e28f61b27e5061defc31f29bde97c7a0d8a6",
+      "sha256": "8d5c184ad570060c21d2a36d64baf77fbb7e13656a6aade4c1e8e54722854f5c"
+    },
+    {
+      "path": "tools/run_tests.py",
+      "git_blob": "f660b5fc933942b68d483929eb2c2b194c1ee015",
+      "sha256": "db17f556cda60893fbaafa752777a47c0a1dc44c471e08f5bb7da84fa23e2862"
+    }
+  ],
+  "statistics_source": "amin-faraz/2dc3a46b831f2d927bcc25b487331b2dd4f711c1/research/ai-offline-lab/faraz_lab/statistics.py",
+  "statistics_sha256": "9551623fae7f147abe7bd533a6f994275b319ccc18493f474654fd5782d34be6"
+}

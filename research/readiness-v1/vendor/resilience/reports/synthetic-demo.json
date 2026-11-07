@@ -1,0 +1,243 @@
+{
+  "scope": "synthetic arithmetic and state replay only",
+  "private_data_or_legacy_models_used": false,
+  "broker_or_mt5_connection": false,
+  "order_authority": false,
+  "entry_proposal": {
+    "action": "ENTRY_PROPOSAL",
+    "reasons": [],
+    "risk": {
+      "action": "TRADE",
+      "reasons": [],
+      "volume": "0.01",
+      "risk_per_lot": "550.00",
+      "risk": "5.5000",
+      "margin": "10.00",
+      "notional": "4000.2000",
+      "directional_volume_held": "0"
+    },
+    "client_intent_id": "0fdf1fdae51c3b59f60f78675e24819f456e153bef06afa80f6d3d4c58681686",
+    "payload_hash": "4ea8f4e96d4ca73711c3d715776169e1af3ab9c9eb1260f82ff710c7ce1658b0",
+    "can_execute": false
+  },
+  "notional_guard": {
+    "notional_cap": "6000",
+    "first_committed_entry_notional": "4000.2000",
+    "second_entry_notional": "4000.2000",
+    "combined_notional": "8000.4000",
+    "reported_known_risk": "5.50",
+    "reported_position_volume": ".01",
+    "reported_known_notional": "0",
+    "reported_unknown_notional": "0",
+    "rejection": "FRESH_SNAPSHOT_UNDERREPORTS_HELD_NOTIONAL",
+    "mock_attempts_after_rejection": 1,
+    "honest_snapshot_action": "NO_TRADE",
+    "honest_snapshot_reasons": [
+      "NOTIONAL_CAP"
+    ],
+    "logical_replay_equal": true,
+    "evidence_source": "OFFLINE_SYNTHETIC"
+  },
+  "unknown_risk": "5.5000",
+  "duplicate_mock_send_blocked": true,
+  "mock_attempts": 1,
+  "logical_replay_equal": true,
+  "partial": {
+    "open_risk": "16.5000",
+    "unknown_risk": "11.0000",
+    "total": "27.5000"
+  },
+  "settlement": {
+    "held_risk_after_confirmed_close": "0.0000",
+    "charged_realized_loss": "2.1000",
+    "epoch_cap_unchanged": "30",
+    "net_pnl": "-2.1000",
+    "evidence_source": "OFFLINE_SYNTHETIC"
+  },
+  "candidate_comparison": [
+    {
+      "candidate": "A",
+      "status": "CLOSED",
+      "exit_reason": "FIXED_TP",
+      "deadline_ms": 17100000,
+      "request_ms": 13500100,
+      "fill_ms": 13500200,
+      "fill_price": "110",
+      "estimated_net_cash": "9.8",
+      "state": {
+        "peak_price": null,
+        "peak_net_cash": null,
+        "basis_revision": 0,
+        "proposed_stop": null,
+        "acknowledged_stop": "95",
+        "observed_stop": "95",
+        "desired_floor_cash": null,
+        "floor_revision": null,
+        "last_quote_event_ms": null,
+        "last_decision_ms": null,
+        "evidence_source": "OFFLINE_SYNTHETIC",
+        "broker_protection_confirmed": false
+      },
+      "events": [
+        {
+          "time_ms": 13500000,
+          "kind": "SYNTHETIC_ASSUMPTION",
+          "detail": "INITIAL_STOP_OBSERVED_AT_FILL",
+          "price": "95"
+        },
+        {
+          "time_ms": 13500100,
+          "kind": "EXIT_REQUEST",
+          "detail": "FIXED_TP",
+          "price": "111"
+        },
+        {
+          "time_ms": 13500200,
+          "kind": "SYNTHETIC_FILL",
+          "detail": "FIXED_TP",
+          "price": "110"
+        }
+      ],
+      "synthetic": true,
+      "evidence_source": "OFFLINE_SYNTHETIC",
+      "broker_protection_confirmed": false
+    },
+    {
+      "candidate": "B",
+      "status": "CLOSED",
+      "exit_reason": "STOP",
+      "deadline_ms": 17100000,
+      "request_ms": 13500300,
+      "fill_ms": 13500400,
+      "fill_price": "103",
+      "estimated_net_cash": "2.8",
+      "state": {
+        "peak_price": "111",
+        "peak_net_cash": "10.8",
+        "basis_revision": 0,
+        "proposed_stop": "108.0",
+        "acknowledged_stop": "108.0",
+        "observed_stop": "108.0",
+        "desired_floor_cash": null,
+        "floor_revision": null,
+        "last_quote_event_ms": 13500200,
+        "last_decision_ms": 13500200,
+        "evidence_source": "OFFLINE_SYNTHETIC",
+        "broker_protection_confirmed": false
+      },
+      "events": [
+        {
+          "time_ms": 13500000,
+          "kind": "SYNTHETIC_ASSUMPTION",
+          "detail": "INITIAL_STOP_OBSERVED_AT_FILL",
+          "price": "95"
+        },
+        {
+          "time_ms": 13500100,
+          "kind": "STOP_PROPOSED",
+          "detail": "ATR14_TRAIL",
+          "price": "108.0"
+        },
+        {
+          "time_ms": 13500200,
+          "kind": "SYNTHETIC_STOP_ACK",
+          "detail": "ACCEPTED",
+          "price": "108.0"
+        },
+        {
+          "time_ms": 13500200,
+          "kind": "SYNTHETIC_STOP_OBSERVED",
+          "detail": "OBSERVED",
+          "price": "108.0"
+        },
+        {
+          "time_ms": 13500300,
+          "kind": "EXIT_REQUEST",
+          "detail": "STOP",
+          "price": "104"
+        },
+        {
+          "time_ms": 13500400,
+          "kind": "SYNTHETIC_FILL",
+          "detail": "STOP",
+          "price": "103"
+        }
+      ],
+      "synthetic": true,
+      "evidence_source": "OFFLINE_SYNTHETIC",
+      "broker_protection_confirmed": false
+    },
+    {
+      "candidate": "C",
+      "status": "CLOSED",
+      "exit_reason": "STOP",
+      "deadline_ms": 17100000,
+      "request_ms": 13500300,
+      "fill_ms": 13500400,
+      "fill_price": "103",
+      "estimated_net_cash": "2.8",
+      "state": {
+        "peak_price": "111",
+        "peak_net_cash": "10.8",
+        "basis_revision": 0,
+        "proposed_stop": "105.60",
+        "acknowledged_stop": "105.60",
+        "observed_stop": "105.60",
+        "desired_floor_cash": "5.40",
+        "floor_revision": 0,
+        "last_quote_event_ms": 13500200,
+        "last_decision_ms": 13500200,
+        "evidence_source": "OFFLINE_SYNTHETIC",
+        "broker_protection_confirmed": false
+      },
+      "events": [
+        {
+          "time_ms": 13500000,
+          "kind": "SYNTHETIC_ASSUMPTION",
+          "detail": "INITIAL_STOP_OBSERVED_AT_FILL",
+          "price": "95"
+        },
+        {
+          "time_ms": 13500100,
+          "kind": "STOP_PROPOSED",
+          "detail": "HALF_PEAK_NET_FLOOR",
+          "price": "105.60"
+        },
+        {
+          "time_ms": 13500200,
+          "kind": "SYNTHETIC_STOP_ACK",
+          "detail": "ACCEPTED",
+          "price": "105.60"
+        },
+        {
+          "time_ms": 13500200,
+          "kind": "SYNTHETIC_STOP_OBSERVED",
+          "detail": "OBSERVED",
+          "price": "105.60"
+        },
+        {
+          "time_ms": 13500300,
+          "kind": "EXIT_REQUEST",
+          "detail": "STOP",
+          "price": "104"
+        },
+        {
+          "time_ms": 13500400,
+          "kind": "SYNTHETIC_FILL",
+          "detail": "STOP",
+          "price": "103"
+        }
+      ],
+      "synthetic": true,
+      "evidence_source": "OFFLINE_SYNTHETIC",
+      "broker_protection_confirmed": false
+    }
+  ],
+  "market_performance_validated": false,
+  "limitations": [
+    "Fixed shared synthetic trace; no policy winner is inferred.",
+    "Replay assumes synthetic initial SL installation and modeled latency.",
+    "Memory replay does not establish disk durability.",
+    "No live broker configuration, cost, account or session was verified."
+  ]
+}

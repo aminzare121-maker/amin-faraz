@@ -1,0 +1,30 @@
+{
+  "installation_manifests": [
+    {
+      "relative_path": "runtime/owner-installation.json",
+      "unchanged": true
+    },
+    {
+      "relative_path": "runtime/active-release.json",
+      "unchanged": true
+    },
+    {
+      "relative_path": "runtime/continuity-policy.json",
+      "unchanged": true
+    }
+  ],
+  "existing_terminals": [
+    {
+      "pid": 11648,
+      "same_process_still_running": true
+    },
+    {
+      "pid": 21192,
+      "same_process_still_running": true
+    }
+  ],
+  "new_trading_process_started": false,
+  "legacy_state_or_models_copied": false,
+  "broker_connected": false,
+  "demo_installation_assessment": "No MT5 installation required for completed offline phase; independent folder and synthetic memory-only demo exercised. A real terminal or adapter remains outside this delivered phase."
+}

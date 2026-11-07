@@ -1,0 +1,24 @@
+test_all_unknown_blocks (test_feed.FeedTests.test_all_unknown_blocks) ... ok
+test_boolean_time (test_feed.FeedTests.test_boolean_time) ... ok
+test_crossed (test_feed.FeedTests.test_crossed) ... ok
+test_duplicate (test_feed.FeedTests.test_duplicate) ... ok
+test_empty (test_feed.FeedTests.test_empty) ... ok
+test_extra_columns_rejected (test_feed.FeedTests.test_extra_columns_rejected) ... ok
+test_gap_is_not_filled (test_feed.FeedTests.test_gap_is_not_filled) ... ok
+test_hash_mismatch (test_feed.FeedTests.test_hash_mismatch) ... ok
+test_nan (test_feed.FeedTests.test_nan) ... ok
+test_ohlc (test_feed.FeedTests.test_ohlc) ... ok
+test_real_scope_rejected_before_parse (test_feed.FeedTests.test_real_scope_rejected_before_parse) ... ok
+test_reverse_order (test_feed.FeedTests.test_reverse_order) ... ok
+test_self_asserted_verified_not_permission (test_feed.FeedTests.test_self_asserted_verified_not_permission) ... ok
+test_session_unknown (test_feed.FeedTests.test_session_unknown) ... ok
+test_timezone_unknown (test_feed.FeedTests.test_timezone_unknown) ... ok
+test_unclosed_bar (test_feed.FeedTests.test_unclosed_bar) ... ok
+test_unknown_price_side (test_feed.FeedTests.test_unknown_price_side) ... ok
+test_valid_bar_dry_run_only (test_feed.FeedTests.test_valid_bar_dry_run_only) ... ok
+test_valid_tick_hash_preserved (test_feed.FeedTests.test_valid_tick_hash_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.001s
+
+OK

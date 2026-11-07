@@ -1,0 +1,38 @@
+{
+  "tests": 19,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "future_gate": {
+    "missing_or_unverified": [
+      "licence",
+      "provenance",
+      "session_calendar",
+      "timezone",
+      "dst_policy",
+      "commission",
+      "tick_size",
+      "tick_value",
+      "swap",
+      "slippage",
+      "volume_grid",
+      "account_currency"
+    ],
+    "real_data_authorized": false,
+    "fit_allowed": false,
+    "trade_allowed": false,
+    "status": "BLOCKED_CURRENT_SCOPE"
+  },
+  "synthetic_dry_run": {
+    "fit_allowed": false,
+    "trade_allowed": false,
+    "real_data_used": false,
+    "rows_processed": 2,
+    "status": "SYNTHETIC_DRY_RUN_PASS",
+    "sha256_before": "3f0f9859c664ddf0abf97b228efed246d391fc59f376b926e04cb72cc27a0c21",
+    "sha256_after": "3f0f9859c664ddf0abf97b228efed246d391fc59f376b926e04cb72cc27a0c21",
+    "reasons": []
+  },
+  "real_downloads": 0,
+  "real_rows_processed": 0
+}
