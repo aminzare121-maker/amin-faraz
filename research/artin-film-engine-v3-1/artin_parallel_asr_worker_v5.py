@@ -18,20 +18,42 @@ from artin_real_asr_trial_v5 import read_pcm_array
 
 
 def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
-                  expected_sha: str, model_name='large-v3-turbo'):
+                  expected_sha: str, model_name='large-v3-turbo', prepped_root=None):
     if not 0<=shard<shard_count<=17:
         raise ValueError('Invalid concurrent partition')
-    if not source_page.startswith('https://my.uupload.ir/p/'):
+    if not prepped_root and not source_page.startswith('https://my.uupload.ir/p/'):
         raise ValueError('Only an explicitly supplied user Uupload page accepted')
     root.mkdir(parents=True,exist_ok=True)
-    url,_=get_direct_url(source_page)
     start=time.monotonic()
-    private_mp4=root/'source_ephemeral.mp4'
-    size,sha=download(url,private_mp4)
-    if sha!=expected_sha:
-        raise ValueError('Video SHA differs from expected source: abort full-course merge')
-    manifest=fast_prepare(private_mp4,root/'fast',workers=4,frames_per_part=2)
-    validate_fast(root/'fast',manifest,verify_files=True)
+    if prepped_root is not None:
+        # Isolated benchmark: the source was downloaded and SHA verified ONCE
+        # by the trusted preparation job. Every worker checks original timing
+        # and SHA256 of each received audio part before running the same ASR.
+        from artin_film_pipeline import file_sha256
+        prepped_root=Path(prepped_root).resolve()
+        manifest=json.loads((prepped_root/'fast_av_manifest.json').read_text(encoding='utf8'))
+        if manifest.get('video_sha256')!=expected_sha:
+            raise ValueError('Prepared original movie SHA differs from expected source')
+        validate_fast(prepped_root,manifest,verify_files=False)
+        if len(manifest.get('parts',[]))!=17:
+            raise ValueError('Original movie must retain all global 17 chunks')
+        for p in manifest['parts']:
+            wav=(prepped_root/p['audio']).resolve()
+            if (not wav.is_relative_to(prepped_root) or not wav.is_file()
+                    or file_sha256(wav)!=p['audio_sha256']):
+                raise ValueError('Prepared source-audio SHA mismatch: '+str(p['chunk']))
+        audio_root=prepped_root
+        sha=expected_sha
+        size=manifest.get('verified_original_movie_bytes',0)
+    else:
+        url,_=get_direct_url(source_page)
+        private_mp4=root/'source_ephemeral.mp4'
+        size,sha=download(url,private_mp4)
+        if sha!=expected_sha:
+            raise ValueError('Video SHA differs from expected source: abort full-course merge')
+        manifest=fast_prepare(private_mp4,root/'fast',workers=4,frames_per_part=2)
+        validate_fast(root/'fast',manifest,verify_files=True)
+        audio_root=root/'fast'
     selected=[p for p in manifest['parts'] if (p['chunk']-1)%shard_count==shard]
     if not selected:
         raise ValueError('Partition has no assigned parts')
@@ -44,7 +66,7 @@ def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
     output=root/'asr_evidence'
     output.mkdir(exist_ok=True)
     for part in selected:
-        audio=read_pcm_array(root/'fast'/part['audio'])
+        audio=read_pcm_array(audio_root/part['audio'])
         st=time.monotonic()
         segments,info=model.transcribe(audio,language='fa',vad_filter=True,
                         beam_size=5,condition_on_previous_text=False,
@@ -96,9 +118,10 @@ def main():
     p.add_argument('--partitions',required=True,type=int)
     p.add_argument('--expected-sha256',required=True)
     p.add_argument('--model',default='large-v3-turbo')
+    p.add_argument('--prepped-root',type=Path,default=None)
     a=p.parse_args()
     page=os.environ.get('TEACHER_VIDEO_PAGE','')
-    process_shard(page,a.out,a.index,a.partitions,a.expected_sha256,a.model)
+    process_shard(page,a.out,a.index,a.partitions,a.expected_sha256,a.model,a.prepped_root)
 
 
 if __name__=='__main__':main()
