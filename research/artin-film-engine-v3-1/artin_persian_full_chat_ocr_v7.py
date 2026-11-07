@@ -55,15 +55,47 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
     # Every frame must first pass source validation before importing a third
     # party OCR model. No mislabeled screenshot can silently enter output.
     files=[_valid_source_row(r,root) for r in chosen]
-    if ocr_factory is None:
-        from paddleocr import PaddleOCR
-        ocr_factory=PaddleOCR
-    model=ocr_factory(lang='fa',use_doc_orientation_classify=False,
-                  use_doc_unwarping=False,use_textline_orientation=False)
     started=time.monotonic()
-    results=[];failed=[]
     private_path=out/'full_chat_ocr_candidates_PRIVATE.json'
-    for i,(row,path) in enumerate(zip(chosen,files),1):
+    results=[];failed=[]
+    if private_path.is_file():
+        saved=json.loads(private_path.read_text(encoding='utf8'))
+        if (not isinstance(saved,dict) or
+            saved.get('schema')!='artin_full_original_chat_ocr_v7' or
+            saved.get('source_video_sha256')!=video_sha or
+            saved.get('frames_total')!=len(rows) or
+            saved.get('frames_targeted')!=len(chosen) or
+            saved.get('partition_index')!=partition_index or
+            saved.get('partition_count')!=partition_count or
+            not isinstance(saved.get('results'),list) or
+            saved.get('frames_attempted')!=len(saved['results']) or
+            len(saved['results'])>len(chosen)):
+            raise ValueError('OCR checkpoint provenance/count mismatch')
+        for pos,(prior,original) in enumerate(zip(saved['results'],chosen)):
+            if (not isinstance(prior,dict) or
+                prior.get('frame_id')!=original['frame_id'] or
+                prior.get('source_frame_sha256')!=original['chat']['sha256'] or
+                prior.get('time_original_video_seconds')!=original['time_seconds'] or
+                prior.get('state') not in
+                  ('OCR_TEXT_CANDIDATES','OCR_NO_READABLE_TEXT','OCR_FAILED_REVIEW_REQUIRED') or
+                prior.get('source_text_verified') is not False or
+                prior.get('teacher_answer_verified') is not False):
+                raise ValueError('OCR checkpoint original image hash/time/status mismatch')
+        # Re-run the first previously failed source frame; keep all earlier
+        # complete records. A truncated checkpoint is legitimate partial work.
+        retry_at=next((i for i,x in enumerate(saved['results'])
+                       if x['state']=='OCR_FAILED_REVIEW_REQUIRED'),len(saved['results']))
+        results=list(saved['results'][:retry_at])
+        print('ARTIN_CHAT_OCR_RESTORED='+json.dumps(
+            {'trusted_existing':len(results),'target':len(chosen)}),flush=True)
+    if len(results)<len(chosen):
+        if ocr_factory is None:
+            from paddleocr import PaddleOCR
+            ocr_factory=PaddleOCR
+        model=ocr_factory(lang='fa',use_doc_orientation_classify=False,
+                      use_doc_unwarping=False,use_textline_orientation=False)
+    for i in range(len(results)+1,len(chosen)+1):
+        row,path=chosen[i-1],files[i-1]
         try:
             first=model.predict(str(path))[0]
             raw=list(first.get('rec_texts',[]))
@@ -126,6 +158,8 @@ def ocr_frames(original_visual_root,index,output,*,max_frames=0,
                   'attempted':i,'total':len(chosen),
                   'failed':len(failed),'time_elapsed_seconds':round(time.monotonic()-started,2)},
                   ensure_ascii=False),flush=True)
+    failed=[{'frame_id':r['frame_id'],'error_type':r.get('error_type','Unknown')}
+            for r in results if r['state']=='OCR_FAILED_REVIEW_REQUIRED']
     summary={'schema':'artin_original_chat_ocr_coverage_v7',
         'source_video_sha256':video_sha,'source_frames_total':len(rows),
         'partition_index':partition_index,'partition_count':partition_count,
