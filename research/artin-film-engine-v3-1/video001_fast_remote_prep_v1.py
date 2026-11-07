@@ -84,7 +84,25 @@ def remote_prepare(request_file,out):
     # The public share page may expire. Never silently switch to a different
     # movie when there is no valid source: report explicit SOURCE_UNAVAILABLE.
     if p.hostname=='my.uupload.ir':
-        direct,_=get_direct_url(share)
+        # Intermittent Uupload share pages sometimes omit the actual MP4 link.
+        # Retry only this transient lookup. Never substitute a different movie,
+        # alter the expected SHA, or mislabel missing media as a successful run.
+        direct=None
+        for attempt in range(4):
+            try:
+                direct,_=get_direct_url(share)
+                _allowed_https(direct)
+                break
+            except (ValueError,OSError) as exc:
+                if attempt==3:
+                    raise RuntimeError(
+                        'SOURCE_UNAVAILABLE: user video page supplied no usable '
+                        'original MP4 after four source-verified attempts') from exc
+                pause=(2,5,10)[attempt]
+                print('VIDEO001_SOURCE_LINK_RETRY='+json.dumps({
+                    'attempt':attempt+1,'next_delay_seconds':pause,
+                    'status':'TRANSIENT_SOURCE_LINK_UNAVAILABLE'}),flush=True)
+                time.sleep(pause)
     else:
         direct=share
     _allowed_https(direct)
