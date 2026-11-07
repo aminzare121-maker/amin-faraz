@@ -102,6 +102,8 @@ def record_session(session,token):
 
 def main():
     env=os.environ
+    if env.get("VIDEO001_MAGAZINE_ID")!="artin-course-001":
+        raise ValueError("Only Artin magazine can update the Artin course registry")
     queue_id=env["VIDEO001_QUEUE_ID"]
     match=re.fullmatch(r"video-q-([0-9]{4})-[a-z0-9-]{4,64}",queue_id)
     if not match:raise ValueError("Invalid queue session ID")
