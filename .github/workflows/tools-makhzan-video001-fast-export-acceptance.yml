@@ -1,0 +1,168 @@
+name: Makhzan VIDEO-001 FAST V12 full private artifact compatibility acceptance
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/tools-makhzan-video001-fast-export-acceptance.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-evidence-and-legacy-v12-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/artin-fidelity-audit-v7-20261107
+          persist-credentials: false
+      - name: Collect real 17-way ASR (from fully successful independent full video)
+        uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          pattern: video001-fast-asr-*
+          merge-multiple: true
+          path: /tmp/source_evidence/asr
+      - name: Collect real 16-way original frame OCR, without merging or losing worker IDs
+        uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          pattern: video001-fast-ocr-*
+          merge-multiple: false
+          path: /tmp/source_evidence/ocr
+      - name: Download real exact source frame pixels from all 16 original OCR worker inputs
+        uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          pattern: video001-fast-original-ocr-*
+          merge-multiple: false
+          path: /tmp/source_evidence/original_chat_workers
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-final-original-source-proof
+          path: /tmp/source_evidence/proof
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-source-summary
+          path: /tmp/source_evidence/summary
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-original-chat-index
+          path: /tmp/source_evidence/chat_index
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-original-board
+          path: /tmp/source_evidence/board
+      - name: Reuse existing genuine one-second original-source timeline from the same source video
+        uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42392242222
+          github-token: ${{ github.token }}
+          name: artin-v8-one-second-real-chat-change-timeline
+          path: /tmp/source_evidence/temporal
+      - name: Recover all original image pixels from source-hashed OCR input shards
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,shutil
+          root=Path('/tmp/source_evidence')
+          idx=json.loads((root/'chat_index/chat_selected_index.json').read_text(encoding='utf8'))
+          dst=root/'chat_pixels'
+          for number,row in enumerate(idx['rows']):
+              worker=number%16
+              base=root/'original_chat_workers'/f'video001-fast-original-ocr-{worker}'
+              rel=Path(row['chat']['path'])
+              options=[base/rel,base/rel.name,base/'chat'/rel.name]
+              f=next((p for p in options if p.is_file()),None)
+              if f is None:
+                  raise FileNotFoundError('No source screenshot '+str(number))
+              if hashlib.sha256(f.read_bytes()).hexdigest()!=row['chat']['sha256']:
+                  raise ValueError('OCR input original screenshot SHA mismatch')
+              to=dst/rel;to.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copy2(f,to)
+          assert len(list(dst.rglob('*.png')))==len(idx['rows'])
+          print('VIDEO001_FULL_ORIGINAL_PIXELS_RECOVERED='+str(len(idx['rows'])))
+          PY
+      - name: Independently verify unchanged original audio, images and source-time links
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_verify_v1.py \
+            --asr-root /tmp/source_evidence/asr \
+            --ocr-root /tmp/source_evidence/ocr \
+            --source-index /tmp/source_evidence/chat_index/chat_selected_index.json \
+            --board-root /tmp/source_evidence/board \
+            --source-summary /tmp/source_evidence/summary/safe_source_prep_summary.json \
+            --out /tmp/source_evidence/verify \
+            --audio-workers 17 --ocr-workers 16
+      - name: Prove FAST source evidence fully exports V12 private review files and no invented rules
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_export_v12.py \
+            --proof-path /tmp/source_evidence/verify/private_fast_verify_summary.json \
+            --source-path /tmp/source_evidence/summary/safe_source_prep_summary.json \
+            --asr-path /tmp/source_evidence/verify/asr_verified/complete_unverified_qa_evidence.json \
+            --ocr-root /tmp/source_evidence/ocr \
+            --chat-index /tmp/source_evidence/chat_index/chat_selected_index.json \
+            --board-root /tmp/source_evidence/board \
+            --temporal-index /tmp/source_evidence/temporal/full_second_by_second_chat_TIMES_ONLY.json \
+            --chat-images /tmp/source_evidence/chat_pixels \
+            --out /tmp/source_evidence/legacy_contract \
+            --audio-workers 17 --ocr-workers 16
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('/tmp/source_evidence/legacy_contract')
+          s=json.loads((p/'safe_session_result.json').read_text(encoding='utf8'))
+          assert s['global_audio_chunks_total']==s['global_audio_chunks_asr_completed']==17
+          assert s['one_second_chat_frames_scanned']==4821
+          assert s['original_source_chat_screenshots']==s['source_screenshots_ocr_completed']==276
+          assert s['original_source_board_screenshots']==161
+          assert s['source_screenshots_ocr_errors']==0
+          assert s['source_verified_trading_rules']==0
+          for path in ['private_original_asr_review.json','private_visual_timeline.json',
+              'private_second_by_second_chat_index.json','private_chat_capture_index.json',
+              'private_question_audio_REVIEW_ONLY.json','private_question_clusters_REVIEW_ONLY.json',
+              'private_unverified_rule_context.json','private_ocr/full_chat_ocr_candidates_PRIVATE.json']:
+              assert (p/path).is_file(),path
+          assert len(list((p/'visual_change/chat').glob('*.png')))==276
+          print('VIDEO001_FAST_ORIGINAL_LEGACY_V12_REVIEW_CONTRACT_PASS='+json.dumps({
+             'source_parts':17,'source_images':276,'source_board_frames':161,
+             'source_scan_frames':4821,'missing_original_evidence':0,'rules_certified':0}))
+          PY
+      - name: Retain only safe acceptance certificate (not confidential teacher or student content)
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          out=Path('/tmp/source_evidence/review_compatibility_certificate.json')
+          out.write_text(json.dumps({'schema':'video001_fast_original_v12_artifact_compatibility_v1',
+             'source_video_80min_sha':'b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff',
+             'full_original_source_export_verified':True,'source_parts':17,
+             'original_chat_images':276,'original_board_frames':161,
+             'unverified_teacher_rules':0,'compatibility_release_test':'PASS'},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO001-V12-fast-complete-legacy-compatibility-proof
+          retention-days: 30
+          if-no-files-found: error
+          path: /tmp/source_evidence/review_compatibility_certificate.json
