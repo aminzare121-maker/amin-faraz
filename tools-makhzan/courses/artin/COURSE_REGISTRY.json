@@ -53,5 +53,22 @@
     "audio_utterances": 2035,
     "provisional_chat_question_groups": 59,
     "unverified_rule_fragments_tagged": 35
+  },
+  "standing_user_instruction_2026_11_08": {
+    "source": "Explicit user request to preserve multi-video sequence for instructor Artin until user declares last video",
+    "status": "COURSE_OPEN_AND_INCREMENTAL",
+    "only_process_videos_user_provides": true,
+    "for_each_new_video": [
+      "Use registered VIDEO-001 V12 to extract source-linked audio, chat and board evidence",
+      "Register as next numbered session under ARTIN-COURSE-001, checking SHA256 and avoiding duplicate inputs",
+      "Retain original lesson wording, times and corrections without overwriting earlier evidence",
+      "Build provisional explanation, correction, exception and contradiction links with previous lessons by subject",
+      "Mark speaker identity, question-answer roles and teacher meaning unverified unless independently checked",
+      "Persist per-session evidence metadata and continuation links to same private GitHub course registry"
+    ],
+    "do_not_close_course_without_explicit_user_statement": true,
+    "do_not_claim_complete_trading_engine_from_partial_videos": true,
+    "no_trade_execution_without_separate_approval": true,
+    "important_limitation": "Cross-session linking code exists but actual linking with a second real instructor video is not yet tested; original large private output artifacts expire unless independently backed up."
   }
 }
