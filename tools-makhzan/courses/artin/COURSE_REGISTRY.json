@@ -1,0 +1,48 @@
+{
+  "schema": "makhzan_artin_multi_session_course_v1",
+  "course_id": "ARTIN-COURSE-001",
+  "name_fa": "آموزش کامل مدرس آرتین؛ اتصال تدریجی جلسه‌ها",
+  "registry_ref": "tools-makhzan-hub",
+  "purpose": "Accumulating source-linked speech, charts, typed student questions, clarifications, later corrections and exceptions across all user-submitted teacher videos.",
+  "session_count_expected": null,
+  "all_sessions_received_confirmed_by_user": false,
+  "processing_policy": "ONLY_PROCESS_NEW_USER_SUPPLIED_VIDEOS; NEVER_RESET_J2_OR_INVENT_LATER_CLASSES",
+  "source_trust_policy": "Candidate model content is review-only; exact market rules require complete cross-session provenance and independent verification.",
+  "registered_sessions": [
+    {
+      "session_id": "ARTIN-J2-001",
+      "sequence": 1,
+      "source_label": "J2_6-11-1404.mp4",
+      "submitted_by_user": true,
+      "source_page": "https://my.uupload.ir/p/aGgKYdpL",
+      "source_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+      "duration_seconds": 4820.5452,
+      "chunks_5min": 17,
+      "evidence_status": "AUDIO_AND_VIDEO_EXTRACTED_SEMANTICS_REVIEW_REQUIRED",
+      "source_audio_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
+      "source_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42395611419",
+      "source_qa_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42393181420",
+      "partial_rule_count": 35,
+      "provisional_qa_groups": 59,
+      "verified_strategy_rules": 0,
+      "topic_tags_candidate": [
+        "مقدمات فارکس",
+        "جفت‌ارزها",
+        "خرید و فروش",
+        "ریسک و حد ضرر"
+      ],
+      "topic_tags_human_verified": false
+    }
+  ],
+  "evidence_nodes": [],
+  "cross_session_links": [],
+  "next_intake_status": "WAITING_FOR_USER_TO_SUBMIT_NEXT_TEACHER_VIDEO",
+  "output_policy": {
+    "course_rules_ready": false,
+    "paper_trades_allowed": false,
+    "live_trades_allowed": false,
+    "do_not_assume_later_lessons_will_contain_a_complete_strategy": true
+  },
+  "current_code_ref": "review/artin-fidelity-audit-v7-20261107",
+  "last_changed": "2026-11-07"
+}
