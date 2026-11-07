@@ -37,6 +37,11 @@ def merge_private_shards(folder: Path, out: Path):
             raise ValueError('Unexpected partition count')
         if st.get('completed_global_parts')!=st.get('expected_global_parts'):
             raise ValueError('Partition is incomplete')
+        idx=st.get('shard_index')
+        canonical=[n for n in range(1,len(manifest['parts'])+1)
+                   if (n-1)%len(statuses)==idx]
+        if st.get('expected_global_parts')!=canonical:
+            raise ValueError('Partition assignment is not source-global modulo schedule')
         ids.extend(st.get('completed_global_parts',[]))
     if sorted(ids)!=list(range(1,len(manifest['parts'])+1)):
         raise ValueError('Partition ownership is incomplete or duplicated')
@@ -60,9 +65,15 @@ def merge_private_shards(folder: Path, out: Path):
          'full_original_audio_human_reviewed':False,
          'question_candidates':len(review['possible_questions_and_following_utterances']),
          'suspect_speech_segments':len(review['suspect_asr_lines']),
+         'cross_boundary_review_candidates':len(review.get('cross_boundary_asr_review',[])),
+         'cross_boundary_conflicts_or_gaps':review.get('cross_boundary_conflicts',0),
+         'possible_late_teacher_corrections':len(review['possible_later_corrections']),
+         'technical_or_mixed_noise_review_candidates':len(review['classroom_noise_or_mixed_review']),
          'trading_topics_not_rules':len(review['teaching_topics_not_rules']),
          'candidate_rule_statements':len(review['rule_candidates']),
          'teacher_answers_verified':0,
+         'student_typed_questions_verified':0,
+         'confirmed_speaker_identities':0,
          'rules_executable':0,
          'broker_or_mt5_actions':0,
          'status':'FULL_ASR_COVERAGE_BUT_TEACHER_MEANING_UNVERIFIED'}
