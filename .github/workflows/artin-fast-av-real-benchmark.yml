@@ -1,0 +1,64 @@
+name: Artin V4 - fast original teacher video media prep benchmark
+on:
+  push:
+    branches:
+      - review/artin-fast-av-evidence-v4-20261107
+    paths:
+      - '.github/workflows/artin-fast-av-real-benchmark.yml'
+permissions:
+  contents: read
+jobs:
+  fast-prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure FFmpeg
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+      - name: Download original teacher MP4 ephemeral and benchmark V4 fast analysis preparation
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import os,time,json,pathlib
+          from artin_ephemeral_remote_ingest import get_direct_url,download
+          from artin_fast_av_v4 import fast_prepare,validate_fast
+          root=pathlib.Path('/tmp/artin_v4_fast_teacher')
+          root.mkdir(parents=True,exist_ok=True)
+          url,_=get_direct_url(os.environ['TEACHER_VIDEO_PAGE'])
+          source=root/'teacher_source.mp4'
+          a=time.monotonic()
+          size,sha=download(url,source)
+          d=time.monotonic()
+          print('ARTIN_REAL_DOWNLOAD='+json.dumps({'bytes':size,'sha256':sha,'seconds':round(d-a,2)}),flush=True)
+          manifest=fast_prepare(source,root/'fast',workers=4,frames_per_part=2)
+          e=time.monotonic()
+          assert validate_fast(root/'fast',manifest)
+          result={'video_seconds':manifest['duration_seconds'],'download_seconds':round(d-a,2),
+             'fast_prepare_seconds':round(e-d,2),'total_seconds':round(e-a,2),
+             'original_sha256':sha,'parts':manifest['parts_ready'],
+             'batches':len(manifest['batches']),'frames':sum(len(c['frames']) for c in manifest['parts']),
+             'audios':sum(bool(c.get('audio_sha256')) for c in manifest['parts']),
+             'all_hashed':True,'video_transcoded':False,
+             'speech_transcribed':False,'teacher_rules_verified':0}
+          safe=dict(manifest)
+          safe.pop('video_path_private',None)
+          (root/'safe_fast_manifest.json').write_text(json.dumps(safe,ensure_ascii=False,indent=2),encoding='utf8')
+          (root/'summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf8')
+          print('ARTIN_FAST_REAL_RESULT='+json.dumps(result,ensure_ascii=False),flush=True)
+          PY
+      - name: Preserve verification report and limited frame evidence (not raw teacher audio or video)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-real-fast-av-v4-evidence
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v4_fast_teacher/summary.json
+            /tmp/artin_v4_fast_teacher/safe_fast_manifest.json
+            /tmp/artin_v4_fast_teacher/fast/frames/**
