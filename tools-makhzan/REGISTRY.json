@@ -58,7 +58,7 @@
       ],
       "outstanding": [
         "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
-        "Independent Persian typed-chat and handwritten board OCR accuracy: not demonstrated; PaddleOCR real-frame pilot run 42390410975 pending.",
+        "Full 161 sampled-chat-frame OCR running in GitHub Actions 42391720989; 30-second screenshot intervals may still miss transient messages.",
         "Speaker-to-role verified teacher/student: not demonstrated.",
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
         "Teacher strategy rules with complete market triggers, all exceptions and counterexamples: none validated.",
@@ -66,8 +66,8 @@
         "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage."
       ],
       "last_verified": {
-        "technical_tests": 155,
-        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42389814966",
+        "technical_tests": 164,
+        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42391727776",
         "complete_asr_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
         "evidence_reaudit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385531441",
         "audio_part_count": 17,
@@ -83,9 +83,13 @@
         "legacy_candidate_without_observable_market_condition": 35,
         "gold_transcription_accuracy": "NOT_MEASURED",
         "gold_visual_text_accuracy": "NOT_MEASURED",
-        "gold_rule_precision_recall": "NOT_MEASURED"
+        "gold_rule_precision_recall": "NOT_MEASURED",
+        "persian_ocr_3_verified_sample_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42391279413",
+        "persian_ocr_three_sample_status": "3 source-verified printed-chat crops visually matched after RTL reorder and Arabic/Persian character normalization; not a population accuracy benchmark",
+        "full_161_sampled_chat_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42391720989",
+        "full_161_sampled_chat_ocr_status": "IN_PROGRESS_LAST_CHECK"
       },
-      "next_action": "Start from V7 17-part original evidence and audited 35 claims, NOT a new video. Examine real PaddleOCR Persian test 42390410975, measure OCR against independently verified frame text, build speaker-corrected reference and require verified conditional market trigger before any candidate can become a demo trading rule. Until verified, emit REVIEW_REQUIRED only."
+      "next_action": "Check GitHub Actions run 42391720989: real OCR on all 161 source-hashed chat snapshots. Verify final frame coverage, failures and timeline; keep actual text private. Then build independently labeled reference for ASR+OCR, verify teacher/student identity, reconcile full questions+teacher answers and later corrections before converting any rules; all unverified remain REVIEW_REQUIRED."
     }
   ]
 }
