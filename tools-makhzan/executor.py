@@ -20,7 +20,7 @@ from urllib.error import HTTPError,URLError
 
 REPO="aminzare121-maker/amin-faraz"
 SOURCE="TEACHER_J2_2026_11_07"
-ACTIONS={"status","build_review","source_ingest","complete_session","course_status"}
+ACTIONS={"status","build_review","source_ingest","complete_session","complete_session_fast","course_status"}
 ROOT=Path(__file__).resolve().parent.parent
 REQUEST=ROOT/"tools-makhzan"/"requests"/"current.json"
 REGISTRY=ROOT/"tools-makhzan"/"REGISTRY.json"
@@ -46,7 +46,7 @@ def validate(request,registry):
     code=tool.get("code",{})
     if code.get("repository")!=REPO or code.get("ref")!="review/artin-fidelity-audit-v7-20261107":
         raise ValueError("Unrecognized code source version; requires reviewed hub upgrade")
-    if action not in ("source_ingest","complete_session"):
+    if action not in ("source_ingest","complete_session","complete_session_fast"):
         if request.get("source_id")!=SOURCE:
             raise ValueError("Must use an explicitly registered source ID")
         if any(k in request for k in ("source_url","expected_sha256","ingest_mode")):
@@ -63,7 +63,7 @@ def validate(request,registry):
         # Deliberately no new-source trading tasks.
         if request.get("ingest_mode") not in ("SOURCE_AND_FAST_AUDIO","SOURCE_AUDIO_AND_CHAT"):
             raise ValueError("Source mode is not evidence-only")
-        if action=="complete_session" and request.get("ingest_mode")!="SOURCE_AUDIO_AND_CHAT":
+        if action in ("complete_session","complete_session_fast") and request.get("ingest_mode")!="SOURCE_AUDIO_AND_CHAT":
             raise ValueError("Full lesson requires SOURCE_AUDIO_AND_CHAT (actual ASR+OCR)")
         h=request.get("expected_sha256")
         if h is not None and not re.fullmatch("[a-f0-9]{64}",str(h)):
@@ -137,7 +137,7 @@ def main():
             f.write("action="+action+"\n")
             f.write("job_id="+req["job_id"]+"\n")
     if a.emit_job:
-        if action not in ("source_ingest","complete_session"):raise ValueError("Only authorized video actions emit a typed job")
+        if action not in ("source_ingest","complete_session","complete_session_fast"):raise ValueError("Only authorized video actions emit a typed job")
         job={"schema":"artin_private_video_job_v6",
              "job_id":req["job_id"],
              "source_url":req["source_url"],
