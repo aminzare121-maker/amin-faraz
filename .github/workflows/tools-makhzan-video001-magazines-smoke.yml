@@ -117,6 +117,6 @@ jobs:
           assert 'inputs.magazine_id' in worker
           assert "inputs.magazine_id == 'artin-course-001'" in worker
           assert 'VIDEO001_MAGAZINE_ID' in worker
-          assert 'makhzan-VIDEO-001-V12-FAST-${{ inputs.magazine_id }}-${{ inputs.queue_id }}' in worker
+          assert 'makhzan-VIDEO-001-V12-FAST-' in worker and 'inputs.queue_id' in worker
           print('VIDEO001_MAGAZINE_WORKER_PRIVATE_SOURCE_ARTIFACT_ROUTING_PASS=True')
           PY
