@@ -1,0 +1,62 @@
+{
+  "synthetic_cases": [
+    {
+      "net": "-2.50",
+      "stop": "100",
+      "exit_slip": "0.05",
+      "units": "10",
+      "entry": "100",
+      "round_trip_fee": "2"
+    },
+    {
+      "net": "0",
+      "stop": "100.25",
+      "exit_slip": "0.05",
+      "units": "10",
+      "entry": "100",
+      "round_trip_fee": "2"
+    },
+    {
+      "assumed_gap_fill": "99.5",
+      "nominal_stop": "101",
+      "net": "-7",
+      "units": "10",
+      "entry": "100",
+      "round_trip_fee": "2"
+    }
+  ],
+  "new_media_review_claimed": false,
+  "sources": [
+    {
+      "path": "profiles/artin-research/session-25/speech-001200.json",
+      "sha256": "f21cd900946f688a4769ff9db11a3037f9360180ac069909c688c4f0c2f26ed6"
+    },
+    {
+      "path": "profiles/artin-research/session-25/speech-001800.json",
+      "sha256": "2d02e6428512661e8a43e842b70eb072c17ed77b39e6f110d3909841af659ee8"
+    },
+    {
+      "path": "profiles/artin-research/session-25/speech-002400.json",
+      "sha256": "2bfc0599f0c1e92865f8d7f7069b04d57c29c48c6c222c8e11297ab5ee3edac2"
+    },
+    {
+      "path": "profiles/artin-research/session-26/speech-001800.json",
+      "sha256": "75294a88a413ef0c723cad2ec7e3018d1805498705f5a2d9aea125d270d5b3ae"
+    }
+  ],
+  "test_source_sha256": "0e87a3cb03bd8e15f52f86e6fab9a2f87b62c5f85017604635d6b4d7f615b75c",
+  "scope": "Synthetic arithmetic and transcript-based management review, not market efficacy",
+  "broker_specifications_verified": false,
+  "orders_authorized": false,
+  "market_backtest": false,
+  "direct_audio_verified": false,
+  "tests": {
+    "passed": 15,
+    "previous": 12,
+    "skipped": 0,
+    "new": 3,
+    "total": 15,
+    "errors": 0,
+    "failed": 0
+  }
+}

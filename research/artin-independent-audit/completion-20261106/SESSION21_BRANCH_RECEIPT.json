@@ -1,0 +1,61 @@
+{
+  "runs": [
+    {
+      "segments": 8,
+      "private_result": "private-session21-location-asr.json",
+      "session": 21,
+      "settings": {
+        "language": "fa",
+        "beam_size": 5,
+        "vad_filter": false,
+        "condition_on_previous_text": true,
+        "temperature": 0,
+        "word_timestamps": true
+      },
+      "model_snapshot": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+      "source_interval": [
+        4189,
+        4241
+      ],
+      "private_result_sha256": "5774939e8abf03a12ae03a4ab57ba32ab7d1540c91daced78e0210c60ca1dcc1",
+      "priority": {
+        "idle_request_succeeded": true,
+        "actual_priority_class": 64
+      },
+      "pcm_sha256": "538ec8305f52baafde9d3657ef42d2422b3f265f725cd14db3c6f52c8e1bb236"
+    },
+    {
+      "segments": 19,
+      "private_result": "private-session21-daystate-asr.json",
+      "session": 21,
+      "settings": {
+        "language": "fa",
+        "beam_size": 5,
+        "vad_filter": false,
+        "condition_on_previous_text": true,
+        "temperature": 0,
+        "word_timestamps": true
+      },
+      "model_snapshot": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+      "source_interval": [
+        3984,
+        4069
+      ],
+      "private_result_sha256": "e1276b83aa5aa044c374800859358c01199eec5937fc54b56b645879232fa780",
+      "priority": {
+        "idle_request_succeeded": true,
+        "actual_priority_class": 64
+      },
+      "pcm_sha256": "aa3e19bff923ad795c506618cc99f94ee348a5920119d6b845493d447386e9f3"
+    }
+  ],
+  "new_unique_pts_samples": 73,
+  "location_decode_seconds": 68.2,
+  "source_video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+  "direct_audio_verified": false,
+  "full_strategy_verified": false,
+  "daystate_decode_seconds": 152.9,
+  "scope": "Time-aligned text and visual mapping of three educational forms; not direct semantic audio verification or a trading engine",
+  "media_published": false,
+  "source_audio_sha256": "d85f67dcfb58c7ef7d3720c8ce1b6e3042e8ffd54542cee5a574f2edac025bea"
+}

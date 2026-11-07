@@ -1,0 +1,46 @@
+{
+  "priority": {
+    "idle_request_succeeded": true,
+    "actual_priority_class": 64
+  },
+  "pcm_sha256": "8ebe524c019561848272809cd4465d26175e02e220687b3e33c77e4ac6f82ef4",
+  "model_snapshot": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+  "settings": {
+    "language": "fa",
+    "beam_size": 5,
+    "vad_filter": false,
+    "condition_on_previous_text": true,
+    "temperature": 0,
+    "word_timestamps": true
+  },
+  "raw_asr_published": false,
+  "elapsed_decode_seconds": 55.4,
+  "source_interval": [
+    4690,
+    4735
+  ],
+  "session": 23,
+  "cpu_threads": 1,
+  "segments": 14,
+  "new_frames": 15,
+  "private_result_sha256": "ae7ed25e784e6368728388611e807e82876168f7e28682e4437a7a607e2f2df1",
+  "sources": [
+    {
+      "sha256": "f0aac2c5f0a4d16cbb33d93b9dfbca89ac481db779fcb8d4e22d1842a526b790",
+      "path": "profiles/artin-research/session-23/speech-003000.json"
+    },
+    {
+      "sha256": "15b16b92a447d5afec02da6926744893f2156453600e7baaa048802b6f74db25",
+      "path": "profiles/artin-research/session-23/speech-004200.json"
+    },
+    {
+      "sha256": "67284eecbb8061204022e2f617db8e4d6e8e0296325835601a1f67a0d6933386",
+      "path": "profiles/artin-research/session-21/speech-004200.json"
+    }
+  ],
+  "literal_audio_semantics_verified": false,
+  "corpus_regex_hits": 115,
+  "source21_video_retrieved": false,
+  "rule_status": "CONDITIONAL_BETWEEN_PREEXISTING_ZONES_TEXT_SUPPORTED_FULL_FORM_MAPPING_OPEN"
+}
+

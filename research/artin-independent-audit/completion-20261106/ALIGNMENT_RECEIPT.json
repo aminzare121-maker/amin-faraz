@@ -1,0 +1,48 @@
+{
+  "waveform_result": "TIME_ALIGNMENT.json",
+  "frames_receipt": "EVIDENCE_RECEIPT.json",
+  "tests": {
+    "passed": 12,
+    "total": 12,
+    "failed": 0,
+    "market_backtest": false
+  },
+  "scope": "TIME_ALIGNED_EXISTING_ASR_AND_STILLS_NOT_DIRECT_LISTENING",
+  "sources": [
+    {
+      "path": "profiles/artin-research/reviews/session-22-533.76-588.56-vad-beam5-medium.json",
+      "sha256": "5b7f0b9fdd3fd6fad332f35860cbe2666a8f43a93270ec275e48bed80eca9925"
+    },
+    {
+      "path": "profiles/artin-research/reviews/session-22-2413-2484-vad-beam5-medium.json",
+      "sha256": "07a2b8514ad0a606dcd6d8131449407a368a9e1808a924ea42afc207964eb910"
+    },
+    {
+      "path": "profiles/artin-research/reviews/session-22-2484-2534-vad-beam5-medium.json",
+      "sha256": "8d659172e2507e50f92a80bb8082274cdc5acca5858ae01732c4de0a1f88db19"
+    },
+    {
+      "path": "profiles/artin-research/session-22/speech-000000.json",
+      "sha256": "b5ca4ac4f9599de7e6158f8902c866e1fc27e05e834bb7043e253efedb4c15d2"
+    },
+    {
+      "path": "profiles/artin-research/session-22/speech-000600.json",
+      "sha256": "0e2f25fa84b1b8907382cb9b2ed666efd7d0d3dddf80678048c847c039efe6ea"
+    },
+    {
+      "path": "profiles/artin-research/session-21/speech-003600.json",
+      "sha256": "14b0d6aea96e5b35f7a771f5658fbcea50017379bdd58cfa0e2a9f780abb80c2"
+    },
+    {
+      "path": "profiles/artin-research/session-21/speech-004200.json",
+      "sha256": "67284eecbb8061204022e2f617db8e4d6e8e0296325835601a1f67a0d6933386"
+    },
+    {
+      "path": "profiles/artin-research/session-21/speech-004800.json",
+      "sha256": "52d8df88a3411bfc3626979de8de71042e33a056cffc148f6c336c4ca7dd4ede"
+    }
+  ],
+  "orders_authorized": false,
+  "rule_status": "REGION_INTERPRETATION_CORROBORATED_NOT_COMPLETE_EXECUTABLE_RULE"
+}
+

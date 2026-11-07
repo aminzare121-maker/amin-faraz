@@ -1,0 +1,29 @@
+{
+  "method": "PCM waveform correlation; 8kHz mono decimated to 2kHz; lag search +/-0.25s, step0.0005s",
+  "windows": [
+    {
+      "start_seconds": 533,
+      "duration_seconds": 10,
+      "video_offset_relative_to_flac_seconds": 0.0,
+      "normalized_correlation": 0.9921264802361058,
+      "correlation_at_zero_offset": 0.9921264802361058
+    },
+    {
+      "start_seconds": 730,
+      "duration_seconds": 10,
+      "video_offset_relative_to_flac_seconds": 0.0,
+      "normalized_correlation": 0.9990204561590456,
+      "correlation_at_zero_offset": 0.9990204561590456
+    },
+    {
+      "start_seconds": 2484,
+      "duration_seconds": 10,
+      "video_offset_relative_to_flac_seconds": 0.0,
+      "normalized_correlation": 0.9913809250041659,
+      "correlation_at_zero_offset": 0.9913809250041659
+    }
+  ],
+  "audio_semantics_verified": false,
+  "max_abs_offset_seconds": 0.0
+}
+
