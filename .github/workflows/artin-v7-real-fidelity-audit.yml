@@ -48,7 +48,7 @@ jobs:
           name: artin-original-visual-board-and-chat-v6
           repository: aminzare121-maker/amin-faraz
           run-id: 42383557569
-          github-token: REPLACE_GITHUB_TOKEN
+          github-token: ${{ github.token }}
           path: /tmp/artin_private_v7/images
       - name: Audit 17 real audio sections and 161 actual chat/board images together
         working-directory: research/artin-film-engine-v3-1
