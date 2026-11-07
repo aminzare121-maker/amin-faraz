@@ -1,0 +1,70 @@
+name: Artin teacher video 5-minute Persian speech proof of concept
+on:
+  push:
+    branches:
+      - review/artin-uupload-access-check-20261107
+    paths:
+      - '.github/workflows/artin-uupload-asr-sample.yml'
+permissions:
+  contents: read
+jobs:
+  asr-sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure FFmpeg and speech model framework
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2'
+      - name: Read first five minutes of private video stream and transcribe Persian speech
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import os,subprocess,json,pathlib,time
+          from artin_ephemeral_remote_ingest import get_direct_url
+          root=pathlib.Path('/tmp/artin_asr_sample')
+          root.mkdir(parents=True,exist_ok=True)
+          direct,_=get_direct_url(os.environ['TEACHER_VIDEO_PAGE'])
+          print('SAMPLE_AUDIO_EXTRACTION_STARTED',flush=True)
+          p=subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-y',
+                            '-i',direct,'-t','300','-vn','-ac','1','-ar','16000',
+                            '-c:a','pcm_s16le',str(root/'sample_0_5min.wav')],
+                            capture_output=True,text=True,timeout=360)
+          if p.returncode:raise RuntimeError('Audio extraction failed: '+p.stderr[-500:])
+          print('SAMPLE_AUDIO_EXTRACTED_BYTES='+str((root/'sample_0_5min.wav').stat().st_size),flush=True)
+          from faster_whisper import WhisperModel
+          model=WhisperModel('base',device='cpu',compute_type='int8',cpu_threads=4)
+          start=time.monotonic()
+          segs,info=model.transcribe(str(root/'sample_0_5min.wav'),language='fa',
+                                     vad_filter=True,beam_size=3,condition_on_previous_text=False)
+          items=[]
+          for i,s in enumerate(segs):
+              items.append({'start':round(s.start,2),'end':round(s.end,2),
+                            'text':s.text.strip(),
+                            'speaker':'UNKNOWN','verified_teacher_statement':False})
+          doc={'schema':'artin_remote_asr_poc_v1','duration_seconds':300,
+               'model':'faster-whisper-base-cpu','language_requested':'fa',
+               'speech_reviewed_by_human':False,'speaker_verified':False,
+               'rules_authorized':0,'transcription_segments':len(items),
+               'processing_seconds':round(time.monotonic()-start,2),
+               'segments':items}
+          (root/'asr_0_5min_unverified.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),
+                                                             encoding='utf-8')
+          print('ARTIN_REAL_5MIN_ASR='+json.dumps({'segments':len(items),
+                'processing_seconds':doc['processing_seconds'],'first_start':items[0]['start'] if items else None,
+                'last_end':items[-1]['end'] if items else None,
+                'text_unverified':True},ensure_ascii=False),flush=True)
+          PY
+      - name: Store ASR proof in private temporary artifact, not Git commits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-first-five-minutes-unverified-asr
+          retention-days: 1
+          if-no-files-found: ignore
+          path: /tmp/artin_asr_sample/asr_0_5min_unverified.json
