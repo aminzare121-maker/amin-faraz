@@ -18,3 +18,5 @@ jobs:
           persist-credentials: false
       - name: Validate persistent tool registry and truthful status
         run: python3 tools-makhzan/validate_registry.py
+      - name: Verify complete-session command is not extraction-only
+        run: python3 -B -m unittest discover -s tools-makhzan -p 'test_executor_complete.py'
