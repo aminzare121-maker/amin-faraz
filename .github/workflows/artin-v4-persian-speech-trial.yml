@@ -1,0 +1,88 @@
+name: Artin V4 - test better Persian ASR and voice-quality evidence
+on:
+  push:
+    branches:
+      - review/artin-fast-av-evidence-v4-20261107
+    paths:
+      - '.github/workflows/artin-v4-persian-speech-trial.yml'
+permissions:
+  contents: read
+jobs:
+  speech-trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare FFmpeg, faster-whisper and NumPy
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Sample real Persian classroom audio with upgraded Whisper small, skip incompatible PyAV decoding
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u - <<'PY'
+          import os,subprocess,pathlib,hashlib,wave,json,time
+          import numpy as np
+          from artin_ephemeral_remote_ingest import get_direct_url
+          from faster_whisper import WhisperModel
+          root=pathlib.Path('/tmp/artin_v4_teacher_asr')
+          root.mkdir(parents=True,exist_ok=True)
+          u,_=get_direct_url(os.environ['TEACHER_VIDEO_PAGE'])
+          def get_audio(start,duration,path):
+              ff=['ffmpeg','-hide_banner','-loglevel','error','-nostdin','-y',
+                 '-ss',str(start),'-i',u,'-t',str(duration),'-vn','-ac','1','-ar','16000',
+                 '-af','highpass=f=100,lowpass=f=6500,afftdn=nf=-25',
+                 '-c:a','pcm_s16le',str(path)]
+              t=time.monotonic()
+              p=subprocess.run(ff,capture_output=True,text=True,timeout=200)
+              if p.returncode:raise RuntimeError(p.stderr[-600:])
+              print('ARTIN_AUDIO_SAMPLE_READY='+json.dumps({'start_seconds':start,'duration':duration,
+                            'bytes':path.stat().st_size,'extraction_seconds':round(time.monotonic()-t,2)}),flush=True)
+          # Class intro can be logistics rather than instruction. Inspect a later block too.
+          clips=[(0,300),(3000,300)]
+          for start,duration in clips:get_audio(start,duration,root/f'audio_{start}.wav')
+          t=time.monotonic()
+          model=WhisperModel('small',device='cpu',compute_type='int8',cpu_threads=4,num_workers=2)
+          print('ARTIN_WHISPER_SMALL_LOADED_SECONDS='+str(round(time.monotonic()-t,2)),flush=True)
+          for start,duration in clips:
+              with wave.open(str(root/f'audio_{start}.wav'),'rb') as wav:
+                  rate=wav.getframerate()
+                  audio=np.frombuffer(wav.readframes(wav.getnframes()),dtype=np.int16).astype(np.float32)/32768.0
+              if rate!=16000:raise ValueError('Expected 16k audio')
+              t=time.monotonic()
+              segments,info=model.transcribe(audio,language='fa',vad_filter=True,
+                             beam_size=5,condition_on_previous_text=False,
+                             no_speech_threshold=.7,word_timestamps=False)
+              entries=[]
+              for seg in segments:
+                  entries.append({'start':round(start+seg.start,3),'end':round(start+seg.end,3),
+                         'text':seg.text.strip(),'avg_logprob':round(seg.avg_logprob,4),
+                         'no_speech_prob':round(seg.no_speech_prob,4),
+                         'speaker':'UNKNOWN','teacher_statement_verified':False,
+                         'source_audio_human_checked':False})
+              doc={'schema':'artin_v4_asr_quality_trial','model':'whisper-small',
+                 'source_start':start,'duration':duration,
+                 'processing_seconds':round(time.monotonic()-t,2),
+                 'segments':entries,'asr_text_verified':False,
+                 'teacher_questions_answers_verified':False,
+                 'teacher_rules_verified':0,'can_change_artin_engine':False}
+              (root/f'asr_{start}_UNVERIFIED.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf8')
+              print('ARTIN_SMALL_ASR_RESULT='+json.dumps({'start':start,'segments':len(entries),
+                   'processing_seconds':doc['processing_seconds'],'avg_logprob_mean':round(
+                       sum(s['avg_logprob'] for s in entries)/len(entries),4) if entries else None,
+                   'source_text_validated':False},ensure_ascii=False),flush=True)
+          PY
+      - name: Archive unverified ASR text privately for evidence quality review, no media files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v4-teacher-small-asr-unverified
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v4_teacher_asr/asr_0_UNVERIFIED.json
+            /tmp/artin_v4_teacher_asr/asr_3000_UNVERIFIED.json
