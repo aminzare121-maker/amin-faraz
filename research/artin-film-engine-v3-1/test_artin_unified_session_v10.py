@@ -30,6 +30,8 @@ class UnifiedPipelineContract(unittest.TestCase):
         manifest={"video_sha256":self.digest,"duration_seconds":60.0,"parts":[p]}
         visual={"schema":"artin_classroom_visual_v6",
                 "source_video_sha256":self.digest,"rows":[{"frame_id":"1"}]}
+        dense_visual={"schema":"artin_change_selected_chat_v8",
+                      "source_video_sha256":self.digest,"rows":[{"frame_id":"1"}]}
         def preparation(*args,**kwargs):
             self.flags.append("prepare")
             return manifest
@@ -57,6 +59,17 @@ class UnifiedPipelineContract(unittest.TestCase):
         def img(*args,**kwargs):
             self.flags.append("image")
             return visual
+        def raw_frames(*args,**kwargs):
+            self.flags.append("scan_each_second")
+            return iter([b"synthetic-test-only"])
+        def detect_chat_changes(*args,**kwargs):
+            self.flags.append("chat_changes")
+            return {"source_video_sha256":self.digest,
+                    "sampled_source_frames":60,
+                    "changed_chat_frames":3,"rows":[{"source_time_seconds":0.0}]}
+        def capture_chat(*args,**kwargs):
+            self.flags.append("capture_highres_chat")
+            return dense_visual
         def ocr(root,index,out,**kwargs):
             self.flags.append("ocr")
             Path(out).mkdir(parents=True,exist_ok=True)
@@ -86,6 +99,9 @@ class UnifiedPipelineContract(unittest.TestCase):
             patch.object(mod,"read_pcm_array",side_effect=audio),
             patch.object(mod,"review_real_asr",side_effect=review),
             patch.object(mod,"extract_visual_timeline",side_effect=img),
+            patch.object(mod,"raw_gray_frames",side_effect=raw_frames),
+            patch.object(mod,"collect_index",side_effect=detect_chat_changes),
+            patch.object(mod,"capture_changed_chat",side_effect=capture_chat),
             patch.object(mod,"ocr_frames",side_effect=ocr),
             patch.object(mod,"join_original_chat_qa",side_effect=join),
             patch.object(mod,"audit_original_teacher_evidence",side_effect=fidelity)],asr_factory
@@ -103,7 +119,11 @@ class UnifiedPipelineContract(unittest.TestCase):
         self.assertEqual(result["global_audio_chunks_asr_completed"],1)
         self.assertEqual(result["source_screenshots_ocr_completed"],1)
         self.assertEqual(self.flags,["prepare","validate","asr_model","read_audio",
-             "review_audio","image","ocr","join","fidelity"])
+             "review_audio","image","scan_each_second","chat_changes",
+             "capture_highres_chat","ocr","join","fidelity"])
+        self.assertEqual(result["one_second_chat_frames_scanned"],60)
+        self.assertEqual(result["original_source_chat_screenshots"],1)
+        self.assertEqual(result["one_second_chat_changed_frames"],3)
         self.assertTrue((self.out/"safe_session_result.json").is_file())
         self.assertEqual(result["conservative_question_review_clusters"],1)
         self.assertTrue(result["all_original_question_observations_retained"])
