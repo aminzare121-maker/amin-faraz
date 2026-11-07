@@ -26,6 +26,10 @@ def normalize(value: str) -> str:
     if not isinstance(value,str): raise ValueError('Text is not a string')
     v=unicodedata.normalize('NFKC',value).replace('ي','ی').replace('ك','ک').replace('\u200c',' ')
     v=''.join(str(unicodedata.digit(c)) if c.isdecimal() else c for c in v)
+    # OCR frequently loses spaces in comparisons (بالاترازیک / بالاتر ازیک).
+    # These are orthographic variants, NOT buy/sell or negation changes.
+    v=re.sub(r'(?<!\w)(بالاتر|پایینتر|کمتر|بیشتر)\s*از\s*(یک|دو|سه)(?!\w)',
+             r'\1 از \2',v)
     v=re.sub(r'\s+',' ',v).strip()
     return v
 
