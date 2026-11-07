@@ -528,7 +528,7 @@ jobs:
       - name: Archive FULL private V12 review data and original images, not only a metrics summary
         uses: actions/upload-artifact@v4
         with:
-          name: makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE
+          name: makhzan-VIDEO-001-V12-FAST-${{ inputs.queue_id }}-complete-source-PRIVATE
           retention-days: 30
           if-no-files-found: error
           path: /tmp/makhzan_fast_complete_source_private/**
@@ -538,3 +538,38 @@ jobs:
           path: /tmp/video001_full_integrity/private_fast_verify_summary.json
           retention-days: 15
           if-no-files-found: error
+
+  record-verified-result:
+    needs: [source-once,source-sharded-asr,source-sharded-ocr,independent-all-evidence-verification]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Get final original-source proof only when ALL 17 ASR + 16 OCR and V12 export succeeded
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: video001-${{ inputs.queue_id }}-final-original-source-proof
+          path: /tmp/video001_receipt/proof
+      - name: Get original SHA-verified film summary for independent cross-check
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: video001-${{ inputs.queue_id }}-source-summary
+          path: /tmp/video001_receipt/source
+      - name: Persist one immutable result per authorized queue ID (never invent teacher meanings)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VIDEO001_QUEUE_ID: ${{ inputs.queue_id }}
+          VIDEO001_SOURCE_PAGE: ${{ inputs.source_page }}
+          VIDEO001_EVIDENCE_DIR: /tmp/video001_receipt
+          VIDEO001_SOURCE_RESULT: ${{ needs.source-once.result }}
+          VIDEO001_ASR_RESULT: ${{ needs.source-sharded-asr.result }}
+          VIDEO001_OCR_RESULT: ${{ needs.source-sharded-ocr.result }}
+          VIDEO001_VERIFY_RESULT: ${{ needs.independent-all-evidence-verification.result }}
+        run: |
+          python3 -u tools-makhzan/video_queue/write_receipt.py
