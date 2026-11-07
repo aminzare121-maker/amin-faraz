@@ -37,7 +37,14 @@ def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
         validate_fast(prepped_root,manifest,verify_files=False)
         if len(manifest.get('parts',[]))!=17:
             raise ValueError('Original movie must retain all global 17 chunks')
-        for p in manifest['parts']:
+        selected_for_this_worker=[
+            p for p in manifest['parts'] if (p['chunk']-1)%shard_count==shard]
+        if not selected_for_this_worker:
+            raise ValueError('Prepared source shard assigned no original parts')
+        # Only the exact audio payloads assigned to THIS worker are needed.
+        # Every original source chunk is verified by exactly one worker;
+        # final strict merge rejects missing, duplicate and wrong-source shards.
+        for p in selected_for_this_worker:
             wav=(prepped_root/p['audio']).resolve()
             if (not wav.is_relative_to(prepped_root) or not wav.is_file()
                     or file_sha256(wav)!=p['audio_sha256']):
