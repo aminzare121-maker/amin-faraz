@@ -59,14 +59,50 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         raise ValueError("Source changed during initial audio/video preparation")
     parts=manifest["parts"]
     if not parts:raise ValueError("No source audio parts extracted")
-    if whisper_model_factory is None:
-        from faster_whisper import WhisperModel
-        whisper_model_factory=WhisperModel
-    asr_model=whisper_model_factory(model_name,device="cpu",compute_type="int8",
-                                   cpu_threads=asr_cpu_threads,num_workers=1)
+    # Source-checked checkpoints keep finished ASR work reusable if a run is
+    # interrupted. Never trust a checkpoint from another source, chunk or model.
+    # IMPORTANT: callers must durably restore private_asr from a trusted private
+    # artifact on a different GitHub runner; local resume works automatically.
+    asr_model=None
     shards=[]
     asr_dir=output/"private_asr"
+    asr_dir.mkdir(parents=True,exist_ok=True)
     for part in parts:
+        checkpoint=asr_dir/f"chunk_{part['chunk']:04d}_UNVERIFIED.json"
+        if checkpoint.is_file():
+            prior=json.loads(checkpoint.read_text(encoding="utf8"))
+            if (not isinstance(prior,dict) or
+                prior.get("schema")!="artin_asr_shard_v5" or
+                prior.get("global_chunk")!=part["chunk"] or
+                prior.get("source_video_sha256")!=source_hash or
+                prior.get("source_audio_sha256")!=part["audio_sha256"] or
+                prior.get("timebase")!="absolute_original_video_seconds" or
+                prior.get("model")!=model_name or
+                prior.get("speaker_human_verified") is not False or
+                prior.get("teacher_rules_verified") is not False or
+                not isinstance(prior.get("segments"),list)):
+                raise ValueError("ASR checkpoint provenance/model mismatch; refusing stale data")
+            for u in prior["segments"]:
+                if not isinstance(u,dict):
+                    raise ValueError("Malformed ASR checkpoint utterance")
+                a,b=u.get("start"),u.get("end")
+                if (not isinstance(a,(int,float)) or not isinstance(b,(int,float)) or
+                    not math.isfinite(a) or not math.isfinite(b) or
+                    not part["cut_start"]-.1<=a<b<=part["cut_end"]+1 or
+                    not isinstance(u.get("text"),str) or not u["text"].strip() or
+                    u.get("speaker_verified") is not False):
+                    raise ValueError("ASR checkpoint utterance failed source/time validation")
+            shards.append(prior)
+            print("ARTIN_ASR_RESUMED="+json.dumps({
+                "part":part["chunk"],"total":len(parts),
+                "utterances":len(prior["segments"])},ensure_ascii=False),flush=True)
+            continue
+        if asr_model is None:
+            if whisper_model_factory is None:
+                from faster_whisper import WhisperModel
+                whisper_model_factory=WhisperModel
+            asr_model=whisper_model_factory(model_name,device="cpu",compute_type="int8",
+                                           cpu_threads=asr_cpu_threads,num_workers=1)
         audio=read_pcm_array(output/"fast"/part["audio"])
         segments,_=asr_model.transcribe(
             audio,language="fa",vad_filter=True,beam_size=5,
