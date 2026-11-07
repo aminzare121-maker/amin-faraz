@@ -15,7 +15,9 @@ from pathlib import Path
 # Reversible material terms: mistranscribing them reverses market instructions.
 CRITICAL_TERMS={'خرید','فروش','بای','سل','لانگ','شورت','استاپ','حد ضرر',
                 'حد سود','نکن','نمی','باید','نباید','بالاتر','پایین‌تر',
-                'بالاتر از','کمتر از','بیشتر از','برعکس','استثنا','صعودی','نزولی'}
+                'بالاتر از','کمتر از','بیشتر از','برعکس','استثنا','صعودی','نزولی',
+                'بخر','نخر','بفروش','نفروش','نیست','نبود','نشد','نخواهد',
+                'نکنید','نخرید','نفروشید','مگر','هرگز','فقط','بدون','نه'}
 
 def normal(text):
     if not isinstance(text,str):raise ValueError('Expected Persian textual evidence')
@@ -23,6 +25,18 @@ def normal(text):
     v=v.replace('ي','ی').replace('ك','ک').replace('\u200c',' ')
     v=re.sub(r'\s+',' ',v).strip()
     return v
+
+def critical_presence(term,text):
+    """Match safety-critical Persian terms as words; negation may be a prefix.
+
+    Substring checks silently confuse 'نه' in unrelated words (e.g. 'خانه')
+    and omit several short directives. A mismatch blocks certification,
+    never automatically supplies a trading decision.
+    """
+    if term=='نمی':
+        return bool(re.search(r'(?<!\\w)نمی(?=\\s|[آ-ی]|$)',text))
+    return bool(re.search(r'(?<!\\w)'+re.escape(term)+r'(?!\\w)',text))
+
 
 def edit_distance(a,b):
     prev=list(range(len(b)+1))
@@ -70,8 +84,10 @@ def measure_reference(refs,*,min_cases=30,max_cer=.02,max_wer=.05):
         rt=reference.split()
         pt=predicted.split()
         wd=edit_distance(rt,pt)
-        important=[t for t in CRITICAL_TERMS if t in reference or t in predicted]
-        risky=any((t in reference)!=(t in predicted) for t in important)
+        important=[t for t in CRITICAL_TERMS
+                   if critical_presence(t,reference) or critical_presence(t,predicted)]
+        risky=any(critical_presence(t,reference)!=critical_presence(t,predicted)
+                  for t in important)
         if risky:terms_wrong+=1
         chars+=len(reference);cherrs+=ed;words+=len(rt);werrs+=wd;valid+=1
         details.append({'id':i,'char_errors':ed,'word_errors':wd,
