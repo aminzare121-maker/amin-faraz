@@ -29,14 +29,16 @@ def read(path):
     return json.loads(Path(path).read_text(encoding='utf8'))
 
 
-def verify(asr_root:Path,ocr_root:Path,source_index:Path,out:Path,*,shards:int=8):
+def verify(asr_root:Path,ocr_root:Path,source_index:Path,out:Path,*,asr_workers:int=8,ocr_workers:int=8):
     start=time.monotonic()
     out.mkdir(parents=True,exist_ok=True)
     # GitHub download-artifact names the subfolders by ARTIFACT name.
     # The original OCR merger requires shard_0..shard_7. Instead of changing
     # original code, create stable links to original immutable output folders.
-    for shard in range(shards):
-        original=ocr_root/f'speed-V12-OCR-{shards}-{shard}'
+    if asr_workers not in (8,17) or ocr_workers not in (8,16):
+        raise ValueError('Only explicitly tested 8+8 / 17+16 splits allowed')
+    for shard in range(ocr_workers):
+        original=ocr_root/f'speed-V12-OCR-{ocr_workers}-{shard}'
         expected=ocr_root/f'shard_{shard}'
         if not original.is_dir():
             raise FileNotFoundError('Missing original OCR worker folder '+str(shard))
@@ -49,7 +51,7 @@ def verify(asr_root:Path,ocr_root:Path,source_index:Path,out:Path,*,shards:int=8
     if len(source.get('rows',[]))!=276:
         raise ValueError('Expected original 276 selected high-resolution frames')
     a=merge_private_shards(asr_root,out/'merged_asr')
-    reports=[read(ocr_root/f'shard_{n}'/'full_chat_ocr_candidates_PRIVATE.json') for n in range(shards)]
+    reports=[read(ocr_root/f'shard_{n}'/'full_chat_ocr_candidates_PRIVATE.json') for n in range(ocr_workers)]
     summary,ocr=merge_ocr(source,reports)
     if summary['frames_ocr_failed'] or summary['frames_ocr_completed']!=276:
         raise RuntimeError('Missing/failed OCR original image')
@@ -70,7 +72,7 @@ def verify(asr_root:Path,ocr_root:Path,source_index:Path,out:Path,*,shards:int=8
     result={
         'schema':'video001_8way_real_source_benchmark_complete_v1',
         'source_video_sha256':EXPECTED,'original_film_duration_s':4820.5452,
-        'speech_workers':shards,'image_ocr_workers':shards,
+        'speech_workers':asr_workers,'image_ocr_workers':ocr_workers,
         'original_asr_parts':17,'original_chat_frames_selected':276,
         'asr_utterances':len(speech['speech_lines']),
         'provisional_question_groups':len(private['question_groups']),
@@ -92,8 +94,11 @@ def main():
     p.add_argument('--ocr-root',type=Path,required=True)
     p.add_argument('--source-index',type=Path,required=True)
     p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--asr-workers',type=int,default=8)
+    p.add_argument('--ocr-workers',type=int,default=8)
     args=p.parse_args()
-    verify(args.asr_root,args.ocr_root,args.source_index,args.out)
+    verify(args.asr_root,args.ocr_root,args.source_index,args.out,
+           asr_workers=args.asr_workers,ocr_workers=args.ocr_workers)
 
 
 if __name__=='__main__':main()
