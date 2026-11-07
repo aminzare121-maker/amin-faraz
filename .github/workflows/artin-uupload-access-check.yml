@@ -1,0 +1,92 @@
+name: Artin private Uupload remote-access diagnostic
+on:
+  push:
+    branches:
+      - review/artin-uupload-access-check-20261107
+    paths:
+      - .github/workflows/artin-uupload-access-check.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Inspect supplied video download page without uploading media
+        env:
+          TARGET_URL: https://my.uupload.ir/p/aGgKYdpL
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import urllib.request
+          import urllib.error
+          import urllib.parse
+          import html.parser
+          import socket
+          import json
+          url=os.environ['TARGET_URL']
+          class Links(html.parser.HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag not in ('a','source','video'):
+                      return
+                  obj=dict(attrs)
+                  val=obj.get('href') or obj.get('src')
+                  if val: self.links.append(val)
+          try:
+              req=urllib.request.Request(
+                  url,headers={'User-Agent':'Mozilla/5.0 ArtinVideoCheck/1.0','Range':'bytes=0-262143'})
+              with urllib.request.urlopen(req,timeout=28) as r:
+                  blob=r.read(262144)
+                  headers={k.lower():v for k,v in r.headers.items()}
+                  host=urllib.parse.urlsplit(r.url).hostname
+                  info={'status':r.status,'final_host':host,'type':headers.get('content-type'),
+                        'length':headers.get('content-length'),'bytes_sampled':len(blob),
+                        'mp4_magic': b'ftyp' in blob[:24],
+                        'html_header': b'<html' in blob[:500].lower()}
+                  if ('html' in (headers.get('content-type') or '').lower() or info['html_header']):
+                      p=Links()
+                      p.feed(blob.decode('utf-8','replace'))
+                      hints=[]
+                      for raw in p.links:
+                          u=urllib.parse.urljoin(r.url,raw)
+                          sp=urllib.parse.urlsplit(u)
+                          if sp.scheme in ('https','http'):
+                              hints.append({'host':sp.hostname,
+                                            'likely_download':any(t in sp.path.lower() for t in
+                                                ('.mp4','.mkv','.zip','.avi','download','dl/','get/'))})
+                      info['links_count']=len(hints)
+                      info['links_likely_download']=sum(x['likely_download'] for x in hints)
+                      info['link_hosts']=sorted({h['host'] for h in hints if h['host']})[:10]
+                      probes=[]
+                      for raw in p.links:
+                          u=urllib.parse.urljoin(r.url,raw)
+                          sp=urllib.parse.urlsplit(u)
+                          if not sp.hostname or not sp.hostname.endswith('.uupload.ir'):
+                              continue
+                          if not (sp.hostname.startswith('s31.') or
+                                  any(t in sp.path.lower() for t in ('.mp4','.mkv','.avi','download','dl/','get/'))):
+                              continue
+                          try:
+                              probe=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0',
+                                      'Range':'bytes=0-8191'})
+                              with urllib.request.urlopen(probe,timeout=18) as q:
+                                  little=q.read(8192)
+                                  probes.append({'host':urllib.parse.urlsplit(q.url).hostname,
+                                                 'status':q.status,'type':q.headers.get('Content-Type'),
+                                                 'content_length':q.headers.get('Content-Length'),
+                                                 'content_range':q.headers.get('Content-Range'),
+                                                 'mp4_magic':b'ftyp' in little[:24],
+                                                 'html':b'<html' in little[:500].lower(),
+                                                 'path_hint':urllib.parse.urlsplit(q.url).path.split('/')[-1][:70]})
+                          except Exception as error:
+                              probes.append({'host':sp.hostname,'error':type(error).__name__})
+                      info['download_probes']=probes
+                  print('ARTIN_ACCESS_RESULT='+json.dumps(info,ensure_ascii=False))
+          except Exception as exc:
+              print('ARTIN_ACCESS_FAILED='+type(exc).__name__+': '+str(exc)[:300])
+              raise
+          PY

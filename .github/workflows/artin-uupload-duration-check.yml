@@ -1,0 +1,37 @@
+name: Artin FFprobe duration check of original remote MP4
+on:
+  push:
+    branches:
+      - review/artin-uupload-access-check-20261107
+    paths:
+      - '.github/workflows/artin-uupload-duration-check.yml'
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure ffprobe is installed
+        run: command -v ffprobe || sudo apt-get install -y ffmpeg
+      - name: Probe MP4 with HTTP byte ranges, no full download
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import os,json,subprocess
+          from artin_ephemeral_remote_ingest import get_direct_url
+          u,rr=get_direct_url(os.environ["TEACHER_VIDEO_PAGE"])
+          p=subprocess.run(["ffprobe","-v","error","-show_entries",
+                            "format=duration:stream=codec_type,width,height,codec_name",
+                            "-of","json",u],capture_output=True,text=True,timeout=45)
+          if p.returncode:
+              print("REMOTE_FFPROBE_FAILED="+p.stderr[-250:])
+              raise RuntimeError("ffprobe failed")
+          d=json.loads(p.stdout)
+          print("ARTIN_REMOTE_DURATION="+json.dumps(d,ensure_ascii=False),flush=True)
+          PY

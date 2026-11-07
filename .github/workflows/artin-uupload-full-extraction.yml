@@ -1,0 +1,42 @@
+name: Artin ephemeral user video extraction and numbered chunks
+on:
+  push:
+    branches:
+      - review/artin-uupload-access-check-20261107
+    paths:
+      - '.github/workflows/artin-uupload-full-extraction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Ensure ffmpeg and ffprobe
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          command -v ffprobe
+      - name: Fetch user video to ephemeral runner and process five-minute slots
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+          ARTIN_PRIVATE_RUNNER_DIR: /tmp/artin_teacher_private
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_ephemeral_remote_ingest.py
+      - name: Upload evidence without original copyrighted video or audio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-user-video-probe-and-frames
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_teacher_private/source_probe.json
+            /tmp/artin_teacher_private/extraction_result.json
+            /tmp/artin_teacher_private/artifact_manifest_redacted.json
+            /tmp/artin_teacher_private/processed/chunk_order_verified.json
+            /tmp/artin_teacher_private/processed/frames/**
