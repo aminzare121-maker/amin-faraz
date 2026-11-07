@@ -59,6 +59,21 @@ class PartitionMergeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'different video'):
                 merge_private_shards(root,root/'final')
 
+    def test_partition_wrong_owner_rejected_even_if_union_complete(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=self.make(Path(d))
+            p0=root/'partition_0_status.json'
+            p1=root/'partition_1_status.json'
+            a=json.loads(p0.read_text());b=json.loads(p1.read_text())
+            a['expected_global_parts']=[1,2]
+            a['completed_global_parts']=[1,2]
+            b['expected_global_parts']=[3]
+            b['completed_global_parts']=[3]
+            p0.write_text(json.dumps(a))
+            p1.write_text(json.dumps(b))
+            with self.assertRaisesRegex(ValueError,'assignment'):
+                merge_private_shards(root,root/'final')
+
     def test_duplicate_partition_ownership_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             root=self.make(Path(d))
