@@ -22,6 +22,8 @@ from artin_fast_av_v4 import fast_prepare,validate_fast
 from artin_real_asr_trial_v5 import read_pcm_array
 from artin_teacher_av_review_v5 import review_real_asr
 from artin_visual_timeline_v6 import extract_visual_timeline
+from artin_chat_temporal_v8 import collect_index,raw_gray_frames
+from artin_chat_change_highres_v8 import collect as capture_changed_chat
 from artin_persian_full_chat_ocr_v7 import ocr_frames
 from artin_ocr_asr_join_v8 import join_original_chat_qa
 from artin_question_dedupe_v11 import clustered_review
@@ -144,6 +146,21 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
     if visual.get("source_video_sha256")!=source_hash or not visual.get("rows"):
         raise RuntimeError("Original visual source incomplete")
     _write(output/"private_visual_timeline.json",visual)
+    # The 30-second BOARD samples cannot see fast-scrolling student chat.
+    # Scan the entire original movie at 1s granularity, then capture original
+    # high-resolution chat pixels at every changed/periodic selected time.
+    chat_changes=collect_index(raw_gray_frames(video),step=1,threshold=.02,
+         anchor_every=30,source_sha256=source_hash,
+         duration_seconds=manifest["duration_seconds"])
+    if chat_changes.get("source_video_sha256")!=source_hash:
+        raise RuntimeError("Chat-change timeline does not match source video")
+    _write(output/"private_second_by_second_chat_index.json",chat_changes)
+    chat_visual=capture_changed_chat(video,chat_changes,output/"visual_change",
+                                   workers=4,max_selected=1200)
+    if (chat_visual.get("source_video_sha256")!=source_hash or
+            not chat_visual.get("rows")):
+        raise RuntimeError("Source-verified dense classroom chat capture failed")
+    _write(output/"private_chat_capture_index.json",chat_visual)
     # Independent printed Persian OCR. Private textual evidence not printed in logs.
     if ocr_model_factory is None:
         # Crucial real-world fix: ctranslate2/Whisper and Paddle/oneDNN
@@ -156,8 +173,8 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         gc.collect()
         ocr_script=Path(__file__).resolve().parent/"artin_persian_full_chat_ocr_v7.py"
         cmd=[sys.executable,"-B",str(ocr_script),
-             "--visual-root",str(output/"visual"),
-             "--visual-index",str(output/"private_visual_timeline.json"),
+             "--visual-root",str(output/"visual_change"),
+             "--visual-index",str(output/"private_chat_capture_index.json"),
              "--out",str(output/"private_ocr")]
         proc=subprocess.run(cmd,text=True,capture_output=True,
                             timeout=max(420, len(visual["rows"])*38+420))
@@ -183,7 +200,7 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         ocr=json.loads(ocr_file.read_text(encoding="utf8"))
     else:
         # Only deterministic test injection may run an OCR model in-process.
-        ocr=ocr_frames(output/"visual",visual,output/"private_ocr",
+        ocr=ocr_frames(output/"visual_change",chat_visual,output/"private_ocr",
                        ocr_factory=ocr_model_factory)
     if ocr.get("ocr_failed_frames"):
         # A failed OCR must never be silently converted into "completed".
@@ -194,12 +211,12 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
                     if x.get("state")=="OCR_FAILED_REVIEW_REQUIRED"),{})
         raise RuntimeError("OCR failure: "+str(first.get("error_type","unknown"))+
             ": "+str(first.get("private_diagnostic","unavailable"))[:180])
-    if ocr.get("frames_attempted")!=len(visual["rows"]):
+    if ocr.get("frames_attempted")!=len(chat_visual["rows"]):
         raise RuntimeError("OCR image coverage incomplete")
     full_ocr=json.loads((output/"private_ocr"/"full_chat_ocr_candidates_PRIVATE.json").read_text(encoding="utf8"))
     if full_ocr.get("complete") is not True:
         raise RuntimeError("OCR checkpoint incomplete")
-    chat_summary,chat_private=join_original_chat_qa(visual,full_ocr,review)
+    chat_summary,chat_private=join_original_chat_qa(chat_visual,full_ocr,review)
     _write(output/"private_question_audio_REVIEW_ONLY.json",chat_private)
     deduped=clustered_review(chat_private)
     if deduped["source_video_sha256"]!=source_hash or not deduped["original_groups_not_lost"]:
@@ -217,7 +234,10 @@ def run_session(video,output,*,whisper_model_factory=None,ocr_model_factory=None
         "global_audio_chunks_total":len(parts),
         "global_audio_chunks_asr_completed":len(shards),
         "timestamped_source_asr_utterances":len(review["speech_lines"]),
-        "original_source_chat_screenshots":len(visual["rows"]),
+        "one_second_chat_frames_scanned":chat_changes["sampled_source_frames"],
+        "one_second_chat_changed_frames":chat_changes["changed_chat_frames"],
+        "original_source_board_screenshots":len(visual["rows"]),
+        "original_source_chat_screenshots":len(chat_visual["rows"]),
         "source_screenshots_ocr_completed":ocr["frames_attempted"],
         "source_screenshots_ocr_errors":ocr["ocr_failed_frames"],
         "screenshots_with_text_candidates":ocr["frames_with_some_ocr_text"],
