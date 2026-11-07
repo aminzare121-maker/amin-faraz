@@ -23,6 +23,7 @@ jobs:
         run: |
           command -v ffmpeg || sudo apt-get install -y ffmpeg
           command -v ffprobe || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
       - name: Run regression tests including new audio, frame and Q&A integrity checks
         working-directory: research/artin-film-engine-v3-1
         run: python3 -B -m unittest discover -p 'test_*.py' -v
