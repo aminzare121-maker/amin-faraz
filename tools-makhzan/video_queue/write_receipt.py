@@ -16,6 +16,7 @@ from urllib.request import Request, urlopen
 
 ROOT="https://api.github.com"
 VALID_ID=re.compile(r"video-q-[0-9]{4}-[a-z0-9-]{4,64}")
+MAGAZINE_ID=re.compile(r"[a-z][a-z0-9-]{2,50}")
 EXPECTED_SHA=re.compile(r"[a-f0-9]{64}")
 PROOF_ARTIFACT="makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE"
 
@@ -52,7 +53,9 @@ def get_evidence(base,success):
             "teacher_meaning_verified":False,
             "original_source_evidence_loss":0}
 
-def build_receipt(queue_id,source_page,run_id,job_results,proof_folder=None):
+def build_receipt(queue_id,source_page,run_id,job_results,proof_folder=None,magazine_id="artin-course-001"):
+    if not isinstance(magazine_id,str) or not MAGAZINE_ID.fullmatch(magazine_id):
+        raise ValueError("Unsafe or missing independent magazine ID")
     if not VALID_ID.fullmatch(queue_id):
         raise ValueError("Unsafe queue ID")
     from urllib.parse import urlsplit
@@ -63,6 +66,7 @@ def build_receipt(queue_id,source_page,run_id,job_results,proof_folder=None):
     evidence=get_evidence(proof_folder,success)
     data={
         "schema":"makhzan_video001_queue_receipt_v1",
+        "magazine_id":magazine_id,
         "queue_id":queue_id,
         "source_page":source_page,
         "github_run_id":int(run_id),
@@ -112,12 +116,15 @@ def main():
              for k in ("source","asr","ocr","verify")}
     receipt=build_receipt(env["VIDEO001_QUEUE_ID"],env["VIDEO001_SOURCE_PAGE"],
                           env["GITHUB_RUN_ID"],results,
-                          env.get("VIDEO001_EVIDENCE_DIR"))
+                          env.get("VIDEO001_EVIDENCE_DIR"),
+                          env["VIDEO001_MAGAZINE_ID"])
     repo=env["GITHUB_REPOSITORY"]
-    path="tools-makhzan/video_queue/receipts/"+receipt["queue_id"]+".json"
+    path=("tools-makhzan/video_queue/magazines/"+receipt["magazine_id"]+
+          "/receipts/"+receipt["queue_id"]+".json")
     sha=github_put_json(path,receipt,repo,"tools-makhzan-hub",env["GH_TOKEN"])
     print("VIDEO001_QUEUE_RECEIPT_COMMITTED="+json.dumps({
-        "queue_id":receipt["queue_id"],"state":receipt["status"],
+        "queue_id":receipt["queue_id"],"magazine_id":receipt["magazine_id"],
+        "state":receipt["status"],
         "receipt_path":path,"commit":sha,
         "source_verified":receipt["source_evidence"] is not None
     }),flush=True)
