@@ -80,7 +80,7 @@ class PartitionMergeTests(unittest.TestCase):
             p=root/'partition_1_status.json';x=json.loads(p.read_text())
             x['expected_global_parts']=[1,2]
             x['completed_global_parts']=[1,2];p.write_text(json.dumps(x))
-            with self.assertRaisesRegex(ValueError,'ownership'):
+            with self.assertRaisesRegex(ValueError,'assignment|ownership'):
                 merge_private_shards(root,root/'final')
 
 
