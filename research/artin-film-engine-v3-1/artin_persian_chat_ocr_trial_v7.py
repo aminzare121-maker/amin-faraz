@@ -22,6 +22,52 @@ def sha(path):
     return h.hexdigest()
 
 
+def reading_order_fa(texts,scores,boxes):
+    """Recover Persian reading order from OCR boxes; not semantic verification."""
+    import math
+    import statistics
+    if len(texts)!=len(scores) or len(texts)!=len(boxes):
+        raise ValueError("OCR text, confidence and box count mismatch")
+    items=[]
+    for txt,conf,bbox in zip(texts,scores,boxes):
+        try:
+            b=bbox.tolist() if hasattr(bbox,"tolist") else list(bbox)
+            left,top,right,bottom=map(float,b)
+            number=float(conf)
+        except (ValueError,TypeError):
+            raise ValueError("Bad OCR text rectangle or confidence")
+        if len(b)!=4 or not all(math.isfinite(v) for v in (left,top,right,bottom,number)) or not (
+                0<=left<right and 0<=top<bottom and 0<=number<=1):
+            raise ValueError("Bad OCR geometry")
+        if not isinstance(txt,str) or not txt.strip():
+            continue
+        items.append({"ocr_candidate":txt,
+          "ocr_model_confidence":round(number,4),
+          "box_xyxy":[round(left,1),round(top,1),round(right,1),round(bottom,1)],
+          "original_text_verified":False})
+    if not items:return []
+    height=statistics.median(x["box_xyxy"][3]-x["box_xyxy"][1] for x in items)
+    groups=[]
+    for a in sorted(items,key=lambda x:(x["box_xyxy"][1]+x["box_xyxy"][3])/2):
+        center=(a["box_xyxy"][1]+a["box_xyxy"][3])/2
+        closest=next((g for g in groups if abs(center-g["center"])<=max(6,height*.65)),None)
+        if closest is None:
+            closest={"center":center,"lines":[]}
+            groups.append(closest)
+        closest["lines"].append(a)
+    out=[]
+    for group_index,g in enumerate(groups):
+        arabic=sum(sum("\u0600"<=ch<="\u06ff" for ch in a["ocr_candidate"]) for a in g["lines"])
+        latin=sum(sum(("A"<=ch<="Z") or ("a"<=ch<="z") for ch in a["ocr_candidate"]) for a in g["lines"])
+        rtl=arabic>=latin
+        for item in sorted(g["lines"],key=lambda a:(a["box_xyxy"][0]+a["box_xyxy"][2])/2,
+                           reverse=rtl):
+            item["visual_line_index"]=group_index
+            item["source_reading_order"]="RTL" if rtl else "LTR"
+            out.append(item)
+    return out
+
+
 def trial(source_image:Path,output:Path,expected_hash:str,roi=(.04,.80,.94,.92),
           ocr_factory=None):
     from PIL import Image
@@ -57,15 +103,11 @@ def trial(source_image:Path,output:Path,expected_hash:str,roi=(.04,.80,.94,.92),
     scores=list(first.get("rec_scores",[]))
     if len(text)!=len(scores):
         raise ValueError("OCR text and confidence counts diverge")
-    items=[]
-    for raw,score in zip(text,scores):
-        if not isinstance(raw,str):
-            raise ValueError("OCR result line is not text")
-        try: score=float(score)
-        except (TypeError,ValueError):
-            raise ValueError("OCR confidence is not numeric")
-        items.append({"ocr_candidate":raw,"ocr_model_confidence":round(float(score),4),
-                      "original_text_verified":False})
+    boxes=first.get("rec_boxes")
+    if boxes is None:
+        if len(text)>1:raise ValueError("Cannot validate Persian order without text boxes")
+        boxes=[[0,0,clip.width,clip.height]] if len(text)==1 else []
+    items=reading_order_fa(text,scores,boxes)
     private={"schema":"artin_source_persian_chat_ocr_v7",
         "source_video_sha256":"b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
         "source_frame_sha256":expected_hash,
@@ -76,6 +118,8 @@ def trial(source_image:Path,output:Path,expected_hash:str,roi=(.04,.80,.94,.92),
         "student_question_human_verified":False,
         "teacher_answer_human_verified":False,
         "rules_executable":0,
+        "readable_text_candidate":" ".join(x["ocr_candidate"] for x in items),
+        "ocr_reading_order_reconstructed":True,
         "lines":items}
     (output/"ocr_PRIVATE_unverified.json").write_text(
         json.dumps(private,ensure_ascii=False,indent=2),encoding="utf8")
