@@ -2,6 +2,10 @@ name: VIDEO-001 reusable FAST 17 ASR + 16 OCR queue worker
 on:
   workflow_call:
     inputs:
+      magazine_id:
+        description: Exactly one registered user-named magazine; no cross-project linkage
+        required: true
+        type: string
       queue_id:
         description: User-requested sequential queue item (no arbitrary override)
         required: true
@@ -42,6 +46,7 @@ jobs:
           VIDEO001_INPUT_URL: ${{ inputs.source_page }}
           VIDEO001_INPUT_SHA: ${{ inputs.expected_sha256 }}
           VIDEO001_INPUT_ID: ${{ inputs.queue_id }}
+          VIDEO001_INPUT_MAGAZINE: ${{ inputs.magazine_id }}
         run: |
           python3 - <<'PY'
           import os,json,re
@@ -51,6 +56,9 @@ jobs:
           p=urlsplit(page)
           if p.scheme!='https' or p.hostname!='my.uupload.ir' or not re.fullmatch(r'/p/[A-Za-z0-9_-]{3,80}/?',p.path) or p.username or p.password or p.query or p.fragment:
               raise ValueError('Only originally user-provided Uupload film share URLs')
+          magazine_id=os.environ['VIDEO001_INPUT_MAGAZINE']
+          if not re.fullmatch(r'[a-z][a-z0-9-]{2,50}',magazine_id):
+              raise ValueError('Invalid independent magazine ID')
           queue_id=os.environ['VIDEO001_INPUT_ID']
           if not re.fullmatch(r'video-q-[0-9]{4}-[a-z0-9-]{4,64}',queue_id):
               raise ValueError('Invalid queue item identity')
@@ -88,40 +96,40 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-board
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-board
           path: /tmp/video001_fast/prepared/board_review/**
           retention-days: 15
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-chat-index
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-chat-index
           path: /tmp/video001_fast/prepared/full_chat/chat_selected_index.json
           retention-days: 15
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-source-summary
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_fast/prepared/safe_source_prep_summary.json
           retention-days: 15
           if-no-files-found: error
       - name: Preserve all time-indexed one-second source scans privately
         uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-temporal
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-temporal
           path: /tmp/video001_fast/prepared/original_second_by_second_chat_index.json
           retention-days: 15
           if-no-files-found: error
       - name: Preserve every original high-resolution selected classroom chat image
         uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-fullres-chat
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-fullres-chat
           path: /tmp/video001_fast/prepared/full_chat/
           retention-days: 15
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 0) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-0
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-0
           path: /tmp/video001_fast/prepared/asr_shards/worker_00/**
           retention-days: 7
           compression-level: 2
@@ -129,7 +137,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 1) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-1
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-1
           path: /tmp/video001_fast/prepared/asr_shards/worker_01/**
           retention-days: 7
           compression-level: 2
@@ -137,7 +145,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 2) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-2
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-2
           path: /tmp/video001_fast/prepared/asr_shards/worker_02/**
           retention-days: 7
           compression-level: 2
@@ -145,7 +153,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 3) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-3
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-3
           path: /tmp/video001_fast/prepared/asr_shards/worker_03/**
           retention-days: 7
           compression-level: 2
@@ -153,7 +161,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 4) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-4
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-4
           path: /tmp/video001_fast/prepared/asr_shards/worker_04/**
           retention-days: 7
           compression-level: 2
@@ -161,7 +169,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 5) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-5
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-5
           path: /tmp/video001_fast/prepared/asr_shards/worker_05/**
           retention-days: 7
           compression-level: 2
@@ -169,7 +177,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 6) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-6
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-6
           path: /tmp/video001_fast/prepared/asr_shards/worker_06/**
           retention-days: 7
           compression-level: 2
@@ -177,7 +185,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 7) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-7
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-7
           path: /tmp/video001_fast/prepared/asr_shards/worker_07/**
           retention-days: 7
           compression-level: 2
@@ -185,7 +193,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 8) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-8
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-8
           path: /tmp/video001_fast/prepared/asr_shards/worker_08/**
           retention-days: 7
           compression-level: 2
@@ -193,7 +201,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 9) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-9
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-9
           path: /tmp/video001_fast/prepared/asr_shards/worker_09/**
           retention-days: 7
           compression-level: 2
@@ -201,7 +209,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 10) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-10
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-10
           path: /tmp/video001_fast/prepared/asr_shards/worker_10/**
           retention-days: 7
           compression-level: 2
@@ -209,7 +217,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 11) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-11
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-11
           path: /tmp/video001_fast/prepared/asr_shards/worker_11/**
           retention-days: 7
           compression-level: 2
@@ -217,7 +225,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 12) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-12
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-12
           path: /tmp/video001_fast/prepared/asr_shards/worker_12/**
           retention-days: 7
           compression-level: 2
@@ -225,7 +233,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 13) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-13
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-13
           path: /tmp/video001_fast/prepared/asr_shards/worker_13/**
           retention-days: 7
           compression-level: 2
@@ -233,7 +241,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 14) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-14
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-14
           path: /tmp/video001_fast/prepared/asr_shards/worker_14/**
           retention-days: 7
           compression-level: 2
@@ -241,7 +249,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 15) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-15
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-15
           path: /tmp/video001_fast/prepared/asr_shards/worker_15/**
           retention-days: 7
           compression-level: 2
@@ -249,7 +257,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 16) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-16
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-16
           path: /tmp/video001_fast/prepared/asr_shards/worker_16/**
           retention-days: 7
           compression-level: 2
@@ -257,7 +265,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 0) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-0
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-0
           path: /tmp/video001_fast/prepared/ocr_shards/worker_00/**
           retention-days: 7
           compression-level: 1
@@ -265,7 +273,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 1) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-1
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-1
           path: /tmp/video001_fast/prepared/ocr_shards/worker_01/**
           retention-days: 7
           compression-level: 1
@@ -273,7 +281,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 2) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-2
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-2
           path: /tmp/video001_fast/prepared/ocr_shards/worker_02/**
           retention-days: 7
           compression-level: 1
@@ -281,7 +289,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 3) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-3
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-3
           path: /tmp/video001_fast/prepared/ocr_shards/worker_03/**
           retention-days: 7
           compression-level: 1
@@ -289,7 +297,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 4) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-4
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-4
           path: /tmp/video001_fast/prepared/ocr_shards/worker_04/**
           retention-days: 7
           compression-level: 1
@@ -297,7 +305,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 5) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-5
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-5
           path: /tmp/video001_fast/prepared/ocr_shards/worker_05/**
           retention-days: 7
           compression-level: 1
@@ -305,7 +313,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 6) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-6
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-6
           path: /tmp/video001_fast/prepared/ocr_shards/worker_06/**
           retention-days: 7
           compression-level: 1
@@ -313,7 +321,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 7) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-7
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-7
           path: /tmp/video001_fast/prepared/ocr_shards/worker_07/**
           retention-days: 7
           compression-level: 1
@@ -321,7 +329,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 8) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-8
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-8
           path: /tmp/video001_fast/prepared/ocr_shards/worker_08/**
           retention-days: 7
           compression-level: 1
@@ -329,7 +337,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 9) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-9
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-9
           path: /tmp/video001_fast/prepared/ocr_shards/worker_09/**
           retention-days: 7
           compression-level: 1
@@ -337,7 +345,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 10) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-10
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-10
           path: /tmp/video001_fast/prepared/ocr_shards/worker_10/**
           retention-days: 7
           compression-level: 1
@@ -345,7 +353,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 11) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-11
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-11
           path: /tmp/video001_fast/prepared/ocr_shards/worker_11/**
           retention-days: 7
           compression-level: 1
@@ -353,7 +361,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 12) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-12
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-12
           path: /tmp/video001_fast/prepared/ocr_shards/worker_12/**
           retention-days: 7
           compression-level: 1
@@ -361,7 +369,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 13) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-13
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-13
           path: /tmp/video001_fast/prepared/ocr_shards/worker_13/**
           retention-days: 7
           compression-level: 1
@@ -369,7 +377,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 14) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-14
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-14
           path: /tmp/video001_fast/prepared/ocr_shards/worker_14/**
           retention-days: 7
           compression-level: 1
@@ -377,7 +385,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.ocr_matrix), 15) }}
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-15
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-15
           path: /tmp/video001_fast/prepared/ocr_shards/worker_15/**
           retention-days: 7
           compression-level: 1
@@ -398,7 +406,7 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-audio-${{ matrix.index }}
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-audio-${{ matrix.index }}
           path: /tmp/video001_source_audio
       - name: Original unchanged Whisper Persian ASR
         run: python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
@@ -415,7 +423,7 @@ jobs:
             --expected-sha256 "$(python3 -c 'import json;print(json.load(open("/tmp/video001_source_audio/fast_av_manifest.json"))["video_sha256"])')"
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-asr-${{ matrix.index }}
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-asr-${{ matrix.index }}
           path: /tmp/video001_fast_asr_worker/asr_evidence/**
           retention-days: 15
           if-no-files-found: error
@@ -439,7 +447,7 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-ocr-${{ matrix.index }}
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-ocr-${{ matrix.index }}
           path: /tmp/video001_source_ocr
       - name: Original unchanged Persian PaddleOCR
         run: python3 -m pip install --disable-pip-version-check 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
@@ -453,7 +461,7 @@ jobs:
             --out /tmp/video001_fast_ocr_worker
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-ocr-${{ matrix.index }}
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-ocr-${{ matrix.index }}
           path: /tmp/video001_fast_ocr_worker/full_chat_ocr_candidates_PRIVATE.json
           retention-days: 15
           if-no-files-found: error
@@ -469,25 +477,25 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          pattern: video001-${{ inputs.queue_id }}-asr-*
+          pattern: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-asr-*
           merge-multiple: true
           path: /tmp/video001_all_asr
       - uses: actions/download-artifact@v4
         with:
-          pattern: video001-${{ inputs.queue_id }}-ocr-*
+          pattern: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-ocr-*
           merge-multiple: false
           path: /tmp/video001_all_ocr
       - uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-chat-index
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-chat-index
           path: /tmp/video001_source_chat_index
       - uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-board
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-board
           path: /tmp/video001_source_board
       - uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-source-summary
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_source_summary
       - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
         working-directory: research/artin-film-engine-v3-1
@@ -503,12 +511,12 @@ jobs:
       - name: Rehydrate the COMPLETE private V12 review package from unchanged source-verified evidence
         uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-temporal
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-temporal
           path: /tmp/video001_source_temporal
       - name: Download original screenshot pixels for permanent source links (not reconstructed text)
         uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-original-fullres-chat
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-fullres-chat
           path: /tmp/video001_source_chat_original
       - name: Rebuild all existing V12 private report fields without deleting unverified rule fragments
         working-directory: research/artin-film-engine-v3-1
@@ -528,13 +536,13 @@ jobs:
       - name: Archive FULL private V12 review data and original images, not only a metrics summary
         uses: actions/upload-artifact@v4
         with:
-          name: makhzan-VIDEO-001-V12-FAST-${{ inputs.queue_id }}-complete-source-PRIVATE
+          name: makhzan-VIDEO-001-V12-FAST-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-complete-source-PRIVATE
           retention-days: 30
           if-no-files-found: error
           path: /tmp/makhzan_fast_complete_source_private/**
       - uses: actions/upload-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-final-original-source-proof
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-final-original-source-proof
           path: /tmp/video001_full_integrity/private_fast_verify_summary.json
           retention-days: 15
           if-no-files-found: error
@@ -553,18 +561,19 @@ jobs:
         if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
         uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-final-original-source-proof
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-final-original-source-proof
           path: /tmp/video001_receipt/proof
       - name: Get original SHA-verified film summary for independent cross-check
         if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
         uses: actions/download-artifact@v4
         with:
-          name: video001-${{ inputs.queue_id }}-source-summary
+          name: video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_receipt/source
-      - name: Register proven lesson in course registry in exact original user-submitted sequence
-        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+      - name: Register proven Artin lesson in its own course registry only
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' && inputs.magazine_id == 'artin-course-001' }}
         env:
           GH_TOKEN: ${{ github.token }}
+          VIDEO001_MAGAZINE_ID: ${{ inputs.magazine_id }}
           VIDEO001_QUEUE_ID: ${{ inputs.queue_id }}
           VIDEO001_SOURCE_PAGE: ${{ inputs.source_page }}
           VIDEO001_SOURCE_PROOF: /tmp/video001_receipt/proof/private_fast_verify_summary.json
@@ -574,6 +583,7 @@ jobs:
       - name: Persist one immutable result per authorized queue ID (never invent teacher meanings)
         env:
           GH_TOKEN: ${{ github.token }}
+          VIDEO001_MAGAZINE_ID: ${{ inputs.magazine_id }}
           VIDEO001_QUEUE_ID: ${{ inputs.queue_id }}
           VIDEO001_SOURCE_PAGE: ${{ inputs.source_page }}
           VIDEO001_EVIDENCE_DIR: /tmp/video001_receipt
