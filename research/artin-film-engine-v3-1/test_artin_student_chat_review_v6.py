@@ -88,6 +88,18 @@ class ChatEvidenceTests(unittest.TestCase):
         chat=validate_visual_model_candidates(v,[p,p])
         self.assertEqual(chat['candidate_count'],1)
 
+    def test_typed_question_matches_nearest_speech_not_oldest_in_window(self):
+        v,p,s=fixtures()
+        s['speech_lines']=[{'id':f'a{i}','start':31.0+i*3,
+                    'end':32.0+i*3,'text':'توضیح مقدماتی'} for i in range(45)]
+        chat=validate_visual_model_candidates(v,[p])
+        got=reconcile_chat_asr(chat,s)
+        a=got['question_candidates'][0]['possible_spoken_replies']
+        self.assertEqual(len(a),10)
+        self.assertGreaterEqual(min(x['spoken_at_seconds'] for x in a),103)
+        self.assertLessEqual(max(x['spoken_at_seconds'] for x in a),142)
+        self.assertTrue(all(not x['candidate_answer_verified'] for x in a))
+
     def test_nonquestion_does_not_generate_fake_answers(self):
         v,p,s=fixtures()
         p['visible_text_candidate']='فایل دانلود شد'
