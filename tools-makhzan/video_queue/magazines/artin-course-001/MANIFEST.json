@@ -1,0 +1,31 @@
+{
+  "schema": "video001_magazine_v1",
+  "magazine_id": "artin-course-001",
+  "title_fa": "دورهٔ آموزش مدرس آرتین",
+  "category": "course",
+  "project_namespace": "ARTIN-COURSE-001",
+  "target_course_registry": "tools-makhzan/courses/artin/COURSE_REGISTRY.json",
+  "session_mode": "serial",
+  "start_sequence": 3,
+  "already_submitted": [
+    {
+      "sequence": 1,
+      "source_page": "https://my.uupload.ir/p/aGgKYdpL",
+      "state": "REGISTERED_FIRST_ORIGINAL_SESSION"
+    },
+    {
+      "sequence": 2,
+      "source_page": "https://my.uupload.ir/p/dxvmY5xW",
+      "state": "ALREADY_RUNNING_SEPARATELY",
+      "github_run_id": 42423414479
+    }
+  ],
+  "submitted_by_user": true,
+  "status": "OPEN_FOR_FUTURE_USER_SUBMITTED_VIDEOS",
+  "allowed_source_domain": "my.uupload.ir",
+  "engine": "VIDEO-001 V12 FAST 17 ASR + 16 OCR",
+  "user_must_explicitly_submit_each_link": true,
+  "automatic_semantic_rule_certification": false,
+  "no_trade_execution": true,
+  "notes": "Dedicated magazine for the Artin course, independent of any other user project. Do not enqueue existing session #2 twice. Other magazines have separate entries and receipts."
+}
