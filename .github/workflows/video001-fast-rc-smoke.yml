@@ -1,0 +1,76 @@
+name: VIDEO001 fast RC source-once isolated artifact smoke and tamper rejection
+on:
+  push:
+    branches:
+      - experiment/video001-v12-speed-only-20261108
+    paths:
+      - '.github/workflows/video001-fast-rc-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-once-and-no-loss-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install original frame toolkit and Pillow only (no altered ASR/OCR models)
+        run: |
+          command -v ffmpeg || sudo apt-get update && sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Create synthetic movie strictly for codec/source-processing regression
+        run: |
+          ffmpeg -nostdin -hide_banner -loglevel error -y \
+            -f lavfi -i testsrc2=size=640x480:rate=5 \
+            -f lavfi -i sine=frequency=440:sample_rate=16000 \
+            -t 9 -pix_fmt yuv420p -c:v mpeg4 -c:a aac /tmp/video001_source_test.mp4
+          test -s /tmp/video001_source_test.mp4
+      - name: Run real unchanged FFmpeg full 5m-part prep + 1s scan + original board and chat SHA sharding
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_source_once_v1.py \
+            --video /tmp/video001_source_test.mp4 \
+            --out /tmp/video001_fast_smoke \
+            --audio-workers 1 --ocr-workers 1 --sample-seconds 30
+      - name: Prove no source-chunk/image omission and detect tampered chunk and source SHA
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from artin_film_pipeline import file_sha256
+          from artin_fast_av_v4 import validate_fast
+          from artin_persian_full_chat_ocr_v7 import _valid_source_row
+          root=Path('/tmp/video001_fast_smoke')
+          doc=json.loads((root/'safe_source_prep_summary.json').read_text())
+          assert doc['source_integrity_verified'] and doc['source_global_audio_chunks']==1
+          assert doc['all_original_audio_parts_assigned_once']
+          assert doc['all_original_chat_images_assigned_once']
+          assert doc['original_chat_images_selected']>0 and doc['original_board_frames']>0
+          ar=root/'asr_shards'/'worker_00'
+          m=json.loads((ar/'fast_av_manifest.json').read_text())
+          assert validate_fast(ar,m,verify_files=False)
+          wav=ar/m['parts'][0]['audio']
+          assert file_sha256(wav)==m['parts'][0]['audio_sha256']
+          cr=root/'ocr_shards'/'worker_00'
+          visual=json.loads((cr/'chat_selected_index.json').read_text())
+          assert visual['source_video_sha256']==doc['source_video_sha256']
+          assert len(visual['rows'])==doc['original_chat_images_selected']
+          for image in visual['rows']:
+              assert _valid_source_row(image,cr).is_file()
+          assert not (root/'private_original.mp4').exists()
+          assert all(x['chat']['sha256'] for x in visual['rows'])
+          with wav.open('ab') as f:f.write(b'FORCED_TAMPER')
+          assert file_sha256(wav)!=m['parts'][0]['audio_sha256']
+          assert m['video_sha256']==doc['source_video_sha256']
+          print('VIDEO001_RC_SOURCE_ONCE_NO_LOSS_TAMPER_REJECTED=True')
+          PY
+      - name: Keep only source-safe regression metrics, no synthetic media
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-rc-source-sha-smoke-no-private-media
+          retention-days: 7
+          if-no-files-found: error
+          path: /tmp/video001_fast_smoke/safe_source_prep_summary.json
