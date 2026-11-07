@@ -113,7 +113,8 @@ def main():
     session=session_from_original_evidence(
         sequence,
         env["VIDEO001_SOURCE_PAGE"],read(env["VIDEO001_SOURCE_SUMMARY"]),
-        read(env["VIDEO001_SOURCE_PROOF"]),int(env["GITHUB_RUN_ID"]),
+        read(env["VIDEO001_SOURCE_PROOF"]),
+        int(env.get("VIDEO001_ORIGINAL_SOURCE_RUN_ID",env["GITHUB_RUN_ID"])),
         env["VIDEO001_QUEUE_ID"])
     response=record_session(session,env["GH_TOKEN"])
     print("VIDEO001_SOURCE_SESSION_REGISTERED="+json.dumps({
