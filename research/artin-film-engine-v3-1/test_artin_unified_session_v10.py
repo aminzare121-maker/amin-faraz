@@ -67,7 +67,17 @@ class UnifiedPipelineContract(unittest.TestCase):
         def join(*args,**kwargs):
             self.flags.append("join")
             return {"verified_teacher_answers":1 if false_teacher_answer else 0,
-                    "provisional_distinct_question_groups":1}, {"review_only":True}
+                    "provisional_distinct_question_groups":1}, {
+                "schema":"artin_private_typed_chat_audio_candidates_v8",
+                "source_video_sha256":self.digest,
+                "question_groups":[{
+                    "candidate_text":"آیا برای ورود باید صبر کنیم؟",
+                    "first_seen":12.0,"last_seen":12.0,
+                    "frame_sources":[{"frame_id":"1","chat_frame_sha256":"a"*64,
+                                      "observed_at_seconds":12.0}],
+                    "teacher_answer_verified":False,"student_question_verified":False,
+                    "provisional_nearby_speech":[]}],
+                "all_teacher_answers_unverified":True}
         def fidelity(*args,**kwargs):
             self.flags.append("fidelity")
             return {"verified_trading_rules":0,"legacy_rule_candidate_count":1}, {"review_only":True}
@@ -95,6 +105,9 @@ class UnifiedPipelineContract(unittest.TestCase):
         self.assertEqual(self.flags,["prepare","validate","asr_model","read_audio",
              "review_audio","image","ocr","join","fidelity"])
         self.assertTrue((self.out/"safe_session_result.json").is_file())
+        self.assertEqual(result["conservative_question_review_clusters"],1)
+        self.assertTrue(result["all_original_question_observations_retained"])
+        self.assertTrue((self.out/"private_question_clusters_REVIEW_ONLY.json").is_file())
         self.assertFalse(result["demo_trades_allowed"])
         self.assertFalse(result["real_trades_allowed"])
 
