@@ -5,6 +5,8 @@ on:
       - review/artin-fidelity-audit-v7-20261107
     paths:
       - '.github/workflows/artin-v12-real-dense-qa.yml'
+      - 'research/artin-film-engine-v3-1/artin_question_dedupe_v11.py'
+      - 'research/artin-film-engine-v3-1/test_artin_question_dedupe_v11.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -77,6 +79,7 @@ jobs:
                    'original_audio_utterances':2035,'selected_1sec_chat_images':276,
                    'provisional_questions':safe['provisional_distinct_question_groups'],
                    'review_clusters':dedup['conservative_near_duplicate_clusters'],
+                   'critical_ocr_word_conflicts_for_review':dedup['critical_word_conflicts_for_review'],
                    'speaker_identity_human_verified':False,
                    'independent_semantic_accuracy_measured':False,
                    'verified_teacher_answers':0,'verified_executable_rules':0}
