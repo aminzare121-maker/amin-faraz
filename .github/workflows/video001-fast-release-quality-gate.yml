@@ -1,0 +1,128 @@
+name: VIDEO001 fast independent release-readiness quality gate (isolated)
+on:
+  push:
+    branches: [experiment/video001-v12-speed-only-20261108]
+    paths:
+      - '.github/workflows/video001-fast-release-quality-gate.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require two INDEPENDENT complete 17 ASR + 16 OCR source-once real-movie runs
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, time
+          repo=os.environ['GITHUB_REPOSITORY']
+          verified=[42418849834, 42420443241]
+          def gh(route):
+              return json.loads(subprocess.check_output(['gh','api',route],text=True))
+          for n in range(130):
+              state=gh(f'/repos/{repo}/actions/runs/{verified[1]}')
+              if state['status']=='completed':
+                  if state['conclusion']!='success':
+                      raise RuntimeError('SECOND_FULL_REAL_SOURCE_TEST_NOT_SUCCESSFUL: '+str(state['conclusion']))
+                  break
+              if n==129:
+                  raise RuntimeError('SECOND_FULL_REAL_SOURCE_TEST_NOT_YET_COMPLETE')
+              time.sleep(12)
+          for run_id in verified:
+              run=gh(f'/repos/{repo}/actions/runs/{run_id}')
+              if run['conclusion']!='success':
+                  raise RuntimeError('Source run did not pass: '+str(run_id))
+              listing=gh(f'/repos/{repo}/actions/runs/{run_id}/artifacts?per_page=100')
+              artifacts={a['name'] for a in listing['artifacts'] if not a['expired']}
+              for required in ('video001-fast-final-original-source-proof','video001-fast-source-summary'):
+                  if required not in artifacts:
+                      raise RuntimeError('Missing final proof: '+str(run_id)+'/'+required)
+              print('VERIFIED_FINAL_SOURCE_RUN='+str(run_id))
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42418849834
+          github-token: ${{ github.token }}
+          name: video001-fast-final-original-source-proof
+          path: /tmp/video001_gated/r1/proof
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42418849834
+          github-token: ${{ github.token }}
+          name: video001-fast-source-summary
+          path: /tmp/video001_gated/r1/source
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-final-original-source-proof
+          path: /tmp/video001_gated/r2/proof
+      - uses: actions/download-artifact@v4
+        with:
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42420443241
+          github-token: ${{ github.token }}
+          name: video001-fast-source-summary
+          path: /tmp/video001_gated/r2/source
+      - name: Reject missing original audio, image, frame, source SHA, or false semantic claims
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          base=Path('/tmp/video001_gated')
+          rows=[]
+          def read(path):return json.loads(path.read_text(encoding='utf8'))
+          for folder in ('r1','r2'):
+              root=base/folder
+              proof=read(root/'proof'/'private_fast_verify_summary.json')
+              source=read(root/'source'/'safe_source_prep_summary.json')
+              sha=proof['original_source_video_sha256']
+              assert sha==source['source_video_sha256']
+              assert sha=='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff'
+              assert proof['original_video_duration_seconds']==source['original_duration_seconds']
+              assert proof['original_five_minute_audio_parts']==source['source_global_audio_chunks']==17
+              assert proof['original_screen_frames_scanned']==source['one_second_frames_scanned']==4821
+              assert proof['source_chat_highres_screenshots']==source['original_chat_images_selected']==276
+              assert proof['original_sampled_board_frames']==source['original_board_frames']==161
+              assert proof['original_ocr_screenshots_finished']==276
+              assert source['source_audio_worker_count']==17 and source['original_ocr_workers']==16
+              assert source['all_original_audio_parts_assigned_once'] is True
+              assert source['all_original_chat_images_assigned_once'] is True
+              assert proof['source_evidence_loss']==0
+              assert proof['independent_hash_and_time_evidence_complete'] is True
+              assert source['source_integrity_verified'] is True
+              assert proof['teacher_semantic_accuracy_independently_verified'] is False
+              assert proof['source_unchanged'] is True and proof['production_v12_unchanged'] is True
+              assert proof['trading_allowed'] is False
+              rows.append({'run':folder,'sha':sha,'audio_parts':17,'chat_frames':276,'board_frames':161,'scanned_frames':4821,
+                           'asr_utterances_unverified':proof['original_asr_utterances'],
+                           'semantic_accuracy_verified':False})
+          assert rows[0]['sha']==rows[1]['sha']
+          output=base/'safe_quality_gate.json'
+          output.write_text(json.dumps({
+              'schema':'video001_v12_experimental_release_gate_v1',
+              'two_full_real_original_film_runs_verified':True,
+              'original_evidence_provenance_complete':True,
+              'technical_pipeline_release_candidate':True,
+              'speech_and_visual_interpretation_accuracy_human_verified':False,
+              'external_source_service_availability_guaranteed':False,
+              'production_version_unchanged':True,
+              'comparisons':rows
+          },indent=2),encoding='utf8')
+          print('VIDEO001_FAST_TWO_E2E_SOURCE_INTEGRITY_GATE_PASS='+json.dumps(rows))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-two-independent-runs-release-gate-private
+          retention-days: 15
+          if-no-files-found: error
+          path: /tmp/video001_gated/safe_quality_gate.json
