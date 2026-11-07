@@ -26,7 +26,7 @@ SOURCE_ORIGINS = frozenset((
 ))
 
 
-def audit_candidate(decision, at):
+def audit_candidate(decision, at, classroom_index=None):
     """Describe a raw ELIGIBLE decision without ever authenticating teacher media."""
     rule = decision.get('rule_id')
     side = decision.get('side')
@@ -52,6 +52,20 @@ def audit_candidate(decision, at):
         return review('UNREGISTERED_RULE')
     if rule == 'STOPPUNCH_S22_SELL_CONFIRMED_PAUSE':
         return review('EXPLICIT_RESEARCH_HYPOTHESIS_NOT_CONFIRMED_TEACHER_FORMULA')
+    if classroom_index is not None:
+        if classroom_index.get('schema') != 'artin_classroom_rule_index_v1' or not isinstance(classroom_index.get('rules'), dict):
+            raise ValueError('Unsupported classroom dialogue review index')
+        rule_review = classroom_index['rules'].get(rule)
+        base['classroom_dialogue_review'] = rule_review
+        if not isinstance(rule_review, dict):
+            return review('RULE_NOT_IN_CLASSROOM_DIALOGUE_REVIEW_INDEX')
+        if rule_review.get('rule_can_trade') is not False:
+            raise ValueError('Classroom dialogue index cannot grant trade permission')
+        if rule_review.get('reason') != 'FULL_TEACHER_EXAMPLES_AND_SEMANTICS_UNVERIFIED':
+            return review('DIALOGUE_' + str(rule_review.get('reason','UNKNOWN')))
+        # A complete-looking text index does NOT verify that classroom media,
+        # question/answer semantics or real positive/negative cases were checked.
+        base['classroom_index_is_not_teacher_verification'] = True
     if decision.get('status') != 'ELIGIBLE':
         return review('NOT_ELIGIBLE_RAW_DECISION')
     if any(name not in decision for name in REQUIRED_TRACE_FIELDS):
