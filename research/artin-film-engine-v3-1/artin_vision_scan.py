@@ -11,6 +11,7 @@ import concurrent.futures
 import json
 import math
 from pathlib import Path
+from artin_batch_slots import artifact_path, batch_frames_dir
 from artin_film_pipeline import (atomic_json, file_sha256, load_manifest,
                                  ollama_json, run_cmd)
 
@@ -30,7 +31,7 @@ def extract_sampled_frames(video, root, chunk, step_seconds=20, max_frames_per_c
     start,end=chunk['core_start'],chunk['core_end']
     if not isinstance(start,(int,float)) or not isinstance(end,(int,float)) or not 0 <= start < end:
         raise ValueError('Invalid core window')
-    folder=root/'vision_frames'/f'part_{chunk["chunk"]:02d}'
+    folder=root/batch_frames_dir(chunk)
     folder.mkdir(parents=True,exist_ok=True)
     # Never trust stale output on reruns with another film/parameter.
     for old in folder.glob('frame_*.jpg'):
@@ -120,7 +121,7 @@ def scan_vision(root,model,workers=2,step_seconds=20,max_images_per_request=4,
                 'visual_model':model,'frames':frames,
                 'observations':observations,'rejected_observations':rejected,
                 'teacher_rules_verified':0,'can_trade':False}
-        atomic_json(root/'visual_scans'/f'part_{chunk["chunk"]:02d}.json',result)
+        atomic_json(root/artifact_path("visual_scans",chunk),result)
         return result
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1,min(int(workers),len(manifest['chunks'])))) as ex:
         outputs=list(ex.map(one,manifest['chunks']))

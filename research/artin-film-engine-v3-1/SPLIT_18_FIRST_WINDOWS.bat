@@ -8,10 +8,10 @@ if not errorlevel 1 set "PY=py -3"
 set "VIDEO=%~1"
 if "%VIDEO%"=="" set /p "VIDEO=Original classroom film full path: "
 if not exist "%VIDEO%" goto bad_video
-set "OUTPUT=%ROOT%PRIVATE_ARTIN_NUMBERED_18"
+set "OUTPUT=%ROOT%PRIVATE_ARTIN_NUMBERED_BATCHES"
 echo.
 echo ARTIN: First split film into numbered 5-minute parts, no AI model needed.
-echo 90-minute film gives part_01.mp4 through part_18.mp4.
+echo Short last part is accepted. Long films use batch_002/part_01 etc.
 echo Parallel processing may finish out of order; final index is always numeric.
 echo.
 %PY% "%ROOT%artin_film_pipeline.py" prepare --video "%VIDEO%" --out "%OUTPUT%" --workers 4 --frames-per-chunk 0 --chunk-seconds 300

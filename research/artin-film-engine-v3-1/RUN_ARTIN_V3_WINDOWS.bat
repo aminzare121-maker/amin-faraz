@@ -6,14 +6,14 @@ set "PY=python"
 where py >nul 2>&1
 if not errorlevel 1 set "PY=py -3"
 echo.
-echo ARTIN V3: 18 linked sections, Persian audio and local vision
+echo ARTIN V3.2: variable-length videos in 18-slot numbered batches, Persian audio and local vision
 set "VIDEO=%~1"
 if "%VIDEO%"=="" set /p "VIDEO=Original classroom video full path: "
 if not exist "%VIDEO%" goto bad_video
 set "ASR=%ROOT%PRIVATE_MODELS\whisper-small"
 set "MODEL=qwen2.5vl:3b"
 echo.
-echo A 90-minute video is split into numbered 01..18 chunks FIRST.
+echo Every 5-minute part has a globally unique index and a 1..18 batch slot.
 echo Local model availability is checked AFTER saving and verifying all clips.
 set "OUTPUT=%ROOT%PRIVATE_ARTIN_RESULT"
 echo.
