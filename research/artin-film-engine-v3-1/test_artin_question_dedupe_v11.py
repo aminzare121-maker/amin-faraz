@@ -35,6 +35,14 @@ class DedupeTests(unittest.TestCase):
         self.assertTrue(x['critical_word_conflict_evidence'][0]['must_review_original_images'])
         self.assertFalse(x['critical_word_conflict_evidence'][0]['automatically_resolved'])
 
+    def test_attached_comparison_spaces_are_same_meaning_not_critical_warning(self):
+        x=clustered_review(review([
+            group('یعنی همیشه اون عدد بالاترازیک هست؟',10,1),
+            group('یعنی همیشه اون عدد بالاتر ازیک هست؟',35,2)]))
+        self.assertEqual(x['conservative_near_duplicate_clusters'],1)
+        self.assertEqual(x['critical_word_conflicts_for_review'],0)
+        self.assertEqual(x['original_review_groups'],2)
+
     def test_sell_and_no_sell_never_combined(self):
         x=clustered_review(review([
             group('اگر قیمت به ناحیه رسید بفروش',10,1),
