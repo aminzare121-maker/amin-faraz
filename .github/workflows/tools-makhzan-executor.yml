@@ -5,8 +5,6 @@ on:
       - tools-makhzan-hub
     paths:
       - 'tools-makhzan/requests/current.json'
-      - 'tools-makhzan/executor.py'
-      - '.github/workflows/tools-makhzan-executor.yml'
 permissions:
   contents: read
   actions: read
@@ -76,11 +74,65 @@ jobs:
           python3 -m pip install --disable-pip-version-check 'numpy>=1.24,<3' 'faster-whisper>=1.1,<2' 'paddlepaddle==3.2.2' 'paddleocr>=3.6,<4' 'Pillow>=10,<13'
       - name: Validate real user source and create private full-session input
         run: python3 -B tools-makhzan/executor.py --emit-job --out /tmp/makhzan_full_session_input
+      - id: source-resume-key
+        name: Determine stable cryptographic key for safe ASR reuse
+        shell: bash
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json,re
+          from pathlib import Path
+          job=json.loads(Path("/tmp/makhzan_full_session_input/ingest_request.json").read_text(encoding="utf8"))
+          sha=job.get("expected_sha256")
+          if isinstance(sha,str) and re.fullmatch("[a-f0-9]{64}",sha):
+              print("key="+sha[:20])
+          else:
+              print("key=none")
+          PY
+      - name: Restore completed ASR parts from a previous private runner if available
+        if: ${{ steps.source-resume-key.outputs.key != 'none' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESUME_KEY: ${{ steps.source-resume-key.outputs.key }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,subprocess,json,io,zipfile,re
+          from pathlib import Path
+          key=os.environ['RESUME_KEY']
+          root=Path('/tmp/makhzan_complete_session_private/complete_source_private/private_asr')
+          url=f"/repos/{os.environ['GITHUB_REPOSITORY']}/actions/artifacts?per_page=100"
+          listing=json.loads(subprocess.check_output(['gh','api',url],text=True))
+          prefix=f"makhzan-ASR-source-{key}-"
+          matches=[a for a in listing.get('artifacts',[]) if
+                   isinstance(a,dict) and str(a.get('name','')).startswith(prefix)
+                   and not a.get('expired',True)]
+          if not matches:
+              print('MAKHZAN_ASR_CHECKPOINT_RESTORE=NONE')
+          else:
+              latest=max(matches,key=lambda a:a.get('created_at',''))
+              binary=subprocess.check_output(['gh','api',f"/repos/{os.environ['GITHUB_REPOSITORY']}/actions/artifacts/{latest['id']}/zip"])
+              count=0
+              with zipfile.ZipFile(io.BytesIO(binary)) as archive:
+                  for member in archive.namelist():
+                      if re.fullmatch(r'chunk_[0-9]{4}_UNVERIFIED[.]json',member):
+                          root.mkdir(parents=True,exist_ok=True)
+                          (root/member).write_bytes(archive.read(member))
+                          count+=1
+              print('MAKHZAN_ASR_CHECKPOINT_RESTORED_PARTS='+str(count))
+          PY
       - name: Process ALL original audio parts and classroom images; never silently stop after download
         run: |
           python3 -u artin-code/research/artin-film-engine-v3-1/artin_remote_complete_v10.py \
             --request /tmp/makhzan_full_session_input/ingest_request.json \
             --out /tmp/makhzan_complete_session_private
+      - name: Retain source-hashed completed ASR chunks even if downstream processing fails
+        if: ${{ always() && steps.source-resume-key.outputs.key != 'none' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-ASR-source-${{ steps.source-resume-key.outputs.key }}-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: ignore
+          path: /tmp/makhzan_complete_session_private/complete_source_private/private_asr/chunk_*_UNVERIFIED.json
       - name: Enforce full pipeline actually ran (ASR, real images, Persian OCR, QA and rule audit)
         run: |
           python3 - <<'PY'
