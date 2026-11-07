@@ -1,0 +1,97 @@
+{
+  "runs": [
+    {
+      "run": "d010e8d0fa05f004fa6d75a38a1ff6a7dceb587d0c3104ffeba09bb219283256",
+      "status": "NEEDS_REVIEW",
+      "exposure_time": "UNKNOWN",
+      "actual_market_utc": "NOT_APPLICABLE_SYNTHETIC",
+      "dataset_hashes": {
+        "synthetic-engine-integration-320-v1": "f54736df63ce3c3be2fc4e9f3dab2d988c795626b70c067ace2760a3bda199de"
+      },
+      "protocol_hash": "9d42b37189392223c884eb4788f32fe26d5646f54679ab6fd99596282d431e45",
+      "intended_interval": [
+        1760223600,
+        1760288400
+      ],
+      "recipe": "test_real_stage.fixture",
+      "dataset_hash_matched": true,
+      "interval_basis": "HASH_MATCHED_SYNTHETIC_RECIPE_AND_STORED_SPLIT_NOT_EXPOSURE_RECEIPT"
+    },
+    {
+      "run": "905209c14b44e66e4669f819ee503065e207cd7d4c37ec1693be84a78d8f3cc1",
+      "status": "NEEDS_REVIEW",
+      "exposure_time": "UNKNOWN",
+      "actual_market_utc": "NOT_APPLICABLE_SYNTHETIC",
+      "dataset_hashes": {
+        "fixture": "f05ba07bd89236abafef9e42dc51325186109226038af604a79be2d63f900ed0"
+      },
+      "protocol_hash": "a14b86af0c73315912e789bba056f88098a90f37756720fbee213ee858de522a",
+      "intended_interval": [
+        223200,
+        288000
+      ],
+      "recipe": "test_selector.bars",
+      "dataset_hash_matched": true,
+      "interval_basis": "HASH_MATCHED_SYNTHETIC_RECIPE_AND_STORED_SPLIT_NOT_EXPOSURE_RECEIPT"
+    },
+    {
+      "run": "1ed88ab532336673f242032c6f9c08f9c499c43393619db12e97ae78ef51ed9e",
+      "status": "NEEDS_REVIEW",
+      "exposure_time": "UNKNOWN",
+      "actual_market_utc": "NOT_APPLICABLE_SYNTHETIC",
+      "dataset_hashes": {
+        "fixture": "f05ba07bd89236abafef9e42dc51325186109226038af604a79be2d63f900ed0"
+      },
+      "protocol_hash": "a14b86af0c73315912e789bba056f88098a90f37756720fbee213ee858de522a",
+      "intended_interval": [
+        223200,
+        288000
+      ],
+      "recipe": "test_selector.bars",
+      "dataset_hash_matched": true,
+      "interval_basis": "HASH_MATCHED_SYNTHETIC_RECIPE_AND_STORED_SPLIT_NOT_EXPOSURE_RECEIPT"
+    },
+    {
+      "run": "86a00f3a67df25060d6b8896063474215677c05f423a673506a2d68e3b34b8c1",
+      "status": "NEEDS_REVIEW",
+      "exposure_time": "UNKNOWN",
+      "actual_market_utc": "NOT_APPLICABLE_SYNTHETIC",
+      "dataset_hashes": {
+        "fixture": "f05ba07bd89236abafef9e42dc51325186109226038af604a79be2d63f900ed0"
+      },
+      "protocol_hash": "a14b86af0c73315912e789bba056f88098a90f37756720fbee213ee858de522a",
+      "intended_interval": null,
+      "recipe": "test_selector.bars",
+      "dataset_hash_matched": true
+    },
+    {
+      "run": "0581ef2738d62677b368ca0bc594a6661313239c6d9904b1e3e02bb1a4dc92d2",
+      "status": "NEEDS_REVIEW",
+      "exposure_time": "UNKNOWN",
+      "actual_market_utc": "NOT_APPLICABLE_SYNTHETIC",
+      "dataset_hashes": {
+        "synthetic-320-actual-strategies": "75529abd11b0a26485d1cd2db21e31573a7d01158c1e2997b629b3257685a4b0"
+      },
+      "protocol_hash": "f6cb985904e75fa73044de4dcd7f1e26f6726e76b86affcf3613c9fd749ca67e",
+      "intended_interval": [
+        1760223600,
+        1760288400
+      ],
+      "recipe": "stage4_qa.actual",
+      "dataset_hash_matched": true,
+      "interval_basis": "HASH_MATCHED_SYNTHETIC_RECIPE_AND_STORED_SPLIT_NOT_EXPOSURE_RECEIPT"
+    }
+  ],
+  "recipes_hash_matched": 5,
+  "intended_intervals_recovered": 4,
+  "complete_exposures_verified": 0,
+  "exposure_time_unknown": 5,
+  "source_hashes": {
+    "test_selector.py": "be1074acdf814dad6551fcd2037b7fe2752f81a010d711967e774717392e9bd0",
+    "test_real_stage.py": "d683f88048b539f87256ecbe2abe6f5ea5f9f91a109424bc09347057071189f6",
+    "stage4_qa.py": "3d5029d2bfc3748a7052efa8d680934817199d79ef858b835a1978449b4cfeb1",
+    "verify_stage.py": "01cf30d52cc5183f663f63df799934fec5237aa91350542b1381ee8716933b09"
+  },
+  "financial_gate": "BLOCKED",
+  "rollback": "ROLLBACK_PROTECTION_UNVERIFIED"
+}

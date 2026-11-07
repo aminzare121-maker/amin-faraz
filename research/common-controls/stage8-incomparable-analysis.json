@@ -1,0 +1,128 @@
+{
+  "total": 2890,
+  "paired": 334,
+  "incomparable": 2556,
+  "reason_counts": {
+    "CAPITAL_PATH_MISMATCH": 2546,
+    "UNKNOWN_COST_OR_PATH": 10
+  },
+  "mutually_exclusive_combinations": {
+    "CAPITAL_PATH_MISMATCH": 2546,
+    "UNKNOWN_COST_OR_PATH": 10
+  },
+  "groups": {
+    "breakout-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "breakout-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "breakout-20-1.5-rules/base:unknown": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "breakout-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 11,
+      "INCOMPARABLE": 169
+    },
+    "breakout-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 11,
+      "INCOMPARABLE": 169
+    },
+    "breakout-20-1.5-rules/stress:unknown": {
+      "PAIRED_SCENARIO_ONLY": 11,
+      "INCOMPARABLE": 169
+    },
+    "rejection-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 180
+    },
+    "rejection-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "rejection-20-1.5-rules/base:unknown": {
+      "INCOMPARABLE": 5
+    },
+    "rejection-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 10,
+      "INCOMPARABLE": 170
+    },
+    "rejection-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "rejection-20-1.5-rules/stress:unknown": {
+      "INCOMPARABLE": 5
+    },
+    "retest-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "retest-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "retest-20-1.5-rules/base:unknown": {
+      "PAIRED_SCENARIO_ONLY": 9,
+      "INCOMPARABLE": 171
+    },
+    "retest-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/stress:unknown": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    }
+  },
+  "examples": {
+    "CAPITAL_PATH_MISMATCH": {
+      "candidate": "breakout-20-1.5-rules",
+      "scenario": "base:stop_first",
+      "row_index": 1,
+      "seed": 31415,
+      "entry_time": 153900,
+      "candidate_duration": 900,
+      "control_duration": 900,
+      "candidate_capital": "9999.8",
+      "control_capital": "9998.200",
+      "candidate_net": -0.2,
+      "control_net": "-1.800",
+      "candidate_exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+      "control_exit_reason": "STOP",
+      "reasons": [
+        "CAPITAL_PATH_MISMATCH"
+      ],
+      "control_trace_sha": "669ff0c309e72d39453e54b1f49f0a8ee8476fd41fa0625194c995823b3cfbf5"
+    },
+    "UNKNOWN_COST_OR_PATH": {
+      "candidate": "rejection-20-1.5-rules",
+      "scenario": "base:unknown",
+      "row_index": 0,
+      "seed": 1729,
+      "entry_time": 152100,
+      "candidate_duration": 900,
+      "control_duration": 900,
+      "candidate_capital": "10000.0",
+      "control_capital": "10000",
+      "candidate_net": null,
+      "control_net": null,
+      "candidate_exit_reason": "STOP_FIRST_AMBIGUOUS",
+      "control_exit_reason": "STOP_FIRST_AMBIGUOUS",
+      "reasons": [
+        "UNKNOWN_COST_OR_PATH"
+      ],
+      "control_trace_sha": "3c1c384052b48f4fecdfa0b57cd441b0d8d985ef7e48c74e700a31f23158a521"
+    }
+  },
+  "note": "Reason counts overlap; combinations sum to incomparable; no threshold or seed changed",
+  "run": "66121ec43b886035c7500c0dc86ab267b91b5c47c8197a7231a17a2c60f04499",
+  "result_sha": "1519f0154d8afcee5686a479a3d4caa9c4ac949811c5f628a27083ad44ca7ea3",
+  "synthetic": true
+}

@@ -1,0 +1,35 @@
+test_real_difference_still_rejected (test_stage8_precision.PrecisionTests.test_real_difference_still_rejected) ... ok
+test_same_direction_exact_capital_matches_all_entries (test_stage8_precision.PrecisionTests.test_same_direction_exact_capital_matches_all_entries) ... ok
+test_capital_or_duration_mismatch_not_filtered (test_matched_controls.ControlTests.test_capital_or_duration_mismatch_not_filtered) ... ok
+test_changed_seed_rejected (test_matched_controls.ControlTests.test_changed_seed_rejected) ... ok
+test_end_to_end_all_seeds_and_ledger (test_matched_controls.ControlTests.test_end_to_end_all_seeds_and_ledger) ... ok
+test_equal_entry_lots_risk_and_context (test_matched_controls.ControlTests.test_equal_entry_lots_risk_and_context) ... ok
+test_holdout_does_not_change_ranking (test_matched_controls.ControlTests.test_holdout_does_not_change_ranking) ... ok
+test_missing_cost_failure_persisted (test_matched_controls.ControlTests.test_missing_cost_failure_persisted) ... ok
+test_seed_depends_only_on_decision_time (test_matched_controls.ControlTests.test_seed_depends_only_on_decision_time) ... ok
+test_unknown_swap_suppresses (test_matched_controls.ControlTests.test_unknown_swap_suppresses) ... ok
+test_variable_volume_and_duration_trace (test_matched_controls.ControlTests.test_variable_volume_and_duration_trace) ... ok
+test_actual_unmocked_signals_and_adaptive_exit (test_selector.SelectorTests.test_actual_unmocked_signals_and_adaptive_exit) ... ok
+test_cache_exact (test_selector.SelectorTests.test_cache_exact) ... ok
+test_cost_hash_changes (test_selector.SelectorTests.test_cost_hash_changes) ... ok
+test_different_assumptions_not_comparable (test_selector.SelectorTests.test_different_assumptions_not_comparable) ... ok
+test_end_to_end_three_methods (test_selector.SelectorTests.test_end_to_end_three_methods) ... ok
+test_future_news_blocked (test_selector.SelectorTests.test_future_news_blocked) ... ok
+test_future_quote_not_verified (test_selector.SelectorTests.test_future_quote_not_verified) ... ok
+test_gap_open_proves_stop_before_range_target (test_selector.SelectorTests.test_gap_open_proves_stop_before_range_target) ... ok
+test_holdout_change_does_not_change_selection (test_selector.SelectorTests.test_holdout_change_does_not_change_selection) ... ok
+test_invalid_dataset_cannot_reuse (test_selector.SelectorTests.test_invalid_dataset_cannot_reuse) ... ok
+test_missing_spread_failure_recorded (test_selector.SelectorTests.test_missing_spread_failure_recorded) ... ok
+test_net_arithmetic_no_double_cost (test_selector.SelectorTests.test_net_arithmetic_no_double_cost) ... ok
+test_no_signal_from_delayed_bar (test_selector.SelectorTests.test_no_signal_from_delayed_bar) ... ok
+test_out_of_order_recorded_failed (test_selector.SelectorTests.test_out_of_order_recorded_failed) ... ok
+test_real_year_blocked (test_selector.SelectorTests.test_real_year_blocked) ... ok
+test_same_bar_unknown_pnl_none (test_selector.SelectorTests.test_same_bar_unknown_pnl_none) ... ok
+test_unknown_swap_blocks_even_with_assumed_profit (test_selector.SelectorTests.test_unknown_swap_blocks_even_with_assumed_profit) ... ok
+test_unmocked_existing_candidates (test_selector.SelectorTests.test_unmocked_existing_candidates) ... ok
+test_variable_quote_trace (test_selector.SelectorTests.test_variable_quote_trace) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 21.956s
+
+OK

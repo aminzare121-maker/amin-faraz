@@ -1,0 +1,59 @@
+{
+  "m15": 23643,
+  "ticks": 7946,
+  "tick_reconstruction": [
+    {
+      "bar_raw_epoch": 1793874600,
+      "bar_server_label": "2026-11-05T10:30:00",
+      "sample_utc_with_supported_winter_mapping": "2026-11-05T08:30:00+00:00",
+      "time_basis": "BROKER_SERVER_LABEL_UTC_PLUS_2_FOR_THIS_SAMPLE_ONLY",
+      "last_field_all_zero": true,
+      "ticks": 4167,
+      "ohlc_delta_tick_minus_bar": {
+        "bid": {
+          "open": "0.0",
+          "high": "0.00",
+          "low": "0.00",
+          "close": "0.00"
+        },
+        "ask": {
+          "open": "0.31",
+          "high": "0.31",
+          "low": "0.33",
+          "close": "0.31"
+        }
+      }
+    },
+    {
+      "bar_raw_epoch": 1793875500,
+      "bar_server_label": "2026-11-05T10:45:00",
+      "sample_utc_with_supported_winter_mapping": "2026-11-05T08:45:00+00:00",
+      "time_basis": "BROKER_SERVER_LABEL_UTC_PLUS_2_FOR_THIS_SAMPLE_ONLY",
+      "last_field_all_zero": true,
+      "ticks": 3779,
+      "ohlc_delta_tick_minus_bar": {
+        "bid": {
+          "open": "0.00",
+          "high": "0.00",
+          "low": "0.00",
+          "close": "0.00"
+        },
+        "ask": {
+          "open": "0.33",
+          "high": "0.34",
+          "low": "0.32",
+          "close": "0.33"
+        }
+      }
+    }
+  ],
+  "gap_count": 260,
+  "patterns": {
+    "ONE_HOUR_RECURRENT_CANDIDATE": 199,
+    "49_HOUR_WEEKEND_CANDIDATE": 48,
+    "OTHER": 13
+  },
+  "natural_proven": 0,
+  "defects_proven": 0,
+  "unknown": 260
+}

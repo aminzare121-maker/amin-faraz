@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-04",
+  "scope": "OBSERVED_COMMON_BID_BARS_ONLY_CONDITIONAL_WINTER_CLOCK_MAPPING",
+  "receipts": {
+    "BID": {
+      "raw_sha256": "7866d3a24764d049023e0934e81655c01b329c1df63b5ad7c4aa1aaf2e002484",
+      "rows_m1": 1380,
+      "bytes": 93823,
+      "bars_m15": 92
+    },
+    "ASK": {
+      "raw_sha256": "fb27741a462c4392c847700c174ffcb0603db55845caa588442fc15734e802ad",
+      "rows_m1": 1380,
+      "bytes": 93827,
+      "bars_m15": 92
+    }
+  },
+  "eplanet_m15": 92,
+  "dukascopy_m15": 92,
+  "common_bars": 92,
+  "left_only": [],
+  "right_only": [],
+  "both_absent": [
+    1793829600,
+    1793830500,
+    1793831400,
+    1793832300
+  ],
+  "dukascopy_excluded": {
+    "BID": [
+      {
+        "time": 1793829600,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793830500,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793831400,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793832300,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      }
+    ],
+    "ASK": [
+      {
+        "time": 1793829600,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793830500,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793831400,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      },
+      {
+        "time": 1793832300,
+        "missing_m1": 15,
+        "reason": "UNKNOWN_SESSION_NO_FILL"
+      }
+    ]
+  },
+  "time_mapping": {
+    "raw_to_utc_seconds": -7200,
+    "scope": "2026-11-04 only",
+    "evidence": [
+      "Eplanet ticket207852 winter UTC+2",
+      "terminal-clock-sanitized.json"
+    ],
+    "historical_year_certified": false,
+    "raw_modified": false,
+    "offset_selected_by_price_fit": false
+  },
+  "ohlc_metrics": {
+    "open": {
+      "signed_mean": "0.1266086956521739130434782609",
+      "signed_median": "0.1205",
+      "mean_absolute": "0.1376956521739130434782608696",
+      "median_absolute": "0.125",
+      "max_absolute": "0.705",
+      "count_abs_gt_1_usd_per_oz": 0
+    },
+    "high": {
+      "signed_mean": "0.04939130434782608695652173913",
+      "signed_median": "0.075",
+      "mean_absolute": "0.1043913043478260869565217391",
+      "median_absolute": "0.085",
+      "max_absolute": "1.397",
+      "count_abs_gt_1_usd_per_oz": 1
+    },
+    "low": {
+      "signed_mean": "0.1494673913043478260869565217",
+      "signed_median": "0.1455",
+      "mean_absolute": "0.1538152173913043478260869565",
+      "median_absolute": "0.146",
+      "max_absolute": "0.511",
+      "count_abs_gt_1_usd_per_oz": 0
+    },
+    "close": {
+      "signed_mean": "0.1121956521739130434782608696",
+      "signed_median": "0.135",
+      "mean_absolute": "0.1441086956521739130434782609",
+      "median_absolute": "0.144",
+      "max_absolute": "0.945",
+      "count_abs_gt_1_usd_per_oz": 0
+    }
+  },
+  "time_difference_seconds": 0,
+  "unusual_rule": "absolute OHLC delta >1 USD/oz; predeclared diagnostic threshold, not defect proof",
+  "bars_with_any_abs_delta_gt_1": 1,
+  "spread_comparison": "NOT_IDENTIFIABLE_FROM_SEPARATE_OHLC_EXTREMA; NO_SYNCHRONIZED_EPLANET_TICKS_FOR_NOV04",
+  "financial_result": "NOT_RUN",
+  "year_fit_allowed": false,
+  "comparator_status": "COMPARABLE_PRICE_ONLY"
+}

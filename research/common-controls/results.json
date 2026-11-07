@@ -1,0 +1,24 @@
+{
+  "tests_run": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "python": "3.12.14",
+  "synthetic_tests_only": true,
+  "financial_backtests_run": 0,
+  "actual_dataset_registered": true,
+  "actual_dataset_valid_for_final_backtest": false,
+  "m15_rows": 23643,
+  "tick_rows": 7915,
+  "qa_sha256": "0f4e244e42ddc96fb78bfa56fb5a13b9aa2a206ba4ab045a5a2f7c87a051870b",
+  "source_sha256": {
+    "audit_free_sample.py": "d647b853646109dd997fd2a8368777116bf63d1f8fc9aeafca22dfc97613372c",
+    "comparison.py": "2af146c4363dd119d1e8f37bbafea5a9754fde836afeaf7d08cc9f92d4485bc1",
+    "registry.py": "3bf60f5382f255adb3b8ba1b9d3b80eccaf7c70014d937fed28d61f3887bf5ae",
+    "run_checks.py": "e4143e01d29e1caeae3dd691be49ef29764ef189b83222866c11fc09bc5385af",
+    "test_controls.py": "7766b95eea8732108f55a47190ce2c9fff1fca45e414ecc1af76c34ac2cdffe6",
+    "vendor/feed_contract.py": "03ed5082a0af4bd11d2ddb4643c1dd75fc8ccaa22059f98b3989ec0c8ffe79ff",
+    "vendor/independent_adapter.py": "94414c98f65780483b0811949bc89c46eb05cf3526ecfa033b6173fa52eb37a6",
+    "vendor/research_ledger.py": "0a5ff406c88050cdd32917e762bb5b3c19038ffa528d40c81e76fa32bf31d703"
+  }
+}

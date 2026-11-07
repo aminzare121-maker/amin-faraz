@@ -1,0 +1,15 @@
+test_conflicting_same_run (test_exposure_migration.MigrationTests.test_conflicting_same_run) ... ok
+test_duplicates_rejected (test_exposure_migration.MigrationTests.test_duplicates_rejected) ... ok
+test_idempotent (test_exposure_migration.MigrationTests.test_idempotent) ... ok
+test_interruption_rolls_back_then_retry (test_exposure_migration.MigrationTests.test_interruption_rolls_back_then_retry) ... ok
+test_manifest_tamper (test_exposure_migration.MigrationTests.test_manifest_tamper) ... ok
+test_missing_not_created (test_exposure_migration.MigrationTests.test_missing_not_created) ... ok
+test_mutated_ledger_detected (test_exposure_migration.MigrationTests.test_mutated_ledger_detected) ... ok
+test_old_snapshot_detected (test_exposure_migration.MigrationTests.test_old_snapshot_detected) ... ok
+test_two_writers_same_manifest (test_exposure_migration.MigrationTests.test_two_writers_same_manifest) ... ok
+test_unknown_timezone_and_empty (test_exposure_migration.MigrationTests.test_unknown_timezone_and_empty) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.256s
+
+OK

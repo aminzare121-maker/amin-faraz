@@ -1,0 +1,359 @@
+{
+  "schema": "quality-v3",
+  "input_gap_report_sha256": "bfd58769577287d936844f3bb5479537c90516d53c6a8554e1189940124811f9",
+  "periods": [
+    {
+      "utc_start": 1762300800,
+      "utc_end": 1772953200,
+      "start_label": "2025-11-05T00:00:00+00:00",
+      "end_label": "2026-03-08T07:00:00+00:00",
+      "candidate_ny_offset": 7200,
+      "candidate_eu_offset": 7200,
+      "candidates_agree": true,
+      "status": "UNKNOWN",
+      "unknown": true,
+      "confidence": "CANDIDATE_AGREEMENT_ONLY",
+      "evidence_ids": [
+        "NIST_DST_2026",
+        "EU_COUNCIL_RULE",
+        "EPLANET_207852_AMBIGUOUS_STATEMENT"
+      ],
+      "offset_seconds": null,
+      "approved_for_final_backtest": false
+    },
+    {
+      "utc_start": 1772953200,
+      "utc_end": 1774746000,
+      "start_label": "2026-03-08T07:00:00+00:00",
+      "end_label": "2026-03-29T01:00:00+00:00",
+      "candidate_ny_offset": 10800,
+      "candidate_eu_offset": 7200,
+      "candidates_agree": false,
+      "status": "UNKNOWN",
+      "unknown": true,
+      "confidence": "CONFLICTING_RULES",
+      "evidence_ids": [
+        "NIST_DST_2026",
+        "EU_COUNCIL_RULE",
+        "EPLANET_207852_AMBIGUOUS_STATEMENT"
+      ],
+      "offset_seconds": null,
+      "approved_for_final_backtest": false
+    },
+    {
+      "utc_start": 1774746000,
+      "utc_end": 1792890000,
+      "start_label": "2026-03-29T01:00:00+00:00",
+      "end_label": "2026-10-25T01:00:00+00:00",
+      "candidate_ny_offset": 10800,
+      "candidate_eu_offset": 10800,
+      "candidates_agree": true,
+      "status": "UNKNOWN",
+      "unknown": true,
+      "confidence": "CANDIDATE_AGREEMENT_ONLY",
+      "evidence_ids": [
+        "NIST_DST_2026",
+        "EU_COUNCIL_RULE",
+        "EPLANET_207852_AMBIGUOUS_STATEMENT"
+      ],
+      "offset_seconds": null,
+      "approved_for_final_backtest": false
+    },
+    {
+      "utc_start": 1792890000,
+      "utc_end": 1793512800,
+      "start_label": "2026-10-25T01:00:00+00:00",
+      "end_label": "2026-11-01T06:00:00+00:00",
+      "candidate_ny_offset": 10800,
+      "candidate_eu_offset": 7200,
+      "candidates_agree": false,
+      "status": "UNKNOWN",
+      "unknown": true,
+      "confidence": "CONFLICTING_RULES",
+      "evidence_ids": [
+        "NIST_DST_2026",
+        "EU_COUNCIL_RULE",
+        "EPLANET_207852_AMBIGUOUS_STATEMENT"
+      ],
+      "offset_seconds": null,
+      "approved_for_final_backtest": false
+    },
+    {
+      "utc_start": 1793512800,
+      "utc_end": 1793836800,
+      "start_label": "2026-11-01T06:00:00+00:00",
+      "end_label": "2026-11-05T00:00:00+00:00",
+      "candidate_ny_offset": 7200,
+      "candidate_eu_offset": 7200,
+      "candidates_agree": true,
+      "status": "UNKNOWN",
+      "unknown": true,
+      "confidence": "CANDIDATE_AGREEMENT_ONLY",
+      "evidence_ids": [
+        "NIST_DST_2026",
+        "EU_COUNCIL_RULE",
+        "EPLANET_207852_AMBIGUOUS_STATEMENT"
+      ],
+      "offset_seconds": null,
+      "approved_for_final_backtest": false
+    }
+  ],
+  "transition_windows": [
+    {
+      "candidate_transition": "NY_START",
+      "candidate_utc": "2026-03-08T07:00:00+00:00",
+      "raw_gap_labels_near_transition": [
+        {
+          "start": "2026-03-03T00:00:00+00:00",
+          "end": "2026-03-03T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-04T00:00:00+00:00",
+          "end": "2026-03-04T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-05T00:00:00+00:00",
+          "end": "2026-03-05T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-06T00:00:00+00:00",
+          "end": "2026-03-06T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-07T00:00:00+00:00",
+          "end": "2026-03-09T01:00:00+00:00",
+          "slots": 196
+        },
+        {
+          "start": "2026-03-10T00:00:00+00:00",
+          "end": "2026-03-10T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-11T00:00:00+00:00",
+          "end": "2026-03-11T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-12T00:00:00+00:00",
+          "end": "2026-03-12T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-13T00:00:00+00:00",
+          "end": "2026-03-13T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-14T00:00:00+00:00",
+          "end": "2026-03-16T01:00:00+00:00",
+          "slots": 196
+        }
+      ],
+      "tick_evidence_available": false,
+      "can_discriminate_broker_dst_rule": false,
+      "reason": "Session labels alone cannot anchor UTC; Tick sample only Nov05; no historical broker calendar."
+    },
+    {
+      "candidate_transition": "EU_START",
+      "candidate_utc": "2026-03-29T01:00:00+00:00",
+      "raw_gap_labels_near_transition": [
+        {
+          "start": "2026-03-24T00:00:00+00:00",
+          "end": "2026-03-24T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-25T00:00:00+00:00",
+          "end": "2026-03-25T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-26T00:00:00+00:00",
+          "end": "2026-03-26T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-27T00:00:00+00:00",
+          "end": "2026-03-27T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-03-28T00:00:00+00:00",
+          "end": "2026-03-30T01:00:00+00:00",
+          "slots": 196
+        },
+        {
+          "start": "2026-03-31T00:00:00+00:00",
+          "end": "2026-03-31T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-04-01T00:00:00+00:00",
+          "end": "2026-04-01T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-04-02T00:00:00+00:00",
+          "end": "2026-04-02T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-04-03T00:00:00+00:00",
+          "end": "2026-04-06T01:00:00+00:00",
+          "slots": 292
+        }
+      ],
+      "tick_evidence_available": false,
+      "can_discriminate_broker_dst_rule": false,
+      "reason": "Session labels alone cannot anchor UTC; Tick sample only Nov05; no historical broker calendar."
+    },
+    {
+      "candidate_transition": "EU_END",
+      "candidate_utc": "2026-10-25T01:00:00+00:00",
+      "raw_gap_labels_near_transition": [
+        {
+          "start": "2026-10-20T00:00:00+00:00",
+          "end": "2026-10-20T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-21T00:00:00+00:00",
+          "end": "2026-10-21T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-22T00:00:00+00:00",
+          "end": "2026-10-22T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-23T00:00:00+00:00",
+          "end": "2026-10-23T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-24T00:00:00+00:00",
+          "end": "2026-10-26T01:00:00+00:00",
+          "slots": 196
+        },
+        {
+          "start": "2026-10-27T00:00:00+00:00",
+          "end": "2026-10-27T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-28T00:00:00+00:00",
+          "end": "2026-10-28T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-29T00:00:00+00:00",
+          "end": "2026-10-29T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-30T00:00:00+00:00",
+          "end": "2026-10-30T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-31T00:00:00+00:00",
+          "end": "2026-11-02T01:00:00+00:00",
+          "slots": 196
+        }
+      ],
+      "tick_evidence_available": false,
+      "can_discriminate_broker_dst_rule": false,
+      "reason": "Session labels alone cannot anchor UTC; Tick sample only Nov05; no historical broker calendar."
+    },
+    {
+      "candidate_transition": "NY_END",
+      "candidate_utc": "2026-11-01T06:00:00+00:00",
+      "raw_gap_labels_near_transition": [
+        {
+          "start": "2026-10-27T00:00:00+00:00",
+          "end": "2026-10-27T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-28T00:00:00+00:00",
+          "end": "2026-10-28T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-29T00:00:00+00:00",
+          "end": "2026-10-29T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-30T00:00:00+00:00",
+          "end": "2026-10-30T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-10-31T00:00:00+00:00",
+          "end": "2026-11-02T01:00:00+00:00",
+          "slots": 196
+        },
+        {
+          "start": "2026-11-03T00:00:00+00:00",
+          "end": "2026-11-03T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-11-04T00:00:00+00:00",
+          "end": "2026-11-04T01:00:00+00:00",
+          "slots": 4
+        },
+        {
+          "start": "2026-11-05T00:00:00+00:00",
+          "end": "2026-11-05T01:00:00+00:00",
+          "slots": 4
+        }
+      ],
+      "tick_evidence_available": false,
+      "can_discriminate_broker_dst_rule": false,
+      "reason": "Session labels alone cannot anchor UTC; Tick sample only Nov05; no historical broker calendar."
+    }
+  ],
+  "gap_counts": {
+    "UNKNOWN": 260
+  },
+  "source_inventory": {
+    "official_historical_eplanet_calendar": false,
+    "official_historical_eplanet_offset_table": false,
+    "support_current_general_statement": true,
+    "live_clock_observation_nov05": true,
+    "tick_sample_nov05_repaired": true,
+    "generic_ny_eu_rules_are_not_broker_proof": true
+  },
+  "final_gate": {
+    "final_backtest_allowed": false,
+    "reasons": [
+      "TIME_MAPPING_UNVERIFIED",
+      "OPEN_MISSING_OR_UNKNOWN",
+      "COSTS_UNVERIFIED"
+    ],
+    "trade_allowed": false
+  },
+  "tests_run": 32,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "new_tests": 32,
+  "affected_existing_bridge_tests_previously_passed": 9,
+  "market_strategy_runs": 0,
+  "downloads": 0,
+  "source_sha256": {
+    "evidence_gates.py": "2b47326313c6593033d13f2a72ed77aa2399af10936242a6ed8a1eb76b75e3a7",
+    "execution_scenarios.py": "16dc3609209741aab0f1ff01cddc2591b7713c2f32165159c39788498a6d4786",
+    "engine_bridge.py": "e4d15f8a8447835cbb21a5e656708162dc6dd442dcc8f97d898bc8bea213121a",
+    "test_stage3.py": "7d68fb4415777bf51fd78a64fbeff7399182ad3bd7ad6a1e379a6a07d914f4ba",
+    "stage3_qa.py": "344da4f296a7d885c9eb331829c2269e782f333b9595fc4e1dc30819a50de777"
+  }
+}

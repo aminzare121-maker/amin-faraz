@@ -1,0 +1,37 @@
+test_future_signal (test_stage3.ExecutionTests.test_future_signal) ... ok
+test_missing_swap_not_zero (test_stage3.ExecutionTests.test_missing_swap_not_zero) ... ok
+test_no_double_cost (test_stage3.ExecutionTests.test_no_double_cost) ... ok
+test_no_session_gap_bridge (test_stage3.ExecutionTests.test_no_session_gap_bridge) ... ok
+test_no_slippage_default (test_stage3.ExecutionTests.test_no_slippage_default) ... ok
+test_no_spread_reject (test_stage3.ExecutionTests.test_no_spread_reject) ... ok
+test_optimistic_is_only_scenario (test_stage3.ExecutionTests.test_optimistic_is_only_scenario) ... ok
+test_path_policy_changes_cache_identity (test_stage3.ExecutionTests.test_path_policy_changes_cache_identity) ... ok
+test_register_reuse_negative_scenario (test_stage3.ExecutionTests.test_register_reuse_negative_scenario) ... ok
+test_short_ask_stop (test_stage3.ExecutionTests.test_short_ask_stop) ... ok
+test_sl_tp_stop_first_unknown (test_stage3.ExecutionTests.test_sl_tp_stop_first_unknown) ... ok
+test_stop_gap_adverse_fill (test_stage3.ExecutionTests.test_stop_gap_adverse_fill) ... ok
+test_target_no_gap_bonus (test_stage3.ExecutionTests.test_target_no_gap_bonus) ... ok
+test_unknown_path_has_no_selected_pnl (test_stage3.ExecutionTests.test_unknown_path_has_no_selected_pnl) ... ok
+test_unverified_quote_fallback (test_stage3.ExecutionTests.test_unverified_quote_fallback) ... ok
+test_variable_real_quote_spread (test_stage3.ExecutionTests.test_variable_real_quote_spread) ... ok
+test_actual_2026_transition_weeks_disagree (test_stage3.TimeTests.test_actual_2026_transition_weeks_disagree) ... ok
+test_asserted_mapping_not_trusted (test_stage3.TimeTests.test_asserted_mapping_not_trusted) ... ok
+test_boolean_cost_claim_is_not_evidence (test_stage3.TimeTests.test_boolean_cost_claim_is_not_evidence) ... ok
+test_conflict_not_closed (test_stage3.TimeTests.test_conflict_not_closed) ... ok
+test_duplicate_evidence_ambiguous (test_stage3.TimeTests.test_duplicate_evidence_ambiguous) ... ok
+test_exact_half_open (test_stage3.TimeTests.test_exact_half_open) ... ok
+test_fall_fold_ambiguous (test_stage3.TimeTests.test_fall_fold_ambiguous) ... ok
+test_incomplete_year_blocks (test_stage3.TimeTests.test_incomplete_year_blocks) ... ok
+test_only_full_verified_gate (test_stage3.TimeTests.test_only_full_verified_gate) ... ok
+test_partial_schedule_unknown (test_stage3.TimeTests.test_partial_schedule_unknown) ... ok
+test_spring_missing_local_time (test_stage3.TimeTests.test_spring_missing_local_time) ... ok
+test_unknown_gate_blocks (test_stage3.TimeTests.test_unknown_gate_blocks) ... ok
+test_unknown_without_calendar (test_stage3.TimeTests.test_unknown_without_calendar) ... ok
+test_unreviewed_rejected (test_stage3.TimeTests.test_unreviewed_rejected) ... ok
+test_verified_closed (test_stage3.TimeTests.test_verified_closed) ... ok
+test_verified_open_missing (test_stage3.TimeTests.test_verified_open_missing) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.123s
+
+OK

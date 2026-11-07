@@ -1,0 +1,179 @@
+{
+  "total": 2890,
+  "paired": 528,
+  "incomparable": 2362,
+  "reason_counts": {
+    "CAPITAL_PATH_MISMATCH": 2352,
+    "UNKNOWN_COST_OR_PATH": 10
+  },
+  "mutually_exclusive_combinations": {
+    "CAPITAL_PATH_MISMATCH": 2352,
+    "UNKNOWN_COST_OR_PATH": 10
+  },
+  "groups": {
+    "breakout-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "breakout-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "breakout-20-1.5-rules/base:unknown": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "breakout-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "breakout-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "breakout-20-1.5-rules/stress:unknown": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "rejection-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 180
+    },
+    "rejection-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "rejection-20-1.5-rules/base:unknown": {
+      "INCOMPARABLE": 5
+    },
+    "rejection-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 180
+    },
+    "rejection-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "rejection-20-1.5-rules/stress:unknown": {
+      "INCOMPARABLE": 5
+    },
+    "retest-20-1.5-rules/base:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/base:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/base:unknown": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/stress:stop_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/stress:target_first": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    },
+    "retest-20-1.5-rules/stress:unknown": {
+      "PAIRED_SCENARIO_ONLY": 12,
+      "INCOMPARABLE": 168
+    }
+  },
+  "examples": {
+    "CAPITAL_PATH_MISMATCH": {
+      "candidate": "breakout-20-1.5-rules",
+      "scenario": "base:stop_first",
+      "row_index": 1,
+      "seed": 31415,
+      "entry_time": 153900,
+      "candidate_duration": 900,
+      "control_duration": 900,
+      "candidate_capital": "9999.800",
+      "control_capital": "9998.200",
+      "candidate_net": -0.2,
+      "control_net": "-1.800",
+      "candidate_exit_reason": "TARGET_CONSERVATIVE_NO_GAP_BONUS",
+      "control_exit_reason": "STOP",
+      "reasons": [
+        "CAPITAL_PATH_MISMATCH"
+      ],
+      "control_trace_sha": "0ebd8d1861d043880c9bcfddac0c1131dfcc744ab306844aaf029d68ff016187"
+    },
+    "UNKNOWN_COST_OR_PATH": {
+      "candidate": "rejection-20-1.5-rules",
+      "scenario": "base:unknown",
+      "row_index": 0,
+      "seed": 1729,
+      "entry_time": 152100,
+      "candidate_duration": 900,
+      "control_duration": 900,
+      "candidate_capital": "10000",
+      "control_capital": "10000",
+      "candidate_net": null,
+      "control_net": null,
+      "candidate_exit_reason": "STOP_FIRST_AMBIGUOUS",
+      "control_exit_reason": "STOP_FIRST_AMBIGUOUS",
+      "reasons": [
+        "UNKNOWN_COST_OR_PATH"
+      ],
+      "control_trace_sha": "115d2211f35af88c4e912be6ecd41355d6a72c9515c09cad370b58f324c0b0d1"
+    }
+  },
+  "note": "Reason counts overlap; combinations sum to incomparable; no threshold or seed changed",
+  "run": "1ea117f7ce7f5d49e90c6a82f70557f81ee128171133db30aa87720476b595b4",
+  "action": "EXECUTED",
+  "ranking": {
+    "rows": [
+      {
+        "id": "breakout-20-1.5-rules",
+        "worst_case_net": -14.4,
+        "max_drawdown": 14.4,
+        "score": null,
+        "reasons": [
+          "NONPOSITIVE_WORST_CASE",
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "rejection-20-1.5-rules",
+        "worst_case_net": null,
+        "max_drawdown": null,
+        "score": null,
+        "reasons": [
+          "UNKNOWN_COST_OR_PATH",
+          "INSUFFICIENT_TRADES",
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      },
+      {
+        "id": "retest-20-1.5-rules",
+        "worst_case_net": 18.0,
+        "max_drawdown": 0.0,
+        "score": null,
+        "reasons": [
+          "INCOMPARABLE_RANDOM_CONTROL"
+        ],
+        "status": "BLOCKED",
+        "profitability_verified": false
+      }
+    ],
+    "scenario_nominee": null,
+    "verified_best": null,
+    "selection_uses_holdout": false,
+    "context_comparable": true,
+    "comparable": false
+  },
+  "synthetic": true,
+  "profitability_verified": false,
+  "comparison_criteria_changed": false,
+  "transition_verification": {
+    "same_control_keys": true,
+    "old_paired_lost": 0,
+    "arithmetic_mismatches_fixed": 194
+  }
+}
