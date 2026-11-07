@@ -5,6 +5,7 @@ on:
       - review/artin-evidence-integrity-chatgpt-20261107
       - review/artin-teacher-trace-gate-20261107
       - review/artin-full-class-dialogue-qa-20261107
+      - review/artin-private-media-manifest-20261107
     paths:
       - research/artin-independent-engine/paper_m15_shadow.py
       - research/artin-independent-engine/test_paper_m15_shadow.py
@@ -16,12 +17,15 @@ on:
       - research/artin-independent-engine/test_classroom_dialogue_pipeline.py
       - research/artin-independent-engine/classroom_rule_review.py
       - research/artin-independent-engine/test_classroom_rule_review.py
+      - research/artin-independent-engine/classroom_media_manifest.py
+      - research/artin-independent-engine/test_classroom_media_manifest.py
       - .github/workflows/artin-evidence-guard-20261107.yml
   pull_request:
     branches:
       - review/artin-m15-shadow-20261107
       - review/artin-evidence-integrity-chatgpt-20261107
       - review/artin-teacher-trace-gate-20261107
+      - review/artin-full-class-dialogue-qa-20261107
     paths:
       - research/artin-independent-engine/paper_m15_shadow.py
       - research/artin-independent-engine/test_paper_m15_shadow.py
@@ -33,6 +37,8 @@ on:
       - research/artin-independent-engine/test_classroom_dialogue_pipeline.py
       - research/artin-independent-engine/classroom_rule_review.py
       - research/artin-independent-engine/test_classroom_rule_review.py
+      - research/artin-independent-engine/classroom_media_manifest.py
+      - research/artin-independent-engine/test_classroom_media_manifest.py
       - .github/workflows/artin-evidence-guard-20261107.yml
 
 permissions:
@@ -50,5 +56,5 @@ jobs:
       - name: Run only synthetic paper-shadow tests (no broker or media)
         working-directory: research/artin-independent-engine
         run: |
-          python3 -B -m unittest -v test_paper_m15_shadow test_teacher_evidence_gate test_entry_review test_classroom_dialogue_pipeline test_classroom_rule_review
+          python3 -B -m unittest -v test_paper_m15_shadow test_teacher_evidence_gate test_entry_review test_classroom_dialogue_pipeline test_classroom_rule_review test_classroom_media_manifest
           python3 -B demo_shadow_synthetic.py
