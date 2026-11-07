@@ -135,10 +135,26 @@ class RealAVReviewTests(unittest.TestCase):
         self.assertEqual(len(r['classroom_noise_or_mixed_review']),1)
         self.assertEqual(r['rule_candidates'],[])
 
+    def test_generic_forex_topic_not_considered_trading_rule(self):
+        m,sh,seg=fixture()
+        r=review_real_asr(m,[sh(1,[seg(115,124,'ما نیاز داریم بشناسیم بازار فارکس چیه')])])
+        self.assertEqual(len(r['rule_candidates']),0)
+        self.assertEqual(len(r['teaching_topics_not_rules']),1)
+
+    def test_declarative_yani_not_a_real_question(self):
+        m,sh,seg=fixture()
+        r=review_real_asr(m,[sh(1,[seg(1,5,'یعنی به معنای واقعی کار کنیم')])])
+        self.assertEqual(len(r['possible_questions_and_following_utterances']),0)
+
+    def test_word_ki_inside_yeki_not_question(self):
+        m,sh,seg=fixture()
+        r=review_real_asr(m,[sh(1,[seg(1,5,'یکی از کارها را ادامه میدهیم')])])
+        self.assertEqual(len(r['possible_questions_and_following_utterances']),0)
+
     def test_no_rules_even_with_complete_synthetic_transcripts(self):
         m,sh,seg=fixture()
-        r=review_real_asr(m,[sh(1,[seg(1,3,'خرید')]),
-            sh(2,[seg(305,307,'فروش')]),sh(3,[seg(705,707,'حد ضرر')])])
+        r=review_real_asr(m,[sh(1,[seg(1,3,'اگر کندل بسته شد خرید کنیم')]),
+            sh(2,[seg(305,307,'وقتی مقاومت شکست فروش انجام بده')]),sh(3,[seg(705,707,'حد ضرر')])])
         self.assertEqual(r['parts_with_asr'],3)
         self.assertGreaterEqual(len(r['rule_candidates']),2)
         self.assertEqual(r['rules_executable'],0)
