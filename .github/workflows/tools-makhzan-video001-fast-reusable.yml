@@ -561,6 +561,16 @@ jobs:
         with:
           name: video001-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_receipt/source
+      - name: Register proven lesson in course registry in exact original user-submitted sequence
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VIDEO001_QUEUE_ID: ${{ inputs.queue_id }}
+          VIDEO001_SOURCE_PAGE: ${{ inputs.source_page }}
+          VIDEO001_SOURCE_PROOF: /tmp/video001_receipt/proof/private_fast_verify_summary.json
+          VIDEO001_SOURCE_SUMMARY: /tmp/video001_receipt/source/safe_source_prep_summary.json
+        run: |
+          python3 -u tools-makhzan/video_queue/register_course.py
       - name: Persist one immutable result per authorized queue ID (never invent teacher meanings)
         env:
           GH_TOKEN: ${{ github.token }}
