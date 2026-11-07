@@ -1,0 +1,122 @@
+name: VIDEO001 independent named magazines source and queue safety
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/tools-makhzan-video001-magazines-smoke.yml'
+      - 'tools-makhzan/video_queue/magazines.py'
+      - 'tools-makhzan/video_queue/load_queue.py'
+      - 'tools-makhzan/video_queue/register_course.py'
+      - 'tools-makhzan/video_queue/write_receipt.py'
+      - '.github/workflows/tools-makhzan-video001-fast-reusable.yml'
+      - '.github/workflows/tools-makhzan-video001-serial-queue.yml'
+permissions:
+  contents: read
+jobs:
+  prove-isolation-and-order:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Compile every magazine and serialization module
+        run: |
+          python3 -m py_compile tools-makhzan/video_queue/magazines.py tools-makhzan/video_queue/load_queue.py tools-makhzan/video_queue/register_course.py tools-makhzan/video_queue/write_receipt.py
+      - name: Real registered Artin magazine must remain separate and start after submitted second film
+        run: |
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0,str(Path('tools-makhzan/video_queue').resolve()))
+          from magazines import enumerate_magazines
+          import json
+          base=Path('tools-makhzan/video_queue')
+          m=json.loads((base/'magazines/artin-course-001/MANIFEST.json').read_text())
+          assert m['title_fa']=='دورهٔ آموزش مدرس آرتین'
+          assert m['start_sequence']==3
+          assert m['already_submitted'][1]['source_page']=='https://my.uupload.ir/p/dxvmY5xW'
+          assert enumerate_magazines(base)==[]
+          print('VIDEO001_MAGAZINE_ORIGINAL_ARTIN_NOT_DUPLICATED=True')
+          PY
+      - name: Simulate two unrelated named magazines, independently ordered and verified
+        run: |
+          python3 - <<'PY'
+          import sys,json,tempfile
+          from pathlib import Path
+          sys.path.insert(0,str(Path('tools-makhzan/video_queue').resolve()))
+          from magazines import enumerate_magazines,read_magazine
+          from write_receipt import build_receipt
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);mags=root/'magazines'
+              def make(mid,title,mode):
+                  p=mags/mid;(p/'entries').mkdir(parents=True);(p/'receipts').mkdir()
+                  (p/'MANIFEST.json').write_text(json.dumps({
+                      'schema':'video001_magazine_v1','magazine_id':mid,
+                      'title_fa':title,'session_mode':mode,'start_sequence':1,
+                      'submitted_by_user':True,'target_course_registry':None}))
+                  return p
+              p=make('film-nature','فیلم طبیعت','serial')
+              q=make('film-work','فیلم کاری','single')
+              def add(path,mid,n,source,name):
+                  qid=f'video-q-{n:04d}-{mid}-{source}'
+                  (path/'entries'/f'{qid}.json').write_text(json.dumps({
+                      'schema':'video001_magazine_user_entry_v1','magazine_id':mid,
+                      'queue_id':qid,'sequence':n,
+                      'video_name_fa':name,
+                      'source_page':f'https://my.uupload.ir/p/{source}',
+                      'submitted_by_user':True,'status':'PENDING_USER_AUTHORIZED',
+                      'expected_sha256':None}))
+                  return qid
+              a=add(p,'film-nature',1,'nature01','جلسه طبیعت یک')
+              b=add(p,'film-nature',2,'nature02','جلسه طبیعت دو')
+              c=add(q,'film-work',1,'work123','فیلم مستقل کار')
+              rows=enumerate_magazines(root)
+              assert [x['magazine_id'] for x in rows]==['film-nature','film-nature','film-work']
+              assert [x['sequence'] for x in rows]==[1,2,1]
+              completed={'magazine_id':'film-nature','queue_id':a,
+                  'source_page':'https://my.uupload.ir/p/nature01',
+                  'status':'COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED',
+                  'source_evidence':{'original_video_sha256':'a'*64}}
+              (p/'receipts'/f'{a}.json').write_text(json.dumps(completed))
+              assert [x['queue_id'] for x in read_magazine(p)]==[b]
+              # A film in another magazine must never be falsely marked complete by this receipt.
+              assert [x['queue_id'] for x in read_magazine(q)]==[c]
+              try:
+                  (q/'receipts'/f'{c}.json').write_text(json.dumps(completed))
+                  read_magazine(q)
+              except ValueError:pass
+              else:raise AssertionError('Foreign magazine receipt accepted')
+              (q/'receipts'/f'{c}.json').unlink()
+              try:
+                  add(q,'film-work',2,'work456','second film prohibited in single magazine')
+                  read_magazine(q)
+              except ValueError:pass
+              else:raise AssertionError('Standalone magazine silently became serial')
+              assert build_receipt(a,'https://my.uupload.ir/p/nature01',9,
+                  {'source':'failure','asr':'skipped','ocr':'skipped','verify':'skipped'},
+                  magazine_id='film-nature')['magazine_id']=='film-nature'
+          print('VIDEO001_MAGAZINE_TWO_UNRELATED_PROJECTS_DO_NOT_MIX=True')
+          PY
+      - name: Verify workflow source inputs and output artifacts are magazine-specific and not course-forced
+        run: |
+          python3 -m pip -q install 'PyYAML>=6,<7'
+          python3 - <<'PY'
+          import yaml
+          from pathlib import Path
+          root=Path('.github/workflows')
+          scheduler=(root/'tools-makhzan-video001-serial-queue.yml').read_text()
+          worker=(root/'tools-makhzan-video001-fast-reusable.yml').read_text()
+          sched=yaml.safe_load(scheduler)['jobs']['process-one-full-movie-at-a-time']
+          engine=yaml.safe_load(worker)['jobs']
+          assert sched['strategy']['max-parallel']==1 and sched['strategy']['fail-fast'] is True
+          assert 'magazine_id' in sched['with']
+          assert engine['source-sharded-asr']['strategy']['max-parallel']==17
+          assert engine['source-sharded-ocr']['strategy']['max-parallel']==16
+          assert 'inputs.magazine_id' in worker
+          assert "inputs.magazine_id == 'artin-course-001'" in worker
+          assert 'VIDEO001_MAGAZINE_ID' in worker
+          assert 'makhzan-VIDEO-001-V12-FAST-${{ inputs.magazine_id }}-${{ inputs.queue_id }}' in worker
+          print('VIDEO001_MAGAZINE_WORKER_PRIVATE_SOURCE_ARTIFACT_ROUTING_PASS=True')
+          PY
