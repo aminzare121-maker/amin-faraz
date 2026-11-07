@@ -112,7 +112,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "Source course puzzle actually contains 2094 provenance anchors from J2 (2035 speech + 59 typed question groups; 35 rule-candidate tags), tested run 42402235654. Executor course_status now hydrates catalog and returns 2094, not empty. Do not invent strategy. Remaining critical tasks: independently measure Persian ASR/OCR source accuracy and chart meaning, handle new authorized class video end-to-end (ASR+OCR+role and Q&A review) before calling tool fully reliable, and preserve future lessons source-by-source.",
+      "next_action": "IMPORTANT root-cause correction: generic source_ingest was extraction-only and must NEVER be reported as complete ASR/vision processing. Now explicit complete_session action is wired to real entire original-video Persian ASR+source screenshots+OCR+QA+source fidelity in one fail-closed run; test contracts passed run 42404309586, real 100-second original teacher video smoke run 42404415289 must be checked for actual success/failure. Semantic understanding still needs independent source-labeled teacher speech/screens and QA validation, not merely software tests. Never claim fully reliable before validated.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -122,14 +122,23 @@
         "ref": "tools-makhzan-hub",
         "allowed_actions": [
           "status",
+          "course_status",
           "build_review",
-          "source_ingest"
+          "source_ingest",
+          "complete_session"
         ],
         "run_status_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397528098",
         "run_build_review_success": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42397597512",
         "last_review_artifact": "makhzan-VIDEO-001-actual-mobile-desktop-review-PRIVATE",
         "limits": "Execution success covers source preparation/reviewer, NOT verified teacher interpretation, speaker role, Q&A accuracy, or trading rule readiness.",
-        "user_activation": "When user explicitly asks to execute an operation in a ChatGPT conversation with connected GitHub, assistant updates current.json; github actions runs even if user's phone subsequently disconnects."
+        "user_activation": "When user explicitly asks to execute an operation in a ChatGPT conversation with connected GitHub, assistant updates current.json; github actions runs even if user's phone subsequently disconnects.",
+        "complete_session_entrypoint": "research/artin-film-engine-v3-1/artin_remote_complete_v10.py",
+        "complete_session_action": "complete_session",
+        "complete_session_backend": "research/artin-film-engine-v3-1/artin_unified_session_v10.py",
+        "complete_session_claim": "Executes entire source video in one run: real Persian ASR, original board/chat capture, printed-chat OCR, provisional question/audio linking, conservative rule audit. Actual semantic accuracy still requires independent gold labels and chart validation.",
+        "complete_session_test_status": "CONTRACT_TESTS_PASS; REAL_100S_VIDEO_SMOKE_IN_PROGRESS",
+        "complete_session_contract_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42404309586",
+        "complete_session_real_smoke_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42404415289"
       },
       "course": {
         "id": "ARTIN-COURSE-001",
