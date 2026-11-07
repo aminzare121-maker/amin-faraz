@@ -7,6 +7,8 @@ on:
       - 'tools-makhzan/course_stitcher.py'
       - 'tools-makhzan/test_course_stitcher.py'
       - 'tools-makhzan/courses/artin/COURSE_REGISTRY.json'
+      - 'tools-makhzan/courses/artin/J2_SOURCE_ANCHORS.json'
+      - 'tools-makhzan/course_seed_from_evidence.py'
       - '.github/workflows/makhzan-artin-course-puzzle.yml'
 permissions:
   contents: read
@@ -33,6 +35,7 @@ jobs:
           x=json.load(open(p,encoding='utf8'))
           assert x['registered_user_submitted_sessions']==1
           assert x['session_sequence']==['ARTIN-J2-001']
+          assert x['registered_original_source_evidence']==2094
           assert x['current_status']=='WAITING_FOR_NEXT_USER_VIDEO'
           assert not x['all_sessions_received_confirmed_by_user']
           assert not x['ready_to_issue_teacher_rules']
