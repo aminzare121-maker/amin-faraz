@@ -1,0 +1,47 @@
+name: Makhzan Artin incremental multi-session puzzle verification
+on:
+  push:
+    branches:
+      - tools-makhzan-hub
+    paths:
+      - 'tools-makhzan/course_stitcher.py'
+      - 'tools-makhzan/test_course_stitcher.py'
+      - 'tools-makhzan/courses/artin/COURSE_REGISTRY.json'
+      - '.github/workflows/makhzan-artin-course-puzzle.yml'
+permissions:
+  contents: read
+jobs:
+  verify-course-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Reject invented lessons, missing sources and unsafe correction/exception links
+        run: python3 -B -m unittest discover -v -s tools-makhzan -p 'test_course_stitcher.py'
+      - name: ACTUALLY RUN first-video Artin course puzzle from canonical tool registry
+        run: |
+          python3 -B tools-makhzan/course_stitcher.py \
+            --registry tools-makhzan/courses/artin/COURSE_REGISTRY.json \
+            --out /tmp/makhzan_artin_course_puzzle_status.json
+      - name: Verify real first video remains source-linked, future lessons NOT fabricated
+        run: |
+          python3 - <<'PY'
+          import json
+          p='/tmp/makhzan_artin_course_puzzle_status.json'
+          x=json.load(open(p,encoding='utf8'))
+          assert x['registered_user_submitted_sessions']==1
+          assert x['session_sequence']==['ARTIN-J2-001']
+          assert x['current_status']=='WAITING_FOR_NEXT_USER_VIDEO'
+          assert not x['all_sessions_received_confirmed_by_user']
+          assert not x['ready_to_issue_teacher_rules']
+          assert not x['paper_or_live_trading_allowed']
+          print('MAKHZAN_ARTIN_COURSE_PUZZLE_WORKING: first real lesson preserved; awaiting next user-supplied film')
+          PY
+      - name: Save reproducible non-sensitive course continuity checkpoint
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-artin-course-puzzle-checkpoint-v1
+          retention-days: 30
+          path: /tmp/makhzan_artin_course_puzzle_status.json
