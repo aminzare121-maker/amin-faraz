@@ -57,8 +57,8 @@
         "Reject duplicate/missing/mismatched parts and block unverified rules."
       ],
       "outstanding": [
+        "276 high-res original chat screenshots extracted successfully. Four-way CPU Persian OCR started in GitHub Actions run 42395611419; completion not yet verified.",
         "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
-        "Full 161 sampled chat screenshots OCR complete, but texts and question groups UNVERIFIED. 276 high-res change-selected frames from 1-second video diagnostic pending run 42392920286.",
         "Speaker-to-role verified teacher/student: not demonstrated.",
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
         "Teacher strategy rules with complete market triggers, all exceptions and counterexamples: none validated.",
@@ -66,8 +66,8 @@
         "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage."
       ],
       "last_verified": {
-        "technical_tests": 188,
-        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42393186070",
+        "technical_tests": 194,
+        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42395615691",
         "complete_asr_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
         "evidence_reaudit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385531441",
         "audio_part_count": 17,
@@ -102,9 +102,13 @@
         "provisional_typed_chat_question_observations": 201,
         "provisional_distinct_question_groups": 59,
         "original_qa_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42393181420",
-        "original_qa_join_status": "SUCCESS_SOURCE_LINKED_TIMELINE_ONLY_ZERO_VERIFIED_TEACHER_ANSWERS"
+        "original_qa_join_status": "SUCCESS_SOURCE_LINKED_TIMELINE_ONLY_ZERO_VERIFIED_TEACHER_ANSWERS",
+        "change_selected_high_res_images": 276,
+        "change_selected_high_res_verified_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392920286",
+        "change_selected_high_res_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42395611419",
+        "change_selected_high_res_ocr_status": "FOUR_REAL_PARALLEL_WORKERS_STARTED_NOT_YET_VERIFIED"
       },
-      "next_action": "Check high-res source frame extraction run 42392920286 and OCR remaining newly detected 1-second change-selected frames; assess population OCR error by human source-verified references. Use existing source-linked 59 provisional typed-question groups in run 42393181420, do not imply they are 59 true distinct messages or teacher answers. Verify teacher speaker, audio, chart, possible corrections; none can authorize trading."
+      "next_action": "First inspect four-worker OCR run 42395611419. Do not call it complete unless all four workers and strict source-hash merge succeeded; output artifact artin-v8-276-farsi-chat-ocr-complete-PRIVATE. Then compare 276+161 frames, deduplicate question candidates, measure source-checked OCR and teacher answer quality. All unverified rules stay review-only. Do not re-download teacher video."
     }
   ]
 }
