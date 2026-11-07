@@ -1,0 +1,41 @@
+name: Artin V6 original student-chat screenshot novelty priority benchmark
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v6-chat-visual-priority-benchmark.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-chat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Pillow
+        run: python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Download original 161 typed-chat board images from private extraction
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          repository: aminzare121-maker/amin-faraz
+          run-id: 42383557569
+          github-token: ${{ github.token }}
+          path: /tmp/artin_v6_original_visual
+      - name: Validate hashes and score which typed chat images changed
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 artin_visual_novelty_v6.py --visual-root /tmp/artin_v6_original_visual/visual --index /tmp/artin_v6_original_visual/visual/visual_timeline_v6.json --out /tmp/artin_v6_original_visual/chat_novelty.json --channel chat
+          python3 artin_visual_novelty_v6.py --visual-root /tmp/artin_v6_original_visual/visual --index /tmp/artin_v6_original_visual/visual/visual_timeline_v6.json --out /tmp/artin_v6_original_visual/board_novelty.json --channel board
+      - name: Upload only private per-frame priority indexes
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v6-chat-board-source-priority-index
+          retention-days: 1
+          path: |
+            /tmp/artin_v6_original_visual/chat_novelty.json
+            /tmp/artin_v6_original_visual/board_novelty.json
