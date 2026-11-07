@@ -35,7 +35,7 @@ jobs:
         run: python3 -B -m unittest discover -p 'test_*.py' -v
 
   user-linked-video-smoke:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/review/artin-v3-2-variable-batches-20261107'
+    if: github.head_ref == 'review/artin-v3-2-variable-batches-20261107' || (github.event_name == 'push' && github.ref == 'refs/heads/review/artin-v3-2-variable-batches-20261107')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
