@@ -70,14 +70,19 @@ def main():
     args=p.parse_args()
     # New named-magazine queue is the canonical path; keep the old flat queue
     # validator available for migration tests, but never merge arbitrary films.
-    items=enumerate_magazines(args.root)
+    all_items=enumerate_magazines(args.root)
+    # Each GitHub workflow invocation handles just ONE complete video.
+    # GitHub jobs have a six-hour wall-clock ceiling; a matrix of 23 videos
+    # could expire before the course finished. A success receipt dispatches
+    # a fresh run for the next pending user-submitted film.
+    items=all_items[:1]
     matrix={"include":items}
     if args.github_output:
         with args.github_output.open("a",encoding="utf8") as out:
             out.write("items="+json.dumps(matrix,separators=(',',':'))+"\n")
             out.write("count="+str(len(items))+"\n")
     print("VIDEO001_USER_SUBMITTED_SERIAL_QUEUE="+json.dumps({
-        "pending":len(items),"queue_ids":[x["queue_id"] for x in items],
+        "pending_total":len(all_items),"dispatched_now":len(items),"queue_ids":[x["queue_id"] for x in items],
         "source_content_claims":"NONE",
         "independent_source_sha_required":True,
         "sequential_in_full_movie_order":True,
