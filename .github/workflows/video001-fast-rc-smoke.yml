@@ -34,6 +34,11 @@ jobs:
             --video /tmp/video001_source_test.mp4 \
             --out /tmp/video001_fast_smoke \
             --audio-workers 1 --ocr-workers 1 --sample-seconds 30
+      - name: Compile entire fast candidate and independently exercise source-first no-speech merge
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -m py_compile video001_fast_source_once_v1.py video001_fast_remote_prep_v1.py video001_fast_verify_v1.py artin_parallel_asr_worker_v5.py
+          python3 -u test_video001_fast_source_once_v1.py /tmp/video001_fast_smoke
       - name: Prove no source-chunk/image omission and detect tampered chunk and source SHA
         working-directory: research/artin-film-engine-v3-1
         run: |
