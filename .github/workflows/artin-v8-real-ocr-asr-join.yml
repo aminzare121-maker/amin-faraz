@@ -31,7 +31,7 @@ jobs:
           name: artin-original-visual-board-and-chat-v6
           repository: aminzare121-maker/amin-faraz
           run-id: 42383557569
-          github-token: REPLACE_GITHUB_TOKEN
+          github-token: ${{ github.token }}
           path: /tmp/artin_real_ocr_join/source
       - name: Fetch all 17 source-verified ASR sections
         uses: actions/download-artifact@v4
@@ -39,7 +39,7 @@ jobs:
           name: artin-v5-full-17part-review-unverified
           repository: aminzare121-maker/amin-faraz
           run-id: 42382408395
-          github-token: REPLACE_GITHUB_TOKEN
+          github-token: ${{ github.token }}
           path: /tmp/artin_real_ocr_join/audio
       - name: Reconcile actual typed chat and nearby spoken text for human review only
         working-directory: research/artin-film-engine-v3-1
