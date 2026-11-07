@@ -1,0 +1,26 @@
+name: Artin V10 unified full-source contract regression
+on:
+  push:
+    branches:
+      - review/artin-fidelity-audit-v7-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/artin_unified_session_v10.py'
+      - 'research/artin-film-engine-v3-1/test_artin_unified_session_v10.py'
+      - 'research/artin-film-engine-v3-1/artin_remote_complete_v10.py'
+      - '.github/workflows/artin-v10-unified-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-unified-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install original image and numeric dependencies
+        run: python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13' 'numpy>=1.24,<3'
+      - name: Test COMPLETE source processing handoff and fail-closed guards
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest discover -v -p 'test_*.py'
