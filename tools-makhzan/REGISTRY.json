@@ -112,7 +112,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "DO NOT reprocess or reclassify J2 as a failed strategy lecture. WAIT for next user-provided teacher video, then source-hash-register it as the next sequence in tools-makhzan/courses/artin/COURSE_REGISTRY.json. Independently process speech/screens/chat with VIDEO-001, append exact time-stamped evidence, and link later explanations/corrections/exceptions by topic to preserved earlier sessions. Do not erase original statements or infer an entire strategy from a single class. Only after user confirms all classes received and source interpretation is validated may cross-class rules be considered for demo validation.",
+      "next_action": "Source course puzzle actually contains 2094 provenance anchors from J2 (2035 speech + 59 typed question groups; 35 rule-candidate tags), tested run 42402235654. Executor course_status now hydrates catalog and returns 2094, not empty. Do not invent strategy. Remaining critical tasks: independently measure Persian ASR/OCR source accuracy and chart meaning, handle new authorized class video end-to-end (ASR+OCR+role and Q&A review) before calling tool fully reliable, and preserve future lessons source-by-source.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -142,12 +142,19 @@
         "user_submitted_video_count": 1,
         "expected_total_sessions": "UNKNOWN_UNTIL_USER_SUPPLIES_OR_CONFIRMS",
         "wait_for_next_video": true,
-        "last_test_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42399391030",
-        "last_executable_hub_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42399653186",
-        "test_count": 13,
+        "last_test_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42402235654",
+        "last_executable_hub_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42402170142",
+        "test_count": 15,
         "source_integrity_rule": "Never create a new lecture without user-supplied original video; NEVER infer a correction from unrelated transcript proximity.",
         "verified_cross_session_links": 0,
-        "video_source_semantic_status": "PARTIAL_EVIDENCE_PENDING_OTHER_CLASSES"
+        "video_source_semantic_status": "PARTIAL_EVIDENCE_PENDING_OTHER_CLASSES",
+        "first_video_source_anchor_catalog": "tools-makhzan/courses/artin/J2_SOURCE_ANCHORS.json",
+        "first_video_actual_evidence_anchors": 2094,
+        "actual_speech_utterances_anchored": 2035,
+        "actual_typed_question_groups_anchored": 59,
+        "actual_rule_candidate_flags": 35,
+        "actual_evidence_status": "SOURCE_LINKED_AND_GITHUB_PERSISTED_METADATA_ONLY_NOT_SEMANTICALLY_CERTIFIED",
+        "last_source_seed_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42401986725"
       }
     }
   ]
