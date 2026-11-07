@@ -37,13 +37,13 @@ def read_pcm_array(filename):
     return np.frombuffer(frames,dtype='<i2').astype('float32')/32768.0
 
 
-def transcribe_audio(audio,model_name,output,minutes):
+def transcribe_audio(audio,model_name,output,minutes,beam_size=5):
     from faster_whisper import WhisperModel
     start=time.monotonic()
     model=WhisperModel(model_name,device='cpu',compute_type='int8',cpu_threads=4,num_workers=1)
     loaded=time.monotonic()-start
     start=time.monotonic()
-    result,info=model.transcribe(audio,language='fa',vad_filter=True,beam_size=5,
+    result,info=model.transcribe(audio,language='fa',vad_filter=True,beam_size=beam_size,
                                  condition_on_previous_text=False,word_timestamps=False)
     utterances=[]
     for i,s in enumerate(result):
@@ -62,7 +62,7 @@ def transcribe_audio(audio,model_name,output,minutes):
     (output/'unverified_transcript.json').write_text(
          json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf8')
     report={'status':'UNVERIFIED_REAL_AUDIO_TRANSCRIPTION','model':model_name,
-         'minutes':minutes,'segment_count':len(utterances),
+         'minutes':minutes,'beam_size':beam_size,'segment_count':len(utterances),
          'model_load_seconds':round(loaded,2),'inference_seconds':round(inference,2),
          'total_characters':sum(len(u['text']) for u in utterances),
          'low_logprob_segments':sum(u['avg_logprob']<-.9 for u in utterances),
@@ -76,9 +76,11 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--model',default='large-v3-turbo')
     p.add_argument('--minutes',type=int,default=5)
+    p.add_argument('--beam-size',type=int,default=5)
     p.add_argument('--out',type=Path,required=True)
     a=p.parse_args()
     if not 1<=a.minutes<=10:raise ValueError('Trial limited to 1-10 minutes')
+    if not 1<=a.beam_size<=8:raise ValueError('Beam size out of range')
     a.out.mkdir(parents=True,exist_ok=True)
     page=os.environ.get('TEACHER_VIDEO_PAGE')
     if not page or not page.startswith('https://my.uupload.ir/p/'):
@@ -88,7 +90,7 @@ def main():
     print('ARTIN_V5_AUDIO_EXTRACTED_SECONDS='+str(seconds),flush=True)
     audio=read_pcm_array(a.out/'sample_private.wav')
     print('ARTIN_V5_ASR_STARTED='+a.model,flush=True)
-    result=transcribe_audio(audio,a.model,a.out,a.minutes)
+    result=transcribe_audio(audio,a.model,a.out,a.minutes,a.beam_size)
     print('ARTIN_V5_ASR_TRIAL_REPORT='+json.dumps(result,ensure_ascii=False),flush=True)
 
 if __name__=='__main__':main()
