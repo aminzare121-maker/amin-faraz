@@ -1,0 +1,69 @@
+name: Artin V5 full real teacher video four-way Persian ASR and QA evidence
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v5-full-parallel-asr.yml'
+permissions:
+  contents: read
+jobs:
+  parallel-asr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        index: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install audio/video toolkit and Persian speech decoder
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          command -v ffprobe
+          python3 -m pip install --disable-pip-version-check 'faster-whisper>=1.1,<2' 'numpy>=1.24,<3'
+      - name: Process the assigned original-video parts with trustworthy source IDs
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_parallel_asr_worker_v5.py --out /tmp/artin_v5_partition_${{ matrix.index }} --index ${{ matrix.index }} --partitions 4 --model large-v3-turbo --expected-sha256 b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff
+      - name: Store only the assigned unverified transcripts and provenance for one day
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v5-shard-${{ matrix.index }}
+          retention-days: 1
+          if-no-files-found: ignore
+          path: /tmp/artin_v5_partition_${{ matrix.index }}/asr_evidence/**
+  verify-and-merge:
+    needs: parallel-asr
+    if: success()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download all four transcript-only parts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: artin-v5-shard-*
+          merge-multiple: true
+          path: /tmp/artin_v5_complete
+      - name: Reject any missing, duplicated, out-of-order or tampered global segment
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_parallel_asr_merge_v5.py --input /tmp/artin_v5_complete --out /tmp/artin_v5_full_review
+      - name: Retain full UNVERIFIED question and candidate-rule review privately for one day
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v5-full-17part-review-unverified
+          retention-days: 1
+          path: |
+            /tmp/artin_v5_full_review/merge_summary.json
+            /tmp/artin_v5_full_review/complete_unverified_qa_evidence.json

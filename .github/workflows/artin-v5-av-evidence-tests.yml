@@ -1,0 +1,29 @@
+name: Artin V5 speech image and teacher-evidence integrity tests
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/**'
+      - '.github/workflows/artin-v5-av-evidence-tests.yml'
+  pull_request:
+    paths:
+      - 'research/artin-film-engine-v3-1/**'
+permissions:
+  contents: read
+jobs:
+  source-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install video test requirements
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          command -v ffprobe || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Run regression tests including new audio, frame and Q&A integrity checks
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B -m unittest discover -p 'test_*.py' -v

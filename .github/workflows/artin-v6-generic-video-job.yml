@@ -1,0 +1,35 @@
+name: Artin V6 reusable user video ingestion by private request file
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - 'research/artin-film-engine-v3-1/jobs/current_video_request.json'
+      - '.github/workflows/artin-v6-generic-video-job.yml'
+permissions:
+  contents: read
+jobs:
+  source-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg and local image library
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          command -v ffprobe
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Receive requested link and build strictly source-hashed evidence
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_generic_video_job_v6.py --request jobs/current_video_request.json --out /tmp/artin_v6_generic_private
+      - name: Upload only safe extraction summary (no class media)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v6-last-source-summary
+          retention-days: 1
+          if-no-files-found: ignore
+          path: /tmp/artin_v6_generic_private/safe_result.json

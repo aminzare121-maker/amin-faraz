@@ -1,0 +1,50 @@
+name: Artin V6 local vision model Persian student-chat first real test
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v6-local-vision-real-chat.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  vision-real:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download private existing teacher screenshot evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          run-id: 42383557569
+          repository: aminzare121-maker/amin-faraz
+          github-token: ${{ github.token }}
+          path: /tmp/artin_original_visual
+      - name: Install local multimodal inference server on ephemeral runner
+        shell: bash
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve > /tmp/artin_v6_ollama.log 2>&1 &
+          for n in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:11434/api/version > /dev/null; then break; fi
+            sleep 2
+          done
+          curl -sf http://127.0.0.1:11434/api/version
+      - name: Download open vision model weights to ephemeral host
+        run: ollama pull qwen2.5vl:3b
+      - name: Read first real student question with original image provenance
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_local_visual_model_v6.py --visual-root /tmp/artin_original_visual/visual --visual-index /tmp/artin_original_visual/visual/visual_timeline_v6.json --frame-id b001_s12_g000012_t0003315000 --model qwen2.5vl:3b --channels chat --max-frames 1 --out /tmp/artin_v6_local_vision_candidate.json
+      - name: Store preliminary model output for manual visual comparison only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v6-one-real-typed-chat-vision-trial
+          retention-days: 1
+          if-no-files-found: ignore
+          path: /tmp/artin_v6_local_vision_candidate.json
