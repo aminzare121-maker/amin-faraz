@@ -1,7 +1,9 @@
 {
   "schema": "makhzan_tool_execution_request_v1",
   "tool_id": "VIDEO-001",
-  "action": "course_status",
-  "job_id": "artin-course-puzzle-20261107-01",
-  "source_id": "TEACHER_J2_2026_11_07"
+  "action": "complete_session",
+  "job_id": "artin-full-source-20261107-verified",
+  "source_url": "https://my.uupload.ir/p/aGgKYdpL",
+  "expected_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+  "ingest_mode": "SOURCE_AUDIO_AND_CHAT"
 }
