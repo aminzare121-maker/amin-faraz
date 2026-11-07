@@ -177,9 +177,20 @@ def main():
     p.add_argument('--sample-seconds',type=int,default=20)
     p.add_argument('--workers',type=int,default=4)
     p.add_argument('--upscale',type=int,default=2)
+    p.add_argument('--chat-bounds',default='0.71,0.11,0.90,0.95')
+    p.add_argument('--board-bounds',default='0,0.14,0.71,0.91')
     a=p.parse_args()
     m=json.loads(a.manifest.read_text(encoding='utf8'))
-    result=extract_visual_timeline(a.video,a.out,m,a.sample_seconds,a.workers,upscale=a.upscale)
+    def bounds(text):
+        try: values=tuple(float(x.strip()) for x in text.split(','))
+        except (TypeError,ValueError) as exc:
+            raise ValueError('Provide four normalized bounds x1,y1,x2,y2') from exc
+        if len(values)!=4:
+            raise ValueError('Provide four normalized bounds x1,y1,x2,y2')
+        return values
+    result=extract_visual_timeline(a.video,a.out,m,a.sample_seconds,a.workers,
+            chat_bounds=bounds(a.chat_bounds),
+            board_bounds=bounds(a.board_bounds),upscale=a.upscale)
     print(json.dumps({'source_duration_seconds':result['source_duration_seconds'],
          'sampled_frames':result['frame_count'],
          'chat_crops':result['frame_count'],'board_crops':result['frame_count'],
