@@ -57,6 +57,27 @@ class VisualModelTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'no usable'):
             scan_local_visual(self.root,self.index,'fake',call_model=no_text)
 
+    def test_nonstandard_model_legibility_is_review_not_crash(self):
+        def odd(*args,**kwargs):
+            return {'visible_text_candidate':'عدد بالاتر از یک؟','legibility':'مبهم'}
+        got=scan_local_visual(self.root,self.index,'fake',max_frames=1,
+                    channels=('chat',),call_model=odd)
+        self.assertEqual(got['provisional_text_observations'],1)
+        self.assertEqual(got['candidates'][0]['legibility_candidate'],'UNKNOWN')
+        self.assertIn('NONSTANDARD_MODEL_LEGIBILITY_CONVERTED_TO_UNKNOWN',
+            [e['status'] for e in got['missing_or_unreadable']])
+
+    def test_chat_only_half_the_expensive_model_calls(self):
+        requests=[]
+        def fake(*args,**kwargs):
+            requests.append(kwargs['frames'][0])
+            return {'visible_text_candidate':'آیا این درست است؟','legibility':'MEDIUM'}
+        r=scan_local_visual(self.root,self.index,'fake',max_frames=2,
+                channels=('chat',),call_model=fake)
+        self.assertEqual(len(requests),2)
+        self.assertEqual(r['channels'],['chat'])
+        self.assertEqual(r['views_attempted'],2)
+
     def test_unknown_priority_rejected(self):
         with self.assertRaisesRegex(ValueError,'Unknown'):
             scan_local_visual(self.root,self.index,'fake',priority_frame_ids={'unseen'},
