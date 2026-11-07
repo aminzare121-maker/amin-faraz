@@ -103,6 +103,20 @@ jobs:
           path: /tmp/video001_fast/prepared/safe_source_prep_summary.json
           retention-days: 15
           if-no-files-found: error
+      - name: Preserve all time-indexed one-second source scans privately
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-temporal
+          path: /tmp/video001_fast/prepared/original_second_by_second_chat_index.json
+          retention-days: 15
+          if-no-files-found: error
+      - name: Preserve every original high-resolution selected classroom chat image
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-fast-original-fullres-chat
+          path: /tmp/video001_fast/prepared/full_chat/
+          retention-days: 15
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: ${{ contains(fromJSON(steps.prep_meta.outputs.asr_matrix), 0) }}
         with:
@@ -485,6 +499,38 @@ jobs:
             --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
             --out /tmp/video001_full_integrity \
             --audio-workers ${{ needs.source-once.outputs.asr_count }} --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+      - name: Rehydrate the COMPLETE private V12 review package from unchanged source-verified evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-temporal
+          path: /tmp/video001_source_temporal
+      - name: Download original screenshot pixels for permanent source links (not reconstructed text)
+        uses: actions/download-artifact@v4
+        with:
+          name: video001-fast-original-fullres-chat
+          path: /tmp/video001_source_chat_original
+      - name: Rebuild all existing V12 private report fields without deleting unverified rule fragments
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_fast_export_v12.py \
+            --proof-path /tmp/video001_full_integrity/private_fast_verify_summary.json \
+            --source-path /tmp/video001_source_summary/safe_source_prep_summary.json \
+            --asr-path /tmp/video001_full_integrity/asr_verified/complete_unverified_qa_evidence.json \
+            --ocr-root /tmp/video001_all_ocr \
+            --chat-index /tmp/video001_source_chat_index/chat_selected_index.json \
+            --board-root /tmp/video001_source_board \
+            --temporal-index /tmp/video001_source_temporal/original_second_by_second_chat_index.json \
+            --chat-images /tmp/video001_source_chat_original \
+            --out /tmp/makhzan_fast_complete_source_private \
+            --audio-workers ${{ needs.source-once.outputs.asr_count }} \
+            --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+      - name: Archive FULL private V12 review data and original images, not only a metrics summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE
+          retention-days: 30
+          if-no-files-found: error
+          path: /tmp/makhzan_fast_complete_source_private/**
       - uses: actions/upload-artifact@v4
         with:
           name: video001-fast-final-original-source-proof
