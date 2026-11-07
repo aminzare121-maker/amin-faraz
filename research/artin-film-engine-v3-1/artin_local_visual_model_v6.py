@@ -106,6 +106,7 @@ def main():
     p.add_argument('--model',default='qwen2.5vl:3b')
     p.add_argument('--max-frames',type=int,default=5)
     p.add_argument('--novelty-index',type=Path)
+    p.add_argument('--frame-id',type=str)
     p.add_argument('--endpoint',default='http://127.0.0.1:11434')
     a=p.parse_args()
     index=json.loads(a.visual_index.read_text(encoding='utf8'))
@@ -115,6 +116,10 @@ def main():
         if novelty.get('schema')!='artin_visual_novelty_v6' or novelty.get('source_video_sha256')!=index.get('source_video_sha256'):
             raise ValueError('Novelty priority belongs to another video')
         priority={r['frame_id'] for r in novelty['rows'] if r.get('selected_for_priority_review')}
+    if a.frame_id:
+        known={r['frame_id'] for r in index['rows']}
+        if a.frame_id not in known:raise ValueError('Unknown source frame ID')
+        priority={a.frame_id}
     report=scan_local_visual(a.visual_root,index,a.model,max_frames=a.max_frames,
                              endpoint=a.endpoint,priority_frame_ids=priority)
     a.out.parent.mkdir(parents=True,exist_ok=True)
