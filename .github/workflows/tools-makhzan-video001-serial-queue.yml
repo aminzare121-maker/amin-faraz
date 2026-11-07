@@ -1,5 +1,6 @@
 name: VIDEO-001 independent magazine serial video queue
 on:
+  workflow_dispatch:
   push:
     branches: [tools-makhzan-hub]
     paths:
@@ -7,7 +8,7 @@ on:
       - 'tools-makhzan/video_queue/magazines/*/entries/*.json'
 permissions:
   contents: write
-  actions: read
+  actions: write
 concurrency:
   group: video001-serial-queue-latest-pending-scan
   cancel-in-progress: false
