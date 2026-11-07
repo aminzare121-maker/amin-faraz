@@ -21,7 +21,7 @@ on:
         default: ''
 permissions:
   contents: write
-  actions: read
+  actions: write
 jobs:
   source-once:
     runs-on: ubuntu-latest
@@ -593,3 +593,10 @@ jobs:
           VIDEO001_VERIFY_RESULT: ${{ needs.independent-all-evidence-verification.result }}
         run: |
           python3 -u tools-makhzan/video_queue/write_receipt.py
+      - name: Schedule next queued user movie only after this one has a verified receipt
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run tools-makhzan-video001-serial-queue.yml --ref tools-makhzan-hub
+          echo 'VIDEO001_NEXT_QUEUE_RUN_DISPATCHED_AFTER_FULL_SOURCE_PROOF=True'
