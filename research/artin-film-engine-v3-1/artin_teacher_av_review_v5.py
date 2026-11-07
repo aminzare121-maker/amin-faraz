@@ -21,6 +21,10 @@ from artin_semantic_context import noise_risk
 _CORRECTION_WORDS=('اصلاح','اشتباه گفتم','اشتباه کرد','درستش','برعکس',
                    'در واقع','منظورم','باید بگم','گفتم که نه')
 _HEX_SHA=re.compile(r'^[a-f0-9]{64}$')
+_TRADE_ACTION=('خرید','فروش','ورود','خروج','حد ضرر','حد سود','استاپ',
+               'تارگت','سیگنال','پوزیشن','معامله نکن','بای','سل')
+_RULE_CONTEXT=('اگر','وقتی','باید','نباید','به شرط','زمانی که',
+               'بعد از','قبل از','در صورتی','تنها اگر','بر اساس','نمی گیریم')
 
 
 def _exact_hash(s):
@@ -138,6 +142,7 @@ def review_real_asr(manifest: dict, shards: list[dict],
                            'can_change_artin_engine':False})
     qas=linked_qa_candidates(manifest['video_sha256'],raw)
     review_rules=[]
+    teaching_topics=[]
     corrections=[]
     off_topic=[]
     for u in raw:
@@ -152,8 +157,18 @@ def review_real_asr(manifest: dict, shards: list[dict],
                                 'possible_later_correction':True,
                                 'superseded_rule_id':None,
                                 'requires_original_audio_review':True})
+        mentions_trading=any(w in u['text'] for w in TRADING_MARKERS)
+        mentions_action=any(w in u['text'] for w in _TRADE_ACTION)
+        mentions_condition=any(w in u['text'] for w in _RULE_CONTEXT)
+        possible_rule=(mentions_action and mentions_condition) or (
+            any(w in u['text'] for w in ('حد ضرر','حد سود')) and mentions_action)
+        if (mentions_trading and not possible_rule and not u['asr_quality_flags']
+                and u['noise_risk']=='NOT_IDENTIFIED'):
+            teaching_topics.append({'source_utterance_id':u['id'],
+                'time':u['start'],'category':'TRADING_TOPIC_NOT_EXECUTABLE_RULE',
+                'can_change_artin_engine':False})
         if (not u['asr_quality_flags'] and u['noise_risk']=='NOT_IDENTIFIED'
-                and any(w in u['text'] for w in TRADING_MARKERS)):
+                and possible_rule):
             nearby=sorted(frames.values(),key=lambda f:abs(f['time_approx']-u['start']))
             review_rules.append({'candidate_id':'candidate_'+u['id'],
                  'source_utterance_id':u['id'],
@@ -182,6 +197,7 @@ def review_real_asr(manifest: dict, shards: list[dict],
             'sampled_frames_count':len(frames),
             'unverified_vision_candidates':candidates,
             'rule_candidates':review_rules,
+            'teaching_topics_not_rules':teaching_topics,
             'teacher_answers_human_verified':0,
             'rules_executable':0,'real_orders_allowed':False,
             'paper_orders_allowed':False,
