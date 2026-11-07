@@ -101,17 +101,23 @@ def reconcile_chat_asr(chat_candidates:dict, review:dict, max_after_seconds=300)
         t=q['image_observed_at_seconds']
         # Timestamp is frame observation time, NOT chat-message send timestamp.
         # A message may already have been on-screen for minutes.
-        candidates=[]
+        nearby=[]
         for speech in audio:
             at=speech.get('start')
             if type(at) not in (int,float) or not math.isfinite(at):
                 raise ValueError('Invalid audio time')
             if t-90 <= at <= t+max_after_seconds:
-                candidates.append({'speech_line_id':speech['id'],
-                   'spoken_at_seconds':at,
-                   'speaker_verified':False,
-                   'candidate_answer_verified':False})
-                if len(candidates)>=10:break
+                nearby.append(speech)
+        # Observation time is NOT message sent time. Taking the FIRST ten
+        # statements from t-90 biases all candidates to old discussion.
+        # Prefer temporally closest speech (regardless of whether just before
+        # or after screenshot); retain chronological display of these ten.
+        nearby.sort(key=lambda u:(abs(u['start']-t),u['start']<t,u['start']))
+        chosen=sorted(nearby[:10],key=lambda u:u['start'])
+        candidates=[{'speech_line_id':u['id'],
+                  'spoken_at_seconds':u['start'],
+                  'speaker_verified':False,
+                  'candidate_answer_verified':False} for u in chosen]
         questions.append({'visual_question_id':q['id'],
             'question_image_sha256':q['frame_sha256'],
             'question_frame_observed_at_seconds':t,
