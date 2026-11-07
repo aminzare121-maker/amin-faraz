@@ -129,6 +129,13 @@ def review_real_asr(manifest: dict, shards: list[dict],
     raw.sort(key=lambda u:(u['start'],u['part_global'],u['id']))
     if len({s['id'] for s in raw})!=len(raw):
         raise ValueError('ASR source-line identity collision')
+    def polarity(text):
+        value=_normalize(text).lower()
+        buy=any(x in value for x in ('خرید','بای',' buy '))
+        sell=any(x in value for x in ('فروش','سل',' sell '))
+        if buy and not sell:return 'BUY_MENTION'
+        if sell and not buy:return 'SELL_MENTION'
+        return 'UNKNOWN_OR_MIXED'
     boundary_review=[]
     for alt in overlap_alternatives:
         midpoint=(alt['start']+alt['end'])/2
@@ -144,7 +151,15 @@ def review_real_asr(manifest: dict, shards: list[dict],
                else 'NO_MATCHING_OWNER_SEGMENT' if best is None
                else 'CONFLICTING_ASR_TEXT_REQUIRES_AUDIO_REVIEW' if similarity<.7
                else 'AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION')
+        a_polarity=polarity(alt['text_candidate'])
+        b_polarity=polarity(best['text']) if best is not None else None
+        high_priority=(issue!='AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION'
+                and a_polarity in ('BUY_MENTION','SELL_MENTION')
+                and (b_polarity is None or b_polarity!=a_polarity))
         boundary_review.append({**alt,'owner_segment_id':best['id'] if best else None,
+                'trading_polarity_candidate':a_polarity,
+                'owner_trading_polarity_candidate':b_polarity,
+                'priority':'HIGH_TRADING_DECISION_REVIEW' if high_priority else 'NORMAL_ASR_REVIEW',
                 'text_similarity':round(similarity,3) if similarity is not None else None,
                 'review_status':issue,'can_change_artin_engine':False})
     # Only exact supported frames can appear in the audiovisual references.
@@ -219,6 +234,7 @@ def review_real_asr(manifest: dict, shards: list[dict],
             'speech_lines':raw,
             'cross_boundary_asr_review':boundary_review,
             'cross_boundary_conflicts':sum(x['review_status']!='AGREEMENT_ONLY_NOT_TEACHER_VERIFICATION' for x in boundary_review),
+            'cross_boundary_high_priority_trade_mentions':sum(x['priority']=='HIGH_TRADING_DECISION_REVIEW' for x in boundary_review),
             'suspect_asr_lines':[{'id':u['id'],'time':u['start'],
                   'flags':u['asr_quality_flags']} for u in raw if u['asr_quality_flags']],
             'possible_questions_and_following_utterances':qas['question_candidates'],
