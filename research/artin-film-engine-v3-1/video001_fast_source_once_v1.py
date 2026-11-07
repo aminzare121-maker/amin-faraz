@@ -98,6 +98,12 @@ def prepare(video,out,*,audio_workers=8,ocr_workers=16,
     validate_visual_index(out/'full_board',manifest,board,verify_files=True)
     if chat['source_video_sha256']!=sha or board['source_video_sha256']!=sha:
         raise ValueError('Original board/chat SHA does not equal speech video')
+    # Scheduler adapts only worker count for short lessons; NEVER changes
+    # original five-minute source parts or drops even one selected chat image.
+    audio_workers=min(audio_workers,len(manifest['parts']))
+    ocr_workers=min(ocr_workers,len(chat['rows']))
+    if audio_workers<1 or ocr_workers<1:
+        raise ValueError('Original lesson contains no valid worker assignments')
     # One sanitized full manifest; only original audio payload files are
     # partitioned by global source-chunk index. Each separate worker gets ONE
     # small shard, never downloads the full movie or unrelated source audio.
