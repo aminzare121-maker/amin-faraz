@@ -112,6 +112,17 @@ class BatchSlotsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'batch/slot identity'):
             validate_manifest_order(m)
 
+    def test_manifest_tampered_batch_index_is_rejected(self):
+        p=chunk_plan(97*60)
+        groups=batch_summary(p)
+        m={'source_duration':97*60,'strict_chunk_order':True,'chunk_seconds':300,
+           'overlap_seconds':12,'batch_schema':'EIGHTEEN_SLOTS_WITH_GLOBAL_ID_V1',
+           'batch_count':2,'batches':groups,'chunks':p}
+        self.assertEqual(len(validate_manifest_order(m)),20)
+        m['batches'][1]['global_indices']=[1,2]
+        with self.assertRaisesRegex(ValueError,'batch index'):
+            validate_manifest_order(m)
+
     def test_chapters_include_batch_and_global_numbers(self):
         p=chunk_plan(97*60)
         with tempfile.TemporaryDirectory() as d:
