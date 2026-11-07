@@ -54,8 +54,10 @@ class VisualModelTests(unittest.TestCase):
     def test_no_text_not_pretended_success(self):
         def no_text(*args,**kwargs):
             return {'visible_text_candidate':'','legibility':'LOW'}
-        with self.assertRaisesRegex(RuntimeError,'no usable'):
-            scan_local_visual(self.root,self.index,'fake',call_model=no_text)
+        r=scan_local_visual(self.root,self.index,'fake',call_model=no_text)
+        self.assertEqual(r['status'],'NO_USABLE_TEXT_REQUIRES_REVIEW')
+        self.assertEqual(r['provisional_text_observations'],0)
+        self.assertFalse(r['can_change_artin_engine'])
 
     def test_nonstandard_model_legibility_is_review_not_crash(self):
         def odd(*args,**kwargs):
@@ -77,6 +79,15 @@ class VisualModelTests(unittest.TestCase):
         self.assertEqual(len(requests),2)
         self.assertEqual(r['channels'],['chat'])
         self.assertEqual(r['views_attempted'],2)
+
+    def test_model_timeout_report_is_preserved(self):
+        def timeout(*args,**kwargs):
+            raise TimeoutError('model hung on Persian handwriting')
+        r=scan_local_visual(self.root,self.index,'fake',max_frames=1,
+                            channels=('chat',),call_model=timeout)
+        self.assertEqual(r['status'],'NO_USABLE_TEXT_REQUIRES_REVIEW')
+        self.assertEqual(r['missing_or_unreadable'][0]['error_type'],'TimeoutError')
+        self.assertTrue(any(x.get('status')=='MODEL_FAILED' for x in r['inference_per_view']))
 
     def test_unknown_priority_rejected(self):
         with self.assertRaisesRegex(ValueError,'Unknown'):
