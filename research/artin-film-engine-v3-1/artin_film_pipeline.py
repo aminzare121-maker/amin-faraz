@@ -169,7 +169,14 @@ def validate_manifest_order(m: dict):
     size=m.get("chunk_seconds",300)
     overlap=m.get("overlap_seconds",OVERLAP_S)
     expected=chunk_plan(duration,int(size),int(overlap))
-    return canonical_chunk_order(chunks,expected)
+    validated=canonical_chunk_order(chunks,expected)
+    if "batch_schema" in m:
+        if m["batch_schema"]!="EIGHTEEN_SLOTS_WITH_GLOBAL_ID_V1":
+            raise ValueError("Unsupported batch schema")
+        groups=batch_summary(validated)
+        if m.get("batch_count")!=len(groups) or m.get("batches")!=groups:
+            raise ValueError("Manifest batch index does not match global timeline")
+    return validated
 
 
 def check_saved_clips(root: Path, m: dict):
