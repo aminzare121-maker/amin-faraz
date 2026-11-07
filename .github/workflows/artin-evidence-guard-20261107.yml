@@ -6,6 +6,7 @@ on:
     paths:
       - research/artin-independent-engine/paper_m15_shadow.py
       - research/artin-independent-engine/test_paper_m15_shadow.py
+      - research/artin-independent-engine/demo_shadow_synthetic.py
       - .github/workflows/artin-evidence-guard-20261107.yml
   pull_request:
     branches:
@@ -13,6 +14,7 @@ on:
     paths:
       - research/artin-independent-engine/paper_m15_shadow.py
       - research/artin-independent-engine/test_paper_m15_shadow.py
+      - research/artin-independent-engine/demo_shadow_synthetic.py
       - .github/workflows/artin-evidence-guard-20261107.yml
 
 permissions:
@@ -29,4 +31,6 @@ jobs:
           persist-credentials: false
       - name: Run only synthetic paper-shadow tests (no broker or media)
         working-directory: research/artin-independent-engine
-        run: python3 -B -m unittest -v test_paper_m15_shadow
+        run: |
+          python3 -B -m unittest -v test_paper_m15_shadow
+          python3 -B demo_shadow_synthetic.py
