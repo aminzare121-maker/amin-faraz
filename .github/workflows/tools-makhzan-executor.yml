@@ -120,6 +120,37 @@ jobs:
                           count+=1
               print('MAKHZAN_ASR_CHECKPOINT_RESTORED_PARTS='+str(count))
           PY
+      - name: Restore only v12 one-second-chat OCR checkpoint for same source
+        if: ${{ steps.source-resume-key.outputs.key != 'none' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESUME_KEY: ${{ steps.source-resume-key.outputs.key }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,subprocess,json,zipfile,io
+          from pathlib import Path
+          repo=os.environ['GITHUB_REPOSITORY']
+          listing=json.loads(subprocess.check_output(
+              ['gh','api',f'/repos/{repo}/actions/artifacts?per_page=100'],text=True))
+          prefix='makhzan-v12-dense-OCR-'+os.environ['RESUME_KEY']+'-'
+          versions=[x for x in listing.get('artifacts',[]) if
+              str(x.get('name','')).startswith(prefix) and not x.get('expired',True)]
+          if versions:
+              latest=max(versions,key=lambda x:x.get('created_at',''))
+              data=subprocess.check_output(
+                  ['gh','api',f"/repos/{repo}/actions/artifacts/{latest['id']}/zip"])
+              with zipfile.ZipFile(io.BytesIO(data)) as z:
+                  matches=[name for name in z.namelist()
+                           if name=='full_chat_ocr_candidates_PRIVATE.json']
+                  if len(matches)!=1:raise RuntimeError('OCR backup incomplete')
+                  folder=Path('/tmp/makhzan_complete_session_private/complete_source_private/private_ocr')
+                  folder.mkdir(parents=True,exist_ok=True)
+                  (folder/matches[0]).write_bytes(z.read(matches[0]))
+              print('SOURCE_CHECKED_DENSE_OCR_RESTORED=True')
+          else:
+              print('SOURCE_CHECKED_DENSE_OCR_RESTORED=False')
+          PY
       - name: Process ALL original audio parts and classroom images; never silently stop after download
         run: |
           python3 -u artin-code/research/artin-film-engine-v3-1/artin_remote_complete_v10.py \
@@ -133,6 +164,14 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
           path: /tmp/makhzan_complete_session_private/complete_source_private/private_asr/chunk_*_UNVERIFIED.json
+      - name: Keep source-hashed V12 dense OCR progress after a failed processing stage
+        if: ${{ always() && steps.source-resume-key.outputs.key != 'none' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: makhzan-v12-dense-OCR-${{ steps.source-resume-key.outputs.key }}-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: ignore
+          path: /tmp/makhzan_complete_session_private/complete_source_private/private_ocr/full_chat_ocr_candidates_PRIVATE.json
       - name: Enforce full pipeline actually ran (ASR, real images, Persian OCR, QA and rule audit)
         run: |
           python3 - <<'PY'
