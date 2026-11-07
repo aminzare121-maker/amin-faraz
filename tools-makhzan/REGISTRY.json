@@ -324,6 +324,34 @@
         "live_hub_next_video_not_yet_run": true,
         "output_artifact_name": "makhzan-VIDEO-001-V12-FAST-complete-source-PRIVATE",
         "technical_release_note": "The original registered V12 branch has installed source-once 17+16 engine and exporter. Hub has a distinct complete_session_fast action; default/preferred for future complete-session work, old complete_session remains usable. Confirm next real session end-to-end in hub. Accuracy of teacher speech/meanings requires independent gold review."
+      },
+      "magazines": {
+        "schema": "video001_magazine_v1",
+        "status": "NAMESPACE_ISOLATION_AND_EMPTY_SERIAL_QUEUE_TESTED",
+        "purpose": "Independent user-named video magazines; stand-alone or serial; never link other projects into Artin.",
+        "guide_path": "tools-makhzan/video_queue/README_FA.md",
+        "manifest_root": "tools-makhzan/video_queue/magazines",
+        "existing": [
+          {
+            "id": "artin-course-001",
+            "title_fa": "دورهٔ آموزش مدرس آرتین",
+            "mode": "serial",
+            "next_session": 3
+          }
+        ],
+        "serial_queue_workflow": ".github/workflows/tools-makhzan-video001-serial-queue.yml",
+        "reusable_fast_worker": ".github/workflows/tools-makhzan-video001-fast-reusable.yml",
+        "recorded_results_location": "tools-makhzan/video_queue/magazines/<magazine_id>/receipts",
+        "queued_new_media_requires_user_message": true,
+        "supports_new_single_video_magazine": true,
+        "supports_new_serial_video_magazine": true,
+        "source_domain_currently": "my.uupload.ir",
+        "isolated_queue_validator_test": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42425416267",
+        "real_empty_queue_smoke": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42425630391",
+        "new_magazine_first_real_movie_e2e_tested": false,
+        "auto_retry_scope": "BOUNDED_TRANSIENT_UUPLOAD_RESOLUTION_ONLY; FAIL_CLOSED_OTHER_ERRORS",
+        "teacher_semantic_links_verified": false,
+        "no_live_trading": true
       }
     }
   ]
