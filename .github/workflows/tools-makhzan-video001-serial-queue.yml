@@ -3,6 +3,7 @@ on:
   push:
     branches: [tools-makhzan-hub]
     paths:
+      - '.github/workflows/tools-makhzan-video001-serial-queue.yml'
       - 'tools-makhzan/video_queue/magazines/*/entries/*.json'
 permissions:
   contents: write
