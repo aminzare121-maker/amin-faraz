@@ -91,12 +91,16 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
                     'visible_text_candidate':txt,
                     'legibility':legibility.upper()})
             except Exception as exc:
+                seconds_per_view.append({'frame_id':row['frame_id'],
+                    'channel':channel,'inference_seconds':round(time.monotonic()-started_at,2),
+                    'status':'MODEL_FAILED'})
                 # Explicit failure; do NOT fabricate text or silently continue
                 # as though the screenshot had been analyzed.
                 failed.append({'frame_id':row['frame_id'],'channel':channel,
                     'status':'MODEL_FAILED','error_type':type(exc).__name__})
-    if not proposals:
-        raise RuntimeError('Vision model yielded no usable text in selected source frames')
+    # A failed model MUST still produce a diagnostic report; the CLI then
+    # exits nonzero after saving it so nobody mistakes empty output for success.
+    no_text=not proposals
     valid=validate_visual_model_candidates(visual_index,proposals)
     return {'schema':'artin_visual_ai_candidate_scan_v6',
             'source_video_sha256':visual_index['source_video_sha256'],
@@ -106,6 +110,7 @@ def scan_local_visual(root,visual_index,model,*,max_frames=5,endpoint='http://12
             'provisional_text_observations':valid['candidate_count'],
             'candidates':valid['candidates'],
             'missing_or_unreadable':failed,
+            'status':'NO_USABLE_TEXT_REQUIRES_REVIEW' if no_text else 'UNVERIFIED_TEXT_CANDIDATES',
             'verified_typed_student_questions':0,
             'verified_teacher_chart_rules':0,
             'can_change_artin_engine':False}
@@ -140,6 +145,12 @@ def main():
                              channels=channels)
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+    if report['status']=='NO_USABLE_TEXT_REQUIRES_REVIEW':
+        print(json.dumps({'status':report['status'],
+              'attempted':report['views_attempted'],
+              'failed_or_unreadable':report['missing_or_unreadable'],
+              'teacher_rules_verified':0},ensure_ascii=False),flush=True)
+        raise SystemExit(2)
     print(json.dumps({'status':'UNVERIFIED_IMAGE_TEXT_CANDIDATES',
         'frames_requested':report['frames_requested'],
         'observations':report['provisional_text_observations'],
