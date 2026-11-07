@@ -31,6 +31,9 @@ class DedupeTests(unittest.TestCase):
             group('وقتی که شکست این ناحیه تایید شد بخر',10,1),
             group('وقتی که شکست این ناحیه تایید شد نخر',20,2)]))
         self.assertEqual(x['conservative_near_duplicate_clusters'],2)
+        self.assertEqual(x['critical_word_conflicts_for_review'],1)
+        self.assertTrue(x['critical_word_conflict_evidence'][0]['must_review_original_images'])
+        self.assertFalse(x['critical_word_conflict_evidence'][0]['automatically_resolved'])
 
     def test_sell_and_no_sell_never_combined(self):
         x=clustered_review(review([
