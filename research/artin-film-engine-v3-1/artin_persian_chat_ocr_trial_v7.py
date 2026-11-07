@@ -59,8 +59,11 @@ def trial(source_image:Path,output:Path,expected_hash:str,roi=(.04,.80,.94,.92),
         raise ValueError("OCR text and confidence counts diverge")
     items=[]
     for raw,score in zip(text,scores):
-        if not isinstance(raw,str) or not isinstance(score,(int,float)):
-            raise ValueError("OCR result field types invalid")
+        if not isinstance(raw,str):
+            raise ValueError("OCR result line is not text")
+        try: score=float(score)
+        except (TypeError,ValueError):
+            raise ValueError("OCR confidence is not numeric")
         items.append({"ocr_candidate":raw,"ocr_model_confidence":round(float(score),4),
                       "original_text_verified":False})
     private={"schema":"artin_source_persian_chat_ocr_v7",
