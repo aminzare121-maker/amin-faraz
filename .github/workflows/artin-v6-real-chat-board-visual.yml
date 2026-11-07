@@ -1,0 +1,41 @@
+name: Artin V6 original teacher video and student chat high-res visual trial
+on:
+  push:
+    branches:
+      - review/artin-teacher-av-understanding-v5-20261107
+    paths:
+      - '.github/workflows/artin-v6-real-chat-board-visual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chat-board-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg and image preservation library
+        run: |
+          command -v ffmpeg || sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Sample teacher board and typed student chat every 30 seconds
+        env:
+          TEACHER_VIDEO_PAGE: https://my.uupload.ir/p/aGgKYdpL
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u artin_real_visual_trial_v6.py --out /tmp/artin_v6_visual --sample-seconds 30 --expected-sha256 b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff
+      - name: Keep screenshots in private short-retention evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-original-visual-board-and-chat-v6
+          retention-days: 1
+          if-no-files-found: ignore
+          path: |
+            /tmp/artin_v6_visual/visual_summary_safe.json
+            /tmp/artin_v6_visual/visual/visual_timeline_v6.json
+            /tmp/artin_v6_visual/visual/chat/**
+            /tmp/artin_v6_visual/visual/board/**
+          compression-level: 7
