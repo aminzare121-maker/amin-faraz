@@ -17,7 +17,6 @@ class ReferenceTests(unittest.TestCase):
     def test_persian_arabic_spelling_normalization(self):
         self.assertEqual(normal('عربي ك و ي  '), 'عربی ک و ی')
         self.assertEqual(normal('سلام‌عليكم'), 'سلام علیکم')
-                         'سلام علیکم')
 
     def test_early_three_samples_never_certify_full_class(self):
         refs=[example(at=i) for i in range(3)]
