@@ -61,6 +61,30 @@ jobs:
                       info['links_count']=len(hints)
                       info['links_likely_download']=sum(x['likely_download'] for x in hints)
                       info['link_hosts']=sorted({h['host'] for h in hints if h['host']})[:10]
+                      probes=[]
+                      for raw in p.links:
+                          u=urllib.parse.urljoin(r.url,raw)
+                          sp=urllib.parse.urlsplit(u)
+                          if not sp.hostname or not sp.hostname.endswith('.uupload.ir'):
+                              continue
+                          if not (sp.hostname.startswith('s31.') or
+                                  any(t in sp.path.lower() for t in ('.mp4','.mkv','.avi','download','dl/','get/'))):
+                              continue
+                          try:
+                              probe=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0',
+                                      'Range':'bytes=0-8191'})
+                              with urllib.request.urlopen(probe,timeout=18) as q:
+                                  little=q.read(8192)
+                                  probes.append({'host':urllib.parse.urlsplit(q.url).hostname,
+                                                 'status':q.status,'type':q.headers.get('Content-Type'),
+                                                 'content_length':q.headers.get('Content-Length'),
+                                                 'content_range':q.headers.get('Content-Range'),
+                                                 'mp4_magic':b'ftyp' in little[:24],
+                                                 'html':b'<html' in little[:500].lower(),
+                                                 'path_hint':urllib.parse.urlsplit(q.url).path.split('/')[-1][:70]})
+                          except Exception as error:
+                              probes.append({'host':sp.hostname,'error':type(error).__name__})
+                      info['download_probes']=probes
                   print('ARTIN_ACCESS_RESULT='+json.dumps(info,ensure_ascii=False))
           except Exception as exc:
               print('ARTIN_ACCESS_FAILED='+type(exc).__name__+': '+str(exc)[:300])
