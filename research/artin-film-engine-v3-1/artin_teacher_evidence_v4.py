@@ -50,7 +50,12 @@ def linked_qa_candidates(source_hash,utterances,question_window_s=420):
     for q in indexed:
         phrase=q['text']
         # A question WITHOUT an explicit marker can be missed; the result is not a full course audit.
-        is_q=('؟' in phrase or '?' in phrase or any(k in phrase for k in QUESTION_MARKERS))
+        # Word boundaries prevent 'کی ' inside 'یکی' and 'میشه' inside
+        # unrelated declarative words. Do not treat 'یعنی' alone as a question.
+        question_words=re.search(
+            r'(?<!\\w)(?:آیا|چرا|چطور|چگونه|کدام|چه زمانی|کی|چیه)(?!\\w)', phrase)
+        modal_start=re.match(r'^(?:می شه|میشه|میتونیم|می توانیم)\\s', phrase)
+        is_q=('؟' in phrase or '?' in phrase or bool(question_words) or bool(modal_start))
         if not is_q:continue
         candidates=[]
         for a in indexed:
