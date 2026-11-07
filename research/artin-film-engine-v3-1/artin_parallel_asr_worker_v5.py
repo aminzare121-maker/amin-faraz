@@ -19,7 +19,7 @@ from artin_real_asr_trial_v5 import read_pcm_array
 
 def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
                   expected_sha: str, model_name='large-v3-turbo'):
-    if not 0<=shard<shard_count<=8:
+    if not 0<=shard<shard_count<=17:
         raise ValueError('Invalid concurrent partition')
     if not source_page.startswith('https://my.uupload.ir/p/'):
         raise ValueError('Only an explicitly supplied user Uupload page accepted')
