@@ -39,7 +39,7 @@ jobs:
       - name: Read first real student question with original image provenance
         working-directory: research/artin-film-engine-v3-1
         run: |
-          python3 -u artin_local_visual_model_v6.py --visual-root /tmp/artin_original_visual/visual --visual-index /tmp/artin_original_visual/visual/visual_timeline_v6.json --frame-id b001_s12_g000012_t0003315000 --model qwen2.5vl:3b --max-frames 1 --out /tmp/artin_v6_local_vision_candidate.json
+          python3 -u artin_local_visual_model_v6.py --visual-root /tmp/artin_original_visual/visual --visual-index /tmp/artin_original_visual/visual/visual_timeline_v6.json --frame-id b001_s12_g000012_t0003315000 --model qwen2.5vl:3b --channels chat --max-frames 1 --out /tmp/artin_v6_local_vision_candidate.json
       - name: Store preliminary model output for manual visual comparison only
         if: always()
         uses: actions/upload-artifact@v4
