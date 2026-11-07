@@ -112,7 +112,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "IMPORTANT root-cause correction: generic source_ingest was extraction-only and must NEVER be reported as complete ASR/vision processing. Now explicit complete_session action is wired to real entire original-video Persian ASR+source screenshots+OCR+QA+source fidelity in one fail-closed run; test contracts passed run 42404309586, real 100-second original teacher video smoke run 42404415289 must be checked for actual success/failure. Semantic understanding still needs independent source-labeled teacher speech/screens and QA validation, not merely software tests. Never claim fully reliable before validated.",
+      "next_action": "First inspect entire original 80m GitHub Action run 42405663580 from canonical hub. Only call fully source-processed if complete_session succeeded with 17/17 chunks, all original frames OCR-attempted, zero engine errors, full ASR + private QA + fidelity artifacts. Real 100sec source pipeline smoke 42405163226 already succeeded after fixing actual Paddle oneDNN runtime failure with process isolation; independent Persian WER/OCR accuracy, verified teacher role and chart semantics remain unmeasured, so no strategy or trade authorization.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -136,9 +136,21 @@
         "complete_session_action": "complete_session",
         "complete_session_backend": "research/artin-film-engine-v3-1/artin_unified_session_v10.py",
         "complete_session_claim": "Executes entire source video in one run: real Persian ASR, original board/chat capture, printed-chat OCR, provisional question/audio linking, conservative rule audit. Actual semantic accuracy still requires independent gold labels and chart validation.",
-        "complete_session_test_status": "CONTRACT_TESTS_PASS; REAL_100S_VIDEO_SMOKE_IN_PROGRESS",
+        "complete_session_test_status": "ACTUAL_SOURCE_HARDWARE_SMOKE_SUCCESS_100SECONDS_BUT_FULL_80MIN_SESSION_PENDING",
         "complete_session_contract_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42404309586",
-        "complete_session_real_smoke_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42404415289"
+        "complete_session_real_smoke_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42404415289",
+        "complete_session_smoke_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42405163226",
+        "complete_session_full_original_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42405663580",
+        "complete_session_real_smoke_metrics": {
+          "duration_seconds": 100.033,
+          "speech_segments": 10,
+          "video_images_ocr": 5,
+          "ocr_failures": 0,
+          "provisional_qa_groups": 1,
+          "verified_teacher_rules": 0,
+          "semantic_accuracy_verified": false
+        },
+        "reliability_warning": "Complete-session runtime succeeded on a real 100-second source clip after two failed runs and fixes (blank chat boxes, Python OCR/Whisper process isolation); this does NOT certify 80-min whole-source reliability or accuracy of teacher meaning. FULL 80m run 42405663580 is IN_PROGRESS."
       },
       "course": {
         "id": "ARTIN-COURSE-001",
