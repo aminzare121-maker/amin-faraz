@@ -48,6 +48,18 @@ class ChatOCRFullTests(unittest.TestCase):
         self.assertEqual(summary['verified_teacher_rules'],0)
         self.assertEqual(summary['frames_with_question_mark_candidates'],1)
 
+    def test_blank_real_chat_with_none_geometry_is_blank_not_model_failure(self):
+        class NoPrintedChatOCR:
+            def predict(self,path):
+                return [{'rec_texts':[],'rec_scores':[],'rec_boxes':None}]
+        summary=ocr_frames(self.root,self.idx,self.root/'blank-output',
+                 ocr_factory=lambda **kwargs:NoPrintedChatOCR())
+        self.assertEqual(summary['frames_attempted'],3)
+        self.assertEqual(summary['frames_without_detected_text'],3)
+        self.assertEqual(summary['ocr_failed_frames'],0)
+        self.assertEqual(summary['frames_with_some_ocr_text'],0)
+        self.assertIsNone(summary['population_OCR_accuracy'])
+
     def test_missing_or_tampered_image_rejected_before_model(self):
         self.rows[0]['chat']['sha256']='f'*64
         with self.assertRaisesRegex(ValueError,'changed chat'):
