@@ -58,7 +58,7 @@
       ],
       "outstanding": [
         "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
-        "Full 161 sampled-chat-frame OCR run 42391720989 and one-second full-film chat-change diagnostic 42392242222 are ongoing; source-image coverage cannot yet be certified.",
+        "Full 161 sampled chat screenshots OCR complete, but texts and question groups UNVERIFIED. 276 high-res change-selected frames from 1-second video diagnostic pending run 42392920286.",
         "Speaker-to-role verified teacher/student: not demonstrated.",
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
         "Teacher strategy rules with complete market triggers, all exceptions and counterexamples: none validated.",
@@ -66,8 +66,8 @@
         "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage."
       ],
       "last_verified": {
-        "technical_tests": 176,
-        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392366133",
+        "technical_tests": 188,
+        "tests_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42393186070",
         "complete_asr_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42382408395",
         "evidence_reaudit_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42385531441",
         "audio_part_count": 17,
@@ -91,9 +91,20 @@
         "full_sampled_161_chat_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42391720989",
         "one_second_chat_change_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392242222",
         "one_second_chat_change_status": "RUNNING",
-        "join_ocr_asr_code": "research/artin-film-engine-v3-1/artin_ocr_asr_join_v8.py"
+        "join_ocr_asr_code": "research/artin-film-engine-v3-1/artin_ocr_asr_join_v8.py",
+        "full_161_frame_ocr_status": "SUCCESS_161_OF_161_FRAMES_PROCESSED_160_WITH_TEXT_1_WITHOUT_TEXT_ZERO_EXECUTION_ERRORS",
+        "full_161_frame_ocr_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42391720989",
+        "full_161_frame_ocr_runtime_seconds": 800.7,
+        "one_second_chat_detected_frames": 4821,
+        "one_second_chat_selected": 276,
+        "one_second_chat_changed": 148,
+        "one_second_chat_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42392242222",
+        "provisional_typed_chat_question_observations": 201,
+        "provisional_distinct_question_groups": 59,
+        "original_qa_join_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42393181420",
+        "original_qa_join_status": "SUCCESS_SOURCE_LINKED_TIMELINE_ONLY_ZERO_VERIFIED_TEACHER_ANSWERS"
       },
-      "next_action": "First CHECK results of runs 42391720989 (all 161 sampled chat OCR) and 42392242222 (1sec chat-change timeline). Verify artifact hashes/errors. Then join full OCR to all 17 original ASR parts using artin_ocr_asr_join_v8.py. Preserve all OCR text in PRIVATE artifacts, do not treat possible question-answer proximity as proof. Independently measure source-quality and verify teacher strategy before rules."
+      "next_action": "Check high-res source frame extraction run 42392920286 and OCR remaining newly detected 1-second change-selected frames; assess population OCR error by human source-verified references. Use existing source-linked 59 provisional typed-question groups in run 42393181420, do not imply they are 59 true distinct messages or teacher answers. Verify teacher speaker, audio, chart, possible corrections; none can authorize trading."
     }
   ]
 }
