@@ -67,6 +67,7 @@ def merge_private_shards(folder: Path, out: Path):
          'suspect_speech_segments':len(review['suspect_asr_lines']),
          'cross_boundary_review_candidates':len(review.get('cross_boundary_asr_review',[])),
          'cross_boundary_conflicts_or_gaps':review.get('cross_boundary_conflicts',0),
+         'priority_buy_sell_boundary_mismatches':review.get('cross_boundary_high_priority_trade_mentions',0),
          'possible_late_teacher_corrections':len(review['possible_later_corrections']),
          'technical_or_mixed_noise_review_candidates':len(review['classroom_noise_or_mixed_review']),
          'trading_topics_not_rules':len(review['teaching_topics_not_rules']),
