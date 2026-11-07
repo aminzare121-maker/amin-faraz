@@ -188,5 +188,29 @@ class M15PaperShadowTests(unittest.TestCase):
 
 
 
+    def test_dialogue_index_unanswered_teacher_questions_blocks_shadow(self):
+        from classroom_rule_review import audit_dialogue_records, SCHEMA
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        rindex=audit_dialogue_records(dict(schema=SCHEMA,records=[]))
+        index_path=self.root/'PRIVATE_classroom_index.json'
+        index_path.write_text(json.dumps(rindex),encoding='utf8')
+        r=replay(self.csv,self.trace,self.summary,self.specs,'100','0.01','1',
+                 strict_teacher_audit=True,classroom_index_path=index_path)
+        self.assertEqual(r['raw_eligible_decisions'],1)
+        self.assertEqual(r['completed_paper_trades'],0)
+        self.assertEqual(r['trades'][0]['reason'],'DIALOGUE_NO_DIALOGUE_REVIEW_RECORDS')
+        self.assertIsNone(r['paper_net_usd_closed_only'])
+        self.assertEqual(len(r['classroom_index_sha256']),64)
+
+    def test_dialogue_index_cannot_be_used_in_diagnostic_profit_mode(self):
+        self.make([(0,10,11,9,10),(900,10,14,9.5,13)])
+        index_path=self.root/'PRIVATE_classroom_index.json'
+        index_path.write_text('{"schema":"artin_classroom_rule_index_v1","rules":{}}')
+        with self.assertRaisesRegex(ValueError,'requires strict teacher audit'):
+            replay(self.csv,self.trace,self.summary,self.specs,'100','0.01','1',
+                   strict_teacher_audit=False,classroom_index_path=index_path)
+
+
+
 if __name__=='__main__':
     unittest.main()
