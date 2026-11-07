@@ -1,0 +1,445 @@
+{
+  "scope": "SYNTHETIC_OFFLINE_NOT_FINANCIAL_VALIDATION",
+  "tests": 40,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "initial": {
+    "model_version": "calendar-conditional-v1",
+    "asof_ms": 1793881200000,
+    "regime": "tightening",
+    "evidence": [
+      {
+        "id": "cpi",
+        "origin_id": "cpi-origin",
+        "metric": "inflation_surprise",
+        "title": "Synthetic CPI",
+        "publisher": "Fixture authority",
+        "source_url": "https://example.org/report",
+        "event_at": "2026-11-05T12:00:00Z",
+        "published_at": "2026-11-05T12:01:00Z",
+        "observed_at": "2026-11-05T12:10:00Z",
+        "checked_at": "2026-11-05T12:10:00Z",
+        "actual": "۳٫۲",
+        "forecast": "3.0",
+        "previous": "2.9",
+        "unit": "percent",
+        "period": "2026-10",
+        "forecast_asof": "2026-11-04T13:00:00Z",
+        "forecast_evidence_id": "forecast-v1",
+        "raw_sha256": "68d6e32d191199dee160e6a02f0f72f44d23dfe39d282cb463feb2e0a1ae73d9",
+        "revision": 0,
+        "status": "VERIFIED_CURRENT",
+        "reasons": [],
+        "source_independent_group": "cpi-origin",
+        "numbers": {
+          "actual": "3.2",
+          "forecast": "3.0",
+          "previous": "2.9",
+          "surprise": "0.2",
+          "change": "0.3"
+        },
+        "published_ms": 1793880060000,
+        "available_ms": 1793880600000
+      }
+    ],
+    "nodes": {
+      "inflation_surprise": "UP",
+      "rates": "UP",
+      "dollar": "UP",
+      "gold": "DOWN"
+    },
+    "scenarios": [
+      {
+        "id": "r1",
+        "target": "rates",
+        "conditions": {
+          "inflation_surprise": "UP"
+        },
+        "then": "UP",
+        "regime": "tightening",
+        "lag_ms": 0,
+        "horizon": "short",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "CONDITIONAL_SUPPORTED",
+        "reasons": [],
+        "root_evidence": [
+          {
+            "evidence_id": "cpi",
+            "origin_id": "cpi-origin",
+            "available_ms": 1793880600000
+          }
+        ],
+        "ready_ms": 1793880600000,
+        "probability": null
+      },
+      {
+        "id": "r2",
+        "target": "dollar",
+        "conditions": {
+          "rates": "UP"
+        },
+        "then": "UP",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "medium",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "CONDITIONAL_SUPPORTED",
+        "reasons": [],
+        "root_evidence": [
+          {
+            "evidence_id": "cpi",
+            "origin_id": "cpi-origin",
+            "available_ms": 1793880600000
+          }
+        ],
+        "ready_ms": 1793880600000,
+        "probability": null
+      },
+      {
+        "id": "r3",
+        "target": "gold",
+        "conditions": {
+          "dollar": "UP"
+        },
+        "then": "DOWN",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "long",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "CONDITIONAL_SUPPORTED",
+        "reasons": [],
+        "root_evidence": [
+          {
+            "evidence_id": "cpi",
+            "origin_id": "cpi-origin",
+            "available_ms": 1793880600000
+          }
+        ],
+        "ready_ms": 1793880600000,
+        "probability": null
+      }
+    ],
+    "contradictions": [],
+    "changes": [
+      {
+        "node": "dollar",
+        "before": "UNKNOWN",
+        "after": "UP",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "gold",
+        "before": "UNKNOWN",
+        "after": "DOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "inflation_surprise",
+        "before": "UNKNOWN",
+        "after": "UP",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "rates",
+        "before": "UNKNOWN",
+        "after": "UP",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      }
+    ],
+    "probability": null,
+    "forecast_validated": false,
+    "can_authorize_orders": false,
+    "ledger_head": "8d2c7e2fcf1eeee2ef62a5b36d59bdcdb96587dd56d1509b09231e379a53e2d4",
+    "analysis_id": "96b7d3299629c9ea73427e06f0a84563415999d3f939f9195e56a7cbed896ec8"
+  },
+  "revised": {
+    "model_version": "calendar-conditional-v1",
+    "asof_ms": 1793881200000,
+    "regime": "tightening",
+    "evidence": [
+      {
+        "id": "cpi",
+        "origin_id": "cpi-origin",
+        "metric": "inflation_surprise",
+        "title": "Synthetic CPI",
+        "publisher": "Fixture authority",
+        "source_url": "https://example.org/report",
+        "event_at": "2026-11-05T12:00:00Z",
+        "published_at": "2026-11-05T12:01:00Z",
+        "observed_at": "2026-11-05T12:10:00Z",
+        "checked_at": "2026-11-05T12:10:00Z",
+        "actual": "2.8",
+        "forecast": "3.0",
+        "previous": "2.9",
+        "unit": "percent",
+        "period": "2026-10",
+        "forecast_asof": "2026-11-04T13:00:00Z",
+        "forecast_evidence_id": "forecast-v1",
+        "raw_sha256": "68d6e32d191199dee160e6a02f0f72f44d23dfe39d282cb463feb2e0a1ae73d9",
+        "revision": 1,
+        "status": "VERIFIED_CURRENT",
+        "reasons": [],
+        "source_independent_group": "cpi-origin",
+        "numbers": {
+          "actual": "2.8",
+          "forecast": "3.0",
+          "previous": "2.9",
+          "surprise": "-0.2",
+          "change": "-0.1"
+        },
+        "published_ms": 1793880060000,
+        "available_ms": 1793880600000
+      }
+    ],
+    "nodes": {
+      "inflation_surprise": "DOWN"
+    },
+    "scenarios": [
+      {
+        "id": "r1",
+        "target": "rates",
+        "conditions": {
+          "inflation_surprise": "UP"
+        },
+        "then": "UP",
+        "regime": "tightening",
+        "lag_ms": 0,
+        "horizon": "short",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_inflation_surprise_DOWN"
+        ],
+        "root_evidence": [
+          {
+            "evidence_id": "cpi",
+            "origin_id": "cpi-origin",
+            "available_ms": 1793880600000
+          }
+        ],
+        "ready_ms": 1793880600000,
+        "probability": null
+      },
+      {
+        "id": "r2",
+        "target": "dollar",
+        "conditions": {
+          "rates": "UP"
+        },
+        "then": "UP",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "medium",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_rates_UNKNOWN",
+          "NO_ROOT_EVIDENCE"
+        ],
+        "root_evidence": [],
+        "ready_ms": 1793881200000,
+        "probability": null
+      },
+      {
+        "id": "r3",
+        "target": "gold",
+        "conditions": {
+          "dollar": "UP"
+        },
+        "then": "DOWN",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "long",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_dollar_UNKNOWN",
+          "NO_ROOT_EVIDENCE"
+        ],
+        "root_evidence": [],
+        "ready_ms": 1793881200000,
+        "probability": null
+      }
+    ],
+    "contradictions": [],
+    "changes": [
+      {
+        "node": "dollar",
+        "before": "UP",
+        "after": "UNKNOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "gold",
+        "before": "DOWN",
+        "after": "UNKNOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "inflation_surprise",
+        "before": "UP",
+        "after": "DOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      },
+      {
+        "node": "rates",
+        "before": "UP",
+        "after": "UNKNOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      }
+    ],
+    "probability": null,
+    "forecast_validated": false,
+    "can_authorize_orders": false,
+    "ledger_head": "c722c5d097fc0829e9487532055a3869c2b382c9598dd83af504041ae4853a89",
+    "analysis_id": "db0adf685ca089438888eb2a38e994b53107a316c4d56dbb3234f79c7be7e02b"
+  },
+  "retracted": {
+    "model_version": "calendar-conditional-v1",
+    "asof_ms": 1793881200000,
+    "regime": "tightening",
+    "evidence": [],
+    "nodes": {},
+    "scenarios": [
+      {
+        "id": "r1",
+        "target": "rates",
+        "conditions": {
+          "inflation_surprise": "UP"
+        },
+        "then": "UP",
+        "regime": "tightening",
+        "lag_ms": 0,
+        "horizon": "short",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_inflation_surprise_UNKNOWN",
+          "NO_ROOT_EVIDENCE"
+        ],
+        "root_evidence": [],
+        "ready_ms": 1793881200000,
+        "probability": null
+      },
+      {
+        "id": "r2",
+        "target": "dollar",
+        "conditions": {
+          "rates": "UP"
+        },
+        "then": "UP",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "medium",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_rates_UNKNOWN",
+          "NO_ROOT_EVIDENCE"
+        ],
+        "root_evidence": [],
+        "ready_ms": 1793881200000,
+        "probability": null
+      },
+      {
+        "id": "r3",
+        "target": "gold",
+        "conditions": {
+          "dollar": "UP"
+        },
+        "then": "DOWN",
+        "regime": "ANY",
+        "lag_ms": 0,
+        "horizon": "long",
+        "rationale_fa": "فرضیه آزمایشی؛ رابطه علّی اثبات نشده",
+        "evidence_id": "SYNTHETIC-RULE",
+        "version": "1",
+        "invalidates_fa": "اصلاح یا تکذیب شاهد یا تغییر رژیم",
+        "risks_fa": "شوک سیاستی، نقدینگی و عوامل حذف‌شده",
+        "status": "UNRESOLVED",
+        "reasons": [
+          "CONDITION_dollar_UNKNOWN",
+          "NO_ROOT_EVIDENCE"
+        ],
+        "root_evidence": [],
+        "ready_ms": 1793881200000,
+        "probability": null
+      }
+    ],
+    "contradictions": [],
+    "changes": [
+      {
+        "node": "inflation_surprise",
+        "before": "DOWN",
+        "after": "UNKNOWN",
+        "reason_fa": "با بازخوانی شواهد فعال، اصلاح/حذف/کهنگی یا شرط رژیم و تأخیر، نتیجه دوباره محاسبه شد؛ امتیاز قبلی انباشته نشد."
+      }
+    ],
+    "probability": null,
+    "forecast_validated": false,
+    "can_authorize_orders": false,
+    "ledger_head": "b44c8c7ac872ef325cb653e7d109496bede02796ab89ef8d75bd2dd94149fba5",
+    "analysis_id": "ab26c525cb2d8f793e1c5a25e092fa5381d258684d920a1259b455fbfdd32c18"
+  },
+  "before_cases_fixed": {
+    "stale_receipt": "stale",
+    "future_event": "UNKNOWN",
+    "duplicate_replay_same": true
+  },
+  "source_sha256": {
+    "candidate/amin_mt5/amin_calendar_engines.py": "26da36a34c25ca7ff73be0d912a8961c6864ee34f8ac2ac291ce77d0e72d8d14",
+    "candidate/amin_mt5/analysis.py": "dde7ec19594ace129a878c57eb9fafb5aaed34542eec0451015caf96319793f1",
+    "candidate/amin_mt5/calendar_evaluation.py": "45f2293944c35b568767db81db47afeeeec61487fa8e0ee6bea2ae0280384ff2",
+    "candidate/amin_mt5/calendar_intelligence.py": "f589306a03bfde7e19cc25ff45cbae77a35a72454b31edab5702a8443de4f5b9",
+    "candidate/amin_mt5/calendar_policy.py": "f40c66080511baeaebf1776d948becd0b69954d99ca02607e3d668a926a1f8f1",
+    "candidate/amin_mt5/calendar_transport.py": "9beb804bd5a215a81ef6c662e4e4cea087762f4be7617dffb3a2cc86ea09425a",
+    "candidate/amin_mt5/cross_impact.py": "32b55d19e2d31507a2c7043c71783ec56497baeb837192a4eaf4d1f45e02e42b",
+    "candidate/amin_mt5/economic_source_guardians.py": "c3e575ee6de18b5ae89efd588a92a5d705665da20173b42c016b20f473a625be",
+    "candidate/amin_mt5/forecast_evaluation.py": "9dd99713b325c71472667edd021dadad0e5609d6cef4d68650954d9d94e6a057",
+    "candidate/amin_mt5/foresight_catalog.py": "2412ff700a26021fcfb8b3aaeb275fb671fde9580b3e71811d1a93940f2ebc44",
+    "candidate/amin_mt5/foresight_method.py": "15f32b7b6d8c4db2ced234b2f34a760cbc65956c0d790d65c1ac5fe792154863",
+    "candidate/amin_mt5/local_research.py": "e2f1ec907edc27a4044391b43328a3909da7f9818e96cae4114fd34182bd63b2",
+    "candidate/amin_mt5/model.py": "fb4953193d70b63ffa647a246b1424acbd63709f44bf1eae21f0da025fe07fb8",
+    "candidate/amin_mt5/research_context.py": "e89b2aab4bd71dfb0974a13edf87ea3624b700218c114f08719106139a9c2f29",
+    "candidate/amin_mt5/runtime.py": "b22dc0ec375d21011ea0c0c2ce17d5020659c165ed696794c1c88d4b244c6be6",
+    "candidate/amin_mt5/scenario_grid.py": "46f06786f30c6f6a3a681fde32dde6fef5664c798214e04fe9e2755ecfb6ef18",
+    "candidate/amin_mt5/sources.py": "1a2913e458f560ce7b0f510ef727feedc8520481bd1da310875e1b0e05eae07b",
+    "candidate/amin_mt5/strategy.py": "af60ba9edaa8b547cd2302ddcb7df9c5d1dd944c3b2283fa9afc47c46452ff77",
+    "candidate/amin_mt5/support.py": "7b6501696f9d894d2915029ed3817ae796d80f54d6d9e0c75a384006d2115cf5",
+    "candidate/android/DashboardActivity.java": "e32872057cda214f8f8095764ec7237db9d55c45787f654ef061362ea40490a4",
+    "candidate/windows/ResearchCalendarPanel.cs": "08d44fe8e0194b15a9a4d8b32033bea14c4661761afaa7cf095fdfab4c295316"
+  }
+}

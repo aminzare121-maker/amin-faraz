@@ -1,0 +1,137 @@
+{
+  "scope": "ACTUAL_EXECUTION_OF_ORIGINAL_CODE_ON_SYNTHETIC_INPUT_NOT_LIVE_UI",
+  "cases": [
+    {
+      "id": "old-receipt",
+      "now_ms": 1793880000000,
+      "receipt_ms": 1791288000000,
+      "expected": "STALE",
+      "actual": {
+        "id": "a",
+        "scope": "calendar",
+        "status": "available",
+        "reason": "SOURCE_RESPONSE_OBSERVED",
+        "error_type": null,
+        "last_attempt_ms": 1791288000000,
+        "last_success_ms": 1791288000000,
+        "consecutive_failures": 0,
+        "cached": false,
+        "receipt_age_ms": 2592000000,
+        "data_period": null,
+        "statistical_period_current": false,
+        "next_attempt_ms": 1793880600000,
+        "market_closure_inferred": false,
+        "can_authorize_orders": false
+      }
+    },
+    {
+      "id": "future-release",
+      "expected": "NOT_VERIFIED_CURRENT",
+      "actual": {
+        "id": "cpi",
+        "status": "VERIFIED_CURRENT",
+        "reasons": [],
+        "evidence": {
+          "publisher": "Fixture authority",
+          "url": "https://example.org/report",
+          "age_minutes": 10.0,
+          "event_at": "2026-12-05T12:00:00Z"
+        },
+        "data": {
+          "actual": 3.2,
+          "forecast": 3.0,
+          "previous": 2.9,
+          "surprise": 0.20000000000000018,
+          "unit": "percent",
+          "period": "2026-10"
+        },
+        "foresight": {
+          "status": "CONDITIONAL",
+          "scenarios": [
+            {
+              "name": "base",
+              "condition": "existing trend persists",
+              "probability": null
+            },
+            {
+              "name": "upside",
+              "condition": "supportive independent evidence",
+              "probability": null
+            },
+            {
+              "name": "downside",
+              "condition": "adverse independent evidence",
+              "probability": null
+            }
+          ],
+          "note": "No probabilities without out-of-sample calibration; no trading signals."
+        }
+      }
+    },
+    {
+      "id": "duplicate-replay",
+      "expected": {
+        "pressure_by_target": {
+          "rates": 0.3
+        },
+        "trace": {
+          "rates": [
+            {
+              "event": "cpi",
+              "delta": 0.3,
+              "from": 0.0,
+              "to": 0.3,
+              "evidence_id": "FIXTURE",
+              "rationale": "synthetic only"
+            }
+          ]
+        },
+        "caveat": "Hypothetical signed propagation only; not causal proof, calibrated probability or trading signal."
+      },
+      "actual": {
+        "pressure_by_target": {
+          "rates": 0.6
+        },
+        "trace": {
+          "rates": [
+            {
+              "event": "cpi",
+              "delta": 0.3,
+              "from": 0.3,
+              "to": 0.6,
+              "evidence_id": "FIXTURE",
+              "rationale": "synthetic only"
+            }
+          ]
+        },
+        "caveat": "Hypothetical signed propagation only; not causal proof, calibrated probability or trading signal."
+      }
+    }
+  ],
+  "snapshot_sha256": {
+    "baseline/amin_mt5/amin_calendar_engines.py": "26da36a34c25ca7ff73be0d912a8961c6864ee34f8ac2ac291ce77d0e72d8d14",
+    "baseline/amin_mt5/analysis.py": "dde7ec19594ace129a878c57eb9fafb5aaed34542eec0451015caf96319793f1",
+    "baseline/amin_mt5/calendar_policy.py": "f40c66080511baeaebf1776d948becd0b69954d99ca02607e3d668a926a1f8f1",
+    "baseline/amin_mt5/calendar_transport.py": "9beb804bd5a215a81ef6c662e4e4cea087762f4be7617dffb3a2cc86ea09425a",
+    "baseline/amin_mt5/cross_impact.py": "32b55d19e2d31507a2c7043c71783ec56497baeb837192a4eaf4d1f45e02e42b",
+    "baseline/amin_mt5/economic_source_guardians.py": "63ad165268cebf483ad8758433a76ea87e19ab803a27483a3599409cab4d8bc6",
+    "baseline/amin_mt5/forecast_evaluation.py": "9dd99713b325c71472667edd021dadad0e5609d6cef4d68650954d9d94e6a057",
+    "baseline/amin_mt5/foresight_catalog.py": "2412ff700a26021fcfb8b3aaeb275fb671fde9580b3e71811d1a93940f2ebc44",
+    "baseline/amin_mt5/foresight_method.py": "15f32b7b6d8c4db2ced234b2f34a760cbc65956c0d790d65c1ac5fe792154863",
+    "baseline/amin_mt5/local_research.py": "388bc4d9aca6b79c2525a88caa83d255fc4f71b0adec311729c8eb57dbc08ade",
+    "baseline/amin_mt5/research_context.py": "e89b2aab4bd71dfb0974a13edf87ea3624b700218c114f08719106139a9c2f29",
+    "baseline/amin_mt5/runtime.py": "b22dc0ec375d21011ea0c0c2ce17d5020659c165ed696794c1c88d4b244c6be6",
+    "baseline/amin_mt5/scenario_grid.py": "46f06786f30c6f6a3a681fde32dde6fef5664c798214e04fe9e2755ecfb6ef18",
+    "baseline/amin_mt5/sources.py": "1a2913e458f560ce7b0f510ef727feedc8520481bd1da310875e1b0e05eae07b",
+    "baseline/amin_mt5/strategy.py": "af60ba9edaa8b547cd2302ddcb7df9c5d1dd944c3b2283fa9afc47c46452ff77",
+    "baseline/amin_mt5/support.py": "7b6501696f9d894d2915029ed3817ae796d80f54d6d9e0c75a384006d2115cf5",
+    "baseline/windows/CalendarPage.cs": "12dbc3597f39727e7ae3b84e956f567da081094c3dedd23efc7ce4618c0a3672",
+    "baseline/windows/ResearchCalendarPanel.cs": "e27e41e2a5d453840041ad02975ad82e51a57f4e2ccec61fa33cc208b8c49f58"
+  },
+  "pr26_tests": {
+    "count": 12,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  }
+}
