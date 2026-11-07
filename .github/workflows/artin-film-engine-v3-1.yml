@@ -33,3 +33,19 @@ jobs:
       - name: "Run V3.2 tests: synthetic variable-length and original smoke fixtures"
         working-directory: research/artin-film-engine-v3-1
         run: python3 -B -m unittest discover -p 'test_*.py' -v
+
+  user-linked-video-smoke:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/review/artin-v3-2-variable-batches-20261107'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install FFmpeg for actual video splitting
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+      - name: Run exact Artin V3.2 splitter against user's linked source (ephemeral)
+        working-directory: research/artin-film-engine-v3-1
+        run: python3 -B real_video_link_trial_20261107.py source_link_trial_20261107.json
