@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Isolated VIDEO-001 source-once fast candidate. ORIGINAL movie is never changed.
+
+Prepare full original five-minute-overlap audio, every one-second chat-change
+index, all source-selected high-resolution chat images, and complete regularly
+sampled classroom board+frame evidence. Partition only DELIVERY, not sampling.
+No OCR, ASR or trading-rule inference occurs in preparation.
+
+This module is experimental, not VIDEO-001 V12 production.
+"""
+from __future__ import annotations
+import argparse
+import concurrent.futures
+import json
+import math
+import os
+from pathlib import Path
+import shutil
+import tempfile
+import time
+from artin_film_pipeline import file_sha256
+from artin_fast_av_v4 import fast_prepare,validate_fast
+from artin_chat_temporal_v8 import collect_index,raw_gray_frames
+from artin_chat_change_highres_v8 import collect as capture_chat
+from artin_visual_timeline_v6 import extract_visual_timeline,validate_visual_index
+
+def write_json(dest, payload):
+    dest.parent.mkdir(parents=True,exist_ok=True)
+    temp=dest.with_suffix('.pending')
+    temp.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf8')
+    os.replace(temp,dest)
+
+def _copy_sha_file(src,dst,digest):
+    src=Path(src).resolve();dst=Path(dst).resolve()
+    if not src.is_file() or file_sha256(src)!=digest:
+        raise ValueError('Original evidence file absent or hash changed')
+    dst.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copy2(src,dst)
+    if file_sha256(dst)!=digest:
+        raise ValueError('Copied evidence file not byte-identical')
+
+def _inside(root,relative):
+    root=Path(root).resolve()
+    dest=(root/relative).resolve()
+    if not dest.is_relative_to(root):
+        raise ValueError('Original evidence path attempted directory escape')
+    return dest
+
+def prepare(video,out,*,audio_workers=8,ocr_workers=16,
+            sample_seconds=30,expected_sha=None,chat_max_selected=10000):
+    start=time.monotonic()
+    video=Path(video).resolve()
+    out=Path(out).resolve()
+    if not video.is_file() or video.stat().st_size<1024:
+        raise ValueError('Actual original video file required')
+    if out==video or out==video.parent or video.is_relative_to(out):
+        raise ValueError('Output must not overwrite original movie')
+    if type(audio_workers) is not int or not 1<=audio_workers<=17:
+        raise ValueError('Audio worker count must be 1..17 on this 80m benchmark')
+    if type(ocr_workers) is not int or not 1<=ocr_workers<=16:
+        raise ValueError('OCR worker count must be 1..16')
+    if type(sample_seconds) is not int or not 5<=sample_seconds<=120:
+        raise ValueError('Preserve original visual sample interval')
+    sha=file_sha256(video)
+    if expected_sha and sha!=expected_sha:
+        raise ValueError('Original user movie SHA-256 mismatch')
+    out.mkdir(parents=True,exist_ok=True)
+    # Audio extraction and the one-second screen-change detection are
+    # independent ffmpeg decodes of the SAME immutable SHA-verified movie.
+    def audio_task():
+        return fast_prepare(video,out/'full_audio',workers=4,frames_per_part=2)
+    def chat_task():
+        return collect_index(raw_gray_frames(video),step=1,threshold=.02,
+            anchor_every=30,source_sha256=sha,
+            duration_seconds=float(duration_probe[0]))
+    # Obtain authoritative original duration without changing source.
+    from artin_film_pipeline import probe_video
+    duration_probe=probe_video(video)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as tasks:
+        fa=tasks.submit(audio_task)
+        fc=tasks.submit(chat_task)
+        manifest=fa.result()
+        timeline=fc.result()
+    validate_fast(out/'full_audio',manifest,verify_files=True)
+    if manifest['video_sha256']!=sha or timeline['source_video_sha256']!=sha:
+        raise ValueError('Audio and one-second video frame identities differ')
+    write_json(out/'original_second_by_second_chat_index.json',timeline)
+    # The next two tasks reuse the SAME movie, completely preserving original
+    # frames/crops, timings and evidence SHA. No frame cap may silently trim.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as tasks:
+        fchat=tasks.submit(capture_chat,video,timeline,out/'full_chat',
+            workers=4,max_selected=chat_max_selected)
+        fboard=tasks.submit(extract_visual_timeline,video,out/'full_board',
+            manifest,sample_seconds=sample_seconds,workers=4)
+        chat=fchat.result()
+        board=fboard.result()
+    validate_visual_index(out/'full_board',manifest,board,verify_files=True)
+    if chat['source_video_sha256']!=sha or board['source_video_sha256']!=sha:
+        raise ValueError('Original board/chat SHA does not equal speech video')
+    # One sanitized full manifest; only original audio payload files are
+    # partitioned by global source-chunk index. Each separate worker gets ONE
+    # small shard, never downloads the full movie or unrelated source audio.
+    manifest=json.loads(json.dumps(manifest))
+    manifest.pop('video_path_private',None)
+    manifest['verified_original_movie_bytes']=video.stat().st_size
+    for i in range(audio_workers):
+        folder=out/'asr_shards'/f'worker_{i:02d}'
+        write_json(folder/'fast_av_manifest.json',manifest)
+        target=[p for p in manifest['parts'] if (p['chunk']-1)%audio_workers==i]
+        if not target:raise ValueError('Empty audio worker shard')
+        for part in target:
+            src=_inside(out/'full_audio',part['audio'])
+            dst=_inside(folder,part['audio'])
+            _copy_sha_file(src,dst,part['audio_sha256'])
+    for i in range(ocr_workers):
+        folder=out/'ocr_shards'/f'worker_{i:02d}'
+        write_json(folder/'chat_selected_index.json',chat)
+        target=[r for n,r in enumerate(chat['rows']) if n%ocr_workers==i]
+        if not target:raise ValueError('Empty OCR worker shard')
+        for r in target:
+            src=_inside(out/'full_chat',r['chat']['path'])
+            dst=_inside(folder,r['chat']['path'])
+            _copy_sha_file(src,dst,r['chat']['sha256'])
+    write_json(out/'board_review'/'visual_timeline_v6.json',board)
+    for row in board['rows']:
+        for mode in ('video_frame','board','chat'):
+            obj=row[mode]
+            _copy_sha_file(_inside(out/'full_board',obj['path']),
+                           _inside(out/'board_review',obj['path']),
+                           obj['sha256'])
+    # An isolated provenance index for the final join. No raw class speech or
+    # personal chat text is put in public logs.
+    summary={'schema':'video001_fast_source_once_v1',
+      'source_video_sha256':sha,'original_movie_bytes':video.stat().st_size,
+      'original_duration_seconds':manifest['duration_seconds'],
+      'source_global_audio_chunks':len(manifest['parts']),
+      'source_audio_worker_count':audio_workers,
+      'one_second_frames_scanned':timeline['sampled_source_frames'],
+      'original_chat_images_selected':len(chat['rows']),
+      'original_board_frames':len(board['rows']),
+      'original_ocr_workers':ocr_workers,
+      'source_integrity_verified':True,
+      'original_movie_transcoded':False,
+      'source_speech_modified':False,
+      'source_screen_text_generated':False,
+      'teacher_semantics_verified':False,
+      'all_original_audio_parts_assigned_once':sum(
+          sum((p['chunk']-1)%audio_workers==i for p in manifest['parts'])
+          for i in range(audio_workers))==len(manifest['parts']),
+      'all_original_chat_images_assigned_once':sum(
+          sum(n%ocr_workers==i for n in range(len(chat['rows'])))
+          for i in range(ocr_workers))==len(chat['rows']),
+      'elapsed_seconds':round(time.monotonic()-start,2)}
+    write_json(out/'safe_source_prep_summary.json',summary)
+    print('VIDEO001_FAST_SOURCE_ONCE_PREPARED='+json.dumps(summary,ensure_ascii=False),flush=True)
+    return summary
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument('--video',type=Path,required=True)
+    p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--expected-sha256',default=None)
+    p.add_argument('--audio-workers',type=int,default=8)
+    p.add_argument('--ocr-workers',type=int,default=16)
+    p.add_argument('--sample-seconds',type=int,default=30)
+    a=p.parse_args()
+    prepare(a.video,a.out,expected_sha=a.expected_sha256,
+        audio_workers=a.audio_workers,ocr_workers=a.ocr_workers,
+        sample_seconds=a.sample_seconds)
+
+if __name__=='__main__':main()
