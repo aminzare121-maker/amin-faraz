@@ -61,9 +61,9 @@
         "Independent measured Persian ASR word error rate against source audio: no verified gold labels.",
         "Speaker-to-role verified teacher/student: not demonstrated.",
         "Original student typed Q&A matched to verified teacher answers: not demonstrated.",
-        "Teacher strategy rules with complete market triggers, all exceptions and counterexamples: none validated.",
         "Evidence audit of 35 legacy rule candidates: all 35 standalone utterances lack observable market condition, do not promote.",
-        "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage."
+        "Original private video and transcripts are ephemeral; 30-day V7 artifact retention does not equal permanent video storage.",
+        "No complete set of instructor lectures has been provided; the first received session is intentionally only part 1 of an open-ended course. Course synthesis waits for the other user-submitted videos."
       ],
       "last_verified": {
         "technical_tests": 194,
@@ -112,7 +112,7 @@
         "review_package_artifact_name": "artin-V8-practical-offline-review-mobile-desktop-PRIVATE",
         "review_package_artifact_expires": "2026-12-07T17:27:34Z"
       },
-      "next_action": "Makhzan VIDEO-001 GitHub Actions executor is PROVEN: status action run 42397528098, build_review run 42397597512. For new chat, read tools-makhzan/REGISTRY.json then user request; update tools-makhzan/requests/current.json with allowlisted operation. Source_ingest for a new authorized Uupload share has not been end-to-end tested from this hub and is only source evidence preparation. Continue actual verified teacher-voice-and-screen rule fidelity research separately; no trading actions.",
+      "next_action": "DO NOT reprocess or reclassify J2 as a failed strategy lecture. WAIT for next user-provided teacher video, then source-hash-register it as the next sequence in tools-makhzan/courses/artin/COURSE_REGISTRY.json. Independently process speech/screens/chat with VIDEO-001, append exact time-stamped evidence, and link later explanations/corrections/exceptions by topic to preserved earlier sessions. Do not erase original statements or infer an entire strategy from a single class. Only after user confirms all classes received and source interpretation is validated may cross-class rules be considered for demo validation.",
       "executor": {
         "type": "github_actions_commit_request",
         "operation_status": "LIVE_EXECUTED_SUCCESS",
@@ -130,6 +130,24 @@
         "last_review_artifact": "makhzan-VIDEO-001-actual-mobile-desktop-review-PRIVATE",
         "limits": "Execution success covers source preparation/reviewer, NOT verified teacher interpretation, speaker role, Q&A accuracy, or trading rule readiness.",
         "user_activation": "When user explicitly asks to execute an operation in a ChatGPT conversation with connected GitHub, assistant updates current.json; github actions runs even if user's phone subsequently disconnects."
+      },
+      "course": {
+        "id": "ARTIN-COURSE-001",
+        "user_goal": "All user-submitted teacher lectures must be sequentially source-grounded and stitched across sessions like a puzzle, preserving later corrections and exceptions; do not require one class to include the entire strategy.",
+        "registry_file": "tools-makhzan/courses/artin/COURSE_REGISTRY.json",
+        "assembler_script": "tools-makhzan/course_stitcher.py",
+        "execution_action": "course_status",
+        "execution_request_file": "tools-makhzan/requests/current.json",
+        "first_received_video": "ARTIN-J2-001",
+        "user_submitted_video_count": 1,
+        "expected_total_sessions": "UNKNOWN_UNTIL_USER_SUPPLIES_OR_CONFIRMS",
+        "wait_for_next_video": true,
+        "last_test_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42399391030",
+        "last_executable_hub_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42399653186",
+        "test_count": 13,
+        "source_integrity_rule": "Never create a new lecture without user-supplied original video; NEVER infer a correction from unrelated transcript proximity.",
+        "verified_cross_session_links": 0,
+        "video_source_semantic_status": "PARTIAL_EVIDENCE_PENDING_OTHER_CLASSES"
       }
     }
   ]
