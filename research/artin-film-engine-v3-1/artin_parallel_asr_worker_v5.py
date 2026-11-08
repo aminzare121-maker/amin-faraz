@@ -35,8 +35,17 @@ def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
         if manifest.get('video_sha256')!=expected_sha:
             raise ValueError('Prepared original movie SHA differs from expected source')
         validate_fast(prepped_root,manifest,verify_files=False)
-        if len(manifest.get('parts',[]))!=17:
-            raise ValueError('Original movie must retain all global 17 chunks')
+        # The original source has ceil(duration/300) globally numbered five-minute
+        # chunks. 17 is the maximum parallel ASR WORKER count, not a limit on
+        # the number of original video chunks (an 86-minute film has 18).
+        import math
+        duration = float(manifest.get('duration_seconds', 0))
+        expected_parts = (math.ceil(duration / 300)
+                          if math.isfinite(duration) and duration > 0 else 0)
+        if expected_parts < 1 or len(manifest.get('parts', [])) != expected_parts:
+            raise ValueError('Original movie is missing five-minute source chunks')
+        if [part.get('chunk') for part in manifest['parts']] != list(range(1, expected_parts + 1)):
+            raise ValueError('Original movie global five-minute chunk numbering is incomplete')
         selected_for_this_worker=[
             p for p in manifest['parts'] if (p['chunk']-1)%shard_count==shard]
         if not selected_for_this_worker:
