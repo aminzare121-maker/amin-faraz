@@ -1,0 +1,30 @@
+test_actual_symbol_blocks_market (test_safe_adapters.AdapterTests.test_actual_symbol_blocks_market) ... ok
+test_audit_codes_do_not_capture_arguments_or_exceptions (test_safe_adapters.AdapterTests.test_audit_codes_do_not_capture_arguments_or_exceptions) ... ok
+test_audit_failure_before_market (test_safe_adapters.AdapterTests.test_audit_failure_before_market) ... ok
+test_authorization_blocks_all_calls (test_safe_adapters.AdapterTests.test_authorization_blocks_all_calls) ... ok
+test_broker_blocks_market (test_safe_adapters.AdapterTests.test_broker_blocks_market) ... ok
+test_counts (test_safe_adapters.AdapterTests.test_counts) ... ok
+test_empty_and_malformed_rows (test_safe_adapters.AdapterTests.test_empty_and_malformed_rows) ... ok
+test_error_containment (test_safe_adapters.AdapterTests.test_error_containment) ... ok
+test_missing_or_failed_audit_blocks_market (test_safe_adapters.AdapterTests.test_missing_or_failed_audit_blocks_market) ... ok
+test_real_blocks_market (test_safe_adapters.AdapterTests.test_real_blocks_market) ... ok
+test_safe_result_and_closed_bars (test_safe_adapters.AdapterTests.test_safe_result_and_closed_bars) ... ok
+test_symbol_blocks_before_sdk (test_safe_adapters.AdapterTests.test_symbol_blocks_before_sdk) ... ok
+test_unknown_api (test_safe_adapters.AdapterTests.test_unknown_api) ... ok
+test_byte_limit (test_safe_adapters.ObserverTests.test_byte_limit) ... ok
+test_explicit_running_stopped (test_safe_adapters.ObserverTests.test_explicit_running_stopped) ... ok
+test_hardlink_rejected (test_safe_adapters.ObserverTests.test_hardlink_rejected) ... ok
+test_invalid_status_fields (test_safe_adapters.ObserverTests.test_invalid_status_fields) ... ok
+test_no_approval (test_safe_adapters.ObserverTests.test_no_approval) ... ok
+test_path_escape (test_safe_adapters.ObserverTests.test_path_escape) ... ok
+test_reparse_attribute_mock (test_safe_adapters.ObserverTests.test_reparse_attribute_mock) ... ok
+test_stale_future (test_safe_adapters.ObserverTests.test_stale_future) ... ok
+test_symlink_policy_mock (test_safe_adapters.ObserverTests.test_symlink_policy_mock) ... ok
+test_unknown_keys_and_private_error (test_safe_adapters.ObserverTests.test_unknown_keys_and_private_error) ... ok
+test_local_fixed_codes_no_secret (test_safe_adapters.SinkTests.test_local_fixed_codes_no_secret) ... ok
+test_unapproved_and_full_sink (test_safe_adapters.SinkTests.test_unapproved_and_full_sink) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.102s
+
+OK

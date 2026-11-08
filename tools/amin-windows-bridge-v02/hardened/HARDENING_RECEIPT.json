@@ -1,0 +1,53 @@
+{
+  "actual_github_auth_or_network_attempted_by_hardening_agent": false,
+  "files": [
+    {
+      "sha256": "869aeb5bd469223d2b58502ecc4ebd2b17441708476df29ee574f5639fec72b6",
+      "name": "bridge_agent.py"
+    },
+    {
+      "sha256": "3d5097a6d18779dd019a590bc09545b41dac2c1869e80c829324f4c200fddf71",
+      "name": "README_FA.md"
+    },
+    {
+      "sha256": "cde1247a6f5f8cfe79878877d3ead0c951dc8e4e1c206304f718fd93f34105f2",
+      "name": "START_ONCE_WINDOWS.bat"
+    },
+    {
+      "sha256": "084b3760ce4cd1f0bd8f4860ba98856281d73eb0c076fa14c74a19925b2ce5dd",
+      "name": "START_WATCH_WINDOWS.bat"
+    },
+    {
+      "sha256": "8110556f60a668293338761860ea103007bc9fb6ed2b29b88241b114ac77794b",
+      "name": "test_bridge_agent.py"
+    },
+    {
+      "sha256": "2d26fb134b5476bfdee6a2fd1cfaa74cab02375648017840415c4669fa52dea6",
+      "name": "test_hardening.py"
+    }
+  ],
+  "native_junction_validation_tested": false,
+  "handshake_id": "amin-bridge-first-handshake-20261106",
+  "reparse_branch_mock_tested": true,
+  "credentials_looked_up_or_printed": false,
+  "handshake_comment_id": 6688143796,
+  "version": "0.2",
+  "total": {
+    "skipped": 1,
+    "errors": 0,
+    "run": 35,
+    "passed": 34,
+    "failed": 0
+  },
+  "new_mock_tests": {
+    "skipped": 0,
+    "passed": 22,
+    "failed": 0
+  },
+  "service_watch_or_startup_created": false,
+  "original_baseline_tests": {
+    "skipped": 1,
+    "passed": 12,
+    "failed": 0
+  }
+}

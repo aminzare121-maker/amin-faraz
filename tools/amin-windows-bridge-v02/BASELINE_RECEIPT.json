@@ -1,0 +1,53 @@
+{
+  "source_commit": "0acc8c808ae29743de9afb4cc5780f8e3bac78e2",
+  "python_version": "3.12.14",
+  "base_tests_run": 13,
+  "base_tests_passed": 12,
+  "base_tests_skipped": 1,
+  "base_tests_failed": 0,
+  "base_test_errors": 0,
+  "skip_reason": "Windows symlink creation unavailable; no system setting changed",
+  "test_invocation": "python -B -m unittest -v test_bridge_agent.py",
+  "github_cli_in_current_PATH": false,
+  "bridge_auth_environment_present": false,
+  "live_bridge_executed": false,
+  "handshake_verified": false,
+  "mt5_connected": false,
+  "owner_workspace_and_existing_local_auth_approved": true,
+  "git_credential_manager_configured": true,
+  "credential_manager_cached_auth_not_yet_verified": true,
+  "files": [
+    {
+      "file": "bridge_agent.py",
+      "git_blob_sha": "4ccea4cf9b8eafa74d27b7ef91943004a7e114a8",
+      "sha256": "10c7a0c057ce56253a403b009db8632f03de9b33526943ad00b69c60134fe2ea",
+      "remote_blob_match": true
+    },
+    {
+      "file": "test_bridge_agent.py",
+      "git_blob_sha": "68b373e797428cd5e671e1b997807bc427c13fcb",
+      "sha256": "8110556f60a668293338761860ea103007bc9fb6ed2b29b88241b114ac77794b",
+      "remote_blob_match": true
+    },
+    {
+      "file": "README_FA.md",
+      "git_blob_sha": "1463fb2a247d54b6e282121b593f6132e4c344ae",
+      "sha256": "7965f998fced74b1008f8a92ea10f7c9b64b5816cd72257a09063d17428aa77f",
+      "remote_blob_match": true
+    },
+    {
+      "file": "START_ONCE_WINDOWS.bat",
+      "git_blob_sha": "c0d2825c0c3688a78cdff8a5ed4c90dfa222e965",
+      "sha256": "654bf7d262843c63cd4b41485d266b61cee79694b791bcf3d1f0171a02364ac1",
+      "remote_blob_match": true
+    },
+    {
+      "file": "START_WATCH_WINDOWS.bat",
+      "git_blob_sha": "751bad2797d53533b52599aea7440c1cf347dbcc",
+      "sha256": "a2175e5b16f5040258e4d28f06f1ae4fb48805fe2534c8de63fbf7f734b6cfa5",
+      "remote_blob_match": true
+    }
+  ],
+  "other_projects_or_processes_stopped": false,
+  "final_status_receipt": "LIVE_RESULT_RECEIPT.json"
+}

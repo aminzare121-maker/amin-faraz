@@ -1,0 +1,26 @@
+name: Amin Windows native connection
+"on":
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: amin-windows-native
+  cancel-in-progress: false
+jobs:
+  connection-check:
+    if: >-
+      github.repository == 'aminzare121-maker/amin-faraz' &&
+      github.event.repository.private == true &&
+      github.actor_id == '344967545' &&
+      github.ref == 'refs/heads/main'
+    runs-on: [amin-win-native-58]
+    timeout-minutes: 3
+    steps:
+      - name: Verify Windows runner round trip
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:OS -ne 'Windows_NT') { throw 'WINDOWS_REQUIRED' }
+          if ($env:GITHUB_EVENT_NAME -ne 'workflow_dispatch') { throw 'MANUAL_RUN_REQUIRED' }
+          if ($env:GITHUB_REPOSITORY -ne 'aminzare121-maker/amin-faraz') { throw 'REPOSITORY_MISMATCH' }
+          Write-Output 'AMIN_NATIVE_WINDOWS_RESULT_V1'
+          @{status='OK';mode='native-github-actions';utc=[DateTime]::UtcNow.ToString('o');run_id=$env:GITHUB_RUN_ID;desktop_control=$false;project_execution=$false} | ConvertTo-Json -Compress
