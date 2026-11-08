@@ -90,13 +90,25 @@ def compare(base_asr,candidate_asr,base_ocr,candidate_ocr,*,expected_asr_parts=1
     ocr_ok=(oa==ob and len(ra)==len(rb)==expected_ocr_frames and
             set(ra)==set(rb) and
             all(ra[k].get("source_frame_sha256")==rb[k].get("source_frame_sha256") for k in ra))
-    text_same=ocr_ok and all(ra[k].get("text_lines")==rb[k].get("text_lines") for k in ra)
+    changed_ocr_keys=[k for k in ra if k in rb and ra[k].get("text_lines")!=rb[k].get("text_lines")]
+    text_same=ocr_ok and not changed_ocr_keys
+    def ocr_words(row):
+        lines=row.get("text_lines") or []
+        return normalize(" ".join(
+            (line.get("ocr_candidate","") if isinstance(line,dict) else str(line))
+            for line in lines))
+    ocr_polarity_drift=sum(
+        Counter(w for w in ocr_words(ra[k]) if w in POLARITY)!=
+        Counter(w for w in ocr_words(rb[k]) if w in POLARITY)
+        for k in changed_ocr_keys)
     return {"schema":"video001_private_consistency_audit_v1",
       "expected_audio_parts":expected_asr_parts,"observed_audio_parts":len(per_chunk),
       "expected_ocr_frames":expected_ocr_frames,"observed_ocr_frames":len(ra),
       "source_integrity_agrees":bool(source_ok and ocr_ok),
       "ocr_text_identical":bool(text_same),
       "total_asr_words_baseline":words_a,"total_asr_words_candidate":words_b,
+      "ocr_frames_with_text_changes":len(changed_ocr_keys),
+      "ocr_frames_with_polarity_count_changes":ocr_polarity_drift,
       "all_asr_chunks_above_similarity_threshold":bool(per_chunk and all(
           x["word_sequence_similarity"]>=min_similarity for x in per_chunk)),
       "polarity_count_changed":polarity_diff,
