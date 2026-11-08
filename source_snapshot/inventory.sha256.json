@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "stage": "A: immutable source import for review only",
+  "review_date": "2026-11-04",
+  "source_location": "Downloads/amin_gold_research (local original preserved)",
+  "base_commit": "f53b6e06d1d8bc883ac5a131ea41a7d474cb15c3",
+  "source_files": [
+    {
+      "path": "analyze.py",
+      "bytes": 2831,
+      "sha256": "aafe7747392f45cfcd65cd4e67b0d17d1ee68030dc92237e11d2a939ddd1e135",
+      "git_blob_sha": "7466e00d8bbe6efe67dfa0b3d9ccdcf382bc421a",
+      "encoding": "utf-8",
+      "crlf_count": 0,
+      "lf_count": 43,
+      "repository_path": "source_snapshot/analyze.py",
+      "copied_unmodified": true
+    },
+    {
+      "path": "run_windows.bat",
+      "bytes": 401,
+      "sha256": "00afa7bbd4b077fb4cfc2c62450e1d38331cbe9edd73d1ec6f63c162717b2a1c",
+      "git_blob_sha": "687f54c5e8865946d1999683e0a7fc49d94ec1a8",
+      "encoding": "utf-8",
+      "crlf_count": 0,
+      "lf_count": 9,
+      "repository_path": "source_snapshot/run_windows.bat",
+      "copied_unmodified": true
+    },
+    {
+      "path": "README_FA.txt",
+      "bytes": 972,
+      "sha256": "37e6ef929b26e9762ca19901449f224f14ea75d64a76dd2bc7097ba3bbf00631",
+      "git_blob_sha": "b9577bc083b905a7b6ea207139f153fff94002a7",
+      "encoding": "utf-8",
+      "crlf_count": 0,
+      "lf_count": 5,
+      "repository_path": "source_snapshot/README_FA.txt",
+      "copied_unmodified": true
+    }
+  ],
+  "sensitive_content_review": {
+    "manual_review_of_all_three_files": true,
+    "credential_pattern_hits": 0,
+    "scope": "No credentials, tokens, private keys or private account information found in these three files. Pattern scan plus manual review is not a comprehensive security audit."
+  },
+  "execution": {
+    "project_run": false,
+    "backtest_run": false,
+    "dependencies_installed": false,
+    "tests_run": false
+  },
+  "excluded": [
+    "CSV market data",
+    "ZIP archive",
+    "strategy results",
+    "images",
+    "credentials",
+    "binary files"
+  ],
+  "limitations": [
+    "Existing time-unit, monthly-reporting, test-selection and gap issues intentionally preserved for review.",
+    "No V4-V10 version or historical eight-test claim validated.",
+    "Dependency versions and data provenance remain unverified."
+  ]
+}
