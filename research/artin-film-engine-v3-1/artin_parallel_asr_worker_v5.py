@@ -17,6 +17,19 @@ from artin_fast_av_v4 import fast_prepare, validate_fast
 from artin_real_asr_trial_v5 import read_pcm_array
 
 
+def verified_global_source_chunk_count(manifest: dict) -> int:
+    """Require all original 5-minute parts, independent of ASR worker count."""
+    import math
+    duration = float(manifest.get('duration_seconds', 0))
+    expected = (math.ceil(duration / 300)
+                if math.isfinite(duration) and duration > 0 else 0)
+    if expected < 1 or len(manifest.get('parts', [])) != expected:
+        raise ValueError('Original movie is missing five-minute source chunks')
+    if [part.get('chunk') for part in manifest['parts']] != list(range(1, expected + 1)):
+        raise ValueError('Original movie global five-minute chunk numbering is incomplete')
+    return expected
+
+
 def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
                   expected_sha: str, model_name='large-v3-turbo', prepped_root=None):
     if not 0<=shard<shard_count<=17:
@@ -35,17 +48,7 @@ def process_shard(source_page: str, root: Path, shard: int, shard_count: int,
         if manifest.get('video_sha256')!=expected_sha:
             raise ValueError('Prepared original movie SHA differs from expected source')
         validate_fast(prepped_root,manifest,verify_files=False)
-        # The original source has ceil(duration/300) globally numbered five-minute
-        # chunks. 17 is the maximum parallel ASR WORKER count, not a limit on
-        # the number of original video chunks (an 86-minute film has 18).
-        import math
-        duration = float(manifest.get('duration_seconds', 0))
-        expected_parts = (math.ceil(duration / 300)
-                          if math.isfinite(duration) and duration > 0 else 0)
-        if expected_parts < 1 or len(manifest.get('parts', [])) != expected_parts:
-            raise ValueError('Original movie is missing five-minute source chunks')
-        if [part.get('chunk') for part in manifest['parts']] != list(range(1, expected_parts + 1)):
-            raise ValueError('Original movie global five-minute chunk numbering is incomplete')
+        verified_global_source_chunk_count(manifest)
         selected_for_this_worker=[
             p for p in manifest['parts'] if (p['chunk']-1)%shard_count==shard]
         if not selected_for_this_worker:
