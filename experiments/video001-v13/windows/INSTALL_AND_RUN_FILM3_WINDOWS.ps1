@@ -25,7 +25,7 @@ if ($PrivateRoot.StartsWith($RepositoryFull + [System.IO.Path]::DirectorySeparat
 }
 $Archives = Join-Path $PrivateRoot 'film3\original_audio_archives'
 $ResultDir = Join-Path $PrivateRoot 'film3\private_asr'
-$VenvDir = Join-Path $PrivateRoot 'asr-venv'
+$VenvDir = Join-Path $PrivateRoot 'asr-venv-py312'
 $Python = Join-Path $VenvDir 'Scripts\python.exe'
 New-Item -ItemType Directory -Path $PrivateRoot -Force | Out-Null
 Write-Output 'V13_FILM3_WINDOWS_LOCAL_WORKFLOW=START'
@@ -39,9 +39,9 @@ function Require-Command([string]$Command) {
 function Install-Venv {
     if (!(Test-Path $Python -PathType Leaf)) {
         if (Get-Command py -ErrorAction SilentlyContinue) {
-            & py -3 -m venv $VenvDir
+            & py -3.12 -m venv $VenvDir
         } elseif (Get-Command python -ErrorAction SilentlyContinue) {
-            & python -m venv $VenvDir
+            throw 'PYTHON_3_12_LAUNCHER_REQUIRED_USE_LOCAL_INSTALLED_PYTHON312'
         } else { throw 'WINDOWS_PYTHON3_REQUIRED' }
         if ($LASTEXITCODE -ne 0) { throw 'WINDOWS_VENV_CREATION_FAILED' }
     }
