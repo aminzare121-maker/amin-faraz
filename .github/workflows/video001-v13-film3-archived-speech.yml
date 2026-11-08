@@ -1,0 +1,41 @@
+name: V13 film 3 archived speech extraction
+on:
+  push:
+    branches: [experiment/video001-v13-integration-20261108]
+    paths: [.github/workflows/video001-v13-film3-archived-speech.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  film3-speech:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 79e9914288ecdbb754aa1212849ba83d279131e6
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch film 3 original audio and verify every chunk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          for i in {0..16}; do
+            gh run download 42426863832 --repo "$GITHUB_REPOSITORY" --name "video001-artin-course-001-video-q-0003-artin-clip-01-original-audio-$i" --dir "$RUNNER_TEMP/audio/worker_$(printf '%02d' "$i")"
+          done
+          python experiments/video001-v13/windows/archive_asr_windows.py --archives "$RUNNER_TEMP/audio" --out "$RUNNER_TEMP/speech" --phase verify
+      - name: Transcribe verified Persian speech with V13
+        run: |
+          python -m pip install 'faster-whisper>=1.1,<2'
+          python experiments/video001-v13/windows/archive_asr_windows.py --archives "$RUNNER_TEMP/audio" --out "$RUNNER_TEMP/speech" --phase run
+      - name: Preserve completed private speech checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-film3-speech-checkpoints
+          path: ${{ runner.temp }}/speech/*.json
+          if-no-files-found: warn
+          retention-days: 7
