@@ -216,7 +216,8 @@ def main():
         raise ValueError("Private media must not be inside source code or vice versa")
     start=time.monotonic()
     models = {"asr": ("faster_whisper",), "ocr": ("paddleocr",),
-              "all": ("faster_whisper", "paddleocr")}.get(args.phase, ())\n    result=preflight(out,models=models)
+              "all": ("faster_whisper", "paddleocr")}.get(args.phase, ())
+    result=preflight(out,models=models)
     if args.phase in ("prepare","all"):
         result["source_step"]=prepare(out)
     if args.phase in ("asr","all"):
