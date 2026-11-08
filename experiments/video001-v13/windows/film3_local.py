@@ -54,7 +54,7 @@ def source_valid(video: Path):
         raise ValueError("SOURCE_SHA_MISMATCH: refuse substitution or changed video")
 
 
-def preflight(out: Path, require_models=False):
+def preflight(out: Path, models=()):
     if not ENGINE.is_dir() or not (ENGINE / "video001_fast_source_once_v2.py").is_file():
         raise ValueError("V13_ENGINE_MISSING: run from checked-out V13 repository")
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
@@ -63,13 +63,13 @@ def preflight(out: Path, require_models=False):
         raise ValueError("ABSOLUTE_PRIVATE_OUTPUT_DIRECTORY_REQUIRED")
     if ENGINE.is_relative_to(out) or out.is_relative_to(ENGINE):
         raise ValueError("Do not store private media in Git checkout/engine folder")
-    deps = ["PIL", "numpy"] + (["faster_whisper", "paddleocr"] if require_models else [])
+    deps = ["PIL", "numpy"] + list(models)
     missing = [x for x in deps if importlib.util.find_spec(x) is None]
     if missing:
         raise RuntimeError("REQUIRED_PACKAGES_MISSING: " + ", ".join(missing))
     return {"schema":"video001_v13_windows_preflight_v1",
             "queue_id":ID,"source_sha256":MOVIE_SHA,
-            "ffmpeg":True, "model_packages_checked":require_models,
+            "ffmpeg":True, "model_packages_checked":list(models),
             "runner":"WINDOWS_LOCAL_BOUNDED_CPU",
             "trading_allowed":False}
 
@@ -215,7 +215,8 @@ def main():
     if out == ENGINE or ENGINE.is_relative_to(out) or out.is_relative_to(ENGINE):
         raise ValueError("Private media must not be inside source code or vice versa")
     start=time.monotonic()
-    result=preflight(out,require_models=args.phase in ("asr","ocr","all"))
+    models = {"asr": ("faster_whisper",), "ocr": ("paddleocr",),
+              "all": ("faster_whisper", "paddleocr")}.get(args.phase, ())\n    result=preflight(out,models=models)
     if args.phase in ("prepare","all"):
         result["source_step"]=prepare(out)
     if args.phase in ("asr","all"):
