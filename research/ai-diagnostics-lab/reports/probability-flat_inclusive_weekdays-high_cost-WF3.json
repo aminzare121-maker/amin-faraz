@@ -1,0 +1,2520 @@
+{
+  "artifacts": {
+    "M1": {
+      "calibration_present": true,
+      "calibration_sha256": "84fe1a5a2f3a20d15f2b68a2e43ed695306b242fc237bdd99c85b1efd1035db4",
+      "model_present": true,
+      "model_sha256": "95f57cfc682536759269a1bda84490e08ee30720b4ecccfb7c76accce5057224",
+      "new_fit_performed": false
+    },
+    "M2": {
+      "calibration_present": true,
+      "calibration_sha256": "f157c97c313c334c783656ff600be6b4f0da1e16af16fe585efc4f9d61bb00f9",
+      "model_present": true,
+      "model_sha256": "00bd831c246a54370cc039eb4ede94dc695c09c207f588f9948e8ae1254c16fc",
+      "new_fit_performed": false
+    }
+  },
+  "base_c": {
+    "V_or_E_used": false,
+    "fitted": false,
+    "positive_labels": 69,
+    "probability": 0.34673366834170855,
+    "smoothing": false,
+    "source_phase": "C",
+    "usable_labels": 199
+  },
+  "drift": {
+    "BASE_C": {
+      "C_to_E": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.03141835302639323,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 222,
+        "target_label_prevalence": 0.3153153153153153,
+        "target_score_n": 229,
+        "total_variation": 0.0
+      },
+      "C_to_V": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.02345780627274302,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 232,
+        "target_label_prevalence": 0.3232758620689655,
+        "target_score_n": 232,
+        "total_variation": 0.0
+      }
+    },
+    "M1_cal": {
+      "C_to_E": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.03141835302639323,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 222,
+        "target_label_prevalence": 0.3153153153153153,
+        "target_score_n": 229,
+        "total_variation": 0.0
+      },
+      "C_to_V": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.02345780627274302,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 232,
+        "target_label_prevalence": 0.3232758620689655,
+        "target_score_n": 232,
+        "total_variation": 0.0
+      }
+    },
+    "M1_raw": {
+      "C_to_E": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 2.5103918583078803e-05,
+        "prevalence_difference": -0.03141835302639323,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 222,
+        "target_label_prevalence": 0.3153153153153153,
+        "target_score_n": 229,
+        "total_variation": 0.0043009808869675994
+      },
+      "C_to_V": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.004959439535553433,
+        "prevalence_difference": -0.02345780627274302,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 232,
+        "target_label_prevalence": 0.3232758620689655,
+        "target_score_n": 232,
+        "total_variation": 0.06760093571304801
+      }
+    },
+    "M2_cal": {
+      "C_to_E": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.03141835302639323,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 222,
+        "target_label_prevalence": 0.3153153153153153,
+        "target_score_n": 229,
+        "total_variation": 0.0
+      },
+      "C_to_V": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0,
+        "prevalence_difference": -0.02345780627274302,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 232,
+        "target_label_prevalence": 0.3232758620689655,
+        "target_score_n": 232,
+        "total_variation": 0.0
+      }
+    },
+    "M2_raw": {
+      "C_to_E": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.0009083713405245442,
+        "prevalence_difference": -0.03141835302639323,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 222,
+        "target_label_prevalence": 0.3153153153153153,
+        "target_score_n": 229,
+        "total_variation": 0.03761163898093087
+      },
+      "C_to_V": {
+        "cause_established": false,
+        "descriptive_only": true,
+        "formal_label_or_market_drift_established": false,
+        "jensen_shannon_nats": 0.013755798249447039,
+        "prevalence_difference": -0.02345780627274302,
+        "reference_label_n": 199,
+        "reference_label_prevalence": 0.34673366834170855,
+        "reference_score_n": 199,
+        "score_denominator_note": "C/V use original usable label rows; E score histogram uses all candidates and prevalence uses available outcomes only",
+        "significance_established": false,
+        "target_label_n": 232,
+        "target_label_prevalence": 0.3232758620689655,
+        "target_score_n": 232,
+        "total_variation": 0.15463091318662278
+      }
+    }
+  },
+  "fold": "WF3",
+  "limitations": [
+    "Retrospective fixed simulation, not independent future validation.",
+    "Tfit and Ccal metrics are in-sample diagnostics only.",
+    "Small and potentially dependent event samples do not prove a drift or failure cause.",
+    "Probability metrics exclude unavailable outcomes; E gates include all candidate scores.",
+    "Data provenance, session validity, Bid/Ask and execution assumptions remain unverified."
+  ],
+  "model_or_threshold_selection_performed": false,
+  "new_fit_performed": false,
+  "phase_samples": {
+    "C": {
+      "available_label_count": 199,
+      "candidate_events_missing_in_window": 8,
+      "candidate_signals_in_window": 208,
+      "embargo_seconds": 16200,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_cutoff_exclusive": 1785526200,
+      "label_prevalence": 0.34673366834170855,
+      "original_global_unavailable_events_scope": "all-signals-not-this-window",
+      "original_window_counts": {
+        "global_unavailable_events": 126,
+        "in_window_candidates": 200,
+        "label_cutoff_exclusive": 1785526200,
+        "latest_known_exit": 1785517200,
+        "negative_labels": 130,
+        "positive_labels": 69,
+        "purged_future_or_embargo_exit": 1,
+        "usable_labels": 199
+      },
+      "positive_labels": 69,
+      "scoring_universe": "original-usable-label-rows-after-boundary-purge",
+      "scoring_universe_count": 199,
+      "window_end_exclusive": 1785542400,
+      "window_start_inclusive": 1782864000
+    },
+    "E": {
+      "available_label_count": 222,
+      "candidate_events_missing_in_window": 7,
+      "candidate_signals_in_window": 229,
+      "embargo_seconds": null,
+      "future_labels_used_for_scoring_or_selection": false,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_cutoff_exclusive": null,
+      "label_prevalence": 0.3153153153153153,
+      "later_settlements_allowed_for_probability_diagnostics": true,
+      "positive_labels": 70,
+      "scoring_universe": "all-E-candidate-signals-including-unavailable-outcomes",
+      "scoring_universe_count": 229,
+      "window_end_exclusive": 1790812800,
+      "window_start_inclusive": 1788220800
+    },
+    "T": {
+      "available_label_count": 1484,
+      "candidate_events_missing_in_window": 81,
+      "candidate_signals_in_window": 1569,
+      "embargo_seconds": 16200,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_cutoff_exclusive": 1782847800,
+      "label_prevalence": 0.37331536388140163,
+      "original_global_unavailable_events_scope": "all-signals-not-this-window",
+      "original_window_counts": {
+        "global_unavailable_events": 126,
+        "in_window_candidates": 1488,
+        "label_cutoff_exclusive": 1782847800,
+        "latest_known_exit": 1782833400,
+        "negative_labels": 930,
+        "positive_labels": 554,
+        "purged_signal_embargo": 4,
+        "usable_labels": 1484
+      },
+      "positive_labels": 554,
+      "scoring_universe": "original-usable-label-rows-after-boundary-purge",
+      "scoring_universe_count": 1484,
+      "window_end_exclusive": 1782864000,
+      "window_start_inclusive": 1762214400
+    },
+    "V": {
+      "available_label_count": 232,
+      "candidate_events_missing_in_window": 9,
+      "candidate_signals_in_window": 243,
+      "embargo_seconds": 16200,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_cutoff_exclusive": 1788204600,
+      "label_prevalence": 0.3232758620689655,
+      "original_global_unavailable_events_scope": "all-signals-not-this-window",
+      "original_window_counts": {
+        "global_unavailable_events": 126,
+        "in_window_candidates": 234,
+        "label_cutoff_exclusive": 1788204600,
+        "latest_known_exit": 1788199200,
+        "negative_labels": 157,
+        "positive_labels": 75,
+        "purged_signal_embargo": 2,
+        "usable_labels": 232
+      },
+      "positive_labels": 75,
+      "scoring_universe": "original-usable-label-rows-after-boundary-purge",
+      "scoring_universe_count": 232,
+      "window_end_exclusive": 1788220800,
+      "window_start_inclusive": 1785542400
+    }
+  },
+  "q_past": {
+    "M1_cal": 0.0,
+    "M1_raw": 0.0,
+    "M2_cal": 0.0,
+    "M2_raw": 0.035175879396984924
+  },
+  "q_past_basis": "score>=.55 fraction on original usable C rows only",
+  "quality": "flat_inclusive_weekdays",
+  "raw_scores_or_weights_public": false,
+  "records": [
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 1484,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 1484,
+      "label_prevalence": 0.37331536388140163,
+      "missing_label_count": 0,
+      "phase": "T",
+      "positive_labels": 554,
+      "probability_metrics": {
+        "brier": 0.2328653770002764,
+        "log_loss": 0.6584146538646575,
+        "n": 1484,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3673682554497576,
+            "n": 1309,
+            "positive_fraction": 0.36134453781512604
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.417907532556449,
+            "n": 175,
+            "positive_fraction": 0.46285714285714286
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 1309,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 175,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.538063310069842,
+        "mean": 0.37332807586328254,
+        "median": 0.3753202449220495,
+        "min": 0.31225269628494334,
+        "n": 1484,
+        "p05": 0.3359259609946865,
+        "p25": 0.3522790771325458,
+        "p75": 0.38877107789874954,
+        "p95": 0.4123002422068958,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.025847142584976467,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 1484,
+      "scored_labeled_count": 1484,
+      "status": "available",
+      "target": "M1_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 199,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 199,
+      "label_prevalence": 0.34673366834170855,
+      "missing_label_count": 0,
+      "phase": "C",
+      "positive_labels": 69,
+      "probability_metrics": {
+        "brier": 0.2284646399940583,
+        "log_loss": 0.6495618036064054,
+        "n": 199,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3617665887132975,
+            "n": 179,
+            "positive_fraction": 0.3463687150837989
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.42320805524057103,
+            "n": 20,
+            "positive_fraction": 0.35
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 179,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 20,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.4803034166269866,
+        "mean": 0.3679416104748325,
+        "median": 0.3599712011991393,
+        "min": 0.3257935039741105,
+        "n": 199,
+        "p05": 0.3357810728525212,
+        "p25": 0.3482783073972878,
+        "p75": 0.38407506020618637,
+        "p95": 0.4133557000355044,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.02636739181549177,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 199,
+      "scored_labeled_count": 199,
+      "status": "available",
+      "target": "M1_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 232,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 232,
+      "label_prevalence": 0.3232758620689655,
+      "missing_label_count": 0,
+      "phase": "V",
+      "positive_labels": 75,
+      "probability_metrics": {
+        "brier": 0.21995517350079416,
+        "log_loss": 0.6318915783508541,
+        "n": 232,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3681815808921541,
+            "n": 193,
+            "positive_fraction": 0.32124352331606215
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.4140134341715954,
+            "n": 39,
+            "positive_fraction": 0.3333333333333333
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 193,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 39,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.4690996791548016,
+        "mean": 0.37588607346930153,
+        "median": 0.37875343190752947,
+        "min": 0.3229050503716108,
+        "n": 232,
+        "p05": 0.3355450375616778,
+        "p25": 0.3510818589884501,
+        "p75": 0.39240897563534377,
+        "p95": 0.41518598885488517,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.026375342017814423,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 232,
+      "scored_labeled_count": 232,
+      "status": "available",
+      "target": "M1_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 229,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 222,
+      "label_prevalence": 0.3153153153153153,
+      "missing_label_count": 7,
+      "phase": "E",
+      "positive_labels": 70,
+      "probability_metrics": {
+        "brier": 0.2241111852651862,
+        "log_loss": 0.6410259718671066,
+        "n": 222,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.36373233380804804,
+            "n": 200,
+            "positive_fraction": 0.325
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.41290151319484275,
+            "n": 22,
+            "positive_fraction": 0.22727272727272727
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 205,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 24,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.48755042809709465,
+        "mean": 0.3690305660652765,
+        "median": 0.3693603935588574,
+        "min": 0.32440140735255574,
+        "n": 229,
+        "p05": 0.33547783907670115,
+        "p25": 0.3475928751208239,
+        "p75": 0.3867846763594886,
+        "p95": 0.40935430828498004,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.02492489274444709,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 229,
+      "scored_labeled_count": 222,
+      "status": "available",
+      "target": "M1_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 1484,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 1484,
+      "label_prevalence": 0.37331536388140163,
+      "missing_label_count": 0,
+      "phase": "T",
+      "positive_labels": 554,
+      "probability_metrics": {
+        "brier": 0.23472288583461648,
+        "log_loss": 0.6623830575763056,
+        "n": 1484,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34656023135708297,
+            "n": 1484,
+            "positive_fraction": 0.37331536388140163
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 1484,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.34858431491413977,
+        "mean": 0.34656023135708297,
+        "median": 0.3464851626567105,
+        "min": 0.3415485408102993,
+        "n": 1484,
+        "p05": 0.34532634341136176,
+        "p25": 0.34605895016345434,
+        "p75": 0.3472306100672102,
+        "p95": 0.3477735783660972,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0008226135989950824,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 1484,
+      "scored_labeled_count": 1484,
+      "status": "available",
+      "target": "M1_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 199,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 199,
+      "label_prevalence": 0.34673366834170855,
+      "missing_label_count": 0,
+      "phase": "C",
+      "positive_labels": 69,
+      "probability_metrics": {
+        "brier": 0.22648399342496575,
+        "log_loss": 0.645345021642022,
+        "n": 199,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3467336683445235,
+            "n": 199,
+            "positive_fraction": 0.34673366834170855
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 199,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3481167204015095,
+        "mean": 0.3467336683445235,
+        "median": 0.3469793872946087,
+        "min": 0.34327008362609907,
+        "n": 199,
+        "p05": 0.34529381776239004,
+        "p25": 0.34620707736479694,
+        "p75": 0.3473622911565106,
+        "p95": 0.3477784471105927,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0008379984618876622,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 199,
+      "scored_labeled_count": 199,
+      "status": "available",
+      "target": "M1_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 232,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 232,
+      "label_prevalence": 0.3232758620689655,
+      "missing_label_count": 0,
+      "phase": "V",
+      "positive_labels": 75,
+      "probability_metrics": {
+        "brier": 0.2193802286834488,
+        "log_loss": 0.6306778721662109,
+        "n": 232,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.346479169182909,
+            "n": 232,
+            "positive_fraction": 0.3232758620689655
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 232,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3482155656334351,
+        "mean": 0.346479169182909,
+        "median": 0.34637580191732564,
+        "min": 0.3436048780518183,
+        "n": 232,
+        "p05": 0.3452374719239763,
+        "p25": 0.3459446685064852,
+        "p75": 0.3472699403625408,
+        "p95": 0.34778638982509263,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0008413413842786875,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 232,
+      "scored_labeled_count": 232,
+      "status": "available",
+      "target": "M1_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 229,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 222,
+      "label_prevalence": 0.3153153153153153,
+      "missing_label_count": 7,
+      "phase": "E",
+      "positive_labels": 70,
+      "probability_metrics": {
+        "brier": 0.21672435707028978,
+        "log_loss": 0.6251591767598856,
+        "n": 222,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34671145595441694,
+            "n": 222,
+            "positive_fraction": 0.3153153153153153
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 229,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3481643003208525,
+        "mean": 0.3466978413758994,
+        "median": 0.3466760048031056,
+        "min": 0.3430539447103824,
+        "n": 229,
+        "p05": 0.3454172733917268,
+        "p25": 0.3461215225610242,
+        "p75": 0.3473849235895182,
+        "p95": 0.3477886487155699,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0007977739974204137,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 229,
+      "scored_labeled_count": 222,
+      "status": "available",
+      "target": "M1_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 75,
+      "gate_denominator": 1484,
+      "gate_fraction": 0.05053908355795148,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 1484,
+      "label_prevalence": 0.37331536388140163,
+      "missing_label_count": 0,
+      "phase": "T",
+      "positive_labels": 554,
+      "probability_metrics": {
+        "brier": 0.23021171670668944,
+        "log_loss": 0.6528857906887655,
+        "n": 1484,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3363821138211382,
+            "n": 982,
+            "positive_fraction": 0.3360488798370672
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.44627539439615,
+            "n": 502,
+            "positive_fraction": 0.44621513944223107
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 982,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 502,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.5584415584415584,
+        "mean": 0.37355625590244274,
+        "median": 0.3363821138211382,
+        "min": 0.3363821138211382,
+        "n": 1484,
+        "p05": 0.3363821138211382,
+        "p25": 0.3363821138211382,
+        "p75": 0.4162303664921466,
+        "p95": 0.5512059369202182,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.060825184134310845,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 1484,
+      "scored_labeled_count": 1484,
+      "status": "available",
+      "target": "M2_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 7,
+      "gate_denominator": 199,
+      "gate_fraction": 0.035175879396984924,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 199,
+      "label_prevalence": 0.34673366834170855,
+      "missing_label_count": 0,
+      "phase": "C",
+      "positive_labels": 69,
+      "probability_metrics": {
+        "brier": 0.23359560830817186,
+        "log_loss": 0.6601791605837057,
+        "n": 199,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3363821138211382,
+            "n": 150,
+            "positive_fraction": 0.37333333333333335
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.45572456026869657,
+            "n": 49,
+            "positive_fraction": 0.2653061224489796
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 150,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 49,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.5584415584415584,
+        "mean": 0.3657679423434013,
+        "median": 0.3363821138211382,
+        "min": 0.3363821138211382,
+        "n": 199,
+        "p05": 0.3363821138211382,
+        "p25": 0.3363821138211382,
+        "p75": 0.3363821138211382,
+        "p95": 0.5102040816326531,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.05843415215308687,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 199,
+      "scored_labeled_count": 199,
+      "status": "available",
+      "target": "M2_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 18,
+      "gate_denominator": 232,
+      "gate_fraction": 0.07758620689655173,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 232,
+      "label_prevalence": 0.3232758620689655,
+      "missing_label_count": 0,
+      "phase": "V",
+      "positive_labels": 75,
+      "probability_metrics": {
+        "brier": 0.21592018391273934,
+        "log_loss": 0.6232751620533664,
+        "n": 232,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3363821138211382,
+            "n": 139,
+            "positive_fraction": 0.26618705035971224
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.4528493438185334,
+            "n": 93,
+            "positive_fraction": 0.40860215053763443
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 139,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 93,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.5584415584415584,
+        "mean": 0.3830694086045768,
+        "median": 0.3363821138211382,
+        "min": 0.3363821138211382,
+        "n": 232,
+        "p05": 0.3363821138211382,
+        "p25": 0.3363821138211382,
+        "p75": 0.4162303664921466,
+        "p95": 0.5584415584415584,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.06805872498502377,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 232,
+      "scored_labeled_count": 232,
+      "status": "available",
+      "target": "M2_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 2,
+      "gate_denominator": 229,
+      "gate_fraction": 0.008733624454148471,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 222,
+      "label_prevalence": 0.3153153153153153,
+      "missing_label_count": 7,
+      "phase": "E",
+      "positive_labels": 70,
+      "probability_metrics": {
+        "brier": 0.22903163408444135,
+        "log_loss": 0.65101480270739,
+        "n": 222,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3363821138211382,
+            "n": 159,
+            "positive_fraction": 0.37735849056603776
+          },
+          {
+            "bin": 2,
+            "mean_probability": 0.4461029941316297,
+            "n": 63,
+            "positive_fraction": 0.15873015873015872
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 164,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 65,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.5584415584415584,
+        "mean": 0.36726469882071455,
+        "median": 0.3363821138211382,
+        "min": 0.3363821138211382,
+        "n": 229,
+        "p05": 0.3363821138211382,
+        "p25": 0.3363821138211382,
+        "p75": 0.4162303664921466,
+        "p95": 0.5102040816326531,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0547778042225059,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 229,
+      "scored_labeled_count": 222,
+      "status": "available",
+      "target": "M2_raw",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 1484,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 1484,
+      "label_prevalence": 0.37331536388140163,
+      "missing_label_count": 0,
+      "phase": "T",
+      "positive_labels": 554,
+      "probability_metrics": {
+        "brier": 0.23551787792757156,
+        "log_loss": 0.6641572638139204,
+        "n": 1484,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3458983745935433,
+            "n": 1484,
+            "positive_fraction": 0.37331536388140163
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 1484,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3498277031691946,
+        "mean": 0.3458983745935433,
+        "median": 0.3498277031691946,
+        "min": 0.3269983048309844,
+        "n": 1484,
+        "p05": 0.3277154422807994,
+        "p25": 0.3412207555991588,
+        "p75": 0.3498277031691946,
+        "p95": 0.3498277031691946,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.006339272206585445,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 1484,
+      "scored_labeled_count": 1484,
+      "status": "available",
+      "target": "M2_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 199,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 199,
+      "label_prevalence": 0.34673366834170855,
+      "missing_label_count": 0,
+      "phase": "C",
+      "positive_labels": 69,
+      "probability_metrics": {
+        "brier": 0.22619082436620014,
+        "log_loss": 0.6446966972655437,
+        "n": 199,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34673366834170855,
+            "n": 199,
+            "positive_fraction": 0.34673366834170855
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 199,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3498277031691946,
+        "mean": 0.34673366834170855,
+        "median": 0.3498277031691946,
+        "min": 0.3269983048309844,
+        "n": 199,
+        "p05": 0.3317792211630844,
+        "p25": 0.3498277031691946,
+        "p75": 0.3498277031691946,
+        "p95": 0.3498277031691946,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.006086171516764239,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 199,
+      "scored_labeled_count": 199,
+      "status": "available",
+      "target": "M2_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 232,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 232,
+      "label_prevalence": 0.3232758620689655,
+      "missing_label_count": 0,
+      "phase": "V",
+      "positive_labels": 75,
+      "probability_metrics": {
+        "brier": 0.22043541646192885,
+        "log_loss": 0.633028124997531,
+        "n": 232,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.3449077719288276,
+            "n": 232,
+            "positive_fraction": 0.3232758620689655
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 232,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3498277031691946,
+        "mean": 0.3449077719288276,
+        "median": 0.3498277031691946,
+        "min": 0.3269983048309844,
+        "n": 232,
+        "p05": 0.3269983048309844,
+        "p25": 0.3412207555991588,
+        "p75": 0.3498277031691946,
+        "p95": 0.3498277031691946,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0070669572518209526,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 232,
+      "scored_labeled_count": 232,
+      "status": "available",
+      "target": "M2_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": true,
+      "empirical_base_rate_only": false,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 229,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 222,
+      "label_prevalence": 0.3153153153153153,
+      "missing_label_count": 7,
+      "phase": "E",
+      "positive_labels": 70,
+      "probability_metrics": {
+        "brier": 0.21610833352209846,
+        "log_loss": 0.6237925521527923,
+        "n": 222,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34653406044909607,
+            "n": 222,
+            "positive_fraction": 0.3153153153153153
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 229,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.3498277031691946,
+        "mean": 0.346559569636435,
+        "median": 0.3498277031691946,
+        "min": 0.3269983048309844,
+        "n": 229,
+        "p05": 0.3317792211630844,
+        "p25": 0.3412207555991588,
+        "p75": 0.3498277031691946,
+        "p95": 0.3498277031691946,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0057388027967384125,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 229,
+      "scored_labeled_count": 222,
+      "status": "available",
+      "target": "M2_cal",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": true,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 1484,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 1484,
+      "label_prevalence": 0.37331536388140163,
+      "missing_label_count": 0,
+      "phase": "T",
+      "positive_labels": 554,
+      "probability_metrics": {
+        "brier": 0.23465758950926321,
+        "log_loss": 0.6622387583696586,
+        "n": 1484,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34673366834170855,
+            "n": 1484,
+            "positive_fraction": 0.37331536388140163
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 1484,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.34673366834170855,
+        "mean": 0.34673366834170855,
+        "median": 0.34673366834170855,
+        "min": 0.34673366834170855,
+        "n": 1484,
+        "p05": 0.34673366834170855,
+        "p25": 0.34673366834170855,
+        "p75": 0.34673366834170855,
+        "p95": 0.34673366834170855,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 1484,
+      "scored_labeled_count": 1484,
+      "status": "available",
+      "target": "BASE_C",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": true,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 199,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": false,
+      "in_sample_diagnostics_only": true,
+      "label_available_count": 199,
+      "label_prevalence": 0.34673366834170855,
+      "missing_label_count": 0,
+      "phase": "C",
+      "positive_labels": 69,
+      "probability_metrics": {
+        "brier": 0.22650943158001058,
+        "log_loss": 0.6454011695665195,
+        "n": 199,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34673366834170855,
+            "n": 199,
+            "positive_fraction": 0.34673366834170855
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 199,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.34673366834170855,
+        "mean": 0.34673366834170855,
+        "median": 0.34673366834170855,
+        "min": 0.34673366834170855,
+        "n": 199,
+        "p05": 0.34673366834170855,
+        "p25": 0.34673366834170855,
+        "p75": 0.34673366834170855,
+        "p95": 0.34673366834170855,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 199,
+      "scored_labeled_count": 199,
+      "status": "available",
+      "target": "BASE_C",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": true,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 232,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 232,
+      "label_prevalence": 0.3232758620689655,
+      "missing_label_count": 0,
+      "phase": "V",
+      "positive_labels": 75,
+      "probability_metrics": {
+        "brier": 0.21931884774766222,
+        "log_loss": 0.6305423395248334,
+        "n": 232,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34673366834170855,
+            "n": 232,
+            "positive_fraction": 0.3232758620689655
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 232,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.34673366834170855,
+        "mean": 0.34673366834170855,
+        "median": 0.34673366834170855,
+        "min": 0.34673366834170855,
+        "n": 232,
+        "p05": 0.34673366834170855,
+        "p25": 0.34673366834170855,
+        "p75": 0.34673366834170855,
+        "p95": 0.34673366834170855,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 232,
+      "scored_labeled_count": 232,
+      "status": "available",
+      "target": "BASE_C",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    },
+    {
+      "calibrator_applied": false,
+      "empirical_base_rate_only": true,
+      "fold": "WF3",
+      "gate_count": 0,
+      "gate_denominator": 229,
+      "gate_fraction": 0.0,
+      "historical_development_not_independent_test": true,
+      "in_sample_diagnostics_only": false,
+      "label_available_count": 222,
+      "label_prevalence": 0.3153153153153153,
+      "missing_label_count": 7,
+      "phase": "E",
+      "positive_labels": 70,
+      "probability_metrics": {
+        "brier": 0.21687868014980963,
+        "log_loss": 0.6254999067467597,
+        "n": 222,
+        "reliability": [
+          {
+            "bin": 0,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 1,
+            "mean_probability": 0.34673366834170855,
+            "n": 222,
+            "positive_fraction": 0.3153153153153153
+          },
+          {
+            "bin": 2,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 3,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          },
+          {
+            "bin": 4,
+            "mean_probability": null,
+            "n": 0,
+            "positive_fraction": null
+          }
+        ]
+      },
+      "score_distribution": {
+        "histogram": [
+          {
+            "bin": 0,
+            "lower_inclusive": 0.0,
+            "n": 0,
+            "upper": 0.2,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 1,
+            "lower_inclusive": 0.2,
+            "n": 229,
+            "upper": 0.4,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 2,
+            "lower_inclusive": 0.4,
+            "n": 0,
+            "upper": 0.6,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 3,
+            "lower_inclusive": 0.6,
+            "n": 0,
+            "upper": 0.8,
+            "upper_inclusive": false
+          },
+          {
+            "bin": 4,
+            "lower_inclusive": 0.8,
+            "n": 0,
+            "upper": 1.0,
+            "upper_inclusive": true
+          }
+        ],
+        "max": 0.34673366834170855,
+        "mean": 0.34673366834170855,
+        "median": 0.34673366834170855,
+        "min": 0.34673366834170855,
+        "n": 229,
+        "p05": 0.34673366834170855,
+        "p25": 0.34673366834170855,
+        "p75": 0.34673366834170855,
+        "p95": 0.34673366834170855,
+        "quantile_method": "linear-(n-1)*q",
+        "sd": 0.0,
+        "sd_definition": "population"
+      },
+      "score_unavailability_reasons": {},
+      "scored_candidate_count": 229,
+      "scored_labeled_count": 222,
+      "status": "available",
+      "target": "BASE_C",
+      "threshold": 0.55,
+      "unavailable_score_count": 0
+    }
+  ],
+  "scenario": "high_cost",
+  "schema": 1,
+  "threshold": 0.55
+}
