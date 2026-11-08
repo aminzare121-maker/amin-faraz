@@ -1,8 +1,7 @@
 name: Amin Windows native connection
 "on":
   workflow_dispatch:
-permissions:
-  contents: read
+permissions: {}
 concurrency:
   group: amin-windows-native
   cancel-in-progress: false
@@ -15,8 +14,6 @@ jobs:
       github.ref == 'refs/heads/main'
     runs-on: [amin-win-native-58]
     timeout-minutes: 3
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Verify Windows runner round trip
         shell: pwsh
