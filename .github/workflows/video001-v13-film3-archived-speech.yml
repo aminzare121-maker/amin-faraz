@@ -29,7 +29,7 @@ jobs:
           python experiments/video001-v13/windows/archive_asr_windows.py --archives "$RUNNER_TEMP/audio" --out "$RUNNER_TEMP/speech" --phase verify
       - name: Transcribe verified Persian speech with V13
         run: |
-          python -m pip install 'faster-whisper>=1.1,<2'
+          python -m pip install 'faster-whisper>=1.1,<2' 'av==18.1.0'
           python experiments/video001-v13/windows/archive_asr_windows.py --archives "$RUNNER_TEMP/audio" --out "$RUNNER_TEMP/speech" --phase run
       - name: Preserve completed private speech checkpoints
         if: always()
