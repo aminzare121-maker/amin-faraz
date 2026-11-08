@@ -1,0 +1,15 @@
+{
+  "schema": "video001_v13_serial_queue_authorization_v1",
+  "magazine_id": "artin-course-001",
+  "start_queue_id": "video-q-0003-artin-clip-01",
+  "start_sequence": 3,
+  "authorization": "USER_EXPLICIT_2026-11-08",
+  "engine": "VIDEO-001-V13-CANDIDATE",
+  "source_engine_sha": "45a68e3d5b8e21c672f7e5450307b205c5c70903",
+  "workflow": ".github/workflows/tools-makhzan-video001-v13-serial-queue.yml",
+  "run_scope": "Only registered user-provided videos, ordered by magazine validator; fail closed on incomplete prior film",
+  "no_trades": true,
+  "original_v12_unchanged": true,
+  "semantics_human_verified": false,
+  "notes": "Attempt new queue run from film 3. Four optional V13 models are not executed in this candidate workflow; no 3-minute or semantic fidelity claim."
+}
