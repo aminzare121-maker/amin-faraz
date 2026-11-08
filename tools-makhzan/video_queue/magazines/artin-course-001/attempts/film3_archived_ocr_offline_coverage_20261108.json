@@ -1,0 +1,21 @@
+{
+  "schema": "artin_film3_archived_ocr_offline_coverage_v1",
+  "source_video_sha256": "a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb",
+  "source_movie_bytes": 218647703,
+  "duration_seconds": 5157.198367,
+  "source_global_audio_chunks": 18,
+  "archived_worker_count": 16,
+  "source_selected_chat_frames": 243,
+  "source_ocr_frames_matched": 243,
+  "frame_coverage_complete": true,
+  "unique_and_provenance_errors": [],
+  "candidate_ocr_text_line_count": 5757,
+  "possible_question_observations_not_verified": 417,
+  "frames_with_possible_question_mark": 188,
+  "ocr_failed_frames": 0,
+  "ocr_frames_with_text": 240,
+  "ocr_frames_empty": 3,
+  "all_model_semantics_human_verified": false,
+  "full_audio_transcript_present": false,
+  "note": "Only offline check of pre-existing GitHub OCR artifacts; user supplied share link but MP4 inaccessible from current execution environment. 417 are raw duplicate-prone OCR question observations, NOT verified student questions. No raw private text uploaded."
+}
