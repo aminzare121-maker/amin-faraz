@@ -1,0 +1,37 @@
+[
+  {
+    "event": "disconnect",
+    "gate": "{\n  \"scope\": \"MOCK_ONLY_NOT_BROKER\",\n  \"eligible\": false,\n  \"reasons\": [\n    \"terminal:UNKNOWN_OR_UNHEALTHY\",\n    \"broker_demo:UNKNOWN_OR_UNHEALTHY\",\n    \"engine:UNKNOWN_OR_UNHEALTHY\",\n    \"api:UNKNOWN_OR_UNHEALTHY\",\n    \"guardian:UNKNOWN_OR_UNHEALTHY\",\n    \"data_fresh:UNKNOWN_OR_UNHEALTHY\",\n    \"STALE_OR_INVALID_TIME\",\n    \"RECONCILIATION_REQUIRED\",\n    \"DISARMED\",\n    \"RISK_POLICY_UNRESOLVED\",\n    \"COSTS_UNKNOWN\"\n  ]\n}",
+    "status": "وضعیت‌های شبیه‌ساز — نه بروکر\nterminal\nUNKNOWN\nbroker_demo\nUNKNOWN\napi\nOFFLINE\nengine\nOFFLINE\nguardian\nUNKNOWN\ndata_fresh\nUNKNOWN\nexecution_armed\nDISARMED"
+  },
+  {
+    "event": "reconnect",
+    "gate": "{\n  \"scope\": \"MOCK_ONLY_NOT_BROKER\",\n  \"eligible\": false,\n  \"reasons\": [\n    \"terminal:UNKNOWN_OR_UNHEALTHY\",\n    \"broker_demo:UNKNOWN_OR_UNHEALTHY\",\n    \"guardian:UNKNOWN_OR_UNHEALTHY\",\n    \"data_fresh:UNKNOWN_OR_UNHEALTHY\",\n    \"STALE_OR_INVALID_TIME\",\n    \"RECONCILIATION_REQUIRED\",\n    \"DISARMED\",\n    \"RISK_POLICY_UNRESOLVED\",\n    \"COSTS_UNKNOWN\"\n  ]\n}",
+    "status": "وضعیت‌های شبیه‌ساز — نه بروکر\nterminal\nUNKNOWN\nbroker_demo\nUNKNOWN\napi\nOK\nengine\nOK\nguardian\nUNKNOWN\ndata_fresh\nUNKNOWN\nexecution_armed\nDISARMED"
+  },
+  {
+    "event": "reconcile",
+    "gate": "{\n  \"scope\": \"MOCK_ONLY_NOT_BROKER\",\n  \"eligible\": false,\n  \"reasons\": [\n    \"terminal:UNKNOWN_OR_UNHEALTHY\",\n    \"broker_demo:UNKNOWN_OR_UNHEALTHY\",\n    \"guardian:UNKNOWN_OR_UNHEALTHY\",\n    \"data_fresh:UNKNOWN_OR_UNHEALTHY\",\n    \"STALE_OR_INVALID_TIME\",\n    \"DISARMED\",\n    \"RISK_POLICY_UNRESOLVED\",\n    \"COSTS_UNKNOWN\"\n  ]\n}",
+    "status": "وضعیت‌های شبیه‌ساز — نه بروکر\nterminal\nUNKNOWN\nbroker_demo\nUNKNOWN\napi\nOK\nengine\nOK\nguardian\nUNKNOWN\ndata_fresh\nUNKNOWN\nexecution_armed\nDISARMED"
+  },
+  {
+    "reduced": "none"
+  },
+  {
+    "duplicate": "تکرار: بدون پردازش مجدد. رد شد — terminal:UNKNOWN_OR_UNHEALTHY | broker_demo:UNKNOWN_OR_UNHEALTHY | guardian:UNKNOWN_OR_UNHEALTHY | data_fresh:UNKNOWN_OR_UNHEALTHY | STALE_OR_INVALID_TIME | DISARMED | RISK_POLICY_UNRESOLVED | COSTS_UNKNOWN | HUMAN_CONFIRMATION_REQUIRED",
+    "journal": "[\n  {\n    \"id\": \"mock-1\",\n    \"accepted\": false,\n    \"reason\": \"terminal:UNKNOWN_OR_UNHEALTHY | broker_demo:UNKNOWN_OR_UNHEALTHY | guardian:UNKNOWN_OR_UNHEALTHY | data_fresh:UNKNOWN_OR_UNHEALTHY | STALE_OR_INVALID_TIME | DISARMED | RISK_POLICY_UNRESOLVED | COSTS_UNKNOWN | HUMAN_CONFIRMATION_REQUIRED\",\n    \"ordersSent\": 0\n  }\n]"
+  },
+  {
+    "pnl": "ناخالص فرضی: 10.00 USD | هزینه فرضی: 0.38 USD | خالص فرضی: 9.62 USD | تحقق‌یافته: ۰"
+  },
+  {
+    "mobileIndependent": true,
+    "mobile": "گوشی نمونه قطع شد؛ وضعیت مستقل موتور و محافظ تغییر نکرد. سلامت واقعی آن‌ها همچنان نامعلوم است."
+  },
+  {
+    "arrowLeft": "8 / 8"
+  },
+  {
+    "arrowRight": "7 / 8"
+  }
+]
