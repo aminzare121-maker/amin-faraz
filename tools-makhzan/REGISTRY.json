@@ -10,7 +10,7 @@
   "repository": "aminzare121-maker/amin-faraz",
   "hub_ref": "tools-makhzan-hub",
   "index_path": "tools-makhzan/INDEX_FA.md",
-  "updated_date": "2026-11-07",
+  "updated_date": "2026-11-08",
   "rules": {
     "discovery": "First fetch this registry from connected GitHub in each new conversation that mentions the hub, then fetch tool state; never answer only from chat memory.",
     "idempotency": "Known video source URL + recorded source SHA256 + existing results means continuation, NOT automatic restart.",
@@ -353,6 +353,35 @@
         "teacher_semantic_links_verified": false,
         "no_live_trading": true
       }
+    },
+    {
+      "id": "VIDEO-001-V13",
+      "name_fa": "پردازشگر فیلم V13 — نسخه آزمایشی مرتبط با VIDEO-001",
+      "purpose": "Candidate integration of V12 evidence pipeline with separately audited optional WhisperX/PaddleOCR/Qwen3-VL/VideoRAG outputs; not operational.",
+      "status": "CANDIDATE_REGISTERED_NOT_DEPLOYED_REAL_FULL_FILM_NOT_PASSED",
+      "version_of": "VIDEO-001",
+      "is_active": false,
+      "is_production": false,
+      "code": {
+        "repository": "aminzare121-maker/amin-faraz",
+        "ref": "experiment/video001-v13-integration-20261108",
+        "path": "experiments/video001-v13",
+        "pull_request": 59,
+        "url": "https://github.com/aminzare121-maker/amin-faraz/pull/59",
+        "merged_into_main": false
+      },
+      "state_path": "tools-makhzan/VIDEO-001-V13_STATUS_FA.md",
+      "film3_report_path": "experiments/video001-v13/STATUS_FILM3_FA.md",
+      "verified_scope": "read-only SHA/time linkage for archival third-film OCR; dynamic 18 chunks/17-worker design and local tests",
+      "explicit_unverified": [
+        "Four external models not yet executed end-to-end on third film",
+        "Full 18-chunk third-film ASR was not completed",
+        "Three-minute total processing for 90-minute movie not verified",
+        "Independent semantic accuracy and instructor Q&A not established",
+        "GitHub Actions V13 CI not confirmed"
+      ],
+      "preserved": "Original VIDEO-001 V12, tools-makhzan queue, main branch and trading engine untouched",
+      "no_live_trading": true
     }
   ]
 }
