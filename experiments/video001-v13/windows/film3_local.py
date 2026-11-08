@@ -143,21 +143,12 @@ def prepare(out: Path):
 
 def transcribe(out: Path):
     root, _, _ = get_prepared(out)
-    dst = out / "asr" / "asr_evidence"
-    manifest_path = dst / "manifest_redacted.json"
-    statuses = list(dst.glob("partition_*_status.json"))
-    parts = list(dst.glob("part_*_unverified.json"))
-    if manifest_path.is_file() and len(statuses)==1 and len(parts)==MOVIE_PARTS:
-        if all(read_json(p).get("source_video_sha256")==MOVIE_SHA for p in parts):
-            return "ASR_PARTS_ALREADY_PRESENT_REVERIFY_ON_MERGE"
-    sys.path.insert(0, str(ENGINE))
-    from artin_parallel_asr_worker_v5 import process_shard
-    # Existing audited worker: CPU/int8, four CPU threads, one model; original
-    # 18 x 5min chunks remain original; no 17 simultaneous CPU models.
-    process_shard("",out / "asr",0,1,MOVIE_SHA,
-                  model_name="large-v3-turbo",
-                  prepped_root=root / "asr_shards" / "worker_00")
-    return "ASR_PROCESSED_18_SOURCE_CHUNKS"
+    from resume_asr import run
+    result = run(ENGINE, root / "asr_shards" / "worker_00",
+                 out / "asr" / "asr_evidence", MOVIE_SHA, expected_parts=MOVIE_PARTS)
+    return {"stage":"ASR_COMPLETED_OR_RESUMED","parts_verified":result["parts_verified"],
+            "parts_reused":result["parts_reused"],
+            "parts_newly_transcribed":result["parts_newly_transcribed"]}
 
 
 def recognize_chat(out: Path):
