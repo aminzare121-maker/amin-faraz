@@ -10,11 +10,45 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import re
+from datetime import datetime, timezone
 
 ROOT=Path(__file__).resolve().parent
 WORKSPACE=ROOT/'approved-workspace'
 BRIDGE=ROOT/'hardened'/'bridge_agent.py'
 LAUNCHER=ROOT/'hardened'/'START_ONCE_WINDOWS.bat'
+
+def safe_child_diagnostic(returncode, stderr):
+    """Return only fixed classifications; never reflect raw output/credentials."""
+    if returncode == 0:
+        return 'PROCESS_EXITED_ZERO_NOT_HANDSHAKE_VERIFIED'
+    text = stderr.decode('utf-8', errors='replace') if isinstance(stderr, bytes) else str(stderr or '')
+    if '[WinError 10013]' in text:
+        return 'LOCAL_NETWORK_PERMISSION_DENIED'
+    found = re.search(r'HTTP Error (\d{3})(?:\D|$)', text)
+    if found:
+        return 'HTTP_STATUS_' + found.group(1)
+    if 'getaddrinfo failed' in text or 'NameResolutionError' in text:
+        return 'NETWORK_NAME_RESOLUTION_FAILED'
+    if 'LOCAL_AUTH_MISSING' in text:
+        return 'LOCAL_AUTH_MISSING'
+    if 'TimeoutError' in text or 'timed out' in text:
+        return 'LOCAL_NETWORK_OR_CHILD_TIMEOUT'
+    if 'INFLIGHT_NEEDS_LOCAL_RECONCILIATION' in text:
+        return 'INFLIGHT_NEEDS_LOCAL_RECONCILIATION'
+    return 'CHILD_ERROR_CLASS_UNAVAILABLE'
+
+def record_safe_diagnostic(code, classification):
+    # This is a diagnostic, never an AMIN-WIN-RESULT or evidence of connectivity.
+    payload = {'utc':datetime.now(timezone.utc).isoformat(), 'returncode':code,
+        'classification':classification, 'handshake_verified':False,
+        'raw_stderr_saved':False, 'credential_saved':False}
+    try:
+        temporary = ROOT/'LAST_RUN_DIAGNOSTIC.json.partial'
+        temporary.write_text(json.dumps(payload, sort_keys=True)+'\n', encoding='utf-8')
+        os.replace(temporary, ROOT/'LAST_RUN_DIAGNOSTIC.json')
+    except OSError:
+        pass
 
 def cached_auth():
     git=shutil.which('git')
@@ -65,6 +99,8 @@ def run_once(expected_bridge_sha256,expected_launcher_sha256=None):
             cwd=BRIDGE.parent,env=env,stdin=subprocess.DEVNULL,capture_output=True,
             timeout=90,shell=False)
         # Do not forward raw child stdout/stderr, even if it unexpectedly fails.
+        classification = safe_child_diagnostic(completed.returncode, completed.stderr)
+        record_safe_diagnostic(completed.returncode, classification)
         return {'status':'CHILD_EXITED','live_bridge_executed':True,'returncode':completed.returncode,
                 'handshake_verified_by_host':False,'verification':'READ_ISSUE38_RESULT_SEPARATELY'}
     except subprocess.TimeoutExpired:
@@ -79,3 +115,4 @@ if __name__=='__main__':
     if len(sys.argv)!=3 or any(len(v)!=64 or any(c not in '0123456789abcdef' for c in v) for v in sys.argv[1:]):
         print(json.dumps({'status':'EXPECTED_REVIEWED_CODE_AND_LAUNCHER_SHAS_REQUIRED'}));raise SystemExit(2)
     print(json.dumps(run_once(sys.argv[1],sys.argv[2]),sort_keys=True))
+
