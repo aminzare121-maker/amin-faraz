@@ -8,6 +8,8 @@ on:
       - 'research/artin-film-engine-v3-1/video001_fast_source_once_v2.py'
       - 'research/artin-film-engine-v3-1/video001_source_overlap_scheduler_v1.py'
       - 'research/artin-film-engine-v3-1/test_video001_source_overlap_scheduler_v1.py'
+      - 'research/artin-film-engine-v3-1/video001_speed_gate_v1.py'
+      - 'research/artin-film-engine-v3-1/test_video001_speed_gate_v1.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,7 +28,7 @@ jobs:
       - name: Prove independent source-stage overlap and fail-closed propagation
         working-directory: research/artin-film-engine-v3-1
         run: |
-          python3 -B -m unittest -v test_video001_source_overlap_scheduler_v1
+          python3 -B -m unittest -v test_video001_source_overlap_scheduler_v1 test_video001_speed_gate_v1
           python3 -m py_compile video001_fast_source_once_v2.py video001_source_overlap_scheduler_v1.py
       - name: Generate a non-teacher synthetic source video for contracts
         run: |
