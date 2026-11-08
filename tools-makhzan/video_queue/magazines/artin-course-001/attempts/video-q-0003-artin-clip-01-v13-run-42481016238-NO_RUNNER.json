@@ -1,0 +1,29 @@
+{
+  "schema": "video001_v13_queue_attempt_v1",
+  "magazine_id": "artin-course-001",
+  "queue_id": "video-q-0003-artin-clip-01",
+  "sequence": 3,
+  "source_page": "https://my.uupload.ir/p/dxvmY5Gv",
+  "user_authorized": true,
+  "engine": "V13_CANDIDATE_ORIGINAL_18_CHUNKS_17_WORKERS",
+  "workflow": ".github/workflows/tools-makhzan-video001-v13-serial-queue.yml",
+  "run_id": 42481016238,
+  "run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42481016238",
+  "created_at": "2026-11-08T12:36:00Z",
+  "status": "FAILED_BEFORE_RUNNER_ASSIGNMENT",
+  "job_results": {
+    "collect": "failure",
+    "process": "skipped"
+  },
+  "allocated_runner": false,
+  "steps_started": 0,
+  "new_audio_chunks_processed": 0,
+  "new_ocr_frames_processed": 0,
+  "cause": "UNKNOWN_PRE_RUN; GitHub-hosted Actions quota exhaustion suspected from earlier recorded usage; no actionable job logs",
+  "source_video_changed": false,
+  "v12_changed": false,
+  "next_movie_started": false,
+  "retry_requirement": "ONLY_AFTER_RUNNER_CAPACITY_AVAILABLE_AND_START_FAILURE_RESOLVED; preserve no-skip order",
+  "semantic_success": false,
+  "notes": "Do not write a COMPLETE receipt, and do not skip film 3."
+}
