@@ -5,9 +5,22 @@ import statistics
 
 SHA=re.compile(r'^[0-9a-f]{64}$')
 
-def select_speed_mode(baseline,candidate,*,min_runs=3,min_speedup=.05):
+def select_speed_mode(baseline,candidate,*,min_runs=3,min_speedup=.05,quality_audit=None):
     safe={'mode':'BASELINE_33_WORKERS','approved':False,
           'reason':'INSUFFICIENT_COMPARABLE_EVIDENCE','speedup_fraction':None}
+    # No automatic mode switch based on speed alone. Independent accuracy
+    # review MUST lift the consistency auditor's REVIEW_REQUIRED state.
+    # The recorded real V1/V2 audit has changed OCR and polarity counts,
+    # so this branch currently ALWAYS falls back to the unchanged baseline.
+    if not isinstance(quality_audit,dict) or any([
+        quality_audit.get('source_integrity_agrees') is not True,
+        quality_audit.get('ocr_text_identical') is not True,
+        quality_audit.get('all_asr_chunks_above_similarity_threshold') is not True,
+        quality_audit.get('polarity_count_changed') is not False,
+        quality_audit.get('independent_human_gold_accuracy_pass') is not True,
+        quality_audit.get('needs_independent_human_gold_validation') is not False,
+    ]):
+        return {**safe,'reason':'QUALITY_NOT_INDEPENDENTLY_VERIFIED'}
     if (not isinstance(baseline,list) or not isinstance(candidate,list)
             or len(baseline)<min_runs or len(candidate)<min_runs
             or len(baseline)!=len(candidate) or min_runs<3 or min_speedup<.05):
