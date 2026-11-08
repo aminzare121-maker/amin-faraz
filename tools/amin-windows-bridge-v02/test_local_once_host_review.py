@@ -23,7 +23,7 @@ class LocalHostReviewTests(unittest.TestCase):
         self.launcher = root / 'START_ONCE.bat'; self.launcher.write_text('@rem synthetic reviewed launcher\n')
         self.launcher_digest = hashlib.sha256(self.launcher.read_bytes()).hexdigest()
         self.digest = hashlib.sha256(self.bridge.read_bytes()).hexdigest()
-        self.patches = [patch.object(host, 'WORKSPACE', self.workspace), patch.object(host, 'BRIDGE', self.bridge), patch.object(host, 'LAUNCHER', self.launcher)]
+        self.patches = [patch.object(host, 'ROOT', root), patch.object(host, 'WORKSPACE', self.workspace), patch.object(host, 'BRIDGE', self.bridge), patch.object(host, 'LAUNCHER', self.launcher)]
         for item in self.patches:
             item.start(); self.addCleanup(item.stop)
 
@@ -98,3 +98,4 @@ class LocalHostReviewTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+
