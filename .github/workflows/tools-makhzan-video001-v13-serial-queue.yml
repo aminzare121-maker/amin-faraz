@@ -1,0 +1,67 @@
+name: VIDEO-001 V13 candidate Artin serial magazine queue
+# User-authorized resume from film 3. V13 code is pinned; V12 workflows untouched.
+# Each film starts only after the preceding VERIFIED receipt, never skip failed film.
+on:
+  workflow_dispatch:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - 'tools-makhzan/video_queue/requests/v13_start.json'
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: video001-v13-serial-queue-latest-pending-scan
+  cancel-in-progress: false
+jobs:
+  collect-and-order-pending-movies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      count: ${{ steps.queue.outputs.count }}
+      items: ${{ steps.queue.outputs.items }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      # Checkout explicitly follows the latest canonical branch at runner start.
+      # Do not issue a second unauthenticated git fetch with credentials disabled.
+      - name: Enumerate only exact user-named magazines from latest branch
+        id: queue
+        run: |
+          python3 -u tools-makhzan/video_queue/load_queue.py --github-output "$GITHUB_OUTPUT"
+      - name: For Artin-only, never overlap the already running film #2
+        if: ${{ contains(steps.queue.outputs.items, 'artin-course-001') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess,time
+          repo=os.environ['GITHUB_REPOSITORY']
+          run=42423414479
+          for attempt in range(440):
+              s=json.loads(subprocess.check_output(
+                  ['gh','api',f'/repos/{repo}/actions/runs/{run}'],text=True))
+              if s['status']=='completed':
+                  if s.get('conclusion')!='success':
+                      raise RuntimeError('Previously submitted Artin film #2 incomplete. Do not skip to #3.')
+                  print('VIDEO001_ARTIN_SESSION2_PRECEDES_MAGAZINE_NEXT=True')
+                  break
+              if attempt==439:
+                  raise TimeoutError('Artin session #2 still incomplete; queue preserved without skipping')
+              time.sleep(12)
+          PY
+  process-one-full-movie-at-a-time:
+    needs: collect-and-order-pending-movies
+    if: ${{ needs.collect-and-order-pending-movies.outputs.count != '0' }}
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.collect-and-order-pending-movies.outputs.items) }}
+    uses: ./.github/workflows/tools-makhzan-video001-v13-reusable.yml
+    with:
+      magazine_id: ${{ matrix.magazine_id }}
+      queue_id: ${{ matrix.queue_id }}
+      source_page: ${{ matrix.source_page }}
+      expected_sha256: ${{ matrix.expected_sha256 }}
