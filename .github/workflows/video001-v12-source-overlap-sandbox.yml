@@ -1,0 +1,77 @@
+name: VIDEO001 V12 isolated source overlap correctness (NO PRODUCTION)
+on:
+  push:
+    branches:
+      - experiment/video001-v12-overlap-guard-20261108
+    paths:
+      - '.github/workflows/video001-v12-source-overlap-sandbox.yml'
+      - 'research/artin-film-engine-v3-1/video001_fast_source_once_v2.py'
+      - 'research/artin-film-engine-v3-1/video001_source_overlap_scheduler_v1.py'
+      - 'research/artin-film-engine-v3-1/test_video001_source_overlap_scheduler_v1.py'
+      - 'research/artin-film-engine-v3-1/video001_speed_gate_v1.py'
+      - 'research/artin-film-engine-v3-1/test_video001_speed_gate_v1.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-exact-source-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install original source frame/image dependencies only
+        run: |
+          command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          python3 -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Prove independent source-stage overlap and fail-closed propagation
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -B -m unittest -v test_video001_source_overlap_scheduler_v1 test_video001_speed_gate_v1
+          python3 -m py_compile video001_fast_source_once_v2.py video001_source_overlap_scheduler_v1.py
+      - name: Generate a non-teacher synthetic source video for contracts
+        run: |
+          ffmpeg -nostdin -hide_banner -loglevel error -y \
+            -f lavfi -i testsrc2=size=640x480:rate=5 \
+            -f lavfi -i sine=frequency=440:sample_rate=16000 \
+            -t 9 -pix_fmt yuv420p -c:v mpeg4 -c:a aac /tmp/video001_overlap_fixture.mp4
+          test -s /tmp/video001_overlap_fixture.mp4
+      - name: Run original V1 and experimental V2 on exactly identical movie
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -B video001_fast_source_once_v1.py \
+            --video /tmp/video001_overlap_fixture.mp4 \
+            --out /tmp/video001_source_baseline --audio-workers 1 --ocr-workers 1
+          python3 -B video001_fast_source_once_v2.py \
+            --video /tmp/video001_overlap_fixture.mp4 \
+            --out /tmp/video001_source_overlap --audio-workers 1 --ocr-workers 1
+      - name: Demand identical SHA, every original 5min part, indexed chat and board evidence
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=[Path('/tmp/video001_source_baseline'),Path('/tmp/video001_source_overlap')]
+          data=[json.loads((r/'safe_source_prep_summary.json').read_text()) for r in root]
+          keys=('source_video_sha256','original_movie_bytes','original_duration_seconds',
+                'source_global_audio_chunks','source_audio_worker_count',
+                'one_second_frames_scanned','original_chat_images_selected',
+                'original_board_frames','original_ocr_workers',
+                'all_original_audio_parts_assigned_once','all_original_chat_images_assigned_once')
+          assert all(data[0][k]==data[1][k] for k in keys), 'Source coverage drift'
+          assert all(d['source_integrity_verified'] and not d['original_movie_transcoded']
+                     for d in data)
+          for rel,seq,fields in [
+              ('full_chat/chat_selected_index.json','rows',('time_seconds','chat')),
+              ('board_review/visual_timeline_v6.json','rows',('time_seconds','board','chat','video_frame')),
+              ('asr_shards/worker_00/fast_av_manifest.json','parts',('chunk','audio_sha256'))]:
+              x=[json.loads((r/rel).read_text()) for r in root]
+              assert len(x[0][seq])==len(x[1][seq])
+              for a,b in zip(x[0][seq],x[1][seq]):
+                  for k in fields:
+                      assert a[k]==b[k], 'Source timestamp/hash drift: '+rel+' '+k
+          print('VIDEO001_EXPERIMENT_SOURCE_PRESERVED=True')
+          print('baseline_fixture_prep_seconds=',data[0]['elapsed_seconds'])
+          print('overlap_fixture_prep_seconds=',data[1]['elapsed_seconds'])
+          print('WARNING: 9s synthetic fixture not evidence of faster 80min real processing')
+          PY

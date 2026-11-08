@@ -1,0 +1,135 @@
+name: VIDEO001 verify archived run ONLY - NO VIDEO REPROCESS NO PRODUCTION
+on:
+  push:
+    branches: [experiment/video001-v12-overlap-guard-20261108]
+    paths: [.github/workflows/video001-verify-existing-artifacts-only.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  issues: write
+jobs:
+  evidence-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN: '42431549425'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Initialize safe diagnostic output
+        run: |
+          mkdir -p /tmp/video001_diag
+          echo '{"schema":"video001_existing_artifacts_diagnostic_v1","status":"STARTED","stage":"download","source_run":42431549425,"production_unchanged":true,"trading_allowed":false}' > /tmp/video001_diag/diagnostic.json
+      - name: Download archived ORIGINAL evidence only (bounded retries, no ASR or OCR rerun)
+        run: |
+          set -euo pipefail
+          get_artifacts() {
+            local mode="$1" name="$2" dest="$3"
+            for attempt in 1 2 3; do
+              rm -rf "$dest"
+              mkdir -p "$dest"
+              if gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" "$mode" "$name" --dir "$dest"; then return 0; fi
+              sleep "$((attempt*4))"
+            done
+            echo "ARCHIVE_DOWNLOAD_FAILED name=$name" >&2
+            return 1
+          }
+          get_artifacts --pattern 'video001-fast-asr-*' /tmp/video001_asr_nested
+          get_artifacts --pattern 'video001-fast-ocr-*' /tmp/video001_all_ocr
+          get_artifacts --name video001-fast-original-chat-index /tmp/video001_source_chat_index
+          get_artifacts --name video001-fast-original-board /tmp/video001_source_board
+          get_artifacts --name video001-fast-source-summary /tmp/video001_source_summary
+          echo '{"schema":"video001_existing_artifacts_diagnostic_v1","status":"DOWNLOADED","stage":"preflight","source_run":42431549425,"production_unchanged":true,"trading_allowed":false}' > /tmp/video001_diag/diagnostic.json
+      - name: Preflight exact artifact names, counts and checksum provenance
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,shutil
+          root=pathlib.Path('/tmp/video001_asr_nested')
+          dest=pathlib.Path('/tmp/video001_all_asr')
+          dest.mkdir(exist_ok=True)
+          bundles=sorted(p for p in root.iterdir() if p.is_dir() and p.name.startswith('video001-fast-asr-'))
+          if len(bundles)!=17: raise ValueError('expected 17 archived ASR worker artifacts')
+          for folder in bundles:
+              for file in folder.iterdir():
+                  if not file.is_file(): raise ValueError('unexpected nested ASR file')
+                  target=dest/file.name
+                  if target.exists(): raise ValueError('duplicate ASR source evidence filename')
+                  shutil.copy2(file,target)
+          assert len(list(dest.glob('part_*_unverified.json')))==17
+          assert len(list(dest.glob('partition_*_status.json')))==17
+          assert (dest/'manifest_redacted.json').is_file()
+          ocr=pathlib.Path('/tmp/video001_all_ocr')
+          assert len(list(ocr.glob('video001-fast-ocr-*')))==16
+          assert (pathlib.Path('/tmp/video001_source_board')/'visual_timeline_v6.json').is_file()
+          summary=json.loads(pathlib.Path('/tmp/video001_source_summary/safe_source_prep_summary.json').read_text())
+          assert summary['source_global_audio_chunks']==17 and summary['original_chat_images_selected']==276
+          assert summary['original_ocr_workers']==16 and summary['original_board_frames']==161
+          assert summary['source_integrity_verified'] is True
+          print('ARCHIVE_PREFLIGHT_SUCCESS audio=17 ocr_workers=16 chat=276 board=161 source_hash_verified')
+          PY
+          echo '{"schema":"video001_existing_artifacts_diagnostic_v1","status":"PREFLIGHT_SUCCESS","stage":"strict-verification","source_run":42431549425,"production_unchanged":true,"trading_allowed":false}' > /tmp/video001_diag/diagnostic.json
+      - name: Reproduce strict source verification on archived outputs (NO VIDEO REPROCESS)
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,traceback,sys
+          sys.path.insert(0,'research/artin-film-engine-v3-1')
+          result_path=pathlib.Path('/tmp/video001_diag/diagnostic.json')
+          def save(doc):
+              result_path.write_text(json.dumps(doc,ensure_ascii=False,indent=2))
+          try:
+              from video001_fast_verify_v1 import verify
+              result=verify(
+                  pathlib.Path('/tmp/video001_all_asr'),
+                  pathlib.Path('/tmp/video001_all_ocr'),
+                  pathlib.Path('/tmp/video001_source_chat_index/chat_selected_index.json'),
+                  pathlib.Path('/tmp/video001_source_board'),
+                  pathlib.Path('/tmp/video001_source_summary/safe_source_prep_summary.json'),
+                  pathlib.Path('/tmp/video001_verified_again'),
+                  audio_workers=17,ocr_workers=16)
+          except Exception as exc:
+              tb=traceback.extract_tb(exc.__traceback__)
+              save({'schema':'video001_existing_artifacts_diagnostic_v1','status':'VERIFY_FAILED',
+                    'stage':'strict-verification','error_class':type(exc).__name__,
+                    'error_code_sha256':__import__('hashlib').sha256(str(exc).encode()).hexdigest()[:16],
+                    'last_code_locations':[{'module':pathlib.Path(t.filename).name,'line':t.lineno} for t in tb[-5:]],
+                    'source_run':42431549425,'production_unchanged':True,'trading_allowed':False})
+              print('ARCHIVED_VERIFICATION_FAILED safe traceback locations recorded (no transcripts)')
+              raise SystemExit(2)
+          else:
+              save({'schema':'video001_existing_artifacts_diagnostic_v1','status':'VERIFIED_SOURCE_EVIDENCE',
+                    'stage':'done','source_run':42431549425,
+                    'original_five_minute_audio_parts':result['original_five_minute_audio_parts'],
+                    'original_ocr_screenshots_finished':result['original_ocr_screenshots_finished'],
+                    'original_sampled_board_frames':result['original_sampled_board_frames'],
+                    'source_evidence_loss':result['source_evidence_loss'],
+                    'teacher_semantic_accuracy_independently_verified':False,
+                    'production_unchanged':True,'trading_allowed':False})
+              print('ARCHIVED_VERIFICATION_SUCCESS source coverage only - SEMANTICS NOT VERIFIED')
+          PY
+      - name: Preserve only safe non-transcript diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-existing-archive-verify-diagnostic-no-transcripts
+          path: /tmp/video001_diag/diagnostic.json
+          retention-days: 15
+          if-no-files-found: error
+      - name: Record reproducible result in Draft PR - no auto merge
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          f=pathlib.Path('/tmp/video001_diag/diagnostic.json')
+          result=json.loads(f.read_text()) if f.is_file() else {'status':'NO_DIAGNOSTIC'}
+          fields=['status','stage','error_class','error_code_sha256','last_code_locations',
+                  'original_five_minute_audio_parts','original_ocr_screenshots_finished',
+                  'original_sampled_board_frames','source_evidence_loss']
+          sanitized={k:result[k] for k in fields if k in result}
+          msg=('ممیزی مجدد فقط با آرشیو موجود، بدون اجرای دوباره فیلم/ASR/OCR و بدون تغییر V12 یا ربات. '
+               'وضعیت (تنها منشأ شواهد، بدون تأیید معنای مدرس): '+json.dumps(sanitized,ensure_ascii=False)+
+               '\nاجرای ممیزی: https://github.com/'+os.environ['GITHUB_REPOSITORY']+'/actions/runs/'+os.environ['GITHUB_RUN_ID'])
+          subprocess.run(['gh','issue','comment','56','--repo',os.environ['GITHUB_REPOSITORY'],'--body',msg],check=True)
+          PY
