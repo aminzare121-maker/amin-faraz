@@ -1,0 +1,325 @@
+{
+  "tool": {
+    "name": "faraz-stage-b-validator",
+    "version": "1.0.0",
+    "python": "3.12.14",
+    "code_sha256": "9c7b576676a137971894679c77127721352e46ccf64b22562bb7682dcb442163"
+  },
+  "generated_at_utc": "2026-11-04T08:05:52.352086+00:00",
+  "input": {
+    "name": "xauusd-m15-bid-2025-11-04-2026-11-03.csv",
+    "before": {
+      "sha256": "8a0ecb9bf47096541bd581b5c21c3cc355930f8a110cad21cc64f6235fe13cdd",
+      "bytes": 1461540
+    },
+    "after": {
+      "sha256": "8a0ecb9bf47096541bd581b5c21c3cc355930f8a110cad21cc64f6235fe13cdd",
+      "bytes": 1461540
+    },
+    "unchanged": true
+  },
+  "critical_errors": [],
+  "execution": {
+    "network_used": false,
+    "packages_installed": false,
+    "strategy_or_backtest_run": false,
+    "raw_input_written": false
+  },
+  "structure": {
+    "status": "PASS",
+    "scope": "Declared field/time/OHLC/ordering rules only; not source authenticity or completeness."
+  },
+  "financial_use": {
+    "status": "NOT_AUTHORIZED",
+    "authorized": false,
+    "reason": "Stage B never authorizes financial evaluation, strategy ranking or trading."
+  },
+  "configuration": {
+    "schema": {
+      "sha256": "c957cb2fafd988f5f950b5d4820ad3039eeb4c5506e6ca932492fbde60c20c4e",
+      "bytes": 422
+    },
+    "manifest": {
+      "sha256": "d28e70494475553f75efdc7c68681e07414e4d85f86e086e724b97fa3f5f168c",
+      "bytes": 2471
+    }
+  },
+  "dataset_id": "local-xauusd-m15-20251104-20261103-existing-exposed",
+  "evidence": {
+    "source_provenance": {
+      "status": "UNVERIFIED",
+      "reason": "Batch names dukascopy-node, but download version, log and raw-source chain have not been recovered.",
+      "references": [
+        "Issue 1: read-only Codex review; source_snapshot/run_windows.bat in PR 2"
+      ]
+    },
+    "bar_timing": {
+      "status": "UNVERIFIED",
+      "reason": "Unix-ms interpretation is explicit; source confirmation of bar-open versus bar-close labels is absent.",
+      "references": [
+        "Issue 1: three timestamp examples; numerical interpretation is not source-clock proof"
+      ]
+    },
+    "timezone": {
+      "status": "UNVERIFIED",
+      "reason": "UTC conversion is an arithmetic interpretation, not independently certified feed timing.",
+      "references": []
+    },
+    "session_calendar": {
+      "status": "UNVERIFIED",
+      "reason": "No source-bound calendar or flat-bar generation policy is available; gaps and Sunday flats remain observations.",
+      "references": []
+    },
+    "price_side": {
+      "status": "UNVERIFIED",
+      "reason": "The filename says bid; no independent side-of-price or instrument/feed metadata has been recovered.",
+      "references": []
+    },
+    "data_license": {
+      "status": "UNVERIFIED",
+      "reason": "Applicable source license and permitted redistribution for this exact dataset have not been documented.",
+      "references": []
+    }
+  },
+  "evidence_note": "Statuses and references are reviewed manifest declarations; this offline tool does not authenticate external evidence or certify source clocks.",
+  "provenance_session_summary": "UNVERIFIED",
+  "audit": {
+    "counts": {
+      "records_read": 29234,
+      "schema_valid_records": 29234,
+      "schema_invalid_records": 0,
+      "records_requiring_quarantine_review": 0,
+      "records_without_structural_findings": 29234,
+      "valid_time_records": 29234,
+      "unique_valid_timestamps": 29234,
+      "session_unknown_records": 29234,
+      "flat_records": 5694,
+      "flat_matching_previous_close": 5640,
+      "gap_events_over_interval": 54,
+      "unobserved_grid_slots_between_rows": 5710,
+      "maximum_gap_ms": 184500000,
+      "longest_contiguous_flat_run_records": 92,
+      "malformed_records_unparsed": 0,
+      "parsing_stopped_before_end": 0,
+      "empty_data_after_header": 0
+    },
+    "category_counts": {
+      "FLAT_OBSERVED": 5694,
+      "GAP_OBSERVED": 54
+    },
+    "examples": {
+      "FLAT_OBSERVED": [
+        {
+          "record": 89,
+          "physical_line_end": 90,
+          "timestamp_ms": 1762293600000
+        },
+        {
+          "record": 90,
+          "physical_line_end": 91,
+          "timestamp_ms": 1762294500000
+        },
+        {
+          "record": 91,
+          "physical_line_end": 92,
+          "timestamp_ms": 1762295400000
+        },
+        {
+          "record": 92,
+          "physical_line_end": 93,
+          "timestamp_ms": 1762296300000
+        },
+        {
+          "record": 185,
+          "physical_line_end": 186,
+          "timestamp_ms": 1762380000000
+        },
+        {
+          "record": 186,
+          "physical_line_end": 187,
+          "timestamp_ms": 1762380900000
+        },
+        {
+          "record": 187,
+          "physical_line_end": 188,
+          "timestamp_ms": 1762381800000
+        },
+        {
+          "record": 188,
+          "physical_line_end": 189,
+          "timestamp_ms": 1762382700000
+        },
+        {
+          "record": 281,
+          "physical_line_end": 282,
+          "timestamp_ms": 1762466400000
+        },
+        {
+          "record": 282,
+          "physical_line_end": 283,
+          "timestamp_ms": 1762467300000
+        },
+        {
+          "record": 283,
+          "physical_line_end": 284,
+          "timestamp_ms": 1762468200000
+        },
+        {
+          "record": 284,
+          "physical_line_end": 285,
+          "timestamp_ms": 1762469100000
+        }
+      ],
+      "GAP_OBSERVED": [
+        {
+          "record": 377,
+          "physical_line_end": 378,
+          "previous_timestamp_ms": 1762551900000,
+          "timestamp_ms": 1762646400000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 945,
+          "physical_line_end": 946,
+          "previous_timestamp_ms": 1763156700000,
+          "timestamp_ms": 1763251200000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 1513,
+          "physical_line_end": 1514,
+          "previous_timestamp_ms": 1763761500000,
+          "timestamp_ms": 1763856000000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 2072,
+          "physical_line_end": 2073,
+          "previous_timestamp_ms": 1764358200000,
+          "timestamp_ms": 1764460800000,
+          "delta_ms": 102600000,
+          "unobserved_slots": 113,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 2640,
+          "physical_line_end": 2641,
+          "previous_timestamp_ms": 1764971100000,
+          "timestamp_ms": 1765065600000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 3208,
+          "physical_line_end": 3209,
+          "previous_timestamp_ms": 1765575900000,
+          "timestamp_ms": 1765670400000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 3776,
+          "physical_line_end": 3777,
+          "previous_timestamp_ms": 1766180700000,
+          "timestamp_ms": 1766275200000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 4139,
+          "physical_line_end": 4140,
+          "previous_timestamp_ms": 1766601000000,
+          "timestamp_ms": 1766620800000,
+          "delta_ms": 19800000,
+          "unobserved_slots": 21,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 4323,
+          "physical_line_end": 4324,
+          "previous_timestamp_ms": 1766785500000,
+          "timestamp_ms": 1766880000000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 4699,
+          "physical_line_end": 4700,
+          "previous_timestamp_ms": 1767217500000,
+          "timestamp_ms": 1767225600000,
+          "delta_ms": 8100000,
+          "unobserved_slots": 8,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 4883,
+          "physical_line_end": 4884,
+          "previous_timestamp_ms": 1767390300000,
+          "timestamp_ms": 1767484800000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        },
+        {
+          "record": 5451,
+          "physical_line_end": 5452,
+          "previous_timestamp_ms": 1767995100000,
+          "timestamp_ms": 1768089600000,
+          "delta_ms": 94500000,
+          "unobserved_slots": 104,
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    "examples_are_capped_per_category": 12,
+    "counting_note": "Categories overlap. records_read = schema_valid_records + schema_invalid_records. Quarantine review is a union of record-level structural findings, not their sum. Unknown session and flat/gap observations are separate, overlapping dimensions. Duplicate identity compares raw fields; textual differences require review, not proved price disagreement. Malformed unparsed records are separately counted; do not claim full coverage after parse failure.",
+    "timestamp_interpretation": {
+      "unit": "unix milliseconds",
+      "source_clock_verified_by_conversion": false,
+      "minimum_ms": 1762214400000,
+      "maximum_ms": 1793663100000,
+      "first_interpreted_utc": "2025-11-04T00:00:00.000+00:00",
+      "last_interpreted_utc": "2026-11-02T23:45:00.000+00:00"
+    },
+    "gap_histogram_ms": {
+      "102600000": 1,
+      "112500000": 2,
+      "184500000": 1,
+      "19800000": 1,
+      "8100000": 1,
+      "94500000": 17,
+      "98100000": 31
+    },
+    "gap_calendar_classifications": {
+      "UNKNOWN": 54
+    },
+    "weekday_records": {
+      "Friday": 4315,
+      "Monday": 4992,
+      "Sunday": 4992,
+      "Thursday": 4980,
+      "Tuesday": 4992,
+      "Wednesday": 4963
+    },
+    "weekday_flat_records": {
+      "Monday": 248,
+      "Sunday": 4648,
+      "Thursday": 390,
+      "Tuesday": 208,
+      "Wednesday": 200
+    },
+    "calendar_classification_note": "Classification is conditional on supplied declarations, not independent source/calendar verification. Flat observations never imply fabricated data."
+  },
+  "reproducible_content_sha256": "8058a7263edd4e0975856960fefd546a6322ec729b4ec5d9133fbf4a945a5edf",
+  "duration_seconds": 0.234378
+}

@@ -1,0 +1,33 @@
+test_change_during_read_and_after_audit_is_critical (test_validate_data.DataAuditTests.test_change_during_read_and_after_audit_is_critical) ... ok
+test_cli_input_and_raw_directory_overlap_refused (test_validate_data.DataAuditTests.test_cli_input_and_raw_directory_overlap_refused) ... ok
+test_cli_new_report_then_refuses_overwrite (test_validate_data.DataAuditTests.test_cli_new_report_then_refuses_overwrite) ... ok
+test_config_duplicate_keys_and_nan_are_rejected (test_validate_data.DataAuditTests.test_config_duplicate_keys_and_nan_are_rejected) ... ok
+test_contradicted_and_not_applicable_never_pass_as_verified (test_validate_data.DataAuditTests.test_contradicted_and_not_applicable_never_pass_as_verified) ... ok
+test_different_bytes_in_parse_read_stop_before_scan (test_validate_data.DataAuditTests.test_different_bytes_in_parse_read_stop_before_scan) ... ok
+test_duplicate_conflict_order_and_overlapping_counts (test_validate_data.DataAuditTests.test_duplicate_conflict_order_and_overlapping_counts) ... ok
+test_empty_header_encoding_and_malformed_csv (test_validate_data.DataAuditTests.test_empty_header_encoding_and_malformed_csv) ... ok
+test_examples_are_capped_but_counts_complete (test_validate_data.DataAuditTests.test_examples_are_capped_but_counts_complete) ... ok
+test_exclusive_report_creation_survives_race (test_validate_data.DataAuditTests.test_exclusive_report_creation_survives_race) ... ok
+test_existing_hardlink_report_is_not_overwritten (test_validate_data.DataAuditTests.test_existing_hardlink_report_is_not_overwritten) ... ok
+test_explicit_input_ignores_other_csv (test_validate_data.DataAuditTests.test_explicit_input_ignores_other_csv) ... ok
+test_flat_gap_are_observations_not_auto_quarantine (test_validate_data.DataAuditTests.test_flat_gap_are_observations_not_auto_quarantine) ... ok
+test_invalid_prices_ohlc_and_wrong_column_count (test_validate_data.DataAuditTests.test_invalid_prices_ohlc_and_wrong_column_count) ... ok
+test_invalid_timestamp_never_bridges_adjacent_rows (test_validate_data.DataAuditTests.test_invalid_timestamp_never_bridges_adjacent_rows) ... ok
+test_malformed_evidence_and_calendar_configs_fail_closed (test_validate_data.DataAuditTests.test_malformed_evidence_and_calendar_configs_fail_closed) ... ok
+test_missing_input_fails_without_private_path_leak (test_validate_data.DataAuditTests.test_missing_input_fails_without_private_path_leak) ... ok
+test_overlapping_schema_errors_count_one_record (test_validate_data.DataAuditTests.test_overlapping_schema_errors_count_one_record) ... ok
+test_range_exclusive_alignment_and_bool_config (test_validate_data.DataAuditTests.test_range_exclusive_alignment_and_bool_config) ... ok
+test_real_cli_process_exit_codes_and_fingerprints (test_validate_data.DataAuditTests.test_real_cli_process_exit_codes_and_fingerprints) ... ok
+test_reproducibility_and_future_mutation_binding (test_validate_data.DataAuditTests.test_reproducibility_and_future_mutation_binding) ... ok
+test_seconds_nanoseconds_decimal_and_malformed_timestamp (test_validate_data.DataAuditTests.test_seconds_nanoseconds_decimal_and_malformed_timestamp) ... ok
+test_size_limit_and_unsupported_unit (test_validate_data.DataAuditTests.test_size_limit_and_unsupported_unit) ... ok
+test_structural_pass_never_authorizes_unknown_source (test_validate_data.DataAuditTests.test_structural_pass_never_authorizes_unknown_source) ... ok
+test_supplied_synthetic_calendar_vs_no_calendar_evidence (test_validate_data.DataAuditTests.test_supplied_synthetic_calendar_vs_no_calendar_evidence) ... ok
+test_three_exact_epoch_ms_examples (test_validate_data.DataAuditTests.test_three_exact_epoch_ms_examples) ... ok
+test_verified_needs_reference_and_never_authorizes_finance (test_validate_data.DataAuditTests.test_verified_needs_reference_and_never_authorizes_finance) ... ok
+test_wrong_hash_and_size_stop_before_scan (test_validate_data.DataAuditTests.test_wrong_hash_and_size_stop_before_scan) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.486s
+
+OK
