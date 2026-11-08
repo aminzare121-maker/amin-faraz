@@ -1,4 +1,6 @@
 name: VIDEO-001 independent magazine serial video queue
+# Explicit user-authorized single retry for Artin video-q-0003 after archived 18-chunk ASR failure.
+# Resume sequential processing ONLY after independently verified full-source receipt.
 on:
   workflow_dispatch:
   push:
