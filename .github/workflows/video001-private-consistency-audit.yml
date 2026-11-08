@@ -1,0 +1,44 @@
+name: VIDEO001 confidential source-linked ASR OCR consistency audit (NO PRODUCTION)
+on:
+  push:
+    branches: [experiment/video001-v12-overlap-guard-20261108]
+    paths:
+      - '.github/workflows/video001-private-consistency-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  private-evidence-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download old and candidate real FULL source-linked ASR/OCR evidence PRIVATELY
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42418849834 --repo "$GITHUB_REPOSITORY" --pattern 'video001-fast-asr-*' --dir /tmp/video001_private/base_asr
+          gh run download 42430206742 --repo "$GITHUB_REPOSITORY" --pattern 'video001-fast-asr-*' --dir /tmp/video001_private/candidate_asr
+          gh run download 42418849834 --repo "$GITHUB_REPOSITORY" --pattern 'video001-fast-ocr-*' --dir /tmp/video001_private/base_ocr
+          gh run download 42430206742 --repo "$GITHUB_REPOSITORY" --pattern 'video001-fast-ocr-*' --dir /tmp/video001_private/candidate_ocr
+      - name: Compare SAME original source hashes and full 17 speech/276 OCR outputs
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_private_consistency_audit_v1.py \
+            --baseline-asr /tmp/video001_private/base_asr \
+            --candidate-asr /tmp/video001_private/candidate_asr \
+            --baseline-ocr /tmp/video001_private/base_ocr \
+            --candidate-ocr /tmp/video001_private/candidate_ocr \
+            --out /tmp/video001_private/private_consistency_report.json
+      - name: Preserve ONLY non-transcript numerical audit metrics for private review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video001-private-consistency-no-raw-transcript
+          path: /tmp/video001_private/private_consistency_report.json
+          retention-days: 15
+          if-no-files-found: ignore
