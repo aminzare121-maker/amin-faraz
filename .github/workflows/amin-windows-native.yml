@@ -11,7 +11,7 @@ jobs:
       github.repository == 'aminzare121-maker/amin-faraz' &&
       github.event.repository.private == true &&
       github.actor_id == '344967545' &&
-      github.ref == 'refs/heads/main'
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/tags/amin-windows-native-v1-20261108')
     runs-on: [amin-win-native-58]
     timeout-minutes: 3
     steps:
