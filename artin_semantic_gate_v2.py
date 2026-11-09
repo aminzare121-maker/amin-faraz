@@ -2,6 +2,7 @@
 import json
 import re
 import sys
+from artin_source_hierarchy import candidate_rule_with_pdf_ok
 
 SHA = re.compile(r"^[a-f0-9]{64}$")
 KINDS = {"entry", "exit", "exception", "decision_order"}
@@ -69,6 +70,10 @@ def rule_ok(rule, number, sources):
     scenario_valid, scenario_reason = scenario_ok(rule)
     if not scenario_valid:
         return False, scenario_reason
+    # Any claim using the teacher's handwritten PDF must retain primary oral proof.
+    source_authority_valid, source_authority_reason = candidate_rule_with_pdf_ok(rule)
+    if not source_authority_valid:
+        return False, source_authority_reason
     r = rule.get("independent_comparison")
     if (not isinstance(r, dict) or not good_text(r.get("teacher_example_id"))
             or not good_text(r.get("reviewer")) or not good_text(r.get("review_evidence_id"))
