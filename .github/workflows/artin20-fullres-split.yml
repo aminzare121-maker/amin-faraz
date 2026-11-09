@@ -1,0 +1,177 @@
+name: ARTIN20 original fullres images lossless sharded recovery
+on:
+  push:
+    branches:
+      - audit/artin20-evidence-extraction-20261109
+    paths:
+      - 'research/artin20_fullres/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin20-fullres-recovery
+  cancel-in-progress: false
+jobs:
+  split_original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download 610MB original image archive and split losslessly
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: aminzare121-maker/amin-faraz
+        run: python3 -u research/artin20_fullres/split_original.py
+      - name: Upload manifest of original source member SHA256s
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-manifest
+          path: artin20_fullres_recovery/fullres_split_manifest.json
+          if-no-files-found: warn
+          retention-days: 60
+      - name: Preserve original image group 00
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-00
+          path: artin20_fullres_recovery/private_shards/part_00.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 01
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-01
+          path: artin20_fullres_recovery/private_shards/part_01.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 02
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-02
+          path: artin20_fullres_recovery/private_shards/part_02.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 03
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-03
+          path: artin20_fullres_recovery/private_shards/part_03.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 04
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-04
+          path: artin20_fullres_recovery/private_shards/part_04.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 05
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-05
+          path: artin20_fullres_recovery/private_shards/part_05.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 06
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-06
+          path: artin20_fullres_recovery/private_shards/part_06.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 07
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-07
+          path: artin20_fullres_recovery/private_shards/part_07.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 08
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-08
+          path: artin20_fullres_recovery/private_shards/part_08.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 09
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-09
+          path: artin20_fullres_recovery/private_shards/part_09.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 10
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-10
+          path: artin20_fullres_recovery/private_shards/part_10.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 11
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-11
+          path: artin20_fullres_recovery/private_shards/part_11.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 12
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-12
+          path: artin20_fullres_recovery/private_shards/part_12.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 13
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-13
+          path: artin20_fullres_recovery/private_shards/part_13.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 14
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-14
+          path: artin20_fullres_recovery/private_shards/part_14.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
+      - name: Preserve original image group 15
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-fullres-original-images-15
+          path: artin20_fullres_recovery/private_shards/part_15.zip
+          if-no-files-found: ignore
+          retention-days: 60
+          compression-level: 0
