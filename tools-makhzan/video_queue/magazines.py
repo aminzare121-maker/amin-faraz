@@ -114,6 +114,22 @@ def read_magazine(folder):
         status=saved.get("status")
         if status==RECEIPT_FAILED:
             failed=True
+        elif status=="MACHINE_TEXT_ARCHIVED_UNVERIFIED":
+            # Explicit user-authorized stage boundary: technical texts may
+            # proceed to NEXT film without pretending teacher meaning is proved.
+            # Every raw channel (speech, chat, board) must have source-backed,
+            # SHA-verified text. This NEVER constitutes an executable rule.
+            p=saved.get("source_evidence")
+            _need(isinstance(p,dict) and p.get("all_raw_text_sha256_verified") is True
+                  and p.get("source_video_sha256") and bool(SHA.fullmatch(p["source_video_sha256"]))
+                  and isinstance(p.get("audio_parts"),int) and p["audio_parts"]>0
+                  and isinstance(p.get("chat_ocr_source_frames"),int) and p["chat_ocr_source_frames"]>0
+                  and isinstance(p.get("board_ocr_source_frames"),int) and p["board_ocr_source_frames"]>0
+                  and p.get("raw_archive_sha256") and bool(SHA.fullmatch(p["raw_archive_sha256"]))
+                  and saved.get("human_semantics_verified") is False
+                  and saved.get("trading_permitted") is False
+                  and saved.get("archive_private_library_path")=="/بهروز/بهروز.zip",
+                  "Invalid evidence for raw machine text; cannot advance magazine")
         else:
             _need(status==RECEIPT_OK and saved.get("source_evidence") is not None,
                   "No verified receipt for queued source")
