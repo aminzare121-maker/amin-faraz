@@ -1,0 +1,169 @@
+{
+  "schema": "artin_v13_six_recovered_teacher_source_audit_v1",
+  "legacy_total_source_citations": 24,
+  "previous_machine_speech_citations": 18,
+  "newly_recovered_citations": 6,
+  "machine_speech_citations_now_present": 24,
+  "unique_new_timed_intervals": 5,
+  "unique_original_audio_chunks": 3,
+  "citations_without_machine_asr_after_recovery": 0,
+  "audio_and_asr_provenance_verified": true,
+  "independent_audio_listening_complete": false,
+  "video_frame_teacher_semantics_verified": false,
+  "teacher_rule_verified_count": 0,
+  "mt5_entries_authorized": 0,
+  "rules_requiring_audio_review": [
+    "STOPPUNCH_SAME_COLOUR",
+    "STOPPUNCH_DOJI_AHEAD",
+    "STOPPUNCH_DOJI_TIED",
+    "STOPPUNCH_OPPOSITE_CONFIRMATION"
+  ],
+  "windows": [
+    {
+      "source_window_id": "ARTIN-RESTORED-01",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 20,
+      "time_seconds": [
+        4100.0,
+        4133.0
+      ],
+      "video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "source_audio_sha256": "cd6839a1a3e4b5b8b1649d7003f0ab7d0d5527e4af97a07aa09e008f86c12563",
+      "original_asr_artifact_id": 13675544193,
+      "original_audio_artifact_id": 13675558632,
+      "asr_segment_count": 13,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-02",
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "queue_video": 20,
+      "time_seconds": [
+        4201.3,
+        4208.84
+      ],
+      "video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "source_audio_sha256": "748a1894f5ea87e14701404023fca5500c338b458ed0d02edf6174d51f511dd4",
+      "original_asr_artifact_id": 13676943594,
+      "original_audio_artifact_id": 13675718418,
+      "asr_segment_count": 5,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-03",
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "queue_video": 20,
+      "time_seconds": [
+        4210.14,
+        4214.52
+      ],
+      "video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "source_audio_sha256": "748a1894f5ea87e14701404023fca5500c338b458ed0d02edf6174d51f511dd4",
+      "original_asr_artifact_id": 13676943594,
+      "original_audio_artifact_id": 13675718418,
+      "asr_segment_count": 3,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-04",
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "queue_video": 20,
+      "time_seconds": [
+        4210.14,
+        4214.52
+      ],
+      "video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "source_audio_sha256": "748a1894f5ea87e14701404023fca5500c338b458ed0d02edf6174d51f511dd4",
+      "original_asr_artifact_id": 13676943594,
+      "original_audio_artifact_id": 13675718418,
+      "asr_segment_count": 3,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-05",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 20,
+      "time_seconds": [
+        4214.52,
+        4223.26
+      ],
+      "video_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "source_audio_sha256": "748a1894f5ea87e14701404023fca5500c338b458ed0d02edf6174d51f511dd4",
+      "original_asr_artifact_id": 13676943594,
+      "original_audio_artifact_id": 13675718418,
+      "asr_segment_count": 6,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-06",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 22,
+      "time_seconds": [
+        4694.0,
+        4728.0
+      ],
+      "video_sha256": "8214f077a05969730c21015dc0f24c489835a9d1a9e9e3be4f73cca1000992ca",
+      "source_audio_sha256": "d0ab09ee0452930b246ab6ad34ce6cc982f2284f7efa694e253890c13e0d3afe",
+      "original_asr_artifact_id": 13679119588,
+      "original_audio_artifact_id": 13679791669,
+      "asr_segment_count": 12,
+      "source_bytes_and_time_verified": true,
+      "spoken_words_independently_verified": false,
+      "teacher_speaker_independently_verified": false,
+      "semantic_rule_verified": false,
+      "market_execution_allowed": false
+    }
+  ],
+  "context_links": [
+    {
+      "topic": "zone_condition_and_possible_between_zones_exception",
+      "source_window_ids": [
+        "ARTIN-RESTORED-02",
+        "ARTIN-RESTORED-03",
+        "ARTIN-RESTORED-05",
+        "ARTIN-RESTORED-06"
+      ],
+      "interpretation": "PROVISIONAL_ASR_CONTRAST_REQUIRES_ORIGINAL_AUDIO_VISUAL_SPEAKER_REVIEW",
+      "candidate_clue": "A zone/gerah qualification appears in video20; full punch between two zones is discussed in video22",
+      "must_not_infer": "universal zone veto or unconditional trade permission"
+    },
+    {
+      "topic": "day_count_doji_branch_cannot_be_proved_from_shared_segment",
+      "source_window_ids": [
+        "ARTIN-RESTORED-03",
+        "ARTIN-RESTORED-04"
+      ],
+      "interpretation": "SAME_AUDIO_AND_TEXT_TWO_DIFFERENT_OLD_RULE_IDS_NOT_INDEPENDENT_SUPPORT",
+      "must_not_infer": "ahead/tied day counting, confirmations, threshold, risk budget"
+    },
+    {
+      "topic": "close_above_reference_ambiguous",
+      "source_window_ids": [
+        "ARTIN-RESTORED-01"
+      ],
+      "interpretation": "REQUIRES_BOARD_REFERENT_AND_ORIGINAL_SPEECH_REVIEW",
+      "must_not_infer": "which price level, buy/sell direction, SL, TP"
+    }
+  ],
+  "note": "ASR recovery improves source coverage only. The 24/24 count is NOT speaker or teacher-rule verification, and the two DOJI hypotheses share the same source interval."
+}
