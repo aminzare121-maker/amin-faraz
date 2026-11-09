@@ -1,0 +1,44 @@
+name: Artin V13 reverse debug of failed verifier
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths: ['.github/workflows/artin-v13-reverse-debug.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  trace-previous-failure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Find actual failed verification job across all API pages
+        shell: bash
+        run: |
+          mkdir -p diagnostics
+          gh api --paginate 'repos/${{ github.repository }}/actions/runs/42579086735/jobs?per_page=100' --jq '.jobs[] | [.id,.conclusion,.name] | @tsv' > diagnostics/jobs.tsv
+          cat diagnostics/jobs.tsv
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          jobs=[line.split('\t',2) for line in Path('diagnostics/jobs.tsv').read_text().splitlines()]
+          matches=[(jid,name) for jid,result,name in jobs if result=='failure' or 'independent-all-evidence-verification' in name]
+          if not matches:raise RuntimeError('No verifier job found in full paginated jobs list')
+          for jid,name in matches:
+              dest=Path('diagnostics')/f'job-{jid}.log'
+              with dest.open('wb') as out:
+                  proc=subprocess.run(['gh','api',f'repos/${{ github.repository }}/actions/jobs/{jid}/logs'],stdout=out,stderr=subprocess.PIPE)
+              if proc.returncode:dest.write_text('Log fetch failed: '+proc.stderr.decode(errors='replace'))
+              print('TRACED_JOB',jid,name,'bytes',dest.stat().st_size,flush=True)
+          PY
+      - name: Persist real root-cause logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-v13-original-failed-verifier-root-cause
+          path: diagnostics/**
+          retention-days: 30
+          if-no-files-found: warn
