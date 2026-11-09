@@ -14,6 +14,33 @@ def seconds(v):
             except ValueError:return None
     return None
 
+
+def extract_candidates(document,channel,source):
+    """Read the observed original Artin ASR and OCR schemas, not guessed fields."""
+    result=[]
+    if not isinstance(document,dict):return result
+    if channel=='asr':
+        for seg in document.get('segments',[]):
+            if not isinstance(seg,dict):continue
+            t=seconds(seg.get('start'))
+            if t is None or not isinstance(seg.get('text'),str):continue
+            result.append({'channel':'asr','source':source,'start':t,'end':seconds(seg.get('end')),
+                           'text':seg['text'],'speaker':seg.get('speaker','UNKNOWN'),
+                           'source_segment_id':seg.get('id'),
+                           'avg_logprob':seg.get('avg_logprob')})
+    else:
+        for frame in document.get('results',[]):
+            if not isinstance(frame,dict):continue
+            t=seconds(frame.get('time_original_video_seconds'))
+            if t is None:continue
+            lines=[line.get('ocr_candidate','') for line in frame.get('text_lines',[])
+                   if isinstance(line,dict) and isinstance(line.get('ocr_candidate'),str)]
+            if lines:
+                result.append({'channel':channel,'source':source,'start':t,'end':t,
+                               'text':' | '.join(lines),'source_frame_id':frame.get('frame_id'),
+                               'source_frame_sha256':frame.get('source_frame_sha256')})
+    return result
+
 def reconcile(data,window=8):
     entries=data.get('candidates',[])
     speech=[x for x in entries if x.get('channel')=='asr' and seconds(x.get('start')) is not None]
