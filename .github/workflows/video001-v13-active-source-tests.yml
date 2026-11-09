@@ -28,5 +28,5 @@ jobs:
       - name: Verify executable V13 accelerated source while preserving V12 evidence
         working-directory: research/artin-film-engine-v3-1
         run: |
-          python -m unittest -v test_video001_v13_source_once.py
-          python -m py_compile video001_v13_source_once.py video001_v13_remote_prep.py video001_v13_visual_bridge.py video001_v13_one_pass_visual.py
+          python -m unittest -v test_video001_v13_source_once.py test_video001_v13_board_text_worker.py test_video001_v13_text_archive_ready.py
+          python -m py_compile video001_v13_source_once.py video001_v13_remote_prep.py video001_v13_visual_bridge.py video001_v13_one_pass_visual.py video001_v13_board_text_worker.py video001_v13_text_archive_ready.py
