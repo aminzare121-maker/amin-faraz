@@ -16,7 +16,7 @@ jobs:
     outputs:
       matrix: ${{ steps.index.outputs.matrix }}
     steps:
-      - name: Wait for existing preservation run, index artifacts without downloading media
+      - name: Index ready sources immediately and defer only active downloads
         id: index
         env:
           GH_TOKEN: ${{ github.token }}
@@ -29,19 +29,22 @@ jobs:
               p=subprocess.run(['gh','api',f'repos/{repo}/{path}'],capture_output=True,timeout=60)
               if p.returncode:raise RuntimeError('GITHUB_READ_FAILED')
               return json.loads(p.stdout)
-          for attempt in range(40):
-              state=api('actions/runs/42653593204')
-              if state['status']=='completed':break
-              time.sleep(15)
-          else:raise RuntimeError('PRESERVATION_STILL_RUNNING_NO_DUPLICATE_STARTED')
+          state=api('actions/runs/42653593204')
+          jobs=api('actions/runs/42653593204/jobs?per_page=100')['jobs']
           artifacts=api('actions/runs/42653593204/artifacts?per_page=100')['artifacts']
           items=[{'sequence':1,'artifact_id':13690841735}]
+          deferred=[]
           for sequence in range(2,26):
               found=[a for a in artifacts if a['name']==f'artin25-original-{sequence}-private' and not a['expired']]
               if len(found)>1:raise RuntimeError(f'ORIGINAL_ARTIFACT_AMBIGUOUS_{sequence}')
+              active=any(j['name']==f'preserve-original ({sequence})' and j['status']!='completed' for j in jobs)
+              if not found and active:
+                  deferred.append(sequence)
+                  continue
               items.append({'sequence':sequence,'artifact_id':found[0]['id'] if found else 0})
+          print(json.dumps({'ready_for_independent_work':[i['sequence'] for i in items],'deferred_to_avoid_duplicate_download':deferred,'whole_course_complete':False}))
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('matrix='+json.dumps({'include':items})+'\n')
-          print('25_SOURCE_ARTIFACTS_INDEXED; semantic verification pending')
+          print('AVAILABLE_SOURCE_ARTIFACTS_INDEXED; semantic verification pending')
           PY
   verify:
     needs: discover
@@ -49,7 +52,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 6
       matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
     steps:
       - name: Install media probe only on hosted runner
