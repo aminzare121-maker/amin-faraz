@@ -1,0 +1,108 @@
+name: Artin25 cloud verify preserved original AV
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-cloud-probe.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin25-cloud-probe-preserved
+  cancel-in-progress: false
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      matrix: ${{ steps.index.outputs.matrix }}
+    steps:
+      - name: Wait for existing preservation run, index artifacts without downloading media
+        id: index
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_OUTPUT_FILE: ${{ github.output }}
+        run: |
+          python3 - <<'PY'
+          import json,subprocess,time,os,pathlib
+          repo='aminzare121-maker/amin-faraz'
+          def api(path):
+              p=subprocess.run(['gh','api',f'repos/{repo}/{path}'],capture_output=True,timeout=60)
+              if p.returncode:raise RuntimeError('GITHUB_READ_FAILED')
+              return json.loads(p.stdout)
+          for attempt in range(40):
+              state=api('actions/runs/42653593204')
+              if state['status']=='completed':break
+              time.sleep(15)
+          else:raise RuntimeError('PRESERVATION_STILL_RUNNING_NO_DUPLICATE_STARTED')
+          artifacts=api('actions/runs/42653593204/artifacts?per_page=100')['artifacts']
+          items=[{'sequence':1,'artifact_id':13690841735}]
+          for sequence in range(2,26):
+              found=[a for a in artifacts if a['name']==f'artin25-original-{sequence}-private' and not a['expired']]
+              if len(found)!=1:raise RuntimeError(f'ORIGINAL_ARTIFACT_MISSING_{sequence}')
+              items.append({'sequence':sequence,'artifact_id':found[0]['id']})
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('matrix='+json.dumps({'include':items})+'\n')
+          print('25_SOURCE_ARTIFACTS_INDEXED; semantic verification pending')
+          PY
+  verify:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - name: Install media probe only on hosted runner
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Independently verify preserved source hash and full duration streams
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SEQUENCE: ${{ matrix.sequence }}
+          ARTIFACT_ID: ${{ matrix.artifact_id }}
+        run: |
+          mkdir -p evidence private
+          python3 - <<'PY'
+          import base64,hashlib,json,os,pathlib,subprocess,zipfile,sys
+          sequence=int(os.environ['SEQUENCE'])
+          artifact=int(os.environ['ARTIFACT_ID'])
+          repo='aminzare121-maker/amin-faraz'
+          result={'sequence':sequence,'artifact_id':artifact,'models_executed':0,'semantic_verified':False}
+          try:
+              p=subprocess.run(['gh','api',f'repos/{repo}/git/blobs/5dec2c82c4e2a895bd6f51744d8967b9911f342e'],capture_output=True,timeout=60)
+              if p.returncode:raise RuntimeError('REGISTRY_READ_FAILED')
+              raw=base64.b64decode(json.loads(p.stdout)['content'])
+              if hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()!='5dec2c82c4e2a895bd6f51744d8967b9911f342e':raise ValueError('REGISTRY_IDENTITY_FAILED')
+              session=next(s for s in json.loads(raw)['registered_sessions'] if s['sequence']==sequence)
+              archive=pathlib.Path('private/source.zip')
+              with archive.open('wb') as f:p=subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{artifact}/zip'],stdout=f,stderr=subprocess.PIPE,timeout=300)
+              if p.returncode:raise RuntimeError('PRESERVED_SOURCE_FETCH_FAILED')
+              expected_name='original_0001.mp4' if sequence==1 else 'original.mp4'
+              with zipfile.ZipFile(archive) as z:
+                  members=[i for i in z.infolist() if not i.is_dir()]
+                  if len(members)!=1 or members[0].filename!=expected_name or members[0].file_size>600*1024**2:raise ValueError('SOURCE_ARCHIVE_CONTRACT_FAILED')
+                  h=hashlib.sha256();target=pathlib.Path('private/source.mp4')
+                  with z.open(members[0]) as src,target.open('wb') as dst:
+                      for block in iter(lambda:src.read(4*1024*1024),b''):h.update(block);dst.write(block)
+              digest=h.hexdigest()
+              if digest!=session['source_sha256']:raise ValueError('SOURCE_SHA_FAILED')
+              p=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration:stream=codec_type,width,height,codec_name','-of','json',str(target)],capture_output=True,timeout=90)
+              if p.returncode:raise RuntimeError('SOURCE_PROBE_FAILED')
+              probe=json.loads(p.stdout);duration=float(probe['format']['duration'])
+              kinds={s.get('codec_type') for s in probe['streams']}
+              if not {'audio','video'}<=kinds or abs(duration-session['duration_seconds'])>0.15:raise ValueError('SOURCE_AV_DURATION_FAILED')
+              result.update(status='PRESERVED_ORIGINAL_AV_IDENTITY_VERIFIED',source_sha256=digest,bytes=target.stat().st_size,duration_seconds=duration,audio_present=True,video_present=True,streams=probe['streams'],full_decode_verified=False)
+          except Exception as exc:result.update(status='SOURCE_REVIEW_BLOCKED',error_type=type(exc).__name__)
+          pathlib.Path('evidence/receipt.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+          print(json.dumps(result))
+          if result['status']!='PRESERVED_ORIGINAL_AV_IDENTITY_VERIFIED':sys.exit(1)
+          PY
+      - name: Preserve source identity and remaining semantic limitations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-av-independent-receipt-${{ matrix.sequence }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 90
