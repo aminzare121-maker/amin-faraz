@@ -1,0 +1,29 @@
+name: Artin additional four semantic examples source validation
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_more_cases/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independently check four course examples against exact original frames
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_more_cases/verify_more.py
+      - name: Archive evidence-checked reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-four-additional-semantic-cases
+          path: artin25_more_cases_output/**
+          retention-days: 60
+          if-no-files-found: warn
