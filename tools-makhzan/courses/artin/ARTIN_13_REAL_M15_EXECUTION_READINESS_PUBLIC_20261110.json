@@ -1,0 +1,595 @@
+{
+  "schema": "artin_13_real_eplanet_m15_public_source_and_gap_receipt_v1",
+  "executed_in": "local private source mounted test environment",
+  "input_archive_sha256": "f9d16743448119564798f7048515ec7b1b3a4d2906a477a26b8b6a6587fb9d98",
+  "market_source_claim": "original user-supplied Eplanet XAUUSD M15 private export, broker independent certification absent",
+  "M15_bars_read": 23643,
+  "M15_chunks_SHA_verified": 20,
+  "M15_unclassified_time_gaps": 260,
+  "route_ids": 13,
+  "legacy_source_citations_mapped": 24,
+  "machine_asr_source_citations_available": 24,
+  "all_original_audio_wording_independently_verified": false,
+  "route_side_bar_combinations_scanned": 614718,
+  "real_market_geometry_observations": {
+    "bars_scanned": 23643,
+    "exact_shadowless_nonflat_subset": 10,
+    "exact_zero_body_subset": 22,
+    "body_greater_than_both_shadows_separately": 12716,
+    "body_greater_than_sum_of_shadows": 10547,
+    "previous_contiguous": 23382,
+    "three_candles_contiguous": 23122,
+    "three_same_direction_raw_candidate": 5382,
+    "up_fvg_three_bar_raw_candidate": 2472,
+    "down_fvg_three_bar_raw_candidate": 2342,
+    "outside_previous_range_raw_candidate": 2462,
+    "teacher_body_shadow_hypotheses_differ": 2169,
+    "unclassified_time_gaps": 260
+  },
+  "route_status": [
+    {
+      "route": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "source_video_intervals": [
+        [
+          21,
+          1888.1,
+          1952.66
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "teacher_model_variant",
+        "strong_run_in_sentiment_direction",
+        "run_break_closed_at",
+        "confirmation_reference_kind",
+        "pause_opened_at",
+        "pause_closed_at",
+        "confirmation_opened_at",
+        "confirmation_closed_at",
+        "pause_body_close",
+        "pause_wick_low",
+        "break_before_pause",
+        "pause_doubt_confirmed",
+        "pause_in_run_direction",
+        "confirmation_in_run_direction",
+        "following_confirmation_closed",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference",
+        "teacher_buy_geometry_not_independently_mapped"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "teacher_model_variant",
+        "strong_run_in_sentiment_direction",
+        "run_break_closed_at",
+        "confirmation_reference_kind",
+        "pause_opened_at",
+        "pause_closed_at",
+        "confirmation_opened_at",
+        "confirmation_closed_at",
+        "pause_body_close",
+        "pause_wick_low",
+        "break_before_pause",
+        "pause_doubt_confirmed",
+        "pause_in_run_direction",
+        "confirmation_in_run_direction",
+        "following_confirmation_closed",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "PULLBACK_STANDARD",
+      "source_video_intervals": [
+        [
+          15,
+          615,
+          854
+        ],
+        [
+          15,
+          1003,
+          1109
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_occurred",
+        "post_break_pivot_confirmed",
+        "retest_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_occurred",
+        "post_break_pivot_confirmed",
+        "retest_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "REVERSAL_CLASSIC",
+      "source_video_intervals": [
+        [
+          19,
+          2188.86,
+          2306.84
+        ],
+        [
+          19,
+          2660.22,
+          3255.4
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "doubt_confirmed",
+        "first_confidence_confirmed",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "doubt_confirmed",
+        "first_confidence_confirmed",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "REVERSAL_THREE",
+      "source_video_intervals": [
+        [
+          19,
+          2660.22,
+          3255.4
+        ],
+        [
+          19,
+          3440.82,
+          4048.72
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "three_same_direction_sequence",
+        "doubt_confidence_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "three_same_direction_sequence",
+        "doubt_confidence_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "raw_price_shape_subset": "three_same_direction_raw_candidate",
+      "shape_subset_occurrences_only": 5382,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "REVERSAL_STAR",
+      "source_video_intervals": [
+        [
+          19,
+          3440.82,
+          4048.72
+        ],
+        [
+          19,
+          4117.72,
+          4483.72
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "star_sequence",
+        "body_penetration_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "star_sequence",
+        "body_penetration_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "BREAK_STRONG",
+      "source_video_intervals": [
+        [
+          20,
+          2105.04,
+          2261
+        ],
+        [
+          20,
+          2274,
+          2649.38
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "fullbody_or_marubozu",
+        "decision_candle_closed",
+        "level_kind",
+        "decision_close",
+        "zone_low_and_high_OR_line_level_after_level_kind"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "fullbody_or_marubozu",
+        "decision_candle_closed",
+        "level_kind",
+        "decision_close",
+        "zone_low_and_high_OR_line_level_after_level_kind"
+      ],
+      "raw_price_shape_subset": "exact_shadowless_nonflat_subset",
+      "shape_subset_occurrences_only": 10,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "BREAK_WEAK_PIVOT",
+      "source_video_intervals": [
+        [
+          20,
+          2770.48,
+          3153.16
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "post_break_pivot_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "post_break_pivot_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "source_video_intervals": [
+        [
+          20,
+          2770.48,
+          3153.16
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "fullbody_or_marubozu",
+        "fullbody_exception_context",
+        "decision_candle_closed"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "fullbody_or_marubozu",
+        "fullbody_exception_context",
+        "decision_candle_closed"
+      ],
+      "raw_price_shape_subset": "exact_shadowless_nonflat_subset",
+      "shape_subset_occurrences_only": 10,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "BREAK_VERY_STRONG_RETEST",
+      "source_video_intervals": [
+        [
+          20,
+          3162.56,
+          3473.88
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "not_chasing",
+        "reference_body_open",
+        "reference_body_close",
+        "retouch_low",
+        "retouch_high"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "not_chasing",
+        "reference_body_open",
+        "reference_body_close",
+        "retouch_low",
+        "retouch_high"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "STOPPUNCH_SAME_COLOUR",
+      "source_video_intervals": [
+        [
+          20,
+          3947,
+          3975
+        ],
+        [
+          20,
+          4201.3,
+          4208.84
+        ],
+        [
+          20,
+          4597,
+          4661
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "same_colour_pause",
+        "pause_candle_closed"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "same_colour_pause",
+        "pause_candle_closed",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "STOPPUNCH_DOJI_AHEAD",
+      "source_video_intervals": [
+        [
+          20,
+          3984.88,
+          4068.98
+        ],
+        [
+          20,
+          4210.14,
+          4214.52
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "doji_candle_closed"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "doji_candle_closed",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "raw_price_shape_subset": "exact_zero_body_subset",
+      "shape_subset_occurrences_only": 22,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "STOPPUNCH_DOJI_TIED",
+      "source_video_intervals": [
+        [
+          20,
+          3984.88,
+          4068.98
+        ],
+        [
+          20,
+          4210.14,
+          4214.52
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "following_confirmation_closed",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "doji_shadow_high"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "following_confirmation_closed",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "doji_shadow_high",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "raw_price_shape_subset": "exact_zero_body_subset",
+      "shape_subset_occurrences_only": 22,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    },
+    {
+      "route": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "source_video_intervals": [
+        [
+          20,
+          4100,
+          4133
+        ],
+        [
+          20,
+          4214.52,
+          4223.26
+        ],
+        [
+          22,
+          4694,
+          4728
+        ]
+      ],
+      "required_fact_names_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "opposite_colour_pause",
+        "complete_punch_sequence",
+        "following_confirmation_closed",
+        "entry_location",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference"
+      ],
+      "required_fact_names_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "opposite_colour_pause",
+        "complete_punch_sequence",
+        "following_confirmation_closed",
+        "entry_location",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "raw_price_shape_subset": null,
+      "shape_subset_occurrences_only": null,
+      "state": "NOT_TEACHER_CERTIFIED_NO_ORDERS"
+    }
+  ],
+  "mt5_orders": 0,
+  "paper_trades": 0,
+  "trade_backtest_completed": false,
+  "win_rate": null,
+  "profit": null,
+  "notes": [
+    "All source links and market raw geometry are available to begin teacher-specific certification.",
+    "Raw three-candle, FVG, doji, shadowless observations are NOT teacher signals.",
+    "Missing teacher semantic definition of major predicates prevents source-faithful entry/SL/TP and P&L.",
+    "PDF is glossary only; independently reviewed original speech is authoritative."
+  ]
+}
