@@ -98,149 +98,149 @@ jobs:
                     return redirected
             opener=urllib.request.build_opener(StripCrossHostAuthorization())
             with opener.open(req,timeout=90) as response,open(target,'wb') as out:
-                import shutil
-                shutil.copyfileobj(response,out)
-            if not zipfile.is_zipfile(target):
-                raise RuntimeError('Invalid ZIP or GitHub redirect response')
-            break
-        except Exception as exc:
-            errors.append(str(exc))
-            if attempt==3:raise RuntimeError('Artifact download failed after 3 attempts '+name+': '+str(errors))
-            time.sleep(attempt*3)
-import pathlib
-pathlib.Path('evidence/artifact-names.json').write_text(json.dumps(mapping,ensure_ascii=False))
-print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
-PY
-me: Run original-evidence diagnostic with explicit acceptance criteria
-ell: bash
-n: |
-python3 - <<'PY'
-import json,subprocess
-from pathlib import Path
-names=json.loads(Path('evidence/artifact-names.json').read_text())
-candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
-if len(candidates)!=1 or not candidates[0].exists():
-    raise RuntimeError('Authoritative TEXT-ONLY source artifact missing or ambiguous')
-subprocess.run(['python3','tools-makhzan/courses/artin/video4_reliability.py',str(candidates[0]),'video-four-diagnostic-result.json'],check=True)
-result=json.loads(Path('video-four-diagnostic-result.json').read_text())
-if result['speech_segments']!=1997 or result['visual_frames']!=502 or len(result['source_files'])<30:
-    raise RuntimeError('Unexpected source coverage; stop and inspect extraction schema')
-if result['teacher_semantics_verified'] is not False:
-    raise RuntimeError('Unverified semantics must never be promoted to verified')
-print('SOURCE_ACCEPTANCE_PASS; audio meaning still requires independent verification')
-PY
-me: Reconstruct classroom questions and contextual answers from original speech
-ell: bash
-n: |
-python3 - <<'PY'
-import json,subprocess
-from pathlib import Path
-names=json.loads(Path('evidence/artifact-names.json').read_text())
-candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
-if len(candidates)!=1:raise RuntimeError('Original speech source not uniquely available')
-subprocess.run(['python3','tools-makhzan/courses/artin/classroom_reasoner.py',str(candidates[0]),'video-four-classroom-questions.json'],check=True)
-data=json.loads(Path('video-four-classroom-questions.json').read_text())
-if data['speech_segments']<1900 or not data['question_answer_candidates']:
-    raise RuntimeError('Classroom context reconstruction incomplete')
-PY
-me: Reconstruct searchable original evidence with explicit ambiguity register
-ell: bash
-n: |
-python3 - <<'PY'
-import zipfile,json,re,hashlib
-from pathlib import Path
-rows=[];uncertain=[];seen=set();counts={'asr':0,'ocr':0,'board':0}
-artifact_names=json.loads(Path('evidence/artifact-names.json').read_text())
-for archive in sorted(Path('evidence').glob('*.zip')):
-    with zipfile.ZipFile(archive) as z:
-        for filename in z.namelist():
-            if filename.endswith('/') or not filename.lower().endswith(('.json','.txt','.srt','.vtt','.md')):continue
-            raw=z.read(filename)
-            try: text=raw.decode('utf-8')
-            except UnicodeDecodeError:continue
-            key=hashlib.sha256(raw).hexdigest()
-            if key in seen:continue
-            seen.add(key)
-            fn=filename.lower()
-            artifact_name=artifact_names.get(archive.stem,'')
-            channel=('asr' if '-asr-' in artifact_name or 'transcript' in fn else 'board' if '-board-ocr-' in artifact_name or 'board' in fn else 'ocr')
-            counts[channel]+=1
-            rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text})
-            # Do not infer speaker or teaching rules from OCR/ASR alone.
-            uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
-# The authoritative TEXT-ONLY artifact contains a second ZIP inside the outer GitHub ZIP.
-# Parse that inner bundle directly: it contains all 15 ASR shards and 16 OCR partitions.
-import io
-for archive in sorted(Path('evidence').glob('*.zip')):
-    with zipfile.ZipFile(archive) as outer:
-        for member in outer.namelist():
-            if not member.endswith('.zip'):continue
-            with zipfile.ZipFile(io.BytesIO(outer.read(member))) as nested:
-                for filename in nested.namelist():
-                    if not filename.lower().endswith('.json'):continue
-                    raw=nested.read(filename)
-                    try: content=raw.decode('utf-8')
-                    except UnicodeDecodeError:continue
-                    key=hashlib.sha256(raw).hexdigest()
-                    if key in seen:continue
-                    seen.add(key)
-                    channel=('asr' if filename.startswith('speech_asr_raw/') else
-                             'board' if filename.startswith('board_ocr_raw/') else
-                             'ocr' if filename.startswith('student_chat_ocr_raw/') else 'metadata')
-                    if channel=='metadata':continue
-                    counts[channel]+=1
-                    rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':content})
-                    uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
-if not rows:raise RuntimeError('No machine-readable source text found')
-# A partial extraction is a failed clarification, not a success receipt.
-if counts['asr']==0 or (counts['ocr']==0 and counts['board']==0):
-    raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
-# Extract timed speech/visual candidates, not just a list of files.
-import sys
-sys.path.insert(0,'tools-makhzan/courses/artin')
-from reconcile_timed_evidence import seconds,extract_candidates
-timed=[]
-for row in rows:
-    if row['file'].lower().endswith('.json'):
-        try:timed.extend(extract_candidates(json.loads(row['text']),row['channel'],row['file']))
-        except (ValueError,TypeError) as exc:
-            print('SOURCE_SCHEMA_ERROR',row['file'],str(exc))
-for entry in timed:
-    t=seconds(entry['start'])
-    if t is None:continue
-    entry['nearby_visual_evidence']=[{'source':v['source'],'start':v['start'],'text':v['text'][:500]} for v in timed if v['channel']!='asr' and seconds(v['start']) is not None and abs(seconds(v['start'])-t)<=8][:12] if entry['channel']=='asr' else []
-Path('video-four-timed-crossmodal-candidates.json').write_text(json.dumps({'video_sequence':4,'candidate_count':len(timed),'time_alignment_window_seconds':8,'human_semantic_certification':False,'candidates':timed},ensure_ascii=False,indent=2))
-if not any(x['channel']=='asr' and seconds(x['start']) is not None for x in timed):
-    raise RuntimeError('NO_TIMED_SPEECH: inspect original ASR schema and correct timestamp parser; no false success')
-Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
-Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
-print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
-PY
-me: Validate evidence provenance and fail on empty machine speech
-ell: bash
-n: |
-python3 - <<'PY'
-import json
-d=json.load(open('video-four-source-text.json'))
-rows=d['source_text']
-assert rows and any(x['channel']=='asr' for x in rows),'No actual ASR transcript found'
-assert any(x['channel'] in ('ocr','board') for x in rows),'No visual OCR found'
-assert all(x['sha256'] and x['artifact_id'] for x in rows),'Untraceable evidence'
-print('EVIDENCE_PROVENANCE_VALIDATED',len(rows))
-PY
-me: Produce timestamp-aware speech and board reconciliation
-n: |
-python3 tools-makhzan/courses/artin/reconcile_timed_evidence.py video-four-timed-crossmodal-candidates.json video-four-speech-visual-reconciliation.json
-es: actions/upload-artifact@v4
-: always()
-th:
-name: artin-video-four-reconstructed-text-and-ambiguity
-path: |
-  video-four-source-text.json
-  video-four-ambiguity-register.json
-  video-four-timed-crossmodal-candidates.json
-  video-four-speech-visual-reconciliation.json
-  video-four-diagnostic-result.json
-  video-four-classroom-questions.json
-retention-days: 30
-if-no-files-found: error
+                          import shutil
+                          shutil.copyfileobj(response,out)
+                      if not zipfile.is_zipfile(target):
+                          raise RuntimeError('Invalid ZIP or GitHub redirect response')
+                      break
+                  except Exception as exc:
+                      errors.append(str(exc))
+                      if attempt==3:raise RuntimeError('Artifact download failed after 3 attempts '+name+': '+str(errors))
+                      time.sleep(attempt*3)
+          import pathlib
+          pathlib.Path('evidence/artifact-names.json').write_text(json.dumps(mapping,ensure_ascii=False))
+          print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
+          PY
+      - name: Run original-evidence diagnostic with explicit acceptance criteria
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          names=json.loads(Path('evidence/artifact-names.json').read_text())
+          candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
+          if len(candidates)!=1 or not candidates[0].exists():
+              raise RuntimeError('Authoritative TEXT-ONLY source artifact missing or ambiguous')
+          subprocess.run(['python3','tools-makhzan/courses/artin/video4_reliability.py',str(candidates[0]),'video-four-diagnostic-result.json'],check=True)
+          result=json.loads(Path('video-four-diagnostic-result.json').read_text())
+          if result['speech_segments']!=1997 or result['visual_frames']!=502 or len(result['source_files'])<30:
+              raise RuntimeError('Unexpected source coverage; stop and inspect extraction schema')
+          if result['teacher_semantics_verified'] is not False:
+              raise RuntimeError('Unverified semantics must never be promoted to verified')
+          print('SOURCE_ACCEPTANCE_PASS; audio meaning still requires independent verification')
+          PY
+      - name: Reconstruct classroom questions and contextual answers from original speech
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          names=json.loads(Path('evidence/artifact-names.json').read_text())
+          candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
+          if len(candidates)!=1:raise RuntimeError('Original speech source not uniquely available')
+          subprocess.run(['python3','tools-makhzan/courses/artin/classroom_reasoner.py',str(candidates[0]),'video-four-classroom-questions.json'],check=True)
+          data=json.loads(Path('video-four-classroom-questions.json').read_text())
+          if data['speech_segments']<1900 or not data['question_answer_candidates']:
+              raise RuntimeError('Classroom context reconstruction incomplete')
+          PY
+      - name: Reconstruct searchable original evidence with explicit ambiguity register
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import zipfile,json,re,hashlib
+          from pathlib import Path
+          rows=[];uncertain=[];seen=set();counts={'asr':0,'ocr':0,'board':0}
+          artifact_names=json.loads(Path('evidence/artifact-names.json').read_text())
+          for archive in sorted(Path('evidence').glob('*.zip')):
+              with zipfile.ZipFile(archive) as z:
+                  for filename in z.namelist():
+                      if filename.endswith('/') or not filename.lower().endswith(('.json','.txt','.srt','.vtt','.md')):continue
+                      raw=z.read(filename)
+                      try: text=raw.decode('utf-8')
+                      except UnicodeDecodeError:continue
+                      key=hashlib.sha256(raw).hexdigest()
+                      if key in seen:continue
+                      seen.add(key)
+                      fn=filename.lower()
+                      artifact_name=artifact_names.get(archive.stem,'')
+                      channel=('asr' if '-asr-' in artifact_name or 'transcript' in fn else 'board' if '-board-ocr-' in artifact_name or 'board' in fn else 'ocr')
+                      counts[channel]+=1
+                      rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text})
+                      # Do not infer speaker or teaching rules from OCR/ASR alone.
+                      uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
+          # The authoritative TEXT-ONLY artifact contains a second ZIP inside the outer GitHub ZIP.
+          # Parse that inner bundle directly: it contains all 15 ASR shards and 16 OCR partitions.
+          import io
+          for archive in sorted(Path('evidence').glob('*.zip')):
+              with zipfile.ZipFile(archive) as outer:
+                  for member in outer.namelist():
+                      if not member.endswith('.zip'):continue
+                      with zipfile.ZipFile(io.BytesIO(outer.read(member))) as nested:
+                          for filename in nested.namelist():
+                              if not filename.lower().endswith('.json'):continue
+                              raw=nested.read(filename)
+                              try: content=raw.decode('utf-8')
+                              except UnicodeDecodeError:continue
+                              key=hashlib.sha256(raw).hexdigest()
+                              if key in seen:continue
+                              seen.add(key)
+                              channel=('asr' if filename.startswith('speech_asr_raw/') else
+                                       'board' if filename.startswith('board_ocr_raw/') else
+                                       'ocr' if filename.startswith('student_chat_ocr_raw/') else 'metadata')
+                              if channel=='metadata':continue
+                              counts[channel]+=1
+                              rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':content})
+                              uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
+          if not rows:raise RuntimeError('No machine-readable source text found')
+          # A partial extraction is a failed clarification, not a success receipt.
+          if counts['asr']==0 or (counts['ocr']==0 and counts['board']==0):
+              raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
+          # Extract timed speech/visual candidates, not just a list of files.
+          import sys
+          sys.path.insert(0,'tools-makhzan/courses/artin')
+          from reconcile_timed_evidence import seconds,extract_candidates
+          timed=[]
+          for row in rows:
+              if row['file'].lower().endswith('.json'):
+                  try:timed.extend(extract_candidates(json.loads(row['text']),row['channel'],row['file']))
+                  except (ValueError,TypeError) as exc:
+                      print('SOURCE_SCHEMA_ERROR',row['file'],str(exc))
+          for entry in timed:
+              t=seconds(entry['start'])
+              if t is None:continue
+              entry['nearby_visual_evidence']=[{'source':v['source'],'start':v['start'],'text':v['text'][:500]} for v in timed if v['channel']!='asr' and seconds(v['start']) is not None and abs(seconds(v['start'])-t)<=8][:12] if entry['channel']=='asr' else []
+          Path('video-four-timed-crossmodal-candidates.json').write_text(json.dumps({'video_sequence':4,'candidate_count':len(timed),'time_alignment_window_seconds':8,'human_semantic_certification':False,'candidates':timed},ensure_ascii=False,indent=2))
+          if not any(x['channel']=='asr' and seconds(x['start']) is not None for x in timed):
+              raise RuntimeError('NO_TIMED_SPEECH: inspect original ASR schema and correct timestamp parser; no false success')
+          Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
+          Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
+          print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
+          PY
+      - name: Validate evidence provenance and fail on empty machine speech
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('video-four-source-text.json'))
+          rows=d['source_text']
+          assert rows and any(x['channel']=='asr' for x in rows),'No actual ASR transcript found'
+          assert any(x['channel'] in ('ocr','board') for x in rows),'No visual OCR found'
+          assert all(x['sha256'] and x['artifact_id'] for x in rows),'Untraceable evidence'
+          print('EVIDENCE_PROVENANCE_VALIDATED',len(rows))
+          PY
+      - name: Produce timestamp-aware speech and board reconciliation
+        run: |
+          python3 tools-makhzan/courses/artin/reconcile_timed_evidence.py video-four-timed-crossmodal-candidates.json video-four-speech-visual-reconciliation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artin-video-four-reconstructed-text-and-ambiguity
+          path: |
+            video-four-source-text.json
+            video-four-ambiguity-register.json
+            video-four-timed-crossmodal-candidates.json
+            video-four-speech-visual-reconciliation.json
+            video-four-diagnostic-result.json
+            video-four-classroom-questions.json
+          retention-days: 30
+          if-no-files-found: error
