@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V13 isolated end-to-end evidence verifier. Fails closed; never edits active queue."""
+"""Isolated V13 end-to-end verifier. Never writes production queue or asserts real-run success from flags."""
 import argparse
 import importlib.util
 import json
@@ -16,11 +16,30 @@ def load(name):
 def verify_run(record, root):
     gate = load("v13_acceptance_gate").check(record)
     files = load("verify_artifacts").verify(record, root)
+    errors = gate["errors"] + files["errors"]
+    # A receipt must bind the SAME source, archive and queue handoff. A matching
+    # receipt-file digest alone cannot establish that it describes this film.
+    if files["passed"]:
+        receipt = (Path(root) / record["receipt_path"]).resolve()
+        try:
+            doc = json.loads(receipt.read_text(encoding="utf-8"))
+            if not isinstance(doc, dict):
+                raise ValueError("receipt must be an object")
+            for field in ("source_sha256", "archive_sha256", "next_queue_id"):
+                if doc.get(field) != record.get(field):
+                    errors.append("receipt binding mismatch: " + field)
+            if doc.get("semantic_review_passed") is not True:
+                errors.append("receipt lacks verified semantic review")
+            if doc.get("next_handoff_verified") is not True:
+                errors.append("receipt lacks verified next handoff")
+        except (OSError, ValueError, UnicodeError) as exc:
+            errors.append("receipt cannot be parsed: " + type(exc).__name__)
+    passed = not errors
     return {
-        "passed": gate["passed"] and files["passed"],
+        "passed": passed,
         "duration_seconds": gate["duration_seconds"],
-        "errors": gate["errors"] + files["errors"],
-        "status": "VERIFIED" if gate["passed"] and files["passed"] else "UNVERIFIED",
+        "errors": errors,
+        "status": "VERIFIED" if passed else "UNVERIFIED",
     }
 
 def main():
