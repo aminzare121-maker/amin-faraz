@@ -125,7 +125,7 @@ def github_put_json(path,document,repo,branch,token):
                      (document.get("status")=="FAILED_NEEDS_REVIEW" and
                       type(prior.get("failure_attempts",1)) is int and
                       1<=prior.get("failure_attempts",1)<3))
-                and int(document.get("github_run_id",0))>int(prior.get("github_run_id",0))):
+                and (int(document.get("github_run_id",0))>int(prior.get("github_run_id",0)) or (document.get("status")=="COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED" and int(document.get("github_run_id",0))==int(prior.get("github_run_id",0)) and document.get("source_evidence") is not None))):
                 document["failure_attempts"]=(0 if document["status"]!="FAILED_NEEDS_REVIEW"
                                               else prior.get("failure_attempts",1)+1)
                 encoded=base64.b64encode((json.dumps(document,ensure_ascii=False,indent=2)+"\n").encode("utf8")).decode("ascii")
