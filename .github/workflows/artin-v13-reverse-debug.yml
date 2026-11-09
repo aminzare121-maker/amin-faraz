@@ -20,7 +20,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p diagnostics
-          gh api --paginate 'repos/${{ github.repository }}/actions/runs/42579086735/jobs?per_page=100' --jq '.jobs[] | [.id,.conclusion,.name] | @tsv' > diagnostics/jobs.tsv
+          gh api --paginate 'repos/${{ github.repository }}/actions/runs/42580188236/jobs?per_page=100' --jq '.jobs[] | [.id,.conclusion,.name] | @tsv' > diagnostics/jobs.tsv
           cat diagnostics/jobs.tsv
           python3 - <<'PY'
           from pathlib import Path
@@ -47,7 +47,7 @@ jobs:
           from pathlib import Path
           import subprocess,json
           logs=sorted(Path('diagnostics').glob('job-*.log'))
-          body=['Reverse diagnosis of failed Artin run 42579086735:']
+          body=['Reverse diagnosis of failed Artin run 42580188236:']
           for p in logs:
               lines=p.read_text(errors='replace').splitlines()
               errors=[line for line in lines if any(word in line.lower() for word in ('error','traceback','exception','failed','missing'))]
@@ -55,7 +55,7 @@ jobs:
           if not logs:body.append('No verifier log downloaded; inspect the diagnostics artifact.')
           message='\\n'.join(body)[:55000]
           found=json.loads(subprocess.check_output(['gh','issue','list','--state','open','--search','in:title Artin V13 verifier root cause','--json','number'],text=True))
-          args=['gh','issue','comment',str(found[0]['number']),'--body',message] if found else ['gh','issue','create','--title','Artin V13 verifier root cause - run 42579086735','--body',message]
+          args=['gh','issue','comment',str(found[0]['number']),'--body',message] if found else ['gh','issue','create','--title','Artin V13 verifier root cause - run 42580188236','--body',message]
           subprocess.run(args,check=True)
           PY
       - name: Persist real root-cause logs
