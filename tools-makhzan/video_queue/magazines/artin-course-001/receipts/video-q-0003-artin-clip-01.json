@@ -1,0 +1,37 @@
+{
+  "schema": "makhzan_video001_queue_technical_text_receipt_v1",
+  "magazine_id": "artin-course-001",
+  "queue_id": "video-q-0003-artin-clip-01",
+  "source_page": "https://my.uupload.ir/p/dxvmY5Gv",
+  "status": "MACHINE_TEXT_ARCHIVED_UNVERIFIED",
+  "state_meaning": "Raw ASR, student chat OCR, board sample OCR stored as machine candidates; does not certify every chart action, teacher rules or human accuracy.",
+  "source_evidence": {
+    "source_video_sha256": "a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb",
+    "duration_seconds": 5157.198367,
+    "audio_parts": 18,
+    "chat_ocr_source_frames": 243,
+    "board_ocr_source_frames": 172,
+    "one_second_chat_frames_scanned": 5157,
+    "raw_asr_segments_in_source_archive": 2355,
+    "raw_archive_sha256": "522c0e2155b957cbd0dbc904cf35b9d0683e5aa9ac32ff95e0b7e582132a99d4",
+    "text_only_master_with_derived_sha256": "0ed43b0c054c7dc7700b04885170b9d62bcbb461d6c7cd3e288a58c502cec37d",
+    "all_raw_text_sha256_verified": true,
+    "original_video_changed": false,
+    "asr_machine_human_accuracy_verified": false,
+    "ocr_machine_human_accuracy_verified": false,
+    "board_chart_actions_semantically_extracted": false,
+    "verified_teacher_question_answer_pairs": 0,
+    "verified_executable_trading_rules": 0,
+    "independent_source_runs": [
+      42426863832,
+      42534706203,
+      42544045477
+    ]
+  },
+  "archive_private_library_path": "/بهروز/بهروز.zip",
+  "user_authorization": "USER_REQUEUED_CONTINUATION_AFTER_VIDEO_3_2026-11-09",
+  "human_semantics_verified": false,
+  "trading_permitted": false,
+  "next_sequence_can_begin_without_semantic_certification": true,
+  "note": "This is not a final semantic/full-visual verification receipt. Only technical text extraction candidate coverage; underlying raw files remain byte-identical. No video is silently skipped."
+}
