@@ -14,8 +14,8 @@ for sequence,artifact in ARTIFACTS.items():
     candidates=[]
     for n in names:
         # Avoid inferring timestamps unless an explicit numeric time can be parsed from the exact filename.
-        all_nums=re.findall(r"(?<!\\d)\\d{3,5}(?:\\.\\d+)?(?!\\d)",pathlib.Path(n).stem)
-        times=[float(num) for num in all_nums if float(num)<8000]
+        all_nums=re.findall(r"_t(\\d{10,12})_",pathlib.Path(n).stem)
+        times=[int(num)/1000 for num in all_nums if int(num)/1000<8000]
         if times:
             candidates.append((min(abs(t-target[sequence]) for t in times),n))
     selection=[name for _,name in sorted(candidates)[:2]] if candidates else names[:2]
