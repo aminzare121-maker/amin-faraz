@@ -17,7 +17,7 @@ def get_json(api):
     if r.returncode:raise RuntimeError(api+":"+r.stderr.decode("utf8","replace")[:250])
     return json.loads(r.stdout)
 def load_zip_file(api):
-    r=subprocess.run(["gh","api",api],stdout=None,stderr=subprocess.PIPE,timeout=360,capture_output=True)
+    r=subprocess.run(["gh","api",api],capture_output=True,timeout=360)
     if r.returncode:raise RuntimeError(api+":"+r.stderr.decode("utf8","replace")[:250])
     if not zipfile.is_zipfile(io.BytesIO(r.stdout)):raise RuntimeError("ZIP_INVALID:"+api)
     return r.stdout
