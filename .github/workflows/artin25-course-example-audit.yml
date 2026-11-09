@@ -1,5 +1,8 @@
 name: Artin course example arithmetic audit
 on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-course-example-audit.yml, audit/artin25-cloud/replay_course_examples.py]
   workflow_dispatch:
 permissions:
   contents: read
