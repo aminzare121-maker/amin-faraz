@@ -34,7 +34,8 @@ jobs:
           for a in selected:
               name=a['name']
               target='evidence/'+str(a['id'])+'.zip'
-              subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a["id"]}/zip','--output',target],check=True)
+              with open(target,'wb') as out:
+                  subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a["id"]}/zip'],stdout=out,check=True)
               import zipfile
               if not zipfile.is_zipfile(target):
                   raise RuntimeError('Artifact ZIP download invalid: '+name)
