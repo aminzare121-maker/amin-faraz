@@ -52,6 +52,17 @@ class HierarchyTests(unittest.TestCase):
     def test_invalid_pdf_page(self):
         d=model();d['pdf_reference']['page']=20
         self.assertEqual(resolve_priority(d)['status'],'INVALID_PDF_PROVENANCE')
+    def test_mismatched_pdf_digest_rejected(self):
+        d=model(); d['pdf_reference']['pdf_sha256']='b'*64
+        self.assertEqual(resolve_priority(d)['status'],'INVALID_PDF_PROVENANCE')
+
+    def test_pdf_page_does_not_override_verified_speech(self):
+        d=model(); d['pdf_reference']['meaning_conflict_with_oral']=True
+        report=resolve_priority(d)
+        self.assertEqual(report['oral_expected_decision'],'NO_TRADE')
+        self.assertFalse(report['decision_certified'])
+        self.assertFalse(report['mt5_trade_allowed'])
+
     def test_pdf_cannot_claim_oral_verified(self):
         d=model();d['pdf_reference']['claim_of_teacher_speech_verified']=True
         self.assertEqual(resolve_priority(d)['status'],'IMPROPER_PDF_PROMOTION')
