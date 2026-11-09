@@ -47,6 +47,14 @@ def verify_run(record, root):
             # ZIP allows duplicate filenames and read(name) silently selects one.
             # Reject decompression bombs before reading embedded content.
             members = master.infolist()
+            # Bound metadata traversal and decompression amplification. This is
+            # fail-closed; the original ZIP is never modified or repaired.
+            if len(members) > 10000:
+                raise ValueError("too many ZIP members in Behrooz readback")
+            if any(m.file_size > 1024 * 1024 and
+                   m.file_size > max(m.compress_size, 1) * 200
+                   for m in members):
+                raise ValueError("excessive ZIP compression ratio in Behrooz readback")
             if any(m.flag_bits & 1 for m in members):
                 raise ValueError("encrypted ZIP member in Behrooz readback")
             if any(m.file_size > 256 * 1024 * 1024 for m in members):
