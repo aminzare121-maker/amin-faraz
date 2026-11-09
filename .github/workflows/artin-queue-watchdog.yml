@@ -7,8 +7,6 @@ on:
     workflows: ['Artin V13 autopilot - serial source and text extraction']
     types: [completed]
     branches: [tools-makhzan-hub]
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   actions: write
