@@ -686,7 +686,7 @@ jobs:
           PY
       - name: Archive exact V13 raw machine texts for Behrooz in under-60-second target stage
         run: |
-          python3 -u research/artin-film-engine-v3-1/video001_v13_text_archive_ready.py \
+          python3 -u "$GITHUB_WORKSPACE/artin-rehydration/research/artin-film-engine-v3-1/video001_v13_text_archive_ready.py" \
             --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
             --source-proof /tmp/video001_full_integrity/private_fast_verify_summary.json \
             --asr-root /tmp/video001_all_asr \
