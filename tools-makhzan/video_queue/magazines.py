@@ -113,6 +113,11 @@ def read_magazine(folder):
               "A receipt from another magazine or video was encountered")
         status=saved.get("status")
         if status==RECEIPT_FAILED:
+            attempts=saved.get('failure_attempts',1)
+            _need(type(attempts) is int and 1<=attempts<=3, 'Invalid failure retry counter')
+            if attempts<3:
+                _need(not failed,'An earlier failed film blocked this serial magazine')
+                outstanding.append(item)
             failed=True
         elif status=="MACHINE_TEXT_ARCHIVED_UNVERIFIED":
             # Explicit user-authorized stage boundary: technical texts may
@@ -133,8 +138,10 @@ def read_magazine(folder):
         else:
             _need(status==RECEIPT_OK and saved.get("source_evidence") is not None,
                   "No verified receipt for queued source")
-    _need(not failed,
-          "One film failed: do not silently skip ahead to next film or mark source successful")
+    # A failed film is the only eligible retry; later films stay blocked.
+    # After three source-backed failed runs, stop instead of burning CI quota.
+    if failed and not outstanding:
+        raise ValueError('Film failed three times: manual review required; later films blocked')
     return outstanding
 
 def enumerate_magazines(root):
