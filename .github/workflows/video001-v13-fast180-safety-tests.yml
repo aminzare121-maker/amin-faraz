@@ -19,7 +19,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Check contract and GPU-candidate code without media, GPU, or trades
+      - name: Install FFmpeg for generated synthetic video only
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -y -qq install ffmpeg
+          ffmpeg -version | head -n 1
+      - name: Check contract and GPU-candidate code without private media, GPU, or trades
         working-directory: experiments/video001-v13/fast180
         run: |
           python -m unittest -v test_speed_acceptance.py test_batched_gpu_asr.py test_one_pass_visual_candidate.py
