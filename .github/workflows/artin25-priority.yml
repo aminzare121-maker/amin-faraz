@@ -1,0 +1,28 @@
+name: ARTIN 25 prioritized literal speech OCR source windows
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_priority/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  priority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build 66 source-grounded semantic review windows without rule certification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_priority/build_windows.py
+      - name: Archive 66 review windows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-priority-unverified-review-windows
+          path: artin25_priority_output/**
+          retention-days: 60
