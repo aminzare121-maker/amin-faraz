@@ -1,0 +1,55 @@
+name: Artin text-selected session2 image evidence
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-text-selected-case2.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  selected-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Read selected text cases and preserve only corresponding image evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p private review
+          python3 - <<'PY'
+          import hashlib,json,pathlib,subprocess,zipfile
+          def fetch(artifact,path):
+              with open(path,'wb') as f:p=subprocess.run(['gh','api',f'repos/aminzare121-maker/amin-faraz/actions/artifacts/{artifact}/zip'],stdout=f,stderr=subprocess.PIPE,timeout=300)
+              if p.returncode:raise RuntimeError('EXISTING_EVIDENCE_READ_FAILED')
+          fetch(13694173934,'private/plan.zip')
+          with zipfile.ZipFile('private/plan.zip') as z:plan=json.loads(z.read('targeted_review_PRIVATE.json'))
+          expected='60e909d7a3acb57a5e80b689e6dac576db479c04795afc413229d7492afc7748'
+          if plan['sequence']!=2 or plan['source_sha256']!=expected:raise ValueError('TEXT_PLAN_SOURCE_MISMATCH')
+          fetch(13691146531,'private/source.zip')
+          h=hashlib.sha256()
+          with zipfile.ZipFile('private/source.zip') as z,z.open('original.mp4') as src,open('private/source.mp4','wb') as dst:
+              for b in iter(lambda:src.read(4*1024*1024),b''):h.update(b);dst.write(b)
+          if h.hexdigest()!=expected:raise ValueError('ORIGINAL_CHANGED')
+          images=[];seen={}
+          for i,c in enumerate(plan['candidates']):
+              mid=(c['segment']['start']+c['segment']['end'])/2
+              for t in [max(0,mid-2),mid,min(plan['source_duration_seconds']-0.01,mid+2)]:
+                  key=round(t,3)
+                  if key in seen:continue
+                  name=f'frame_{key:010.3f}.png';target=pathlib.Path('review')/name
+                  p=subprocess.run(['ffmpeg','-nostdin','-v','error','-ss',str(key),'-i','private/source.mp4','-frames:v','1',str(target)],capture_output=True,timeout=60)
+                  if p.returncode:raise RuntimeError('SELECTED_FRAME_READ_FAILED')
+                  record={'file':name,'original_video_seconds':key,'image_sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'candidate_index':i}
+                  images.append(record);seen[key]=name
+          pathlib.Path('review/text_selected_review_PRIVATE.json').write_text(json.dumps({'sequence':2,'source_sha256':expected,'selection_plan_artifact':13694173934,'candidates':plan['candidates'],'images':images,'models_executed':0,'image_relations_verified':False,'semantic_verified':False,'note':'Frames before/at/after text anchor are candidates. Inspect or expand the clip when pointing/motion or context is not resolved.'},ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps({'sequence':2,'selected_candidates':len(plan['candidates']),'images':len(images),'models_executed':0,'semantic_verified':False}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artin25-session2-text-selected-images-PRIVATE
+          path: review/
+          retention-days: 90
+          if-no-files-found: error
