@@ -503,7 +503,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: bfbaa2b1bffc3346253e2605d699a8c9de367193
+          ref: 982bc660722c4167fbcea64b223b8698593a4d80
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
@@ -592,6 +592,25 @@ jobs:
           pathlib.Path('/tmp/video001_full_integrity/board_ocr_safe_summary.json').write_text(json.dumps(summary,indent=2))
           print('V13_SOURCE_HASHED_BOARD_TEXT_CANDIDATES_COMPLETE=',len(b['rows']),flush=True)
           PY
+      - name: Archive exact V13 raw machine texts for Behrooz in under-60-second target stage
+        run: |
+          python3 -u research/artin-film-engine-v3-1/video001_v13_text_archive_ready.py \
+            --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
+            --source-proof /tmp/video001_full_integrity/private_fast_verify_summary.json \
+            --asr-root /tmp/video001_all_asr \
+            --ocr-root /tmp/video001_all_ocr \
+            --board-ocr-root /tmp/v13_board_ocr_original \
+            --export-root /tmp/makhzan_fast_complete_source_private \
+            --out /tmp/v13_behr_text/V13_BEHROOZ_TEXT_ONLY.zip \
+            --magazine-id ${{ inputs.magazine_id }} \
+            --queue-id ${{ inputs.queue_id }}
+      - name: Preserve V13 machine text only, with SHA, pending private ChatGPT Library transfer
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-behrooz-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-TEXT-ONLY
+          path: /tmp/v13_behr_text/**
+          retention-days: 15
+          if-no-files-found: error
       - name: Archive FULL private V12 review data and original images, not only a metrics summary
         uses: actions/upload-artifact@v4
         with:
