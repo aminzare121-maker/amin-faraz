@@ -94,6 +94,24 @@ jobs:
           pathlib.Path('evidence/artifact-names.json').write_text(json.dumps(mapping,ensure_ascii=False))
           print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
           PY
+      - name: Run original-evidence diagnostic with explicit acceptance criteria
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          names=json.loads(Path('evidence/artifact-names.json').read_text())
+          candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
+          if len(candidates)!=1 or not candidates[0].exists():
+              raise RuntimeError('Authoritative TEXT-ONLY source artifact missing or ambiguous')
+          subprocess.run(['python3','tools-makhzan/courses/artin/video4_reliability.py',str(candidates[0]),'video-four-diagnostic-result.json'],check=True)
+          result=json.loads(Path('video-four-diagnostic-result.json').read_text())
+          if result['speech_segments']!=1997 or result['visual_frames']!=502 or len(result['source_files'])!=49:
+              raise RuntimeError('Unexpected source coverage; stop and inspect extraction schema')
+          if result['teacher_semantics_verified'] is not False:
+              raise RuntimeError('Unverified semantics must never be promoted to verified')
+          print('SOURCE_ACCEPTANCE_PASS; audio meaning still requires independent verification')
+          PY
       - name: Reconstruct searchable original evidence with explicit ambiguity register
         shell: bash
         run: |
@@ -191,5 +209,6 @@ jobs:
             video-four-ambiguity-register.json
             video-four-timed-crossmodal-candidates.json
             video-four-speech-visual-reconciliation.json
+            video-four-diagnostic-result.json
           retention-days: 30
           if-no-files-found: error
