@@ -6,6 +6,8 @@ Input: JSON object {"sessions": [{"session": 1..25, "rules": [...]}, ...]}.
 Each rule requires raw evidence references and a human-reviewed comparison.
 """
 import json
+import math
+import re
 import sys
 
 REQUIRED = {"entry", "exit", "exception", "decision_order"}
@@ -45,19 +47,31 @@ def audit(document):
             compare = rule.get("independent_comparison")
             # Verifier must identify actual teacher example, expected and observed
             # decision, speech+image timed anchors, and independent reviewer.
-            refs_ok = (
-                isinstance(evidence, list) and bool(evidence)
-                and all(isinstance(x, dict)
-                        and x.get("source_sha256")
-                        and isinstance(x.get("start"), (int, float))
-                        and isinstance(x.get("end"), (int, float))
-                        and 0 <= x["start"] <= x["end"]
-                        and x.get("modality") in ("speech", "image")
-                        for x in evidence)
-                and {"speech", "image"}.issubset(
-                    {x["modality"] for x in evidence}
+            # A pair of unrelated timestamps or placeholder hashes is not
+            # evidence of a synchronized speech/image observation.
+            def valid_anchor(x):
+                return (
+                    isinstance(x, dict)
+                    and isinstance(x.get("source_sha256"), str)
+                    and re.fullmatch(r"[0-9a-fA-F]{64}", x["source_sha256"]) is not None
+                    and type(x.get("start")) in (int, float)
+                    and type(x.get("end")) in (int, float)
+                    and math.isfinite(x["start"])
+                    and math.isfinite(x["end"])
+                    and 0 <= x["start"] <= x["end"]
+                    and x.get("modality") in ("speech", "image")
                 )
-            )
+
+            refs_ok = False
+            if isinstance(evidence, list) and evidence and all(valid_anchor(x) for x in evidence):
+                # Match anchors on the same source video, with overlapping
+                # intervals. Zero-duration anchors are allowed if coincident.
+                refs_ok = any(
+                    speech["source_sha256"].lower() == frame["source_sha256"].lower()
+                    and max(speech["start"], frame["start"]) <= min(speech["end"], frame["end"])
+                    for speech in evidence if speech["modality"] == "speech"
+                    for frame in evidence if frame["modality"] == "image"
+                )
             compare_ok = (
                 isinstance(compare, dict)
                 and compare.get("teacher_example_id")
