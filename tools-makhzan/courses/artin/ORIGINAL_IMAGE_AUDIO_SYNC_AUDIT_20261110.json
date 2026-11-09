@@ -1,0 +1,99 @@
+{
+  "schema": "artin_v13_public_original_visual_audio_temporal_gate_v1",
+  "input_original_board_zip_sha256": {
+    "20": "4ee123ee806c848b4b733f3bbc1e7ae4f2f12f1ef94f96095cda7312c45f319f",
+    "22": "b56deb23203ab616b614cc0f959e342b26dfbccda7f964e663c887e39338770a"
+  },
+  "original_frame_scene_tags_from_model_inspection_count": 6,
+  "six_source_citations": 6,
+  "five_unique_audio_time_windows": 5,
+  "citations_with_board_frame_inside_speech_window": 3,
+  "citations_without_board_frame_inside_speech_window": 3,
+  "same_audio_used_for_doji_ahead_and_tied": true,
+  "cases": [
+    {
+      "source_window_id": "ARTIN-RESTORED-01",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 20,
+      "source_start_seconds": 4100.0,
+      "source_end_seconds": 4133.0,
+      "time_match_status": "IN_WINDOW_FRAMES_EXIST",
+      "frames_inside_window": 1,
+      "nearest_image_time_seconds": 4125.0,
+      "closest_frame_gap_seconds": 0.0,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-02",
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "queue_video": 20,
+      "source_start_seconds": 4201.3,
+      "source_end_seconds": 4208.84,
+      "time_match_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+      "frames_inside_window": 0,
+      "nearest_image_time_seconds": 4215.0,
+      "closest_frame_gap_seconds": 6.16,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-03",
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "queue_video": 20,
+      "source_start_seconds": 4210.14,
+      "source_end_seconds": 4214.52,
+      "time_match_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+      "frames_inside_window": 0,
+      "nearest_image_time_seconds": 4215.0,
+      "closest_frame_gap_seconds": 0.48,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-04",
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "queue_video": 20,
+      "source_start_seconds": 4210.14,
+      "source_end_seconds": 4214.52,
+      "time_match_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+      "frames_inside_window": 0,
+      "nearest_image_time_seconds": 4215.0,
+      "closest_frame_gap_seconds": 0.48,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-05",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 20,
+      "source_start_seconds": 4214.52,
+      "source_end_seconds": 4223.26,
+      "time_match_status": "IN_WINDOW_FRAMES_EXIST",
+      "frames_inside_window": 1,
+      "nearest_image_time_seconds": 4215.0,
+      "closest_frame_gap_seconds": 0.0,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    },
+    {
+      "source_window_id": "ARTIN-RESTORED-06",
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "queue_video": 22,
+      "source_start_seconds": 4694.0,
+      "source_end_seconds": 4728.0,
+      "time_match_status": "MIXED_SCENES_WITHIN_INTERVAL",
+      "frames_inside_window": 2,
+      "nearest_image_time_seconds": 4725.0,
+      "closest_frame_gap_seconds": 0.0,
+      "chart_referent_verified": false,
+      "rule_semantic_certified": false
+    }
+  ],
+  "teacher_speech_independently_verified": false,
+  "audio_image_teacher_referent_independently_verified": false,
+  "entry_conditions_certified": 0,
+  "offline_teacher_strategy_backtest_completed": false,
+  "mt5_order_authorized": false,
+  "note": "Image and original board archive bytes/time verified; visual scene classification is bounded still-image inspection, NOT verification of the lesson spoken meaning. No signal, SL, TP or profit outcomes inferred."
+}
