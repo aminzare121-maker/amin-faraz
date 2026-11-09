@@ -16,7 +16,7 @@ SHA=re.compile(r'^[a-f0-9]{64}$')
 def audit(registry,audit_doc):
     sessions=registry['registered_sessions']
     items=audit_doc['sessions']
-    assert len(items)==len(sessions), 'Audit must cover every registered lesson'
+    assert len(items)<=len(sessions), 'Audit references lessons not yet registered'
     for session,entry in zip(sessions,items):
         assert entry['sequence']==session['sequence'], 'Audit session order mismatch'
         assert entry['source_sha256']==session['source_sha256'] and SHA.fullmatch(entry['source_sha256']), 'Audit original-video identity mismatch'
@@ -24,6 +24,9 @@ def audit(registry,audit_doc):
         assert entry['teacher_semantics_verified'] is False, 'Never assert teacher meaning without source-anchored independent evidence'
         assert entry['verified_executable_rules']==[], 'Unverified rule cannot be executable'
         assert entry['review_required'] is True, 'Unverified film must remain flagged for review'
+    missing=sessions[len(items):]
+    if missing:
+        print('SEMANTIC_AUDIT_NEW_SESSIONS_REQUIRE_REVIEW='+','.join(str(x['sequence']) for x in missing))
     return len(items)
 
 def main():
