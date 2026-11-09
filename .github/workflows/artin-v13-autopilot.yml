@@ -2,6 +2,7 @@ name: Artin V13 autopilot - serial source and text extraction
 # V13 verifier diagnostic and receipt fixes: 31c14306cf52d7fe0ea51bed200ef857e9fdc9db
 # Event-driven entry point: push or workflow_dispatch; no 15-minute polling.
 # Restart after registration-proof and V12/Behrooz fixes; process first unresolved authorized film.
+# Recovery trigger: session 003 now registered, video 004 retry unblocked; select same authorized video.
 # Explicitly user-submitted magazine entries only. No trading or invented rules.
 on:
   push:
