@@ -1,0 +1,31 @@
+name: ARTIN 25 cumulative evidence source review - sequences 4 to 25
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_semantic/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read source-indexed ASR and OCR for all registered sequence 4-25 videos
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: aminzare121-maker/amin-faraz
+        run: |
+          python3 -u research/artin25_semantic/source_audit.py
+      - name: Preserve independent evidence index and diagnostic results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-source-grounded-audit-unverified
+          path: artin25_semantic_output/**
+          if-no-files-found: warn
+          retention-days: 60
