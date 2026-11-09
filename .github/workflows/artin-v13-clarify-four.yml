@@ -2,7 +2,9 @@ name: Artin video four speech and board clarification
 on:
   push:
     branches: [tools-makhzan-hub]
-    paths: ['.github/workflows/artin-v13-clarify-four.yml']
+    paths:
+      - '.github/workflows/artin-v13-clarify-four.yml'
+      - 'tools-makhzan/courses/artin/reconcile_timed_evidence.py'
   workflow_dispatch:
 permissions:
   actions: read
