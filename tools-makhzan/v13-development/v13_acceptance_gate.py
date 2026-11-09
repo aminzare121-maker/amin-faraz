@@ -47,8 +47,8 @@ def check(record):
         if order != sorted(order):
             errors.append("timestamps out of order")
         duration = (times["next_handoff_committed_at"] - times["source_started_at"]).total_seconds()
-        if duration >= 180 or duration < 0:
-            errors.append(f"end-to-end duration {duration:.3f}s is not <180s")
+        if duration > 180 or duration < 0:
+            errors.append(f"end-to-end duration {duration:.3f}s is outside 0..180s")
     else:
         duration = None
     return {"passed": not errors, "duration_seconds": duration, "errors": errors}
