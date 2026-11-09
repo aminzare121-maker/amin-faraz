@@ -7,6 +7,7 @@ on:
 permissions:
   actions: read
   contents: read
+  issues: write
 jobs:
   trace-previous-failure:
     runs-on: ubuntu-latest
@@ -33,6 +34,25 @@ jobs:
                   proc=subprocess.run(['gh','api',f'repos/${{ github.repository }}/actions/jobs/{jid}/logs'],stdout=out,stderr=subprocess.PIPE)
               if proc.returncode:dest.write_text('Log fetch failed: '+proc.stderr.decode(errors='replace'))
               print('TRACED_JOB',jid,name,'bytes',dest.stat().st_size,flush=True)
+          PY
+      - name: Publish exact failure excerpt in an issue for autonomous follow-up
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess,json
+          logs=sorted(Path('diagnostics').glob('job-*.log'))
+          body=['Reverse diagnosis of failed Artin run 42579086735:']
+          for p in logs:
+              lines=p.read_text(errors='replace').splitlines()
+              errors=[line for line in lines if any(word in line.lower() for word in ('error','traceback','exception','failed','missing'))]
+              body.extend([p.name,'```',*(errors[-35:] or lines[-15:]),'```'])
+          if not logs:body.append('No verifier log downloaded; inspect the diagnostics artifact.')
+          message='\\n'.join(body)[:55000]
+          found=json.loads(subprocess.check_output(['gh','issue','list','--state','open','--search','in:title Artin V13 verifier root cause','--json','number'],text=True))
+          args=['gh','issue','comment',str(found[0]['number']),'--body',message] if found else ['gh','issue','create','--title','Artin V13 verifier root cause - run 42579086735','--body',message]
+          subprocess.run(args,check=True)
           PY
       - name: Persist real root-cause logs
         if: always()
