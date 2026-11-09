@@ -1,0 +1,21 @@
+name: Artin course example arithmetic audit
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  arithmetic-only:
+    if: github.ref == 'refs/heads/audit/artin25-cloud-evidence-20261109'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Replay observed examples without trading
+        run: python3 audit/artin25-cloud/replay_course_examples.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: artin-course-example-arithmetic-audit
+          path: course_example_replay_result.json
+          retention-days: 30
