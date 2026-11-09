@@ -1,0 +1,26 @@
+name: V13 strict three-minute candidate tests (no private media)
+on:
+  push:
+    branches: [experiment/video001-v13-180sec-gpu-candidate-20261109]
+    paths:
+      - 'experiments/video001-v13/fast180/**'
+      - '.github/workflows/video001-v13-fast180-safety-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-safety-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check contract and GPU-candidate code without media, GPU, or trades
+        working-directory: experiments/video001-v13/fast180
+        run: |
+          python -m unittest -v test_speed_acceptance.py test_batched_gpu_asr.py
+          python -m py_compile speed_acceptance.py batched_gpu_asr.py
