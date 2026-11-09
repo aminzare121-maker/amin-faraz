@@ -5,6 +5,8 @@ on:
     paths:
       - 'tools-makhzan/v13-development/**'
       - '.github/workflows/v13-development-gates.yml'
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,6 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify-acceptance-gate:
+    if: github.ref == 'refs/heads/artin-v13-under180-development'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -20,8 +23,11 @@ jobs:
         with:
           ref: artin-v13-under180-development
           persist-credentials: false
-      - name: Unit tests for V13 end-to-end evidence gate (synthetic tests only)
+      - name: Compile development gate
+        run: python3 -m py_compile tools-makhzan/v13-development/*.py
+      - name: Unit tests for V13 evidence gate (synthetic tests only)
         run: python3 -m unittest discover -s tools-makhzan/v13-development -p 'test_*.py' -v
-      - name: Report non-production status
+      - name: Explain scope
+        if: always()
         run: |
-          echo 'Only acceptance-gate unit tests were executed; no real film or <180s claim.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Development checks only. No real video, <180s result, autonomous code modification or production switch.' >> "$GITHUB_STEP_SUMMARY"
