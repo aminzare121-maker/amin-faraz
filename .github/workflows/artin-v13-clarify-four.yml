@@ -113,26 +113,15 @@ jobs:
           if counts['asr']==0 or counts['ocr']==0:
               raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
           # Extract timed speech/visual candidates, not just a list of files.
-          timed=[]
-          def walk(node,origin,channel,depth=0):
-              if depth>12:return
-              if isinstance(node,list):
-                  for x in node:walk(x,origin,channel,depth+1)
-              elif isinstance(node,dict):
-                  value=next((node[k] for k in ('text','transcript','content','utterance','recognized_text') if isinstance(node.get(k),str) and node[k].strip()),None)
-                  start=next((node[k] for k in ('start','start_time','timestamp','time','start_seconds') if isinstance(node.get(k),(int,float,str))),None)
-                  end=next((node[k] for k in ('end','end_time','end_time_seconds','end_seconds') if isinstance(node.get(k),(int,float,str))),None)
-                  if value and start is not None:
-                      timed.append({'channel':channel,'source':origin,'start':start,'end':end,'text':value,'speaker':'UNKNOWN'})
-                  for v in node.values():
-                      if isinstance(v,(list,dict)):walk(v,origin,channel,depth+1)
-          for row in rows:
-              if row['file'].lower().endswith('.json'):
-                  try:walk(json.loads(row['text']),row['file'],row['channel'])
-                  except (ValueError,TypeError):pass
           import sys
           sys.path.insert(0,'tools-makhzan/courses/artin')
-          from reconcile_timed_evidence import seconds
+          from reconcile_timed_evidence import seconds,extract_candidates
+          timed=[]
+          for row in rows:
+              if row['file'].lower().endswith('.json'):
+                  try:timed.extend(extract_candidates(json.loads(row['text']),row['channel'],row['file']))
+                  except (ValueError,TypeError) as exc:
+                      print('SOURCE_SCHEMA_ERROR',row['file'],str(exc))
           for entry in timed:
               t=seconds(entry['start'])
               if t is None:continue
