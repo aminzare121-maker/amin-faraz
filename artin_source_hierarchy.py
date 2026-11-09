@@ -10,6 +10,8 @@ import re
 
 SHA256 = re.compile(r'^[0-9a-f]{64}$')
 DECISIONS = {'ENTER', 'EXIT', 'HOLD', 'NO_TRADE'}
+# Exact immutable SHA-256 of the 19-page PDF supplied by the course owner.
+TEACHER_PDF_SHA256 = 'f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909'
 
 
 def good_sha(s):
@@ -38,9 +40,9 @@ def resolve_priority(case):
         'reasons': [],
     }
     if page is not None:
-        if not isinstance(page, dict) or not (type(page.get('page')) is int and 1 <= page['page'] <= 19) or not good_sha(page.get('pdf_sha256')):
+        if not isinstance(page, dict) or not (type(page.get('page')) is int and 1 <= page['page'] <= 19) or page.get('pdf_sha256') != TEACHER_PDF_SHA256:
             result['status'] = 'INVALID_PDF_PROVENANCE'
-            result['reasons'].append('page number and Technical.pdf SHA-256 required')
+            result['reasons'].append('page number 1–19 and the exact original Technical.pdf SHA-256 required')
             return result
         if page.get('claim_of_teacher_speech_verified') is True or page.get('trade_permission') is True:
             result['status'] = 'IMPROPER_PDF_PROMOTION'
