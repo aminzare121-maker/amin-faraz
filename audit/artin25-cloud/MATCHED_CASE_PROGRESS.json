@@ -1,0 +1,43 @@
+{
+  "schema": "artin_personally_reviewed_case_progress_v1",
+  "semantic_verified_sessions": 0,
+  "verified_executable_rules": 0,
+  "engine_ready": false,
+  "cases": [
+    {
+      "sequence": 2,
+      "case": "CONTRACT_SIZE_AND_GOLD_NUMERIC_EXAMPLE",
+      "source_sha256": "60e909d7a3acb57a5e80b689e6dac576db479c04795afc413229d7492afc7748",
+      "frames_personally_viewed_seconds": [
+        1004.89,
+        1413.39,
+        1467.5,
+        1487.09,
+        1499.56
+      ],
+      "image_artifact": 13696385274,
+      "crc_and_image_sha_verified": true,
+      "result": "LIMITED_TEXT_IMAGE_EXAMPLE_MATCHED",
+      "arithmetic_example_checked": true,
+      "direct_listening": false,
+      "teacher_role_verified": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 2,
+      "case": "USDCAD_SYMBOL_AND_UNIT_AMBIGUITY",
+      "frames_personally_viewed_seconds": [
+        1165,
+        1173,
+        1184
+      ],
+      "image_artifact": 13696318926,
+      "crc_and_image_sha_verified": true,
+      "result": "SYMBOL_TRANSITION_MATCHED_AMOUNT_CURRENCY_UNRESOLVED",
+      "direct_listening": false,
+      "teacher_role_verified": false,
+      "whole_lesson_verified": false
+    }
+  ],
+  "note": "Raw classroom images and transcripts remain private artifacts/local review files. No assumption that nearby speech answers visible chat. No trading rules or orders created."
+}
