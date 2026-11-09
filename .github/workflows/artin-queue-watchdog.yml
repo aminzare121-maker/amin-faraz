@@ -36,7 +36,7 @@ jobs:
           def gh(*args):
               return subprocess.check_output(['gh',*args],text=True)
           try:
-              pending=enumerate_magazines(Path('tools-makhzan/video_queue/magazines'))
+              pending=enumerate_magazines(Path('tools-makhzan/video_queue'))
           except Exception as exc:
               print('QUEUE_BLOCKED_FOR_MANUAL_REVIEW:',str(exc),flush=True)
               raise
