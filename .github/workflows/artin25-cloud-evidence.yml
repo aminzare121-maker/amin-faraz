@@ -1,0 +1,84 @@
+name: Artin25 cloud original evidence recovery
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-cloud-evidence.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin25-cloud-original-evidence
+  cancel-in-progress: false
+jobs:
+  recover-existing-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Recover only missing original and inspect existing source package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: aminzare121-maker/amin-faraz
+        shell: bash
+        run: |
+          mkdir -p evidence private
+          python3 - <<'PY'
+          import hashlib,json,pathlib,subprocess,urllib.request,zipfile,shutil
+          root=pathlib.Path('evidence')
+          results={'models_executed':0,'semantic_verified':False,'sessions':[]}
+          def save():
+              (root/'source_evidence_audit.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
+          def sha(path):
+              h=hashlib.sha256()
+              with path.open('rb') as f:
+                  for b in iter(lambda:f.read(4*1024*1024),b''):h.update(b)
+              return h.hexdigest()
+          item={'sequence':1,'status':'RECOVERY_ATTEMPT','semantic_verified':False}
+          try:
+              path=pathlib.Path('private/original_0001.download')
+              request=urllib.request.Request('https://s31.uupload.ir/files/dashtianphysics/Fx/J2_6-11-1404.mp4',headers={'User-Agent':'Mozilla/5.0'})
+              size=0
+              with urllib.request.urlopen(request,timeout=45) as response,path.open('wb') as out:
+                  if response.status!=200:raise ValueError('FULL_RESPONSE_REQUIRED')
+                  for b in iter(lambda:response.read(1024*1024),b''):
+                      size+=len(b)
+                      if size>1024**3:raise ValueError('SOURCE_SIZE_LIMIT')
+                      out.write(b)
+              digest=sha(path)
+              if digest!='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff':raise ValueError('SOURCE_SHA_MISMATCH')
+              path.replace(pathlib.Path('private/original_0001.mp4'))
+              item.update(status='ORIGINAL_SHA_VERIFIED',bytes=size,source_sha256=digest)
+          except Exception as exc:item.update(status='RECOVERY_BLOCKED',error_type=type(exc).__name__)
+          results['sessions'].append(item);save()
+          item={'sequence':2,'artifact_id':13594514435,'semantic_verified':False}
+          try:
+              archive=pathlib.Path('private/source2_existing.zip')
+              with archive.open('wb') as out:
+                  p=subprocess.run(['gh','api','repos/aminzare121-maker/amin-faraz/actions/artifacts/13594514435/zip'],stdout=out,stderr=subprocess.PIPE,timeout=600)
+              if p.returncode:raise RuntimeError('EXISTING_ARTIFACT_FETCH_FAILED')
+              if archive.stat().st_size>512*1024**2:raise ValueError('ARCHIVE_SIZE_LIMIT')
+              with zipfile.ZipFile(archive) as z:
+                  members=[{'name':i.filename,'bytes':i.file_size} for i in z.infolist()]
+                  if sum(i['bytes'] for i in members)>2*1024**3:raise ValueError('EXPANSION_LIMIT')
+                  if z.testzip() is not None:raise ValueError('ARCHIVE_CRC_FAILED')
+              (root/'source2_package_members.json').write_text(json.dumps(members,indent=2),encoding='utf-8')
+              item.update(status='EXISTING_PACKAGE_CRC_VERIFIED',archive_sha256=sha(archive),bytes=archive.stat().st_size,members=len(members),media_members=[m for m in members if pathlib.Path(m['name']).suffix.lower() in ('.mp4','.wav','.flac')])
+          except Exception as exc:item.update(status='PACKAGE_INSPECTION_BLOCKED',error_type=type(exc).__name__)
+          results['sessions'].append(item);save()
+          print('AUDIT_RECORDED; no ASR/OCR or semantic approval executed')
+          PY
+      - name: Preserve source identity findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-cloud-source-evidence-audit
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve verified missing original
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-original-0001-private
+          path: private/original_0001.mp4
+          if-no-files-found: ignore
+          retention-days: 90
