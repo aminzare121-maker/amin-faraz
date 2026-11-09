@@ -34,7 +34,7 @@ def check(record):
             value = record.get(key)
             if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
                 errors.append("invalid SHA-256 evidence "+key)
-    if record.get("evidence_mode") != "real-production":
+    # A single reused digest cannot represent distinct source, ASR, OCR, review, archive and receipt artifacts.\n    digests = [record.get(k) for k in EVIDENCE if k.endswith("_sha256")]\n    valid_digests = [v for v in digests if isinstance(v, str) and len(v) == 64]\n    if len(valid_digests) != len(set(valid_digests)):\n        errors.append("duplicate SHA-256 across distinct evidence artifacts")\n    if record.get("evidence_mode") != "real-production":
         errors.append("not real production evidence")
     if record.get("semantic_review_passed") is not True:
         errors.append("semantic review not verified")
