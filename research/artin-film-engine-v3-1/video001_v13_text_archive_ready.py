@@ -73,7 +73,15 @@ def package(out,magazine_id,queue_id,source_summary,source_proof,asr_root,ocr_ro
       ('verified_export_and_review_text_only',verified_export_root),
     ]
     allfiles=[]
-    for category,root in categories:allfiles.extend(collect(root,category))
+    for category,root in categories:
+        if category=='student_chat_ocr_raw':
+            # Keep one source byte stream per verified partition. The verifier
+            # creates hardlink aliases; archiving both doubles payload without
+            # adding any source evidence and jeopardizes the packaging SLA.
+            allfiles.extend((f'{category}/worker-{i:02d}/{p.name}',p)
+                            for i,p in enumerate(ocr_files))
+        else:
+            allfiles.extend(collect(root,category))
     idx={}
     for path,src in allfiles:
         if path in idx:raise ValueError('DUPLICATE_INTERNAL_ARCHIVE_PATH')
