@@ -1,5 +1,8 @@
 name: Artin video four speech and board clarification
 on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths: ['.github/workflows/artin-v13-clarify-four.yml']
   workflow_dispatch:
 permissions:
   actions: read
@@ -23,7 +26,7 @@ jobs:
           import json,os,subprocess,sys
           run='42581509064'
           repo=os.environ['GH_REPO']
-          raw=subprocess.check_output(['gh','api','--paginate',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True)
+          raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True)
           artifacts=json.loads(raw)['artifacts']
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
