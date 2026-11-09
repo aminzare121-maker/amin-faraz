@@ -11,7 +11,8 @@ def fixture(seconds=179):
     start = datetime(2026, 11, 9, tzinfo=timezone.utc)
     d = {key: (start + timedelta(seconds=seconds*i/(len(gate.REQUIRED)-1))).isoformat()
          for i, key in enumerate(gate.REQUIRED)}
-    d.update({key: "test-only-nonproduction-evidence" for key in gate.EVIDENCE})
+    d.update({key: ("a" * 64 if key.endswith("_sha256") else "video-q-0019-artin-test") for key in gate.EVIDENCE})
+    d["evidence_mode"] = "real-production"
     d.update(semantic_review_passed=True, next_handoff_verified=True, source_integrity_verified=True)
     return d
 
@@ -25,6 +26,12 @@ class AcceptanceGateTests(unittest.TestCase):
         self.assertFalse(gate.check(d)["passed"])
     def test_missing_handoff_fails(self):
         d=fixture();d.pop("next_handoff_committed_at")
+        self.assertFalse(gate.check(d)["passed"])
+    def test_synthetic_evidence_rejected(self):
+        d=fixture();d["evidence_mode"]="synthetic"
+        self.assertFalse(gate.check(d)["passed"])
+    def test_invalid_digest_rejected(self):
+        d=fixture();d["source_sha256"]="not-a-hash"
         self.assertFalse(gate.check(d)["passed"])
     def test_missing_hash_fails(self):
         d=fixture();d.pop("source_sha256")
