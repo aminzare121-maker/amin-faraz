@@ -717,6 +717,20 @@ jobs:
           retention-days: 15
           if-no-files-found: error
 
+      - name: Always preserve late-stage V12 export and Behrooz failure diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-late-stage-failure-diagnostics
+          path: |
+            /tmp/video001_reverse_trace/preflight.json
+            /tmp/video001_full_integrity/private_fast_verify_summary.json
+            /tmp/video001_full_integrity/board_ocr_safe_summary.json
+            /tmp/v13_behr_text/*.safe_receipt.json
+            /tmp/makhzan_fast_complete_source_private/EVIDENCE_MANIFEST.json
+          retention-days: 15
+          if-no-files-found: warn
+
   record-verified-result:
     needs: [source-once,source-sharded-asr,source-sharded-ocr,source-board-ocr,independent-all-evidence-verification]
     if: ${{ always() }}
