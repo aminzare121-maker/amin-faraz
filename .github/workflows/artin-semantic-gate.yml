@@ -6,6 +6,8 @@ on:
     paths:
       - 'artin_semantic_gate.py'
       - 'test_artin_semantic_gate.py'
+      - 'artin_semantic_gate_v2.py'
+      - 'test_artin_semantic_gate_v2.py'
       - '.github/workflows/artin-semantic-gate.yml'
   workflow_dispatch:
 
@@ -19,4 +21,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run fail-closed semantic gate tests
-        run: python3 -m unittest -v test_artin_semantic_gate.py
+        run: python3 -m unittest -v test_artin_semantic_gate.py test_artin_semantic_gate_v2.py
