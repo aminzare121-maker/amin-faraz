@@ -24,7 +24,7 @@ class ReceiptBindingTests(unittest.TestCase):
             (root / (key + ".bin")).write_bytes(data)
             record[key + "_path"] = key + ".bin"
             record[key + "_sha256"] = digest(data)
-        receipt = {key: record[key] for key in ("source_sha256", "archive_sha256", "next_queue_id")}
+        receipt = {key: record[key] for key in ("queue_id", "source_sha256", "archive_sha256", "semantic_review_sha256", "next_queue_id")}
         receipt.update(semantic_review_passed=True, next_handoff_verified=True)
         if corrupt_queue:
             receipt["next_queue_id"] = "video-q-9999-wrong-film"
@@ -66,6 +66,30 @@ class ReceiptBindingTests(unittest.TestCase):
             result = module.verify_run(self.make_record(root, corrupt_queue=True), root)
             self.assertFalse(result["passed"])
             self.assertIn("receipt binding mismatch: next_queue_id", result["errors"])
+
+    def test_receipt_for_different_current_film_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            receipt = json.loads((root / "receipt.json").read_text())
+            receipt["queue_id"] = "video-q-9999-other"
+            data = json.dumps(receipt).encode()
+            (root / "receipt.json").write_bytes(data)
+            record["receipt_sha256"] = digest(data)
+            result = module.verify_run(record, root)
+            self.assertIn("receipt binding mismatch: queue_id", result["errors"])
+
+    def test_receipt_for_different_semantic_review_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            receipt = json.loads((root / "receipt.json").read_text())
+            receipt["semantic_review_sha256"] = digest(b"unrelated review")
+            data = json.dumps(receipt).encode()
+            (root / "receipt.json").write_bytes(data)
+            record["receipt_sha256"] = digest(data)
+            result = module.verify_run(record, root)
+            self.assertIn("receipt binding mismatch: semantic_review_sha256", result["errors"])
 
     def test_tampered_receipt_rejected(self):
         with tempfile.TemporaryDirectory() as d:
