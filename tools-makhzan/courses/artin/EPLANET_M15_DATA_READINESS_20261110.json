@@ -1,0 +1,47 @@
+{
+  "schema": "artin_eplanet_m15_data_readiness_v1",
+  "date": "2026-11-10",
+  "source_reference": {
+    "repository": "aminzare121-maker/amin-faraz",
+    "branch_demo": "research/eplanet-demo-history",
+    "qa_report": "research/eplanet-demo-history/REPORT_FA.md",
+    "qa_file": "research/eplanet-demo-history/year-qa-sanitized.json",
+    "m5_branch": "research/faraz-m5-gap-probe-20261106",
+    "m5_report": "research/faraz-m5-gap-probe-20261106/ACTUAL_EPLANET_M5_AUDIT_FA.md"
+  },
+  "known_historical_findings_from_prior_eplanet_demo_run": {
+    "exported_m15_count_reported_latest": 23735,
+    "exported_m5_count_reported_latest": 70974,
+    "earlier_m15_count": 23643,
+    "earlier_m15_gap_events": 260,
+    "earlier_missing_calendar_slots_unclassified": 11397,
+    "original_raw_csv_available_in_this_chat_environment": false,
+    "historical_session_and_timezone_verification_complete": false,
+    "bid_chart_mode_reported": true,
+    "spread_slippage_swap_historical_data_complete": false
+  },
+  "preflight_implementation": {
+    "code": "artin_eplanet_m15_preflight.py",
+    "tests": "test_artin_eplanet_m15_preflight.py",
+    "objective": "Validate the untouched owner-supplied M15 OHLC source before any Artin paper replay; do not infer teacher trade rules",
+    "local_unit_tests": 13,
+    "local_unit_tests_passed": 13,
+    "github_actions_run_id": 42700723780,
+    "github_total_unittest": 94,
+    "github_passed": 72,
+    "github_skipped_private_archives": 22,
+    "github_failed": 0,
+    "github_conclusion": "success",
+    "synthetic_large_input_row_count": 23735,
+    "synthetic_large_input_is_real_eplanet_data": false
+  },
+  "no_actual_broker_candle_backtest_yet": true,
+  "missing_input": "Verified original unmodified Eplanet XAUUSD M15 OHLC export CSV with acquisition provenance, currently only known from private Windows-side prior reports",
+  "teacher_rule_source_priority": "Authenticated teacher original audio primary; Technical.pdf supplementary for disambiguation; do not use Faraz strategy logic as teacher rules",
+  "safety": {
+    "teacher_semantics_verified_25_lessons": false,
+    "mt5_orders_permitted": false,
+    "orders_executed": 0,
+    "profit_claim": null
+  }
+}
