@@ -1,0 +1,643 @@
+{
+  "schema": "artin_original_teacher_13_entry_source_window_audit_v1",
+  "derived_from": "entry_engine.SOURCES on review/artin-m15-shadow-20261107 and the private 25-session machine-ASR inventory",
+  "entry_rule_ids": 13,
+  "citation_windows_total": 24,
+  "citation_windows_with_asr_excerpt": 14,
+  "citation_windows_without_asr_excerpt": 10,
+  "citation_windows_outside_last_speech_excerpt": 10,
+  "speaker_and_wording_independently_verified_source_windows": 0,
+  "teacher_trade_rules_semantically_certified": 0,
+  "motor_teacher_decisions_independently_compared": 0,
+  "real_m15_candles_available_separately": true,
+  "m15_data_does_not_verify_teacher_entry_predicates": true,
+  "trading_permitted": false,
+  "source_rules": [
+    {
+      "rule_id": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "citations": 1,
+      "windows_with_asr_excerpt": 1,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 22,
+          "start_seconds": 1888.1,
+          "end_seconds": 1952.66,
+          "window_seconds": 64.56,
+          "machine_transcript_overlap_rows": 1,
+          "machine_transcript_union_seconds": 3.92,
+          "machine_transcript_time_coverage_fraction": 0.06072,
+          "visual_reference_kinds": {
+            "student_chat": 3
+          },
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "cf5bf6e2de6aa3fdcc77f76ebbe4bf038fc6603116ccb6f2b42a24e80adc341c",
+          "source_sampling_first_seconds": 76.44,
+          "source_sampling_last_seconds": 4816.22,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "PULLBACK_STANDARD",
+      "citations": 2,
+      "windows_with_asr_excerpt": 2,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 16,
+          "start_seconds": 615,
+          "end_seconds": 854,
+          "window_seconds": 239,
+          "machine_transcript_overlap_rows": 3,
+          "machine_transcript_union_seconds": 9.58,
+          "machine_transcript_time_coverage_fraction": 0.04008,
+          "visual_reference_kinds": {
+            "board": 1,
+            "student_chat": 3
+          },
+          "unique_board_sha_references": 1,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "3aab77ccfaaef32b82c1db0886cadaf7215d0db663b6cb1d2d3e2edfcfed80ca",
+          "source_sampling_first_seconds": 66.19,
+          "source_sampling_last_seconds": 3465.02,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 16,
+          "start_seconds": 1003,
+          "end_seconds": 1109,
+          "window_seconds": 106,
+          "machine_transcript_overlap_rows": 4,
+          "machine_transcript_union_seconds": 12.26,
+          "machine_transcript_time_coverage_fraction": 0.11566,
+          "visual_reference_kinds": {
+            "board": 1,
+            "student_chat": 6
+          },
+          "unique_board_sha_references": 1,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "3aab77ccfaaef32b82c1db0886cadaf7215d0db663b6cb1d2d3e2edfcfed80ca",
+          "source_sampling_first_seconds": 66.19,
+          "source_sampling_last_seconds": 3465.02,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_CLASSIC",
+      "citations": 2,
+      "windows_with_asr_excerpt": 2,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 20,
+          "start_seconds": 2188.86,
+          "end_seconds": 2306.84,
+          "window_seconds": 117.98,
+          "machine_transcript_overlap_rows": 14,
+          "machine_transcript_union_seconds": 23.0,
+          "machine_transcript_time_coverage_fraction": 0.19495,
+          "visual_reference_kinds": {
+            "board": 5,
+            "student_chat": 19
+          },
+          "unique_board_sha_references": 3,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 20,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "window_seconds": 595.18,
+          "machine_transcript_overlap_rows": 61,
+          "machine_transcript_union_seconds": 151.84,
+          "machine_transcript_time_coverage_fraction": 0.25512,
+          "visual_reference_kinds": {
+            "board": 13,
+            "student_chat": 85
+          },
+          "unique_board_sha_references": 9,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_THREE",
+      "citations": 2,
+      "windows_with_asr_excerpt": 2,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 20,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "window_seconds": 595.18,
+          "machine_transcript_overlap_rows": 61,
+          "machine_transcript_union_seconds": 151.84,
+          "machine_transcript_time_coverage_fraction": 0.25512,
+          "visual_reference_kinds": {
+            "board": 13,
+            "student_chat": 85
+          },
+          "unique_board_sha_references": 9,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 20,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "window_seconds": 607.9,
+          "machine_transcript_overlap_rows": 43,
+          "machine_transcript_union_seconds": 127.06,
+          "machine_transcript_time_coverage_fraction": 0.20901,
+          "visual_reference_kinds": {
+            "board": 18,
+            "student_chat": 47
+          },
+          "unique_board_sha_references": 12,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_STAR",
+      "citations": 2,
+      "windows_with_asr_excerpt": 2,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 20,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "window_seconds": 607.9,
+          "machine_transcript_overlap_rows": 43,
+          "machine_transcript_union_seconds": 127.06,
+          "machine_transcript_time_coverage_fraction": 0.20901,
+          "visual_reference_kinds": {
+            "board": 18,
+            "student_chat": 47
+          },
+          "unique_board_sha_references": 12,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 20,
+          "start_seconds": 4117.72,
+          "end_seconds": 4483.72,
+          "window_seconds": 366.0,
+          "machine_transcript_overlap_rows": 13,
+          "machine_transcript_union_seconds": 26.22,
+          "machine_transcript_time_coverage_fraction": 0.07164,
+          "visual_reference_kinds": {
+            "board": 2,
+            "student_chat": 21
+          },
+          "unique_board_sha_references": 2,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "source_sampling_first_seconds": 184.74,
+          "source_sampling_last_seconds": 5254.95,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_STRONG",
+      "citations": 2,
+      "windows_with_asr_excerpt": 2,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 2105.04,
+          "end_seconds": 2261,
+          "window_seconds": 155.96,
+          "machine_transcript_overlap_rows": 2,
+          "machine_transcript_union_seconds": 5.24,
+          "machine_transcript_time_coverage_fraction": 0.0336,
+          "visual_reference_kinds": {
+            "board": 2
+          },
+          "unique_board_sha_references": 1,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 2274,
+          "end_seconds": 2649.38,
+          "window_seconds": 375.38,
+          "machine_transcript_overlap_rows": 17,
+          "machine_transcript_union_seconds": 48.64,
+          "machine_transcript_time_coverage_fraction": 0.12958,
+          "visual_reference_kinds": {
+            "board": 11,
+            "student_chat": 19
+          },
+          "unique_board_sha_references": 6,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_WEAK_PIVOT",
+      "citations": 1,
+      "windows_with_asr_excerpt": 1,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "window_seconds": 382.68,
+          "machine_transcript_overlap_rows": 16,
+          "machine_transcript_union_seconds": 39.32,
+          "machine_transcript_time_coverage_fraction": 0.10275,
+          "visual_reference_kinds": {
+            "board": 5,
+            "student_chat": 25
+          },
+          "unique_board_sha_references": 4,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "citations": 1,
+      "windows_with_asr_excerpt": 1,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "window_seconds": 382.68,
+          "machine_transcript_overlap_rows": 16,
+          "machine_transcript_union_seconds": 39.32,
+          "machine_transcript_time_coverage_fraction": 0.10275,
+          "visual_reference_kinds": {
+            "board": 5,
+            "student_chat": 25
+          },
+          "unique_board_sha_references": 4,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_VERY_STRONG_RETEST",
+      "citations": 1,
+      "windows_with_asr_excerpt": 1,
+      "windows_without_asr_excerpt": 0,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 3162.56,
+          "end_seconds": 3473.88,
+          "window_seconds": 311.32,
+          "machine_transcript_overlap_rows": 12,
+          "machine_transcript_union_seconds": 37.09,
+          "machine_transcript_time_coverage_fraction": 0.11914,
+          "visual_reference_kinds": {
+            "board": 3,
+            "student_chat": 29
+          },
+          "unique_board_sha_references": 3,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "ASR_EXCERPTS_PRESENT_INCOMPLETE_REVIEW",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "citations": 3,
+      "windows_with_asr_excerpt": 0,
+      "windows_without_asr_excerpt": 3,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 3947,
+          "end_seconds": 3975,
+          "window_seconds": 28,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 4201.3,
+          "end_seconds": 4208.84,
+          "window_seconds": 7.54,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 4597,
+          "end_seconds": 4661,
+          "window_seconds": 64,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "citations": 2,
+      "windows_with_asr_excerpt": 0,
+      "windows_without_asr_excerpt": 2,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "window_seconds": 84.1,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "window_seconds": 4.38,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "citations": 2,
+      "windows_with_asr_excerpt": 0,
+      "windows_without_asr_excerpt": 2,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "window_seconds": 84.1,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "window_seconds": 4.38,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "citations": 3,
+      "windows_with_asr_excerpt": 0,
+      "windows_without_asr_excerpt": 3,
+      "semantic_teacher_verified": false,
+      "trade_ready": false,
+      "source_windows": [
+        {
+          "session": 21,
+          "start_seconds": 4100,
+          "end_seconds": 4133,
+          "window_seconds": 33,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 21,
+          "start_seconds": 4214.52,
+          "end_seconds": 4223.26,
+          "window_seconds": 8.74,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "source_sampling_first_seconds": 92.01,
+          "source_sampling_last_seconds": 3594.16,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        },
+        {
+          "session": 23,
+          "start_seconds": 4694,
+          "end_seconds": 4728,
+          "window_seconds": 34,
+          "machine_transcript_overlap_rows": 0,
+          "machine_transcript_union_seconds": 0.0,
+          "machine_transcript_time_coverage_fraction": 0.0,
+          "visual_reference_kinds": {},
+          "unique_board_sha_references": 0,
+          "independent_speaker_wording_verified_rows": 0,
+          "teacher_meaning_verified_rows": 0,
+          "evidence_status": "BEYOND_LAST_SAMPLED_ASR",
+          "teacher_semantics_certified": false,
+          "source_file_sha256": "c149f812afcef85c728f0d2c3dab83019de17205cdeb45492effc9a9fa214800",
+          "source_sampling_first_seconds": 248.12,
+          "source_sampling_last_seconds": 4039.24,
+          "missing_asr_not_proof_of_missing_original_audio": true
+        }
+      ]
+    }
+  ]
+}
