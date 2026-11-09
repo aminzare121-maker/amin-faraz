@@ -1,0 +1,86 @@
+{
+  "schema": "artin_semantic_source_cards_v1",
+  "original_sources_immutable": true,
+  "overall_teacher_semantic_certification": "NOT_COMPLETED",
+  "cards": [
+    {
+      "id": "ARTIN-004-EXECUTION-QUOTES",
+      "sequence": 4,
+      "approx_speech_time_s": 2203.66,
+      "original_speech": [
+        "وقتی سل میگیرم برعکس اسک آبیه تعین میکنه که من تیپی میخورده یا استافم",
+        "معامله سلی که میگیری با بید شروع میشه",
+        "معامله بایی که میگیری با اسک شروع میشه آبیه"
+      ],
+      "image_ref": "board/b001_s08_g000008_t0002205000_board.png",
+      "image_observed": "MT5 Market Watch columns Bid, Ask, Spread; BUY/SELL quote panel",
+      "supported_description": "Market SELL uses Bid reference; market BUY uses Ask reference.",
+      "status": "SOURCE_AND_IMAGE_CONSISTENT_PLATFORM_MECHANIC_SPEAKER_UNVERIFIED",
+      "teacher_rule_certified": false,
+      "can_implement_as_platform_quote_helper": true,
+      "can_trigger_market_order": false,
+      "later_sessions_checked_for_superseding_instruction": false
+    },
+    {
+      "id": "ARTIN-025-RISKFREE-EXAMPLE",
+      "sequence": 25,
+      "approx_speech_time_s": 2504.05,
+      "original_speech": [
+        "مثلا بدونی هر وقت به تارگیت دو",
+        "رسید ریسک فیری میخوایی بکنید",
+        "یعنی استاپلاس رو ورداری بیاری بذاری نقطه ورداری",
+        "حالا به عنوان مثال دارم میگم"
+      ],
+      "image_ref": "board/b001_s09_g000009_t0002505000_board.png",
+      "image_observed": "MT5 image shows target1, target2 riskfree, target3 labels",
+      "supported_description": "Instructor appears to illustrate a conditional breakeven stop after target 2, explicitly as an example rather than universal rule.",
+      "status": "ILLUSTRATIVE_EXAMPLE_NOT_CERTIFIED_GENERAL_RULE",
+      "teacher_rule_certified": false,
+      "can_implement_as_platform_quote_helper": false,
+      "can_trigger_market_order": false,
+      "later_sessions_checked_for_superseding_instruction": false
+    },
+    {
+      "id": "ARTIN-022-PIVOT-LIQUIDITY",
+      "sequence": 22,
+      "approx_speech_time_s": 1334.75,
+      "original_speech": [
+        "که بیاد پشت این پیوت رو جمع",
+        "پشت این نقدینگی رو بخواد جمع کنه بریزه"
+      ],
+      "image_ref": "board/b001_s05_g000005_t0001335000_board.png",
+      "image_observed": "XAUUSD 15m chart with trendline, LIQ label and FVG15 highlighted zone",
+      "supported_description": "Illustrates possible liquidity sweep around a pivot and marked zone, but does not establish an entry/exit trigger.",
+      "status": "VISUAL_CONTEXT_LINKED_NO_EXECUTABLE_TRIGGER",
+      "teacher_rule_certified": false,
+      "can_implement_as_platform_quote_helper": false,
+      "can_trigger_market_order": false,
+      "later_sessions_checked_for_superseding_instruction": false
+    },
+    {
+      "id": "ARTIN-020-CANDLE-COMPARISON",
+      "sequence": 20,
+      "approx_speech_time_s": 3792.5,
+      "original_speech": [
+        "یعنی یک کندلی میبینم",
+        "که برخلاف دوتا کندل قبلیش",
+        "نگاه یه ذره ترموز کرده"
+      ],
+      "image_ref": "board/b001_s13_g000013_t0003795000_board.png",
+      "image_observed": "XAUUSD 15m chart with three recent bullish candles of different size",
+      "supported_description": "Compares a candle to the preceding two, but evidence is insufficient to set numeric or categorical entry conditions.",
+      "status": "VISUAL_CONTEXT_LINKED_CONDITION_UNRESOLVED",
+      "teacher_rule_certified": false,
+      "can_implement_as_platform_quote_helper": false,
+      "can_trigger_market_order": false,
+      "later_sessions_checked_for_superseding_instruction": false
+    }
+  ],
+  "gating_policy": {
+    "strategy_enabled": false,
+    "validated_entry_rules": 0,
+    "validated_exit_rules": 0,
+    "sample_rule_precedence": "Later-session changes override earlier instructions only after explicit source-linked semantic verification; no automatic overriding from word matches.",
+    "live_trading_forbidden": true
+  }
+}
