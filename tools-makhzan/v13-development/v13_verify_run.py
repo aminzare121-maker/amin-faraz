@@ -51,16 +51,19 @@ def verify_run(record, root):
             # fail-closed; the original ZIP is never modified or repaired.
             if len(members) > 10000:
                 raise ValueError("too many ZIP members in Behrooz readback")
+            # Enforce absolute decompressed-size limits first; a forged huge
+            # member may also exceed the ratio cap. Keep the specific size
+            # diagnostic while still rejecting either unsafe condition.
+            if any(m.file_size > 256 * 1024 * 1024 for m in members):
+                raise ValueError("oversized ZIP member in Behrooz readback")
+            if sum(m.file_size for m in members) > 1024 * 1024 * 1024:
+                raise ValueError("oversized total ZIP in Behrooz readback")
             if any(m.file_size > 1024 * 1024 and
                    m.file_size > max(m.compress_size, 1) * 200
                    for m in members):
                 raise ValueError("excessive ZIP compression ratio in Behrooz readback")
             if any(m.flag_bits & 1 for m in members):
                 raise ValueError("encrypted ZIP member in Behrooz readback")
-            if any(m.file_size > 256 * 1024 * 1024 for m in members):
-                raise ValueError("oversized ZIP member in Behrooz readback")
-            if sum(m.file_size for m in members) > 1024 * 1024 * 1024:
-                raise ValueError("oversized total ZIP in Behrooz readback")
             names = master.namelist()
             if len(names) != len(set(names)):
                 raise ValueError("duplicate ZIP members in Behrooz readback")
