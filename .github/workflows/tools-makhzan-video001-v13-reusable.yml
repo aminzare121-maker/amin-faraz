@@ -609,6 +609,8 @@ jobs:
       - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
         working-directory: research/artin-film-engine-v3-1
         run: |
+          mkdir -p /tmp/video001_verifier_diagnostics
+          set -o pipefail
           python3 -u video001_fast_verify_v1.py \
             --asr-root /tmp/video001_all_asr \
             --ocr-root /tmp/video001_all_ocr \
@@ -616,7 +618,15 @@ jobs:
             --board-root /tmp/video001_source_board \
             --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
             --out /tmp/video001_full_integrity \
-            --audio-workers ${{ needs.source-once.outputs.asr_count }} --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+            --audio-workers ${{ needs.source-once.outputs.asr_count }} --ocr-workers ${{ needs.source-once.outputs.ocr_count }} 2>&1 | tee /tmp/video001_verifier_diagnostics/strict_verifier.log
+      - name: Preserve exact strict-verifier failure log for root-cause debugging
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-strict-verifier-log
+          path: /tmp/video001_verifier_diagnostics/strict_verifier.log
+          retention-days: 15
+          if-no-files-found: warn
       - name: Preserve independent verifier failure evidence for reverse diagnosis
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
