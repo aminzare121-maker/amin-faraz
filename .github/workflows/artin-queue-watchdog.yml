@@ -1,5 +1,7 @@
 name: Artin queue independent watchdog
 on:
+  push:
+    paths: ['.github/workflows/artin-queue-watchdog.yml']
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
