@@ -6,7 +6,7 @@ from pathlib import Path
 
 REQUIRED = ("source_started_at", "download_verified_at", "speech_complete_at",
             "visual_complete_at", "semantic_review_complete_at", "archive_committed_at",
-            "receipt_committed_at", "next_handoff_committed_at")
+            "receipt_committed_at", "next_handoff_committed_at", "behrooz_readback_verified_at")
 EVIDENCE = ("source_sha256", "speech_evidence_sha256", "visual_evidence_sha256",
             "semantic_review_sha256", "archive_sha256", "receipt_sha256",
             "next_queue_id")
@@ -43,10 +43,12 @@ def check(record):
     if record.get("source_integrity_verified") is not True:
         errors.append("source integrity not verified")
     if len(times) == len(REQUIRED):
-        order = [times[k] for k in REQUIRED]
+        order = [times[k] for k in REQUIRED if k != "behrooz_readback_verified_at"]
         if order != sorted(order):
             errors.append("timestamps out of order")
-        duration = (times["next_handoff_committed_at"] - times["source_started_at"]).total_seconds()
+        if times["behrooz_readback_verified_at"] < times["archive_committed_at"]:
+            errors.append("Behrooz readback predates archive")
+        duration = (times["behrooz_readback_verified_at"] - times["source_started_at"]).total_seconds()
         if duration > 180 or duration < 0:
             errors.append(f"end-to-end duration {duration:.3f}s is outside 0..180s")
     else:

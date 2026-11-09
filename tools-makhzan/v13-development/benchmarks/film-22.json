@@ -1,0 +1,16 @@
+{
+  "queue_id": "video-q-0024-artin-clip-22",
+  "scope": "Observed completed delivery across the local attempt, existing queue extraction, assisted review, and Behrooz readback; not a standalone local extractor benchmark.",
+  "github_source_run": 42631530339,
+  "timing_origin": "Local receive request creation, immediately before invoking the receiver",
+  "timing_end": "Version 5 read back, compared byte-for-byte, indexed film archive hash verified, review found",
+  "elapsed_seconds_approx": 488.55,
+  "source_preparation_seconds_local": 134.07,
+  "local_asr_first_attempt": "Model network lookup failed through proxy",
+  "target_seconds": 180,
+  "met_target": false,
+  "source_audio_parts": 14,
+  "chat_images": 319,
+  "board_images": 139,
+  "provisional_question_groups": 48
+}

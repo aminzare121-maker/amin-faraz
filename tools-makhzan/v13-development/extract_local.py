@@ -55,6 +55,18 @@ def extract(root, prep_engine, worker, verifier, entry):
     board_text = root / "board_text"
     asr = root / "asr"
     ocr = root / "ocr"
+    # Resolve the same model from the local cache before attempting a network
+    # lookup. Keep the original model name and normal download on a cold host.
+    from huggingface_hub import snapshot_download
+    from huggingface_hub.errors import LocalEntryNotFoundError
+    model = "large-v3-turbo"
+    try:
+        snapshot = Path(snapshot_download("mobiuslabsgmbh/faster-whisper-large-v3-turbo",
+                                          local_files_only=True))
+        if all((snapshot / f).is_file() for f in ("model.bin", "config.json", "tokenizer.json", "preprocessor_config.json")):
+            model = str(snapshot)
+    except (FileNotFoundError, LocalEntryNotFoundError):
+        pass
     asr.mkdir()
     jobs = []
     with ThreadPoolExecutor(max_workers=speech + images + 1) as pool:
@@ -64,7 +76,7 @@ def extract(root, prep_engine, worker, verifier, entry):
             jobs.append(pool.submit(run, worker / "artin_parallel_asr_worker_v5.py",
                                     "--prepped-root", prepared / f"asr_shards/worker_{i:02d}",
                                     "--out", root / f"speech-{i}", "--index", i, "--partitions", speech,
-                                    "--expected-sha256", source["source_video_sha256"]))
+                                    "--expected-sha256", source["source_video_sha256"], "--model", model))
         for i in range(images):
             shard = prepared / f"ocr_shards/worker_{i:02d}"
             jobs.append(pool.submit(run, worker / "artin_persian_full_chat_ocr_v7.py",

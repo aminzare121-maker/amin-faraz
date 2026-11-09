@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Isolated V13 end-to-end verifier. Never writes production queue or asserts real-run success from flags."""
+import hashlib
+import zipfile
 import argparse
 import importlib.util
 import json
@@ -34,6 +36,27 @@ def verify_run(record, root):
                 errors.append("receipt lacks verified next handoff")
         except (OSError, ValueError, UnicodeError) as exc:
             errors.append("receipt cannot be parsed: " + type(exc).__name__)
+    try:
+        root = Path(root).resolve()
+        readback = (root / record["behrooz_readback_path"]).resolve()
+        if not readback.is_relative_to(root) or not readback.is_file():
+            raise ValueError("missing readback bytes")
+        if not record.get("behrooz_library_file_id") or int(record["behrooz_version"]) < 1:
+            raise ValueError("missing saved version")
+        with zipfile.ZipFile(readback) as master:
+            entries = json.loads(master.read("BEHROOZ_INDEX.json"))["videos"]
+            matches = [v for v in entries if v.get("queue_id") == record["queue_id"]]
+            if len(matches) != 1:
+                raise ValueError("film identity absent or ambiguous")
+            entry = matches[0]
+            archive_digest = hashlib.sha256(master.read(entry["archive"])).hexdigest()
+            if archive_digest != record["archive_sha256"] or archive_digest != entry["sha256"]:
+                raise ValueError("wrong film archive in Behrooz")
+            review = master.read(f"DERIVED_NOT_RAW/VIDEO_{int(entry['video']):02d}/REVIEW_FA.md")
+            if hashlib.sha256(review).hexdigest() != record["semantic_review_sha256"]:
+                raise ValueError("wrong review in Behrooz")
+    except (KeyError, ValueError, OSError, TypeError, zipfile.BadZipFile) as exc:
+        errors.append("Behrooz readback verification failed: " + str(exc))
     passed = not errors
     return {
         "passed": passed,
