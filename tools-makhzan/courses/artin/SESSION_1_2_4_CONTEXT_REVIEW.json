@@ -1,0 +1,21 @@
+{
+  "schema": "artin_session_context_review_v1",
+  "source_artifacts": {
+    "session1_qa": 13582555688,
+    "session2_full_original_asr": 13594514435,
+    "session4_full_text": 13658290669
+  },
+  "reviewed": {
+    "session1_question_groups": 59,
+    "session2_asr_segments": 2014,
+    "session4_asr_segments": 1997
+  },
+  "cross_session_candidates": {
+    "session1_questions_with_lexical_matches_in_session2": 8,
+    "session1_questions_with_lexical_matches_in_session4": 6
+  },
+  "session3": "ORIGINAL_SPEECH_NOT_RETRIEVED_YET",
+  "status": "PARTIAL_SOURCE_COMPARISON_NOT_SEMANTIC_VERIFICATION",
+  "next": "Recover third session source ASR; inspect actual teacher utterances for each matching question and reconcile lessons sequentially",
+  "no_trading_engine_changes": true
+}
