@@ -1,0 +1,31 @@
+name: Artin 66 original frames visual contact sheets
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_contact_sheets/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure image processing library
+        run: python3 -m pip install --user --quiet Pillow
+      - name: Build 11 original-frame contact sheets across all 66 source windows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_contact_sheets/make_contact_sheets.py
+      - name: Store reviewable contact sheets and source metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-source-visual-contact-sheets
+          path: artin25_contact_sheets_output/**
+          retention-days: 60
+          if-no-files-found: warn
