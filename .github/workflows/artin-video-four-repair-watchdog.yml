@@ -1,0 +1,44 @@
+name: Artin video four independent repair watchdog
+on:
+  workflow_run:
+    workflows: ['Artin video four speech and board clarification']
+    types: [completed]
+    branches: [tools-makhzan-hub]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
+concurrency:
+  group: artin-video-four-repair-watchdog
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Retry failed clarification without hiding unresolved errors
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess,sys
+          from datetime import datetime,timezone,timedelta
+          repo=os.environ['GH_REPO']
+          def gh(*args):
+              return subprocess.check_output(['gh',*args],text=True)
+          runs=json.loads(gh('run','list','--repo',repo,'--workflow','artin-v13-clarify-four.yml','--branch','tools-makhzan-hub','--limit','30','--json','databaseId,status,conclusion,createdAt'))
+          if any(r['status']!='completed' for r in runs):
+              print('CLARIFICATION_ALREADY_RUNNING');sys.exit(0)
+          if runs and runs[0]['conclusion']=='success':
+              print('SOURCE_RECONSTRUCTED; TEACHER_MEANING_STILL_UNVERIFIED');sys.exit(0)
+          now=datetime.now(timezone.utc)
+          recent=[r for r in runs if now-datetime.fromisoformat(r['createdAt'].replace('Z','+00:00'))<timedelta(hours=6)]
+          if len(recent)>=3:
+              print('RETRY_LIMIT_REACHED; FAILURE_REMAINS_VISIBLE');sys.exit(1)
+          print('DISPATCH_REPAIR_ATTEMPT',len(recent)+1)
+          subprocess.run(['gh','workflow','run','artin-v13-clarify-four.yml','--repo',repo,'--ref','tools-makhzan-hub'],check=True)
+          PY
