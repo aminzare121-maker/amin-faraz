@@ -1,0 +1,813 @@
+{
+  "schema": "artin_v13_legacy_to_current_video_mapping_v1",
+  "provenance": {
+    "legacy_asr_coverage_blob_sha": "fa955ed57b8e4a2f64588dda0752909b6d8263d5",
+    "current_course_registry_blob_sha": "5dec2c82c4e2a895bd6f51744d8967b9911f342e",
+    "older_engine_blob_sha": "2998d66f933f1edad4eccf7fb574b9f14007cf35"
+  },
+  "proposed_mapping": "old_session minus 1 for legacy ASR sessions 2..26",
+  "legacy_session_1_had_no_asr": true,
+  "whole_course_shift_comparison": {
+    "minus_one": {
+      "offset": -1,
+      "mapped": 25,
+      "unmapped_sessions": [],
+      "chunk_start_exceeds_video": [],
+      "all_25_mapped_without_duration_conflict": true
+    },
+    "zero": {
+      "offset": 0,
+      "mapped": 24,
+      "unmapped_sessions": [
+        26
+      ],
+      "chunk_start_exceeds_video": [
+        {
+          "old_session": 4,
+          "current_video": 4,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4348.5768
+        },
+        {
+          "old_session": 7,
+          "current_video": 7,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4699.161542
+        },
+        {
+          "old_session": 9,
+          "current_video": 9,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4249.34458
+        },
+        {
+          "old_session": 10,
+          "current_video": 10,
+          "last_nonempty_chunk_start": 4200,
+          "video_duration": 3932.22966
+        },
+        {
+          "old_session": 11,
+          "current_video": 11,
+          "last_nonempty_chunk_start": 3600,
+          "video_duration": 1245.3854
+        },
+        {
+          "old_session": 14,
+          "current_video": 14,
+          "last_nonempty_chunk_start": 4200,
+          "video_duration": 3735.928163
+        },
+        {
+          "old_session": 16,
+          "current_video": 16,
+          "last_nonempty_chunk_start": 3600,
+          "video_duration": 3512.018141
+        },
+        {
+          "old_session": 21,
+          "current_video": 21,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 3601.229206
+        },
+        {
+          "old_session": 23,
+          "current_video": 23,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4201.697234
+        }
+      ],
+      "all_25_mapped_without_duration_conflict": false
+    },
+    "plus_one": {
+      "offset": 1,
+      "mapped": 23,
+      "unmapped_sessions": [
+        25,
+        26
+      ],
+      "chunk_start_exceeds_video": [
+        {
+          "old_session": 3,
+          "current_video": 4,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4348.5768
+        },
+        {
+          "old_session": 4,
+          "current_video": 5,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4588.6346
+        },
+        {
+          "old_session": 9,
+          "current_video": 10,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 3932.22966
+        },
+        {
+          "old_session": 10,
+          "current_video": 11,
+          "last_nonempty_chunk_start": 4200,
+          "video_duration": 1245.3854
+        },
+        {
+          "old_session": 13,
+          "current_video": 14,
+          "last_nonempty_chunk_start": 4200,
+          "video_duration": 3735.928163
+        },
+        {
+          "old_session": 14,
+          "current_video": 15,
+          "last_nonempty_chunk_start": 4200,
+          "video_duration": 3769.375389
+        },
+        {
+          "old_session": 15,
+          "current_video": 16,
+          "last_nonempty_chunk_start": 3600,
+          "video_duration": 3512.018141
+        },
+        {
+          "old_session": 20,
+          "current_video": 21,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 3601.229206
+        },
+        {
+          "old_session": 23,
+          "current_video": 24,
+          "last_nonempty_chunk_start": 4800,
+          "video_duration": 4154.073107
+        }
+      ],
+      "all_25_mapped_without_duration_conflict": false
+    }
+  },
+  "mapped_current_queue_videos": 25,
+  "legacy_entry_rule_ids": 13,
+  "legacy_citation_windows": 24,
+  "legacy_citation_windows_out_of_current_video_duration": 0,
+  "with_current_asr_overlap": 18,
+  "without_current_asr_overlap": 6,
+  "evidence_level": "TIMING_AND_MACHINE_ASR_CORROBORATED_ORIGINAL_MEDIA_SHA_NOT_VERIFIED",
+  "candidate_source_map_not_auto_installed": {
+    "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE": [
+      [
+        21,
+        1888.1,
+        1952.66
+      ]
+    ],
+    "PULLBACK_STANDARD": [
+      [
+        15,
+        615,
+        854
+      ],
+      [
+        15,
+        1003,
+        1109
+      ]
+    ],
+    "REVERSAL_CLASSIC": [
+      [
+        19,
+        2188.86,
+        2306.84
+      ],
+      [
+        19,
+        2660.22,
+        3255.4
+      ]
+    ],
+    "REVERSAL_THREE": [
+      [
+        19,
+        2660.22,
+        3255.4
+      ],
+      [
+        19,
+        3440.82,
+        4048.72
+      ]
+    ],
+    "REVERSAL_STAR": [
+      [
+        19,
+        3440.82,
+        4048.72
+      ],
+      [
+        19,
+        4117.72,
+        4483.72
+      ]
+    ],
+    "BREAK_STRONG": [
+      [
+        20,
+        2105.04,
+        2261
+      ],
+      [
+        20,
+        2274,
+        2649.38
+      ]
+    ],
+    "BREAK_WEAK_PIVOT": [
+      [
+        20,
+        2770.48,
+        3153.16
+      ]
+    ],
+    "BREAK_WEAK_FULLBODY_EXCEPTION": [
+      [
+        20,
+        2770.48,
+        3153.16
+      ]
+    ],
+    "BREAK_VERY_STRONG_RETEST": [
+      [
+        20,
+        3162.56,
+        3473.88
+      ]
+    ],
+    "STOPPUNCH_SAME_COLOUR": [
+      [
+        20,
+        3947,
+        3975
+      ],
+      [
+        20,
+        4201.3,
+        4208.84
+      ],
+      [
+        20,
+        4597,
+        4661
+      ]
+    ],
+    "STOPPUNCH_DOJI_AHEAD": [
+      [
+        20,
+        3984.88,
+        4068.98
+      ],
+      [
+        20,
+        4210.14,
+        4214.52
+      ]
+    ],
+    "STOPPUNCH_DOJI_TIED": [
+      [
+        20,
+        3984.88,
+        4068.98
+      ],
+      [
+        20,
+        4210.14,
+        4214.52
+      ]
+    ],
+    "STOPPUNCH_OPPOSITE_CONFIRMATION": [
+      [
+        20,
+        4100,
+        4133
+      ],
+      [
+        20,
+        4214.52,
+        4223.26
+      ],
+      [
+        22,
+        4694,
+        4728
+      ]
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "source_citations": [
+        {
+          "legacy_session": 22,
+          "current_queue_video": 21,
+          "start_seconds": 1888.1,
+          "end_seconds": 1952.66,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 7,
+          "current_original_asr_source_file_sha256": "36ff5f007f6a73b82a949694c94164289cdc362f738c6b82a4b12d2e9efdc29d",
+          "current_original_asr_coverage_fraction": 0.22057,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 1,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "PULLBACK_STANDARD",
+      "source_citations": [
+        {
+          "legacy_session": 16,
+          "current_queue_video": 15,
+          "start_seconds": 615,
+          "end_seconds": 854,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 36,
+          "current_original_asr_source_file_sha256": "7fecff51b99b7bf8f03f54e0949883279480472d139dd052fadc0b28b6894241",
+          "current_original_asr_coverage_fraction": 0.4482,
+          "current_original_board_sha_refs": 7,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 16,
+          "current_queue_video": 15,
+          "start_seconds": 1003,
+          "end_seconds": 1109,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 11,
+          "current_original_asr_source_file_sha256": "7fecff51b99b7bf8f03f54e0949883279480472d139dd052fadc0b28b6894241",
+          "current_original_asr_coverage_fraction": 0.27132,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "REVERSAL_CLASSIC",
+      "source_citations": [
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 2188.86,
+          "end_seconds": 2306.84,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 9,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.20512,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 52,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.26437,
+          "current_original_board_sha_refs": 10,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "REVERSAL_THREE",
+      "source_citations": [
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 52,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.26437,
+          "current_original_board_sha_refs": 10,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 54,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.2456,
+          "current_original_board_sha_refs": 9,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "REVERSAL_STAR",
+      "source_citations": [
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 54,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.2456,
+          "current_original_board_sha_refs": 9,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 20,
+          "current_queue_video": 19,
+          "start_seconds": 4117.72,
+          "end_seconds": 4483.72,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 39,
+          "current_original_asr_source_file_sha256": "18961ab3ab8da986feafb3df309a006cdeb46dfaef7f8905a91657dd2a260993",
+          "current_original_asr_coverage_fraction": 0.34038,
+          "current_original_board_sha_refs": 9,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "BREAK_STRONG",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 2105.04,
+          "end_seconds": 2261,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 13,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.17165,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 2274,
+          "end_seconds": 2649.38,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 40,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.25225,
+          "current_original_board_sha_refs": 9,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "BREAK_WEAK_PIVOT",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 50,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.33001,
+          "current_original_board_sha_refs": 8,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 1,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 50,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.33001,
+          "current_original_board_sha_refs": 8,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 1,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "BREAK_VERY_STRONG_RETEST",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 3162.56,
+          "end_seconds": 3473.88,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 27,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.2624,
+          "current_original_board_sha_refs": 6,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 1,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 3947,
+          "end_seconds": 3975,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 1,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.09643,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4201.3,
+          "end_seconds": 4208.84,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4597,
+          "end_seconds": 4661,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 6,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.37031,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        }
+      ],
+      "citation_count": 3,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 8,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.22735,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 8,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.22735,
+          "current_original_board_sha_refs": 2,
+          "current_transcript_status": "TIMED_MACHINE_ASR_PRESENT_NEEDS_AUDIO_REVIEW"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        }
+      ],
+      "citation_count": 2,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "source_citations": [
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4100,
+          "end_seconds": 4133,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        },
+        {
+          "legacy_session": 21,
+          "current_queue_video": 20,
+          "start_seconds": 4214.52,
+          "end_seconds": 4223.26,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "8c37e5693e5a247aa4c99b4affcb14fcd848148f84c8d18af548edfabd1414e3",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        },
+        {
+          "legacy_session": 23,
+          "current_queue_video": 22,
+          "start_seconds": 4694,
+          "end_seconds": 4728,
+          "mapped_citation_within_original_video_duration": true,
+          "mapping_basis": "LEGACY_NONEMPTY_ASR_CHUNK_BOUNDARY_AND_CANONICAL_VIDEO_DURATION",
+          "original_video_identity_sha_verified": false,
+          "teacher_semantics_verified": false,
+          "trade_permission": false,
+          "current_original_asr_overlap_rows": 0,
+          "current_original_asr_source_file_sha256": "cf5bf6e2de6aa3fdcc77f76ebbe4bf038fc6603116ccb6f2b42a24e80adc341c",
+          "current_original_asr_coverage_fraction": 0.0,
+          "current_original_board_sha_refs": 0,
+          "current_transcript_status": "MISSING_TIMED_ASR_NEEDS_SOURCE_RECOVERY"
+        }
+      ],
+      "citation_count": 3,
+      "candidate_mapping_only": true,
+      "teacher_rule_verified": false,
+      "trade_permitted": false
+    }
+  ],
+  "source_file_modification_performed": false,
+  "teacher_speaker_and_wording_independently_verified": false,
+  "teacher_strategy_rules_certified": 0,
+  "teacher_to_engine_matches_certified": 0,
+  "m15_trade_backtest_authorized": false,
+  "mt5_trade_permitted": false,
+  "note": "This repairs the 26-vs-25 session indexing mismatch in a separate candidate source map. The six transcript-absent cited windows still need evidence; SHA equality of original film/audio and teacher lesson interpretation remain unverified."
+}
