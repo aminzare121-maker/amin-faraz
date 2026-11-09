@@ -1,0 +1,34 @@
+name: ARTIN20 isolated recovery ASR OCR and time alignment
+on:
+  push:
+    branches:
+      - audit/artin20-evidence-extraction-20261109
+    paths:
+      - 'research/artin20_isolated/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin20-isolated-recovery
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract V13 original machine transcripts board OCR and time-indexed evidence independently
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: aminzare121-maker/amin-faraz
+        run: |
+          python3 -u research/artin20_isolated/recover_evidence.py
+      - name: Preserve extraction outputs and diagnostic manifest even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-independent-extracted-evidence
+          path: artin20_recovery/private_results/**
+          if-no-files-found: warn
+          retention-days: 30
