@@ -1,0 +1,52 @@
+{
+  "schema": "artin_classroom_review_order_v1",
+  "mode": "SEQUENTIAL_EVIDENCE_GROUNDED",
+  "do_not_skip_unresolved_sessions": true,
+  "do_not_invent_teacher_answers": true,
+  "sessions": [
+    {
+      "sequence": 1,
+      "run_ids": [
+        42382408395,
+        42395611419,
+        42393181420
+      ],
+      "question_artifact_id": 13582555688,
+      "status": "QUESTION_REVIEW_STARTED",
+      "next": "Link original teacher speech to each question and record unresolved meaning"
+    },
+    {
+      "sequence": 2,
+      "run_ids": [
+        42423414479
+      ],
+      "status": "WAITING_SESSION_1_CONTEXT",
+      "next": "Compare lesson two speech with session one unresolved questions"
+    },
+    {
+      "sequence": 3,
+      "run_ids": [
+        42544045477
+      ],
+      "status": "WAITING_SESSION_2_CONTEXT",
+      "next": "Retrieve source evidence, preserve ambiguity links"
+    },
+    {
+      "sequence": 4,
+      "run_ids": [
+        42581509064
+      ],
+      "text_artifact_id": 13658290669,
+      "status": "WAITING_SESSION_3_CONTEXT",
+      "next": "Use 1997 original speech segments and 502 OCR frames with cumulative context"
+    }
+  ],
+  "completion_conditions": [
+    "All four lessons reviewed in order",
+    "Every interpreted rule linked to original speech and lesson",
+    "Question/answer speaker roles distinguished where evidence supports",
+    "Unresolved statements retained explicitly",
+    "No fabricated teacher explanations",
+    "Original trading engine unchanged"
+  ]
+}
