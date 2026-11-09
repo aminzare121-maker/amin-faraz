@@ -36,6 +36,15 @@ def get_evidence(base,success):
     assert source.get("source_integrity_verified") is True
     assert source.get("all_original_audio_parts_assigned_once") is True
     assert source.get("all_original_chat_images_assigned_once") is True
+    # New V13 path must also supply the board text-candidate coverage.
+    board_summary_path=Path(base)/"board"/"board_ocr_safe_summary.json"
+    if board_summary_path.exists():
+        board=load(board_summary_path)
+        assert board.get("schema")=="V13_BOARD_TEXT_OCR_ALL_SAMPLED_SOURCE_FRAMES_V1", "No board OCR proof"
+        assert board.get("source_video_sha256")==sha, "Board source mismatch"
+        assert board.get("frames_processed")==source["original_board_frames"], "Board OCR missing frames"
+        assert board.get("missing_frames")==0 and board.get("human_verified") is False, "Unsafe board OCR state"
+
     assert evidence["original_five_minute_audio_parts"]==source["source_global_audio_chunks"]
     assert evidence["original_screen_frames_scanned"]==source["one_second_frames_scanned"]
     assert evidence["source_chat_highres_screenshots"]==source["original_chat_images_selected"]
@@ -44,6 +53,7 @@ def get_evidence(base,success):
     assert evidence.get("teacher_semantic_accuracy_independently_verified") is False
     assert evidence.get("trading_allowed") is False
     return {"original_video_sha256":sha,
+            "board_ocr_all_sampled_frames_machine_extracted":board_summary_path.exists(),
             "original_duration_seconds":source["original_duration_seconds"],
             "audio_parts":source["source_global_audio_chunks"],
             "one_second_frames_scanned":source["one_second_frames_scanned"],
@@ -114,6 +124,10 @@ def main():
     env=os.environ
     results={k:env["VIDEO001_"+k.upper()+"_RESULT"]
              for k in ("source","asr","ocr","verify")}
+    if "VIDEO001_BOARD_RESULT" in env:
+        results["board"]=env["VIDEO001_BOARD_RESULT"]
+        if results["board"]=="success" and not (Path(env.get("VIDEO001_EVIDENCE_DIR",""))/"board"/"board_ocr_safe_summary.json").is_file():
+            raise ValueError("MISSING_MANDATORY_V13_BOARD_OCR_PROOF")
     receipt=build_receipt(env["VIDEO001_QUEUE_ID"],env["VIDEO001_SOURCE_PAGE"],
                           env["GITHUB_RUN_ID"],results,
                           env.get("VIDEO001_EVIDENCE_DIR"),
