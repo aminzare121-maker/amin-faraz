@@ -1,0 +1,23 @@
+name: Artin original board frame visual audit isolated
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_visual/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare image decoder
+        run: python3 -m pip install --user Pillow --quiet
+      - name: Read actual source images (no teacher-rule certification)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_visual/inspect_original_board.py
