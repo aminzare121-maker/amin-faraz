@@ -6,6 +6,31 @@ import sys
 SHA = re.compile(r"^[a-f0-9]{64}$")
 KINDS = {"entry", "exit", "exception", "decision_order"}
 DECISIONS = {"ENTER", "EXIT", "HOLD", "NO_TRADE"}
+SCENARIO_KINDS = {"hypothetical_market_state", "observed_market_state"}
+
+
+def scenario_ok(rule):
+    """A teacher's hypothetical market state is valid instructional evidence.
+
+    Classifying a scenario is distinct from proving it occurred historically.
+    This is a structural check; it does NOT certify the teacher's meaning.
+    """
+    scenario = rule.get("teaching_scenario")
+    if scenario is None:
+        return True, None  # Backwards-compatible: unclassified, not historically proven.
+    if not isinstance(scenario, dict) or scenario.get("kind") not in SCENARIO_KINDS:
+        return False, "invalid_teaching_scenario"
+    if not good_text(scenario.get("market_state")):
+        return False, "missing_scenario_market_state"
+    if scenario["kind"] == "hypothetical_market_state":
+        if scenario.get("claims_observed_trade") is True:
+            return False, "hypothetical_falsely_claims_observed_trade"
+        # Example/assumption/conditional speech is not grounds for rejection.
+        return True, None
+    if (scenario.get("source_observation_verified") is not True
+            or not good_text(scenario.get("observation_evidence_id"))):
+        return False, "unverified_historical_observation"
+    return True, None
 
 
 def good_text(v):
@@ -41,6 +66,9 @@ def rule_ok(rule, number, sources):
     if not any(max(s["start"], i["start"]) <= min(s["end"], i["end"])
                for s in speech for i in images):
         return False, "av_timestamps_do_not_overlap"
+    scenario_valid, scenario_reason = scenario_ok(rule)
+    if not scenario_valid:
+        return False, scenario_reason
     r = rule.get("independent_comparison")
     if (not isinstance(r, dict) or not good_text(r.get("teacher_example_id"))
             or not good_text(r.get("reviewer")) or not good_text(r.get("review_evidence_id"))
