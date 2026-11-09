@@ -1,0 +1,23 @@
+{
+  "schema": "artin_v13_private_archive_22_skipped_tests_receipt_v1",
+  "reference_public_run_id": 42695989509,
+  "private_run_date": "2026-11-09",
+  "execution_environment": "local Python with private Behrooz archives",
+  "individually_selected_tests": 22,
+  "locally_executed": 22,
+  "passed": 22,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "observed_runtime_seconds": 7.463,
+  "log_sha256": "22c5240e92830fb9448e62f1cfbdf0b36bce22d2a77700516ac3dd2bc9e034d3",
+  "report_sha256": "f793e72f9cbd1fc384b73f4f42586ee2ed8094ca087dabbdfa6949ffd3fe2b08",
+  "private_archive_location": "/بهروز",
+  "private_log": "/بهروز/ARTIN_EXACT_22_PRIVATE_TESTS_20261109.log",
+  "private_report": "/بهروز/ARTIN_EXACT_22_PRIVATE_TESTS_REPORT_20261109.json",
+  "private_runner": "/بهروز/run_artin_private_22.py",
+  "notes": "Local tests were chosen by name from GitHub's 22 skipped cases. Tests inspect extracted evidence and program invariants; they are not independent listening-based verification of original teacher speech. No source bytes or course text uploaded to public GitHub.",
+  "full_semantic_teacher_fidelity_verified": false,
+  "mt5_strategy_rules_certified": 0,
+  "trading_authorized": false
+}
