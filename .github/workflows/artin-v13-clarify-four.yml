@@ -27,7 +27,10 @@ jobs:
           run='42581509064'
           repo=os.environ['GH_REPO']
           raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True)
-          artifacts=json.loads(raw)['artifacts']
+          response=json.loads(raw)
+          artifacts=response['artifacts']
+          if response.get('total_count',len(artifacts))>len(artifacts):
+              raise RuntimeError('Artifact inventory truncated: fetch all pages before processing')
           assert artifacts, 'No video-four artifacts; do not mark clarification complete'
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
@@ -75,9 +78,9 @@ jobs:
                       if key in seen:continue
                       seen.add(key)
                       fn=filename.lower()
-                      channel=('asr' if 'asr' in fn or 'transcript' in fn else 'board' if 'board' in fn else 'ocr')
+                      channel=('asr' if 'asr' in fn or 'transcript' in fn or '-asr-' in archive.name else 'board' if 'board' in fn else 'ocr')
                       counts[channel]+=1
-                      rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text[:200000]})
+                      rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text})
                       # Do not infer speaker or teaching rules from OCR/ASR alone.
                       uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
           if not rows:raise RuntimeError('No machine-readable source text found')
@@ -89,6 +92,7 @@ jobs:
           print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: artin-video-four-reconstructed-text-and-ambiguity
           path: |
