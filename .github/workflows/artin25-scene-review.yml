@@ -1,0 +1,29 @@
+name: Artin 66 original image scene classification audit
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_scene_review/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check each human-inspected original image scene classification against SHA-indexed evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_scene_review/check_scenes.py
+      - name: Preserve 66 screenshot assessments
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-reviewed-scene-types-original-frames
+          path: artin25_scene_review_output/**
+          retention-days: 60
+          if-no-files-found: warn
