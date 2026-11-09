@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Read a bounded sample of actual original board frames from GitHub Actions (no reinterpretation)."""
 import os,subprocess,io,zipfile,json,re,sys,pathlib,base64
-ARTIFACTS={13:13667296735,15:13668204524,19:13672954786,21:13677804243}
-target={13:3194.15,15:1546.15,19:4304.0,21:944.57}
+ARTIFACTS={12:13666352041,14:13667767654,18:13671883841,24:13682220643}
+target={12:2294.42,14:973.8,18:822.99,24:3610.07}
 for sequence,artifact in ARTIFACTS.items():
     p=subprocess.run(["gh","api",f"repos/aminzare121-maker/amin-faraz/actions/artifacts/{artifact}/zip"],capture_output=True,timeout=300)
     if p.returncode:
