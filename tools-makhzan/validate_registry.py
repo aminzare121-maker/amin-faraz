@@ -18,7 +18,7 @@ def validate_registry(registry,root):
     seen=set()
     for item in tools:
         tid=item.get("id")
-        if not isinstance(tid,str) or not re.fullmatch(r"[A-Z]+-[0-9]{3}",tid) or tid in seen:
+        if not isinstance(tid,str) or not re.fullmatch(r"[A-Z]+-[0-9]{3}(?:-V[0-9]+)?",tid) or tid in seen:
             raise ValueError("Tool IDs must be unique and stable")
         seen.add(tid)
         for key in ("name_fa","status","state_path","continuation_path","next_action"):
