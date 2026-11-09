@@ -1,0 +1,34 @@
+{
+  "schema": "makhzan_video001_queue_receipt_v1",
+  "magazine_id": "artin-course-001",
+  "queue_id": "video-q-0017-artin-clip-15",
+  "source_page": "https://my.uupload.ir/p/EOwrJaRE",
+  "github_run_id": 42611072346,
+  "github_run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42611072346",
+  "job_results": {
+    "source": "success",
+    "asr": "success",
+    "ocr": "success",
+    "verify": "success",
+    "board": "success",
+    "register": "success"
+  },
+  "status": "COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED",
+  "source_evidence": {
+    "original_video_sha256": "4e66db074ee12a417d2152e53f83de94600592a0a0969bcdd5488fc2f27c464b",
+    "board_ocr_all_sampled_frames_machine_extracted": true,
+    "original_duration_seconds": 4511.5758,
+    "audio_parts": 16,
+    "one_second_frames_scanned": 4512,
+    "ocr_source_images": 432,
+    "board_frames": 151,
+    "provisional_qa_groups": 67,
+    "teacher_meaning_verified": false,
+    "original_source_evidence_loss": 0
+  },
+  "failure_attempts": 0,
+  "verified_teacher_rules": 0,
+  "trading_permitted": false,
+  "retry_policy": "SOURCE_FETCH_4_BOUNDED_ATTEMPTS; WORKER_FAILURES_NEVER_SILENTLY_SKIP",
+  "note": "This receipt does not certify speech words, teaching meaning, speaker roles or executable trades."
+}
