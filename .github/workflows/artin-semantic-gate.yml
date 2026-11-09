@@ -26,6 +26,8 @@ on:
       - 'test_artin_technical_speech_inventory.py'
       - 'artin_source_hierarchy.py'
       - 'test_artin_source_hierarchy.py'
+      - 'artin_eplanet_m15_preflight.py'
+      - 'test_artin_eplanet_m15_preflight.py'
       - '.github/workflows/artin-semantic-gate.yml'
   workflow_dispatch:
 
@@ -39,4 +41,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run fail-closed semantic gate tests
-        run: python3 -m unittest -v test_artin_semantic_gate.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py
+        run: python3 -m unittest -v test_artin_semantic_gate.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py test_artin_eplanet_m15_preflight.py
