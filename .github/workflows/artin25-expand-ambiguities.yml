@@ -1,0 +1,40 @@
+name: Artin expand documented ambiguous visual references
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-expand-ambiguities.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin25-documented-ambiguity-expansion
+  cancel-in-progress: false
+jobs:
+  expand:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        sequence: [19,20,22]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Expand only documented references from hash-verified originals
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SEQUENCE: ${{ matrix.sequence }}
+        run: python3 audit/artin25-cloud/expand_ambiguous_visuals.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artin25-expanded-ambiguity-${{ matrix.sequence }}-PRIVATE
+          path: review/
+          retention-days: 90
+          compression-level: 0
+          if-no-files-found: error
