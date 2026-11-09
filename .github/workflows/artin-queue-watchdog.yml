@@ -1,4 +1,5 @@
 name: Artin queue independent watchdog
+# 2026-11-09: wake default-branch watchdog for authorized queued film 0010.
 on:
   push:
     paths: ['.github/workflows/artin-queue-watchdog.yml']
