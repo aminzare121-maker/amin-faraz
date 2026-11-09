@@ -1,0 +1,69 @@
+name: V13 experimental real source one-pass timing (not full extraction)
+on:
+  push:
+    branches: [experiment/video001-v13-180sec-gpu-candidate-20261109]
+    paths: ['.github/workflows/video001-v13-real-one-pass-source.yml']
+permissions:
+  contents: read
+jobs:
+  source-stage-only-real-film:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      SOURCE_PAGE: https://my.uupload.ir/p/dxvmY5Gv
+      EXPECTED_SHA: a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install ffmpeg for real single-pass test
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -y -qq install ffmpeg
+      - name: Measure real source download and one-pass source visual scan without modifying V12
+        run: |
+          python -u - <<'PY'
+          import json,os,pathlib,sys,time
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'v13_private_onepass'
+          root.mkdir(parents=True,exist_ok=True)
+          sys.path.insert(0,'research/artin-film-engine-v3-1')
+          sys.path.insert(0,'experiments/video001-v13/fast180')
+          from artin_ephemeral_remote_ingest import get_direct_url
+          from video001_fast_remote_prep_v2 import download_once
+          from one_pass_visual_candidate import run
+          t0=time.monotonic()
+          original,_=get_direct_url(os.environ['SOURCE_PAGE'])
+          direct_delay=time.monotonic()-t0
+          video=root/'ephemeral_source_original.mp4'
+          size,sha=download_once(original,video)
+          d=time.monotonic()
+          if sha!=os.environ['EXPECTED_SHA']:
+              raise ValueError('REAL_SOURCE_SHA_MISMATCH; candidate not run')
+          print('V13_SOURCE_RECEIVED_SHA_AND_BYTES_MATCH',size,round(d-t0,2),flush=True)
+          result=run(video,root/'visual_candidate',sha,duration=5157.198367)
+          done=time.monotonic()
+          result_safe={'schema':'V13_REAL_SOURCE_ONLY_NOT_FULL_TEXT_EXTRACTION',
+               'source_sha256':sha,'bytes_verified':size,
+               'direct_url_lookup_seconds':round(direct_delay,3),
+               'download_including_lookup_seconds':round(d-t0,3),
+               'one_pass_visual_seconds':result['elapsed_seconds'],
+               'source_received_to_visual_ready_seconds':round(done-t0,3),
+               'full_audio_transcription_done':False,
+               'paddleocr_text_done':False,
+               'board_semantics_done':False,
+               'independent_teacher_accuracy_verified':False,
+               'end_to_end_3_min_proven':False,
+               'original_file_modified':False,
+               'visual_output_sampled_board_count':result['highres_board_frames'],
+               'one_second_chat_frames_scanned':result['chat_frames_one_second']}
+          (root/'safe_stage_timing.json').write_text(json.dumps(result_safe,indent=2),encoding='utf-8')
+          print('V13_REAL_SOURCE_STAGE_ONLY='+json.dumps(result_safe),flush=True)
+          PY
+      - name: Preserve only safe numeric stage timing, never original media
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-real-source-onepass-numeric-only
+          path: ${{ runner.temp }}/v13_private_onepass/safe_stage_timing.json
+          retention-days: 7
+          if-no-files-found: ignore
