@@ -1,0 +1,51 @@
+name: Artin session one actual synchronized review evidence
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-first-session-review.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  synchronized-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Install media tools on cloud only
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Prepare synchronized original speech and actual frames without ASR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p private review
+          python3 - <<'PY'
+          import hashlib,json,pathlib,subprocess,zipfile
+          source_sha='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff'
+          with open('private/source.zip','wb') as f:
+              p=subprocess.run(['gh','api','repos/aminzare121-maker/amin-faraz/actions/artifacts/13690841735/zip'],stdout=f,stderr=subprocess.PIPE,timeout=300)
+          if p.returncode:raise RuntimeError('EXISTING_ORIGINAL_READ_FAILED')
+          h=hashlib.sha256()
+          with zipfile.ZipFile('private/source.zip') as z,z.open('original_0001.mp4') as src,open('private/source.mp4','wb') as dst:
+              for b in iter(lambda:src.read(4*1024*1024),b''):h.update(b);dst.write(b)
+          if h.hexdigest()!=source_sha:raise ValueError('SOURCE_CHANGED')
+          def command(args):
+              p=subprocess.run(args,capture_output=True,timeout=120)
+              if p.returncode:raise RuntimeError('REVIEW_MEDIA_PREPARATION_FAILED')
+          command(['ffmpeg','-nostdin','-v','error','-ss','270','-i','private/source.mp4','-t','60','-vn','-ac','1','-ar','16000','-c:a','pcm_s16le','review/speech_270_330.wav'])
+          frames=[]
+          for t in [270,285,300,315,329]:
+              path=f'review/frame_{t}.png'
+              command(['ffmpeg','-nostdin','-v','error','-ss',str(t),'-i','private/source.mp4','-frames:v','1',path])
+              frames.append({'seconds':t,'file':pathlib.Path(path).name,'sha256':hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()})
+          receipt={'sequence':1,'source_sha256':source_sha,'audio_start_seconds':270,'audio_end_seconds':330,'audio_sha256':hashlib.sha256(pathlib.Path('review/speech_270_330.wav').read_bytes()).hexdigest(),'frames':frames,'models_executed':0,'speaker_verified':False,'semantic_verified':False,'note':'Synchronized review excerpt only; original preserved unchanged; no teacher-rule conclusion.'}
+          pathlib.Path('review/provenance.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
+          print('SYNCHRONIZED_SOURCE_REVIEW_MATERIAL_READY; not semantic approval')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artin25-session1-synchronized-review-270-330-private
+          path: review/
+          if-no-files-found: error
+          retention-days: 90
