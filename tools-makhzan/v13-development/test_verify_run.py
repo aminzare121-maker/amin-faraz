@@ -137,5 +137,38 @@ class ReceiptBindingTests(unittest.TestCase):
             self.assertFalse(result["passed"])
             self.assertTrue(any("duplicate ZIP members" in e for e in result["errors"]))
 
+    def test_oversized_embedded_member_rejected_without_expansion(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "a") as z:
+                # Metadata alone is sufficient to trigger the bound. No huge
+                # payload is allocated in this synthetic regression test.
+                z.writestr("extra.txt", b"tiny")
+            original = module.zipfile.ZipFile
+            class OversizeView(original):
+                def infolist(self):
+                    members = super().infolist()
+                    members[-1].file_size = 256 * 1024 * 1024 + 1
+                    return members
+            module.zipfile.ZipFile = OversizeView
+            try:
+                result = module.verify_run(record, root)
+                self.assertFalse(result["passed"])
+                self.assertTrue(any("oversized ZIP member" in e for e in result["errors"]))
+            finally:
+                module.zipfile.ZipFile = original
+
+    def test_nonlist_behrooz_index_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "w") as z:
+                z.writestr("BEHROOZ_INDEX.json", json.dumps({"videos": {}}))
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("invalid Behrooz index video list" in e for e in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
