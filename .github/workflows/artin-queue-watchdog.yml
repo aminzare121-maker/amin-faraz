@@ -8,6 +8,8 @@ on:
     types: [completed]
     branches: [tools-makhzan-hub]
   workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *' # fallback only; workflow_run resumes immediately
 permissions:
   actions: write
   contents: read
@@ -53,13 +55,9 @@ jobs:
           if active:
               print('AUTOPILOT_ALREADY_ACTIVE',active[0]['databaseId'],flush=True)
               sys.exit(0)
-          # A GitHub Actions run can be pending indexing; give a fresh dispatch time to appear.
-          from datetime import datetime,timezone
-          if runs and os.environ.get('GITHUB_EVENT_NAME')!='workflow_run':
-              newest=max(datetime.fromisoformat(r['createdAt'].replace('Z','+00:00')) for r in runs)
-              if (datetime.now(timezone.utc)-newest).total_seconds()<480:
-                  print('RECENT_RUN_COOLDOWN',newest.isoformat(),flush=True)
-                  sys.exit(0)
+          # No 480-second cooldown: active-run check above prevents concurrent dispatch.
+          # Keep a diagnostic record in logs for the exact pending film.
+          print('WATCHDOG_QUEUE_DIAGNOSTIC',json.dumps({'first_pending':pending[0]['queue_id'],'pending_total':len(pending),'recent_runs':runs[:3]},ensure_ascii=False),flush=True)
           print('WATCHDOG_DISPATCH_AUTHORIZED_PENDING_QUEUE',pending[0]['queue_id'],flush=True)
           subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--repo',repo,'--ref',branch],check=True)
           PY
