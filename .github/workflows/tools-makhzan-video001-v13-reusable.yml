@@ -757,6 +757,7 @@ jobs:
         run: |
           python3 -u tools-makhzan/video_queue/register_course.py
       - name: Persist one immutable result per authorized queue ID (never invent teacher meanings)
+        id: receipt
         if: ${{ always() }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -771,10 +772,31 @@ jobs:
           VIDEO001_VERIFY_RESULT: ${{ needs.independent-all-evidence-verification.result }}
         run: |
           python3 -u tools-makhzan/video_queue/write_receipt.py
-      - name: Schedule next queued user movie only after this one has a verified receipt
-        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+      - name: Continue serial magazine only after persisted verified receipt or bounded failed retry
+        if: ${{ always() && steps.receipt.outcome == 'success' }}
         env:
           GH_TOKEN: ${{ github.token }}
+          VIDEO001_MAGAZINE_ID: ${{ inputs.magazine_id }}
+          VIDEO001_QUEUE_ID: ${{ inputs.queue_id }}
         run: |
-          gh workflow run artin-v13-autopilot.yml --ref tools-makhzan-hub
-          echo 'VIDEO001_V13_NEXT_QUEUE_RUN_DISPATCHED_AFTER_FULL_SOURCE_PROOF=True'
+          python3 - <<'PY'
+          import json,os,subprocess
+          from urllib.request import Request,urlopen
+          from urllib.parse import quote
+          repo=os.environ['GITHUB_REPOSITORY']
+          path=f"tools-makhzan/video_queue/magazines/{os.environ['VIDEO001_MAGAZINE_ID']}/receipts/{os.environ['VIDEO001_QUEUE_ID']}.json"
+          url=f"https://api.github.com/repos/{repo}/contents/{quote(path,safe='/')}?ref=tools-makhzan-hub"
+          req=Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+          import base64
+          with urlopen(req,timeout=30) as response: obj=json.load(response)
+          receipt=json.loads(base64.b64decode(obj['content']))
+          status=receipt['status'];attempts=receipt.get('failure_attempts',1)
+          run=int(os.environ['GITHUB_RUN_ID'])
+          if receipt.get('github_run_id')!=run:
+              raise ValueError('Receipt is not from this workflow run: refusing duplicate dispatch')
+          should_dispatch=(status=='COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED'
+                           or (status=='FAILED_NEEDS_REVIEW' and type(attempts) is int and attempts<3))
+          print('ARTIN_SERIAL_NEXT_DISPATCH='+json.dumps({'status':status,'failure_attempts':attempts,'dispatch':should_dispatch}),flush=True)
+          if should_dispatch:
+              subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--ref','tools-makhzan-hub'],check=True)
+          PY
