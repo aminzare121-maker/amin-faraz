@@ -760,6 +760,7 @@ jobs:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
           path: /tmp/video001_receipt/board
       - name: Register proven Artin lesson in its own course registry only
+        id: register
         if: ${{ needs.independent-all-evidence-verification.result == 'success' && inputs.magazine_id == 'artin-course-001' }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -784,6 +785,7 @@ jobs:
           VIDEO001_OCR_RESULT: ${{ needs.source-sharded-ocr.result }}
           VIDEO001_BOARD_RESULT: ${{ needs.source-board-ocr.result }}
           VIDEO001_VERIFY_RESULT: ${{ needs.independent-all-evidence-verification.result }}
+          VIDEO001_REGISTER_RESULT: ${{ steps.register.outcome }}
         run: |
           python3 -u tools-makhzan/video_queue/write_receipt.py
       - name: Continue serial magazine only after persisted verified receipt or bounded failed retry
