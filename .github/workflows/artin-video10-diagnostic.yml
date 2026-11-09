@@ -1,0 +1,65 @@
+name: Artin video 0010 diagnostic and recovery
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/artin-video10-diagnostic.yml']
+  workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
+jobs:
+  diagnose-and-resume:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Log exact video 0010 queue, prior receipt, permissions, and active runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/artin-diagnostic
+          python3 - <<'PY' | tee /tmp/artin-diagnostic/video10.json
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools-makhzan/video_queue')
+          from magazines import enumerate_magazines
+          root=Path('tools-makhzan/video_queue')
+          entry=json.loads((root/'magazines/artin-course-001/entries/video-q-0010-artin-clip-08.json').read_text())
+          receipt=root/'magazines/artin-course-001/receipts/video-q-0010-artin-clip-08.json'
+          pending=enumerate_magazines(root)
+          print(json.dumps({'queue_id':entry['queue_id'],'source_page':entry['source_page'],'receipt_exists':receipt.exists(),'pending_total':len(pending),'first_pending':pending[0]['queue_id'] if pending else None,'is_first_pending':bool(pending and pending[0]['queue_id']==entry['queue_id'])},ensure_ascii=False))
+          if pending and pending[0]['queue_id']!=entry['queue_id']:
+              raise ValueError('First pending queue item differs from film 0010')
+          PY
+          gh api "repos/$GH_REPO/actions/permissions" | tee /tmp/artin-diagnostic/actions-permissions.json
+          gh run list --repo "$GH_REPO" --workflow artin-v13-autopilot.yml --branch tools-makhzan-hub --limit 12 --json databaseId,status,conclusion,createdAt,displayTitle | tee /tmp/artin-diagnostic/recent-runs.json
+      - name: Immediately dispatch next authorized video if no active run
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,subprocess,os
+          runs=json.load(open('/tmp/artin-diagnostic/recent-runs.json'))
+          active=[r for r in runs if r['status'] in ('queued','in_progress','waiting','requested','pending')]
+          diag=json.load(open('/tmp/artin-diagnostic/video10.json'))
+          if diag['receipt_exists'] or not diag['is_first_pending']:
+              print('NO_DISPATCH_ALREADY_RECEIPTED_OR_DIFFERENT_PENDING');raise SystemExit(0)
+          if active:
+              print('ALREADY_ACTIVE',active[0]['databaseId']);raise SystemExit(0)
+          print('DISPATCH_VIDEO_0010_NOW',flush=True)
+          subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--repo',os.environ['GH_REPO'],'--ref','tools-makhzan-hub'],check=True)
+          print('DISPATCH_ACCEPTED_CHECK_RUN_LOGS_FOR_PROCESSING',flush=True)
+          PY
+      - name: Preserve diagnostic even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-video-0010-diagnostic
+          path: /tmp/artin-diagnostic/
+          retention-days: 15
+          if-no-files-found: warn
