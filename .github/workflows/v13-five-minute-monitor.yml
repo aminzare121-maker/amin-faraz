@@ -1,0 +1,28 @@
+name: V13 five-minute isolated development monitor
+# GitHub scheduled workflows only run from the default branch.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: v13-five-minute-monitor
+  cancel-in-progress: false
+jobs:
+  check-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: artin-v13-under180-development
+          persist-credentials: false
+      - name: Check development files and run acceptance gate unit tests
+        run: |
+          python3 -m py_compile tools-makhzan/v13-development/*.py
+          python3 -m unittest discover -s tools-makhzan/v13-development -p 'test_*.py' -v
+      - name: Explicit scope
+        if: always()
+        run: |
+          echo 'Scheduled V13 development test only. No video processing, self-repair, or production deployment.' >> "$GITHUB_STEP_SUMMARY"
