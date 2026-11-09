@@ -22,5 +22,5 @@ jobs:
       - name: Check contract and GPU-candidate code without media, GPU, or trades
         working-directory: experiments/video001-v13/fast180
         run: |
-          python -m unittest -v test_speed_acceptance.py test_batched_gpu_asr.py
-          python -m py_compile speed_acceptance.py batched_gpu_asr.py
+          python -m unittest -v test_speed_acceptance.py test_batched_gpu_asr.py test_one_pass_visual_candidate.py
+          python -m py_compile speed_acceptance.py batched_gpu_asr.py one_pass_visual_candidate.py
