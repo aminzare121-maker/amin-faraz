@@ -32,9 +32,9 @@ jobs:
           state=api('actions/runs/42653593204')
           jobs=api('actions/runs/42653593204/jobs?per_page=100')['jobs']
           artifacts=api('actions/runs/42653593204/artifacts?per_page=100')['artifacts']
-          items=[{'sequence':1,'artifact_id':13690841735}]
+          items=[]
           deferred=[]
-          for sequence in range(2,26):
+          for sequence in (17,25):
               found=[a for a in artifacts if a['name']==f'artin25-original-{sequence}-private' and not a['expired']]
               if len(found)>1:raise RuntimeError(f'ORIGINAL_ARTIFACT_AMBIGUOUS_{sequence}')
               active=any(j['name']==f'preserve-original ({sequence})' and j['status']!='completed' for j in jobs)
