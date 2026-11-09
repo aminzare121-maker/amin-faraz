@@ -638,10 +638,16 @@ jobs:
         with:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-fullres-chat
           path: /tmp/video001_source_chat_original
+      - name: Checkout tested non-destructive V12 evidence rehydration helper
+        uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          path: artin-rehydration
+          persist-credentials: false
       - name: Rebuild all existing V12 private report fields without deleting unverified rule fragments
         working-directory: research/artin-film-engine-v3-1
         run: |
-          python3 -u video001_fast_export_v12.py \
+          python3 -u "$GITHUB_WORKSPACE/artin-rehydration/research/artin-film-engine-v3-1/video001_fast_export_v12.py" \
             --proof-path /tmp/video001_full_integrity/private_fast_verify_summary.json \
             --source-path /tmp/video001_source_summary/safe_source_prep_summary.json \
             --asr-path /tmp/video001_full_integrity/asr_verified/complete_unverified_qa_evidence.json \
