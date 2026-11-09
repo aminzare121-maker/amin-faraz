@@ -44,15 +44,28 @@ def verify_run(record, root):
         if not record.get("behrooz_library_file_id") or int(record["behrooz_version"]) < 1:
             raise ValueError("missing saved version")
         with zipfile.ZipFile(readback) as master:
+            # ZIP allows duplicate filenames and read(name) silently selects one.
+            names = master.namelist()
+            if len(names) != len(set(names)):
+                raise ValueError("duplicate ZIP members in Behrooz readback")
+            if "BEHROOZ_INDEX.json" not in names:
+                raise ValueError("missing Behrooz index")
             entries = json.loads(master.read("BEHROOZ_INDEX.json"))["videos"]
             matches = [v for v in entries if v.get("queue_id") == record["queue_id"]]
             if len(matches) != 1:
                 raise ValueError("film identity absent or ambiguous")
             entry = matches[0]
+            if not isinstance(entry.get("archive"), str) or entry["archive"] not in names:
+                raise ValueError("indexed film archive missing")
+            if not isinstance(entry.get("video"), int) or not 1 <= entry["video"] <= 999:
+                raise ValueError("invalid indexed video number")
+            review_member = f"DERIVED_NOT_RAW/VIDEO_{entry['video']:02d}/REVIEW_FA.md"
+            if review_member not in names:
+                raise ValueError("indexed film review missing")
             archive_digest = hashlib.sha256(master.read(entry["archive"])).hexdigest()
             if archive_digest != record["archive_sha256"] or archive_digest != entry["sha256"]:
                 raise ValueError("wrong film archive in Behrooz")
-            review = master.read(f"DERIVED_NOT_RAW/VIDEO_{int(entry['video']):02d}/REVIEW_FA.md")
+            review = master.read(review_member)
             if hashlib.sha256(review).hexdigest() != record["semantic_review_sha256"]:
                 raise ValueError("wrong review in Behrooz")
     except (KeyError, ValueError, OSError, TypeError, zipfile.BadZipFile) as exc:
