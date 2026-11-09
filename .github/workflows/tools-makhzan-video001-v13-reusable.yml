@@ -531,6 +531,28 @@ jobs:
         with:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
           path: /tmp/v13_board_ocr_original
+      - name: Normalize downloaded OCR artifact folders for unchanged strict verifier
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os, shutil
+          root=Path('/tmp/video001_all_ocr')
+          expected=int('${{ needs.source-once.outputs.ocr_count }}')
+          prefix='v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-ocr-'
+          for i in range(expected):
+              source=root/f'{prefix}{i}'/'full_chat_ocr_candidates_PRIVATE.json'
+              if not source.is_file():
+                  raise FileNotFoundError(f'Missing original OCR worker artifact {i}: {source}')
+              target=root/f'video001-fast-ocr-{i}'
+              target.mkdir(exist_ok=True)
+              dest=target/source.name
+              if dest.exists() and dest.read_bytes()!=source.read_bytes():
+                  raise ValueError(f'OCR worker {i} byte mismatch')
+              if not dest.exists():
+                  os.link(source,dest)
+          print(f'OCR artifact paths normalized without modifying original evidence: {expected}')
+          PY
       - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
         working-directory: research/artin-film-engine-v3-1
         run: |
