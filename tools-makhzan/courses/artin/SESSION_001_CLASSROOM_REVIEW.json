@@ -1,0 +1,36 @@
+{
+  "schema": "artin_classroom_review_v1",
+  "session_sequence": 1,
+  "source_video_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+  "qa_source_run": 42393181420,
+  "qa_artifact_id": 13582555688,
+  "original_question_groups": 59,
+  "unique_ocr_question_candidates_after_normalization": 43,
+  "teacher_answers_verified": 0,
+  "review_start": "session_001",
+  "sample_questions": [
+    {
+      "time_seconds": 285,
+      "question": "استاد طبق سرفصل هایی که جلسه اول فرمودید جلو میریم؟",
+      "classification": "course_structure"
+    },
+    {
+      "time_seconds": 555,
+      "question": "١1:1٥ صدا دارید؟",
+      "classification": "audio_check_not_trading_rule"
+    },
+    {
+      "time_seconds": 765,
+      "question": "تا چه قد ذاتیه یا تا چه قد میتونه به دست بیاد؟",
+      "classification": "psychology_question"
+    },
+    {
+      "time_seconds": 1185,
+      "question": "کار با ابزار رو گفتید اول یاد بگیریم و منظم جلو بریم؟",
+      "classification": "tools_and_learning"
+    }
+  ],
+  "review_method": "Link original OCR question frame to original ASR speech IDs; distinguish student question, teacher response, later correction; do not manufacture missing teacher answer.",
+  "source_of_truth": "Original audio and video; OCR and ASR are provisional",
+  "status": "SESSION_001_REVIEW_STARTED_NOT_SEMANTICALLY_CERTIFIED"
+}
