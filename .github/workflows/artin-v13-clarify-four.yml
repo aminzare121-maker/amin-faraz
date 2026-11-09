@@ -28,12 +28,16 @@ jobs:
           repo=os.environ['GH_REPO']
           raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True)
           artifacts=json.loads(raw)['artifacts']
+          assert artifacts, 'No video-four artifacts; do not mark clarification complete'
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
           for a in selected:
               name=a['name']
               target='evidence/'+str(a['id'])+'.zip'
               subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a["id"]}/zip','--output',target],check=True)
+              import zipfile
+              if not zipfile.is_zipfile(target):
+                  raise RuntimeError('Artifact ZIP download invalid: '+name)
           print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
           PY
       - name: Reconstruct searchable original evidence with explicit ambiguity register
@@ -42,7 +46,7 @@ jobs:
           python3 - <<'PY'
           import zipfile,json,re,hashlib
           from pathlib import Path
-          rows=[];uncertain=[];seen=set()
+          rows=[];uncertain=[];seen=set();counts={'asr':0,'ocr':0,'board':0}
           for archive in sorted(Path('evidence').glob('*.zip')):
               with zipfile.ZipFile(archive) as z:
                   for filename in z.namelist():
@@ -53,14 +57,19 @@ jobs:
                       key=hashlib.sha256(raw).hexdigest()
                       if key in seen:continue
                       seen.add(key)
-                      channel=('asr' if 'asr-' in archive.name or 'transcript' in filename.lower() else 'ocr_or_source')
+                      fn=filename.lower()
+                      channel=('asr' if 'asr' in fn or 'transcript' in fn else 'board' if 'board' in fn else 'ocr')
+                      counts[channel]+=1
                       rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text[:200000]})
                       # Do not infer speaker or teaching rules from OCR/ASR alone.
                       uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
           if not rows:raise RuntimeError('No machine-readable source text found')
+          # A partial extraction is a failed clarification, not a success receipt.
+          if counts['asr']==0 or counts['ocr']==0:
+              raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
           Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
           Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
-          print('SOURCE_TEXT_FILES='+str(len(rows))+'; SEMANTIC_VERIFICATION=REQUIRED')
+          print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
           PY
       - uses: actions/upload-artifact@v4
         with:
@@ -69,3 +78,4 @@ jobs:
             video-four-source-text.json
             video-four-ambiguity-register.json
           retention-days: 30
+          if-no-files-found: error
