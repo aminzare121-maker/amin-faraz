@@ -68,7 +68,9 @@ def run(video,out,expected_sha,*,duration=None,board_sample_s=30):
             else: metric=sum(abs(a-b) for a,b in zip(last,buf))/(255*FRAME_SIZE)
             selected=(last is None or metric>=.02 or count-selected_at>=30)
             if selected:selected_at=count
-            rows.append({'second':count,'change_score':round(metric,6),'source_frame_selected':selected})
+            rows.append({'second':count,'change_score':round(metric,6),
+                         'change_above_threshold':metric>=.02,
+                         'source_frame_selected':selected})
             count+=1;last=buf
     except BaseException:
         pipe.kill();pipe.communicate()
