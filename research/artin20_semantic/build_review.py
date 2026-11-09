@@ -21,11 +21,17 @@ TERMS = {
     "risk": ["استاپ", "حد ضرر", "ریسک", "ضرر", "لات", "حجم", "سرمایه"],
     "confirmation": ["تایید", "تأیید", "شرط", "صبر", "کندل", "بسته بش", "بسته شد", "شکست"],
     "market": ["روند", "حمایت", "مقاومت", "پولبک", "بازگشت", "نقدینگی", "تایم فریم", "تایم‌فریم"],
-    "revision": ["جلسه قبل", "جلسه قبلی", "دفعه قبل", "اشتباه", "تصحیح", "اصلاح", "برخلاف", "اما", "نباید", "استثنا"]
+    "revision": ["جلسه قبل", "جلسه قبلی", "دفعه قبل", "اشتباه", "تصحیح", "اصلاح", "برخلاف", "استثنا"]
 }
 NEGATIONS = ["نکن", "نباید", "نمی‌ش", "نمی ش", "نه", "ممنوع", "اشتباه"]
 def normalized(s):
     return str(s).replace("ي","ی").replace("ك","ک").replace("\u200c"," ").replace("أ","ا").replace("ۀ","ه").strip().lower()
+def term_present(phrase, text):
+    p=normalized(phrase)
+    # A short standalone trade word (buy/sell) must not match Persian words like "باید".
+    if p in {"بای","سل","روند"}:
+        return re.search(r"(?<!\\w)"+re.escape(p)+r"(?!\\w)", text) is not None
+    return p in text
 def sha(data): return hashlib.sha256(data).hexdigest()
 def read_zip_jsonl(z, basename):
     hits=[n for n in z.namelist() if n.endswith(basename)]
@@ -72,7 +78,7 @@ def main():
         if t.get("speech_index")!=i:raise RuntimeError("TEMPORAL_INDEX_OUT_OF_ORDER")
         txt=s.get("text") or ""
         norm=normalized(txt)
-        categories={cat:[p for p in phrases if normalized(p) in norm] for cat,phrases in TERMS.items()}
+        categories={cat:[p for p in phrases if term_present(p,norm)] for cat,phrases in TERMS.items()}
         categories={cat:phrases for cat,phrases in categories.items() if phrases}
         if not categories:continue
         linked=[]
@@ -103,6 +109,14 @@ def main():
         score+=2 if "revision" in categories else 0
         if not linked:time_issue+=1
         label="REVIEW_PRIORITY" if score>=8 else "POTENTIAL_CONTEXT"
+        context=[{
+            "speech_index":j,"time_start":speech[j].get("time_start"),
+            "time_end":speech[j].get("time_end"),"text_exact":speech[j].get("text",""),
+            "speaker_verified":speech[j].get("speaker_verified",False)
+        } for j in range(max(0,i-3),min(len(speech),i+4))]
+        context_text=normalized(" ".join(str(x.get("text_exact") or "") for x in context))
+        explicit_conditional_cue=any(term_present(x,context_text) for x in ["اگر","وقتی","زمانی که"])
+        temporal_exact_with_nonempty_ocr=any(x["relation"]=="WITHIN_SPEECH_INTERVAL" and x["ocr_has_content"] for x in linked)
         priorities[label]+=1
         rec={
             "candidate_id":f"artin20-speech-{i:04d}","source_video_queue_sequence":20,
@@ -111,7 +125,10 @@ def main():
             "speech_source_file":s.get("source_file"),"speech_source_id":s.get("source_id"),
             "source_audio_sha256":s.get("source_audio_sha256"),
             "teacher_speaker_verified":bool(s.get("speaker_verified",False)),
-            "lexical_tags":categories,"negation_cues":[p for p in NEGATIONS if normalized(p) in norm],
+            "lexical_tags":categories,"negation_cues":[p for p in NEGATIONS if term_present(p,norm)],
+            "speech_context_unverified":context,
+            "conditional_language_nearby_not_verified":explicit_conditional_cue,
+            "exact_time_visual_with_nonempty_ocr":temporal_exact_with_nonempty_ocr,
             "visual_candidates":linked,
             "evidence_priority_score_not_confidence":score,
             "label":label,
@@ -140,6 +157,7 @@ def main():
         "potential_context_count":priorities["POTENTIAL_CONTEXT"],
         "candidates_without_temporal_visual":time_issue,
         "visual_links_with_nonempty_ocr":visual_with_text,
+        "review_records_with_context":len(review),
         "lexical_match_only_not_semantic":True,
         "teacher_roles_not_authenticated":True,
         "semantic_verified_count":0,"mt5_rules_approved":0,"originals_mutated":False,
