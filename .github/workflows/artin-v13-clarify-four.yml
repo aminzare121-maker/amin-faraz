@@ -130,16 +130,16 @@ jobs:
               if row['file'].lower().endswith('.json'):
                   try:walk(json.loads(row['text']),row['file'],row['channel'])
                   except (ValueError,TypeError):pass
-          def seconds(value):
-              try:return float(value)
-              except (ValueError,TypeError):return None
+          import sys
+          sys.path.insert(0,'tools-makhzan/courses/artin')
+          from reconcile_timed_evidence import seconds
           for entry in timed:
               t=seconds(entry['start'])
               if t is None:continue
               entry['nearby_visual_evidence']=[{'source':v['source'],'start':v['start'],'text':v['text'][:500]} for v in timed if v['channel']!='asr' and seconds(v['start']) is not None and abs(seconds(v['start'])-t)<=8][:12] if entry['channel']=='asr' else []
           Path('video-four-timed-crossmodal-candidates.json').write_text(json.dumps({'video_sequence':4,'candidate_count':len(timed),'time_alignment_window_seconds':8,'human_semantic_certification':False,'candidates':timed},ensure_ascii=False,indent=2))
-          if not timed:
-              print('NO_TIMED_TEXT_FIELDS: full source evidence retained; timed crossmodal alignment unavailable')
+          if not any(x['channel']=='asr' and seconds(x['start']) is not None for x in timed):
+              raise RuntimeError('NO_TIMED_SPEECH: inspect original ASR schema and correct timestamp parser; no false success')
           Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
           Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
           print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
