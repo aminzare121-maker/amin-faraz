@@ -1,0 +1,31 @@
+name: ARTIN20 independent speech-image semantic candidate review
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin20_semantic/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Analyze recovered Artin20 time-indexed source without inventing teacher rules
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: aminzare121-maker/amin-faraz
+        run: |
+          python3 -u research/artin20_semantic/build_review.py
+      - name: Preserve review evidence, tests and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin20-semantic-review-unverified
+          path: artin20_semantic_output/**
+          if-no-files-found: warn
+          retention-days: 60
