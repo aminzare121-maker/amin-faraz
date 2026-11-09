@@ -1,0 +1,68 @@
+name: Artin video four speech and board clarification
+on:
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: artin-video-four-clarification
+  cancel-in-progress: false
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Download actual video four machine transcripts and chat/board OCR
+        shell: bash
+        run: |
+          mkdir -p evidence
+          python3 - <<'PY'
+          import json,os,subprocess,sys
+          run='42581509064'
+          repo=os.environ['GH_REPO']
+          raw=subprocess.check_output(['gh','api','--paginate',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True)
+          artifacts=json.loads(raw)['artifacts']
+          selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
+          if not selected:raise RuntimeError('Original video four text artifacts not available')
+          for a in selected:
+              name=a['name']
+              target='evidence/'+str(a['id'])+'.zip'
+              subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a["id"]}/zip','--output',target],check=True)
+          print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
+          PY
+      - name: Reconstruct searchable original evidence with explicit ambiguity register
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import zipfile,json,re,hashlib
+          from pathlib import Path
+          rows=[];uncertain=[];seen=set()
+          for archive in sorted(Path('evidence').glob('*.zip')):
+              with zipfile.ZipFile(archive) as z:
+                  for filename in z.namelist():
+                      if filename.endswith('/') or not filename.lower().endswith(('.json','.txt','.srt','.vtt','.md')):continue
+                      raw=z.read(filename)
+                      try: text=raw.decode('utf-8')
+                      except UnicodeDecodeError:continue
+                      key=hashlib.sha256(raw).hexdigest()
+                      if key in seen:continue
+                      seen.add(key)
+                      channel=('asr' if 'asr-' in archive.name or 'transcript' in filename.lower() else 'ocr_or_source')
+                      rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text[:200000]})
+                      # Do not infer speaker or teaching rules from OCR/ASR alone.
+                      uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
+          if not rows:raise RuntimeError('No machine-readable source text found')
+          Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
+          Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
+          print('SOURCE_TEXT_FILES='+str(len(rows))+'; SEMANTIC_VERIFICATION=REQUIRED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artin-video-four-reconstructed-text-and-ambiguity
+          path: |
+            video-four-source-text.json
+            video-four-ambiguity-register.json
+          retention-days: 30
