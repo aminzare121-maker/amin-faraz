@@ -45,12 +45,24 @@ def verify_run(record, root):
             raise ValueError("missing saved version")
         with zipfile.ZipFile(readback) as master:
             # ZIP allows duplicate filenames and read(name) silently selects one.
+            # Reject decompression bombs before reading embedded content.
+            members = master.infolist()
+            if any(m.flag_bits & 1 for m in members):
+                raise ValueError("encrypted ZIP member in Behrooz readback")
+            if any(m.file_size > 256 * 1024 * 1024 for m in members):
+                raise ValueError("oversized ZIP member in Behrooz readback")
+            if sum(m.file_size for m in members) > 1024 * 1024 * 1024:
+                raise ValueError("oversized total ZIP in Behrooz readback")
             names = master.namelist()
             if len(names) != len(set(names)):
                 raise ValueError("duplicate ZIP members in Behrooz readback")
             if "BEHROOZ_INDEX.json" not in names:
                 raise ValueError("missing Behrooz index")
+            if master.getinfo("BEHROOZ_INDEX.json").file_size > 4 * 1024 * 1024:
+                raise ValueError("oversized Behrooz index")
             entries = json.loads(master.read("BEHROOZ_INDEX.json"))["videos"]
+            if not isinstance(entries, list):
+                raise ValueError("invalid Behrooz index video list")
             matches = [v for v in entries if v.get("queue_id") == record["queue_id"]]
             if len(matches) != 1:
                 raise ValueError("film identity absent or ambiguous")
@@ -62,7 +74,12 @@ def verify_run(record, root):
             review_member = f"DERIVED_NOT_RAW/VIDEO_{entry['video']:02d}/REVIEW_FA.md"
             if review_member not in names:
                 raise ValueError("indexed film review missing")
-            archive_digest = hashlib.sha256(master.read(entry["archive"])).hexdigest()
+            # Stream the embedded archive digest to cap peak memory use.
+            archive_hash = hashlib.sha256()
+            with master.open(entry["archive"]) as source:
+                while chunk := source.read(1024 * 1024):
+                    archive_hash.update(chunk)
+            archive_digest = archive_hash.hexdigest()
             if archive_digest != record["archive_sha256"] or archive_digest != entry["sha256"]:
                 raise ValueError("wrong film archive in Behrooz")
             review = master.read(review_member)
