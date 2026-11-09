@@ -30,7 +30,11 @@ jobs:
           response=json.loads(raw)
           artifacts=response['artifacts']
           if response.get('total_count',len(artifacts))>len(artifacts):
-              raise RuntimeError('Artifact inventory truncated: fetch all pages before processing')
+              for page in range(2,1+(response['total_count']+99)//100):
+                  more=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100&page={page}'],text=True))
+                  artifacts.extend(more['artifacts'])
+              if len(artifacts)!=response['total_count']:
+                  raise RuntimeError('Incomplete artifact pagination; refuse partial reconstruction')
           assert artifacts, 'No video-four artifacts; do not mark clarification complete'
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
@@ -87,6 +91,34 @@ jobs:
           # A partial extraction is a failed clarification, not a success receipt.
           if counts['asr']==0 or counts['ocr']==0:
               raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
+          # Extract timed speech/visual candidates, not just a list of files.
+          timed=[]
+          def walk(node,origin,channel,depth=0):
+              if depth>12:return
+              if isinstance(node,list):
+                  for x in node:walk(x,origin,channel,depth+1)
+              elif isinstance(node,dict):
+                  value=next((node[k] for k in ('text','transcript','content','utterance','recognized_text') if isinstance(node.get(k),str) and node[k].strip()),None)
+                  start=next((node[k] for k in ('start','start_time','timestamp','time','start_seconds') if isinstance(node.get(k),(int,float,str))),None)
+                  end=next((node[k] for k in ('end','end_time','end_time_seconds','end_seconds') if isinstance(node.get(k),(int,float,str))),None)
+                  if value and start is not None:
+                      timed.append({'channel':channel,'source':origin,'start':start,'end':end,'text':value,'speaker':'UNKNOWN'})
+                  for v in node.values():
+                      if isinstance(v,(list,dict)):walk(v,origin,channel,depth+1)
+          for row in rows:
+              if row['file'].lower().endswith('.json'):
+                  try:walk(json.loads(row['text']),row['file'],row['channel'])
+                  except (ValueError,TypeError):pass
+          def seconds(value):
+              try:return float(value)
+              except (ValueError,TypeError):return None
+          for entry in timed:
+              t=seconds(entry['start'])
+              if t is None:continue
+              entry['nearby_visual_evidence']=[{'source':v['source'],'start':v['start'],'text':v['text'][:500]} for v in timed if v['channel']!='asr' and seconds(v['start']) is not None and abs(seconds(v['start'])-t)<=8][:12] if entry['channel']=='asr' else []
+          Path('video-four-timed-crossmodal-candidates.json').write_text(json.dumps({'video_sequence':4,'candidate_count':len(timed),'time_alignment_window_seconds':8,'human_semantic_certification':False,'candidates':timed},ensure_ascii=False,indent=2))
+          if not timed:
+              print('NO_TIMED_TEXT_FIELDS: full source evidence retained; timed crossmodal alignment unavailable')
           Path('video-four-source-text.json').write_text(json.dumps({'video_sequence':4,'original_video_sha256':'322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb','source_text':rows},ensure_ascii=False,indent=2))
           Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
           print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
@@ -98,5 +130,6 @@ jobs:
           path: |
             video-four-source-text.json
             video-four-ambiguity-register.json
+            video-four-timed-crossmodal-candidates.json
           retention-days: 30
           if-no-files-found: error
