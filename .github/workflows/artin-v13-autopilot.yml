@@ -63,6 +63,19 @@ jobs:
               assert len(got)==1 and got[0]['queue_id']=='video-q-0004-artin-test',got
           print('ARTIN_SERIAL_QUEUE_RETRY_TESTS_PASSED')
           PY
+      - name: Verify canonical Artin course registry is contiguous before retry
+        run: |
+          python3 - <<'PY'
+          import json,sys
+          sys.path.insert(0,'tools-makhzan')
+          from course_stitcher import validate_course
+          from pathlib import Path
+          doc=json.loads(Path('tools-makhzan/courses/artin/COURSE_REGISTRY.json').read_text())
+          validate_course(doc)
+          sessions=doc['registered_sessions']
+          assert all(row['sequence']==i for i,row in enumerate(sessions,1))
+          print('ARTIN_REGISTERED_CONTIGUOUS_SESSIONS='+str(len(sessions)))
+          PY
       - name: Validate latest magazine receipts and select one, never skip a failure
         id: queue
         run: |
