@@ -30,9 +30,13 @@ jobs:
           if not matches:raise RuntimeError('No verifier job found in full paginated jobs list')
           for jid,name in matches:
               dest=Path('diagnostics')/f'job-{jid}.log'
-              with dest.open('wb') as out:
-                  proc=subprocess.run(['gh','api',f'repos/${{ github.repository }}/actions/jobs/{jid}/logs'],stdout=out,stderr=subprocess.PIPE)
-              if proc.returncode:dest.write_text('Log fetch failed: '+proc.stderr.decode(errors='replace'))
+              import urllib.request,os
+              req=urllib.request.Request(f'https://api.github.com/repos/${{ github.repository }}/actions/jobs/{jid}/logs',headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','User-Agent':'artin-reverse-debug'})
+              try:
+                  with urllib.request.urlopen(req,timeout=60) as response:
+                      dest.write_bytes(response.read())
+              except Exception as exc:
+                  dest.write_text('Log fetch failed: '+str(exc))
               print('TRACED_JOB',jid,name,'bytes',dest.stat().st_size,flush=True)
           PY
       - name: Publish exact failure excerpt in an issue for autonomous follow-up
