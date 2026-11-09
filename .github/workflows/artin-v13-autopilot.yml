@@ -1,0 +1,50 @@
+name: Artin V13 autopilot - serial source and text extraction
+# V13 verifier diagnostic and receipt fixes: 31c14306cf52d7fe0ea51bed200ef857e9fdc9db
+# Event-driven entry point: push or workflow_dispatch; no 15-minute polling.
+# Explicitly user-submitted magazine entries only. No trading or invented rules.
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/artin-v13-autopilot.yml'
+      - 'tools-makhzan/video_queue/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: artin-v13-autopilot-single-active-video
+  cancel-in-progress: false
+jobs:
+  find-next-authorized-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    outputs:
+      count: ${{ steps.queue.outputs.count }}
+      items: ${{ steps.queue.outputs.items }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Validate latest magazine receipts and select one, never skip a failure
+        id: queue
+        run: |
+          python3 -m py_compile tools-makhzan/video_queue/load_queue.py tools-makhzan/video_queue/magazines.py
+          python3 -u tools-makhzan/video_queue/load_queue.py --github-output "$GITHUB_OUTPUT"
+      - name: Record queue information without personal speech or video
+        run: |
+          echo 'Queue scanned; user-supplied films only. Source content is not certified by this step.' >> "$GITHUB_STEP_SUMMARY"
+  process-one-user-submitted-film:
+    needs: find-next-authorized-video
+    if: ${{ needs.find-next-authorized-video.outputs.count != '0' }}
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.find-next-authorized-video.outputs.items) }}
+    uses: aminzare121-maker/amin-faraz/.github/workflows/tools-makhzan-video001-v13-reusable.yml@tools-makhzan-hub
+    with:
+      magazine_id: ${{ matrix.magazine_id }}
+      queue_id: ${{ matrix.queue_id }}
+      source_page: ${{ matrix.source_page }}
+      expected_sha256: ${{ matrix.expected_sha256 }}
