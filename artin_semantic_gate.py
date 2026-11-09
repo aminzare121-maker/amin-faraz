@@ -39,6 +39,7 @@ def audit(document):
             errors.append(f"session {number}: rules must be an array")
             rules = []
         verified = 0
+        verified_kinds = set()
         for idx, rule in enumerate(rules):
             if not isinstance(rule, dict):
                 errors.append(f"session {number} rule {idx}: malformed")
@@ -86,11 +87,13 @@ def audit(document):
                     rule.get("ambiguity_resolved") is True and
                     refs_ok and compare_ok):
                 verified += 1
+                verified_kinds.add(rule["kind"])
             elif rule.get("status") == "VERIFIED":
                 errors.append(f"session {number} rule {idx}: unsupported VERIFIED claim")
         result.append({
             "session": number,
-            "status": "REVIEWED" if verified and verified == len(rules) else "UNVERIFIED",
+            "status": "REVIEWED" if REQUIRED.issubset(verified_kinds) and verified == len(rules) else "UNVERIFIED",
+            "missing_rule_kinds": sorted(REQUIRED - verified_kinds),
             "verified_rules": verified,
             "total_rules": len(rules)
         })
