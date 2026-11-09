@@ -37,7 +37,10 @@ jobs:
           assert m['title_fa']=='دورهٔ آموزش مدرس آرتین'
           assert m['start_sequence']==3
           assert m['already_submitted'][1]['source_page']=='https://my.uupload.ir/p/dxvmY5xW'
-          assert enumerate_magazines(base)==[]
+          pending=enumerate_magazines(base)
+          assert len(pending)==22
+          assert pending[0]['queue_id']=='video-q-0004-artin-clip-02'
+          assert pending[-1]['queue_id']=='video-q-0025-artin-clip-23'
           print('VIDEO001_MAGAZINE_ORIGINAL_ARTIN_NOT_DUPLICATED=True')
           PY
       - name: Simulate two unrelated named magazines, independently ordered and verified
