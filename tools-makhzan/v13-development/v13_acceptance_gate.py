@@ -28,6 +28,14 @@ def check(record):
     for key in EVIDENCE:
         if not record.get(key):
             errors.append("missing evidence "+key)
+    # A populated field is not proof: require actual SHA-256 digests, not placeholders.
+    for key in EVIDENCE:
+        if key.endswith("_sha256"):
+            value = record.get(key)
+            if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+                errors.append("invalid SHA-256 evidence "+key)
+    if record.get("evidence_mode") != "real-production":
+        errors.append("not real production evidence")
     if record.get("semantic_review_passed") is not True:
         errors.append("semantic review not verified")
     if record.get("next_handoff_verified") is not True:
