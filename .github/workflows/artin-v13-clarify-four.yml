@@ -54,8 +54,10 @@ jobs:
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
           import time,zipfile,urllib.request
+          mapping={}
           for a in selected:
               name=a['name']
+              mapping[str(a['id'])]=name
               target='evidence/'+str(a['id'])+'.zip'
               errors=[]
               for attempt in range(1,4):
@@ -77,6 +79,8 @@ jobs:
                       errors.append(str(exc))
                       if attempt==3:raise RuntimeError('Artifact download failed after 3 attempts '+name+': '+str(errors))
                       time.sleep(attempt*3)
+          import pathlib
+          pathlib.Path('evidence/artifact-names.json').write_text(json.dumps(mapping,ensure_ascii=False))
           print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
           PY
       - name: Reconstruct searchable original evidence with explicit ambiguity register
@@ -86,6 +90,7 @@ jobs:
           import zipfile,json,re,hashlib
           from pathlib import Path
           rows=[];uncertain=[];seen=set();counts={'asr':0,'ocr':0,'board':0}
+          artifact_names=json.loads(Path('evidence/artifact-names.json').read_text())
           for archive in sorted(Path('evidence').glob('*.zip')):
               with zipfile.ZipFile(archive) as z:
                   for filename in z.namelist():
@@ -97,7 +102,8 @@ jobs:
                       if key in seen:continue
                       seen.add(key)
                       fn=filename.lower()
-                      channel=('asr' if 'asr' in fn or 'transcript' in fn or '-asr-' in archive.name else 'board' if 'board' in fn else 'ocr')
+                      artifact_name=artifact_names.get(archive.stem,'')
+                      channel=('asr' if '-asr-' in artifact_name or 'transcript' in fn else 'board' if '-board-ocr-' in artifact_name or 'board' in fn else 'ocr')
                       counts[channel]+=1
                       rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text})
                       # Do not infer speaker or teaching rules from OCR/ASR alone.
