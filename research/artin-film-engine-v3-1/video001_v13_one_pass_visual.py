@@ -87,7 +87,10 @@ def run(video,out,expected_sha,*,duration=None,board_sample_s=30):
     if len(boards)==expected_boards-1 and actual%board_sample_s>0:
         start=(expected_boards-1)*board_sample_s
         segment=actual-start
-        target=min(actual-max(.05,min(1.0,segment/4)),start+board_sample_s/2)
+        global_chunk_start=300*math.floor((actual-1e-6)/300)
+        final_global_chunk_duration=actual-global_chunk_start
+        target=min(actual-max(.05,min(1.0,final_global_chunk_duration/4)),
+                   start+board_sample_s/2)
         dest=board/f'board_frame_{expected_boards:06d}.jpg'
         cmd_tail=['ffmpeg','-nostdin','-hide_banner','-loglevel','error',
                   '-ss',str(round(target,3)),'-i',str(video),
