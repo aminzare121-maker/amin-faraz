@@ -825,5 +825,21 @@ jobs:
                            or (status=='FAILED_NEEDS_REVIEW' and type(attempts) is int and attempts<3))
           print('ARTIN_SERIAL_NEXT_DISPATCH='+json.dumps({'status':status,'failure_attempts':attempts,'dispatch':should_dispatch}),flush=True)
           if should_dispatch:
-              subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--ref','tools-makhzan-hub'],check=True)
+              # A completed receipt may be the last authorized video: never dispatch an endless empty queue.
+              from pathlib import Path
+              import sys
+              sys.path.insert(0,'tools-makhzan/video_queue')
+              from magazines import enumerate_magazines
+              # checkout is from before this job's receipt commit; refresh only the queue files
+              # using the GitHub API rather than trusting a stale local checkout.
+              import tempfile
+              with tempfile.TemporaryDirectory() as tmp:
+                  subprocess.run(['git','fetch','--depth=1','origin','tools-makhzan-hub'],check=True)
+                  subprocess.run(['git','archive','FETCH_HEAD','tools-makhzan/video_queue/magazines'],stdout=open(tmp+'/queue.tar','wb'),check=True)
+                  subprocess.run(['tar','-xf',tmp+'/queue.tar','-C',tmp],check=True)
+                  pending=enumerate_magazines(Path(tmp)/'tools-makhzan/video_queue')
+              print('ARTIN_PENDING_AUTHORIZED_ITEMS='+str(len(pending)),flush=True)
+              if pending:
+                  subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--repo',repo,'--ref','tools-makhzan-hub'],check=True)
+
           PY
