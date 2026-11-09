@@ -180,6 +180,14 @@ def main():
                     if category in all_rows:
                         for row in iterate_text_rows(doc,src,category):
                             all_rows[category].append(row)
+        diagnostic={}
+        for item in summary["content_inventory"]:
+            cat=item.get("category","no_category")
+            if cat not in diagnostic:diagnostic[cat]={"count":0,"samples":[]}
+            diagnostic[cat]["count"]+=1
+            if len(diagnostic[cat]["samples"])<7:
+                diagnostic[cat]["samples"].append({"file":item.get("file",""),"schema":item.get("schema",{})})
+        print("ARTIN20_SCHEMA_DIAGNOSTIC="+json.dumps(diagnostic,ensure_ascii=False),flush=True)
         # Avoid claiming time alignment unless clocks are explicitly usable:
         # match only by numeric time, never infer that words describe the image.
         speech=all_rows["speech"];visual=all_rows["board"]+all_rows["student_chat"]
