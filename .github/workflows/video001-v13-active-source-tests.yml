@@ -1,0 +1,32 @@
+name: V13 active fast-source executable integration tests
+on:
+  push:
+    branches: [experiment/video001-v13-integration-20261108]
+    paths:
+      - 'research/artin-film-engine-v3-1/video001_v13_*.py'
+      - 'research/artin-film-engine-v3-1/test_video001_v13_source_once.py'
+      - '.github/workflows/video001-v13-active-source-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fast-source-synthetic-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies only for local synthetic source
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -y -qq install ffmpeg
+          python -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Verify executable V13 accelerated source while preserving V12 evidence
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python -m unittest -v test_video001_v13_source_once.py
+          python -m py_compile video001_v13_source_once.py video001_v13_remote_prep.py video001_v13_visual_bridge.py video001_v13_one_pass_visual.py
