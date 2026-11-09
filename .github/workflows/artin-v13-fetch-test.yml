@@ -1,0 +1,33 @@
+name: Artin V13 continuation fetch test
+on:
+  push:
+    branches: [test/artin-v13-fetch-acf0528]
+    paths: ['.github/workflows/artin-v13-fetch-test.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Execute both git commands from the repaired continuation step
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import ast
+          import pathlib
+          import subprocess
+          path = pathlib.Path('.github/workflows/tools-makhzan-video001-v13-reusable.yml')
+          tail = path.read_text().split('with tempfile.TemporaryDirectory() as tmp:')[-1]
+          commands = [ast.literal_eval(ast.parse(line.strip()).body[0].value.args[0]) for line in tail.strip().splitlines()[:2]]
+          assert commands[0] == ['gh', 'auth', 'setup-git', '--hostname', 'github.com']
+          assert commands[1] == ['git', 'fetch', '--depth=1', 'origin', 'tools-makhzan-hub']
+          for command in commands:
+              subprocess.run(command, check=True)
+          subprocess.run(['git', 'cat-file', '-e', 'FETCH_HEAD:tools-makhzan/video_queue/magazines'], check=True)
+          print('V13_CONTINUATION_FETCH_OK')
+          PY
