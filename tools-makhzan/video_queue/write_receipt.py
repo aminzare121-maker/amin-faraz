@@ -126,7 +126,7 @@ def main():
              for k in ("source","asr","ocr","verify")}
     if "VIDEO001_BOARD_RESULT" in env:
         results["board"]=env["VIDEO001_BOARD_RESULT"]
-        if results["board"]=="success" and not (Path(env.get("VIDEO001_EVIDENCE_DIR",""))/"board"/"board_ocr_safe_summary.json").is_file():
+        if results["verify"]=="success" and results["board"]=="success" and not (Path(env.get("VIDEO001_EVIDENCE_DIR",""))/"board"/"board_ocr_safe_summary.json").is_file():
             raise ValueError("MISSING_MANDATORY_V13_BOARD_OCR_PROOF")
     receipt=build_receipt(env["VIDEO001_QUEUE_ID"],env["VIDEO001_SOURCE_PAGE"],
                           env["GITHUB_RUN_ID"],results,
