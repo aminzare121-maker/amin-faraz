@@ -213,5 +213,35 @@ class ReceiptBindingTests(unittest.TestCase):
             self.assertTrue(any("Behrooz readback verification failed" in e for e in result["errors"]))
 
 
+    def test_zip_bomb_compression_ratio_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            # A real compressed payload, not a metadata mock: >1 MiB
+            # expanding from a few KiB, below the per-member size limit.
+            with zipfile.ZipFile(root / "behrooz.zip", "a", compression=zipfile.ZIP_DEFLATED) as z:
+                z.writestr("EXTRA_HIGHLY_COMPRESSED.bin", b"X" * (2 * 1024 * 1024))
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("excessive ZIP compression ratio" in e for e in result["errors"]), result["errors"])
+
+    def test_too_many_zip_members_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            original = module.zipfile.ZipFile
+            class ManyMembersView(original):
+                def infolist(self):
+                    members = super().infolist()
+                    return members + [members[-1]] * 10001
+            module.zipfile.ZipFile = ManyMembersView
+            try:
+                result = module.verify_run(record, root)
+                self.assertFalse(result["passed"])
+                self.assertTrue(any("too many ZIP members" in e for e in result["errors"]), result["errors"])
+            finally:
+                module.zipfile.ZipFile = original
+
+
 if __name__ == "__main__":
     unittest.main()
