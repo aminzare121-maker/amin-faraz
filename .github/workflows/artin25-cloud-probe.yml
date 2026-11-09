@@ -38,8 +38,8 @@ jobs:
           items=[{'sequence':1,'artifact_id':13690841735}]
           for sequence in range(2,26):
               found=[a for a in artifacts if a['name']==f'artin25-original-{sequence}-private' and not a['expired']]
-              if len(found)!=1:raise RuntimeError(f'ORIGINAL_ARTIFACT_MISSING_{sequence}')
-              items.append({'sequence':sequence,'artifact_id':found[0]['id']})
+              if len(found)>1:raise RuntimeError(f'ORIGINAL_ARTIFACT_AMBIGUOUS_{sequence}')
+              items.append({'sequence':sequence,'artifact_id':found[0]['id'] if found else 0})
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('matrix='+json.dumps({'include':items})+'\n')
           print('25_SOURCE_ARTIFACTS_INDEXED; semantic verification pending')
           PY
@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir -p evidence private
           python3 - <<'PY'
-          import base64,hashlib,json,os,pathlib,subprocess,zipfile,sys
+          import base64,hashlib,json,os,pathlib,subprocess,zipfile,sys,time
           sequence=int(os.environ['SEQUENCE'])
           artifact=int(os.environ['ARTIFACT_ID'])
           repo='aminzare121-maker/amin-faraz'
@@ -75,17 +75,37 @@ jobs:
               raw=base64.b64decode(json.loads(p.stdout)['content'])
               if hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()!='5dec2c82c4e2a895bd6f51744d8967b9911f342e':raise ValueError('REGISTRY_IDENTITY_FAILED')
               session=next(s for s in json.loads(raw)['registered_sessions'] if s['sequence']==sequence)
-              archive=pathlib.Path('private/source.zip')
-              with archive.open('wb') as f:p=subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{artifact}/zip'],stdout=f,stderr=subprocess.PIPE,timeout=300)
-              if p.returncode:raise RuntimeError('PRESERVED_SOURCE_FETCH_FAILED')
-              expected_name='original_0001.mp4' if sequence==1 else 'original.mp4'
-              with zipfile.ZipFile(archive) as z:
-                  members=[i for i in z.infolist() if not i.is_dir()]
-                  if len(members)!=1 or members[0].filename!=expected_name or members[0].file_size>600*1024**2:raise ValueError('SOURCE_ARCHIVE_CONTRACT_FAILED')
-                  h=hashlib.sha256();target=pathlib.Path('private/source.mp4')
-                  with z.open(members[0]) as src,target.open('wb') as dst:
-                      for block in iter(lambda:src.read(4*1024*1024),b''):h.update(block);dst.write(block)
-              digest=h.hexdigest()
+              target=pathlib.Path('private/source.mp4')
+              if artifact:
+                  archive=pathlib.Path('private/source.zip')
+                  with archive.open('wb') as f:p=subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{artifact}/zip'],stdout=f,stderr=subprocess.PIPE,timeout=300)
+                  if p.returncode:raise RuntimeError('PRESERVED_SOURCE_FETCH_FAILED')
+                  expected_name='original_0001.mp4' if sequence==1 else 'original.mp4'
+                  with zipfile.ZipFile(archive) as z:
+                      members=[i for i in z.infolist() if not i.is_dir()]
+                      if len(members)!=1 or members[0].filename!=expected_name or members[0].file_size>600*1024**2:raise ValueError('SOURCE_ARCHIVE_CONTRACT_FAILED')
+                      h=hashlib.sha256()
+                      with z.open(members[0]) as src,target.open('wb') as dst:
+                          for block in iter(lambda:src.read(4*1024*1024),b''):h.update(block);dst.write(block)
+                  digest=h.hexdigest()
+              else:
+                  p=subprocess.run(['gh','api',f'repos/{repo}/git/blobs/b9ea53da086fbb2323813e3b592aedd42feefb83'],capture_output=True,timeout=60)
+                  if p.returncode:raise RuntimeError('INGEST_MODULE_READ_FAILED')
+                  code=base64.b64decode(json.loads(p.stdout)['content'])
+                  if hashlib.sha1(b'blob '+str(len(code)).encode()+b'\0'+code).hexdigest()!='b9ea53da086fbb2323813e3b592aedd42feefb83':raise ValueError('INGEST_MODULE_IDENTITY_FAILED')
+                  module={'__name__':'pinned_artin_ingest'};exec(compile(code,'pinned_artin_ingest.py','exec'),module)
+                  partial=pathlib.Path('private/missing_original.download')
+                  for attempt in range(3):
+                      try:
+                          direct,_=module['get_direct_url'](session['source_page'])
+                          size,digest=module['download'](direct,partial)
+                          break
+                      except Exception:
+                          if attempt==2:raise
+                          time.sleep(2)
+                  if digest!=session['source_sha256']:raise ValueError('RECOVERED_SOURCE_SHA_FAILED')
+                  partial.replace(target)
+                  pathlib.Path('private/new_original.mp4').hardlink_to(target)
               if digest!=session['source_sha256']:raise ValueError('SOURCE_SHA_FAILED')
               p=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration:stream=codec_type,width,height,codec_name','-of','json',str(target)],capture_output=True,timeout=90)
               if p.returncode:raise RuntimeError('SOURCE_PROBE_FAILED')
@@ -106,3 +126,12 @@ jobs:
           path: evidence/
           if-no-files-found: error
           retention-days: 90
+      - name: Preserve only newly recovered missing original
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-recovered-original-${{ matrix.sequence }}-private
+          path: private/new_original.mp4
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 0
