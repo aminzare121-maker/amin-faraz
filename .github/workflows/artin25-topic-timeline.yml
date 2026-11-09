@@ -1,0 +1,29 @@
+name: ARTIN cross-session cumulative semantic source index
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_timeline/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trace identical concepts through later lessons without auto approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_timeline/review_timeline.py
+      - name: Archive cumulative teaching source and progression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-cross-session-topic-traces-NOT-CERTIFIED
+          path: artin25_timeline_output/**
+          retention-days: 60
+          if-no-files-found: warn
