@@ -35,6 +35,8 @@ def extract_candidates(document,channel,source):
             if t is None:continue
             lines=[line.get('ocr_candidate','') for line in frame.get('text_lines',[])
                    if isinstance(line,dict) and isinstance(line.get('ocr_candidate'),str)]
+            if not lines and isinstance(frame.get('machine_text_raw'),str):
+                lines=[frame['machine_text_raw']]
             if lines:
                 result.append({'channel':channel,'source':source,'start':t,'end':t,
                                'text':' | '.join(lines),'source_frame_id':frame.get('frame_id'),
