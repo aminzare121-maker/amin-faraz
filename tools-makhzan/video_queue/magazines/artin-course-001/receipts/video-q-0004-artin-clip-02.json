@@ -15,9 +15,16 @@
   },
   "status": "FAILED_NEEDS_REVIEW",
   "source_evidence": null,
-  "failure_attempts": 3,
+  "failure_attempts": 2,
   "verified_teacher_rules": 0,
   "trading_permitted": false,
   "retry_policy": "SOURCE_FETCH_4_BOUNDED_ATTEMPTS; WORKER_FAILURES_NEVER_SILENTLY_SKIP",
-  "note": "This receipt does not certify speech words, teaching meaning, speaker roles or executable trades."
+  "note": "This receipt does not certify speech words, teaching meaning, speaker roles or executable trades.",
+  "previous_failed_runs": [
+    42576036896,
+    42579086735,
+    42580188236
+  ],
+  "recovery_reason": "Explicit one-time technical retry after fixing missing session-003 course registration; prior three failures retained in previous_failed_runs. Never certify evidence without fresh successful verifier and registration.",
+  "recovery_attempt_authorized": true
 }
