@@ -1,0 +1,57 @@
+{
+  "schema": "artin_v13_25_session_replay_stage_receipt_v1",
+  "record_date": "2026-11-09",
+  "source_location": "Private Library /بهروز (private content not copied to public GitHub)",
+  "local_run": {
+    "real_sessions_indexed": 25,
+    "source_anchored_teaching_candidates": 10,
+    "lesson_numbers_with_candidates": [
+      4,
+      12,
+      13,
+      14,
+      15,
+      18,
+      19,
+      21,
+      24,
+      25
+    ],
+    "cross_session_links_inspected": 8,
+    "reversed_chronology_links": 1,
+    "defective_source_link": {
+      "source_case": "A14-TREND-TYPES",
+      "claimed_later_case": "A13-WEAK-TREND-REVERSE",
+      "issue": "14 cannot precede 13; do not treat as a verified later correction"
+    },
+    "four_local_replay_tests": "PASS"
+  },
+  "audio_source_check": {
+    "session": 25,
+    "part": "b001_s09_g000009",
+    "source_seconds_start": 2388,
+    "source_seconds_end": 2712,
+    "duration_seconds": 324,
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "sha256_expected": "54cbe238a86b9b30f9b6840c049652cd0d675960b34ea77a7fbb7c6c365c43af",
+    "sha256_computed": "54cbe238a86b9b30f9b6840c049652cd0d675960b34ea77a7fbb7c6c365c43af",
+    "sha256_match": true,
+    "auditory_transcription_verified": false
+  },
+  "github_unit_test_run": {
+    "run_id": 42679838263,
+    "executed": 18,
+    "passed": 17,
+    "skipped_private_archive": 1,
+    "conclusion": "success"
+  },
+  "evidence_scope": "Source hash and machine time alignment, not independent audio listening, not semantic rule certification.",
+  "hypothetical_example_policy": "Accept possible real-market conditions taught hypothetically; never claim a historical trade without source proof.",
+  "teacher_voice_independently_verified": false,
+  "teacher_meaning_25_sessions_verified": false,
+  "approved_strategy_rules": 0,
+  "motor_vs_teacher_real_decisions_compared": 0,
+  "mql5_semantic_motor_ready": false,
+  "real_trading_allowed": false
+}
