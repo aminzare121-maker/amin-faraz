@@ -119,6 +119,7 @@ def read_magazine(folder):
                 _need(not failed,'An earlier failed film blocked this serial magazine')
                 outstanding.append(item)
             failed=True
+            break  # Retry only this failed film; never inspect or schedule later entries.
         elif status=="MACHINE_TEXT_ARCHIVED_UNVERIFIED":
             # Explicit user-authorized stage boundary: technical texts may
             # proceed to NEXT film without pretending teacher meaning is proved.
