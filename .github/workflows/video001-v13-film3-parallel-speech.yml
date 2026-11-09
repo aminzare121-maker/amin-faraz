@@ -1,0 +1,128 @@
+name: V13 film 3 parallel original speech extraction
+on:
+  push:
+    branches: [experiment/video001-v13-integration-20261108]
+    paths: [.github/workflows/video001-v13-film3-parallel-speech.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 17
+      matrix:
+        worker: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download original archived source shard (no video redownload)
+        run: |
+          gh run download 42426863832 --repo "$GITHUB_REPOSITORY" \
+            --name "video001-artin-course-001-video-q-0003-artin-clip-01-original-audio-${{ matrix.worker }}" \
+            --dir "$RUNNER_TEMP/src"
+      - name: Install compatible speech engine
+        run: python -m pip install 'faster-whisper>=1.1,<2' 'av==18.1.0'
+      - name: Verify SHA and transcribe assigned source chunks
+        env:
+          WORKER: ${{ matrix.worker }}
+        run: |
+          python -u - <<'PY'
+          import os, pathlib, json, hashlib, math, time
+          from faster_whisper import WhisperModel
+          w=int(os.environ['WORKER'])
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          src=root/'src'
+          out=root/'out';out.mkdir(exist_ok=True)
+          manifest=json.loads((src/'fast_av_manifest.json').read_text())
+          video_sha='a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb'
+          parts=manifest.get('parts',[])
+          assert manifest.get('video_sha256')==video_sha
+          assert abs(float(manifest['duration_seconds'])-5157.198367)<.02
+          assert len(parts)==18 and [p['chunk'] for p in parts]==list(range(1,19))
+          assigned=[p for p in parts if (p['chunk']-1)%17==w]
+          assert len(assigned)==(2 if w==0 else 1)
+          originals=[]
+          for p in assigned:
+              f=(src/p['audio']).resolve()
+              assert f.is_relative_to(src.resolve()) and f.is_file()
+              h=hashlib.sha256()
+              with f.open('rb') as rd:
+                  for buf in iter(lambda:rd.read(1024*1024),b''): h.update(buf)
+              assert h.hexdigest()==p['audio_sha256']
+              assert math.isfinite(float(p['cut_start'])) and math.isfinite(float(p['cut_end']))
+              originals.append((p,f))
+          model=WhisperModel('large-v3-turbo',device='cpu',compute_type='int8',cpu_threads=4,num_workers=1)
+          for p,f in originals:
+              sections, info=model.transcribe(str(f),language='fa',vad_filter=True,beam_size=5,condition_on_previous_text=False)
+              rows=[]
+              for seg in sections:
+                  start=float(p['cut_start'])+float(seg.start)
+                  end=min(float(p['cut_end']),float(p['cut_start'])+float(seg.end))
+                  if end<=start: continue
+                  rows.append({'id':'asr_film3_p%02d_%04d'%(p['chunk'],len(rows)),
+                      'start_seconds':round(start,3),'end_seconds':round(end,3),
+                      'in_primary_five_minute_window':(start+end)/2>=float(p['core_start']) and (start+end)/2<float(p['core_end']),
+                      'text':seg.text.strip(),'speaker':'UNKNOWN','human_verified':False,
+                      'avg_logprob':round(float(seg.avg_logprob),4),'no_speech_prob':round(float(seg.no_speech_prob),4)})
+              doc={'schema':'video001_v13_film3_archived_asr_chunk_v1','global_chunk':p['chunk'],
+                  'source_video_sha256':video_sha,'source_audio_sha256':p['audio_sha256'],
+                  'model':'large-v3-turbo','human_verified':False,'speaker_verified':False,
+                  'teacher_rules_verified':False,'segments':rows}
+              (out/('part_%02d_asr.json'%p['chunk'])).write_text(json.dumps(doc,ensure_ascii=False),encoding='utf-8')
+              print('CHUNK_COMPLETE',p['chunk'],'SEGMENTS',len(rows),flush=True)
+          print('WORKER_COMPLETE',w,flush=True)
+          PY
+      - name: Save every verified worker independently
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: film3-parallel-worker-${{ matrix.worker }}
+          path: ${{ runner.temp }}/out/*.json
+          retention-days: 7
+          if-no-files-found: warn
+  merge-speech:
+    needs: [transcribe]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: film3-parallel-worker-*
+          path: parts
+          merge-multiple: true
+      - name: Strictly merge all 18 original-audio parts with timing
+        run: |
+          python - <<'PY'
+          import pathlib,json
+          root=pathlib.Path('parts')
+          files=sorted(root.glob('part_*_asr.json'))
+          assert len(files)==18,('INCOMPLETE_OR_DUPLICATE',len(files))
+          docs=[json.loads(p.read_text(encoding='utf-8')) for p in files]
+          assert [d['global_chunk'] for d in docs]==list(range(1,19))
+          assert len({d['source_video_sha256'] for d in docs})==1
+          assert docs[0]['source_video_sha256']=='a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb'
+          assert all(d['human_verified'] is False and d['teacher_rules_verified'] is False for d in docs)
+          segments=sorted((s for d in docs for s in d['segments'] if s.get('in_primary_five_minute_window') and s['text']),key=lambda s:s['start_seconds'])
+          dst=pathlib.Path('report');dst.mkdir(exist_ok=True)
+          (dst/'film3_speech_UNVERIFIED.json').write_text(json.dumps({'film_id':'video-q-0003-artin-clip-01','source_video_sha256':docs[0]['source_video_sha256'],'duration_seconds':5157.198367,'parts_complete':18,'semantic_teacher_accuracy_verified':False,'rules_verified':0,'segments':segments},ensure_ascii=False,indent=2),encoding='utf-8')
+          with (dst/'film3_speech_UNVERIFIED_FA.txt').open('w',encoding='utf-8') as f:
+              f.write('گفتار ماشینی فیلم سوم آرتین؛ معنای مدرس و گوینده هنوز تأیید نشده است.\n')
+              for s in segments:
+                  x=int(s['start_seconds']);f.write(f'[{x//3600:02}:{x//60%60:02}:{x%60:02}] {s["text"]}\n')
+          (dst/'safe_summary.json').write_text(json.dumps({'audio_chunks_verified':18,'segments_primary':len(segments),'teacher_rules_verified':0,'full_multimodal_video_complete':False,'status':'AUDIO_ASR_COMPLETE_NOT_SEMANTIC_REVIEW'},indent=2))
+          print('ASR_18_PARTS_MERGED',len(segments))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: film3-full-speech-unverified-18-parts
+          path: report/
+          retention-days: 7

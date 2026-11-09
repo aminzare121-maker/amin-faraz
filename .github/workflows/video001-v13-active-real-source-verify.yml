@@ -1,0 +1,74 @@
+name: V13 real film3 active source integration verification (no private artifacts)
+on:
+  push:
+    branches: [experiment/video001-v13-integration-20261108]
+    paths: ['.github/workflows/video001-v13-active-real-source-verify.yml']
+permissions:
+  contents: read
+jobs:
+  film3-source-integration-private:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install source-decode dependencies
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -y -qq install ffmpeg
+          python -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+      - name: Fetch registered film3 and run real active V13 source prep
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          mkdir -p "$RUNNER_TEMP/v13_registered"
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'v13_registered'/'request.json'
+          doc={'schema':'video001_fast_source_request_v1',
+               'source_page':'https://my.uupload.ir/p/dxvmY5Gv',
+               'expected_sha256':'a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb',
+               'audio_workers':17,'ocr_workers':16,'sample_seconds':30}
+          p.write_text(json.dumps(doc),encoding='utf8')
+          PY
+          python -u video001_v13_remote_prep.py \
+            --request "$RUNNER_TEMP/v13_registered/request.json" \
+            --out "$RUNNER_TEMP/v13_registered/run"
+      - name: Strict source coverage / build safe numeric receipt
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'v13_registered'/'run'/'prepared'
+          x=json.loads((root/'safe_source_prep_summary.json').read_text())
+          assert x['source_video_sha256']=='a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb'
+          assert x['original_duration_seconds']>5157 and x['original_duration_seconds']<5158
+          assert x['v13_one_pass_visual_enabled'] is True
+          assert x['v13_legacy_archives_overwritten'] is False
+          assert x['source_global_audio_chunks']==18
+          assert x['one_second_frames_scanned']==5157
+          assert x['original_board_frames']==172
+          assert x['source_integrity_verified'] is True
+          assert x['all_original_audio_parts_assigned_once'] is True
+          assert x['all_original_chat_images_assigned_once'] is True
+          # Original source, audio, screenshots, speech & student messages
+          # remain private to the ephemeral GitHub runner. Do not upload them.
+          safe={k:v for k,v in x.items() if k not in ('video_path_private',)}
+          safe['real_3min_full_text_complete']=False
+          safe['class_media_published']=False
+          safe['ocr_and_speech_transcribed_by_this_run']=False
+          dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'v13_numeric_only'
+          dest.mkdir(exist_ok=True)
+          (dest/'source_prep_evidence_safe.json').write_text(json.dumps(safe,indent=2))
+          print('V13_REAL_EXECUTABLE_SOURCE_VERIFIED='+json.dumps(safe),flush=True)
+          PY
+      - name: Keep numeric evidence only, never raw media
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-active-film3-source-numeric-proof
+          path: ${{ runner.temp }}/v13_numeric_only/source_prep_evidence_safe.json
+          retention-days: 7
+          if-no-files-found: error
