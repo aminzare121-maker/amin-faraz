@@ -531,6 +531,58 @@ jobs:
         with:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
           path: /tmp/v13_board_ocr_original
+      - name: Reverse trace every strict verifier input before merge
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+          roots={
+            'asr_manifest':Path('/tmp/video001_all_asr/manifest_redacted.json'),
+            'source_summary':Path('/tmp/video001_source_summary/safe_source_prep_summary.json'),
+            'chat_index':Path('/tmp/video001_source_chat_index/chat_selected_index.json'),
+            'board_index':Path('/tmp/video001_source_board/visual_timeline_v6.json'),
+            'board_ocr':Path('/tmp/v13_board_ocr_original/board_ocr_candidates_PRIVATE.json'),
+          }
+          report={'schema':'artin_v13_preflight_reverse_trace_v1','checks':[]}
+          for label,p in roots.items():
+              exists=p.is_file()
+              report['checks'].append({'input':label,'exists':exists,'bytes':p.stat().st_size if exists else None})
+          for label,p in roots.items():
+              if not p.is_file():continue
+              try:
+                  obj=json.loads(p.read_text(encoding='utf8'))
+                  report['checks'].append({'input':label,'json_valid':True,'source_sha':obj.get('source_video_sha256',obj.get('video_sha256'))})
+              except Exception as e:
+                  report['checks'].append({'input':label,'json_valid':False,'error':str(e)[:300]})
+          b=roots['board_index']
+          if b.is_file():
+              index=json.loads(b.read_text(encoding='utf8'))
+              root=b.parent
+              missing=[];bad=[]
+              for row in index.get('rows',[]):
+                  for channel in ('video_frame','board','chat'):
+                      obj=row.get(channel,{})
+                      p=(root/obj.get('path','')).resolve()
+                      if not p.is_relative_to(root.resolve()) or not p.is_file():
+                          missing.append({'frame':row.get('frame_id'),'channel':channel,'path':str(p)})
+                      elif hashlib.sha256(p.read_bytes()).hexdigest()!=obj.get('sha256'):
+                          bad.append({'frame':row.get('frame_id'),'channel':channel})
+              report['checks'].append({'input':'board_original_pixels','rows':len(index.get('rows',[])),'missing_count':len(missing),'hash_mismatch_count':len(bad),'missing_examples':missing[:8],'hash_examples':bad[:8]})
+          out=Path('/tmp/video001_reverse_trace');out.mkdir(parents=True,exist_ok=True)
+          (out/'preflight.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print('ARTIN_REVERSE_TRACE='+json.dumps(report,ensure_ascii=False),flush=True)
+          if any(c.get('exists') is False or c.get('json_valid') is False or c.get('missing_count',0)>0 or c.get('hash_mismatch_count',0)>0 for c in report['checks']):
+              raise RuntimeError('Preflight failed: inspect preserved reverse trace artifact')
+          PY
+      - name: Preserve reverse-trace diagnostic even when strict verification fails
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-reverse-trace
+          path: /tmp/video001_reverse_trace/preflight.json
+          retention-days: 15
+          if-no-files-found: warn
       - name: Normalize downloaded OCR artifact folders for unchanged strict verifier
         shell: bash
         run: |
