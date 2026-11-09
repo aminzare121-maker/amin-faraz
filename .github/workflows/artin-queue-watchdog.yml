@@ -1,0 +1,60 @@
+name: Artin queue independent watchdog
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
+  issues: write
+concurrency:
+  group: artin-independent-watchdog
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Checkout authoritative Artin queue branch
+        uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Validate queue, prevent duplicate runs, and resume only authorized work
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools-makhzan/video_queue')
+          from magazines import enumerate_magazines
+          repo=os.environ['GH_REPO']
+          branch='tools-makhzan-hub'
+          def gh(*args):
+              return subprocess.check_output(['gh',*args],text=True)
+          try:
+              pending=enumerate_magazines(Path('tools-makhzan/video_queue/magazines'))
+          except Exception as exc:
+              print('QUEUE_BLOCKED_FOR_MANUAL_REVIEW:',str(exc),flush=True)
+              raise
+          if not pending:
+              print('QUEUE_COMPLETE_OR_NO_AUTHORIZED_PENDING_FILMS',flush=True)
+              sys.exit(0)
+          runs=json.loads(gh('run','list','--repo',repo,'--workflow','artin-v13-autopilot.yml','--branch',branch,'--limit','30','--json','databaseId,status,createdAt'))
+          active=[r for r in runs if r['status'] in ('queued','in_progress','waiting','requested','pending')]
+          if active:
+              print('AUTOPILOT_ALREADY_ACTIVE',active[0]['databaseId'],flush=True)
+              sys.exit(0)
+          # A GitHub Actions run can be pending indexing; give a fresh dispatch time to appear.
+          from datetime import datetime,timezone
+          if runs:
+              newest=max(datetime.fromisoformat(r['createdAt'].replace('Z','+00:00')) for r in runs)
+              if (datetime.now(timezone.utc)-newest).total_seconds()<480:
+                  print('RECENT_RUN_COOLDOWN',newest.isoformat(),flush=True)
+                  sys.exit(0)
+          print('WATCHDOG_DISPATCH_AUTHORIZED_PENDING_QUEUE',pending[0]['queue_id'],flush=True)
+          subprocess.run(['gh','workflow','run','artin-v13-autopilot.yml','--repo',repo,'--ref',branch],check=True)
+          PY
