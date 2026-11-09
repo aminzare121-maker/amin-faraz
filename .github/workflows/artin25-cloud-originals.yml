@@ -1,0 +1,86 @@
+name: Artin25 cloud preserve and verify remaining originals
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-cloud-originals.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin25-originals-2-through-25
+  cancel-in-progress: false
+jobs:
+  preserve-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        sequence: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+    steps:
+      - name: Restore only source missing from cloud archive and verify identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SEQUENCE: ${{ matrix.sequence }}
+        shell: bash
+        run: |
+          mkdir -p evidence private
+          python3 - <<'PY'
+          import base64,hashlib,json,os,pathlib,subprocess,sys
+          sequence=int(os.environ['SEQUENCE'])
+          repo='aminzare121-maker/amin-faraz'
+          def blob(sha):
+              p=subprocess.run(['gh','api',f'repos/{repo}/git/blobs/{sha}'],capture_output=True,timeout=60)
+              if p.returncode:raise RuntimeError('PINNED_BLOB_FETCH_FAILED')
+              raw=base64.b64decode(json.loads(p.stdout)['content'])
+              if hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()!=sha:raise ValueError('GIT_BLOB_IDENTITY_MISMATCH')
+              return raw
+          result={'sequence':sequence,'models_executed':0,'semantic_verified':False}
+          try:
+              registry=json.loads(blob('5dec2c82c4e2a895bd6f51744d8967b9911f342e'))
+              session=next(s for s in registry['registered_sessions'] if s['sequence']==sequence)
+              code=blob('b9ea53da086fbb2323813e3b592aedd42feefb83')
+              module={'__name__':'pinned_artin_ingest'}
+              exec(compile(code,'pinned_artin_ingest.py','exec'),module)
+              direct=None
+              try:direct,_=module['get_direct_url'](session['source_page'])
+              except Exception:
+                  if sequence==2:direct='https://s31.uupload.ir/files/dashtianphysics/Fx/J3_7-11-1404.mp4'
+                  else:raise
+              partial=pathlib.Path('private/original.download')
+              size,digest=module['download'](direct,partial)
+              if digest!=session['source_sha256']:raise ValueError('SOURCE_SHA_MISMATCH')
+              original=pathlib.Path('private/original.mp4')
+              partial.replace(original)
+              result.update(source_sha256=digest,bytes=size,source_sha_verified=True)
+              p=subprocess.run(['ffprobe','-v','error','-show_entries','format=duration:stream=codec_type,width,height,codec_name','-of','json',str(original)],capture_output=True,timeout=120)
+              if p.returncode:raise ValueError('ORIGINAL_PROBE_FAILED')
+              probe=json.loads(p.stdout)
+              duration=float(probe['format']['duration'])
+              kinds={s.get('codec_type') for s in probe.get('streams',[])}
+              if not {'audio','video'}<=kinds:raise ValueError('AUDIO_OR_VIDEO_MISSING')
+              if abs(duration-session['duration_seconds'])>0.15:raise ValueError('SOURCE_DURATION_MISMATCH')
+              result.update(status='ORIGINAL_AV_IDENTITY_VERIFIED',duration_seconds=duration,audio_present=True,video_present=True,full_decode_verified=False)
+          except Exception as exc:result.update(status='SOURCE_EVIDENCE_BLOCKED',error_type=type(exc).__name__)
+          pathlib.Path('evidence/receipt.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+          print(json.dumps(result))
+          if result.get('status')!='ORIGINAL_AV_IDENTITY_VERIFIED':sys.exit(1)
+          PY
+      - name: Preserve private source with original hash
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-original-${{ matrix.sequence }}-private
+          path: private/original.mp4
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 0
+      - name: Preserve actual result including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-source-receipt-${{ matrix.sequence }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 90
