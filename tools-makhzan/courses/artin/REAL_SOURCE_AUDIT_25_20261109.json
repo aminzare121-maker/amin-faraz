@@ -1,0 +1,169 @@
+{
+  "schema": "artin_real_archives_25_session_source_integrity_v1",
+  "audit_date": "2026-11-09",
+  "method": "Local Python zipfile + JSONL field checks + SHA256 comparison of six actual PNG image bytes; not original audio/video semantic review",
+  "inputs": [
+    {
+      "file": "بهروز.zip",
+      "sha256": "6029e6671f437faf54cb6f431d6c8831ee49054eb42f70bf8b05ec8d7edabf73",
+      "source": "Library /بهروز"
+    },
+    {
+      "file": "Artin_22_Sessions_Speech_OCR_Review_20261109.zip",
+      "sha256": "71f2c737bc6c3958759a7f46dc712dcf0678faf25b1648cce542e8010f5612ba",
+      "source": "Library /بهروز"
+    },
+    {
+      "file": "Artin_Six_Source_Semantic_Cases_20261109.zip",
+      "sha256": "e862fb91f623666f9e4b4632509dc12bea6cab0dc7f2bc3c38814c8d01b5807c",
+      "source": "Library /بهروز"
+    },
+    {
+      "file": "Artin_66_Original_Frames_SourceLinked_20261109.zip",
+      "sha256": "280b6d4b7eed60580cab12b9c7113cdcb26790f5244bec6da19d062a8e176c7d",
+      "source": "Library /بهروز"
+    }
+  ],
+  "source_integrity_pass": true,
+  "source_sessions_inspected": 25,
+  "per_session_speech_rows": [
+    [
+      1,
+      2172
+    ],
+    [
+      2,
+      2163
+    ],
+    [
+      3,
+      2355
+    ],
+    [
+      4,
+      136
+    ],
+    [
+      5,
+      143
+    ],
+    [
+      6,
+      84
+    ],
+    [
+      7,
+      63
+    ],
+    [
+      8,
+      63
+    ],
+    [
+      9,
+      57
+    ],
+    [
+      10,
+      93
+    ],
+    [
+      11,
+      14
+    ],
+    [
+      12,
+      307
+    ],
+    [
+      13,
+      244
+    ],
+    [
+      14,
+      138
+    ],
+    [
+      15,
+      224
+    ],
+    [
+      16,
+      147
+    ],
+    [
+      17,
+      241
+    ],
+    [
+      18,
+      213
+    ],
+    [
+      19,
+      283
+    ],
+    [
+      20,
+      313
+    ],
+    [
+      21,
+      138
+    ],
+    [
+      22,
+      123
+    ],
+    [
+      23,
+      108
+    ],
+    [
+      24,
+      227
+    ],
+    [
+      25,
+      186
+    ]
+  ],
+  "speech_rows_total": 10235,
+  "image_cases": [
+    [
+      "A04-QUOTE-MECHANICS",
+      4
+    ],
+    [
+      "A13-WEAK-TREND-REVERSE",
+      13
+    ],
+    [
+      "A15-BREAKOUT-VS-PULLBACK",
+      15
+    ],
+    [
+      "A19-PIERCING-EXAMPLE",
+      19
+    ],
+    [
+      "A21-STOP-BEHIND-LIQUIDITY",
+      21
+    ],
+    [
+      "A25-TARGET2-RISKFREE",
+      25
+    ]
+  ],
+  "image_cases_matching_original_png_sha256": 6,
+  "image_cases_inspected": 6,
+  "errors": [],
+  "teacher_speaker_verified": false,
+  "teacher_semantics_verified": false,
+  "cross_session_instruction_precedence_verified": false,
+  "complete_teacher_entry_exit_predicates_verified": 0,
+  "verified_executable_trade_rules": 0,
+  "allow_mt5_trade": false,
+  "scope_limit": "Machine ASR/OCR text and selected original PNG hashes only; does not compare actual motor decisions to fully authenticated teacher examples; full original audio/video semantic review not performed.",
+  "reproduction_note": "Python script artin_real_source_gate.py and complete JSON report were produced in the current execution environment; GitHub JSON is an audit summary; zip archives remain in private Library, not committed to public repo."
+}
