@@ -42,7 +42,9 @@ def scan_chat_and_board_once(video, output, source_sha256, duration_seconds):
         val = entry.get("change_score")
         if type(val) not in (int, float) or not math.isfinite(val) or val < 0:
             raise ValueError("V13_INVALID_CHAT_CHANGE_SCORE")
-        is_changed = val >= .02
+        is_changed = entry.get("change_above_threshold")
+        if type(is_changed) is not bool:
+            raise ValueError("V13_MISSING_EXACT_CHANGE_DECISION")
         periodic = i - last_selected >= 30
         selected = i == 0 or is_changed or periodic
         if entry.get("source_frame_selected") is not selected:
