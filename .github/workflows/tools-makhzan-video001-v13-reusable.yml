@@ -1,4 +1,4 @@
-# Experimental V13 queue adaptation: SAME V12 source/ASR/OCR logic except fixed 18-chunk worker guard.
+# V13 queue adaptation: active verified one-pass source preparation, unchanged independent ASR/OCR and strict integrity; no raw archive overwrite.
 # Optional 4-model research adapters are NOT executed by this workflow; no semantic accuracy claim.
 name: VIDEO-001 V13 candidate reusable 17 ASR + 16 OCR queue worker
 on:
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout pinned experimental V13 source engine; fixes 18 original chunks with 17 workers
         uses: actions/checkout@v4
         with:
-          ref: 45a68e3d5b8e21c672f7e5450307b205c5c70903
+          ref: 5e61788b10abc115638ffe04cab6987ef0803b42
           path: artin-code
           persist-credentials: false
       - name: Validate original user-submitted queue item and create exact source request
@@ -81,7 +81,7 @@ jobs:
       - name: Download original user MP4 ONCE and preserve ALL original audio + image evidence
         working-directory: artin-code/research/artin-film-engine-v3-1
         run: |
-          python3 -u video001_fast_remote_prep_v1.py --request /tmp/makhzan_fast_user_source.json --out /tmp/video001_fast
+          python3 -u video001_v13_remote_prep.py --request /tmp/makhzan_fast_user_source.json --out /tmp/video001_fast
       - name: Determine actual source chunks and screenshot worker sets
         id: prep_meta
         run: |
@@ -600,5 +600,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run tools-makhzan-video001-v13-serial-queue.yml --ref tools-makhzan-hub
+          gh workflow run artin-v13-autopilot.yml --ref main
           echo 'VIDEO001_V13_NEXT_QUEUE_RUN_DISPATCHED_AFTER_FULL_SOURCE_PROOF=True'
