@@ -170,5 +170,48 @@ class ReceiptBindingTests(unittest.TestCase):
             self.assertTrue(any("invalid Behrooz index video list" in e for e in result["errors"]))
 
 
+    def test_mixed_type_index_entries_fail_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "w") as z:
+                z.writestr("BEHROOZ_INDEX.json", json.dumps({"videos": [None, 42, "bad"]}))
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("invalid Behrooz index video list" in e for e in result["errors"]))
+
+    def test_null_index_document_fail_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "w") as z:
+                z.writestr("BEHROOZ_INDEX.json", "null")
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("invalid Behrooz index document" in e for e in result["errors"]))
+
+    def test_corrupted_zip_payload_fails_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            path = root / "behrooz.zip"
+            with zipfile.ZipFile(path) as z:
+                member = z.getinfo("RAW/video21.bin")
+                offset = member.header_offset
+            payload = bytearray(path.read_bytes())
+            # Flip an archive payload byte while preserving the ZIP directory.
+            with zipfile.ZipFile(path) as z:
+                with path.open("rb") as source:
+                    source.seek(offset + 26)
+                    name_len = int.from_bytes(source.read(2), "little")
+                    extra_len = int.from_bytes(source.read(2), "little")
+                pos = offset + 30 + name_len + extra_len
+            payload[pos] ^= 1
+            path.write_bytes(payload)
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("Behrooz readback verification failed" in e for e in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
