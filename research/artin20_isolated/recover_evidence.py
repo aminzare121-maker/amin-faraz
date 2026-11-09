@@ -177,9 +177,55 @@ def main():
                                     else ("student_chat" if "/student_chat_ocr_raw/" in "/"+src or "/ocr" in src else "misc")))
                     summary["content_inventory"].append({"file":src,"size":len(content),"sha256":sha(content),
                                                          "category":category,"schema":described(doc)})
-                    if category in all_rows:
-                        for row in iterate_text_rows(doc,src,category):
-                            all_rows[category].append(row)
+                    # Use the canonical merged transcript once. Individual ASR shard
+                    # rows include overlap and must not be double-counted.
+                    if ("/verified_export_and_review_text_only/ASR_REVIEW_UNVERIFIED.json" in src
+                        and isinstance(doc,dict)):
+                        for rec in doc.get("speech_lines",[]):
+                            if not isinstance(rec,dict):continue
+                            t=seconds(rec.get("start"));e=seconds(rec.get("end"))
+                            all_rows["speech"].append({
+                                "source_file":src,"source_id":rec.get("id"),
+                                "source_audio_sha256":rec.get("source_audio_sha256"),
+                                "category":"speech","text":rec.get("text",""),
+                                "time_start":t,"time_end":e,
+                                "timestamp_basis":"SOURCE_MERGED_REVIEW_CLOCK",
+                                "speaker_role":rec.get("speaker","UNKNOWN"),
+                                "speaker_verified":rec.get("speaker_verified",False),
+                                "semantic_verification":False})
+                    # Original student-chat machine OCR: each result is one
+                    # time-indexed frame, even if its OCR text is empty.
+                    elif ("/student_chat_ocr_raw/worker-" in src
+                          and src.endswith("/full_chat_ocr_candidates_PRIVATE.json")
+                          and isinstance(doc,dict)):
+                        for rec in doc.get("results",[]):
+                            if not isinstance(rec,dict):continue
+                            all_rows["student_chat"].append({
+                                "source_file":src,"source_id":rec.get("frame_id"),
+                                "source_frame_sha256":rec.get("source_frame_sha256"),
+                                "category":"student_chat",
+                                "text":rec.get("text_lines",[]),
+                                "possible_typed_questions":rec.get("possible_typed_questions",[]),
+                                "time_start":seconds(rec.get("time_original_video_seconds")),
+                                "time_end":None,
+                                "timestamp_basis":"ORIGINAL_VIDEO_SECONDS",
+                                "speaker_role":"UNKNOWN",
+                                "teacher_answer_verified":False,"semantic_verification":False})
+                    # Original teacher-board machine OCR; preserve raw OCR field.
+                    elif ("/board_ocr_raw/board_ocr_candidates_PRIVATE.json" in src
+                          and isinstance(doc,dict)):
+                        for rec in doc.get("results",[]):
+                            if not isinstance(rec,dict):continue
+                            all_rows["board"].append({
+                                "source_file":src,"source_id":rec.get("frame_id"),
+                                "source_frame_sha256":rec.get("source_frame_sha256"),
+                                "category":"board",
+                                "text":rec.get("machine_text_raw",""),
+                                "time_start":seconds(rec.get("time_original_video_seconds")),
+                                "time_end":None,
+                                "timestamp_basis":"ORIGINAL_VIDEO_SECONDS",
+                                "speaker_role":"UNKNOWN",
+                                "teacher_rule_verified":False,"semantic_verification":False})
         diagnostic={}
         for item in summary["content_inventory"]:
             cat=item.get("category","no_category")
@@ -200,20 +246,37 @@ def main():
             "".join(json.dumps(r,ensure_ascii=False)+"\n" for r in speech),encoding="utf8")
         OUT.joinpath("visual_source_rows_UNVERIFIED.jsonl").write_text(
             "".join(json.dumps(r,ensure_ascii=False)+"\n" for r in visual),encoding="utf8")
+        summary["exact_interval_matches"]=0
+        summary["nearby_only_matches"]=0
         with OUT.joinpath("temporal_candidates_NOT_SEMANTIC.jsonl").open("w",encoding="utf8") as o:
             for i,r in enumerate(speech):
                 hits=[]
-                t=r["time_start"]
+                t=r["time_start"];end=r["time_end"]
                 if t is not None:
-                    pos=bisect.bisect_left(timestamps,t)
-                    for j in range(max(pos-3,0),min(pos+4,len(timestamps))):
-                        delta=abs(timed_visual[j][0]-t)
-                        if delta<=6:
-                            hits.append({"visual_index":timed_visual[j][1],"delta_seconds":round(delta,3)})
-                hits=sorted(hits,key=lambda h:h["delta_seconds"])[:3]
-                if hits:summary["temporal_matches"]+=1
+                    if end is not None and end>=t:
+                        a=bisect.bisect_left(timestamps,t)
+                        b=bisect.bisect_right(timestamps,end)
+                        for j in range(a,min(b,a+10)):
+                            hits.append({"visual_index":timed_visual[j][1],
+                                         "delta_seconds":0.0,
+                                         "relation":"WITHIN_SPEECH_INTERVAL"})
+                    if not hits:
+                        pos=bisect.bisect_left(timestamps,t)
+                        for j in range(max(pos-4,0),min(pos+5,len(timestamps))):
+                            delta=abs(timed_visual[j][0]-t)
+                            if delta<=6:
+                                hits.append({"visual_index":timed_visual[j][1],
+                                             "delta_seconds":round(delta,3),
+                                             "relation":"NEAR_START_WITHIN_6_SECONDS"})
+                hits=sorted(hits,key=lambda h:h["delta_seconds"])[:5]
+                if hits:
+                    summary["temporal_matches"]+=1
+                    if hits[0]["relation"]=="WITHIN_SPEECH_INTERVAL":
+                        summary["exact_interval_matches"]+=1
+                    else:summary["nearby_only_matches"]+=1
                 else:summary["unmatched_speech"]+=1
-                o.write(json.dumps({"speech_index":i,"speech_time":t,"visual_candidates":hits,
+                o.write(json.dumps({"speech_index":i,"speech_time_start":t,
+                  "speech_time_end":end,"visual_candidates":hits,
                   "time_only_not_semantic":True,"speaker_role_unverified":True},ensure_ascii=False)+"\n")
         summary["status"]=("SOURCE_EXTRACTED_AND_TEMPORAL_CANDIDATES_CREATED"
                             if speech and visual else "SOURCE_ARCHIVED_BUT_REQUIRED_ROWS_UNAVAILABLE")
@@ -228,7 +291,7 @@ def main():
         OUT.joinpath("summary.json").write_text(json.dumps({k:v for k,v in summary.items() if k!="content_inventory"},ensure_ascii=False,indent=2),encoding="utf8")
         print("ARTIN20_SOURCE_EXTRACTION_REPORT="+json.dumps({
           k:v for k,v in summary.items() if k in ("status","source_archives","speech_records",
-          "chat_ocr_records","board_ocr_records","image_files","temporal_matches","unmatched_speech","blocker")
+          "chat_ocr_records","board_ocr_records","image_files","temporal_matches","exact_interval_matches","nearby_only_matches","unmatched_speech","blocker")
         },ensure_ascii=False),flush=True)
     if not speech or not visual:sys.exit(2)
 
