@@ -11,7 +11,7 @@ def fixture(seconds=179):
     start = datetime(2026, 11, 9, tzinfo=timezone.utc)
     d = {key: (start + timedelta(seconds=seconds*i/(len(gate.REQUIRED)-1))).isoformat()
          for i, key in enumerate(gate.REQUIRED)}
-    d.update({key: ("a" * 64 if key.endswith("_sha256") else "video-q-0019-artin-test") for key in gate.EVIDENCE})
+    d.update({key: (format(i+1, "064x") if key.endswith("_sha256") else "video-q-0019-artin-test") for i, key in enumerate(gate.EVIDENCE)})
     d["evidence_mode"] = "real-production"
     d.update(semantic_review_passed=True, next_handoff_verified=True, source_integrity_verified=True)
     return d
@@ -19,7 +19,7 @@ def fixture(seconds=179):
 class AcceptanceGateTests(unittest.TestCase):
     def test_synthetic_under180_is_accepted_by_gate_only(self):
         self.assertTrue(gate.check(fixture())["passed"])
-    def test_exactly_180_misses_strict_target(self):
+    def test_reused_digest_across_artifacts_fails(self):\n        d=fixture(); d["receipt_sha256"]=d["source_sha256"]\n        result=gate.check(d)\n        self.assertFalse(result["passed"])\n        self.assertIn("duplicate SHA-256 across distinct evidence artifacts", result["errors"])\n    def test_exactly_180_misses_strict_target(self):
         self.assertFalse(gate.check(fixture(180))["passed"])
         self.assertFalse(gate.check(fixture(180.001))["passed"])
     def test_receipt_without_semantic_review_fails(self):
