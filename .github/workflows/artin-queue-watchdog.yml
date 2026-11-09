@@ -56,7 +56,7 @@ jobs:
               sys.exit(0)
           # A GitHub Actions run can be pending indexing; give a fresh dispatch time to appear.
           from datetime import datetime,timezone
-          if runs:
+          if runs and os.environ.get('GITHUB_EVENT_NAME')!='workflow_run':
               newest=max(datetime.fromisoformat(r['createdAt'].replace('Z','+00:00')) for r in runs)
               if (datetime.now(timezone.utc)-newest).total_seconds()<480:
                   print('RECENT_RUN_COOLDOWN',newest.isoformat(),flush=True)
