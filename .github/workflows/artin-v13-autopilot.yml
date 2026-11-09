@@ -9,8 +9,6 @@ on:
       - '.github/workflows/artin-v13-autopilot.yml'
       - 'tools-makhzan/video_queue/**'
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
 permissions:
   contents: write
   actions: write
