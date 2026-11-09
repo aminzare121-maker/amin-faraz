@@ -32,6 +32,15 @@ jobs:
           assert seconds('01:02:03.5')==3723.5
           out=reconcile({'candidates':[{'channel':'asr','start':'00:00:12','text':'test'},{'channel':'board','start':14,'text':'board'}]})
           assert out['speech_count']==1 and out['matched_speech_count']==1 and out['semantic_accuracy_verified'] is False
+          from reconcile_timed_evidence import extract_candidates
+          real_asr_schema={'schema':'artin_asr_shard_v5','segments':[{'id':'asr_p001_00000','start':0.0,'end':2.04,'text':'من یه لیستی دارم','speaker':'UNKNOWN'}]}
+          real_ocr_schema={'schema':'artin_full_original_chat_ocr_v7','results':[{'frame_id':'b001_s01_g000001_t0000000000','time_original_video_seconds':0.0,'source_frame_sha256':'a'*64,'text_lines':[{'ocr_candidate':'گپ عمومی'}]}]}
+          speech=extract_candidates(real_asr_schema,'asr','original_asr')
+          image=extract_candidates(real_ocr_schema,'ocr','original_ocr')
+          assert len(speech)==1 and len(image)==1 and speech[0]['text']=='من یه لیستی دارم'
+          aligned=reconcile({'candidates':speech+image})
+          assert aligned['matched_speech_count']==1
+          print('REAL_ARTIFACT_SCHEMA_CONTRACT_PASS')
           PY
       - name: Download actual video four machine transcripts and chat/board OCR
         shell: bash
