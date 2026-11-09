@@ -28,6 +28,39 @@ jobs:
         with:
           ref: tools-makhzan-hub
           persist-credentials: false
+      - name: Check queue code syntax and failed-receipt retry logic before any paid media processing
+        run: |
+          python3 -m py_compile tools-makhzan/video_queue/magazines.py tools-makhzan/video_queue/write_receipt.py
+          python3 - <<'PY'
+          import importlib.util, tempfile, json
+          from pathlib import Path
+          p=Path('tools-makhzan/video_queue/magazines.py')
+          spec=importlib.util.spec_from_file_location('magazines',p)
+          m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d)/'artin-course-001'
+              (root/'entries').mkdir(parents=True)
+              (root/'receipts').mkdir()
+              (root/'MANIFEST.json').write_text(json.dumps(dict(schema=m.SCHEMA,magazine_id='artin-course-001',title_fa='Artin',submitted_by_user=True,session_mode='serial',start_sequence=3,target_course_registry=m.ARTIN_COURSE)))
+              for n in (3,4):
+                  q=f'video-q-{n:04d}-artin-test'
+                  u=f'https://my.uupload.ir/p/test{n}'
+                  (root/'entries'/f'{q}.json').write_text(json.dumps(dict(schema=m.ENTRY_SCHEMA,magazine_id='artin-course-001',queue_id=q,sequence=n,submitted_by_user=True,status='PENDING_USER_AUTHORIZED',source_page=u,video_name_fa=f'Film {n}')))
+              q='video-q-0003-artin-test'
+              receipt=root/'receipts'/f'{q}.json'
+              for attempts in (1,2):
+                  receipt.write_text(json.dumps(dict(magazine_id='artin-course-001',queue_id=q,source_page='https://my.uupload.ir/p/test3',status=m.RECEIPT_FAILED,failure_attempts=attempts)))
+                  got=m.read_magazine(root)
+                  assert len(got)==1 and got[0]['queue_id']==q,got
+              receipt.write_text(json.dumps(dict(magazine_id='artin-course-001',queue_id=q,source_page='https://my.uupload.ir/p/test3',status=m.RECEIPT_FAILED,failure_attempts=3)))
+              try: m.read_magazine(root)
+              except ValueError as e: assert 'three times' in str(e),e
+              else: raise AssertionError('Third failure did not stop')
+              receipt.write_text(json.dumps(dict(magazine_id='artin-course-001',queue_id=q,source_page='https://my.uupload.ir/p/test3',status=m.RECEIPT_OK,source_evidence={'verified':True})))
+              got=m.read_magazine(root)
+              assert len(got)==1 and got[0]['queue_id']=='video-q-0004-artin-test',got
+          print('ARTIN_SERIAL_QUEUE_RETRY_TESTS_PASSED')
+          PY
       - name: Validate latest magazine receipts and select one, never skip a failure
         id: queue
         run: |
