@@ -3,28 +3,32 @@
   "magazine_id": "artin-course-001",
   "queue_id": "video-q-0004-artin-clip-02",
   "source_page": "https://my.uupload.ir/p/mbAZoaan",
-  "github_run_id": 42580188236,
-  "github_run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42580188236",
+  "github_run_id": 42581509064,
+  "github_run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42581509064",
   "job_results": {
     "source": "success",
     "asr": "success",
     "ocr": "success",
     "verify": "success",
     "board": "success",
-    "register": "missing"
+    "register": "success"
   },
-  "status": "FAILED_NEEDS_REVIEW",
-  "source_evidence": null,
-  "failure_attempts": 2,
+  "status": "COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED",
+  "source_evidence": {
+    "original_video_sha256": "322755df7d9bb32811f99529df5f71bb8081ef333c3566e8ecc3111c208173bb",
+    "board_ocr_all_sampled_frames_machine_extracted": true,
+    "original_duration_seconds": 4348.5768,
+    "audio_parts": 15,
+    "one_second_frames_scanned": 4349,
+    "ocr_source_images": 357,
+    "board_frames": 145,
+    "provisional_qa_groups": 42,
+    "teacher_meaning_verified": false,
+    "original_source_evidence_loss": 0
+  },
+  "failure_attempts": 0,
   "verified_teacher_rules": 0,
   "trading_permitted": false,
   "retry_policy": "SOURCE_FETCH_4_BOUNDED_ATTEMPTS; WORKER_FAILURES_NEVER_SILENTLY_SKIP",
-  "note": "This receipt does not certify speech words, teaching meaning, speaker roles or executable trades.",
-  "previous_failed_runs": [
-    42576036896,
-    42579086735,
-    42580188236
-  ],
-  "recovery_reason": "Explicit one-time technical retry after fixing missing session-003 course registration; prior three failures retained in previous_failed_runs. Never certify evidence without fresh successful verifier and registration.",
-  "recovery_attempt_authorized": true
+  "note": "This receipt does not certify speech words, teaching meaning, speaker roles or executable trades."
 }
