@@ -46,23 +46,24 @@ def run(video,out,expected_sha,*,duration=None,board_sample_s=30):
         raise ValueError('VIDEO_SOURCE_DURATION_MISMATCH')
     out.mkdir(parents=True,exist_ok=True);board=out/'board_uninterpreted'
     board.mkdir(exist_ok=True)
-    filt=("[0:v:0]fps=1,split=2[c][b];"
-          "[c]crop=iw*0.19:ih*0.84:iw*0.71:ih*0.11,"
+    filt=("[0:v:0]split=2[c][b];"
+          "[c]fps=1,crop=iw*0.19:ih*0.84:iw*0.71:ih*0.11,"
           "scale=64:160:flags=fast_bilinear,format=gray[chat];"
-          "[b]select=eq(mod(n+15\\,30)\\,0)[sample]")
+          "[b]select=if(isnan(prev_selected_t)\\,gte(t\\,15)\\,gte(t-prev_selected_t\\,30))[sample]")
     cmd=['ffmpeg','-nostdin','-hide_banner','-loglevel','error','-i',str(video),
          '-filter_complex',filt,
          '-map','[chat]','-f','rawvideo','-pix_fmt','gray','pipe:1',
          '-map','[sample]','-fps_mode','vfr','-q:v','3',str(board/'board_frame_%06d.jpg')]
     started=time.monotonic()
     pipe=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    rows=[];last=None;selected_at=-30;count=0
+    rows=[];last=None;selected_at=-30;count=0;chat_digest=hashlib.sha256()
     try:
         while True:
             buf=pipe.stdout.read(FRAME_SIZE)
             if not buf:break
             if len(buf)!=FRAME_SIZE:
                 raise ValueError('TRUNCATED_CHAT_GRAY_SOURCE')
+            chat_digest.update(buf)
             if last is None:metric=1.0
             else: metric=sum(abs(a-b) for a,b in zip(last,buf))/(255*FRAME_SIZE)
             selected=(last is None or metric>=.02 or count-selected_at>=30)
@@ -106,6 +107,8 @@ def run(video,out,expected_sha,*,duration=None,board_sample_s=30):
     result={'schema':'video001_v13_one_pass_visual_candidate_v1',
         'video_sha256':expected_sha,'duration_seconds':actual,
         'chat_frames_one_second':count,'highres_board_frames':len(boards),
+        'original_chat_gray_stream_sha256':chat_digest.hexdigest(),
+        'board_frames_sha256':[sha(frame) for frame in boards],
         'board_timestamps_nominal_seconds':nominal,
         'tail_source_seeks':extra_seek,
         'change_selected_chat_frames':sum(x['source_frame_selected'] for x in rows),
