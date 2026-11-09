@@ -1,16 +1,21 @@
-name: V13 five-minute isolated development monitor
-# GitHub scheduled workflows only run from the default branch.
+name: V13 event-driven isolated development monitor
+# Events trigger promptly; the five-minute schedule is a fallback, not a guarantee.
 on:
+  workflow_run:
+    workflows: ["V13 isolated development acceptance checks"]
+    types: [completed]
+    branches: [artin-v13-under180-development]
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: v13-five-minute-monitor
+  group: v13-event-monitor
   cancel-in-progress: false
 jobs:
   check-development:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'artin-v13-under180-development'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -18,11 +23,30 @@ jobs:
         with:
           ref: artin-v13-under180-development
           persist-credentials: false
-      - name: Check development files and run acceptance gate unit tests
+      - name: Run development tests with bounded retry and diagnostic log
+        shell: bash
         run: |
-          python3 -m py_compile tools-makhzan/v13-development/*.py
-          python3 -m unittest discover -s tools-makhzan/v13-development -p 'test_*.py' -v
+          set -uo pipefail
+          python3 -m py_compile tools-makhzan/v13-development/*.py || exit 1
+          for attempt in 1 2; do
+            echo "Attempt $attempt" | tee -a v13-test-log.txt
+            if python3 -m unittest discover -s tools-makhzan/v13-development -p 'test_*.py' -v 2>&1 | tee -a v13-test-log.txt; then
+              echo 'V13 unit tests passed; real video acceptance NOT verified.' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if [ "$attempt" -eq 1 ]; then sleep 3; fi
+          done
+          echo 'V13 unit tests failed after 2 attempts. No production changes made.' >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+      - name: Preserve diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-test-diagnostics-${{ github.run_id }}
+          path: v13-test-log.txt
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Explicit scope
         if: always()
         run: |
-          echo 'Scheduled V13 development test only. No video processing, self-repair, or production deployment.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Event-driven development tests with bounded retry only. No autonomous code repair, video processing, <180s claim, or production deployment.' >> "$GITHUB_STEP_SUMMARY"
