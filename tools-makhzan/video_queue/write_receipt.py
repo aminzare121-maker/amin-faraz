@@ -151,6 +151,8 @@ def main():
         results["board"]=env["VIDEO001_BOARD_RESULT"]
         if results["verify"]=="success" and results["board"]=="success" and not (Path(env.get("VIDEO001_EVIDENCE_DIR",""))/"board"/"board_ocr_safe_summary.json").is_file():
             raise ValueError("MISSING_MANDATORY_V13_BOARD_OCR_PROOF")
+    if env["VIDEO001_MAGAZINE_ID"]=="artin-course-001":
+        results["register"]=env.get("VIDEO001_REGISTER_RESULT","missing")
     receipt=build_receipt(env["VIDEO001_QUEUE_ID"],env["VIDEO001_SOURCE_PAGE"],
                           env["GITHUB_RUN_ID"],results,
                           env.get("VIDEO001_EVIDENCE_DIR"),
