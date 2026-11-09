@@ -1,0 +1,29 @@
+name: Artin 66 source visual frames verification
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_frames/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select original images near all 66 evidence windows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_frames/match_frame_sources.py
+      - name: Preserve source copies and original SHA256s
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-66-original-frame-window-evidence
+          path: artin25_frames_output/**
+          if-no-files-found: warn
+          retention-days: 60
