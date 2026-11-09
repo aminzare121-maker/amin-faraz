@@ -113,7 +113,10 @@ def read_magazine(folder):
               "A receipt from another magazine or video was encountered")
         status=saved.get("status")
         if status==RECEIPT_FAILED:
-            failed=True
+            # Retry only the same failed video on the next explicitly triggered run.
+            # Never skip it, never certify it, and never advance to a later film.
+            outstanding.append(item)
+            break
         elif status=="MACHINE_TEXT_ARCHIVED_UNVERIFIED":
             # Explicit user-authorized stage boundary: technical texts may
             # proceed to NEXT film without pretending teacher meaning is proved.
@@ -133,8 +136,7 @@ def read_magazine(folder):
         else:
             _need(status==RECEIPT_OK and saved.get("source_evidence") is not None,
                   "No verified receipt for queued source")
-    _need(not failed,
-          "One film failed: do not silently skip ahead to next film or mark source successful")
+    # A failed receipt is a retryable queue boundary, not an approved completion.
     return outstanding
 
 def enumerate_magazines(root):
