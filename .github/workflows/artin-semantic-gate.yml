@@ -1,0 +1,22 @@
+name: Artin semantic gate unit tests
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_semantic_gate.py'
+      - 'test_artin_semantic_gate.py'
+      - '.github/workflows/artin-semantic-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-gate-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run fail-closed semantic gate tests
+        run: python3 -m unittest -v test_artin_semantic_gate.py
