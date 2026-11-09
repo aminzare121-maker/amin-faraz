@@ -1,0 +1,37 @@
+name: Artin queue event-driven continuation
+on:
+  workflow_run:
+    workflows: ["Artin V13 autopilot - serial source and text extraction"]
+    types: [completed]
+    branches: [tools-makhzan-hub]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: artin-queue-continuation-dispatch
+  cancel-in-progress: false
+jobs:
+  continue-only-after-success:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Inspect next authorized queue item
+        id: queue
+        run: |
+          python3 -u tools-makhzan/video_queue/load_queue.py --github-output "$GITHUB_OUTPUT"
+      - name: Dispatch next film only when pending
+        if: steps.queue.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run artin-v13-autopilot.yml --ref tools-makhzan-hub
+          echo 'Next authorized queue scan dispatched; actual extraction result must be verified separately.' >> "$GITHUB_STEP_SUMMARY"
+      - name: No further authorized item
+        if: steps.queue.outputs.count == '0'
+        run: echo 'No pending authorized queue item; chain stops without inventing work.' >> "$GITHUB_STEP_SUMMARY"
