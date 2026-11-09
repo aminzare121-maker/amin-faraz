@@ -6,6 +6,7 @@ on:
       - '.github/workflows/artin-v13-clarify-four.yml'
       - 'tools-makhzan/courses/artin/reconcile_timed_evidence.py'
       - 'tools-makhzan/courses/artin/video4_reliability.py'
+      - 'tools-makhzan/courses/artin/classroom_reasoner.py'
   workflow_dispatch:
 permissions:
   actions: read
@@ -117,6 +118,20 @@ jobs:
               raise RuntimeError('Unverified semantics must never be promoted to verified')
           print('SOURCE_ACCEPTANCE_PASS; audio meaning still requires independent verification')
           PY
+      - name: Reconstruct classroom questions and contextual answers from original speech
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          names=json.loads(Path('evidence/artifact-names.json').read_text())
+          candidates=[Path('evidence')/(key+'.zip') for key,value in names.items() if value.endswith('-TEXT-ONLY')]
+          if len(candidates)!=1:raise RuntimeError('Original speech source not uniquely available')
+          subprocess.run(['python3','tools-makhzan/courses/artin/classroom_reasoner.py',str(candidates[0]),'video-four-classroom-questions.json'],check=True)
+          data=json.loads(Path('video-four-classroom-questions.json').read_text())
+          if data['speech_segments']<1900 or not data['question_answer_candidates']:
+              raise RuntimeError('Classroom context reconstruction incomplete')
+          PY
       - name: Reconstruct searchable original evidence with explicit ambiguity register
         shell: bash
         run: |
@@ -215,5 +230,6 @@ jobs:
             video-four-timed-crossmodal-candidates.json
             video-four-speech-visual-reconciliation.json
             video-four-diagnostic-result.json
+            video-four-classroom-questions.json
           retention-days: 30
           if-no-files-found: error
