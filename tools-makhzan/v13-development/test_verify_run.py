@@ -112,5 +112,30 @@ class ReceiptBindingTests(unittest.TestCase):
             (root / "behrooz.zip").unlink()
             self.assertFalse(module.verify_run(record, root)["passed"])
 
+
+    def test_duplicate_archive_member_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "a") as z:
+                with __import__("warnings").catch_warnings():
+                    __import__("warnings").simplefilter("ignore", UserWarning)
+                    z.writestr("RAW/video21.bin", (root / "archive.bin").read_bytes())
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("duplicate ZIP members" in e for e in result["errors"]))
+
+    def test_duplicate_index_member_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            record = self.make_record(root)
+            with zipfile.ZipFile(root / "behrooz.zip", "a") as z:
+                with __import__("warnings").catch_warnings():
+                    __import__("warnings").simplefilter("ignore", UserWarning)
+                    z.writestr("BEHROOZ_INDEX.json", '{"videos":[]}')
+            result = module.verify_run(record, root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("duplicate ZIP members" in e for e in result["errors"]))
+
 if __name__ == "__main__":
     unittest.main()
