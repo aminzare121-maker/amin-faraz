@@ -63,7 +63,11 @@ jobs:
               if len(artifacts)!=response['total_count']:
                   raise RuntimeError('Incomplete artifact pagination; refuse partial reconstruction')
           assert artifacts, 'No video-four artifacts; do not mark clarification complete'
-          selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
+          # The authoritative TEXT-ONLY archive contains the complete nested evidence.
+          # Prefer it alone to avoid duplicate downloads and rate-limit failures.
+          selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') and not a.get('expired')]
+          if len(selected)!=1:
+              raise RuntimeError('Expected exactly one non-expired authoritative TEXT-ONLY artifact; found '+str(len(selected)))
           if not selected:raise RuntimeError('Original video four text artifacts not available')
           import time,zipfile,urllib.request
           mapping={}
@@ -163,7 +167,7 @@ jobs:
                               uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
           if not rows:raise RuntimeError('No machine-readable source text found')
           # A partial extraction is a failed clarification, not a success receipt.
-          if counts['asr']==0 or counts['ocr']==0:
+          if counts['asr']==0 or (counts['ocr']==0 and counts['board']==0):
               raise RuntimeError('Missing ASR or OCR source text; clarification incomplete: '+str(counts))
           # Extract timed speech/visual candidates, not just a list of files.
           import sys
