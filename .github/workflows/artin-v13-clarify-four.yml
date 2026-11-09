@@ -70,7 +70,7 @@ jobs:
           if len(selected)!=1:
               raise RuntimeError('Expected exactly one non-expired authoritative TEXT-ONLY artifact; found '+str(len(selected)))
           if not selected:raise RuntimeError('Original video four text artifacts not available')
-          import time,zipfile,urllib.request
+          import time,zipfile,urllib.request,urllib.parse
           mapping={}
           for a in selected:
               name=a['name']
@@ -86,7 +86,7 @@ jobs:
                           headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
                                    'Accept':'application/vnd.github+json',
                                    'X-GitHub-Api-Version':'2022-11-28'})
-                      with urllib.request.urlopen(req,timeout=90) as response,open(target,'wb') as out:
+                      # Never forward the GitHub bearer token to redirected signed storage.\n                      class StripCrossHostAuthorization(urllib.request.HTTPRedirectHandler):\n                          def redirect_request(self, request, fp, code, msg, headers, newurl):\n                              redirected=super().redirect_request(request,fp,code,msg,headers,newurl)\n                              if redirected and urllib.parse.urlsplit(newurl).hostname != urllib.parse.urlsplit(request.full_url).hostname:\n                                  for key in list(redirected.headers):\n                                      if key.lower()=='authorization':del redirected.headers[key]\n                                  for key in list(redirected.unredirected_hdrs):\n                                      if key.lower()=='authorization':del redirected.unredirected_hdrs[key]\n                              return redirected\n                      opener=urllib.request.build_opener(StripCrossHostAuthorization())\n                      with opener.open(req,timeout=90) as response,open(target,'wb') as out:
                           import shutil
                           shutil.copyfileobj(response,out)
                       if not zipfile.is_zipfile(target):
