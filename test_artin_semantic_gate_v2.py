@@ -86,5 +86,49 @@ class Tests(unittest.TestCase):
         }
         self.assertIn("missing_scenario_market_state", audit(d)["errors"][0])
 
+    def test_teacher_pdf_alone_cannot_certify_rule(self):
+        d = fixture()
+        d["sessions"][0]["rules"][0]["pdf_reference"] = {
+            "page": 14, "pdf_sha256": "f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909",
+        }
+        self.assertIn("pdf_source_priority_oral_source_missing", audit(d)["errors"][0])
+
+    def test_machine_asr_plus_pdf_not_enough(self):
+        d = fixture()
+        d["sessions"][0]["rules"][0].update(
+            pdf_reference={"page": 15, "pdf_sha256": "f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909"},
+            oral_evidence={"session": 1, "audio_sha256": SHA, "start_seconds": 1,
+                           "end_seconds": 3, "speaker_is_teacher_verified": False,
+                           "words_checked_against_original_audio": False}
+        )
+        self.assertIn("pdf_source_priority_oral_audio_review_required", audit(d)["errors"][0])
+
+    def test_reviewed_oral_with_pdf_stays_structural(self):
+        d = fixture()
+        d["sessions"][0]["rules"][0].update(
+            pdf_reference={"page": 13, "pdf_sha256": "f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909"},
+            oral_evidence={"session": 1, "audio_sha256": SHA, "start_seconds": 1,
+                           "end_seconds": 3, "speaker_is_teacher_verified": True,
+                           "words_checked_against_original_audio": True,
+                           "meaning_reviewed_against_context": True,
+                           "teacher_decision": "ENTER"}
+        )
+        result = audit(d)
+        self.assertEqual(result["sessions"][0]["status"], "STRUCTURALLY_REVIEWED")
+        self.assertFalse(result["semantic_fidelity_certified"])
+
+    def test_pdf_conflict_flags_rule_for_review(self):
+        d = fixture()
+        d["sessions"][0]["rules"][0].update(
+            pdf_reference={"page": 14, "pdf_sha256": "f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909",
+                           "meaning_conflict_with_oral": True},
+            oral_evidence={"session": 1, "audio_sha256": SHA, "start_seconds": 1,
+                           "end_seconds": 3, "speaker_is_teacher_verified": True,
+                           "words_checked_against_original_audio": True,
+                           "meaning_reviewed_against_context": True,
+                           "teacher_decision": "ENTER"}
+        )
+        self.assertIn("pdf_source_priority_oral_primary_pdf_conflict_flagged", audit(d)["errors"][0])
+
 if __name__ == "__main__":
     unittest.main()
