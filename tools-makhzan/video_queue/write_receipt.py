@@ -84,6 +84,7 @@ def build_receipt(queue_id,source_page,run_id,job_results,proof_folder=None,maga
         "job_results":job_results,
         "status":"COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED" if success else "FAILED_NEEDS_REVIEW",
         "source_evidence":evidence,
+        "failure_attempts":0 if success else 1,
         "verified_teacher_rules":0,
         "trading_permitted":False,
         "retry_policy":"SOURCE_FETCH_4_BOUNDED_ATTEMPTS; WORKER_FAILURES_NEVER_SILENTLY_SKIP",
@@ -116,12 +117,19 @@ def github_put_json(path,document,repo,branch,token):
             # Only replace a failed attempt with later fully verified proof
             # for the identical magazine, queue item and original source.
             if (prior.get("status")=="FAILED_NEEDS_REVIEW"
-                and document.get("status")=="COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED"
+                and document.get("status") in ("FAILED_NEEDS_REVIEW","COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED")
                 and prior.get("queue_id")==document.get("queue_id")
                 and prior.get("magazine_id")==document.get("magazine_id")
                 and prior.get("source_page")==document.get("source_page")
-                and document.get("source_evidence") is not None
+                and (document.get("source_evidence") is not None or
+                     (document.get("status")=="FAILED_NEEDS_REVIEW" and
+                      type(prior.get("failure_attempts",1)) is int and
+                      1<=prior.get("failure_attempts",1)<3))
                 and int(document.get("github_run_id",0))>int(prior.get("github_run_id",0))):
+                document["failure_attempts"]=(0 if document["status"]!="FAILED_NEEDS_REVIEW"
+                                              else prior.get("failure_attempts",1)+1)
+                encoded=base64.b64encode((json.dumps(document,ensure_ascii=False,indent=2)+"\n").encode("utf8")).decode("ascii")
+                payload["content"]=encoded
                 payload["sha"]=existing["sha"]
             else:
                 raise ValueError("Refusing to replace a verified or mismatched queue receipt")
