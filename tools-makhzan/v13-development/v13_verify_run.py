@@ -60,8 +60,11 @@ def verify_run(record, root):
                 raise ValueError("missing Behrooz index")
             if master.getinfo("BEHROOZ_INDEX.json").file_size > 4 * 1024 * 1024:
                 raise ValueError("oversized Behrooz index")
-            entries = json.loads(master.read("BEHROOZ_INDEX.json"))["videos"]
-            if not isinstance(entries, list):
+            index_doc = json.loads(master.read("BEHROOZ_INDEX.json"))
+            if not isinstance(index_doc, dict):
+                raise ValueError("invalid Behrooz index document")
+            entries = index_doc.get("videos")
+            if not isinstance(entries, list) or any(not isinstance(v, dict) for v in entries):
                 raise ValueError("invalid Behrooz index video list")
             matches = [v for v in entries if v.get("queue_id") == record["queue_id"]]
             if len(matches) != 1:
@@ -85,7 +88,7 @@ def verify_run(record, root):
             review = master.read(review_member)
             if hashlib.sha256(review).hexdigest() != record["semantic_review_sha256"]:
                 raise ValueError("wrong review in Behrooz")
-    except (KeyError, ValueError, OSError, TypeError, zipfile.BadZipFile) as exc:
+    except (KeyError, ValueError, OSError, TypeError, UnicodeError, RuntimeError, zipfile.BadZipFile, EOFError) as exc:
         errors.append("Behrooz readback verification failed: " + str(exc))
     passed = not errors
     return {
