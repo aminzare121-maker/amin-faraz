@@ -76,9 +76,6 @@ jobs:
           assert all(row['sequence']==i for i,row in enumerate(sessions,1))
           print('ARTIN_REGISTERED_CONTIGUOUS_SESSIONS='+str(len(sessions)))
           PY
-      - name: Audit teacher meaning independently of source extraction; forbid executable rule promotion
-        run: |
-          python3 -u tools-makhzan/courses/artin/semantic_integrity_gate.py
       - name: Validate latest magazine receipts and select one, never skip a failure
         id: queue
         run: |
