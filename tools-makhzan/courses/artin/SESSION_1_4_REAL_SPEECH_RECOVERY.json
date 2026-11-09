@@ -1,0 +1,39 @@
+{
+  "schema": "artin_source_recovery_audit_v1",
+  "recovered_at": "2026-11-09",
+  "session_1": {
+    "session_id": "ARTIN-J2-001",
+    "source": "Library file بهروز_ارجاع_زمانی_سه_ویدیو.jsonl",
+    "record_type": "speech_source_anchor",
+    "segments": 2172,
+    "last_end_seconds": 4804.4,
+    "has_original_machine_text": true,
+    "human_verified": false
+  },
+  "sessions": [
+    {
+      "sequence": 1,
+      "speech_segments": 2172
+    },
+    {
+      "sequence": 2,
+      "speech_segments": 2014
+    },
+    {
+      "sequence": 3,
+      "speech_segments": 2171
+    },
+    {
+      "sequence": 4,
+      "speech_segments": 1997
+    }
+  ],
+  "total_speech_segments": 8354,
+  "replay_candidates": 1974,
+  "verified_trading_rules": 0,
+  "notes": [
+    "Session 1 original machine transcript was recovered from an existing archival source, not synthesized.",
+    "These are ASR text records, not independent audio or teacher-semantic verification.",
+    "No trading engine was changed."
+  ]
+}
