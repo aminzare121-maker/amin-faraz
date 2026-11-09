@@ -18,6 +18,21 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: false
+      - name: Self-test speech and OCR time alignment
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import sys
+          sys.path.insert(0,'tools-makhzan/courses/artin')
+          from reconcile_timed_evidence import reconcile,seconds
+          assert seconds('01:02:03.5')==3723.5
+          out=reconcile({'candidates':[{'channel':'asr','start':'00:00:12','text':'test'},{'channel':'board','start':14,'text':'board'}]})
+          assert out['speech_count']==1 and out['matched_speech_count']==1 and out['semantic_accuracy_verified'] is False
+          PY
       - name: Download actual video four machine transcripts and chat/board OCR
         shell: bash
         run: |
@@ -123,6 +138,9 @@ jobs:
           Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
           print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
           PY
+      - name: Produce timestamp-aware speech and board reconciliation
+        run: |
+          python3 tools-makhzan/courses/artin/reconcile_timed_evidence.py video-four-timed-crossmodal-candidates.json video-four-speech-visual-reconciliation.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -131,5 +149,6 @@ jobs:
             video-four-source-text.json
             video-four-ambiguity-register.json
             video-four-timed-crossmodal-candidates.json
+            video-four-speech-visual-reconciliation.json
           retention-days: 30
           if-no-files-found: error
