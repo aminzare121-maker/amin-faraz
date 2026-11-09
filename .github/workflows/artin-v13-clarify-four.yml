@@ -119,6 +119,29 @@ jobs:
                       rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':text})
                       # Do not infer speaker or teaching rules from OCR/ASR alone.
                       uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
+          # The authoritative TEXT-ONLY artifact contains a second ZIP inside the outer GitHub ZIP.
+          # Parse that inner bundle directly: it contains all 15 ASR shards and 16 OCR partitions.
+          import io
+          for archive in sorted(Path('evidence').glob('*.zip')):
+              with zipfile.ZipFile(archive) as outer:
+                  for member in outer.namelist():
+                      if not member.endswith('.zip'):continue
+                      with zipfile.ZipFile(io.BytesIO(outer.read(member))) as nested:
+                          for filename in nested.namelist():
+                              if not filename.lower().endswith('.json'):continue
+                              raw=nested.read(filename)
+                              try: content=raw.decode('utf-8')
+                              except UnicodeDecodeError:continue
+                              key=hashlib.sha256(raw).hexdigest()
+                              if key in seen:continue
+                              seen.add(key)
+                              channel=('asr' if filename.startswith('speech_asr_raw/') else
+                                       'board' if filename.startswith('board_ocr_raw/') else
+                                       'ocr' if filename.startswith('student_chat_ocr_raw/') else 'metadata')
+                              if channel=='metadata':continue
+                              counts[channel]+=1
+                              rows.append({'artifact_id':archive.stem,'file':filename,'sha256':key,'channel':channel,'text':content})
+                              uncertain.append({'artifact_id':archive.stem,'file':filename,'source_sha256':key,'speaker_role':'UNVERIFIED','teacher_meaning':'UNVERIFIED','board_speech_alignment':'UNVERIFIED','requires_original_audio_video_comparison':True})
           if not rows:raise RuntimeError('No machine-readable source text found')
           # A partial extraction is a failed clarification, not a success receipt.
           if counts['asr']==0 or counts['ocr']==0:
