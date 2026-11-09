@@ -1,0 +1,38 @@
+{
+  "schema": "artin_v13_10_evidence_provenance_summary_v1",
+  "source_scope": "User's private Library /بهروز; full texts and original images not copied into public repo",
+  "machine_text_25_sessions_present": true,
+  "ten_case_audit": {
+    "cases": 10,
+    "exact_time_text_audio_segment_hash_matches": 10,
+    "original_image_sha256_matches": 10,
+    "automatic_machine_nearby_visual_matches": 9,
+    "source_image_recovered_outside_auto_index": 1
+  },
+  "supplemental_case": {
+    "id": "A15-BREAKOUT-VS-PULLBACK",
+    "session": 15,
+    "original_frame_timestamp_seconds": 1545,
+    "speech_timestamp_seconds": 1546.15,
+    "delta_seconds": 1.15,
+    "original_artifact_id": 13668204524,
+    "frame_sha256_valid": true,
+    "explanation": "Original classroom board/source frame verified; machine speech nearby list contains only student-chat candidates. The picture is a classroom screen, not proof of a candle example.",
+    "pending": "original audio speaker/meaning review and identification of a chart-relevant demonstration"
+  },
+  "code_checks": {
+    "local_synthetic_and_private_tests": "19 of 19 passed",
+    "github_actions_run": 42689775340,
+    "github_total": 55,
+    "github_passed": 35,
+    "github_skipped_private": 20,
+    "github_failed": 0
+  },
+  "trust_boundary": {
+    "teacher_semantics_certified": false,
+    "verified_teacher_strategy_rules": 0,
+    "motor_teacher_decision_replays_certified": 0,
+    "mt5_trading_permitted": false
+  },
+  "next_unverified_work": "Independent original speech/speaker and chart semantic review of 25 lessons, cross-lesson correction precedence, teacher/motor replay on teacher-grounded cases"
+}
