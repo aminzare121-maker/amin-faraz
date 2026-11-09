@@ -1,0 +1,29 @@
+name: Artin source-grounded six-case semantic audit
+on:
+  push:
+    branches:
+      - audit/artin20-semantic-review-20261109
+    paths:
+      - 'research/artin25_verified_cases/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate literal speech provenance and original image hashes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -u research/artin25_verified_cases/validate_review.py
+      - name: Upload checked non-trading semantic case analysis and tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin25-six-manually-reviewed-cases
+          path: artin25_verified_cases_output/**
+          if-no-files-found: warn
+          retention-days: 60
