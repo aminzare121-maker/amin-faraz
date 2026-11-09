@@ -34,6 +34,10 @@ on:
       - 'test_artin_eplanet_monthly_evidence.py'
       - 'artin_teacher_market_observability.py'
       - 'test_artin_teacher_market_observability.py'
+      - 'artin_13_source_coverage_audit.py'
+      - 'test_artin_13_source_coverage_audit.py'
+      - 'artin_teacher_citation_duration_guard.py'
+      - 'test_artin_teacher_citation_duration_guard.py'
       - '.github/workflows/artin-semantic-gate.yml'
   workflow_dispatch:
 
@@ -47,4 +51,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run fail-closed semantic gate tests
-        run: python3 -m unittest -v test_artin_semantic_gate.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py test_artin_eplanet_m15_preflight.py test_artin_real_m15_observation_replay.py test_artin_eplanet_monthly_evidence.py test_artin_teacher_market_observability.py
+        run: python3 -m unittest -v test_artin_semantic_gate.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py test_artin_eplanet_m15_preflight.py test_artin_real_m15_observation_replay.py test_artin_eplanet_monthly_evidence.py test_artin_teacher_market_observability.py test_artin_13_source_coverage_audit.py test_artin_teacher_citation_duration_guard.py
