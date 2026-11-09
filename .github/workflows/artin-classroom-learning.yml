@@ -1,0 +1,65 @@
+name: Artin classroom to engine evidence compiler
+on:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - 'tools-makhzan/courses/artin/artin_class_to_engine.py'
+      - 'tools-makhzan/courses/artin/inbox/**'
+      - '.github/workflows/artin-classroom-learning.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: artin-classroom-learning
+  cancel-in-progress: false
+jobs:
+  classroom-learning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+      - name: Verify safety and compiler invariants
+        run: |
+          python3 - <<'PY'
+          import importlib.util
+          p='tools-makhzan/courses/artin/artin_class_to_engine.py'
+          spec=importlib.util.spec_from_file_location('artin',p)
+          m=importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(m)
+          sessions=[{'session_id':'S1','speech':[{'start':1,'text':'اینجا خرید نکن'}],'questions':[{'time_seconds':1,'text':'چرا خرید نکنیم؟'}]},
+                    {'session_id':'S2','speech':[{'start':2,'text':'باید حد ضرر را رعایت کرد'}],'questions':[]}]
+          out=m.build(sessions)
+          assert len(out['sessions'])==2
+          assert len(out['verified_executable_rules'])==0
+          assert any(c['negation_review_required'] for c in out['replay_cases'])
+          assert all(c['expected_decision'] is None for c in out['replay_cases'])
+          print('EVIDENCE_COMPILER_SAFETY_PASS')
+          PY
+      - name: Compile all delivered sessions in sequence
+        shell: bash
+        run: |
+          mkdir -p output
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          folder=Path('tools-makhzan/courses/artin/inbox')
+          files=sorted(folder.glob('session-*.json')) if folder.exists() else []
+          if not files:
+              print('NO_SOURCE_INPUT: archive/source ingestion required; not a completed lesson')
+              Path('output/STATUS.json').write_text(json.dumps({'status':'BLOCKED_NO_SESSION_SOURCE','verified_rules':0}))
+          else:
+              sessions=[]
+              for f in files:
+                  data=json.loads(f.read_text(encoding='utf-8'))
+                  if 'session_id' not in data or 'speech' not in data:raise RuntimeError('Malformed session source '+str(f))
+                  sessions.append(data)
+              Path('output/ordered_sessions.json').write_text(json.dumps({'sessions':sessions},ensure_ascii=False),encoding='utf-8')
+              subprocess.run(['python3','tools-makhzan/courses/artin/artin_class_to_engine.py','output/ordered_sessions.json','output/classroom_replay_candidates.json'],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artin-classroom-learning-evidence
+          path: output/
+          if-no-files-found: error
