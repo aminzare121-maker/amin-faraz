@@ -41,7 +41,7 @@ jobs:
           if doc.get('source_video_sha256')!=expected or doc.get('timebase')!='absolute_original_video_seconds':raise ValueError('SOURCE_TRANSCRIPT_IDENTITY_FAILED')
           context=[s for s in doc['segments'] if s['end']>=1150 and s['start']<=1208]
           images=[]
-          for t in [1165.0,1173.0,1184.0]:
+          for t in [1157.0,1160.0,1162.0]:
               name=f'frame_{t:010.3f}.png';target=pathlib.Path('review')/name
               p=subprocess.run(['ffmpeg','-nostdin','-v','error','-ss',str(t),'-i','private/source.mp4','-frames:v','1',str(target)],capture_output=True,timeout=60)
               if p.returncode:raise RuntimeError('SELECTED_FRAME_READ_FAILED')
@@ -51,7 +51,7 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: artin25-session2-USDCAD-unit-review-PRIVATE
+          name: artin25-session2-USDCAD-before-switch-PRIVATE
           path: review/
           retention-days: 90
           if-no-files-found: error
