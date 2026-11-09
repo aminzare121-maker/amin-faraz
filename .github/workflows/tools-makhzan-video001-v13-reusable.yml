@@ -565,6 +565,17 @@ jobs:
             --source-summary /tmp/video001_source_summary/safe_source_prep_summary.json \
             --out /tmp/video001_full_integrity \
             --audio-workers ${{ needs.source-once.outputs.asr_count }} --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+      - name: Preserve independent verifier failure evidence for reverse diagnosis
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-verifier-failure-diagnostics
+          path: |
+            /tmp/video001_full_integrity/**/*.json
+            /tmp/video001_source_summary/*.json
+            /tmp/video001_all_asr/manifest_redacted.json
+          retention-days: 15
+          if-no-files-found: warn
       - name: Rehydrate the COMPLETE private V12 review package from unchanged source-verified evidence
         uses: actions/download-artifact@v4
         with:
