@@ -1,0 +1,69 @@
+{
+  "tool_commit": "57ec438b99ca45fc00ee8355607bf0e435dd2db1",
+  "files": [
+    {
+      "path": "research/faraz-local-lab/faraz_offline_lab.py",
+      "sha256": "631d380b2d2cc8a6e06e7607ebf2c23fa58987facb3be66909013d3c06d0a77a",
+      "git_blob_sha": "29f06973af388f041b78648c14dd96fa29daeeb0",
+      "matches_locked_pr37": true
+    },
+    {
+      "path": "research/faraz-local-lab/test_faraz_offline_lab.py",
+      "sha256": "d97b46c0bd44c2bcaf44c71b26c9788a9258d2d1a8da0bd009952b674a1045bb",
+      "git_blob_sha": "37dd36b447c65d683ef96335d19cb87a317b1b05",
+      "matches_locked_pr37": true
+    },
+    {
+      "path": "research/faraz-local-lab/README_FA.md",
+      "sha256": "d485edcbd3cf217169160e8890a2b1114dcaf6f495ffbf85d5854421a82e96ec",
+      "git_blob_sha": "9453fa3da5a5d64987084c00b29fd96343741df0",
+      "matches_locked_pr37": true
+    },
+    {
+      "path": "research/faraz-local-lab/RUN_LOCAL.bat",
+      "sha256": "b37f3fbe55f8da7ec2de4a3456d2c38b56261df5326cc9ecdd2f8e66d4835ace",
+      "git_blob_sha": "aa5eef64dd8c3cebad5e5262f1cfb924230e1fb2",
+      "matches_locked_pr37": true
+    }
+  ],
+  "data_sha256_before_after": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "output_sha256": "9621d55b7fc797e83ee19c7c73533203fdf87bde55eb7e656a6f220e0903296c",
+  "input_rows": 23643,
+  "segments": 261,
+  "gap_count": 260,
+  "missing_calendar_slots": 11397,
+  "min_segment_bars": 1,
+  "max_segment_bars": 92,
+  "segments_with_at_least_61_bars": 256,
+  "post_warmup_bar_positions": 8107,
+  "aggregate_checks": [
+    {
+      "family": "trend_pullback",
+      "count_identities_pass": true,
+      "expectancy_rounding_consistent": true,
+      "sum_rounded_quarters_minus_rounded_total_usd": "0.01"
+    },
+    {
+      "family": "range_reversion",
+      "count_identities_pass": true,
+      "expectancy_rounding_consistent": true,
+      "sum_rounded_quarters_minus_rounded_total_usd": "0.01"
+    },
+    {
+      "family": "compression_expansion",
+      "count_identities_pass": true,
+      "expectancy_rounding_consistent": true,
+      "sum_rounded_quarters_minus_rounded_total_usd": "0.00"
+    }
+  ],
+  "aggregate_schema_has_no_raw_price_rows_trade_times_or_local_paths": true,
+  "actual_real_data_runs": 1,
+  "original_program_modified": false,
+  "parameters_tuned": false,
+  "network_or_broker_calls_in_program": false,
+  "rights_basis": "Private local research permitted by ticket207852 summary; explicit owner instruction PR32#6685130265 requests non-reconstructive aggregate-only reporting. No raw feed, trade trace, account or local path published; no blanket redistribution license inferred.",
+  "raw_data_published": false,
+  "full_year_net": "UNKNOWN",
+  "unknown_pnl_bound": "NOT_ESTABLISHED",
+  "fresh_holdout": false
+}
