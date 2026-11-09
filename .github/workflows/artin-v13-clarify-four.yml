@@ -144,6 +144,18 @@ jobs:
           Path('video-four-ambiguity-register.json').write_text(json.dumps({'video_sequence':4,'semantic_certification':False,'items':uncertain},ensure_ascii=False,indent=2))
           print('SOURCE_TEXT_FILES='+str(len(rows))+'; CHANNEL_COUNTS='+str(counts)+'; SEMANTIC_VERIFICATION=REQUIRED')
           PY
+      - name: Validate evidence provenance and fail on empty machine speech
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('video-four-source-text.json'))
+          rows=d['source_text']
+          assert rows and any(x['channel']=='asr' for x in rows),'No actual ASR transcript found'
+          assert any(x['channel'] in ('ocr','board') for x in rows),'No visual OCR found'
+          assert all(x['sha256'] and x['artifact_id'] for x in rows),'Untraceable evidence'
+          print('EVIDENCE_PROVENANCE_VALIDATED',len(rows))
+          PY
       - name: Produce timestamp-aware speech and board reconciliation
         run: |
           python3 tools-makhzan/courses/artin/reconcile_timed_evidence.py video-four-timed-crossmodal-candidates.json video-four-speech-visual-reconciliation.json
