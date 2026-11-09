@@ -7,6 +7,7 @@ on:
     branches: [tools-makhzan-hub]
     paths:
       - '.github/workflows/artin-v13-autopilot.yml'
+      - '.github/workflows/tools-makhzan-video001-v13-reusable.yml'
       - 'tools-makhzan/video_queue/**'
   workflow_dispatch:
 permissions:
