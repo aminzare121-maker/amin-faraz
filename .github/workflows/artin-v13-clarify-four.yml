@@ -31,14 +31,30 @@ jobs:
           assert artifacts, 'No video-four artifacts; do not mark clarification complete'
           selected=[a for a in artifacts if a['name'].endswith('-TEXT-ONLY') or '-asr-' in a['name'] or '-ocr-' in a['name'] or '-board-ocr-UNVERIFIED-TEXT' in a['name']]
           if not selected:raise RuntimeError('Original video four text artifacts not available')
+          import time,zipfile,urllib.request
           for a in selected:
               name=a['name']
               target='evidence/'+str(a['id'])+'.zip'
-              with open(target,'wb') as out:
-                  subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a["id"]}/zip'],stdout=out,check=True)
-              import zipfile
-              if not zipfile.is_zipfile(target):
-                  raise RuntimeError('Artifact ZIP download invalid: '+name)
+              errors=[]
+              for attempt in range(1,4):
+                  try:
+                      # GitHub artifact download is an HTTP redirect to signed storage.
+                      # gh api does not reliably follow this binary redirect.
+                      req=urllib.request.Request(
+                          f'https://api.github.com/repos/{repo}/actions/artifacts/{a["id"]}/zip',
+                          headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                                   'Accept':'application/vnd.github+json',
+                                   'X-GitHub-Api-Version':'2022-11-28'})
+                      with urllib.request.urlopen(req,timeout=90) as response,open(target,'wb') as out:
+                          import shutil
+                          shutil.copyfileobj(response,out)
+                      if not zipfile.is_zipfile(target):
+                          raise RuntimeError('Invalid ZIP or GitHub redirect response')
+                      break
+                  except Exception as exc:
+                      errors.append(str(exc))
+                      if attempt==3:raise RuntimeError('Artifact download failed after 3 attempts '+name+': '+str(errors))
+                      time.sleep(attempt*3)
           print('SOURCE_TEXT_ARTIFACTS_DOWNLOADED='+str(len(selected)))
           PY
       - name: Reconstruct searchable original evidence with explicit ambiguity register
