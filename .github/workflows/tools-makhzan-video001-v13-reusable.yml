@@ -40,7 +40,7 @@ jobs:
       - name: Checkout pinned experimental V13 source engine; fixes 18 original chunks with 17 workers
         uses: actions/checkout@v4
         with:
-          ref: 5e61788b10abc115638ffe04cab6987ef0803b42
+          ref: 27e184447480925cd814e0b604bf2924b9c460b7
           path: artin-code
           persist-credentials: false
       - name: Validate original user-submitted queue item and create exact source request
@@ -392,6 +392,34 @@ jobs:
           retention-days: 7
           compression-level: 1
           if-no-files-found: error
+  source-board-ocr:
+    needs: source-once
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 27e184447480925cd814e0b604bf2924b9c460b7
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-original-board
+          path: /tmp/v13_board_original
+      - name: Install Persian and English board text recognition
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq -y install tesseract-ocr tesseract-ocr-fas tesseract-ocr-eng
+      - name: OCR every sampled board frame WITHOUT claiming chart-action understanding
+        working-directory: research/artin-film-engine-v3-1
+        run: |
+          python3 -u video001_v13_board_text_worker.py --board-root /tmp/v13_board_original --out /tmp/v13_board_ocr_new --workers 6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
+          path: /tmp/v13_board_ocr_new/**
+          retention-days: 15
+          if-no-files-found: error
+
   source-sharded-asr:
     needs: source-once
     runs-on: ubuntu-latest
@@ -468,7 +496,7 @@ jobs:
           retention-days: 15
           if-no-files-found: error
   independent-all-evidence-verification:
-    needs: [source-once,source-sharded-asr,source-sharded-ocr]
+    needs: [source-once,source-sharded-asr,source-sharded-ocr,source-board-ocr]
     if: success()
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -499,6 +527,10 @@ jobs:
         with:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_source_summary
+      - uses: actions/download-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
+          path: /tmp/v13_board_ocr_original
       - name: Strict NO LOSS original full-film ASR, OCR, time, teacher board and Q&A evidence verification
         working-directory: research/artin-film-engine-v3-1
         run: |
@@ -535,6 +567,31 @@ jobs:
             --out /tmp/makhzan_fast_complete_source_private \
             --audio-workers ${{ needs.source-once.outputs.asr_count }} \
             --ocr-workers ${{ needs.source-once.outputs.ocr_count }}
+      - name: Strictly connect sampled board OCR to original SHA/time-indexed board source
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,shutil
+          a=pathlib.Path('/tmp/v13_board_ocr_original/board_ocr_candidates_PRIVATE.json')
+          m=json.loads(a.read_text(encoding='utf8'))
+          b=json.loads(pathlib.Path('/tmp/video001_source_board/visual_timeline_v6.json').read_text(encoding='utf8'))
+          if (m['schema']!='V13_BOARD_TEXT_OCR_ALL_SAMPLED_SOURCE_FRAMES_V1'
+            or m['source_video_sha256']!=b['source_video_sha256']
+            or m['frames_processed']!=len(b['rows'])
+            or m['missing_frames']!=0):
+              raise ValueError('NO_BOARD_OCR_SOURCE_PROVENANCE')
+          for original,candidate in zip(b['rows'],m['results']):
+              if (original['frame_id']!=candidate['frame_id']
+                or original['time_seconds']!=candidate['time_original_video_seconds']
+                or original['board']['sha256']!=candidate['source_frame_sha256']):
+                  raise ValueError('BOARD_OCR_IMAGE_HASH_OR_TIME_DIFFERS')
+          out=pathlib.Path('/tmp/makhzan_fast_complete_source_private/V13_DERIVED_MACHINE_UNVERIFIED')
+          out.mkdir(parents=True,exist_ok=True)
+          shutil.copy2(a,out/'BOARD_OCR_CANDIDATES_UNVERIFIED.json')
+          summary=json.loads(pathlib.Path('/tmp/v13_board_ocr_original/board_ocr_safe_summary.json').read_text(encoding='utf8'))
+          assert summary['frames_processed']==len(b['rows'])
+          pathlib.Path('/tmp/video001_full_integrity/board_ocr_safe_summary.json').write_text(json.dumps(summary,indent=2))
+          print('V13_SOURCE_HASHED_BOARD_TEXT_CANDIDATES_COMPLETE=',len(b['rows']),flush=True)
+          PY
       - name: Archive FULL private V12 review data and original images, not only a metrics summary
         uses: actions/upload-artifact@v4
         with:
@@ -550,7 +607,7 @@ jobs:
           if-no-files-found: error
 
   record-verified-result:
-    needs: [source-once,source-sharded-asr,source-sharded-ocr,independent-all-evidence-verification]
+    needs: [source-once,source-sharded-asr,source-sharded-ocr,source-board-ocr,independent-all-evidence-verification]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
@@ -571,6 +628,12 @@ jobs:
         with:
           name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-source-summary
           path: /tmp/video001_receipt/source
+      - name: Get source-hashed board OCR coverage for final queue receipt
+        if: ${{ needs.independent-all-evidence-verification.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: v13-video001-${{ inputs.magazine_id }}-${{ inputs.queue_id }}-board-ocr-UNVERIFIED-TEXT
+          path: /tmp/video001_receipt/board
       - name: Register proven Artin lesson in its own course registry only
         if: ${{ needs.independent-all-evidence-verification.result == 'success' && inputs.magazine_id == 'artin-course-001' }}
         env:
@@ -592,6 +655,7 @@ jobs:
           VIDEO001_SOURCE_RESULT: ${{ needs.source-once.result }}
           VIDEO001_ASR_RESULT: ${{ needs.source-sharded-asr.result }}
           VIDEO001_OCR_RESULT: ${{ needs.source-sharded-ocr.result }}
+          VIDEO001_BOARD_RESULT: ${{ needs.source-board-ocr.result }}
           VIDEO001_VERIFY_RESULT: ${{ needs.independent-all-evidence-verification.result }}
         run: |
           python3 -u tools-makhzan/video_queue/write_receipt.py
