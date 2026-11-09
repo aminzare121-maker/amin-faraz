@@ -1,5 +1,6 @@
 # V13 queue adaptation: active verified one-pass source preparation, unchanged independent ASR/OCR and strict integrity; no raw archive overwrite.
 # Optional 4-model research adapters are NOT executed by this workflow; no semantic accuracy claim.
+# V13 text archive deduplicates OCR hardlink aliases; preserve original byte hashes.
 name: VIDEO-001 V13 candidate reusable 17 ASR + 16 OCR queue worker
 on:
   workflow_call:
