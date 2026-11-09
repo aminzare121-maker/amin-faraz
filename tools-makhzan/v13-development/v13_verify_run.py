@@ -27,7 +27,7 @@ def verify_run(record, root):
             doc = json.loads(receipt.read_text(encoding="utf-8"))
             if not isinstance(doc, dict):
                 raise ValueError("receipt must be an object")
-            for field in ("source_sha256", "archive_sha256", "next_queue_id"):
+            for field in ("queue_id", "source_sha256", "archive_sha256", "semantic_review_sha256", "next_queue_id"):
                 if doc.get(field) != record.get(field):
                     errors.append("receipt binding mismatch: " + field)
             if doc.get("semantic_review_passed") is not True:
