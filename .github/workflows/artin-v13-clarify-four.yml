@@ -86,7 +86,18 @@ jobs:
                           headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],
                                    'Accept':'application/vnd.github+json',
                                    'X-GitHub-Api-Version':'2022-11-28'})
-                      # Never forward the GitHub bearer token to redirected signed storage.\n                      class StripCrossHostAuthorization(urllib.request.HTTPRedirectHandler):\n                          def redirect_request(self, request, fp, code, msg, headers, newurl):\n                              redirected=super().redirect_request(request,fp,code,msg,headers,newurl)\n                              if redirected and urllib.parse.urlsplit(newurl).hostname != urllib.parse.urlsplit(request.full_url).hostname:\n                                  for key in list(redirected.headers):\n                                      if key.lower()=='authorization':del redirected.headers[key]\n                                  for key in list(redirected.unredirected_hdrs):\n                                      if key.lower()=='authorization':del redirected.unredirected_hdrs[key]\n                              return redirected\n                      opener=urllib.request.build_opener(StripCrossHostAuthorization())\n                      with opener.open(req,timeout=90) as response,open(target,'wb') as out:
+                      # Never forward the GitHub bearer token to redirected signed storage.
+                      class StripCrossHostAuthorization(urllib.request.HTTPRedirectHandler):
+                          def redirect_request(self, request, fp, code, msg, headers, newurl):
+                              redirected=super().redirect_request(request,fp,code,msg,headers,newurl)
+                              if redirected and urllib.parse.urlsplit(newurl).hostname != urllib.parse.urlsplit(request.full_url).hostname:
+                                  for key in list(redirected.headers):
+                                      if key.lower()=='authorization':del redirected.headers[key]
+                                  for key in list(redirected.unredirected_hdrs):
+                                      if key.lower()=='authorization':del redirected.unredirected_hdrs[key]
+                              return redirected
+                      opener=urllib.request.build_opener(StripCrossHostAuthorization())
+                      with opener.open(req,timeout=90) as response,open(target,'wb') as out:
                           import shutil
                           shutil.copyfileobj(response,out)
                       if not zipfile.is_zipfile(target):
