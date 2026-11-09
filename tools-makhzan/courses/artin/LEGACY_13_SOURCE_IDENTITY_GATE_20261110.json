@@ -1,0 +1,429 @@
+{
+  "schema": "artin_v13_cross_registry_source_identity_gate_v2",
+  "provenance": {
+    "registry": "tools-makhzan-hub:tools-makhzan/courses/artin/COURSE_REGISTRY.json",
+    "registry_blob_sha": "5dec2c82c4e2a895bd6f51744d8967b9911f342e",
+    "older_engine": "review/artin-m15-shadow-20261107:research/artin-independent-engine/entry_engine.py",
+    "older_engine_blob_sha": "2998d66f933f1edad4eccf7fb574b9f14007cf35",
+    "older_source_coverage_blob_sha": "fa955ed57b8e4a2f64588dda0752909b6d8263d5"
+  },
+  "canonical_registered_video_count": 25,
+  "old_engine_rule_count": 13,
+  "old_engine_citation_count": 24,
+  "citations_fit_current_queue_video_duration": 14,
+  "citations_beyond_current_queue_video_duration": 10,
+  "rules_with_unmatched_time_in_current_queue": 4,
+  "rules_requiring_source_identity_repair": [
+    "STOPPUNCH_SAME_COLOUR",
+    "STOPPUNCH_DOJI_AHEAD",
+    "STOPPUNCH_DOJI_TIED",
+    "STOPPUNCH_OPPOSITE_CONFIRMATION"
+  ],
+  "source_mapping_repair_requires_exact_video_identity": true,
+  "source_identity_mapping_verified_count": 0,
+  "older_and_current_lesson_numbering_may_differ": true,
+  "legacy_source21_transcript_chunk_index_reaches_seconds": 6000,
+  "interpretation_warning": "Mismatch is between two registries; never claim original teacher footage is too short until exact original file hashes match.",
+  "no_silent_reassignment_to_another_lesson": true,
+  "valid_duration_does_not_imply_teacher_semantics_verified": true,
+  "teacher_rules_certified": 0,
+  "teacher_engine_matches_independently_proven": 0,
+  "no_real_or_demo_orders": true,
+  "replay_trade_and_profit_claims_permitted": false,
+  "rules": [
+    {
+      "rule_id": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "citation_count": 1,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 22,
+          "start_seconds": 1888.1,
+          "end_seconds": 1952.66,
+          "canonical_video_duration_seconds": 4970.001,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "PULLBACK_STANDARD",
+      "citation_count": 2,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 16,
+          "start_seconds": 615,
+          "end_seconds": 854,
+          "canonical_video_duration_seconds": 3512.018141,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 16,
+          "start_seconds": 1003,
+          "end_seconds": 1109,
+          "canonical_video_duration_seconds": 3512.018141,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_CLASSIC",
+      "citation_count": 2,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 20,
+          "start_seconds": 2188.86,
+          "end_seconds": 2306.84,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 20,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_THREE",
+      "citation_count": 2,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 20,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 20,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "REVERSAL_STAR",
+      "citation_count": 2,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 20,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 20,
+          "start_seconds": 4117.72,
+          "end_seconds": 4483.72,
+          "canonical_video_duration_seconds": 6568.089252,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_STRONG",
+      "citation_count": 2,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 2105.04,
+          "end_seconds": 2261,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 2274,
+          "end_seconds": 2649.38,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_WEAK_PIVOT",
+      "citation_count": 1,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "citation_count": 1,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "BREAK_VERY_STRONG_RETEST",
+      "citation_count": 1,
+      "invalid_source_citation_count": 0,
+      "source_citation_gate": "TIME_IN_BOUNDS_SOURCE_IDENTITY_NOT_PROVEN",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 3162.56,
+          "end_seconds": 3473.88,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": true,
+          "seconds_start_after_current_queue_video_end": 0,
+          "seconds_end_after_current_queue_video_end": 0,
+          "evidence_status": "TIME_WITHIN_CURRENT_QUEUE_SLOT_SOURCE_IDENTITY_UNVERIFIED",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_SAME_COLOUR",
+      "citation_count": 3,
+      "invalid_source_citation_count": 3,
+      "source_citation_gate": "BLOCKED_UNTIL_SOURCE_IDENTITY_MAPPED",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 3947,
+          "end_seconds": 3975,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 345.771,
+          "seconds_end_after_current_queue_video_end": 373.771,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 4201.3,
+          "end_seconds": 4208.84,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 600.071,
+          "seconds_end_after_current_queue_video_end": 607.611,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 4597,
+          "end_seconds": 4661,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 995.771,
+          "seconds_end_after_current_queue_video_end": 1059.771,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_AHEAD",
+      "citation_count": 2,
+      "invalid_source_citation_count": 2,
+      "source_citation_gate": "BLOCKED_UNTIL_SOURCE_IDENTITY_MAPPED",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 383.651,
+          "seconds_end_after_current_queue_video_end": 467.751,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 608.911,
+          "seconds_end_after_current_queue_video_end": 613.291,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_DOJI_TIED",
+      "citation_count": 2,
+      "invalid_source_citation_count": 2,
+      "source_citation_gate": "BLOCKED_UNTIL_SOURCE_IDENTITY_MAPPED",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 383.651,
+          "seconds_end_after_current_queue_video_end": 467.751,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 608.911,
+          "seconds_end_after_current_queue_video_end": 613.291,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    },
+    {
+      "rule_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "citation_count": 3,
+      "invalid_source_citation_count": 3,
+      "source_citation_gate": "BLOCKED_UNTIL_SOURCE_IDENTITY_MAPPED",
+      "original_teacher_audio_verified": false,
+      "method_backtest_permitted": false,
+      "citations": [
+        {
+          "session": 21,
+          "start_seconds": 4100,
+          "end_seconds": 4133,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 498.771,
+          "seconds_end_after_current_queue_video_end": 531.771,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 21,
+          "start_seconds": 4214.52,
+          "end_seconds": 4223.26,
+          "canonical_video_duration_seconds": 3601.229206,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 613.291,
+          "seconds_end_after_current_queue_video_end": 622.031,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        },
+        {
+          "session": 23,
+          "start_seconds": 4694,
+          "end_seconds": 4728,
+          "canonical_video_duration_seconds": 4201.697234,
+          "citation_fits_current_queue_video_duration": false,
+          "seconds_start_after_current_queue_video_end": 492.303,
+          "seconds_end_after_current_queue_video_end": 526.303,
+          "evidence_status": "INCOMPATIBLE_WITH_CURRENT_QUEUE_SLOT_UNRESOLVED_SOURCE_IDENTITY",
+          "same_original_video_identity_verified": false
+        }
+      ]
+    }
+  ]
+}
