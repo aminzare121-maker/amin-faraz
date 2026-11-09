@@ -1,0 +1,23 @@
+name: Artin observed teacher price-side example replay
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-price-side-replay.yml]
+permissions:
+  contents: read
+jobs:
+  replay-observed-examples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Replay observed examples and reject wrong-quote alternative
+        run: python3 audit/artin25-cloud/replay_lesson4_price_side.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artin25-lesson4-observed-price-side-replay
+          path: replay_output/
+          retention-days: 90
+          if-no-files-found: error
