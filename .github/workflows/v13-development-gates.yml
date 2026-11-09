@@ -1,0 +1,27 @@
+name: V13 isolated development acceptance checks
+on:
+  push:
+    branches: [artin-v13-under180-development]
+    paths:
+      - 'tools-makhzan/v13-development/**'
+      - '.github/workflows/v13-development-gates.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: v13-development-only-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify-acceptance-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: artin-v13-under180-development
+          persist-credentials: false
+      - name: Unit tests for V13 end-to-end evidence gate (synthetic tests only)
+        run: python3 -m unittest discover -s tools-makhzan/v13-development -p 'test_*.py' -v
+      - name: Report non-production status
+        run: |
+          echo 'Only acceptance-gate unit tests were executed; no real film or <180s claim.' >> "$GITHUB_STEP_SUMMARY"
