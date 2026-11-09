@@ -43,11 +43,9 @@ def check(record):
     if record.get("source_integrity_verified") is not True:
         errors.append("source integrity not verified")
     if len(times) == len(REQUIRED):
-        order = [times[k] for k in REQUIRED if k != "behrooz_readback_verified_at"]
+        order = [times[k] for k in REQUIRED]
         if order != sorted(order):
-            errors.append("timestamps out of order")
-        if times["behrooz_readback_verified_at"] < times["archive_committed_at"]:
-            errors.append("Behrooz readback predates archive")
+            errors.append("timestamps out of order, including Behrooz readback")
         duration = (times["behrooz_readback_verified_at"] - times["source_started_at"]).total_seconds()
         if duration >= 180 or duration < 0:
             errors.append(f"end-to-end duration {duration:.3f}s must be nonnegative and below 180s")
