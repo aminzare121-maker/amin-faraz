@@ -109,9 +109,24 @@ def github_put_json(path,document,repo,branch,token):
              "content":encoded,"branch":branch}
     if existing:
         content=base64.b64decode(existing.get("content","")).decode("utf8") if existing.get("encoding")=="base64" else ""
-        if content and json.loads(content)==document:
-            return "EXISTS_IDENTICAL"
-        raise ValueError("Refusing to overwrite earlier verified queue receipt")
+        if content:
+            prior=json.loads(content)
+            if prior==document:
+                return "EXISTS_IDENTICAL"
+            # Only replace a failed attempt with later fully verified proof
+            # for the identical magazine, queue item and original source.
+            if (prior.get("status")=="FAILED_NEEDS_REVIEW"
+                and document.get("status")=="COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED"
+                and prior.get("queue_id")==document.get("queue_id")
+                and prior.get("magazine_id")==document.get("magazine_id")
+                and prior.get("source_page")==document.get("source_page")
+                and document.get("source_evidence") is not None
+                and int(document.get("github_run_id",0))>int(prior.get("github_run_id",0))):
+                payload["sha"]=existing["sha"]
+            else:
+                raise ValueError("Refusing to replace a verified or mismatched queue receipt")
+        else:
+            raise ValueError("Cannot verify existing queue receipt content")
     request=Request(url,method="PUT",headers={**headers,"Content-Type":"application/json"},
                     data=json.dumps(payload).encode("utf8"))
     with urlopen(request,timeout=35) as response:
