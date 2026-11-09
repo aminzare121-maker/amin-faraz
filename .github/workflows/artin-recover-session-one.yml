@@ -1,0 +1,61 @@
+name: Recover genuine Artin session one speech
+on:
+  workflow_dispatch:
+  push:
+    branches: [tools-makhzan-hub]
+    paths:
+      - '.github/workflows/artin-recover-session-one.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install actual media and ASR tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade yt-dlp faster-whisper requests
+      - name: Recover and verify original video, then transcribe its audio
+        shell: bash
+        run: |
+          mkdir -p session1
+          python - <<'PY'
+          import hashlib,subprocess,pathlib,sys
+          page='https://my.uupload.ir/p/aGgKYdpL'
+          expected='b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff'
+          subprocess.run(['yt-dlp','--no-playlist','--no-part','-o','session1/original.%(ext)s',page],check=True,timeout=900)
+          files=[p for p in pathlib.Path('session1').glob('original.*') if p.is_file()]
+          if len(files)!=1:raise RuntimeError('Original source not uniquely recovered')
+          video=files[0]
+          h=hashlib.sha256()
+          with video.open('rb') as f:
+              for chunk in iter(lambda:f.read(1024*1024),b''):h.update(chunk)
+          if h.hexdigest()!=expected:
+              raise RuntimeError('Source SHA256 mismatch: refuse substituting a different video')
+          subprocess.run(['ffmpeg','-nostdin','-v','error','-y','-i',str(video),'-ac','1','-ar','16000','session1/audio.wav'],check=True,timeout=900)
+          print('ORIGINAL_VIDEO_SHA256_VERIFIED')
+          PY
+          python - <<'PY'
+          import json,pathlib
+          from faster_whisper import WhisperModel
+          model=WhisperModel('small',device='cpu',compute_type='int8',cpu_threads=4)
+          chunks,info=model.transcribe('session1/audio.wav',language='fa',beam_size=3,vad_filter=True)
+          rows=[{'start':float(s.start),'end':float(s.end),'text':s.text.strip(),'speaker':'UNKNOWN','verified_against_audio':False} for s in chunks]
+          if len(rows)<300:raise RuntimeError('Insufficient transcript coverage; refuse complete status')
+          out={'schema':'artin_session1_original_source_asr_recovered_v1','original_source_sha256':'b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff','source_audio_verified':True,'teacher_semantics_verified':False,'segments':rows}
+          pathlib.Path('session1/actual_original_asr_unverified.json').write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf8')
+          print('RECOVERED_SEGMENTS',len(rows))
+          PY
+          rm -f session1/original.* session1/audio.wav
+      - name: Upload recovered original session one speech evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-session-one-source-recovery-result
+          path: session1/*.json
+          if-no-files-found: warn
+          retention-days: 30
