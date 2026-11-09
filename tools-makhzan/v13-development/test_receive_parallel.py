@@ -43,7 +43,7 @@ def serve(payload, mode):
 
 
 class ReceiverTests(unittest.TestCase):
-    payload = b"0000ftyp" + bytes(range(256)) * 17000
+    payload = b"0000ftyp" + bytes(range(256)) * 34000
     engine = SimpleNamespace(_allowed_https=lambda url: None,
                              SourceRedirectSafe=urllib.request.HTTPRedirectHandler, MAX_BYTES=600 << 20)
 

@@ -19,8 +19,8 @@ def fixture(seconds=179):
 class AcceptanceGateTests(unittest.TestCase):
     def test_synthetic_under180_is_accepted_by_gate_only(self):
         self.assertTrue(gate.check(fixture())["passed"])
-    def test_exactly_180_passes(self):
-        self.assertTrue(gate.check(fixture(180))["passed"])
+    def test_exactly_180_misses_strict_target(self):
+        self.assertFalse(gate.check(fixture(180))["passed"])
         self.assertFalse(gate.check(fixture(180.001))["passed"])
     def test_receipt_without_semantic_review_fails(self):
         d=fixture();d["semantic_review_passed"]=False

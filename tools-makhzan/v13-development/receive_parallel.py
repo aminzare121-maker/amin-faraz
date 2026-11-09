@@ -31,7 +31,7 @@ def receive(url, output, engine, serial):
         raise ValueError("Invalid source size")
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    block_size = 4 * 1024 * 1024
+    block_size = 8 * 1024 * 1024
     # Independent handles permit disjoint writes on Linux and Windows.
     def copy_range(start):
         end = min(start + block_size, size) - 1
@@ -52,7 +52,7 @@ def receive(url, output, engine, serial):
     with output.open("xb") as dest:
         dest.truncate(size)
     try:
-        with ThreadPoolExecutor(max_workers=6) as pool:
+        with ThreadPoolExecutor(max_workers=12) as pool:
             list(pool.map(copy_range, range(0, size, block_size)))
         with output.open("rb") as source:
             if b"ftyp" not in source.read(24):

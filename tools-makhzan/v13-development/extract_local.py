@@ -44,17 +44,7 @@ def run(script, *args):
     subprocess.run([sys.executable, str(script), *map(str, args)], check=True)
 
 
-def extract(root, prep_engine, worker, verifier, entry):
-    prepared = root / "media/prepared"
-    source_summary = prepared / "safe_source_prep_summary.json"
-    source = read(source_summary)
-    speech = source["source_audio_worker_count"]
-    images = source["original_ocr_workers"]
-    chat_index = prepared / "full_chat/chat_selected_index.json"
-    board = prepared / "board_review"
-    board_text = root / "board_text"
-    asr = root / "asr"
-    ocr = root / "ocr"
+def speech_model():
     # Resolve the same model from the local cache before attempting a network
     # lookup. Keep the original model name and normal download on a cold host.
     from huggingface_hub import snapshot_download
@@ -67,23 +57,59 @@ def extract(root, prep_engine, worker, verifier, entry):
             model = str(snapshot)
     except (FileNotFoundError, LocalEntryNotFoundError):
         pass
+    return model
+
+
+def speech_input(root, full_audio, manifest):
+    """Expose verified WAVs early using the same private-path-free shard format."""
+    audio_input = root / "early-audio"
+    audio_input.mkdir()
+    try:
+        source_bytes = (root / "media/private_original_user_movie.mp4").stat().st_size
+    except FileNotFoundError:
+        summary = read(root / "media/prepared/safe_source_prep_summary.json")
+        if summary["source_video_sha256"] != manifest["video_sha256"]:
+            raise ValueError("Prepared source changed before ASR")
+        source_bytes = summary["original_movie_bytes"]
+    manifest = dict(manifest, verified_original_movie_bytes=source_bytes)
+    manifest.pop("video_path_private", None)
+    for part in manifest["parts"]:
+        relative = Path(part["audio"])
+        source = (full_audio / relative).resolve()
+        if relative.is_absolute() or not source.is_relative_to(full_audio.resolve()):
+            raise ValueError("Invalid prepared audio path")
+        target = audio_input / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        os.link(source, target)
+    (audio_input / "fast_av_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    return audio_input
+
+
+def extract(root, prep_engine, worker, verifier, entry, speech_jobs):
+    prepared = root / "media/prepared"
+    source_summary = prepared / "safe_source_prep_summary.json"
+    source = read(source_summary)
+    speech = source["source_audio_worker_count"]
+    if speech != len(speech_jobs):
+        raise ValueError("Speech worker count differs from final source summary")
+    images = source["original_ocr_workers"]
+    chat_index = prepared / "full_chat/chat_selected_index.json"
+    board = prepared / "board_review"
+    board_text = root / "board_text"
+    asr = root / "asr"
+    ocr = root / "ocr"
     asr.mkdir()
     jobs = []
     with ThreadPoolExecutor(max_workers=speech + images + 1) as pool:
         jobs.append(pool.submit(run, prep_engine / "video001_v13_board_text_worker.py",
                                 "--board-root", board, "--out", board_text, "--workers", 2))
-        for i in range(speech):
-            jobs.append(pool.submit(run, worker / "artin_parallel_asr_worker_v5.py",
-                                    "--prepped-root", prepared / f"asr_shards/worker_{i:02d}",
-                                    "--out", root / f"speech-{i}", "--index", i, "--partitions", speech,
-                                    "--expected-sha256", source["source_video_sha256"], "--model", model))
         for i in range(images):
             shard = prepared / f"ocr_shards/worker_{i:02d}"
             jobs.append(pool.submit(run, worker / "artin_persian_full_chat_ocr_v7.py",
                                     "--visual-root", shard, "--visual-index", shard / "chat_selected_index.json",
                                     "--partition-index", i, "--partition-count", images,
                                     "--out", ocr / f"video001-fast-ocr-{i}"))
-        for job in jobs:
+        for job in speech_jobs + jobs:
             job.result()
     for i in range(speech):
         for path in (root / f"speech-{i}/asr_evidence").iterdir():
@@ -134,13 +160,40 @@ def main():
     start = time.monotonic()
     report = {"queue_id": entry["queue_id"], "archive_verified": False, "semantic_review_verified": False}
     try:
-        run(Path(__file__).with_name("receive_parallel.py"), engines[0], "--request", request, "--out", root / "media")
-        report["receive_and_prepare_seconds"] = time.monotonic() - start
-        extract(root, *engines, entry)
+        # The producer atomically publishes the complete, validated audio manifest.
+        # ASR can start while the independent visual preparation is still running.
+        full_audio = root / "media/prepared/full_audio"
+        manifest_path = full_audio / "fast_av_manifest.json"
+        with ThreadPoolExecutor(max_workers=args.asr + 1) as pool:
+            preparation = pool.submit(run, Path(__file__).with_name("receive_parallel.py"),
+                                      engines[0], "--request", request, "--out", root / "media")
+            while not manifest_path.is_file() and not preparation.done():
+                time.sleep(0.1)
+            if preparation.done():
+                preparation.result()
+            manifest = read(manifest_path)
+            count = min(args.asr, len(manifest["parts"]))
+            digest = manifest["video_sha256"]
+            if entry.get("expected_sha256") and digest != entry["expected_sha256"]:
+                raise ValueError("Audio belongs to a different film")
+            audio_input = speech_input(root, full_audio, manifest)
+            model = speech_model()
+            report["speech_dispatch_seconds"] = time.monotonic() - start
+            print(json.dumps({"speech_dispatch_seconds": report["speech_dispatch_seconds"]}), flush=True)
+            speech_jobs = [
+                pool.submit(run, engines[1] / "artin_parallel_asr_worker_v5.py",
+                            "--prepped-root", audio_input, "--out", root / f"speech-{i}",
+                            "--index", i, "--partitions", count, "--expected-sha256", digest,
+                            "--model", model)
+                for i in range(count)
+            ]
+            preparation.result()
+            report["receive_and_prepare_seconds"] = time.monotonic() - start
+            extract(root, *engines, entry, speech_jobs)
         report["archive_verified"] = True
     finally:
         report["elapsed_seconds"] = time.monotonic() - start
-        report["machine_text_within_180_seconds"] = report["archive_verified"] and report["elapsed_seconds"] <= 180
+        report["machine_text_within_180_seconds"] = report["archive_verified"] and report["elapsed_seconds"] < 180
         (root / "timing.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps(report), flush=True)
 

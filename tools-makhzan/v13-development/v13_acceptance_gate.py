@@ -49,8 +49,8 @@ def check(record):
         if times["behrooz_readback_verified_at"] < times["archive_committed_at"]:
             errors.append("Behrooz readback predates archive")
         duration = (times["behrooz_readback_verified_at"] - times["source_started_at"]).total_seconds()
-        if duration > 180 or duration < 0:
-            errors.append(f"end-to-end duration {duration:.3f}s is outside 0..180s")
+        if duration >= 180 or duration < 0:
+            errors.append(f"end-to-end duration {duration:.3f}s must be nonnegative and below 180s")
     else:
         duration = None
     return {"passed": not errors, "duration_seconds": duration, "errors": errors}
