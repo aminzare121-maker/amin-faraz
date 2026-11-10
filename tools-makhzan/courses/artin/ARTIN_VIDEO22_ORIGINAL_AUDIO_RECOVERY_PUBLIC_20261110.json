@@ -1,0 +1,29 @@
+{
+  "schema": "artin_video22_original_audio_recovery_public_v1",
+  "source_github_actions_artifact_id": 13679791669,
+  "original_audio_member": "audio/batch_001/part_16.wav",
+  "original_audio_sha256": "d0ab09ee0452930b246ab6ad34ce6cc982f2284f7efa694e253890c13e0d3afe",
+  "verified_original_audio_cut_seconds": [
+    4488,
+    4812
+  ],
+  "original_review_excerpt_end_seconds": 4733,
+  "repaired_review_excerpt_end_seconds": 4743.55,
+  "restored_audio_duration_seconds": 10.55,
+  "problematic_machine_segment": "asr_p016_00063",
+  "machine_segment_end_seconds": 4738.55,
+  "source_audio_now_fully_covers_machine_segment": true,
+  "other_original_audio_files_unchanged": 4,
+  "original_frames_unchanged": 4,
+  "private_repaired_zip": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V2_AUDIO_FIXED_20261110.zip",
+  "private_source_report": "/بهروز/ARTIN_VIDEO22_ORIGINAL_AUDIO_RECOVERED_20261110.json",
+  "public_source_repair_script": "repair_artin_audio_excerpt_v22.py",
+  "tests_on_original_archive": {
+    "ordinary": 8,
+    "python_optimized": 8
+  },
+  "github_actions_new_run_verified": false,
+  "independent_teacher_speech_verified": false,
+  "teacher_semantics_certified": false,
+  "trading_authorized": false
+}
