@@ -1,0 +1,30 @@
+{
+  "schema": "artin_restored_av_strict_boundary_public_v1",
+  "original_video20_frame_sha256_verified": 4,
+  "unique_audio_wav_sha256_verified": 5,
+  "restored_citation_windows_audited": 6,
+  "original_video20_citations_with_frame_inside_exact_citation": 2,
+  "original_video20_citations_with_frame_only_in_audio_margin": 3,
+  "shared_audio_clip_alias": "ARTIN-RESTORED-04 uses actual audio from ARTIN-RESTORED-03, verified against provenance aliases rather than inventing missing file",
+  "strict_example": {
+    "citation": "ARTIN-RESTORED-03",
+    "citation_seconds": [
+      4210.14,
+      4214.52
+    ],
+    "margin_only_frame_seconds": 4215,
+    "interpretation": "Frame at 4215 outside cited speech interval despite lying within WAV file margin; must not count as direct synchronized evidence"
+  },
+  "local_tests": {
+    "run": 8,
+    "passed": 8,
+    "negative_cases": "audio SHA mismatch, frame SHA mismatch, undocumented alias, changed alias time, margin-only frame improperly promoted"
+  },
+  "private_report": "/بهروز/ARTIN_RESTORED_AV_STRICT_BOUNDARY_PRIVATE_20261110.json",
+  "private_implementation": "/بهروز/artin_restored_av_window_audit.py",
+  "private_tests": "/بهروز/test_artin_restored_av_window_audit.py",
+  "original_audio_audited_integrity_not_speech_meaning": true,
+  "teacher_meaning_certified": false,
+  "orders_authorized": 0,
+  "github_actions_run": "NOT_EXECUTED"
+}
