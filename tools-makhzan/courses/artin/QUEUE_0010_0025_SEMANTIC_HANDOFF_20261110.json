@@ -1,0 +1,35 @@
+{
+  "schema": "artin_queue_semantic_handoff_v1",
+  "checked_at": "2026-11-10",
+  "branch": "tools-makhzan-hub",
+  "magazine": "artin-course-001",
+  "queue_range": [
+    10,
+    25
+  ],
+  "receipt_audit": {
+    "count": 16,
+    "all_six_job_results_success": true,
+    "all_source_sha256_present": true,
+    "teacher_meaning_verified_count": 0,
+    "verified_teacher_rules_count": 0,
+    "scope": "Repository receipt JSON verification only; not independent replay of all media or audio/visual semantic validation"
+  },
+  "first_unfinished_stage": "Independent teacher-meaning verification using original timestamped audio, board, chat, and questions, starting from earliest unresolved lesson and preserving cumulative context",
+  "next_actions": [
+    "Read original evidence and reconstruct speaker-attributed question/answer timeline in lesson order",
+    "Compare provisional time links to original audiovisual evidence; retain unresolved ambiguity",
+    "Track corrections and exceptions across lessons without inventing rules",
+    "Only after independent semantic verification, register confirmed lesson findings in private Behrooz archive"
+  ],
+  "no_trading": true,
+  "no_v12_changes": true,
+  "source_receipt_directory": "tools-makhzan/video_queue/magazines/artin-course-001/receipts",
+  "reconstructed_session_four": {
+    "run_id": 42714275125,
+    "artifact_id": 13716743132,
+    "artifact_sha256": "d067174c5987e3564d0bb63feb28c1b15817c101c54779f859b836caf278f199",
+    "semantic_verification": false
+  },
+  "note": "Checkpoint only. Does not claim full semantic processing or Behrooz transfer."
+}
