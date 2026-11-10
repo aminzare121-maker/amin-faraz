@@ -90,3 +90,8 @@ jobs:
             echo "::endgroup::"
           done
           exit "$failed"
+
+      - name: Run optimized AV fail-closed regression tests
+        shell: bash
+        run: |
+          python3 -O -m unittest -v test_artin_restored_av_window_gate_v2_public
