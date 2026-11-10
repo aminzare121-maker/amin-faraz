@@ -97,6 +97,13 @@ jobs:
           done
           exit "$failed"
 
+      - name: Run interval differential oracle with optimized Python
+        shell: bash
+        run: |
+          # Python -O disables assert statements; unittest assertions must still execute.
+          # This verifies the interval matcher does not depend on debug-only checks.
+          python3 -O -m unittest -v test_artin_interval_differential
+
       - name: Run optimized AV fail-closed regression tests
         shell: bash
         run: |
