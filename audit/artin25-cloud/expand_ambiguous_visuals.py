@@ -15,7 +15,8 @@ def main():
  if p.returncode:raise RuntimeError("EXISTING_SOURCE_READ_FAILED")
  h=hashlib.sha256()
  with zipfile.ZipFile(private/"source.zip") as z:
-  names=[s for s in z.namelist() if pathlib.PurePosixPath(s).name=="original.mp4"]
+  member="original_0001.mp4" if n==1 else "original.mp4"
+  names=[s for s in z.namelist() if pathlib.PurePosixPath(s).name==member]
   if len(names)!=1:raise ValueError("ORIGINAL_NOT_UNIQUE")
   with z.open(names[0]) as src,open(private/"source.mp4","wb") as dst:
    for b in iter(lambda:src.read(4194304),b""):h.update(b);dst.write(b)
