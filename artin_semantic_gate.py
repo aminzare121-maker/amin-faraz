@@ -14,6 +14,8 @@ REQUIRED = {"entry", "exit", "exception", "decision_order"}
 
 
 def audit(document):
+    if not isinstance(document, dict):
+        raise ValueError("evidence document must be an object")
     sessions = document.get("sessions", [])
     if not isinstance(sessions, list):
         raise ValueError("sessions must be an array")
@@ -75,8 +77,10 @@ def audit(document):
                 )
             compare_ok = (
                 isinstance(compare, dict)
-                and compare.get("teacher_example_id")
-                and compare.get("reviewer")
+                and isinstance(compare.get("teacher_example_id"), str)
+                and bool(compare["teacher_example_id"].strip())
+                and isinstance(compare.get("reviewer"), str)
+                and bool(compare["reviewer"].strip())
                 and compare.get("expected_decision") in ("ENTER", "EXIT", "HOLD", "NO_TRADE")
                 and compare.get("observed_decision") == compare.get("expected_decision")
                 and compare.get("independent") is True
