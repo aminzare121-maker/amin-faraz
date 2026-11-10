@@ -690,6 +690,27 @@
       "direct_listening": false,
       "teacher_role_verified": false,
       "whole_lesson_verified": false
+    },
+    {
+      "sequence": 20,
+      "case": "POINTER_VARIANT_LOCATION_CORRECTION",
+      "source_sha256": "6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",
+      "run": 42783194737,
+      "frames_personally_viewed_seconds": [
+        4203,
+        4209,
+        4215,
+        4221,
+        4233,
+        4235,
+        4238
+      ],
+      "crc_and_image_sha_verified": true,
+      "result": "MIDDLE_OPPOSITE_COLOR_PAUSE_PLUS_CONFIRMATION_IS_BETWEEN_ZONE_EXCEPTION_LEFT_SAME_COLOR_AND_RIGHT_DOJI_REQUIRE_ZONE",
+      "supersedes_earlier_candidate": "LEFT_SAME_COLOR_BETWEEN_ZONE_INFERENCE",
+      "direct_listening": false,
+      "whole_lesson_verified": false,
+      "execution_enabled": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
