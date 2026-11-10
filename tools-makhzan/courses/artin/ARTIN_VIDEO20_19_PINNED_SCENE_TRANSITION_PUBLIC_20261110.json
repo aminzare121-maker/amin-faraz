@@ -1,0 +1,26 @@
+{
+  "schema": "artin_video20_19_pinned_original_frame_transition_public_v1",
+  "date": "2026-11-10",
+  "source_archive": "/بهروز/ARTIN_VIDEO_20_RECOVERED/BOARD_IMAGES.zip",
+  "frames_individually_sha256_verified": 19,
+  "observed_scene_boundary_seconds": {
+    "last_observed_educational_schematic": 4215,
+    "first_observed_historical_price_chart": 4245,
+    "exact_transition_time_known": false
+  },
+  "review_method": "Manual interpretation of a contact sheet, pinned to 19 original archival frame bytes using SHA-256; not continuous-motion footage analysis",
+  "local_tests": {
+    "normal_passed": 7,
+    "normal_total": 7,
+    "python_optimized_passed": 7,
+    "python_optimized_total": 7
+  },
+  "private_review": "/بهروز/ARTIN_VIDEO20_19_FRAME_BOUNDARY_AUDIT_PRIVATE_20261110.json",
+  "private_hash_pins": "/بهروز/ARTIN_VIDEO20_19_FRAME_PINNED_LABELS_PRIVATE_20261110.json",
+  "source_code": "artin_video20_scene_boundary.py",
+  "test_file": "test_artin_video20_scene_boundary.py",
+  "teacher_speech_certified": false,
+  "teacher_strategy_certified": false,
+  "trade_authorized": 0,
+  "github_actions_execution_verified": false
+}
