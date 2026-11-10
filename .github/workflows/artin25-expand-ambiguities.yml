@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [10] # exact selection interval after open dropdown
+        sequence: [22] # documented gap selection at 4521..4547 seconds
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
