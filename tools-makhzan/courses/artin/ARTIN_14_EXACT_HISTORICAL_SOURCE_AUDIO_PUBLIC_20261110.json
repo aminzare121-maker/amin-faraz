@@ -82,7 +82,17 @@
       }
     }
   },
-  "github_actions_outcome": "PENDING_INDEPENDENT_RUN_VERIFICATION",
+  "github_actions_outcome": {
+    "run_id": 42811737307,
+    "run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42811737307",
+    "status": "completed",
+    "conclusion": "success",
+    "head_commit": "e98de826d03bd443143a9c593456c66fcbd18a19",
+    "public_synthetic_tests_normal": "8/8 PASS",
+    "public_synthetic_tests_optimized": "8/8 PASS",
+    "private_original_wav_test_executed_in_github": false,
+    "verified_from": "GitHub Actions jobs and job logs"
+  },
   "teacher_words_independently_heard": false,
   "teacher_speaker_verified": false,
   "teacher_chart_decision_verified": false,
