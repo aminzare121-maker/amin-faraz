@@ -21,6 +21,16 @@ class DecisionBoundaryTests(unittest.TestCase):
     def test_conflict_blocks(self):
         self.assertEqual(decide([rule("entry", "ENTER"), rule("exit", "EXIT")])["reason"], "PRIORITY_CONFLICT")
 
+    def test_lower_priority_entry_no_trade_blocks_high_priority_entry(self):
+        rows = [rule("entry", "ENTER", 10),
+                RuleOutcome("no_entry", "entry", "NO_TRADE", True,
+                            "session-02@00:03:00", 1, 2),
+                rule("exit", "HOLD"), rule("risk", "HOLD")]
+        result = decide(rows)
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "ENTRY_NO_TRADE_PRECEDENCE_UNVERIFIED")
+        self.assertIs(result["executable"], False)
+
     def test_veto_prevents_entry(self):
         rows = [rule("entry", "ENTER", 3), rule("exception", "NO_TRADE")]
         self.assertEqual(decide(rows)["decision"], "NO_TRADE")
