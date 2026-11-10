@@ -32,6 +32,17 @@ class DecisionBoundaryTests(unittest.TestCase):
         self.assertEqual(result["reason"], "ENTRY_EXIT_PRECEDENCE_UNVERIFIED")
         self.assertIs(result["executable"], False)
 
+    def test_truthy_string_is_not_verification(self):
+        row = RuleOutcome("entry1", "entry", "ENTER", "yes", "session-01@00:01:00", 1, 1)
+        self.assertEqual(decide([row])["reason"], "UNVERIFIED_OR_INVALID_RULE")
+
+    def test_invalid_rule_kind_action_pairs_block(self):
+        for kind, action in (("exit", "ENTER"), ("risk", "ENTER"),
+                             ("exception", "EXIT")):
+            with self.subTest(kind=kind, action=action):
+                row = RuleOutcome("bad", kind, action, True, "session-01@00:01:00", 1, 1)
+                self.assertEqual(decide([row])["decision"], "BLOCKED")
+
     def test_non_executable_even_when_allowed(self):
         rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
         result = decide(rows)
