@@ -1,0 +1,745 @@
+{
+  "schema": "artin_13_route_semantic_evidence_readiness_audit_v1",
+  "generated_utc": "2026-11-10",
+  "sources": [
+    "tools-makhzan/courses/artin/ARTIN_13_ROUTE_UNIFIED_SOURCE_COVERAGE_PUBLIC_20261110.json",
+    "tools-makhzan/courses/artin/ORIGINAL_IMAGE_AUDIO_SYNC_AUDIT_20261110.json",
+    "tools-makhzan/courses/artin/ARTIN_13_REAL_M15_EXECUTION_READINESS_PUBLIC_20261110.json"
+  ],
+  "scope": "Public evidence inspection only; no private original media or course ZIP downloaded in this audit",
+  "sessions_reported": 25,
+  "routes_total": 13,
+  "source_citations_total": 24,
+  "machine_asr_citations_present": 24,
+  "restored_visual_time_cases": 6,
+  "restored_cases_with_in_window_frame": 3,
+  "restored_cases_without_in_window_frame": 3,
+  "original_teacher_words_independently_verified": false,
+  "teacher_meaning_independently_verified": false,
+  "route_semantically_approved": 0,
+  "orders_authorized": 0,
+  "important_caveat": "An in-window chart screenshot is not proof it illustrates the spoken setup. Shared DOJI audio is not independent evidence for both decisions.",
+  "route_cases": [
+    {
+      "route_id": "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE",
+      "citations": [
+        {
+          "video": 21,
+          "start_seconds": 1888.1,
+          "end_seconds": 1952.66,
+          "asr_rows": 7
+        }
+      ],
+      "citation_count": 1,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "teacher_model_variant",
+        "strong_run_in_sentiment_direction",
+        "run_break_closed_at",
+        "confirmation_reference_kind",
+        "pause_opened_at",
+        "pause_closed_at",
+        "confirmation_opened_at",
+        "confirmation_closed_at",
+        "pause_body_close",
+        "pause_wick_low",
+        "break_before_pause",
+        "pause_doubt_confirmed",
+        "pause_in_run_direction",
+        "confirmation_in_run_direction",
+        "following_confirmation_closed",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference",
+        "teacher_buy_geometry_not_independently_mapped"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "teacher_model_variant",
+        "strong_run_in_sentiment_direction",
+        "run_break_closed_at",
+        "confirmation_reference_kind",
+        "pause_opened_at",
+        "pause_closed_at",
+        "confirmation_opened_at",
+        "confirmation_closed_at",
+        "pause_body_close",
+        "pause_wick_low",
+        "break_before_pause",
+        "pause_doubt_confirmed",
+        "pause_in_run_direction",
+        "confirmation_in_run_direction",
+        "following_confirmation_closed",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "PULLBACK_STANDARD",
+      "citations": [
+        {
+          "video": 15,
+          "start_seconds": 615,
+          "end_seconds": 854,
+          "asr_rows": 36
+        },
+        {
+          "video": 15,
+          "start_seconds": 1003,
+          "end_seconds": 1109,
+          "asr_rows": 11
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_occurred",
+        "post_break_pivot_confirmed",
+        "retest_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_occurred",
+        "post_break_pivot_confirmed",
+        "retest_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "REVERSAL_CLASSIC",
+      "citations": [
+        {
+          "video": 19,
+          "start_seconds": 2188.86,
+          "end_seconds": 2306.84,
+          "asr_rows": 9
+        },
+        {
+          "video": 19,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "asr_rows": 52
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "doubt_confirmed",
+        "first_confidence_confirmed",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "doubt_confirmed",
+        "first_confidence_confirmed",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "REVERSAL_THREE",
+      "citations": [
+        {
+          "video": 19,
+          "start_seconds": 2660.22,
+          "end_seconds": 3255.4,
+          "asr_rows": 52
+        },
+        {
+          "video": 19,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "asr_rows": 54
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "three_same_direction_sequence",
+        "doubt_confidence_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "three_same_direction_sequence",
+        "doubt_confidence_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "REVERSAL_STAR",
+      "citations": [
+        {
+          "video": 19,
+          "start_seconds": 3440.82,
+          "end_seconds": 4048.72,
+          "asr_rows": 54
+        },
+        {
+          "video": 19,
+          "start_seconds": 4117.72,
+          "end_seconds": 4483.72,
+          "asr_rows": 39
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "star_sequence",
+        "body_penetration_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "zone_context",
+        "reversal_relative_to_last_leg",
+        "decision_candle_closed",
+        "star_sequence",
+        "body_penetration_condition",
+        "half_leg_condition",
+        "teacher_prz_exception_if_strong_trend"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "BREAK_STRONG",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 2105.04,
+          "end_seconds": 2261,
+          "asr_rows": 13
+        },
+        {
+          "video": 20,
+          "start_seconds": 2274,
+          "end_seconds": 2649.38,
+          "asr_rows": 40
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "fullbody_or_marubozu",
+        "decision_candle_closed",
+        "level_kind",
+        "decision_close",
+        "zone_low_and_high_OR_line_level_after_level_kind"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "fullbody_or_marubozu",
+        "decision_candle_closed",
+        "level_kind",
+        "decision_close",
+        "zone_low_and_high_OR_line_level_after_level_kind"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "BREAK_WEAK_PIVOT",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "asr_rows": 50
+        }
+      ],
+      "citation_count": 1,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "post_break_pivot_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "post_break_pivot_confirmed",
+        "decision_candle_closed",
+        "decision_close",
+        "post_break_pivot_level"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "BREAK_WEAK_FULLBODY_EXCEPTION",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 2770.48,
+          "end_seconds": 3153.16,
+          "asr_rows": 50
+        }
+      ],
+      "citation_count": 1,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "fullbody_or_marubozu",
+        "fullbody_exception_context",
+        "decision_candle_closed"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "pullback_confirmed",
+        "fullbody_or_marubozu",
+        "fullbody_exception_context",
+        "decision_candle_closed"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "BREAK_VERY_STRONG_RETEST",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 3162.56,
+          "end_seconds": 3473.88,
+          "asr_rows": 27
+        }
+      ],
+      "citation_count": 1,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "not_chasing",
+        "reference_body_open",
+        "reference_body_close",
+        "retouch_low",
+        "retouch_high"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "family_selection_context",
+        "trend_strength",
+        "break_strength",
+        "not_chasing",
+        "reference_body_open",
+        "reference_body_close",
+        "retouch_low",
+        "retouch_high"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "STOPPUNCH_SAME_COLOUR",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 3947,
+          "end_seconds": 3975,
+          "asr_rows": 1
+        },
+        {
+          "video": 20,
+          "start_seconds": 4201.3,
+          "end_seconds": 4208.84,
+          "asr_rows": 5
+        },
+        {
+          "video": 20,
+          "start_seconds": 4597,
+          "end_seconds": 4661,
+          "asr_rows": 6
+        }
+      ],
+      "citation_count": 3,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [
+        {
+          "window": "ARTIN-RESTORED-02",
+          "video": 20,
+          "frame_count_in_window": 0,
+          "temporal_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+          "chart_referent_verified": false
+        }
+      ],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "same_colour_pause",
+        "pause_candle_closed"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "same_colour_pause",
+        "pause_candle_closed",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "STOPPUNCH_DOJI_AHEAD",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "asr_rows": 8
+        },
+        {
+          "video": 20,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "asr_rows": 3
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [
+        {
+          "window": "ARTIN-RESTORED-03",
+          "video": 20,
+          "frame_count_in_window": 0,
+          "temporal_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+          "chart_referent_verified": false
+        }
+      ],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "doji_candle_closed"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "doji_candle_closed",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "STOPPUNCH_DOJI_TIED",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 3984.88,
+          "end_seconds": 4068.98,
+          "asr_rows": 8
+        },
+        {
+          "video": 20,
+          "start_seconds": 4210.14,
+          "end_seconds": 4214.52,
+          "asr_rows": 3
+        }
+      ],
+      "citation_count": 2,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [
+        {
+          "window": "ARTIN-RESTORED-04",
+          "video": 20,
+          "frame_count_in_window": 0,
+          "temporal_status": "NO_FRAME_WITHIN_SPEECH_INTERVAL",
+          "chart_referent_verified": false
+        }
+      ],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "following_confirmation_closed",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "doji_shadow_high"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "zone_context",
+        "doji_confirmed",
+        "day_analysis_state",
+        "following_confirmation_closed",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "doji_shadow_high",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "authorization": "NO_TRADE"
+    },
+    {
+      "route_id": "STOPPUNCH_OPPOSITE_CONFIRMATION",
+      "citations": [
+        {
+          "video": 20,
+          "start_seconds": 4100,
+          "end_seconds": 4133,
+          "asr_rows": 13
+        },
+        {
+          "video": 20,
+          "start_seconds": 4214.52,
+          "end_seconds": 4223.26,
+          "asr_rows": 6
+        },
+        {
+          "video": 22,
+          "start_seconds": 4694,
+          "end_seconds": 4728,
+          "asr_rows": 12
+        }
+      ],
+      "citation_count": 3,
+      "source_coverage": "MACHINE_ASR_PRESENT_NOT_ORIGINAL_SPEECH_VERIFIED",
+      "speech_original_verified": false,
+      "teacher_vs_student_verified": false,
+      "temporal_visual_samples": [
+        {
+          "window": "ARTIN-RESTORED-01",
+          "video": 20,
+          "frame_count_in_window": 1,
+          "temporal_status": "IN_WINDOW_FRAMES_EXIST",
+          "chart_referent_verified": false
+        },
+        {
+          "window": "ARTIN-RESTORED-05",
+          "video": 20,
+          "frame_count_in_window": 1,
+          "temporal_status": "IN_WINDOW_FRAMES_EXIST",
+          "chart_referent_verified": false
+        },
+        {
+          "window": "ARTIN-RESTORED-06",
+          "video": 22,
+          "frame_count_in_window": 2,
+          "temporal_status": "MIXED_SCENES_WITHIN_INTERVAL",
+          "chart_referent_verified": false
+        }
+      ],
+      "all_visual_examples_verified": false,
+      "entry_exit_exceptions_verified": false,
+      "cross_session_corrections_verified": false,
+      "teacher_decision_replayed": false,
+      "required_market_context_buy": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "opposite_colour_pause",
+        "complete_punch_sequence",
+        "following_confirmation_closed",
+        "entry_location",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference"
+      ],
+      "required_market_context_sell": [
+        "sentiment_permission",
+        "current_setup",
+        "strong_run_in_sentiment_direction",
+        "opposite_colour_pause",
+        "complete_punch_sequence",
+        "following_confirmation_closed",
+        "entry_location",
+        "confirmation_near",
+        "confirmation_timely",
+        "confirmation_close",
+        "teacher_confirmation_reference",
+        "teacher_sell_geometry_not_independently_mapped"
+      ],
+      "authorization": "NO_TRADE"
+    }
+  ],
+  "required_next_evidence": [
+    "Private original speech/audio with speaker attribution and phrase-level QA",
+    "Original video frames sufficiently dense to bind referred chart object to timestamped teacher speech",
+    "Observed teacher choice, entry/exit/exception and decision sequence per route",
+    "Cross-session amendment and contradiction adjudication",
+    "Independent review and case replay; retain NO_TRADE until complete"
+  ]
+}
