@@ -31,3 +31,36 @@ jobs:
       - name: Run optimized offline compile-receipt integrity tests (NOT a MetaEditor compile)
         shell: bash
         run: python -O -m unittest -v test_artin_compile_check_v3
+
+  windows-powershell-syntax:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Windows PowerShell source (no MetaEditor available)
+        shell: powershell
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $scriptPath = Join-Path $PWD 'compile_artin_v13_shadow.ps1'
+          [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -ne 0) {
+            $parseErrors | ForEach-Object { Write-Host $_.Message }
+            throw 'PowerShell script has syntax errors'
+          }
+          Write-Host 'PowerShell 5.1 syntax parse PASS; not a MetaEditor compilation.'
+      - name: Verify repo source is identical except the historic final LF
+        shell: powershell
+        run: |
+          $path = Join-Path $PWD 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
+          [byte[]]$bytes = [System.IO.File]::ReadAllBytes($path)
+          if ($bytes.Length -eq 0) { throw 'Empty MQ5 source' }
+          if ($bytes[$bytes.Length - 1] -ne 10) {
+            $bytes = [byte[]]($bytes + [byte]10)
+          }
+          $sha = [System.Security.Cryptography.SHA256]::Create()
+          $digest = [System.BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-', '').ToLowerInvariant()
+          if ($digest -ne '66f65c92275999e41835a1c414263cf7c5dd0ef4ea219dbef0e96b030bdcd361') {
+            throw 'Source has changed beyond the historic GitHub final newline'
+          }
+          Write-Host 'V2 source content matches pinned original ZIP byte-for-byte after one terminal LF.'
