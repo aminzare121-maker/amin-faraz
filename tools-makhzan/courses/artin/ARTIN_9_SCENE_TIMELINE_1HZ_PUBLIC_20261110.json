@@ -1,0 +1,247 @@
+{
+  "schema": "artin_9_two_episode_1hz_screen_change_public_v1",
+  "date": "2026-11-10",
+  "source_sessions": [
+    19,
+    21
+  ],
+  "chart_symbols": {
+    "19": "XAUUSD",
+    "21": "EURUSD"
+  },
+  "original_source_intervals_seconds": {
+    "19": [
+      4276,
+      4331
+    ],
+    "21": [
+      1896,
+      1944
+    ]
+  },
+  "sample_rate": "1 frame per video second (approximate scene time within 1 second)",
+  "sampled_frames": 103,
+  "pixel_change_rule": "At least 8% of sampled chart ROI pixels differ from previous 1-second sample by more than 30 grayscale-equivalent per-channel max intensity",
+  "candidate_large_screen_changes_by_session": {
+    "19": [
+      {
+        "original_video_second": 4279,
+        "changed_fraction": 0.0987
+      },
+      {
+        "original_video_second": 4284,
+        "changed_fraction": 0.1169
+      },
+      {
+        "original_video_second": 4297,
+        "changed_fraction": 0.1424
+      },
+      {
+        "original_video_second": 4298,
+        "changed_fraction": 0.125
+      },
+      {
+        "original_video_second": 4304,
+        "changed_fraction": 0.1104
+      },
+      {
+        "original_video_second": 4307,
+        "changed_fraction": 0.1
+      },
+      {
+        "original_video_second": 4318,
+        "changed_fraction": 0.2284
+      },
+      {
+        "original_video_second": 4325,
+        "changed_fraction": 0.1279
+      },
+      {
+        "original_video_second": 4326,
+        "changed_fraction": 0.1902
+      },
+      {
+        "original_video_second": 4327,
+        "changed_fraction": 0.0987
+      }
+    ],
+    "21": [
+      {
+        "original_video_second": 1897,
+        "changed_fraction": 0.1115
+      },
+      {
+        "original_video_second": 1898,
+        "changed_fraction": 0.1128
+      },
+      {
+        "original_video_second": 1900,
+        "changed_fraction": 0.1218
+      },
+      {
+        "original_video_second": 1907,
+        "changed_fraction": 0.9504
+      },
+      {
+        "original_video_second": 1909,
+        "changed_fraction": 0.9505
+      },
+      {
+        "original_video_second": 1920,
+        "changed_fraction": 0.0862
+      },
+      {
+        "original_video_second": 1921,
+        "changed_fraction": 0.1096
+      },
+      {
+        "original_video_second": 1935,
+        "changed_fraction": 0.0983
+      },
+      {
+        "original_video_second": 1940,
+        "changed_fraction": 0.152
+      }
+    ]
+  },
+  "candidate_large_screen_change_count": 19,
+  "pairs": [
+    {
+      "pair_id": 2,
+      "session": 19,
+      "intervening_large_visual_change_seconds": [
+        4297,
+        4298
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        4297,
+        4298,
+        4304
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 3,
+      "session": 19,
+      "intervening_large_visual_change_seconds": [
+        4297,
+        4298,
+        4304
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        4297,
+        4298,
+        4304,
+        4307
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 5,
+      "session": 19,
+      "intervening_large_visual_change_seconds": [],
+      "large_visual_changes_during_full_comparison_seconds": [
+        4304
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 7,
+      "session": 19,
+      "intervening_large_visual_change_seconds": [
+        4304
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        4304,
+        4307
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 9,
+      "session": 21,
+      "intervening_large_visual_change_seconds": [],
+      "large_visual_changes_during_full_comparison_seconds": [],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 10,
+      "session": 21,
+      "intervening_large_visual_change_seconds": [],
+      "large_visual_changes_during_full_comparison_seconds": [],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 12,
+      "session": 21,
+      "intervening_large_visual_change_seconds": [
+        1920,
+        1921
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        1920,
+        1921
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 13,
+      "session": 21,
+      "intervening_large_visual_change_seconds": [
+        1909,
+        1920,
+        1921
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        1907,
+        1909,
+        1920,
+        1921
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    },
+    {
+      "pair_id": 14,
+      "session": 21,
+      "intervening_large_visual_change_seconds": [
+        1909
+      ],
+      "large_visual_changes_during_full_comparison_seconds": [
+        1907,
+        1909
+      ],
+      "same_market_setup_proven": false,
+      "teacher_decision_certified": false
+    }
+  ],
+  "pairs_with_large_change_strictly_between_utterances": 6,
+  "pairs_with_large_change_across_utterances_inclusive": 7,
+  "private_review_zip": "/بهروز/ARTIN_9_SCENE_TIMELINE_1HZ_20261110.zip",
+  "private_original_av_zip": "/بهروز/ARTIN_9_TWO_EPISODE_EVIDENCE_REVIEW_20261110.zip",
+  "new_scene_frames_in_private_review": 19,
+  "source_video_audio_original_assets_unchanged": true,
+  "calibration_limits": [
+    "Large pixel changes can be zoom, screen selection, browser popup, annotation editing or chart movement; they are NOT teacher trade decisions.",
+    "No change above 8% does not imply identical trading conditions; small but meaningful annotation changes may be excluded.",
+    "Original video time is sampled once per second, not frame-accurate transition localization.",
+    "Machine-ASR original Persian words, speaker identity, chart referent and teacher semantics remain independently unverified."
+  ],
+  "browser_runtime_tested": false,
+  "local_original_media_tests": {
+    "ordinary": "22/22 PASS (12 synthetic + 10 real-source)",
+    "python_O": "22/22 PASS (12 synthetic + 10 real-source)"
+  },
+  "github_actions": "NOT_VERIFIED_AS_OF_REPORT_CREATION",
+  "semantic_teacher_cases_certified": 0,
+  "orders_authorized": 0,
+  "public_script": "artin_9_scene_timeline.py",
+  "public_test": "test_artin_9_scene_timeline_public.py"
+}
