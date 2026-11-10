@@ -94,6 +94,94 @@ def _decision(event, text):
     raise TeacherActionError('NOT_AN_ENTRY_DECISION')
 
 
+
+def _three_candle_close_entry(event, text):
+    """Reversal-three class: 3 consecutive M15 closes; entry timing is bar 3.
+
+    Instructor's pivot, half-leg location and doubt-candle recognition are
+    required as prior-known chart observations, never guessed by indicators.
+    This is an executable conditional decision, not an MT5 trade permission.
+    """
+    if not (('سه تا کندل' in text or 'ستا کندل' in text)
+            and ('یک دوم' in text or 'نصف' in text)
+            and 'شک' in text and 'کلوز کندل' in text
+            and ('جهت سنتیمنت' in text or 'جهت سنتمینت' in text)
+            and 'یکی' in text):
+        raise TeacherActionError('THREE_CANDLE_TEACHER_WORDS_NOT_PRESENT')
+    side=event.get('side')
+    if side not in ('BUY','SELL'):raise TeacherActionError('THREE_CANDLE_SIDE_REQUIRED')
+    observations=event.get('candles')
+    if observations is None:
+        return {'decision':'WAIT_FOR_THREE_M15_CANDLES','order_created':False}
+    if not isinstance(observations,list) or len(observations)!=3:
+        raise TeacherActionError('EXACTLY_THREE_M15_BARS_REQUIRED')
+    times=[];direction=[]
+    for candle in observations:
+        if not isinstance(candle,dict) or type(candle.get('time')) is not int or candle['time']<=0:
+            raise TeacherActionError('M15_NATIVE_BAR_TIME_REQUIRED')
+        t=candle['time'];times.append(t)
+        o=money(candle.get('open'),'bar_open');h=money(candle.get('high'),'bar_high')
+        l=money(candle.get('low'),'bar_low');c=money(candle.get('close'),'bar_close')
+        if not l<=min(o,c)<=max(o,c)<=h:
+            raise TeacherActionError('INVALID_THREE_CANDLE_OHLC')
+        if not isinstance(candle.get('source'),str) or not candle['source'].strip():
+            raise TeacherActionError('UNSOURCED_M15_CANDLE')
+        direction.append('BUY' if c>o else 'SELL' if c<o else 'FLAT')
+    if times[1]-times[0]!=900 or times[2]-times[1]!=900:
+        return {'decision':'REJECT_THREE_CANDLE_SEQUENCE_GAP','order_created':False}
+    at=event.get('decision_at')
+    if type(at) is not int or at<times[0]:
+        raise TeacherActionError('INVALID_THREE_CANDLE_DECISION_TIME')
+    if at<times[2]+900:
+        return {'decision':'WAIT_FOR_THIRD_CANDLE_CLOSE','order_created':False,
+                'earliest_decision_at':times[2]+900}
+    if at!=times[2]+900:
+        # Teacher points specifically to the third close, not a late signal.
+        return {'decision':'REJECT_NOT_AT_THIRD_CANDLE_CLOSE','order_created':False}
+    # Lesson 19, 3509.96-3519.68: AT LEAST ONE of the three bars that
+    # points with sentiment must be the doubt bar. The older shortcut that
+    # ALL THREE bars must point with sentiment contradicts this wording.
+    # The doubt candle's index is supplied from the classroom chart; choosing
+    # it based on hindsight or arbitrary candle geometry is prohibited.
+    if side not in direction:
+        return {'decision':'REJECT_NO_CANDLE_IN_SENTIMENT_DIRECTION',
+                'order_created':False,'observed_directions':direction}
+    chart=event.get('teacher_chart_facts')
+    required=('pivot_confirmed','half_leg_location_confirmed',
+              'doubt_candle_present','sentiment_permitted','doubt_candle_index')
+    if not isinstance(chart,dict) or any(k not in chart for k in required):
+        return {'decision':'WAIT_FOR_CLASS_CHART_CONTEXT','order_created':False,
+                'missing_facts':[k for k in required if not isinstance(chart,dict) or k not in chart]}
+    for name in required:
+        fact=chart[name]
+        if not isinstance(fact,dict) or type(fact.get('known_at')) is not int or (
+                not isinstance(fact.get('source'),str) or not fact['source'].strip()
+                or fact['known_at']>at):
+            return {'decision':'WAIT_FOR_PRIOR_KNOWN_CLASS_FACTS',
+                    'order_created':False,'invalid_fact':name}
+        if name=='doubt_candle_index':
+            # 0/1/2 is a source-anchored *position*, not a new indicator.
+            if type(fact.get('value')) is not int or not 0<=fact['value']<=2:
+                return {'decision':'WAIT_FOR_PRIOR_KNOWN_CLASS_FACTS',
+                        'order_created':False,'invalid_fact':name}
+            if direction[fact['value']]!=side:
+                return {'decision':'REJECT_TEACHER_DOUBT_CANDLE_OPPOSES_SENTIMENT',
+                        'order_created':False,'doubt_bar_index':fact['value'],
+                        'observed_directions':direction}
+        elif type(fact.get('value')) is not bool:
+            return {'decision':'WAIT_FOR_PRIOR_KNOWN_CLASS_FACTS',
+                    'order_created':False,'invalid_fact':name}
+        elif not fact['value']:
+            return {'decision':'REJECT_TEACHER_THREE_CANDLE_CONDITION_FALSE',
+                    'order_created':False,'failed_fact':name}
+    return {'decision':'CLASSROOM_THIRD_CLOSE_SETUP_CANDIDATE',
+            'order_created':False,'trade_authorized':False,
+            'route':'REVERSAL_THREE','side':side,'bar_3_close_time':at,
+            'doubt_candle_index':chart['doubt_candle_index']['value'],
+            'observed_bar_directions':direction,
+            'teacher_chart_observations_externally_supplied':True,
+            'teacher_chart_meaning_independently_verified':False}
+
 def _riskfree(event, text):
     if 'استاپ' not in text or 'نقطه' not in text or not re.search(r'بیار|بذار|بردار',text):
         raise TeacherActionError('RISKFREE_STOP_WORDS_NOT_PRESENT')
@@ -148,7 +236,15 @@ def _sourced_stop_move(event, text):
     are not inferred from noisy ASR or fabricated historical fills. No orders.
     """
     kind=event['kind']
-    if kind=='REDUCE_RISK_STOP':
+    halve=kind=='HALVE_RISK_STOP'
+    if halve:
+        # Session 24 expressly describes halving the initial nominal stop
+        # distance while keeping the position open. Never invent a trigger.
+        if not ('استاپ' in text and ('نصف' in text or 'یک دوم' in text)
+                and 'ریسک' in text):
+            raise TeacherActionError('HALVE_RISK_CLASS_WORDS_NOT_PRESENT')
+        label='reduce'
+    elif kind=='REDUCE_RISK_STOP':
         if not ('ریسک' in text and ('درصد' in text or 'استاپ' in text)
                 and (re.search(r'نمی\s*بنده',text) or 'استاپ' in text)):
             raise TeacherActionError('REDUCE_RISK_CLASS_WORDS_NOT_PRESENT')
@@ -167,10 +263,10 @@ def _sourced_stop_move(event, text):
         raise TeacherActionError('INVALID_SIDE')
     # No hidden contract defaults. Prices/fees/volume must be supplied rather
     # than taken from the classroom speech or a presumed broker specification.
-    required=('entry','initial_stop','current_stop','new_stop','lots',
+    required=('entry','initial_stop','current_stop','lots',
               'money_per_price_unit_per_lot','min_lot','lot_step',
               'round_trip_fee_per_lot','adverse_price_allowance')
-    if any(k not in trade for k in required):
+    if any(k not in trade for k in required) or (not halve and 'new_stop' not in trade):
         raise TeacherActionError('EXPLICIT_STOP_CONTRACT_REQUIRED')
     from capital import Instrument,Costs,move_stop
     def decimal_nonnegative(v,name):
@@ -183,7 +279,21 @@ def _sourced_stop_move(event, text):
                             ('money_per_price_unit_per_lot','min_lot','lot_step')))
     costs=Costs(*(decimal_nonnegative(trade[k],k) for k in
                  ('round_trip_fee_per_lot','adverse_price_allowance')))
-    position={k:money(trade[k],k) for k in ('entry','initial_stop','current_stop','new_stop','lots')}
+    position={k:money(trade[k],k) for k in ('entry','initial_stop','current_stop','lots')}
+    if halve:
+        side_sign=Decimal(1) if side=='BUY' else Decimal(-1)
+        initial_distance=side_sign*(position['entry']-position['initial_stop'])
+        if initial_distance<=0:raise TeacherActionError('INITIAL_STOP_WRONG_SIDE')
+        half_stop=(position['entry']+position['initial_stop'])/2
+        if side_sign*(half_stop-position['current_stop'])<=0:
+            return {'decision':'ALREADY_HALF_RISK_OR_BETTER','label':'reduce',
+                    'order_created':False,'position_closed':False,
+                    'current_stop_unchanged':str(position['current_stop']),
+                    'lots_unchanged':str(position['lots']),
+                    'nominal_initial_stop_distance':str(initial_distance)}
+        position['new_stop']=half_stop
+    else:
+        position['new_stop']=money(trade['new_stop'],'new_stop')
     if position['lots']<instrument.min_lot or position['lots']%instrument.lot_step:
         raise TeacherActionError('LOTS_NOT_ON_CONTRACT_GRID')
     if event.get('observed_management_trigger') is not True or not event.get('trigger_source'):
@@ -198,6 +308,8 @@ def _sourced_stop_move(event, text):
                 'current_stop_unchanged':str(position['current_stop']),
                 'lots_unchanged':str(position['lots'])}
     return {'decision':'PAPER_STOP_MOVE_ACCEPTED','label':label,
+            'teacher_half_stop_distance_rule_applied':halve,
+            'nominal_initial_stop_distance_reduction_fraction':'0.5' if halve else None,
             'order_created':False,'position_closed':False,
             'old_stop':str(position['current_stop']),'new_stop':str(result['stop']),
             'lots_before':str(position['lots']),'lots_after':str(result['lots']),
@@ -275,9 +387,10 @@ def execute(events_doc, source_folder, core_folder):
         rows,text=_evidence(event,index)
         if kind in ('NO_ENTRY','ENTRY_AFTER_CONFIRMATION'):
             action=_decision(event,text)
+        elif kind=='THREE_CANDLE_CLOSE_ENTRY':action=_three_candle_close_entry(event,text)
         elif kind=='RISKFREE_TO_ENTRY':action=_riskfree(event,text)
         elif kind=='KEEP_STRUCTURAL_STOP':action=_structural_stop(event,text)
-        elif kind in ('REDUCE_RISK_STOP','SAVE_PROFIT_STOP'):
+        elif kind in ('REDUCE_RISK_STOP','HALVE_RISK_STOP','SAVE_PROFIT_STOP'):
             action=_sourced_stop_move(event,text)
         elif kind=='STOP_EXIT_TRIGGER':action=_stop_triggered_exit(event,text)
         else:raise TeacherActionError('UNKNOWN_TEACHER_CLASS_EVENT')

@@ -39,9 +39,12 @@ class ClassTradeActionsTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.folder=Path(self.tmp.name)
         self.rows={
+           19:[source(19,'three','سه تا کندل زیر یک دوم لگ حتما یکی در جهت سنتیمنت باید کندل شک باشد ورود روی کلوز کندل سوم',100.0)],
            21:[source(21,'before','اینجا ورود نمی کنیم',10.0),
                source(21,'after','رو کلوز تاییده ورود میکنیم',20.0)],
            24:[source(24,'reduce','دو درصد ریسک را یک درصد می کنیم، معامله رو نمیبنده',100.0),
+               source(24,'half-speech','استاپلاسم میارم جایی که نصفشه',150.0),
+               source(24,'half-risk','نصف ریسکتون رو کم کنید',160.0),
                source(24,'profit','5 دلار سیوه سود میکنم، استاپلاس هم اینجاست',200.0),
                source(24,'stop-reference','برگرده استاپلاس من رو بزنه',300.0),
                source(24,'stop-exit','خودش معامله رو میبنده',325.0)],
@@ -195,6 +198,138 @@ class ClassTradeActionsTests(unittest.TestCase):
         with self.assertRaisesRegex(TeacherActionError,'STOP_EXIT_BID_EXCEEDS_ASK'):self.run_events([e])
         e['source_segment_ids']=['stop-exit']
         with self.assertRaisesRegex(TeacherActionError,'STOP_EXIT_CLASS_WORDS_NOT_PRESENT'):self.run_events([e])
+
+
+    def test_teacher_half_risk_auto_computes_stop_for_buy_and_sell(self):
+        for side,initial,expected in [('BUY','3990','3995'),('SELL','4010','4005')]:
+            with self.subTest(side=side):
+                pos=frame_position(side)
+                pos.pop('new_stop')  # Unlike the old event, user never chooses half-stop.
+                event=self.base('HALVE_RISK_STOP',24,'half-speech',position=pos,
+                    observed_management_trigger=True,trigger_source='SYNTHETIC_CLASS_EVENT')
+                event['source_segment_ids']=['half-speech','half-risk']
+                result=self.run_events([event])['classroom_decision_actions'][0]['execution']
+                self.assertEqual(result['decision'],'PAPER_STOP_MOVE_ACCEPTED')
+                self.assertEqual(result['new_stop'],expected)
+                self.assertEqual(result['lots_before'],result['lots_after'])
+                self.assertTrue(result['teacher_half_stop_distance_rule_applied'])
+                self.assertFalse(result['position_closed'])
+                self.assertIsNone(result['realized_pnl'])
+
+    def test_half_risk_does_not_loosen_existing_better_stop(self):
+        pos=frame_position(current_stop='3997');pos.pop('new_stop')
+        event=self.base('HALVE_RISK_STOP',24,'half-speech',position=pos,
+            observed_management_trigger=True,trigger_source='SYNTHETIC_CLASS_EVENT')
+        event['source_segment_ids']=['half-speech','half-risk']
+        result=self.run_events([event])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'ALREADY_HALF_RISK_OR_BETTER')
+        self.assertEqual(result['current_stop_unchanged'],'3997')
+
+    def test_half_risk_waits_for_trigger_not_claim_classroom_fill(self):
+        pos=frame_position();pos.pop('new_stop')
+        event=self.base('HALVE_RISK_STOP',24,'half-speech',position=pos,
+            observed_management_trigger=False,trigger_source='SYNTHETIC_CLASS_EVENT')
+        event['source_segment_ids']=['half-speech','half-risk']
+        result=self.run_events([event])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CLASSROOM_TRIGGER')
+        self.assertEqual(result['current_stop_unchanged'],'3990')
+
+    def test_half_risk_rejects_wrong_initial_stop_side(self):
+        pos=frame_position();pos.pop('new_stop');pos['initial_stop']='4010'
+        event=self.base('HALVE_RISK_STOP',24,'half-speech',position=pos,
+            observed_management_trigger=True,trigger_source='SYNTHETIC_CLASS_EVENT')
+        event['source_segment_ids']=['half-speech','half-risk']
+        with self.assertRaisesRegex(TeacherActionError,'INITIAL_STOP_WRONG_SIDE'):
+            self.run_events([event])
+
+    def test_half_risk_requires_both_original_class_concepts(self):
+        pos=frame_position();pos.pop('new_stop')
+        event=self.base('HALVE_RISK_STOP',24,'half-speech',position=pos,
+            observed_management_trigger=True,trigger_source='SYNTHETIC_CLASS_EVENT')
+        with self.assertRaisesRegex(TeacherActionError,'HALVE_RISK_CLASS_WORDS_NOT_PRESENT'):
+            self.run_events([event])
+
+
+    def three_candle_event(self, **changes):
+        bars=[{'time':t,'open':o,'high':h,'low':l,'close':c,'source':'SYNTHETIC_TEST_M15'}
+              for t,o,h,l,c in [(900,'100','102','99','101'),(1800,'101','103','100','102'),
+                                 (2700,'102','104','101','103')]]
+        event=self.base('THREE_CANDLE_CLOSE_ENTRY',19,'three',side='BUY',
+              candles=bars,decision_at=3600,
+              teacher_chart_facts={**{k:{'value':True,'known_at':3500,'source':'SYNTHETIC_TEST_CLASS_FACT'}
+                 for k in ('pivot_confirmed','half_leg_location_confirmed',
+                           'doubt_candle_present','sentiment_permitted')},
+                 'doubt_candle_index':{'value':0,'known_at':3500,'source':'SYNTHETIC_TEST_CHART_FACT'}})
+        event.update(changes)
+        return event
+
+    def test_three_candle_teacher_close_replay_candidate_only(self):
+        e=self.three_candle_event()
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'CLASSROOM_THIRD_CLOSE_SETUP_CANDIDATE')
+        self.assertEqual(r['bar_3_close_time'],3600)
+        self.assertFalse(r['order_created'])
+        self.assertFalse(r['trade_authorized'])
+        self.assertFalse(r['teacher_chart_meaning_independently_verified'])
+
+    def test_three_candle_must_wait_exact_closed_bar(self):
+        e=self.three_candle_event(decision_at=3500)
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'WAIT_FOR_THIRD_CANDLE_CLOSE')
+        e['decision_at']=4500
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'REJECT_NOT_AT_THIRD_CANDLE_CLOSE')
+
+    def test_three_candle_gap_or_wrong_direction_blocks(self):
+        e=self.three_candle_event();e['candles'][1]['time']=1900
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'REJECT_THREE_CANDLE_SEQUENCE_GAP')
+        e=self.three_candle_event()
+        for c in e['candles']:
+            c['open'],c['close']='102','101'
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'REJECT_NO_CANDLE_IN_SENTIMENT_DIRECTION')
+
+    def test_three_candle_mixed_directions_allowed_when_doubt_matches_sentiment(self):
+        e=self.three_candle_event()
+        # The class says one candle in sentiment direction must be a doubt
+        # candle; it does NOT say each of three candles must match sentiment.
+        e['candles'][1]['open'],e['candles'][1]['close']='102','101'
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'CLASSROOM_THIRD_CLOSE_SETUP_CANDIDATE')
+        self.assertEqual(result['observed_bar_directions'],['BUY','SELL','BUY'])
+        self.assertEqual(result['doubt_candle_index'],0)
+
+    def test_three_candle_doubt_must_really_be_sentiment_candle(self):
+        e=self.three_candle_event()
+        e['candles'][1]['open'],e['candles'][1]['close']='102','101'
+        e['teacher_chart_facts']['doubt_candle_index']['value']=1
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'REJECT_TEACHER_DOUBT_CANDLE_OPPOSES_SENTIMENT')
+        e['teacher_chart_facts']['doubt_candle_index']['value']=3
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_PRIOR_KNOWN_CLASS_FACTS')
+
+    def test_three_candle_missing_doubt_chart_index_never_claims_candidate(self):
+        e=self.three_candle_event();del e['teacher_chart_facts']['doubt_candle_index']
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CLASS_CHART_CONTEXT')
+
+    def test_three_candle_unknown_or_future_chart_fact_never_enters(self):
+        e=self.three_candle_event();e['teacher_chart_facts'].pop('pivot_confirmed')
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'WAIT_FOR_CLASS_CHART_CONTEXT')
+        e=self.three_candle_event();e['teacher_chart_facts']['half_leg_location_confirmed']['known_at']=3601
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'WAIT_FOR_PRIOR_KNOWN_CLASS_FACTS')
+        e=self.three_candle_event();e['teacher_chart_facts']['doubt_candle_present']['value']=False
+        r=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(r['decision'],'REJECT_TEACHER_THREE_CANDLE_CONDITION_FALSE')
+
+    def test_three_candle_malformed_ohlc_rejected(self):
+        e=self.three_candle_event();e['candles'][2]['high']='101'
+        with self.assertRaisesRegex(TeacherActionError,'INVALID_THREE_CANDLE_OHLC'):
+            self.run_events([e])
 
     def test_duplicate_class_event_rejected(self):
         e=self.base('NO_ENTRY',21,'before')
