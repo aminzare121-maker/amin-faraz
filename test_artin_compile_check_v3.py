@@ -63,7 +63,7 @@ class CompileOnlyContract(unittest.TestCase):
         for token in ('/compile:', '/log','Get-FileHash', 'SOURCE_SHA256_MISMATCH',
                       'COMPILER_LOG_DID_NOT_CONFIRM_ZERO_ERRORS','EX5_NOT_CREATED',
                       'COMPILE_CONFIRMED_LOCAL_METAEDITOR_ONLY','demo_runtime_tested = $false',
-                      'Start-Process','WaitForExit(120000)'):
+                      'Start-Process','WaitForExit(120000)', 'Explicit path is strict'):
             with self.subTest(token=token):self.assertIn(token,script)
         for forbidden in ('OrderSend(', 'OrderSendAsync(', 'WebRequest(',
                           'Invoke-Expression','-Verb RunAs', 'MQL5\\Experts', 'TERMINAL_DATA_PATH'):
