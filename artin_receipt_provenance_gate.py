@@ -6,6 +6,7 @@ It does NOT verify teacher meaning or source authenticity.
 """
 import hashlib
 import json
+import stat
 from pathlib import Path
 
 REQUIRED = ("source_video", "speech", "visual", "semantic_review", "archive", "handoff")
@@ -31,20 +32,25 @@ def audit_artifacts(receipt, root):
         if not isinstance(expected, str) or len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
             errors.append("invalid SHA-256: " + kind)
             continue
-        path = (root / name).resolve()
-        if not path.is_relative_to(root) or not path.is_file():
+        # Resolve safely, then stat the artifact once rather than calling
+        # is_file() (which performs a second metadata read).
+        try:
+            path = (root / name).resolve(strict=True)
+            if not path.is_relative_to(root):
+                errors.append("missing or unsafe file: " + kind)
+                continue
+            metadata = path.stat()
+        except (OSError, RuntimeError):
+            errors.append("missing or unsafe file: " + kind)
+            continue
+        if not stat.S_ISREG(metadata.st_mode):
             errors.append("missing or unsafe file: " + kind)
             continue
         if path in seen_paths:
             errors.append("duplicate artifact file: " + kind)
             continue
         seen_paths.add(path)
-        try:
-            metadata = path.stat()
-            size = metadata.st_size
-        except OSError:
-            errors.append("unreadable artifact metadata: " + kind)
-            continue
+        size = metadata.st_size
         identity = (metadata.st_dev, metadata.st_ino)
         if identity in seen_inodes:
             errors.append("duplicate artifact inode: " + kind)
