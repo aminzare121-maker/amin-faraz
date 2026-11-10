@@ -731,6 +731,67 @@
       "result": "SELECTED_FRAMES_SHOW_NESTED_CLASS_SCREEN_AND_CHAT_NOT_INSTRUCTIONAL_CHART_QA_REPETITION_DISAMBIGUATED",
       "direct_listening": false,
       "whole_lesson_verified": false
+    },
+    {
+      "sequence": 21,
+      "case": "STOP_ORIGIN_CONTEXT_AND_NEARER_ZONE_EXCEPTION",
+      "run": 42787423445,
+      "frames_personally_viewed_seconds": [
+        537,
+        550,
+        558,
+        585,
+        620,
+        635
+      ],
+      "image_sha_verified": true,
+      "result": "LIMITED_SOURCE_EXAMPLE_MATCHED_NOT_WHOLE_LESSON_VERIFIED",
+      "direct_listening": false,
+      "execution_enabled": false
+    },
+    {
+      "sequence": 24,
+      "case": "RULER_DISTANCE_AND_CONDITIONAL_CONTRACT_RISK",
+      "run": 42787423445,
+      "frames_personally_viewed_seconds": [
+        1118,
+        1125,
+        1135
+      ],
+      "image_sha_verified": true,
+      "result": "LIMITED_SOURCE_EXAMPLE_MATCHED_NOT_WHOLE_LESSON_VERIFIED",
+      "direct_listening": false,
+      "execution_enabled": false
+    },
+    {
+      "sequence": 19,
+      "case": "STAR_EXPLICIT_BUY_REJECT_ACCEPT_AND_TEACHER_STATED_SELL_MIRROR",
+      "run": 42788023224,
+      "frames_personally_viewed_seconds": [
+        4235,
+        4288,
+        4304
+      ],
+      "image_sha_verified": true,
+      "mid_edit_frame_not_used_as_reject_label": 4235,
+      "direct_listening": false,
+      "execution_enabled": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 23,
+      "case": "FULL_EXISTING_TEXT_READ_AND_INTRODUCTORY_TREE_CONTEXT",
+      "primary_segments_read": 1764,
+      "run": 42788921614,
+      "frames_personally_viewed_seconds": [
+        2649,
+        2670,
+        2697
+      ],
+      "image_sha_verified": true,
+      "full_tree_parameters_available": false,
+      "direct_listening": false,
+      "whole_lesson_verified": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
@@ -746,11 +807,12 @@
     "semantic_verified": false
   },
   "observed_arithmetic_audit": {
-    "run": 42715167259,
-    "tests_passed": 17,
+    "run": 42789511045,
+    "tests_passed": 27,
     "blind": false,
     "whole_course_conformance": false,
-    "orders_placed": 0
+    "orders_placed": 0,
+    "conditional_assumptions_explicit": true
   },
   "owner_approved_wording_audio": {
     "run": 42786472293,
