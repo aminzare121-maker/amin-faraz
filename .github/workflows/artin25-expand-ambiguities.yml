@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [19,20,22]
+        sequence: [20]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ github.sha }}
       - run: |
@@ -30,7 +30,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           SEQUENCE: ${{ matrix.sequence }}
         run: python3 audit/artin25-cloud/expand_ambiguous_visuals.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: artin25-expanded-ambiguity-${{ matrix.sequence }}-PRIVATE
