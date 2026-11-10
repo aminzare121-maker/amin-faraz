@@ -1,0 +1,37 @@
+{
+  "schema": "artin_original_av_v5_citation_bounded_audio_player_public_v1",
+  "date": "2026-11-10",
+  "private_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V5_BOUNDED_PLAYBACK_20261110.zip",
+  "private_audit": "/بهروز/ARTIN_6_V5_BOUNDED_PLAYBACK_AUDIT_20261110(1).json",
+  "source_citation_windows": 6,
+  "utterance_buttons": 42,
+  "boundary_spanning_buttons": 12,
+  "fully_inside_buttons": 30,
+  "fix": "Button-triggered playback now starts at intersection of machine ASR phrase with citation and pauses near intersection end. Native WAV player remains free for context listening.",
+  "media_bytes_unchanged": true,
+  "private_unit_tests": {
+    "ordinary": 9,
+    "optimized": 9
+  },
+  "public_synthetic_unit_tests": {
+    "ordinary": 4,
+    "optimized": 4
+  },
+  "chromium_real_audio_click": {
+    "status": "PASSED",
+    "method": "document loaded inline with original WAV data URL",
+    "start_expected_seconds": 5,
+    "first_observed_current_seconds": 5.336642,
+    "stop_target_seconds": 6.68,
+    "observed_paused_current_seconds": 6.788251,
+    "manual_seek_clears_bound": true,
+    "javascript_errors": 0,
+    "caveat": "timeupdate-based stop slightly overshoots target; not sample-accurate"
+  },
+  "source_script": "artin_citation_scoped_playback_v5.py",
+  "public_tests": "test_artin_citation_scoped_playback_v5_public.py",
+  "github_workflow_changed": true,
+  "github_actions_run_verified": false,
+  "independent_teacher_meaning_verified": false,
+  "mt5_orders_authorized": 0
+}
