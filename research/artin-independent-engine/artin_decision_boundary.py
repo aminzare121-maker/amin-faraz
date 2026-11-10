@@ -1,0 +1,55 @@
+"""Fail-closed decision boundary for Artin research engine.
+
+No teacher trading rule is inferred here. No broker connection or order API.
+Only independently verified, time-anchored rule outcomes may enter the
+decision arbitration; conflicting or incomplete inputs never produce ENTER.
+"""
+from dataclasses import dataclass
+from typing import Iterable
+
+KINDS = frozenset({"entry", "exit", "exception", "decision_order", "risk"})
+ACTIONS = frozenset({"ENTER", "EXIT", "NO_TRADE", "HOLD"})
+
+@dataclass(frozen=True)
+class RuleOutcome:
+    rule_id: str
+    kind: str
+    action: str
+    verified: bool
+    evidence_id: str
+    priority: int
+    session: int
+
+def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
+    """Return a non-executable decision. Unresolved precedence blocks entry."""
+    rows = tuple(outcomes)
+    if not demo_only:
+        return {"decision": "BLOCKED", "reason": "REAL_DISABLED"}
+    if not rows:
+        return {"decision": "BLOCKED", "reason": "NO_VERIFIED_TEACHER_RULES"}
+    for row in rows:
+        if (not isinstance(row, RuleOutcome) or
+            not isinstance(row.rule_id, str) or not row.rule_id.strip() or
+            row.kind not in KINDS or row.action not in ACTIONS or
+            type(row.priority) is not int or type(row.session) is not int or
+            not 1 <= row.session <= 25 or
+            not row.verified or not isinstance(row.evidence_id, str) or
+            not row.evidence_id.strip()):
+            return {"decision": "BLOCKED", "reason": "UNVERIFIED_OR_INVALID_RULE"}
+    ids = [r.rule_id for r in rows]
+    if len(ids) != len(set(ids)):
+        return {"decision": "BLOCKED", "reason": "DUPLICATE_RULE_ID"}
+    # A verified exception or risk veto dominates entry regardless of rank.
+    if any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows):
+        return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO"}
+    highest = max(r.priority for r in rows)
+    top = [r for r in rows if r.priority == highest]
+    if len({r.action for r in top}) != 1:
+        return {"decision": "BLOCKED", "reason": "PRIORITY_CONFLICT"}
+    action = top[0].action
+    if action == "ENTER":
+        # An entry requires independently reviewed exit and risk rules.
+        if not any(r.kind == "exit" for r in rows) or not any(r.kind == "risk" for r in rows):
+            return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED"}
+    return {"decision": action, "reason": "VERIFIED_RULE_ARBITRATION",
+            "rule_ids": [r.rule_id for r in top], "executable": False}
