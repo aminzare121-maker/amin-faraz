@@ -23,5 +23,10 @@
   "privacy": "Audio, screenshots and private utterance texts remain in private Behooz Library zip and are not uploaded to public GitHub.",
   "speech_recognition_independently_repeated": false,
   "teacher_semantic_interpretation_verified": false,
-  "orders_authorized": 0
+  "orders_authorized": 0,
+  "superseded_by": {
+    "private_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V2_AUDIO_FIXED_20261110.zip",
+    "public_report": "tools-makhzan/courses/artin/ARTIN_VIDEO22_ORIGINAL_AUDIO_RECOVERY_PUBLIC_20261110.json",
+    "note": "Review clip ended at 4733 because of extraction margin. Source WAV extends to 4812; now clip extends to 4743.55, covering machine ASR segment until 4738.55. This is not teacher semantic certification."
+  }
 }
