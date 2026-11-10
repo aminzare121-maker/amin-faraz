@@ -17,6 +17,7 @@ def audit_artifacts(receipt, root):
     artifacts = receipt.get("artifacts") if isinstance(receipt, dict) else None
     if not isinstance(artifacts, dict):
         return {"passed": False, "errors": ["missing artifacts map"]}
+    seen_paths = set()
     for kind in REQUIRED:
         item = artifacts.get(kind)
         if not isinstance(item, dict):
@@ -33,7 +34,16 @@ def audit_artifacts(receipt, root):
         if not path.is_relative_to(root) or not path.is_file():
             errors.append("missing or unsafe file: " + kind)
             continue
-        if path.stat().st_size > MAX_BYTES:
+        if path in seen_paths:
+            errors.append("duplicate artifact file: " + kind)
+            continue
+        seen_paths.add(path)
+        try:
+            size = path.stat().st_size
+        except OSError:
+            errors.append("unreadable artifact metadata: " + kind)
+            continue
+        if size > MAX_BYTES:
             errors.append("artifact exceeds size limit: " + kind)
             continue
         digest = hashlib.sha256()
