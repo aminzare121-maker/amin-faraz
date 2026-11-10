@@ -1,0 +1,35 @@
+name: Artin V13 Windows local MT5 file bridge (offline no trades)
+on:
+  push:
+    branches: [artin-v13-under180-development]
+    paths:
+      - 'artin_mt5_local_observer_launcher.py'
+      - 'test_artin_mt5_local_observer_launcher.py'
+      - 'run_artin_mt5_demo_observer.cmd'
+      - 'README_ARTIN_MT5_WINDOWS_LIVE_BRIDGE_FA.md'
+      - 'artin_mt5_durable_outbox_v5.py'
+      - 'artin_mt5_incremental_observer_v4.py'
+      - 'artin_mt5_shadow_bridge.py'
+      - '.github/workflows/artin_mt5_windows_live_bridge.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-file-bridge:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Normal synthetic integration and restart checks
+        run: python -m unittest -v test_artin_mt5_local_observer_launcher
+      - name: Optimized synthetic integration and restart checks
+        run: python -O -m unittest -v test_artin_mt5_local_observer_launcher
+      - name: Existing V5 crash-safety regression suite
+        run: python -m unittest -q test_artin_mt5_durable_outbox_v5
