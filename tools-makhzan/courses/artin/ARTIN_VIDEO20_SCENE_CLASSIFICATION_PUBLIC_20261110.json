@@ -1,0 +1,33 @@
+{
+  "schema": "artin_video20_original_frame_manual_scene_review_v1",
+  "source_private": "/بهروز/ARTIN_VIDEO20_DIRECT_VISUAL_SCENE_SEPARATION_20261110.json",
+  "original_verified_frames": 4,
+  "scenes": [
+    {
+      "video_second": 4095,
+      "category": "educational schematic"
+    },
+    {
+      "video_second": 4125,
+      "category": "educational schematic"
+    },
+    {
+      "video_second": 4215,
+      "category": "educational schematic annotated with blue curved path"
+    },
+    {
+      "video_second": 4305,
+      "category": "detailed candlestick chart"
+    }
+  ],
+  "finding": "These screenshots do not form a single continuous observed teacher trade. Do not derive an order action from chronological screenshot succession.",
+  "limitations": "Full motion/speaker semantics not independently verified; one screenshot is insufficient to prove exact teacher conditions.",
+  "trade_authorizations": 0,
+  "verified_original_frame_hashes": 4,
+  "optimized_python_local_tests": {
+    "normal": 15,
+    "optimized": 15
+  },
+  "workflow_optimized_tests_added": true,
+  "github_actions_execution_result": "NOT_VERIFIED"
+}
