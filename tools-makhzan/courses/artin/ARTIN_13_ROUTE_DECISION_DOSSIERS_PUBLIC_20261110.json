@@ -1,0 +1,26 @@
+{
+  "schema": "artin_13_route_decision_dossiers_public_v1",
+  "generated_date": "2026-11-10",
+  "source_archive": "/بهروز/ARTIN_13_ROUTE_24_CITATION_PRIVATE_REVIEW_20261110.json",
+  "private_dossiers": "/بهروز/ARTIN_13_ROUTE_DECISION_DOSSIERS_PRIVATE_20261110.json",
+  "private_review_generator": "/بهروز/artin_route_decision_dossiers.py",
+  "private_tests": "/بهروز/test_artin_route_decision_dossiers.py",
+  "routes": 13,
+  "source_citations": 24,
+  "same_session_route_pairs": 31,
+  "local_tests": {
+    "executed": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "github_actions_executed": false,
+  "method": "Preserved original unverified machine ASR utterance ids and timestamps; categorized candidate entry/no-entry, risk/exit, exception and decision-order speech; deduplicated ids; rejected conflicting identity and invalid intervals.",
+  "verified_teacher_speaker_attribution": false,
+  "verified_teacher_meaning": false,
+  "verified_visual_chart_referents": false,
+  "verified_cross_session_corrections": false,
+  "teacher_decision_replays_passed": 0,
+  "routes_authorized_for_trading": 0,
+  "limitations": "Keyword matching produces review candidates, not executable entry or exit rules. Same-session correlations do not prove corrections. The original AV requires independent semantic examination.",
+  "privacy": "The excerpts remain in private ChatGPT Library folder, not in this public GitHub report."
+}
