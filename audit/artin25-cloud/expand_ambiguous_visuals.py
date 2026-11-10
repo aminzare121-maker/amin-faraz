@@ -2,6 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 import imageio_ffmpeg
 CASES={
+23:(13692425864,"403dca1d3fc90f739a9d6fe0006c87606cd7ffa5f026f5f9cd3e8d5644b47e0a",[2649,2670,2697],"Introductory decision-tree branches and limits of later complete-tree promise"),
 21:(13691563117,"f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",[537,550,558,585,620,635],"One-third stop origin, marked level and nearby FVG alternative"),
 24:(13692025289,"7f82b19f0c19fd38daaf118e7bf5a53bf6aa9ac22f12e29a7f18ad4ad2f6f759",[1118,1125,1135],"Actual chart distance display during spoken unit disagreement"),
 1:(13690841735,"b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",[680,1230,1390,2195,3438,3452],"Legacy first-lesson transcript unclear roles and direction-entry distinction; no model re-execution"),
