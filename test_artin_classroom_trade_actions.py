@@ -42,7 +42,9 @@ class ClassTradeActionsTests(unittest.TestCase):
            21:[source(21,'before','اینجا ورود نمی کنیم',10.0),
                source(21,'after','رو کلوز تاییده ورود میکنیم',20.0)],
            24:[source(24,'reduce','دو درصد ریسک را یک درصد می کنیم، معامله رو نمیبنده',100.0),
-               source(24,'profit','5 دلار سیوه سود میکنم، استاپلاس هم اینجاست',200.0)],
+               source(24,'profit','5 دلار سیوه سود میکنم، استاپلاس هم اینجاست',200.0),
+               source(24,'stop-reference','برگرده استاپلاس من رو بزنه',300.0),
+               source(24,'stop-exit','خودش معامله رو میبنده',325.0)],
            25:[source(25,'riskfree','استاپلاس رو برداری بیاری بذاری نقطه ورود',300.0),
                source(25,'structure','استاپ نزدیک تر کار اشتباه میشه',400.0)],
         }
@@ -156,6 +158,43 @@ class ClassTradeActionsTests(unittest.TestCase):
         second=self.base('NO_ENTRY',21,'before')
         with self.assertRaisesRegex(TeacherActionError,'CLASSROOM_SEQUENCE_REVERSED'):
             self.run_events([first,second])
+
+    def test_stop_trigger_paper_exit_buy_and_hold(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'BUY','entry':'4000','current_stop':'4005','lots':'0.01'},
+                    quote={'bid':'4004','ask':'4004.1','source':'SYNTHETIC_TEST_PRICE'})
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        x=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(x['decision'],'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL')
+        self.assertFalse(x['broker_fill_verified'])
+        self.assertIsNone(x['realized_pnl'])
+        self.assertFalse(x['position_closed'])
+        e['quote']['bid']='4006';e['quote']['ask']='4006.1'
+        x=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(x['decision'],'PAPER_POSITION_HELD_STOP_NOT_HIT')
+
+    def test_stop_trigger_paper_exit_sell_and_quote_side(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'SELL','entry':'4000','current_stop':'3995','lots':'0.01'},
+                    quote={'bid':'3994','ask':'3996','source':'SYNTHETIC_TEST_PRICE'})
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        x=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(x['decision'],'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL')
+        self.assertEqual(x['quote_side'],'ASK')
+        e['quote']['ask']='3994.5'
+        x=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(x['decision'],'PAPER_POSITION_HELD_STOP_NOT_HIT')
+
+    def test_stop_exit_needs_real_source_and_bid_ask(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'BUY','entry':'4000','current_stop':'4005','lots':'0.01'})
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        x=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(x['decision'],'WAIT_FOR_SOURCED_QUOTE')
+        e['quote']={'bid':'4004','ask':'4003','source':'SYNTHETIC_TEST_PRICE'}
+        with self.assertRaisesRegex(TeacherActionError,'STOP_EXIT_BID_EXCEEDS_ASK'):self.run_events([e])
+        e['source_segment_ids']=['stop-exit']
+        with self.assertRaisesRegex(TeacherActionError,'STOP_EXIT_CLASS_WORDS_NOT_PRESENT'):self.run_events([e])
 
     def test_duplicate_class_event_rejected(self):
         e=self.base('NO_ENTRY',21,'before')

@@ -207,6 +207,49 @@ def _sourced_stop_move(event, text):
                                    else 'EXTERNAL_RECORDED_TRIGGER_NOT_INDEPENDENTLY_VERIFIED'}
 
 
+def _stop_triggered_exit(event, text):
+    """Replay the teacher's stated stop-trigger exit, not a broker fill.
+
+    Source lesson 24: if price returns and touches the stop, the position
+    closes through that stop. Intrabar path, slippage and actual fills are not
+    supplied by spoken classroom words. Never manufacture a realized P&L.
+    """
+    if not ('استاپلاس' in text and ('بزنه' in text or 'بزند' in text)
+            and ('می بنده' in text or 'میبنده' in text)):
+        raise TeacherActionError('STOP_EXIT_CLASS_WORDS_NOT_PRESENT')
+    position=event.get('position')
+    if not isinstance(position,dict) or position.get('side') not in ('BUY','SELL'):
+        raise TeacherActionError('STOP_EXIT_EXPLICIT_SIDE_REQUIRED')
+    stop=money(position.get('current_stop'),'current_stop')
+    entry=money(position.get('entry'),'entry')
+    lots=money(position.get('lots'),'lots')
+    side=position['side']
+    quote=event.get('quote')
+    if not isinstance(quote,dict) or not quote.get('source'):
+        return {'decision':'WAIT_FOR_SOURCED_QUOTE','order_created':False,
+                'position_closed':False,'stop_unchanged':str(stop),
+                'lots_unchanged':str(lots)}
+    bid=money(quote.get('bid'),'bid')
+    ask=money(quote.get('ask'),'ask')
+    if bid>ask:
+        raise TeacherActionError('STOP_EXIT_BID_EXCEEDS_ASK')
+    observed=bid if side=='BUY' else ask
+    touched=observed<=stop if side=='BUY' else observed>=stop
+    if not touched:
+        return {'decision':'PAPER_POSITION_HELD_STOP_NOT_HIT',
+                'order_created':False,'position_closed':False,
+                'quote_side':'BID' if side=='BUY' else 'ASK',
+                'observed_quote':str(observed),'stop':str(stop),
+                'lots_unchanged':str(lots)}
+    return {'decision':'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL',
+            'order_created':False,'position_closed':False,
+            'stop_order_triggered_in_model':True,'broker_fill_verified':False,
+            'quote_side':'BID' if side=='BUY' else 'ASK',
+            'observed_quote':str(observed),'entry':str(entry),
+            'stop':str(stop),'lots':str(lots),
+            'realized_pnl':None,'slippage_unknown':True}
+
+
 def execute(events_doc, source_folder, core_folder):
     """Run source-linked classroom *decisions*, never platform orders."""
     if events_doc.get('schema')!='artin_classroom_trade_actions_v1' or not isinstance(events_doc.get('events'),list):
@@ -236,6 +279,7 @@ def execute(events_doc, source_folder, core_folder):
         elif kind=='KEEP_STRUCTURAL_STOP':action=_structural_stop(event,text)
         elif kind in ('REDUCE_RISK_STOP','SAVE_PROFIT_STOP'):
             action=_sourced_stop_move(event,text)
+        elif kind=='STOP_EXIT_TRIGGER':action=_stop_triggered_exit(event,text)
         else:raise TeacherActionError('UNKNOWN_TEACHER_CLASS_EVENT')
         # The speech must appear in strictly class chronological order per session.
         first=rows[0]['start_seconds'];last=rows[-1]['end_seconds'];sess=event['session']
