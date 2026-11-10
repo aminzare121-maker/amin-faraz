@@ -113,5 +113,43 @@ class SemanticGateTests(unittest.TestCase):
         self.assertEqual(report["sessions"][0]["verified_rules"], 0)
         self.assertTrue(any("unsupported VERIFIED" in e for e in report["errors"]))
 
+    def test_interval_sweep_finds_late_overlap_with_many_unrelated_anchors(self):
+        # Synthetic fixture; checks matching, not semantic correctness or speed.
+        def anchor(modality, start, end, source="a"):
+            return {"modality": modality, "source_sha256": source * 64,
+                    "start": start, "end": end}
+        evidence = ([anchor("speech", i * 10, i * 10 + 1) for i in range(500)]
+                    + [anchor("image", i * 10 + 5, i * 10 + 6) for i in range(499)]
+                    + [anchor("image", 4990.5, 4990.5)])
+        rule = {
+            "kind": "entry", "evidence": evidence,
+            "independent_comparison": {
+                "teacher_example_id": "synthetic", "reviewer": "synthetic-reviewer",
+                "expected_decision": "ENTER", "observed_decision": "ENTER",
+                "independent": True, "review_result": "PASS"},
+            "cross_session_checked": True, "ambiguity_resolved": True,
+        }
+        report = audit({"sessions": [{"session": 1, "rules": [rule]}]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 1)
+        self.assertFalse(report["complete"])
+
+    def test_interval_sweep_rejects_nonoverlapping_same_source(self):
+        evidence = [
+            {"modality": "speech", "source_sha256": "a" * 64,
+             "start": 1, "end": 2},
+            {"modality": "image", "source_sha256": "a" * 64,
+             "start": 3, "end": 4},
+        ]
+        rule = {
+            "kind": "entry", "evidence": evidence,
+            "independent_comparison": {
+                "teacher_example_id": "synthetic", "reviewer": "synthetic-reviewer",
+                "expected_decision": "ENTER", "observed_decision": "ENTER",
+                "independent": True, "review_result": "PASS"},
+            "cross_session_checked": True, "ambiguity_resolved": True,
+        }
+        report = audit({"sessions": [{"session": 1, "rules": [rule]}]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 0)
+
 if __name__ == "__main__":
     unittest.main()
