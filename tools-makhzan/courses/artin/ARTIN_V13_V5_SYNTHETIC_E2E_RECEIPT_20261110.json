@@ -1,0 +1,26 @@
+{
+  "schema": "artin_v13_durable_outbox_v5_synthetic_e2e_receipt_v1",
+  "synthetic_only": true,
+  "source_fixture_sha256": "a316c357f182558f20c01234a84d92b61b766dc8a460c88a89169f452e3349f1",
+  "source_fixture_bars": 70,
+  "run_new_bars": [
+    5,
+    3,
+    62,
+    0
+  ],
+  "receipt_sequences": [
+    1,
+    2,
+    3
+  ],
+  "final_checkpoint_rows": 70,
+  "receipt_byte_sha256": [
+    "16fb848faad206c0ab77dc885d3119c129ecdbb7d4fcf33bef9533108cfa1662",
+    "4a1c9ed7bc1bacdd3aa904a5268e9517900f417127acd340f706c601452b41b5",
+    "8e4b5d9a33df7a33d2b8b416de21099c1feca1d69f1a710d0e901127c4e837e5"
+  ],
+  "teacher_semantics_certified": false,
+  "orders_sent": 0,
+  "real_mt5_compiler_runtime_tested": false
+}
