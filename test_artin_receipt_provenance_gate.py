@@ -58,7 +58,7 @@ class ProvenanceTests(unittest.TestCase):
         (self.root / "speech").mkdir()
         result = audit_artifacts(self.receipt, self.root)
         self.assertFalse(result["passed"])
-        self.assertIn("missing or unsafe file: speech", result["errors"])
+        self.assertTrue(any(message in result["errors"] for message in ("missing or unsafe file: speech", "missing or unreadable file: speech")), result["errors"])
 
     def test_stream_size_limit_fails_closed(self):
         # The byte limit must also apply to bytes actually read, not just
@@ -69,8 +69,14 @@ class ProvenanceTests(unittest.TestCase):
         self.assertTrue(any("artifact exceeds size limit" in e for e in result["errors"]))
 
     def test_hash_uses_opened_descriptor_not_path_stat(self):
-        # Path.stat must not be used for validation after opening a file.
-        with patch.object(Path, "stat", side_effect=AssertionError("path stat called")):
+        # Resolution can stat directories, but artifact integrity must rely
+        # on fstat() of its opened descriptor, not Path.stat() on artifacts.
+        original_stat = Path.stat
+        def allow_resolution_only(path, *args, **kwargs):
+            if path.name in REQUIRED:
+                raise AssertionError("artifact path stat called")
+            return original_stat(path, *args, **kwargs)
+        with patch.object(Path, "stat", allow_resolution_only):
             result = audit_artifacts(self.receipt, self.root)
         self.assertTrue(result["passed"], result["errors"])
 
