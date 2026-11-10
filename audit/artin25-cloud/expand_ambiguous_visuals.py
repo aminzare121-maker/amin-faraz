@@ -2,6 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 import imageio_ffmpeg
 CASES={
+2:(13691146531,"60e909d7a3acb57a5e80b689e6dac576db479c04795afc413229d7492afc7748",[926,935,1513,1518,1523,3918,3930,3948],"Check nominal-value examples and the explicit position-size formula correction without replacing speech with arithmetic guesses"),
 18:(13693801002,"5b896a56747b6e1d5ab5c01c6d01dcce7ed396a471dfa170cbad3193aaecd6ed",[3084,3090,3093,3140],"Separate prior zone formation from later touch and fill in the same bullish FVG; keep the later different example distinct"),
 7:(13690343720,"ae50c37d83ca2b92ea0c27ba429247878e5edd01a44c0596ca50d85cac335ce1",[4315,4337,4353],"Match the live EURUSD and DXY chart switch; prior PDF frames do not show this example"),
 8:(13689654008,"0b55bcbf9714ff586d232abbd0b2d1070231bb055a5775a62347cd146253a2f8",[4218,4298,4337,4399],"Check written comparison bases and wage equality during transcript direction disagreement; do not infer unheard speech"),
@@ -28,8 +29,8 @@ def main():
  with zipfile.ZipFile(private/"source.zip") as z:
   member="original_0001.mp4" if n==1 else "original.mp4"
   names=[s for s in z.namelist() if pathlib.PurePosixPath(s).name==member]
-  if n==18 and not names:
-   # This recovered source archive uses a different member basename.
+  if n in (2,18) and not names:
+   # Some recovered source archives use a different member basename.
    # Require one MP4 only; the immutable expected source SHA below remains mandatory.
    names=[s for s in z.namelist() if pathlib.PurePosixPath(s).suffix.lower()==".mp4"]
   if len(names)!=1:raise ValueError("ORIGINAL_NOT_UNIQUE")
