@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [1] # three newly recovered relative-strength cases; no ASR or OCR
+        sequence: [1, 17] # only documented missing numerical and pointing context; no ASR or OCR
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
