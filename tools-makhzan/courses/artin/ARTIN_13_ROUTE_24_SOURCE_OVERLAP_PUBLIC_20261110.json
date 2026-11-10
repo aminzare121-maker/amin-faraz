@@ -1,0 +1,22 @@
+{
+  "schema": "artin_24_citation_source_overlap_integrity_v1",
+  "citations": 24,
+  "routes": 13,
+  "asr_occurrences_in_24_citations": 559,
+  "unique_session_segment_ids": 390,
+  "shared_across_route_segment_ids": 167,
+  "source_identity_conflicts": [],
+  "invalid_time_overlaps": [],
+  "valid": true,
+  "semantic_fidelity_verified": false,
+  "teacher_speech_verified": false,
+  "order_authorized": false,
+  "interpretation": "Shared segment IDs are not independent confirmations of multiple teacher trade paths.",
+  "method": "Deduplicate ASR within (session, segment_id), compare time/text/audio SHA fingerprints, reject invalid source interval intersection.",
+  "local_tests": {
+    "executed": 4,
+    "passed": 4,
+    "github_ci_executed": false
+  },
+  "private_evidence_file": "/بهروز/ARTIN_13_ROUTE_24_SOURCE_OVERLAP_PRIVATE_20261110.json"
+}
