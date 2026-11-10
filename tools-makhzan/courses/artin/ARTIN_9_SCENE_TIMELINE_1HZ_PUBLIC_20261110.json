@@ -239,9 +239,20 @@
     "ordinary": "22/22 PASS (12 synthetic + 10 real-source)",
     "python_O": "22/22 PASS (12 synthetic + 10 real-source)"
   },
-  "github_actions": "NOT_VERIFIED_AS_OF_REPORT_CREATION",
+  "github_actions": {
+    "run_id": 42822607886,
+    "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42822607886",
+    "head_commit": "fe93f12562f1dbd9b7da6d43c65479f75964fdbd",
+    "status": "completed",
+    "conclusion": "success",
+    "public_standard": "12/12 PASS",
+    "public_optimized_python": "12/12 PASS",
+    "private_original_source_media_executed_in_CI": false,
+    "verified_from": "GitHub Actions workflow jobs and job logs"
+  },
   "semantic_teacher_cases_certified": 0,
   "orders_authorized": 0,
   "public_script": "artin_9_scene_timeline.py",
-  "public_test": "test_artin_9_scene_timeline_public.py"
+  "public_test": "test_artin_9_scene_timeline_public.py",
+  "private_archive_sha256": "13a655287ce6b0c5d5608c9d79a784da84ec3a93e4cc6969e4eff9cb6e628693"
 }
