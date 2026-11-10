@@ -1,0 +1,37 @@
+{
+  "schema": "artin_teacher_auto_ohlc_scan_v1",
+  "source_bars": 23643,
+  "source_kind": "REAL_BAR_PRICES_SOURCE_NOT_PROOF_OF_TEACHER_TRADES",
+  "counts": {
+    "bars": 23643,
+    "fvg_created": 4814,
+    "reversal_candidates": 217,
+    "break_candidates": 0,
+    "ambiguous_candidates": 8,
+    "history_discontinuities": 260
+  },
+  "signal_count": 201,
+  "engine_route_claim": "2_MEASURABLE_PDF_SUBSETS_OF_13_NOT_COMPLETE_TEACHER_SEMANTICS",
+  "video_rules_independently_validated": false,
+  "paper_or_broker_orders_created": 0,
+  "assumptions_not_attributed_to_teacher": [
+    "strict same-bar OHLC fullbody is only a measurable subset of strong-candle discussion",
+    "first FVG touch is an ambiguity-control selection, not a proven teacher filter",
+    "opposite FVG edge as operational stop is one chart reference, not a verified teacher choice",
+    "opposite-colour doubt does not independently establish an entire market leg",
+    "signal available after latest decision candle closes; next-open actual fill unproven"
+  ],
+  "sources": {
+    "FVG": "Technical(1).pdf#page=11",
+    "REVERSAL": "Technical(1).pdf#page=13",
+    "BREAK": "Technical(1).pdf#page=14",
+    "STOP": "Technical(1).pdf#page=17",
+    "FXM_RISK": "FXM.pdf#page=2",
+    "FXM_TP": "FXM.pdf#page=4"
+  },
+  "source_sha256_private_not_published": true,
+  "source_pdfs_hashes": {
+    "FXM.pdf": "504930d6b148b008f134a92e7445e870b7e3fc54478db0956f82f695c23a7af1",
+    "Technical(1).pdf": "f50f66139fa96c8083e936f368160c3b77667302174e3e1c6084c8bbd6a1a909"
+  }
+}

@@ -4,6 +4,13 @@ on:
     branches: [artin-fxm-teacher-engine-20261110]
     paths:
       - 'artin_unified_paper_motor.py'
+      - 'artin_automatic_teacher_recognizer.py'
+      - 'artin_automatic_trade_cycle.py'
+      - 'artin_mt5_demo_automatic.py'
+      - 'test_artin_automatic_teacher_engine.py'
+      - 'test_artin_automatic_demo_integration.py'
+      - 'README_AUTOMATIC_TRADING_MOTOR_FA.md'
+      - 'AUTO_TEACHER_REAL_M15_AGGREGATE_REPORT.json'
       - 'artin_teacher_sl_tp_motor.py'
       - 'technical_teacher_policy.py'
       - 'fxm_teacher_policy.py'
@@ -63,6 +70,8 @@ jobs:
           python -m unittest discover -s core -p 'test_*.py' -q
           python -O -m unittest -q test_artin_unified_paper_motor test_artin_teacher_sl_tp_motor test_artin_teacher_pdf_bridge test_technical_teacher_policy test_fxm_teacher_policy test_artin_fxm_teacher_motor
           python -O -m unittest discover -s core -p 'test_*.py' -q
+          python -m unittest -q test_artin_automatic_teacher_engine test_artin_automatic_demo_integration
+          python -O -m unittest -q test_artin_automatic_teacher_engine test_artin_automatic_demo_integration
       - name: One synthetic paper lifecycle; never actual MT5/PnL verification
         shell: bash
         run: |
