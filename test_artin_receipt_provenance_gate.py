@@ -2,6 +2,7 @@ import hashlib
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 from artin_receipt_provenance_gate import REQUIRED, audit_artifacts, audit_file_backed_cycle
 from test_artin_real_cycle_receipt_gate import CycleReceiptTests
 
@@ -40,6 +41,23 @@ class ProvenanceTests(unittest.TestCase):
         result = audit_artifacts(self.receipt, self.root)
         self.assertFalse(result["passed"])
         self.assertIn("duplicate artifact file: visual", result["errors"])
+
+    def test_metadata_stat_is_read_once_per_artifact(self):
+        # A second unguarded stat could fail after the first succeeds.
+        original_stat = Path.stat
+        calls = {}
+
+        def guarded_stat(path, *args, **kwargs):
+            if path.name in REQUIRED:
+                calls[path.name] = calls.get(path.name, 0) + 1
+                if calls[path.name] > 1:
+                    raise OSError("artifact metadata changed")
+            return original_stat(path, *args, **kwargs)
+
+        with patch.object(Path, "stat", guarded_stat):
+            result = audit_artifacts(self.receipt, self.root)
+        self.assertTrue(result["passed"], result["errors"])
+        self.assertEqual({name: 1 for name in REQUIRED}, calls)
 
     def test_tampering_fails(self):
         (self.root / "speech").write_bytes(b"changed")
