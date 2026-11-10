@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [18] # eight actual-candle pointer anchors after the drawn FVG construction; no model rerun
+        sequence: [18] # six exact outer-candle identity anchors for the observed bullish FVG
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
