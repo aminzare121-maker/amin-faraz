@@ -64,3 +64,24 @@ def check_and_build(archive,citation_doc,margin=45.0):
       "citation_count":24,"source_excerpt_occurrences":sum(c["source_excerpt_count"] for c in cases),
       "source_unique_segment_keys":len(shared),"shared_segment_keys":sum(v>1 for v in shared.values()),
       "cases":cases,"teacher_semantics_certified":False,"mt5_orders_authorized":0}
+
+def main():
+    """Run a read-only integrity review against the original private archive."""
+    import argparse
+    from pathlib import Path
+    parser = argparse.ArgumentParser()
+    parser.add_argument("archive", help="original private 25-session ZIP")
+    parser.add_argument("citations", help="original 24-citation private JSON")
+    parser.add_argument("output", help="destination JSON report")
+    parser.add_argument("--margin", type=float, default=45.0)
+    args = parser.parse_args()
+    result = check_and_build(args.archive,
+        json.loads(Path(args.citations).read_text(encoding="utf-8")), args.margin)
+    dest = Path(args.output)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    print(json.dumps({key: value for key, value in result.items() if key != "cases"},
+                     ensure_ascii=False))
+
+if __name__ == "__main__":
+    main()
