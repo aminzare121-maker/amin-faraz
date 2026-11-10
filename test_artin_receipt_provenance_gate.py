@@ -20,6 +20,27 @@ class ProvenanceTests(unittest.TestCase):
     def test_file_backed_receipt(self):
         self.assertTrue(audit_file_backed_cycle(self.receipt, self.root)["passed"])
 
+    def test_duplicate_evidence_file_fails(self):
+        # Different stages must not be backed by the very same bytes/file.
+        self.receipt["artifacts"]["visual"] = dict(self.receipt["artifacts"]["speech"])
+        result = audit_artifacts(self.receipt, self.root)
+        self.assertFalse(result["passed"])
+        self.assertIn("duplicate artifact file: visual", result["errors"])
+
+    def test_symlink_alias_of_same_file_fails(self):
+        alias = self.root / "speech-alias"
+        try:
+            alias.symlink_to(self.root / "speech")
+        except (OSError, NotImplementedError):
+            self.skipTest("symlinks unavailable")
+        self.receipt["artifacts"]["visual"] = {
+            "path": "speech-alias",
+            "sha256": self.receipt["artifacts"]["speech"]["sha256"],
+        }
+        result = audit_artifacts(self.receipt, self.root)
+        self.assertFalse(result["passed"])
+        self.assertIn("duplicate artifact file: visual", result["errors"])
+
     def test_tampering_fails(self):
         (self.root / "speech").write_bytes(b"changed")
         self.assertFalse(audit_artifacts(self.receipt, self.root)["passed"])
