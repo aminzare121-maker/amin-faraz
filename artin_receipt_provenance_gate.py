@@ -40,11 +40,12 @@ def audit_artifacts(receipt, root):
             continue
         seen_paths.add(path)
         try:
-            size = path.stat().st_size
+            metadata = path.stat()
+            size = metadata.st_size
         except OSError:
             errors.append("unreadable artifact metadata: " + kind)
             continue
-        identity = (path.stat().st_dev, path.stat().st_ino)
+        identity = (metadata.st_dev, metadata.st_ino)
         if identity in seen_inodes:
             errors.append("duplicate artifact inode: " + kind)
             continue
