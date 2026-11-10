@@ -969,6 +969,35 @@
       "result": "MISSING_PROVIDER_DATA_DISTINCT_FROM_ACTUAL_TWO_SIDED_MARKET_REVIEW_NOT_AUTOMATIC_NEUTRAL",
       "direct_listening": false,
       "whole_lesson_verified": false
+    },
+    {
+      "sequence": 10,
+      "case": "FULL_EXISTING_TEXT_AND_CONFIRMED_SENTIMENT_METER_TIMEFRAME",
+      "primary_rows_reviewed": 1628,
+      "runs": [
+        42797589768,
+        42797878562
+      ],
+      "new_frames_personally_viewed_seconds": [
+        2447,
+        2448,
+        2448.5,
+        2449,
+        2452,
+        2462
+      ],
+      "image_sha_verified": true,
+      "result": "ONE_HOUR_INDICATOR_SOURCE_CONFIRMED_ON_15_MIN_CHART_REFRESH_CONTEXT_NOT_FIXED_TTL",
+      "direct_listening": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 24,
+      "case": "FULL_EXISTING_TEXT_AND_CONDITIONAL_MANAGEMENT_STAGE_ORDER",
+      "primary_rows_reviewed": 1567,
+      "result": "REDUCE_BEFORE_RISKFREE_IN_STAGED_MODEL_SIMPLE_SL_TP_ALSO_PERMITTED_UNCLEAR_STUDENT_ALTERNATIVE_NOT_INVENTED",
+      "direct_listening": false,
+      "whole_lesson_verified": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
@@ -1022,5 +1051,13 @@
     "status_schema_regression_tests_passed": 10,
     "media_reprocessed": 0,
     "note": "Metadata validation only; no independent teacher-semantic approval"
+  },
+  "partial_clause_registry": {
+    "candidate_groups": 12,
+    "source_spans_validated": 20,
+    "scope": "PARTIAL_PRIVATE_CANDIDATES_NOT_FULL_RULE_INVENTORY",
+    "provenance_check_passed": true,
+    "semantic_verified": false,
+    "execution_enabled": false
   }
 }
