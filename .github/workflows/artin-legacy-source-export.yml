@@ -32,8 +32,14 @@ jobs:
               raise SystemExit('LEGACY_ENGINE_MODULES_MISSING')
           out=Path('/tmp/artin-legacy-core-pinned.zip')
           manifest={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+          manifest['docs/S16_SOURCE_PATH_CASES.json']=hashlib.sha256((root/'docs'/'S16_SOURCE_PATH_CASES.json').read_bytes()).hexdigest()
           with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
               for p in files:z.write(p,arcname=p.name)
+              # Required by original pullback-topology regression tests:
+              # immutable research annotation, not a broker candle or claim of teacher validation.
+              fixture=root/'docs'/'S16_SOURCE_PATH_CASES.json'
+              if not fixture.is_file():raise SystemExit('LEGACY_TEST_FIXTURE_MISSING')
+              z.write(fixture,arcname='docs/S16_SOURCE_PATH_CASES.json')
               z.writestr('LEGACY_SHA_MANIFEST.json',json.dumps({'source_commit':expected,'files_sha256':manifest},sort_keys=True,indent=2))
           print(json.dumps({'archive':str(out),'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'count':len(files)}))
           PY
