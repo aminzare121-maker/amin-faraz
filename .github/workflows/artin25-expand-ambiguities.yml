@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [18] # four later-touch and fill anchors; formation evidence is already preserved
+        sequence: [2] # eight nominal-value and formula-correction anchors; no speech or OCR rerun
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
