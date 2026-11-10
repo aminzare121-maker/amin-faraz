@@ -1,0 +1,40 @@
+{
+  "schema": "artin_16_lexical_pairs_exact_original_audio_provenance_v1",
+  "date": "2026-11-10",
+  "input": "private source-anchored 13-route 24-citation decision conflict review",
+  "private_report": "/بهروز/ARTIN_16_CONFLICT_MEDIA_PROVENANCE_PRIVATE_20261110.json",
+  "candidate_pair_occurrences": 16,
+  "distinct_original_session_segment_pairs": 14,
+  "duplicated_pairs_across_routes": 2,
+  "session_counts": {
+    "19": 9,
+    "20": 1,
+    "21": 6
+  },
+  "audio_source_checked": "Recovered video20 original audio part_07.wav from /بهروز/ARTIN_VIDEO_20_RECOVERED/AUDIO_06.zip",
+  "audio_chunk_source_interval_seconds": [
+    1788,
+    2112
+  ],
+  "audio_chunk_sha256": "04cca047dfcb37e875e392132c276f3ef2541e160eaacc7c3abf07aa9b8f4c43",
+  "original_manifest_sha256_checked": true,
+  "conflicting_asr_session21_source_audio_sha256": "d3ea03e2be921aa3db944ab3d2f43402cf85639345bd32d53497d0259f1f3df2",
+  "matching_sha_across_checked_source_and_sixteen_pair_occurrences": 0,
+  "interpretation": "Audio interval overlap alone is NOT provenance. This one verified WAV does not match the recorded audio SHA of any of the 16 candidate occurrences. Other original audio artifacts were not exhaustively checked; do not conclude audio is absent.",
+  "local_tests": {
+    "normal": {
+      "passed": 7,
+      "total": 7
+    },
+    "optimized": {
+      "passed": 7,
+      "total": 7
+    }
+  },
+  "public_source": "artin_conflict_media_provenance.py",
+  "public_tests": "test_artin_conflict_media_provenance.py",
+  "github_actions_result": "NOT_VERIFIED",
+  "independent_original_audio_speech_semantics_verified": false,
+  "teacher_rules_certified": 0,
+  "orders_authorized": 0
+}
