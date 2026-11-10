@@ -1,0 +1,37 @@
+name: Artin 13 legacy execution contract regressions
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - test_artin_13_legacy_execution_contract.py
+      - .github/workflows/artin-13-legacy-execution-contract.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout V13 tests (no credentials retained)
+        uses: actions/checkout@v4
+        with:
+          path: v13
+          persist-credentials: false
+      - name: Checkout immutable legacy engine from its audited commit
+        uses: actions/checkout@v4
+        with:
+          ref: b48fb06f8b2b0d134292025f5b27fc670ad2a293
+          path: legacy
+          persist-credentials: false
+      - name: Reject wrong or moved legacy revision
+        shell: bash
+        run: |
+          test "$(git -C legacy rev-parse HEAD)" = "b48fb06f8b2b0d134292025f5b27fc670ad2a293"
+          test -f legacy/research/artin-independent-engine/entry_engine.py
+          test -f legacy/research/artin-independent-engine/examples.py
+      - name: Check all 13 branches without market or teacher evidence claims
+        env:
+          ARTIN_PINNED_LEGACY_DIR: ${{ github.workspace }}/legacy/research/artin-independent-engine
+        run: python3 -m unittest discover -s v13 -p test_artin_13_legacy_execution_contract.py -v
