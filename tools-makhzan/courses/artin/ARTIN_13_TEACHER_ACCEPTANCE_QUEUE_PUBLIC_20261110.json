@@ -1,0 +1,44 @@
+{
+  "schema": "artin_13_route_teacher_acceptance_preflight_public_v1",
+  "date": "2026-11-10",
+  "source_private_files": [
+    "/بهروز/ARTIN_13_ROUTE_DECISION_DOSSIERS_PRIVATE_20261110.json",
+    "/بهروز/ARTIN_13_ROUTE_24_CITATION_PRIVATE_REVIEW_20261110.json",
+    "/بهروز/ARTIN_24_CROSSMODAL_EVIDENCE_PRIVATE_20261110.json"
+  ],
+  "private_output": "/بهروز/ARTIN_13_TEACHER_ACCEPTANCE_QUEUE_PRIVATE_20261110.json",
+  "total_routes": 13,
+  "citations": 24,
+  "original_frame_sample": "66 previously reviewed contact-sheet frames only; absence in sample does not prove absence in the original video",
+  "routes_with_at_least_one_sampled_frame_inside_citation": 2,
+  "routes_with_no_sampled_frame_inside_citation": 11,
+  "citations_with_at_least_one_sampled_frame_inside": 2,
+  "citations_with_no_sampled_frame_inside": 22,
+  "route_ids_with_sampled_frame": [
+    "REVERSAL_STAR",
+    "BREAK_VERY_STRONG_RETEST"
+  ],
+  "unresolved_per_route": [
+    "independent listening to original teacher audio",
+    "teacher vs student speaker identity",
+    "original visual chart referent",
+    "entry exit exception decision order",
+    "cross-session revisions",
+    "teacher classroom decision vs engine replay"
+  ],
+  "unique_certified_teacher_routes": 0,
+  "orders_authorized": 0,
+  "local_tests": {
+    "ordinary": 13,
+    "optimized_python": 13,
+    "passed": 13
+  },
+  "public_synthetic_tests": {
+    "ordinary": 6,
+    "optimized_python": 6
+  },
+  "github_actions_run_result": "NOT_VERIFIED",
+  "purpose": "Create exact 13-route missing-evidence queue; NEVER infer rules or permit MT5 orders from machine ASR/image metadata.",
+  "public_source": "artin_13_teacher_acceptance_matrix.py",
+  "public_test": "test_artin_13_teacher_acceptance_public.py"
+}
