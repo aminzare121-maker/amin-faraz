@@ -7,7 +7,7 @@ CASES={
 10:(13689764605,"1f63842913a250bf1fe81bab3dc7dcc90f282c4026ee41ac88cc31687b8e65ea",[2448,2448.5,2449],"Verify final indicator timeframe selection without conflating it with entry chart timeframe"),
 12:(13690508501,"200da08226639095044fb0ebb3f3508b7fd82ac770f81bfb87ec789578057805",[2335,2346,2401,2443],"Match explicit doubt and confidence labels to selected candles without inferring from engulf names"),
 17:(13692620657,"4e66db074ee12a417d2152e53f83de94600592a0a0969bcdd5488fc2f27c464b",[518,528,535],"Verify example RR drawing at time of explanation instead of borrowing later edited coordinates"),
-9:(13689564024,"dd78ff36ce267d4b1735aa6ce1d2a591371e82cd05461a6467d5589149908e8e",[3038,3046,3053,3085,3115],"Distinguish CPI and interest-rate charts during the spoken switch; do not relabel a CPI screenshot"),
+9:(13689564024,"dd78ff36ce267d4b1735aa6ce1d2a591371e82cd05461a6467d5589149908e8e",[2299,2320,2629,2749,2772],"Match inflation level versus change in increments in the classroom role-play; do not infer exact weights or unheard speech"),
 23:(13692425864,"403dca1d3fc90f739a9d6fe0006c87606cd7ffa5f026f5f9cd3e8d5644b47e0a",[2649,2670,2697],"Introductory decision-tree branches and limits of later complete-tree promise"),
 21:(13691563117,"f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",[541,547,553,556],"One-third stop origin, marked level and nearby FVG alternative"),
 24:(13692025289,"7f82b19f0c19fd38daaf118e7bf5a53bf6aa9ac22f12e29a7f18ad4ad2f6f759",[1118,1125,1135],"Actual chart distance display during spoken unit disagreement"),
