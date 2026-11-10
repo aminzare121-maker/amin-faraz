@@ -1,0 +1,36 @@
+{
+  "schema": "artin_restored_original_av_playable_coverage_public_v2",
+  "date": "2026-11-10",
+  "source": "private original AV listening packet (in /بهروز)",
+  "original_wav_files_verified": 5,
+  "citation_windows_verified": 6,
+  "original_frame_hashes_verified": 4,
+  "source_audio_gap": {
+    "citation": "ARTIN-RESTORED-06",
+    "queue_video": 22,
+    "segment": "asr_p016_00063",
+    "machine_text_end_seconds": 4738.55,
+    "original_wav_end_seconds": 4733,
+    "missing_audio_seconds": 5.55,
+    "action": "TRUNCATED_AUDIO_NON_CERTIFIABLE"
+  },
+  "unit_tests": {
+    "ordinary": {
+      "passed": 8,
+      "total": 8
+    },
+    "optimized_python": {
+      "passed": 8,
+      "total": 8
+    }
+  },
+  "technical_change": "Fail closed on original WAV SHA mismatch, image SHA mismatch, wrong time, missing clip and incorrectly marked complete ASR; report playable span directly from WAV bytes.",
+  "private_report": "/بهروز/ARTIN_6_AV_PLAYABLE_COVERAGE_PRIVATE_20261110.json",
+  "private_source_tests": "/بهروز/test_artin_packet_coverage_v2.py",
+  "script": "artin_packet_coverage_v2.py",
+  "recovered_missing_seconds": false,
+  "teacher_words_independently_verified": false,
+  "teacher_trade_logic_verified": false,
+  "trades_authorized": 0,
+  "github_actions_run_verified": false
+}
