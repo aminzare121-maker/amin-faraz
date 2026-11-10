@@ -27,5 +27,19 @@
   "orders_authorized": 0,
   "github_actions_result": "NOT_VERIFIED",
   "public_code": "artin_13_decision_conflict_replay.py",
-  "public_tests": "test_artin_13_decision_conflict_public.py"
+  "public_tests": "test_artin_13_decision_conflict_public.py",
+  "lexical_correction_v2": {
+    "status": "V1_MACHINE_POLARITY_ALARMS_SUPERSEDED",
+    "v1_pair_occurrences": 16,
+    "v1_unique_pairs": 14,
+    "v2_counts": {
+      "negative_negative_false_alarm": 1,
+      "noncomparable_entry_reference": 4,
+      "contextual_wording_unresolved": 9
+    },
+    "v2_authoritative_public_report": "tools-makhzan/courses/artin/ARTIN_14_MACHINE_CONFLICT_SEMANTIC_TRIAGE_V2_PUBLIC_20261110.json",
+    "private_review_zip": "/بهروز/ARTIN_14_PAIRS_LEXICAL_TRIAGE_V2_PRIVATE_20261110.zip",
+    "semantic_teacher_conflicts_verified": 0,
+    "orders_authorized": 0
+  }
 }
