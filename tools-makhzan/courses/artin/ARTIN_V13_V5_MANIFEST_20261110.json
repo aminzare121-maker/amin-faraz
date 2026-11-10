@@ -1,0 +1,60 @@
+{
+  "schema": "artin_v13_v5_durable_batch_review_archive_v1",
+  "created": "2026-11-10",
+  "scope": "local synthetic offline software tests, NO MT5 run, NO trader",
+  "files": [
+    {
+      "path": "artin_mt5_durable_outbox_v5.py",
+      "sha256": "15d39a72c2ee788b9427200523fd48d4795ced832f816e4121bde1a078ebd6c6",
+      "size": 12513
+    },
+    {
+      "path": "test_artin_mt5_durable_outbox_v5.py",
+      "sha256": "3b6d21231ec71e474ba48be895f9499ddd51e9189bef05374e8a3accddf43617",
+      "size": 11476
+    },
+    {
+      "path": "artin_mt5_incremental_observer_v4.py",
+      "sha256": "a03ed5ac0c3d4bc6568bf721e9e0300ef3653af72fcbf0438e08278e12fc3c91",
+      "size": 13381
+    },
+    {
+      "path": "artin_mt5_shadow_bridge.py",
+      "sha256": "27bd45bd57d30451b9ec9054e2a3b757214aa380b55f3e7a2b170557bcdd2494",
+      "size": 6715
+    },
+    {
+      "path": "test_artin_mt5_incremental_observer_v4.py",
+      "sha256": "99f841cc010004c8f3313a90a839c286f976198dba788408b155af4b66a0826f",
+      "size": 11173
+    },
+    {
+      "path": "README_DURABLE_OUTBOX_V5_FA.md",
+      "sha256": "34f7611ef44981f5ad7f3e70c2751a8787bb08fe4843810d4c4ab8e55e85d620",
+      "size": 3466
+    },
+    {
+      "path": "v5_e2e_receipt_generator.py",
+      "sha256": "eaf2ff4ea5ee883a8b7badb8a497bdddefee82485a6b2b1740396b1d45ef3975",
+      "size": 1996
+    },
+    {
+      "path": "ARTIN_V13_V5_SYNTHETIC_E2E_RECEIPT_20261110.json",
+      "sha256": "2d51df470292d4e51118c9c12a4d78d332b8525e02753b92b88126332229ec55",
+      "size": 707
+    },
+    {
+      "path": "v5_tests_normal.log",
+      "sha256": "46c35ea46eb7643123d39732a9a8e0519c619ae93e5d7c480d37a7dfac702e56",
+      "size": 3569
+    },
+    {
+      "path": "v5_tests_optimized.log",
+      "sha256": "bd8286a53d597bd13bb61dd4b677a605c6ba38fa961de365e315b9bad7083a8d",
+      "size": 3569
+    }
+  ],
+  "trade_orders_sent": 0,
+  "teacher_semantic_approval": false,
+  "real_power_outage_verified": false
+}
