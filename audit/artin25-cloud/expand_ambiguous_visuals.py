@@ -2,6 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 import imageio_ffmpeg
 CASES={
+10:(13689764605,"1f63842913a250bf1fe81bab3dc7dcc90f282c4026ee41ac88cc31687b8e65ea",[2447,2452,2462],"Verify final indicator timeframe selection without conflating it with entry chart timeframe"),
 12:(13690508501,"200da08226639095044fb0ebb3f3508b7fd82ac770f81bfb87ec789578057805",[2335,2346,2401,2443],"Match explicit doubt and confidence labels to selected candles without inferring from engulf names"),
 17:(13692620657,"4e66db074ee12a417d2152e53f83de94600592a0a0969bcdd5488fc2f27c464b",[518,528,535],"Verify example RR drawing at time of explanation instead of borrowing later edited coordinates"),
 9:(13689564024,"dd78ff36ce267d4b1735aa6ce1d2a591371e82cd05461a6467d5589149908e8e",[3038,3046,3053,3085,3115],"Distinguish CPI and interest-rate charts during the spoken switch; do not relabel a CPI screenshot"),
