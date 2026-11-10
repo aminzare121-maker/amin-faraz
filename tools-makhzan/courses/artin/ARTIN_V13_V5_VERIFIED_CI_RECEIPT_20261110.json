@@ -1,0 +1,33 @@
+{
+  "schema": "artin_v13_v5_durable_outbox_ci_receipt_v1",
+  "date": "2026-11-10",
+  "repo": "aminzare121-maker/amin-faraz",
+  "branch": "artin-v13-under180-development",
+  "workflow_run_id": 42853088531,
+  "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42853088531",
+  "head_sha": "7fc051380a266c5b788c8497270cf2831a99d194",
+  "status": "completed",
+  "conclusion": "success",
+  "ubuntu_latest": {
+    "normal": "24 PASS",
+    "optimized": "24 PASS",
+    "synthetic_end_to_end": "70 closed bars, receipts 5+3+62, repeat 0",
+    "result": "success"
+  },
+  "windows_latest": {
+    "normal": "24 PASS",
+    "optimized": "24 PASS",
+    "synthetic_end_to_end": "70 closed bars, receipts 5+3+62, repeat 0",
+    "result": "success"
+  },
+  "private_owner_data_used": false,
+  "read_only": true,
+  "orders_sent": 0,
+  "teacher_semantics_certified": false,
+  "metaeditor_real_compile_tested": false,
+  "actual_eplanet_demo_tested": false,
+  "physical_windows_power_loss_tested": false,
+  "archive_sha256": "abdf78b8a1451382de54e7b1758d0f005f0f372a072e52c7835235efd0ae0ac6",
+  "original_v2_v4_code_modified": false,
+  "description": "A source-linked immutable batch observation receipt is persisted before the observer advances its checkpoint; crashes between actions are tested with deterministic exceptions and source-pinned replay."
+}
