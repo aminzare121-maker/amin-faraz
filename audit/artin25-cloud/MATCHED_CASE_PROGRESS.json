@@ -654,8 +654,61 @@
       "teacher_role_verified": false,
       "whole_lesson_verified": false,
       "continuous_video_viewed": false
+    },
+    {
+      "sequence": 1,
+      "case": "LEGACY_TRANSCRIPT_CONNECTED_WITH_EXPLICIT_PROVENANCE_LIMIT",
+      "source_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+      "legacy_transcript_parts": 9,
+      "legacy_segments": 951,
+      "transcript_binding": "CANONICAL_PAGE_URL_ONLY_NOT_AUDIO_HASH_BOUND",
+      "frames_personally_viewed_seconds": [
+        285,
+        315
+      ],
+      "result": "PARTIAL_INTRODUCTION_REVIEW_NO_EXECUTABLE_RULE_APPROVED",
+      "direct_listening": false,
+      "teacher_role_verified": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 3,
+      "case": "LP_NETTING_EXAMPLE_NOT_ENTRY_SIGNAL",
+      "source_sha256": "a2721fb01575f9ad4859f594e5c6fa6852e31dce353e31f70eed1a8edb3bbfbb",
+      "existing_transcript_parts": 18,
+      "existing_transcript_segments": 2303,
+      "frames_personally_viewed_seconds": [
+        2835,
+        2895,
+        2925,
+        2955,
+        3375,
+        3435
+      ],
+      "image_sha_verified": true,
+      "result": "HYPOTHETICAL_NETTING_DIAGRAM_MATCHED_NOT_MARKET_ORDER_FLOW_SIGNAL",
+      "direct_listening": false,
+      "teacher_role_verified": false,
+      "whole_lesson_verified": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
-  "last_review_date": "2026-11-10"
+  "last_review_date": "2026-11-10",
+  "supplementary_visual_review": {
+    "run": 42712974253,
+    "verified_image_count": 23,
+    "sequences": [
+      19,
+      20,
+      22
+    ],
+    "semantic_verified": false
+  },
+  "observed_arithmetic_audit": {
+    "run": 42715167259,
+    "tests_passed": 17,
+    "blind": false,
+    "whole_course_conformance": false,
+    "orders_placed": 0
+  }
 }
