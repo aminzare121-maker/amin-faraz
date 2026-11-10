@@ -88,6 +88,9 @@ on:
       - 'artin_14_pair_time_identity.py'
       - 'test_artin_14_pair_time_identity_public.py'
       - 'build_artin_14_pair_original_mp4_review.py'
+      - 'artin_reconstruct_3_historical_wavs.py'
+      - 'artin_upgrade_14_pair_exact_sources.py'
+      - 'test_artin_upgrade_14_pair_exact_sources_public.py'
       - '.github/workflows/artin-semantic-gate.yml'
   workflow_dispatch:
 
@@ -104,7 +107,7 @@ jobs:
         shell: bash
         run: |
           failed=0
-          for suite in test_artin_semantic_gate.py test_artin_interval_differential.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py test_artin_eplanet_m15_preflight.py test_artin_real_m15_observation_replay.py test_artin_eplanet_monthly_evidence.py test_artin_teacher_market_observability.py test_artin_13_source_coverage_audit.py test_artin_teacher_citation_duration_guard.py test_artin_legacy_identity_reconciliation.py test_artin_restore_six_archived_speech_windows.py test_artin_six_source_context_guard.py test_artin_original_visual_time_gate.py test_artin_13_real_m15_gap_audit.py test_artin_historical_context_integrity_gate.py test_artin_merge_25_course_source_evidence.py test_artin_negated_entry_provenance_gate.py test_artin_negated_entry_provenance_gate_v2.py test_artin_negative_context_packets.py test_artin_24_context_membership_public.py test_artin_restored_av_window_gate_v2_public.py test_artin_video20_scene_boundary.py test_artin_video20_citation_scene_guard.py test_artin_packet_coverage_public.py test_artin_citation_scope_packet_v3_public.py test_artin_citation_scope_ui_v4_public.py test_artin_citation_scoped_playback_v5_public.py test_artin_13_teacher_acceptance_public.py test_artin_13_decision_conflict_public.py test_artin_conflict_media_provenance.py test_artin_14_pair_source_reconciliation.py test_artin_14_pair_time_identity_public.py; do
+          for suite in test_artin_semantic_gate.py test_artin_interval_differential.py test_artin_semantic_gate_v2.py test_artin_replay_stage.py test_artin_full_review_queue.py test_artin_review_packets.py test_artin_full_coverage_index.py test_artin_teacher_case_provenance.py test_artin_teacher_scenario_replay.py test_artin_visual_supplement.py test_artin_technical_speech_inventory.py test_artin_source_hierarchy.py test_artin_eplanet_m15_preflight.py test_artin_real_m15_observation_replay.py test_artin_eplanet_monthly_evidence.py test_artin_teacher_market_observability.py test_artin_13_source_coverage_audit.py test_artin_teacher_citation_duration_guard.py test_artin_legacy_identity_reconciliation.py test_artin_restore_six_archived_speech_windows.py test_artin_six_source_context_guard.py test_artin_original_visual_time_gate.py test_artin_13_real_m15_gap_audit.py test_artin_historical_context_integrity_gate.py test_artin_merge_25_course_source_evidence.py test_artin_negated_entry_provenance_gate.py test_artin_negated_entry_provenance_gate_v2.py test_artin_negative_context_packets.py test_artin_24_context_membership_public.py test_artin_restored_av_window_gate_v2_public.py test_artin_video20_scene_boundary.py test_artin_video20_citation_scene_guard.py test_artin_packet_coverage_public.py test_artin_citation_scope_packet_v3_public.py test_artin_citation_scope_ui_v4_public.py test_artin_citation_scoped_playback_v5_public.py test_artin_13_teacher_acceptance_public.py test_artin_13_decision_conflict_public.py test_artin_conflict_media_provenance.py test_artin_14_pair_source_reconciliation.py test_artin_14_pair_time_identity_public.py test_artin_upgrade_14_pair_exact_sources_public.py; do
             echo "::group::${suite}"
             if python3 -m unittest -v "$suite"; then
               echo "PASS: $suite"
@@ -175,3 +178,7 @@ jobs:
       - name: Run optimized source interval ID identity tests
         shell: bash
         run: python3 -O -m unittest -v test_artin_14_pair_time_identity_public
+
+      - name: Run optimized exact historical WAV guard
+        shell: bash
+        run: python3 -O -m unittest -v test_artin_upgrade_14_pair_exact_sources_public
