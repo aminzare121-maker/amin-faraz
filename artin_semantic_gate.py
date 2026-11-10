@@ -11,7 +11,7 @@ import re
 import sys
 
 REQUIRED = {"entry", "exit", "exception", "decision_order"}
-# Bound untrusted evidence size before the quadratic speech/image join.
+# Bound untrusted evidence size before validation and interval indexing.
 MAX_ANCHORS_PER_RULE = 2000
 
 
@@ -71,13 +71,7 @@ def audit(document):
             refs_ok = False
             if (isinstance(evidence, list) and 0 < len(evidence) <= MAX_ANCHORS_PER_RULE
                     and all(valid_anchor(x) for x in evidence)):
-                # Match anchors on the same source video, with overlapping
-                # intervals. Zero-duration anchors are allowed if coincident.
-                # Group by video, sort by START time and sweep. End-time sort
-                # loses long enclosing intervals (e.g. speech 19..97 against
-                # image 60..68 after a short speech 73..80). The disjoint
-                # branch advances the interval that ends first.
-                # Avoid the quadratic cross-product for long lessons.
+                # Require overlap within the same source. Prefix maxima preserve\n                # long enclosing intervals; zero-duration anchors can coincide.
                 by_source = {}
                 for anchor in evidence:
                     source = anchor["source_sha256"].lower()
