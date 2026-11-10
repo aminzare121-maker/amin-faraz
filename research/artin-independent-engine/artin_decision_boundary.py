@@ -33,7 +33,11 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
             row.kind not in KINDS or row.action not in ACTIONS or
             type(row.priority) is not int or type(row.session) is not int or
             not 1 <= row.session <= 25 or
-            not row.verified or not isinstance(row.evidence_id, str) or
+            type(row.verified) is not bool or not row.verified or
+            (row.kind == "entry" and row.action not in ("ENTER", "NO_TRADE", "HOLD")) or
+            (row.kind == "exit" and row.action == "ENTER") or
+            (row.kind in ("risk", "exception") and row.action in ("ENTER", "EXIT")) or
+            not isinstance(row.evidence_id, str) or
             not row.evidence_id.strip()):
             return {"decision": "BLOCKED", "reason": "UNVERIFIED_OR_INVALID_RULE"}
     ids = [r.rule_id for r in rows]
