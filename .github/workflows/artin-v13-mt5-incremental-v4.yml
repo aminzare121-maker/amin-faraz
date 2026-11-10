@@ -1,0 +1,31 @@
+name: Artin V13 incremental M15 DEMO observer V4 (offline only)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_mt5_incremental_observer_v4.py'
+      - 'test_artin_mt5_incremental_observer_v4.py'
+      - 'artin_mt5_shadow_bridge.py'
+      - 'SYNTHETIC_M15_RECOVERY_FIXTURE.csv'
+      - '.github/workflows/artin-v13-mt5-incremental-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot-and-checkpoint-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run 24 offline synthetic append-only tests (no orders)
+        shell: bash
+        run: python -m unittest -v test_artin_mt5_incremental_observer_v4
+      - name: Run 24 optimized offline synthetic append-only tests
+        shell: bash
+        run: python -O -m unittest -v test_artin_mt5_incremental_observer_v4
