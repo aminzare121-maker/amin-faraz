@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [7, 8] # only newly documented chart switch and comparison ambiguities
+        sequence: [9] # five new anchors for level versus slope in the classroom example
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
