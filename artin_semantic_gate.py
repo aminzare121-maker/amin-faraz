@@ -71,7 +71,8 @@ def audit(document):
             refs_ok = False
             if (isinstance(evidence, list) and 0 < len(evidence) <= MAX_ANCHORS_PER_RULE
                     and all(valid_anchor(x) for x in evidence)):
-                # Require overlap within the same source. Prefix maxima preserve\n                # long enclosing intervals; zero-duration anchors can coincide.
+                # Require overlap within the same source. Prefix maxima preserve
+                # long enclosing intervals; zero-duration anchors can coincide.
                 by_source = {}
                 for anchor in evidence:
                     source = anchor["source_sha256"].lower()
