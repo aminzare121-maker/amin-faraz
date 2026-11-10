@@ -1,0 +1,31 @@
+name: Artin V13 DEMO M15 closed-bar catchup V2 (synthetic only)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
+      - 'artin_mt5_recovery_plan_v2.py'
+      - 'test_artin_mt5_recovery_plan_v2.py'
+      - 'artin_mt5_shadow_bridge.py'
+      - '.github/workflows/artin-v13-mt5-m15-recovery-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-capture-recovery-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out original development branch
+        uses: actions/checkout@v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify oldest-first recovery and CSV importer (synthetic only)
+        run: python -m unittest -v test_artin_mt5_recovery_plan_v2
+      - name: Verify optimized Python recovery safety (synthetic only)
+        run: python -O -m unittest -v test_artin_mt5_recovery_plan_v2
