@@ -83,19 +83,24 @@ def audit(document):
                     source = anchor["source_sha256"].lower()
                     pair = by_source.setdefault(source, {"speech": [], "image": []})
                     pair[anchor["modality"]].append((anchor["start"], anchor["end"]))
+                # Prefix maximum end handles nested intervals correctly.
+                # For each speech interval, binary-search the last image
+                # starting no later than speech.end. An overlap exists iff
+                # the maximum image end in that prefix >= speech.start.
+                from bisect import bisect_right
                 for pair in by_source.values():
-                    speech = sorted(pair["speech"], key=lambda interval: (interval[0], interval[1]))
                     images = sorted(pair["image"], key=lambda interval: (interval[0], interval[1]))
-                    i = j = 0
-                    while i < len(speech) and j < len(images):
-                        a, b = speech[i], images[j]
-                        if max(a[0], b[0]) <= min(a[1], b[1]):
+                    starts = [interval[0] for interval in images]
+                    max_ends = []
+                    running_max = float("-inf")
+                    for _, image_end in images:
+                        running_max = max(running_max, image_end)
+                        max_ends.append(running_max)
+                    for speech_start, speech_end in pair["speech"]:
+                        k = bisect_right(starts, speech_end) - 1
+                        if k >= 0 and max_ends[k] >= speech_start:
                             refs_ok = True
                             break
-                        if a[1] < b[1]:
-                            i += 1
-                        else:
-                            j += 1
                     if refs_ok:
                         break
             compare_ok = (
