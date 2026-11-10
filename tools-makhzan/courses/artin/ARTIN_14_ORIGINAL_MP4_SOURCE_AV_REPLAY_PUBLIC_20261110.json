@@ -1,0 +1,79 @@
+{
+  "schema": "artin_14_conflict_pairs_verified_original_mp4_av_replay_v1",
+  "date": "2026-11-10",
+  "original_video_sessions": [
+    19,
+    20,
+    21
+  ],
+  "original_video_sha_receipts_verified": 3,
+  "source_original_mp4s_retrieved": 3,
+  "historical_audio_sha_groups": 4,
+  "distinct_conflict_pairs": 14,
+  "machine_speech_segments_unique": 16,
+  "original_video_replay_clips": 4,
+  "regenerated_pcm_wav_clips": 4,
+  "source_video_interval_images": 16,
+  "all_16_images_extracted_inside_original_machine_asr_intervals": true,
+  "private_playable_review_zip": "/بهروز/ARTIN_14_PAIRS_ORIGINAL_MP4_DERIVED_REVIEW_20261110.zip",
+  "private_review_and_correction_report": "/بهروز/ARTIN_14_MP4_ORIGINAL_RECOVERY_CORRECTED_PRIVATE_20261110.json",
+  "frame_contact_sheet_private": "/بهروز/ARTIN_14_ORIGINAL_VIDEO_FRAMES_CONTACT_20261110.jpg",
+  "critical_source_alignment_fix": {
+    "affected_pairs": 6,
+    "index_based_misbound_segment_slots": 12,
+    "fix": "Match source ASR segment ID to its own recorded start/end and original audio source SHA; never zip separate arrays by index."
+  },
+  "visual_observations": [
+    {
+      "session": 19,
+      "range_seconds": [
+        3772,
+        3792
+      ],
+      "observation": "original video captures a virtual classroom/browser view, not trading-chart entry evidence"
+    },
+    {
+      "session": 19,
+      "range_seconds": [
+        4284,
+        4322
+      ],
+      "observation": "annotated teaching chart with drawn candles; teacher decision unconfirmed"
+    },
+    {
+      "session": 20,
+      "range_seconds": [
+        3371,
+        3386
+      ],
+      "observation": "schematic candlestick chart, not evidence of executed trade"
+    },
+    {
+      "session": 21,
+      "range_seconds": [
+        1904,
+        1936
+      ],
+      "observation": "annotated price chart with a large decline; spoken rule still unverified"
+    }
+  ],
+  "historical_wav_exact_sha_matches_for_regenerated_wavs": 0,
+  "important_note": "The original MP4 files match independent source receipts. The WAVs are newly decoded from MP4, not byte-identical replays of historical FFmpeg outputs. Reference lesson20 PCM over first 300 seconds matches known historical WAV despite different metadata and samples at final boundary.",
+  "local_original_media_tests": {
+    "normal": 10,
+    "python_optimized": 10
+  },
+  "public_synthetic_source_pair_tests": {
+    "normal": 7,
+    "python_optimized": 7
+  },
+  "independent_original_audio_listening_certified": false,
+  "teacher_speaker_role_certified": false,
+  "teacher_semantic_conflicts_resolved": 0,
+  "teacher_route_decisions_certified": 0,
+  "orders_authorized": 0,
+  "github_actions_result": "PENDING_INDEPENDENT_CHECK",
+  "source_reproducer": "build_artin_14_pair_original_mp4_review.py",
+  "source_identity_module": "artin_14_pair_time_identity.py",
+  "synthetic_regression_tests": "test_artin_14_pair_time_identity_public.py"
+}
