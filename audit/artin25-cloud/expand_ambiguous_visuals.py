@@ -2,6 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 import imageio_ffmpeg
 CASES={
+12:(13690508501,"200da08226639095044fb0ebb3f3508b7fd82ac770f81bfb87ec789578057805",[2335,2346,2401,2443],"Match explicit doubt and confidence labels to selected candles without inferring from engulf names"),
 17:(13692620657,"4e66db074ee12a417d2152e53f83de94600592a0a0969bcdd5488fc2f27c464b",[518,528,535],"Verify example RR drawing at time of explanation instead of borrowing later edited coordinates"),
 9:(13689564024,"dd78ff36ce267d4b1735aa6ce1d2a591371e82cd05461a6467d5589149908e8e",[3038,3046,3053,3085,3115],"Distinguish CPI and interest-rate charts during the spoken switch; do not relabel a CPI screenshot"),
 23:(13692425864,"403dca1d3fc90f739a9d6fe0006c87606cd7ffa5f026f5f9cd3e8d5644b47e0a",[2649,2670,2697],"Introductory decision-tree branches and limits of later complete-tree promise"),
