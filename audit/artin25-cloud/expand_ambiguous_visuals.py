@@ -5,7 +5,7 @@ CASES={
 21:(13691563117,"f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",[537,550,558,585,620,635],"One-third stop origin, marked level and nearby FVG alternative"),
 24:(13692025289,"7f82b19f0c19fd38daaf118e7bf5a53bf6aa9ac22f12e29a7f18ad4ad2f6f759",[1118,1125,1135],"Actual chart distance display during spoken unit disagreement"),
 1:(13690841735,"b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",[680,1230,1390,2195,3438,3452],"Legacy first-lesson transcript unclear roles and direction-entry distinction; no model re-execution"),
-19:(13691172465,"164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",[3668,3680,3695,3955,3980,4005,4410,4430,4468,4480],"Three completed drawings and Star SELL half-leg ambiguity"),
+19:(13691172465,"164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",[4235,4288,4304],"Three completed drawings and Star SELL half-leg ambiguity"),
 20:(13690608979,"6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",[4203,4209,4215,4221,4233,4235,4238],"Pointed Stop/Punch variants and between-zone exception"),
 22:(13691432406,"8214f077a05969730c21015dc0f24c489835a9d1a9e9e3be4f73cca1000992ca",[1405,3546,3584,4755,4874,4887],"Pre-existing-zone requirement, confirmation line and rejected Three")}
 def main():
