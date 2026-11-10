@@ -2,7 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 import imageio_ffmpeg
 CASES={
-18:(13693801002,"5b896a56747b6e1d5ab5c01c6d01dcce7ed396a471dfa170cbad3193aaecd6ed",[3070,3072,3074,3076,3078,3080],"Inspect exact crosshair candle identities and outer shadow prices in the observed bullish FVG; do not substitute rectangle bounds for OHLC"),
+18:(13693801002,"5b896a56747b6e1d5ab5c01c6d01dcce7ed396a471dfa170cbad3193aaecd6ed",[3084,3090,3093,3140],"Separate prior zone formation from later touch and fill in the same bullish FVG; keep the later different example distinct"),
 7:(13690343720,"ae50c37d83ca2b92ea0c27ba429247878e5edd01a44c0596ca50d85cac335ce1",[4315,4337,4353],"Match the live EURUSD and DXY chart switch; prior PDF frames do not show this example"),
 8:(13689654008,"0b55bcbf9714ff586d232abbd0b2d1070231bb055a5775a62347cd146253a2f8",[4218,4298,4337,4399],"Check written comparison bases and wage equality during transcript direction disagreement; do not infer unheard speech"),
 10:(13689764605,"1f63842913a250bf1fe81bab3dc7dcc90f282c4026ee41ac88cc31687b8e65ea",[2448,2448.5,2449],"Verify final indicator timeframe selection without conflating it with entry chart timeframe"),
