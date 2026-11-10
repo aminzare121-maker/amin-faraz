@@ -70,7 +70,16 @@ def audit_artifacts(receipt, root):
                         break
                     digest.update(block)
                 else:
-                    if digest.hexdigest() != expected:
+                    # Reject files modified while they were being hashed.
+                    # A matching digest alone cannot establish a stable snapshot.
+                    after = fstat_artifact(f)
+                    before_identity = (metadata.st_dev, metadata.st_ino, metadata.st_size,
+                                       metadata.st_mtime_ns, metadata.st_ctime_ns)
+                    after_identity = (after.st_dev, after.st_ino, after.st_size,
+                                      after.st_mtime_ns, after.st_ctime_ns)
+                    if after_identity != before_identity or total != metadata.st_size:
+                        errors.append("artifact changed during read: " + kind)
+                    elif digest.hexdigest() != expected:
                         errors.append("digest mismatch: " + kind)
         except (OSError, RuntimeError):
             errors.append("missing or unreadable file: " + kind)
