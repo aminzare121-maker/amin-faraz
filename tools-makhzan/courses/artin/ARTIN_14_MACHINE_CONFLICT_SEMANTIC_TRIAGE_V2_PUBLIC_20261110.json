@@ -1,0 +1,199 @@
+{
+  "schema": "artin_14_machine_lexical_conflict_triage_v2",
+  "distinct_pairs": 14,
+  "original_pair_occurrences_before_dedup": 16,
+  "source_wavs_original_SHA256_and_clip_PCM_verified_in_this_run": 4,
+  "original_frame_identity_checks_across_pair_mentions": 28,
+  "distinct_source_video_frames_sha256_verified": 16,
+  "classification_counts": {
+    "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT": 9,
+    "FALSE_LEXICAL_FLIP_BOTH_WORDINGS_NEGATED": 1,
+    "NONCOMPARABLE_ACTION_CLAIM_IN_MACHINE_TEXT": 4
+  },
+  "v1_lexical_negative_bug_corrected": true,
+  "v2_packet_stale_decoded_clip_hash_disregarded_and_original_full_pcm_verified": true,
+  "original_speech_independently_transcribed": false,
+  "teacher_speaker_verified": false,
+  "teacher_chart_decision_compared_to_engine": false,
+  "teacher_semantic_conflicts_certified": 0,
+  "teacher_rules_certified": 0,
+  "mt5_trades_authorized": 0,
+  "screen_type_counts": {
+    "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES": 5,
+    "WEBINAR_ROOM_NO_TRADING_CHART_VISIBLE": 2,
+    "TRADINGVIEW_ILLUSTRATED_SINGLE_CANDLE": 1,
+    "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART": 6
+  },
+  "cases": [
+    {
+      "pair_number_original": 1,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR"
+      ],
+      "wording_status": "NONCOMPARABLE_ACTION_CLAIM_IN_MACHINE_TEXT",
+      "screen_type": "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 2,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 3,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 5,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 7,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_XAUUSD_15M_ILLUSTRATED_CANDLES",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 4,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR",
+        "REVERSAL_THREE"
+      ],
+      "wording_status": "FALSE_LEXICAL_FLIP_BOTH_WORDINGS_NEGATED",
+      "screen_type": "WEBINAR_ROOM_NO_TRADING_CHART_VISIBLE",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 6,
+      "session": 19,
+      "route_ids": [
+        "REVERSAL_STAR",
+        "REVERSAL_THREE"
+      ],
+      "wording_status": "NONCOMPARABLE_ACTION_CLAIM_IN_MACHINE_TEXT",
+      "screen_type": "WEBINAR_ROOM_NO_TRADING_CHART_VISIBLE",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 8,
+      "session": 20,
+      "route_ids": [
+        "BREAK_VERY_STRONG_RETEST"
+      ],
+      "wording_status": "NONCOMPARABLE_ACTION_CLAIM_IN_MACHINE_TEXT",
+      "screen_type": "TRADINGVIEW_ILLUSTRATED_SINGLE_CANDLE",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 9,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 10,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 11,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "NONCOMPARABLE_ACTION_CLAIM_IN_MACHINE_TEXT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 12,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 13,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair_number_original": 14,
+      "session": 21,
+      "route_ids": [
+        "STOPPUNCH_S22_SELL_CONFIRMED_PAUSE"
+      ],
+      "wording_status": "CONTEXT_DEPENDENT_OPPOSITE_WORDING_NOT_VERIFIED_CONFLICT",
+      "screen_type": "TRADINGVIEW_EURUSD_15M_ANNOTATED_CHART",
+      "speaker_verified": false,
+      "semantic_conflict_verified": false,
+      "trade_permitted": false
+    }
+  ]
+}
