@@ -72,12 +72,28 @@ def audit(document):
                     and all(valid_anchor(x) for x in evidence)):
                 # Match anchors on the same source video, with overlapping
                 # intervals. Zero-duration anchors are allowed if coincident.
-                refs_ok = any(
-                    speech["source_sha256"].lower() == frame["source_sha256"].lower()
-                    and max(speech["start"], frame["start"]) <= min(speech["end"], frame["end"])
-                    for speech in evidence if speech["modality"] == "speech"
-                    for frame in evidence if frame["modality"] == "image"
-                )
+                # Group by video and sweep intervals sorted by start time.
+                # Avoid the quadratic cross-product for long lessons.
+                by_source = {}
+                for anchor in evidence:
+                    source = anchor["source_sha256"].lower()
+                    pair = by_source.setdefault(source, {"speech": [], "image": []})
+                    pair[anchor["modality"]].append((anchor["start"], anchor["end"]))
+                for pair in by_source.values():
+                    speech = sorted(pair["speech"])
+                    images = sorted(pair["image"])
+                    i = j = 0
+                    while i < len(speech) and j < len(images):
+                        a, b = speech[i], images[j]
+                        if max(a[0], b[0]) <= min(a[1], b[1]):
+                            refs_ok = True
+                            break
+                        if a[1] < b[1]:
+                            i += 1
+                        else:
+                            j += 1
+                    if refs_ok:
+                        break
             compare_ok = (
                 isinstance(compare, dict)
                 and isinstance(compare.get("teacher_example_id"), str)
