@@ -59,6 +59,7 @@ def audit(document):
                     isinstance(x, dict)
                     and isinstance(x.get("source_sha256"), str)
                     and re.fullmatch(r"[0-9a-fA-F]{64}", x["source_sha256"]) is not None
+                    and int(x["source_sha256"], 16) != 0  # Reject all-zero placeholder hashes
                     and type(x.get("start")) in (int, float)
                     and type(x.get("end")) in (int, float)
                     and math.isfinite(x["start"])
