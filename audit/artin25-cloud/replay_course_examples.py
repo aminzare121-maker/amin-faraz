@@ -39,6 +39,12 @@ def evaluate():
     check("observed_risk_within_example_budget",D("100000")*distance*D(".15")<=D(20),True,24,"lesson24 risk budget20")
     check("nearer_fvg_stop_risk",D("4746.344")-D("4727.257"),D("19.087"),21,"expanded:635")
     check("original_far_stop_risk",D("4773.442")-D("4727.257"),D("46.185"),21,"expanded:620")
+    # Lesson25 illustrative two-trade path, conditional fixed1000USD base, no fees.
+    first_profit=D(1000)*D(".016")*D(".8")
+    second_risk=D(1000)*D(".013")
+    check("tree_TP_TP_exact_not_rounded26",first_profit+second_risk,D("25.8"),25,"785..999 fixed-base assumption")
+    check("tree_TP_SL_exact_not_zero",first_profit-second_risk,D("-.2"),25,"950..971 rounded reset discrepancy")
+    check("tree_example_25pct_goal_reached",first_profit+second_risk>=D(1000)*D(".025"),True,25,"983..995 illustrative daily goal; not later5pct profile")
     # These checks validate arithmetic/fidelity observations, NOT semantic approval or an entry engine.
     return dict(schema="artin_course_example_replay_v1", tests=cases,
                 passed=sum(x["passed"] for x in cases), orders_placed=0,
