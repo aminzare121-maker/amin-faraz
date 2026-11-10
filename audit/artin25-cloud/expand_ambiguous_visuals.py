@@ -9,7 +9,7 @@ CASES={
 17:(13692620657,"4e66db074ee12a417d2152e53f83de94600592a0a0969bcdd5488fc2f27c464b",[518,528,535],"Verify example RR drawing at time of explanation instead of borrowing later edited coordinates"),
 9:(13689564024,"dd78ff36ce267d4b1735aa6ce1d2a591371e82cd05461a6467d5589149908e8e",[2299,2320,2629,2749,2772],"Match inflation level versus change in increments in the classroom role-play; do not infer exact weights or unheard speech"),
 23:(13692425864,"403dca1d3fc90f739a9d6fe0006c87606cd7ffa5f026f5f9cd3e8d5644b47e0a",[2649,2670,2697],"Introductory decision-tree branches and limits of later complete-tree promise"),
-21:(13691563117,"f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",[541,547,553,556],"One-third stop origin, marked level and nearby FVG alternative"),
+21:(13691563117,"f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",[524,526,528,530,532],"Identify the explicitly pointed origin of the Punch impulse before stop-tool editing; later stop coordinates do not prove leg endpoints"),
 24:(13692025289,"7f82b19f0c19fd38daaf118e7bf5a53bf6aa9ac22f12e29a7f18ad4ad2f6f759",[1118,1125,1135],"Actual chart distance display during spoken unit disagreement"),
 1:(13690841735,"b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",[680,1230,1390,2195,3438,3452],"Legacy first-lesson transcript unclear roles and direction-entry distinction; no model re-execution"),
 19:(13691172465,"164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",[4235,4288,4304],"Three completed drawings and Star SELL half-leg ambiguity"),
