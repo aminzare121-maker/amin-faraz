@@ -1,0 +1,114 @@
+{
+  "schema": "codex_independent_offline_validation_v1",
+  "checked_utc": "2026-11-10T18:24:26.122307+00:00",
+  "results": [
+    {
+      "mode": "normal",
+      "tests_passed": true,
+      "elapsed_with_benchmark_seconds": 4.123595100012608,
+      "test_log": "tests-normal.txt",
+      "synthetic_archive_benchmark": {
+        "schema": "synthetic_archive_batch_benchmark_v1",
+        "synthetic_input": true,
+        "actual_mt5_receiving_seconds": null,
+        "video_extraction_measured": false,
+        "same_canonical_archive_head": true,
+        "modes": {
+          "one_bar_transactions": {
+            "rows": 100,
+            "head_sha256": "710dd7630212e4e9b6b84b5591b34dcbd09abc748d589cf90de38b8167ced0b4",
+            "wall_seconds": 2.959724400076084,
+            "stage_seconds": {
+              "validation": 0.0010511998552829027,
+              "processing": 0.002063899883069098,
+              "storage": 0.8135127003770322,
+              "verification": 1.809591900673695,
+              "total": 2.9531807001912966
+            },
+            "archive_integrity_verified": true
+          },
+          "batched_transaction": {
+            "rows": 100,
+            "head_sha256": "710dd7630212e4e9b6b84b5591b34dcbd09abc748d589cf90de38b8167ced0b4",
+            "wall_seconds": 0.040546400006860495,
+            "stage_seconds": {
+              "validation": 0.0005241999169811606,
+              "processing": 0.0005792999872937799,
+              "storage": 0.008190100081264973,
+              "verification": 0.022953899926505983,
+              "total": 0.0403970000334084
+            },
+            "archive_integrity_verified": true
+          }
+        },
+        "orders_enabled": false
+      }
+    },
+    {
+      "mode": "optimized",
+      "tests_passed": true,
+      "elapsed_with_benchmark_seconds": 4.29579569993075,
+      "test_log": "tests-optimized.txt",
+      "synthetic_archive_benchmark": {
+        "schema": "synthetic_archive_batch_benchmark_v1",
+        "synthetic_input": true,
+        "actual_mt5_receiving_seconds": null,
+        "video_extraction_measured": false,
+        "same_canonical_archive_head": true,
+        "modes": {
+          "one_bar_transactions": {
+            "rows": 100,
+            "head_sha256": "710dd7630212e4e9b6b84b5591b34dcbd09abc748d589cf90de38b8167ced0b4",
+            "wall_seconds": 2.8242309000343084,
+            "stage_seconds": {
+              "validation": 0.0010502004297450185,
+              "processing": 0.0020111995982006192,
+              "storage": 0.7855412006611004,
+              "verification": 1.7097771990811452,
+              "total": 2.8171141005586833
+            },
+            "archive_integrity_verified": true
+          },
+          "batched_transaction": {
+            "rows": 100,
+            "head_sha256": "710dd7630212e4e9b6b84b5591b34dcbd09abc748d589cf90de38b8167ced0b4",
+            "wall_seconds": 0.045111200073733926,
+            "stage_seconds": {
+              "validation": 0.0006353999488055706,
+              "processing": 0.0006168000400066376,
+              "storage": 0.008006099960766733,
+              "verification": 0.02724089997354895,
+              "total": 0.04496530001051724
+            },
+            "archive_integrity_verified": true
+          }
+        },
+        "orders_enabled": false
+      }
+    }
+  ],
+  "source_hashes": {
+    "mql5/ArtinIndependentCapture.ex5": "4a75afb83008348f159fc69abbb76d6c499f3bc8580b3385f184359116e749bd",
+    "mql5/ArtinIndependentCapture.mq5": "732f550fa1125144bc79fbe55098a7e158d8ccd67cdadf9ed98a4979fa8d77fd",
+    "mql5/compile.ps1": "ad3add1dea5dc76413c015f3f9f34f1e989faf2b1dd5107847e44231ee96f7e2",
+    "mql5/failed-v100.ex5": "9689163ee853946e33c5521a88b219e7fb04f05bebf63085ab02ee1da47fd49e",
+    "mql5/failed-v100.mq5": "8e2e918c3a574c339e4578508a8a4f7dc3a2389fd43c6bb62099a605292512ba",
+    "mql5/README.md": "d54f047256b2d7cea1f761ea231bf01462ff8cbe9ef829396620f24d9b39c9b4",
+    "mql5/RUNTIME_ATTEMPT.md": "98ff1116980a2c2ff725968f592ee10a815bf2c2293aeaa55623dcf3f05afba9",
+    "python/ARCHIVE_API.md": "cceddb4ba18c6249e546e6e494bf0f951824611be94668c7009bfb20364ee516",
+    "python/candle_archive.py": "202bf1c99bbf09dd0ab8a70cf5167708b31865f0c84132708ff4571589463d67",
+    "python/import_mql_capture.py": "7553f8c597ac7397cfb8fbffb8c03b078550fffcac6529d0371933612f51fbb2",
+    "python/observe_demo.py": "343e963d4af4cb05d8de4dcd177c1dcf5a5440b05b802229756ea78e72d0ffe8",
+    "python/path_registry.py": "cc9f94d2d12a19bf5ae52f7d7e4631854fa5935b02f727d25b51c2e13f3f211b",
+    "python/replay_captured_recovery.py": "de81eba26d440fa6239ffa1f4d07ed1c1f881176b75c3787228a02cb64c8386b",
+    "python/validate_project.py": "7311ed05e8adc5b32998ab3759ed5f72341c440bd815f9ccbc65f127fc1ab833",
+    "python/verify_archive.py": "c703d9dc516587fc3aec4d73ce30cb1a391c3796a33be1aa37e5167139f3375d",
+    "tests/benchmark_archive.py": "1202c51730b4581adcf2c0181a21aa4dc3fd4af2377c14f087c1793b09315dde",
+    "tests/test_archive.py": "3db05f6de0b68b539da4a80ea953850bd36a98d72665f899c89a406e417b54fa",
+    "tests/test_observer.py": "aebccc0a6f0618ebc4bd920b3b65da5aa9cfcd8f902bb74c9abaddcb5752bdad"
+  },
+  "mt5_runtime_exercised_by_this_command": false,
+  "semantic_verified": false,
+  "orders_enabled": false,
+  "video_under180_measured": false
+}

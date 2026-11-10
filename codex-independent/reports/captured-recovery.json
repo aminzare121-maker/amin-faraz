@@ -1,0 +1,53 @@
+{
+  "schema": "codex_captured_bars_recovery_v1",
+  "snapshot_sha256": "f6f26d6df7b6dbb348627ca8accb8f3e5ee7b2f283cd2b8ce12c6d13aa864ba3",
+  "captured_bar_count": 512,
+  "deliberately_omitted_count": 3,
+  "backfilled_count": 3,
+  "duplicates_not_rewritten": 509,
+  "known_broker_gaps_preserved": [
+    {
+      "after": 1793749500,
+      "before": 1793754000,
+      "absent_grid_slots": 4,
+      "status": "GAP_UNRESOLVED",
+      "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+    },
+    {
+      "after": 1793835900,
+      "before": 1793840400,
+      "absent_grid_slots": 4,
+      "status": "GAP_UNRESOLVED",
+      "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+    },
+    {
+      "after": 1793922300,
+      "before": 1793926800,
+      "absent_grid_slots": 4,
+      "status": "GAP_UNRESOLVED",
+      "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+    },
+    {
+      "after": 1794008700,
+      "before": 1794186000,
+      "absent_grid_slots": 196,
+      "status": "GAP_UNRESOLVED",
+      "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+    },
+    {
+      "after": 1794267900,
+      "before": 1794272400,
+      "absent_grid_slots": 4,
+      "status": "GAP_UNRESOLVED",
+      "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+    }
+  ],
+  "before_gap_count": 6,
+  "after_gap_count": 5,
+  "source_native_time_preserved": true,
+  "tail_deletion_detected": true,
+  "physical_network_outage_tested": false,
+  "source": "ACTUAL_DEMO_CAPTURE_WITH_CONTROLLED_LOCAL_OMISSIONS",
+  "terminal_or_account_changed": false,
+  "orders_submitted": 0
+}
