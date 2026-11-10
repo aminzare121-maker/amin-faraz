@@ -1,0 +1,4 @@
+# Preserve exact V2 collector source bytes across Windows and Linux checkouts.
+# SHA-256 is pinned by V3/V6 compile and staging guards; automatic CRLF
+# conversion on Windows must never change an audited MQL5 file.
+/ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5 -text
