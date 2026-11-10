@@ -1,0 +1,33 @@
+name: Artin V13 MT5 DEMO shadow bridge contract (no orders)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'ArtinV13_ShadowProbe_DemoOnly.mq5'
+      - 'artin_mt5_shadow_bridge.py'
+      - 'artin_v13_teacher_to_mt5_shadow_map.py'
+      - 'test_artin_mt5_shadow_bridge.py'
+      - 'test_artin_v13_teacher_to_mt5_shadow_map.py'
+      - '.github/workflows/artin-v13-mt5-demo-shadow-bridge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shadow-only-safety:
+    name: Safe read-only data bridge, 13 routes, 0 trades
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact development revision
+        uses: actions/checkout@v4
+      - name: Use Python 3.11 for public-only offline validation
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run ordinary CSV parsing and teacher-map safety tests
+        run: python -m unittest -v test_artin_mt5_shadow_bridge test_artin_v13_teacher_to_mt5_shadow_map
+      - name: Run optimized CSV parsing and teacher-map safety tests
+        run: python -O -m unittest -v test_artin_mt5_shadow_bridge test_artin_v13_teacher_to_mt5_shadow_map
