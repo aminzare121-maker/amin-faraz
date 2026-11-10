@@ -1,0 +1,18 @@
+{
+  "schema": "artin_v13_demo_shadow_bridge_source_v1",
+  "date": "2026-11-10",
+  "scope": "Native MT5 read-only closed M15 CSV export, offline CSV audit, and 13-route original private acceptance-source map. No automated orders.",
+  "owner_source_evidence": {"current_sessions": 25, "source_citations": 24, "candidate_routes": 13, "teacher_certified_routes": 0, "demo_orders_authorized": 0},
+  "files": ["ArtinV13_ShadowProbe_DemoOnly.mq5", "artin_mt5_shadow_bridge.py", "artin_v13_teacher_to_mt5_shadow_map.py", "test_artin_mt5_shadow_bridge.py", "test_artin_v13_teacher_to_mt5_shadow_map.py"],
+  "environment_enforcement": {"mt5_demo_only": true, "symbol_prefix": "XAUUSD", "timeframe": "M15", "closed_bars_only": true, "no_trade_functions": true, "broker_clock_utc_unverified": true},
+  "local_unit_tests": {"normal": "29/29 PASS", "optimized": "29/29 PASS", "test_type": "synthetic CSV and real private 13-route 24-citation acceptance source; MQL5 safety checked statically"},
+  "mql5_compiled_in_MetaEditor": false,
+  "actual_MT5_DEMO_run_observed": false,
+  "real_Eplanet_M15_CSV_ingested": false,
+  "github_actions_result": "NOT_YET_VERIFIED",
+  "original_25_lesson_ASR_archives_changed": false,
+  "mt5_orders_sent": 0,
+  "teacher_semantics_certified": false,
+  "private_artifact": "/بهروز/ARTIN_V13_MT5_DEMO_SHADOW_BRIDGE_20261110.zip",
+  "private_13_route_readiness_report": "/بهروز/ARTIN_V13_REAL_13_ROUTE_SHADOW_READINESS_20261110.json"
+}
