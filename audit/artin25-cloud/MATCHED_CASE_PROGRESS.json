@@ -890,6 +890,32 @@
       "direct_listening": false,
       "whole_lesson_verified": false,
       "execution_enabled": false
+    },
+    {
+      "sequence": 19,
+      "case": "REAL_OHLC_DISTINGUISHES_SUM_VS_MAX_BUT_NO_EXPLICIT_CONFIDENCE_LABEL",
+      "existing_frame_seconds": 4801.09,
+      "image_sha_verified": true,
+      "result": "ENGULF_LABEL_NOT_USED_AS_CONFIDENCE_LABEL",
+      "whole_lesson_verified": false,
+      "execution_enabled": false
+    },
+    {
+      "sequence": 12,
+      "case": "EXPLICIT_DOUBT_CONFIDENCE_LABELS_AND_CURSOR_IDENTITY",
+      "run": 42794078983,
+      "frames_personally_viewed_seconds": [
+        2335,
+        2346,
+        2401,
+        2443
+      ],
+      "image_sha_verified": true,
+      "result": "ONE_LEGIBLE_SELECTED_DOUBT_CANDLE_MATCHES_BOTH_CANDIDATE_COMPARISONS_OTHER_HEADER_OHLC_NOT_ASSIGNED_TO_DRAWN_TARGET",
+      "sum_or_max_resolved": false,
+      "direct_listening": false,
+      "whole_lesson_verified": false,
+      "execution_enabled": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
