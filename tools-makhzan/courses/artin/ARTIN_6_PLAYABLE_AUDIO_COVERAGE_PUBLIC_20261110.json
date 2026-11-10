@@ -32,5 +32,23 @@
   "teacher_words_independently_verified": false,
   "teacher_trade_logic_verified": false,
   "trades_authorized": 0,
-  "github_actions_run_verified": false
+  "github_actions_run_verified": false,
+  "correction_20261110": {
+    "status": "RESOLVED_BY_ORIGINAL_SOURCE_AUDIO",
+    "source_github_actions_artifact_id": 13679791669,
+    "source_wav_sha256": "d0ab09ee0452930b246ab6ad34ce6cc982f2284f7efa694e253890c13e0d3afe",
+    "original_wav_cut": [
+      4488,
+      4812
+    ],
+    "previous_review_clip_end_seconds": 4733,
+    "new_review_clip_end_seconds": 4743.55,
+    "asr_63_end_seconds": 4738.55,
+    "previous_false_implication": "Missing audio was only from the short listening-packet clip, not the original source WAV.",
+    "new_private_listening_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V2_AUDIO_FIXED_20261110.zip",
+    "source_sha_verified": true,
+    "coverage_repaired": true,
+    "independent_speaker_semantics_certified": false,
+    "trade_authorized": false
+  }
 }
