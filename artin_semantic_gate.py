@@ -105,7 +105,10 @@ def audit(document):
                 and compare.get("independent") is True
                 and compare.get("review_result") == "PASS"
             )
-            if (rule.get("kind") in REQUIRED and
+            # Untrusted JSON may supply a list/dict as kind; never hash it.
+            kind = rule.get("kind")
+            kind_ok = isinstance(kind, str) and kind in REQUIRED
+            if (kind_ok and
                     rule.get("cross_session_checked") is True and
                     rule.get("ambiguity_resolved") is True and
                     refs_ok and compare_ok):
