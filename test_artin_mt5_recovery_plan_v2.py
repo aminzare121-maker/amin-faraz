@@ -136,6 +136,17 @@ class RecoveryPlannerTests(unittest.TestCase):
                           'GlobalVariableGet(', 'GlobalVariableSet(', 'FILE_SHARE_WRITE'):
             with self.subTest(forbidden=forbidden):self.assertNotIn(forbidden,source)
 
+    def test_v2_mql_checks_prior_csv_price_and_walltime_before_append(self):
+        source=Path(__file__).with_name('ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5').read_text()
+        self.assertIn('row[2]!=TimeToString(current,TIME_DATE|TIME_SECONDS)',source)
+        self.assertIn('corrupt OHLC in persisted CSV',source)
+        self.assertIn('ValidDecimalCell(row[p])',source)
+        self.assertIn('DigitsOnly(row[v])',source)
+        self.assertIn('FileClose(g_file);g_file=INVALID_HANDLE;return INIT_FAILED;',source)
+        bad=encode_csv(bars(1)).replace(b'3002.0',b'2000.0')
+        with self.assertRaises(SourceRejected):
+            parse_csv_bytes(bad)
+
     def test_stream_stays_blocked_after_partial_recovery(self):
         history=bars(20); pending=next_closed_batch(history,history[4],batch_bars=3)
         self.assertEqual(len(pending.epochs),3)
