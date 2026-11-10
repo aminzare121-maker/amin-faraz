@@ -1,0 +1,119 @@
+{
+  "schema": "artin_9_original_av_visual_context_independent_gate_v1",
+  "case_count": 9,
+  "total_review_media_seconds": 103,
+  "original_media_members_byte_identical_to_verified_source": 15,
+  "original_screenshots_sha_verified": 11,
+  "original_audio_windows_duration_and_pcm_verified": 2,
+  "original_video_excerpts_verified_byte_identical_to_previous_source": 2,
+  "asr_utterance_buttons_checked": 18,
+  "chart_symbols_from_direct_observed_screenshots": {
+    "19": "XAUUSD_15M",
+    "21": "EURUSD_15M"
+  },
+  "teacher_speech_independently_heard": false,
+  "teacher_market_decision_replayed": false,
+  "teacher_strategy_semantics_certified": false,
+  "orders_sent": 0,
+  "private_package": "/بهروز/ARTIN_9_UNRESOLVED_ORIGINAL_AV_103_SECONDS_20261110.zip",
+  "private_audit": "/بهروز/ARTIN_9_VISUAL_CONTEXT_AUDIT_PRIVATE_20261110.json",
+  "per_case_visual_review": [
+    {
+      "pair": 2,
+      "video_session": 19,
+      "chart_in_frame": "XAUUSD_15M_CHART_ILLUSTRATED",
+      "screenshot_state_observation": "Negative phrase has a red illustrated candle; positive phrase has a later green candle.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 3,
+      "video_session": 19,
+      "chart_in_frame": "XAUUSD_15M_CHART_ILLUSTRATED",
+      "screenshot_state_observation": "Negative phrase has a red illustrated candle; positive phrase has a later green candle.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 5,
+      "video_session": 19,
+      "chart_in_frame": "XAUUSD_15M_CHART_ILLUSTRATED",
+      "screenshot_state_observation": "Both original frames depict green candle examples, with on-screen annotations at different times.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 7,
+      "video_session": 19,
+      "chart_in_frame": "XAUUSD_15M_CHART_ILLUSTRATED",
+      "screenshot_state_observation": "Both original frames depict green candle examples, with on-screen annotations at different times.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 9,
+      "video_session": 21,
+      "chart_in_frame": "EURUSD_15M_CHART_ANNOTATED",
+      "screenshot_state_observation": "Underlying EURUSD candlestick chart is similar; drawn levels and pointers differ.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 10,
+      "video_session": 21,
+      "chart_in_frame": "EURUSD_15M_CHART_ANNOTATED",
+      "screenshot_state_observation": "Underlying EURUSD candlestick chart is similar; drawn levels and pointers differ.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 12,
+      "video_session": 21,
+      "chart_in_frame": "EURUSD_15M_CHART_ANNOTATED",
+      "screenshot_state_observation": "Underlying EURUSD candlestick chart is similar; drawn levels and pointers differ.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 13,
+      "video_session": 21,
+      "chart_in_frame": "EURUSD_15M_CHART_ANNOTATED",
+      "screenshot_state_observation": "Underlying EURUSD candlestick chart is similar; drawn levels and pointers differ.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    },
+    {
+      "pair": 14,
+      "video_session": 21,
+      "chart_in_frame": "EURUSD_15M_CHART_ANNOTATED",
+      "screenshot_state_observation": "Underlying EURUSD candlestick chart is similar; drawn levels and pointers differ.",
+      "same_teacher_chart_conditions_verified": false,
+      "original_speech_independently_verified": false,
+      "semantic_contradiction_certified": false,
+      "trade_permitted": false
+    }
+  ],
+  "verification": {
+    "private_real_media_tests": 5,
+    "public_synthetic_tests": 10,
+    "normal_run_total": 15,
+    "optimized_run_total": 15,
+    "github_actions_run": "NOT_VERIFIED"
+  }
+}
