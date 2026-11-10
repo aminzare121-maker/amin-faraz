@@ -1,0 +1,33 @@
+name: Artin V13 V7 full-chain file audit (synthetic only)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_mt5_evidence_audit_v7.py'
+      - 'test_artin_mt5_evidence_audit_v7.py'
+      - 'artin_mt5_durable_outbox_v5.py'
+      - 'artin_mt5_local_observer_launcher.py'
+      - 'artin_mt5_incremental_observer_v4.py'
+      - 'README_ARTIN_MT5_V7_FA.md'
+      - '.github/workflows/artin-v13-full-chain-file-audit-v7.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-file-integrity:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run synthetic V7 full-chain and V5 regression tests
+        run: python -m unittest -v test_artin_mt5_evidence_audit_v7 test_artin_mt5_durable_outbox_v5
+      - name: Repeat in optimized Python mode
+        run: python -O -m unittest -v test_artin_mt5_evidence_audit_v7 test_artin_mt5_durable_outbox_v5
