@@ -44,6 +44,30 @@ string SafeFilenameToken(const string value)
    return out;
   }
 
+bool DigitsOnly(const string s)
+  {
+   if(StringLen(s)==0)return false;
+   for(int i=0;i<StringLen(s);i++)
+     {
+      ushort d=StringGetCharacter(s,i);
+      if(d<48||d>57)return false;
+     }
+   return true;
+  }
+
+bool ValidDecimalCell(const string s)
+  {
+   if(StringLen(s)==0)return false;
+   int dots=0;
+   for(int i=0;i<StringLen(s);i++)
+     {
+      ushort d=StringGetCharacter(s,i);
+      if(d==46){dots++;if(dots>1)return false;}
+      else if(d<48||d>57)return false;
+     }
+   return true;
+  }
+
 // Preserve rows exactly as written. CSV is the sole restart checkpoint: never
 // trust a global MT5 variable that might outlive a deleted or truncated CSV.
 bool ReadLastCommittedBar()
@@ -79,14 +103,30 @@ bool ReadLastCommittedBar()
       string time_text=row[1];
       if(StringLen(time_text)<9||StringLen(time_text)>12)
         { Print("ARTIN V2 BLOCKED: invalid timestamp width");return false; }
-      for(int k=0;k<StringLen(time_text);k++)
-        {
-         ushort digit=StringGetCharacter(time_text,k);
-         if(digit<48||digit>57){ Print("ARTIN V2 BLOCKED: invalid timestamp digit");return false; }
-        }
+      if(!DigitsOnly(time_text))
+        { Print("ARTIN V2 BLOCKED: invalid timestamp digit");return false; }
       datetime current=(datetime)StringToInteger(time_text);
       if(current<=g_last_bar||((long)current)%900!=0)
         { Print("ARTIN V2 BLOCKED: CSV duplicate, reversed or off-grid bar");return false; }
+      if(row[2]!=TimeToString(current,TIME_DATE|TIME_SECONDS))
+        { Print("ARTIN V2 BLOCKED: CSV timestamp and wallclock mismatch");return false; }
+      double price[4];
+      for(int p=5;p<=8;p++)
+        {
+         if(!ValidDecimalCell(row[p]))
+           { Print("ARTIN V2 BLOCKED: malformed historical price");return false; }
+         price[p-5]=StringToDouble(row[p]);
+         if(!MathIsValidNumber(price[p-5])||price[p-5]<=0)
+           { Print("ARTIN V2 BLOCKED: invalid historical price");return false; }
+        }
+      double op=price[0],hi=price[1],lo=price[2],cl=price[3];
+      if(lo>MathMin(op,cl)||hi<MathMax(op,cl)||hi<lo)
+        { Print("ARTIN V2 BLOCKED: corrupt OHLC in persisted CSV");return false; }
+      for(int v=9;v<=11;v++)
+        {
+         if(!DigitsOnly(row[v]))
+           { Print("ARTIN V2 BLOCKED: invalid volume or spread");return false; }
+        }
       g_last_bar=current;
       lines++;
       if(lines>500000){ Print("ARTIN V2 BLOCKED: unusually large CSV");return false; }
