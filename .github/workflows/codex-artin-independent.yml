@@ -1,0 +1,28 @@
+name: Codex Artin independent archive validation
+on:
+  push:
+    branches: [codex-artin-mt5-independent]
+    paths: ['codex-independent/**', '.github/workflows/codex-artin-independent.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python codex-independent/python/validate_project.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: codex-independent-offline-${{ matrix.os }}
+          path: |
+            codex-independent/reports/offline-validation.json
+            codex-independent/reports/tests-normal.txt
+            codex-independent/reports/tests-optimized.txt
+          retention-days: 30
