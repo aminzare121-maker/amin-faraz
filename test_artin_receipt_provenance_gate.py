@@ -42,7 +42,7 @@ class ProvenanceTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertIn("duplicate artifact file: visual", result["errors"])
 
-    def test_descriptor_metadata_is_read_once_per_artifact(self):
+    def test_descriptor_metadata_is_read_before_and_after_hash(self):
         from artin_receipt_provenance_gate import fstat_artifact
         calls = []
         def guarded_fstat(file):
@@ -51,7 +51,7 @@ class ProvenanceTests(unittest.TestCase):
         with patch("artin_receipt_provenance_gate.fstat_artifact", side_effect=guarded_fstat):
             result = audit_artifacts(self.receipt, self.root)
         self.assertTrue(result["passed"], result["errors"])
-        self.assertEqual(len(calls), len(REQUIRED))
+        self.assertEqual(len(calls), 2 * len(REQUIRED))
 
     def test_directory_cannot_impersonate_evidence(self):
         (self.root / "speech").unlink()
