@@ -72,7 +72,8 @@ def audit(document):
                     and all(valid_anchor(x) for x in evidence)):
                 # Match anchors on the same source video, with overlapping
                 # intervals. Zero-duration anchors are allowed if coincident.
-                # Group by video and sweep intervals sorted by start time.
+                # Group by video and sweep intervals sorted by END time. Sorting by
+                # start can skip nested intervals and produce false negatives.
                 # Avoid the quadratic cross-product for long lessons.
                 by_source = {}
                 for anchor in evidence:
@@ -80,8 +81,8 @@ def audit(document):
                     pair = by_source.setdefault(source, {"speech": [], "image": []})
                     pair[anchor["modality"]].append((anchor["start"], anchor["end"]))
                 for pair in by_source.values():
-                    speech = sorted(pair["speech"])
-                    images = sorted(pair["image"])
+                    speech = sorted(pair["speech"], key=lambda interval: interval[1])
+                    images = sorted(pair["image"], key=lambda interval: interval[1])
                     i = j = 0
                     while i < len(speech) and j < len(images):
                         a, b = speech[i], images[j]
