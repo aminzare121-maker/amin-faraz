@@ -58,6 +58,9 @@ def audit_artifacts(receipt, root):
                     continue
                 seen_paths.add(path)
                 seen_inodes.add(identity)
+                if metadata.st_size == 0:
+                    errors.append("empty artifact: " + kind)
+                    continue
                 if metadata.st_size > MAX_BYTES:
                     errors.append("artifact exceeds size limit: " + kind)
                     continue
