@@ -1,0 +1,69 @@
+name: Artin unified teacher-PDF paper motor (offline only)
+on:
+  push:
+    branches: [artin-fxm-teacher-engine-20261110]
+    paths:
+      - 'artin_unified_paper_motor.py'
+      - 'artin_teacher_sl_tp_motor.py'
+      - 'technical_teacher_policy.py'
+      - 'fxm_teacher_policy.py'
+      - 'test_artin_unified_paper_motor.py'
+      - 'test_artin_teacher_sl_tp_motor.py'
+      - 'test_artin_teacher_pdf_bridge.py'
+      - 'test_technical_teacher_policy.py'
+      - 'test_fxm_teacher_policy.py'
+      - 'test_artin_fxm_teacher_motor.py'
+      - 'core/LEGACY_SHA_MANIFEST.json'
+      - 'examples/SYNTHETIC_TEST_ONLY_FXM_TP_LADDER.json'
+      - '.github/workflows/artin-unified-paper-engine-ci.yml'
+  workflow_dispatch:
+jobs:
+  offline-source-guard:
+    name: offline source tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore exact pinned classroom engine from historic repo commit
+        shell: bash
+        run: |
+          mkdir -p core
+          git archive b48fb06f8b2b0d134292025f5b27fc670ad2a293:research/artin-independent-engine | tar -xf - -C core
+      - name: Verify pinned source hashes and execute Python normal/optimized tests
+        shell: bash
+        run: |
+          python - <<'PY'
+          from artin_unified_paper_motor import check_core_integrity
+          print('Pinned core verified:',check_core_integrity('core'))
+          PY
+          python -m unittest -q test_artin_unified_paper_motor test_artin_teacher_sl_tp_motor test_artin_teacher_pdf_bridge test_technical_teacher_policy test_fxm_teacher_policy test_artin_fxm_teacher_motor
+          python -m unittest discover -s core -p 'test_*.py' -q
+          python -O -m unittest -q test_artin_unified_paper_motor test_artin_teacher_sl_tp_motor test_artin_teacher_pdf_bridge test_technical_teacher_policy test_fxm_teacher_policy test_artin_fxm_teacher_motor
+          python -O -m unittest discover -s core -p 'test_*.py' -q
+      - name: One synthetic paper lifecycle; never actual MT5/PnL verification
+        shell: bash
+        run: |
+          python artin_unified_paper_motor.py --events examples/SYNTHETIC_TEST_ONLY_FXM_TP_LADDER.json --pinned-core core --out synthetic-offline-execution.json
+          python - <<'PY'
+          import json
+          from artin_unified_paper_motor import verify_journal
+          r=json.load(open('synthetic-offline-execution.json',encoding='utf-8'))
+          assert r['orders_sent']==0 and r['strategy_profitability_verified'] is False
+          assert r['source_mode']=='SYNTHETIC_TEST'
+          assert r['counts']['PLANNED']==1 and r['counts']['OPENED']==1 and r['counts']['CLOSED']==1
+          assert r['counts']['STOP_MOVES']==2 and verify_journal(r)
+          print('Synthetic execution: complete PAPER lifecycle; NO live DEMO trades verified')
+          PY
+      - name: Preserve synthetic-only debug output
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-unified-synthetic-${{ matrix.os }}
+          path: synthetic-offline-execution.json

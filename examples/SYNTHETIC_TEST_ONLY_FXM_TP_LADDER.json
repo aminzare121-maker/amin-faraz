@@ -1,0 +1,160 @@
+{
+  "schema": "artin_unified_paper_events_v1",
+  "mode": "SYNTHETIC_TEST",
+  "account": {
+    "balance": "1000",
+    "reference_balance": "1000",
+    "risk_pct": "1"
+  },
+  "contract": {
+    "money_per_price_unit_per_lot": "100",
+    "min_lot": "0.01",
+    "lot_step": "0.01",
+    "source": "synthetic-contract-only"
+  },
+  "costs": {
+    "round_trip_fee_per_lot": "0",
+    "adverse_price_allowance": "0",
+    "source": "synthetic-no-cost-example"
+  },
+  "events": [
+    {
+      "id": "setup-BUY-901",
+      "kind": "SETUP",
+      "at": 901,
+      "source": "synthetic-classroom-test",
+      "side": "BUY",
+      "route": "REVERSAL_CLASSIC",
+      "trading_day": "teacher-test-day-1",
+      "facts": {
+        "sentiment_permission": {
+          "value": "TWO_SIDED",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "current_setup": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "family_selection_context": {
+          "value": "ZONE_CONTEXT",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "trend_strength": {
+          "value": "NORMAL",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "zone_context": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "reversal_relative_to_last_leg": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "decision_candle_closed": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "doubt_confirmed": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "first_confidence_confirmed": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        }
+      },
+      "technical_chart": {
+        "entry_family": {
+          "value": "REVERSAL",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "teacher_scene_meaning_confirmed": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "prz_context": {
+          "value": "TREND",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "prz_teacher_confirmed": {
+          "value": true,
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "stop_anchor_kind": {
+          "value": "PIVOT",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "entry_price": {
+          "value": "4000",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        },
+        "structural_stop_price": {
+          "value": "3995",
+          "known_at": 900,
+          "source": "synthetic-chart-test-900"
+        }
+      },
+      "target_mode": "THREE_TP",
+      "target_mode_source": "FXM.pdf#page=4",
+      "winrate": "55",
+      "winrate_evidence": "synthetic-only-calibration"
+    },
+    {
+      "id": "FILL-902",
+      "kind": "FILL",
+      "at": 902,
+      "source": "synthetic-bid-ask-sequence",
+      "bid": "3999.9",
+      "ask": "4000"
+    },
+    {
+      "id": "QUOTE-903",
+      "kind": "QUOTE",
+      "at": 903,
+      "source": "synthetic-bid-ask-sequence",
+      "bid": "4004",
+      "ask": "4004.2"
+    },
+    {
+      "id": "QUOTE-904",
+      "kind": "QUOTE",
+      "at": 904,
+      "source": "synthetic-bid-ask-sequence",
+      "bid": "4006.5",
+      "ask": "4006.7"
+    },
+    {
+      "id": "QUOTE-905",
+      "kind": "QUOTE",
+      "at": 905,
+      "source": "synthetic-bid-ask-sequence",
+      "bid": "4009",
+      "ask": "4009.2"
+    },
+    {
+      "id": "EXIT_FILL-906",
+      "kind": "EXIT_FILL",
+      "at": 906,
+      "source": "synthetic-bid-ask-sequence",
+      "bid": "4009",
+      "ask": "4009.2"
+    }
+  ],
+  "_NOTICE": "SYNTHETIC_TEST_ONLY_NOT_REAL_TEACHER_OR_BROKER_PERFORMANCE"
+}

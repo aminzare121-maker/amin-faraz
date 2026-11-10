@@ -1,0 +1,17 @@
+{
+  "name": "Artin unified source-guarded paper trade engine",
+  "release_kind": "source-grounded executable paper trade lifecycle",
+  "entry_13_route_core_commit": "b48fb06f8b2b0d134292025f5b27fc670ad2a293",
+  "teacher_sources": ["Technical(1).pdf", "FXM.pdf"],
+  "observed_at": "2026-11-11",
+  "local_tests_normal": {"teacher_bridge": 102, "pinned_core": 147},
+  "local_tests_optimized": {"teacher_bridge": 102, "pinned_core": 147},
+  "synthetic_only_paper_lifecycle": {"planned": 1, "opened": 1, "stop_moves": 2, "closed": 1},
+  "real_trading_result": null,
+  "automatic_raw_OHLC_teacher_semantic_signal": false,
+  "real_MT5_order_test": false,
+  "broker_orders_sent": 0,
+  "profitability_verified": false,
+  "source_video_alignment_complete": false,
+  "known_blocker": "Teacher visual/semantic entry conditions not verified across 25 classes; PDF gives conditions but not algorithmic thresholds for every visual predicate."
+}
