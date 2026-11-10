@@ -17,21 +17,18 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        sequence: [1]
+        sequence: [21,24]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ github.sha }}
-      - run: |
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq ffmpeg
-          fi
-          ffmpeg -version | head -n 1
+      - name: Install media reader without speech models
+        run: python3 -m pip install --quiet --disable-pip-version-check --target .ffmpeg-tools imageio-ffmpeg==0.6.0
       - name: Expand only documented references from hash-verified originals
         env:
           GH_TOKEN: ${{ github.token }}
           SEQUENCE: ${{ matrix.sequence }}
+          PYTHONPATH: .ffmpeg-tools
         run: python3 audit/artin25-cloud/expand_ambiguous_visuals.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
