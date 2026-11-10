@@ -792,6 +792,53 @@
       "full_tree_parameters_available": false,
       "direct_listening": false,
       "whole_lesson_verified": false
+    },
+    {
+      "sequence": 3,
+      "case": "FULL_EXISTING_NON_SENSITIVE_TEXT_CONTENT_REVIEWED",
+      "existing_parts": 18,
+      "existing_segments": 2303,
+      "stored_primary_rows": 2114,
+      "boundary_overlap_flags": 7,
+      "result": "FUNDING_DEMONSTRATIONS_AND_BROKER_NETTING_EXAMPLES_SEPARATED_FROM_ENTRY_RULES_NO_DUPLICATE_VOTES",
+      "direct_listening": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 9,
+      "case": "CPI_VERSUS_FEDERAL_FUNDS_RATE_CHART_SWITCH",
+      "run": 42791443564,
+      "frames_personally_viewed_seconds": [
+        3038,
+        3046,
+        3053,
+        3085,
+        3115
+      ],
+      "image_sha_verified": true,
+      "result": "BOTH_CHART_IDENTITIES_CONFIRMED_OLD_CPI_FRAME_NOT_RELABELLED_AS_RATE_CURSOR_VALUE_NOT_DATA",
+      "direct_listening": false,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 17,
+      "case": "PULLBACK_CONFIRMATION_NOT_ANY_FIRST_BREAK_AND_RR_DISCREPANCY",
+      "run": 42791668076,
+      "frames_personally_viewed_seconds": [
+        518,
+        528,
+        535
+      ],
+      "previous_frames_rechecked": [
+        441.43,
+        496.9,
+        568.05
+      ],
+      "image_sha_verified": true,
+      "result": "EXPLICIT_DISPLAYED_RR_1_31_DIFFERS_FROM_TRANSCRIBED_1_TO_3_NO_FIXED_RR_ISSUED",
+      "direct_listening": false,
+      "whole_lesson_verified": false,
+      "execution_enabled": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
@@ -827,5 +874,15 @@
     "models_executed": 0,
     "direct_listening": false,
     "semantic_verified": false
+  },
+  "partial_tree_example": {
+    "sequences": [
+      23,
+      25
+    ],
+    "scope": "INTRODUCTORY_TP_SL_DIAGRAM_AND_TWO_TRADE_NUMERIC_ILLUSTRATION_NOT_COMPLETE_FINAL_TREE",
+    "missing_first_loss_branch": true,
+    "percentage_base_and_costs_unresolved": true,
+    "execution_enabled": false
   }
 }
