@@ -1,0 +1,68 @@
+{
+  "schema": "codex_chatgpt_baseline_readonly_evidence_v1",
+  "checked_utc": "2026-11-10T18:03:23.769408+00:00",
+  "repository": "aminzare121-maker/amin-faraz",
+  "branch": "artin-v13-under180-development",
+  "commit": "5983ef142ce51957160b3a976ef43888626ceed7",
+  "source_code_executed": false,
+  "reference_branch_modified": false,
+  "git_tree_truncated": false,
+  "ex5_in_git_tree": false,
+  "ci": {
+    "run_id": 42868191728,
+    "head_sha": "5983ef142ce51957160b3a976ef43888626ceed7",
+    "conclusion": "success",
+    "scope": "SYNTHETIC_FILE_INTEGRITY_ONLY",
+    "normal_and_optimized_steps_succeeded": true,
+    "os": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "artifacts_total_count": 0,
+    "job_wall_seconds": [
+      7,
+      17
+    ],
+    "job_duration_is_live_cycle_benchmark": false
+  },
+  "real_metaeditor_compile": "NOT_VERIFIED_IN_REVIEWED_EVIDENCE",
+  "actual_eplanet_demo_runtime": "NOT_VERIFIED_IN_REVIEWED_EVIDENCE",
+  "real_m15_csv_ingestion": "NOT_VERIFIED_IN_REVIEWED_EVIDENCE",
+  "real_network_disconnect_recovery": "NOT_VERIFIED_IN_REVIEWED_EVIDENCE",
+  "physical_power_loss_recovery": "NOT_VERIFIED_IN_REVIEWED_EVIDENCE",
+  "five_stage_live_timings": null,
+  "source_capabilities_observed": [
+    "DEMO_ONLY_ACCOUNT_CHECK",
+    "XAUUSD_PREFIX_AND_M15_CHECK",
+    "COPYRATES_START_POSITION_1_OR_LATER",
+    "BROKER_EPOCH_AND_NATIVE_WALLTIME",
+    "EXACT_HISTORY_ANCHOR",
+    "OLDEST_FIRST_CATCHUP",
+    "APPEND_PREFIX_SHA256",
+    "DURABLE_RECEIPT_BEFORE_CHECKPOINT",
+    "FULL_CHAIN_REPLAY",
+    "ALL_13_ROUTES_BLOCKED"
+  ],
+  "static_broker_specific_guard": "SafeAccountChart does not explicitly require Eplanet server; DEMO/symbol/timeframe only",
+  "teacher_routes_structural_count": 13,
+  "teacher_certified_routes": 0,
+  "orders_allowed": false,
+  "source_authentication_from_csv_verified": false,
+  "source_blobs": {
+    "README_ARTIN_MT5_V7_FA.md": "082169ec26e0b60625353fc14e542a3dce13d6d1",
+    "README_ARTIN_MT5_V6_FA.md": "8d5bc79fbe31ea1196912dc04916d1a2b9d019db",
+    "ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5": "4bd156abd7a50b9a04b0634a619a8f93b63b9fc5",
+    "artin_mt5_incremental_observer_v4.py": "d5a93d76a35502c904d3c0d6eca2ffd7bb8bda5e",
+    "artin_mt5_durable_outbox_v5.py": "8f8745d374da55724993594ba7dba4d288b321a7",
+    "artin_mt5_evidence_audit_v7.py": "de34c4773fbd01748ba92921da5e8c0dcbe36e80",
+    "artin_v13_teacher_to_mt5_shadow_map.py": "58262a694309528e739dec3deab4246d30b9bd66"
+  },
+  "report_file": "CHATGPT_BASELINE_EVIDENCE.fa.md",
+  "report_sha256": "39b398edf275caa3f4b4e647d5461d7d08b1e8413ff1ac16f8209d8d78287b5b",
+  "limitations": [
+    "NOT_FULL_CODE_SECURITY_AUDIT",
+    "NO_PRIVATE_AUDIO_VISUAL_REVIEW_OF_24_CITATIONS",
+    "UNKNOWN_IS_NOT_FAILURE",
+    "DOES_NOT_COPY_CHATGPT_SUCCESS_TO_CODEX_VERSION"
+  ]
+}

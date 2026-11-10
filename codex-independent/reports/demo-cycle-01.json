@@ -1,0 +1,76 @@
+{
+  "schema": "artin_codex_observer_cycle_v1",
+  "checked_utc": "2026-11-10T18:01:43.293683+00:00",
+  "demo_guard_passed": true,
+  "existing_terminal_identity_passed": true,
+  "receive_seconds": 0.0008069000905379653,
+  "attach_and_capture_seconds": 0.007908100029453635,
+  "archive": {
+    "added": 512,
+    "duplicates": 0,
+    "backfilled": 0,
+    "out_of_order_input": false,
+    "recovered_transaction": false,
+    "head": {
+      "version": 1,
+      "count": 512,
+      "head_sha256": "e68ed35f1ede5915b4de70e2a0d2ea41c4fe9204ba579224ec3a10a63b686fe1",
+      "latest_time": 1794339900,
+      "symbol": "XAUUSD.st",
+      "timeframe": "M15"
+    },
+    "gaps": [
+      {
+        "after": 1793749500,
+        "before": 1793754000,
+        "absent_grid_slots": 4,
+        "status": "GAP_UNRESOLVED",
+        "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+      },
+      {
+        "after": 1793835900,
+        "before": 1793840400,
+        "absent_grid_slots": 4,
+        "status": "GAP_UNRESOLVED",
+        "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+      },
+      {
+        "after": 1793922300,
+        "before": 1793926800,
+        "absent_grid_slots": 4,
+        "status": "GAP_UNRESOLVED",
+        "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+      },
+      {
+        "after": 1794008700,
+        "before": 1794186000,
+        "absent_grid_slots": 196,
+        "status": "GAP_UNRESOLVED",
+        "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+      },
+      {
+        "after": 1794267900,
+        "before": 1794272400,
+        "absent_grid_slots": 4,
+        "status": "GAP_UNRESOLVED",
+        "cause": "UNKNOWN_NOT_AUTOMATIC_DATA_LOSS_OR_FVG"
+      }
+    ],
+    "timings_seconds": {
+      "validation": 0.002952300012111664,
+      "processing": 0.0028690999606624246,
+      "storage": 0.01155940000899136,
+      "verification": 0.021416400093585253,
+      "total": 0.046044599963352084
+    },
+    "orders_enabled": false
+  },
+  "snapshot_sha256": "f6f26d6df7b6dbb348627ca8accb8f3e5ee7b2f283cd2b8ce12c6d13aa864ba3",
+  "snapshot_bytes": 65201,
+  "total_seconds": 0.1711549999890849,
+  "orders_submitted": 0,
+  "terminal_restarted": false,
+  "account_login_called": false,
+  "network_disconnection_simulated": false,
+  "video_extraction_benchmarked": false
+}
