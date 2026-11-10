@@ -42,23 +42,16 @@ class ProvenanceTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertIn("duplicate artifact file: visual", result["errors"])
 
-    def test_metadata_stat_is_read_once_per_artifact(self):
-        # Path.resolve may check metadata; artifact validation must not call
-        # is_file() plus stat() and repeatedly query a changing file.
-        original_stat = Path.stat
-        calls = {}
-
-        def guarded_stat(path, *args, **kwargs):
-            if path.name in REQUIRED:
-                calls[path.name] = calls.get(path.name, 0) + 1
-                if calls[path.name] > 2:
-                    raise OSError("artifact metadata changed")
-            return original_stat(path, *args, **kwargs)
-
-        with patch.object(Path, "stat", guarded_stat):
+    def test_descriptor_metadata_is_read_once_per_artifact(self):
+        from artin_receipt_provenance_gate import fstat_artifact
+        calls = []
+        def guarded_fstat(file):
+            calls.append(file.name)
+            return fstat_artifact(file)
+        with patch("artin_receipt_provenance_gate.fstat_artifact", side_effect=guarded_fstat):
             result = audit_artifacts(self.receipt, self.root)
         self.assertTrue(result["passed"], result["errors"])
-        self.assertTrue(all(1 <= calls.get(name, 0) <= 2 for name in REQUIRED), calls)
+        self.assertEqual(len(calls), len(REQUIRED))
 
     def test_directory_cannot_impersonate_evidence(self):
         (self.root / "speech").unlink()
