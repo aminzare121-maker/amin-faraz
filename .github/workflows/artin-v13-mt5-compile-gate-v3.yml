@@ -53,13 +53,17 @@ jobs:
         shell: powershell
         run: |
           $path = Join-Path $PWD 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
-          [byte[]]$bytes = [System.IO.File]::ReadAllBytes($path)
-          if ($bytes.Length -eq 0) { throw 'Empty MQ5 source' }
-          if ($bytes[$bytes.Length - 1] -ne 10) {
-            $bytes = [byte[]]($bytes + [byte]10)
-          }
+          [byte[]]$raw = [System.IO.File]::ReadAllBytes($path)
+          if ($raw.Length -eq 0) { throw 'Empty MQ5 source' }
+          # Git on windows-latest may checkout LF text as CRLF; normalize ONLY
+          # CRLF to LF, then accept exactly the single historic missing final LF.
+          $encoder = [System.Text.UTF8Encoding]::new($false, $true)
+          $normalized = $encoder.GetString($raw).Replace("`r`n","`n")
+          if (-not $normalized.EndsWith("`n")) { $normalized += "`n" }
+          [byte[]]$bytes = $encoder.GetBytes($normalized)
           $sha = [System.Security.Cryptography.SHA256]::Create()
           $digest = [System.BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-', '').ToLowerInvariant()
+          Write-Host ("SHA256 canonical: " + $digest + "; raw=" + $raw.Length + "; canonical=" + $bytes.Length)
           if ($digest -ne '66f65c92275999e41835a1c414263cf7c5dd0ef4ea219dbef0e96b030bdcd361') {
             throw 'Source has changed beyond the historic GitHub final newline'
           }
