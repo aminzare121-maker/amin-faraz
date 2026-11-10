@@ -1,0 +1,149 @@
+{
+  "schema": "artin_9_pairs_two_original_av_episodes_public_review_v1",
+  "date": "2026-11-10",
+  "private_review_package": "/بهروز/ARTIN_9_TWO_EPISODE_EVIDENCE_REVIEW_20261110.zip",
+  "private_manifest": "/بهروز/ARTIN_9_TWO_EPISODE_EVIDENCE_PRIVATE_20261110.json",
+  "private_package_sha256": "d568f7a02dabb83e83c558e1fd6f589a1e47606856629fa774f0eea43e275801",
+  "source_packet_sha256": "c34bde629452b279ce9f9965c78c5e7067d0c13ac339d0bbaed619743e97b78f",
+  "source_sessions": [
+    {
+      "session": 19,
+      "chart": "XAUUSD",
+      "timeframe": "15m",
+      "original_seconds": [
+        4276,
+        4331
+      ],
+      "unique_machine_speech": 4,
+      "reference_original_video_sha256": "164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",
+      "reference_original_wav_sha256": "b96434bd9989bce5096fe24ae7c4d8419475d0a23235aea6022bfaddec65ab20",
+      "episode_WAV_SHA256": "4f6fc8d86ecf4fb2359c0b83b300f93bc431a20fe5c28bd7afc012cfe09a3ccf",
+      "episode_video_SHA256": "07d68a94522755a534ebc85d80b9e4d4a5cb0568e5c618983ca5fda4ddfbed4d"
+    },
+    {
+      "session": 21,
+      "chart": "EURUSD",
+      "timeframe": "15m",
+      "original_seconds": [
+        1896,
+        1944
+      ],
+      "unique_machine_speech": 5,
+      "reference_original_video_sha256": "f63690d402f299d297110ff815b7fee9fcae8bb4927b9084e401488efaa3a1a3",
+      "reference_original_wav_sha256": "d3ea03e2be921aa3db944ab3d2f43402cf85639345bd32d53497d0259f1f3df2",
+      "episode_WAV_SHA256": "ab6c2246aefdb4550715d70064ce076c956dd1f5e96547fec62b94c47be6c99b",
+      "episode_video_SHA256": "9fc823055fc0576dcb10ef57cf7e222d67383597c5b77039e5f8a491bcb24b7b"
+    }
+  ],
+  "nine_pairs": [
+    {
+      "pair_number": 2,
+      "session": 19,
+      "utterance_ids": [
+        "asr_75f20a08d03d0f34a402d3b5",
+        "asr_9547712adda0a68e4bbc935f"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 3,
+      "session": 19,
+      "utterance_ids": [
+        "asr_75f20a08d03d0f34a402d3b5",
+        "asr_de7803476c6a715c938db9b1"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 5,
+      "session": 19,
+      "utterance_ids": [
+        "asr_a5861a27824306d243b7beb3",
+        "asr_9547712adda0a68e4bbc935f"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 7,
+      "session": 19,
+      "utterance_ids": [
+        "asr_a5861a27824306d243b7beb3",
+        "asr_de7803476c6a715c938db9b1"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 9,
+      "session": 21,
+      "utterance_ids": [
+        "asr_5fce6f249e004a2b06749e03",
+        "asr_8c2847b85d75233330fedb72"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 10,
+      "session": 21,
+      "utterance_ids": [
+        "asr_5fce6f249e004a2b06749e03",
+        "asr_a7fa4433bb92a52ff93d9048"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 12,
+      "session": 21,
+      "utterance_ids": [
+        "asr_ca4236043bd0b39e6bce225d",
+        "asr_5fce6f249e004a2b06749e03"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 13,
+      "session": 21,
+      "utterance_ids": [
+        "asr_b58dac6689a08dd5a1f6044d",
+        "asr_8c2847b85d75233330fedb72"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    },
+    {
+      "pair_number": 14,
+      "session": 21,
+      "utterance_ids": [
+        "asr_b58dac6689a08dd5a1f6044d",
+        "asr_ca4236043bd0b39e6bce225d"
+      ],
+      "semantic_verdict": "UNRESOLVED_NOT_A_CONFIRMED_CONTRADICTION"
+    }
+  ],
+  "unique_machine_ASR_utterances": 9,
+  "distinct_original_audio_and_video_episodes": 2,
+  "total_original_AV_seconds": 103,
+  "original_media_files_byte_preserved": 15,
+  "original_media_integrity_tested_locally": true,
+  "local_tests": {
+    "ordinary": "16/16 PASS (6 original-private, 10 synthetic-public)",
+    "python_O": "16/16 PASS (6 original-private, 10 synthetic-public)"
+  },
+  "github_actions_ci_status": {
+    "run_id": 42820059614,
+    "status": "completed",
+    "conclusion": "success",
+    "source_branch": "artin-v13-under180-development",
+    "head_commit": "c00ab28ad290447d4929190b7d4d499f4c4333df",
+    "public_normal_tests": "10/10 PASS",
+    "public_optimized_tests": "10/10 PASS",
+    "private_media_test_run_in_ci": false,
+    "verified_against": "GitHub Actions jobs and job log"
+  },
+  "persian_words_independently_heard": false,
+  "speaker_identity_independently_verified": false,
+  "teacher_decision_semantics_verified": false,
+  "confirmed_teacher_contradictions": 0,
+  "route_trading_authorized": 0,
+  "EURUSD_to_XAUUSD_rule_transfer_authorized": false,
+  "limitations": "Source AV provenance, exact timestamps, cross-reference and ZIP health are audited; no independent Persian listening or teacher decision is certified.",
+  "provenance_result_summary": "Nine unverified polarity-comparison pairs are represented by nine unique machine utterances within two source MP4 episodes; integrity and temporal mapping tested, but no independent listening or teacher interpretation claimed."
+}
