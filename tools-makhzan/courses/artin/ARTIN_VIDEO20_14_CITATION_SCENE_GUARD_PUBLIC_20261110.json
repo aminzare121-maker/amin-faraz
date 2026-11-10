@@ -1,0 +1,50 @@
+{
+  "schema": "artin_video20_14_citations_vs_19_sha256_frames_public_v1",
+  "date": "2026-11-10",
+  "source": "/بهروز/ARTIN_VIDEO_20_RECOVERED/BOARD_IMAGES.zip",
+  "pinned_labels": "/بهروز/ARTIN_VIDEO20_19_FRAME_PINNED_LABELS_PRIVATE_20261110.json",
+  "private_full_cases": "/بهروز/ARTIN_VIDEO20_19_FRAME_CITATION_GUARD_PRIVATE_20261110.json",
+  "source_frames_sha256_verified": 19,
+  "session20_citations": 14,
+  "classification_counts": {
+    "NO_DIRECT_FRAME": 7,
+    "SAMPLED_FRAME_ONLY": 5,
+    "SCENE_AMBIGUOUS": 2
+  },
+  "transition_bracket_seconds": {
+    "last_schematic_observed": 4215,
+    "first_historical_chart_observed": 4245,
+    "exact_transition_unknown": true
+  },
+  "notable_cases": [
+    {
+      "citation_index": 19,
+      "frame_4215": "outside citation; never direct evidence"
+    },
+    {
+      "citation_index": 21,
+      "frame_4215": "outside citation; never direct evidence"
+    },
+    {
+      "citation_index": 23,
+      "frame_4215": "inside citation but possible scene transition during citation; not semantically certified"
+    }
+  ],
+  "local_regression_tests": {
+    "normal": {
+      "passed": 7,
+      "total": 7
+    },
+    "optimized_python": {
+      "passed": 7,
+      "total": 7
+    }
+  },
+  "code_file": "artin_video20_citation_scene_guard.py",
+  "tests_file": "test_artin_video20_citation_scene_guard.py",
+  "github_workflow_included": true,
+  "github_actions_result": "NOT_VERIFIED",
+  "independent_teacher_audio_certification": false,
+  "teacher_chart_decision_replay_certification": false,
+  "orders_authorized": 0
+}
