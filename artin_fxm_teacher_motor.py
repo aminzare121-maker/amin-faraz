@@ -14,13 +14,14 @@ from core.capital import Costs, Instrument
 from artin_classroom_motor import run as classroom_run
 from fxm_teacher_policy import (AccountRisk, risk_sized_plan, winrate_target_policy,
                                 timeframe_notes)
+from artin_teacher_sl_tp_motor import build_plan
 
 
 def hash_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def evaluate_fxmgates(original, case_rows, account, *, risk_style, winrate=None, winrate_evidence=None):
+def evaluate_fxmgates(original, case_rows, account, *, risk_style, winrate=None, winrate_evidence=None, technical_pdf_enabled=False):
     by_case={r['case_id']:r for r in case_rows}
     risk_state=account.assess()
     historical_rr=(winrate_target_policy(winrate,evidence_source=winrate_evidence)
@@ -49,11 +50,34 @@ def evaluate_fxmgates(original, case_rows, account, *, risk_style, winrate=None,
                     stop_source=row.get('paper_trade_teacher_source',''),
                     entry_source=row.get('paper_trade_teacher_source',''))
             status=sizing['status']
+        technical_plan=None
+        if technical_pdf_enabled and isinstance(row.get('teacher_pdf_plan'),dict):
+            pdf_row=row['teacher_pdf_plan']
+            contract=row.get('paper_trade')
+            if isinstance(contract,dict) and isinstance(contract.get('instrument'),dict) and isinstance(contract.get('costs'),dict):
+                i,c=contract['instrument'],contract['costs']
+                technical_plan=build_plan(
+                    route=result['route_id'],side=row['side'],decision_at=pdf_row.get('decision_at'),
+                    chart_evidence=pdf_row.get('chart_evidence'),account=account,
+                    instrument=Instrument(Decimal(str(i['money_per_price_unit_per_lot'])),
+                        Decimal(str(i['min_lot'])),Decimal(str(i['lot_step']))),
+                    costs=Costs(Decimal(str(c['round_trip_fee_per_lot'])),
+                        Decimal(str(c['adverse_price_allowance']))),
+                    target_mode=pdf_row.get('target_mode'),
+                    target_mode_source=pdf_row.get('target_mode_source'),
+                    winrate=winrate,winrate_evidence=winrate_evidence,
+                    teacher_core_eligible=result['motor_status']=='ELIGIBLE')
+                # A dataclass paper state is not a verified broker fill and must
+                # not be advertised as a serializable live order.
+                technical_plan={k:v for k,v in technical_plan.items() if k!='position'}
+            else:
+                technical_plan={'status':'MISSING_ACTUAL_CONTRACT_FOR_PDF_PLAN','orders_enabled':False}
         results.append({'case_id':result['case_id'],
                 'entry_route':result['route_id'],
                 'entry_core_status':result['motor_status'],
                 'fxm_status':status,
                 'fxm_sizing':sizing,
+                'teacher_pdf_trade_plan':technical_plan,
                 'orders_enabled':False})
     return {'schema':'artin_fxmgated_teacher_motor_v1',
             'pinned_core_commit':original['pinned_motor_commit'],
@@ -63,6 +87,7 @@ def evaluate_fxmgates(original, case_rows, account, *, risk_style, winrate=None,
             'original_13_route_engine_loaded':original['all_13_route_implementations_loaded'],
             'original_class_cases':len(original['cases']),
             'fxm_cases_checked':len(results),
+            'teacher_pdf_plans_satisfied':sum(r['teacher_pdf_trade_plan'] is not None and r['teacher_pdf_trade_plan'].get('status')=='PAPER_TEACHER_PDF_TRADE_PLAN' for r in results),
             'fxm_paper_intents':sum(r['fxm_status']=='PAPER_SIZED_ONLY' for r in results),
             'broker_connected':False,'orders_sent':0,
             'semantic_certification_claimed':False,
@@ -71,18 +96,22 @@ def evaluate_fxmgates(original, case_rows, account, *, risk_style, winrate=None,
 
 def run(*,citation_path,cases_path,core,fxm_pdf,out,
         balance,reference_balance,risk_pct,risk_style,winrate=None,winrate_evidence=None,
-        action_events=None,source_folder=None):
+        action_events=None,source_folder=None,technical_pdf=None):
     if not Path(fxm_pdf).is_file():
         raise FileNotFoundError('FXM_ORIGINAL_PDF_REQUIRED')
+    if technical_pdf is not None and not Path(technical_pdf).is_file():
+        raise FileNotFoundError('TECHNICAL_ORIGINAL_PDF_REQUIRED')
     with tempfile.TemporaryDirectory(prefix='artin_fxm_') as d:
         prior=classroom_run(citation_path,cases_path,core,Path(d)/'classroom.json',
                             action_events,source_folder)
     cases=json.loads(Path(cases_path).read_text(encoding='utf8'))['cases']
     report=evaluate_fxmgates(prior,cases,AccountRisk(Decimal(str(balance)),
                  Decimal(str(reference_balance)),Decimal(str(risk_pct))),
-                 risk_style=risk_style,winrate=winrate,winrate_evidence=winrate_evidence)
+                 risk_style=risk_style,winrate=winrate,winrate_evidence=winrate_evidence,
+                 technical_pdf_enabled=technical_pdf is not None)
     report['source_evidence_sha256']={'fxm_pdf':hash_file(fxm_pdf),
-          'citations':hash_file(citation_path),'cases':hash_file(cases_path)}
+          'citations':hash_file(citation_path),'cases':hash_file(cases_path),
+        'technical_pdf':hash_file(technical_pdf) if technical_pdf is not None else None}
     path=Path(out);path.parent.mkdir(parents=True,exist_ok=True)
     if path.exists():raise FileExistsError('OUTPUT_EXISTS_NO_OVERWRITE')
     path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
@@ -95,6 +124,7 @@ def main():
     p.add_argument('--classroom-cases',type=Path,required=True)
     p.add_argument('--pinned-core',type=Path,required=True)
     p.add_argument('--fxm-pdf',type=Path,required=True)
+    p.add_argument('--technical-pdf',type=Path,help='Enable Technical(1).pdf source-anchored paper SL/TP plans')
     p.add_argument('--balance',required=True)
     p.add_argument('--reference-balance',required=True)
     p.add_argument('--risk-percent',required=True)
@@ -109,6 +139,7 @@ def main():
         core=a.pinned_core,fxm_pdf=a.fxm_pdf,out=a.out,
         balance=a.balance,reference_balance=a.reference_balance,risk_pct=a.risk_percent,
         risk_style=a.style,winrate=a.winrate,winrate_evidence=a.winrate_evidence,
+        technical_pdf=a.technical_pdf,
         action_events=a.teacher_action_events,source_folder=a.original_25_sessions_dir)
     print(json.dumps({k:result[k] for k in ('original_13_route_engine_loaded',
          'fxm_cases_checked','fxm_paper_intents','orders_sent')}))

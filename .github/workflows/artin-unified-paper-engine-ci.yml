@@ -32,11 +32,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Restore exact pinned classroom engine from historic repo commit
+      - name: Restore byte-exact pinned classroom engine from Git objects (no text conversion)
         shell: bash
         run: |
-          mkdir -p core
-          git archive b48fb06f8b2b0d134292025f5b27fc670ad2a293:research/artin-independent-engine | tar -xf - -C core
+          python - <<'PY'
+          import hashlib,json,subprocess
+          from pathlib import Path
+          root=Path('core')
+          manifest=json.loads((root/'LEGACY_SHA_MANIFEST.json').read_text(encoding='utf-8'))
+          revision=manifest['source_commit']
+          for relative,expected in manifest['files_sha256'].items():
+              path=root/relative
+              blob=f'{revision}:research/artin-independent-engine/{relative}'
+              data=subprocess.check_output(['git','-c','core.autocrlf=false','show',blob])
+              observed=hashlib.sha256(data).hexdigest()
+              if observed != expected:
+                  raise RuntimeError(f'PINNED_BLOB_HASH_MISMATCH:{relative}:{observed}')
+              path.parent.mkdir(parents=True,exist_ok=True)
+              path.write_bytes(data)
+          print('Restored pinned source files:',len(manifest['files_sha256']))
+          PY
       - name: Verify pinned source hashes and execute Python normal/optimized tests
         shell: bash
         run: |
