@@ -1,5 +1,7 @@
 """Synthetic and a previously archived M15-shaped fixture, NOT DEMO runtime/teacher tests."""
 import copy
+import base64
+import zlib
 import json
 import tempfile
 import unittest
@@ -11,10 +13,31 @@ from artin_mt5_shadow_bridge import HEADER, ROUTES
 
 ROOT = Path(__file__).resolve().parent
 
+# Serialized immutable synthetic fixture; avoids GitHub CSV spreadsheet conversions.
+FIXTURE_ZLIB_B64 = (
+    'eNqt2V9vE0cUBfD3Sv0OfIBVNDN37vzpWyB5qCCNFED0zXKcpY5w4shJQO2n77pn8Y736vqhM4BiYkL4aXR0dHZ43r7uVv1is7zt'
+    'N93tbvut3y36p+1q/fOTH8vN5uX+oe+e/3643W66/e+/7pbDG9un/rFb3/+17jbbH91qs33uhz9dfVt8325e93/hadcv77rhw+bn'
+    'Wy/9crUevulz/7B8HL72efG9391/ve/vupfd8q5fLF9f1tvd/T/93a+/XH3ixafLm6vf/zj/sLi4vLpevPtw/fHyYvH2/GZxc/5l'
+    '8fbm+v3lzf7dd+87G4MZfnhjOmccn1lzZvIbk38zZvjV/Xn++fPHi7N+9dhdWe5o+NIzs39xw4vLOeEzO7zY/Xfo/vv5/xCWBMKy'
+    'hrBAWCAsELYe4ZxAkHoSDggHhAPC1SPICoRXT4KAICAICKpHDJE4QlhzIhMeCA+EB8I3QGSB0DPBQDAQDATXIzgJhJ6JAEQAIgAR'
+    '6hEhCoSeiQhEBCICEesR+w9HCHsiEwmIBEQCItUjEguEnokMRAYiA5HrEdkLhJYJi44kNGae+rMWYQ0JhJYJi44kNGae+rMaYWeN'
+    'aZ2aCYuOJDRmnvqzGuGsQFj1JAgIAuLQn9UIMgKhZ8ID4YE49Gc9IguEngkGgoE49Gc1ws8bk05kIgARgDj0ZzWCo0DomYhARCAO'
+    '/VmNCEEg9EwkIBIQh/6sRkQWCD0TGYgMxKE/qxFp3phezYRDR3q8mKk/qxGZBELLhENHeryYqT9rEcM/LxCknoQDwhWLkxo0prNW'
+    'ILx6EgQEFYuTGjTmfmwfI/hEJjwQvlic1KAxncsCoWeCgSgXJzVoTEdJIPRMBCBCsTipQWM6HwVCz0QEIhaLkxo0puN5Y4YTmUhA'
+    'pGJxUoPGdIEFQs9EBiIXi5MaNKaLXiC0TBA6kqfH8bE/qxGJBELLBKEjeXocH/uzGpHnjRnVTBA6kqfH8bE/axFkrEBY9SQICCoW'
+    'p2/QmPubgTlCz4QHwheL0zdoTLJZIPRMMBDl4vQNGpPcvDHTiUwEIEKxOH2DxiSKAqFnIgIRi8XpGzQm+SAQeiYSEKlYnL5BYxKz'
+    'QOiZyEDkYnH6Bo1JYd6Y+j3mOC7D9Dg+9mc1IpJAaJkYx2WYHsfH/qxGJCcQpJ6EA8IVi5NbNGa2AuHVkyAgqFic3KAx99eYRwhn'
+    'TmTCA+GLxckNGtObLBB6JhiIcnFyg8b0NgmEnokARCgWJzdoTO+iQOiZiEDEYnFyg8b0NGtMZ09kIgGRisXJDRrTexYIPRMZiFws'
+    'Tm7QmJ69QGiZGMdlnB7Hx/6sRgQSCC0T47iM0+P42J/ViDhrTKffY47jMk6P42N/ViOSFQirngQBQcXiDC0aMxuB0DPhgfDF4gwt'
+    'GjNngdAzwUCUizM0aEw288akE5kIQIRicYYGjck2CoSeiQhELBZnaNCY7IJA6JlIQKRicYYGjcnEAqFnIgORi8UZGjQm+7IxrXlj'
+    '9D0xjst0dJ0ZGzQmMwmElolxXKaj68zYoDE5OIEg9SQcEOV1ZmzQmBytQHj1JAiI8jozNmjM/X8QHyPsiUx4IMrrzNigMTllgdAz'
+    'wUCUizO2aMycBELPRACivM6MDRozmCgQeiYiEOV1ZmzQmMGGGcKdyEQCorzOjA0aMzgWCD0TGYjyOjPOG/NfqtLaGQ=='
+)
+
 
 def fixture():
     """Use immutable synthetic rows, no fabricated broker provenance claims."""
-    raw = (ROOT / 'SYNTHETIC_M15_RECOVERY_FIXTURE.csv').read_bytes()
+    raw = zlib.decompress(base64.b64decode(FIXTURE_ZLIB_B64))
     lines = raw.splitlines(keepends=True)
     assert len(lines)>10
     return lines
