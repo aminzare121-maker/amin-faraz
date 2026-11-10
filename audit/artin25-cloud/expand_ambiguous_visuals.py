@@ -28,6 +28,10 @@ def main():
  with zipfile.ZipFile(private/"source.zip") as z:
   member="original_0001.mp4" if n==1 else "original.mp4"
   names=[s for s in z.namelist() if pathlib.PurePosixPath(s).name==member]
+  if n==18 and not names:
+   # This recovered source archive uses a different member basename.
+   # Require one MP4 only; the immutable expected source SHA below remains mandatory.
+   names=[s for s in z.namelist() if pathlib.PurePosixPath(s).suffix.lower()==".mp4"]
   if len(names)!=1:raise ValueError("ORIGINAL_NOT_UNIQUE")
   with z.open(names[0]) as src,open(private/"source.mp4","wb") as dst:
    for b in iter(lambda:src.read(4194304),b""):h.update(b);dst.write(b)
