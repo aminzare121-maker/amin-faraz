@@ -1,0 +1,27 @@
+{
+  "schema": "artin_6_source_windows_reviewable_av_packet_v1",
+  "date": "2026-11-10",
+  "private_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_20261110.zip",
+  "private_builder": "/بهروز/build_artin_audio_review.py",
+  "private_tests": "/بهروز/test_artin_listening_packet.py",
+  "original_wav_files": 5,
+  "restored_citation_windows": 6,
+  "duplicated_audio_window": "ARTIN-RESTORED-04 refers to the same source WAV as ARTIN-RESTORED-03; not independent evidence",
+  "original_full_resolution_images": 4,
+  "synchronized_machine_asr": "Interactive, time-indexed phrases linked to local original WAV files",
+  "incomplete_excerpt": {
+    "citation": "ARTIN-RESTORED-06",
+    "asr_id": "asr_p016_00063",
+    "source_audio_end_seconds": 4733,
+    "asr_text_end_seconds": 4738.55,
+    "status": "TRUNCATED_AUDIO_NON_CERTIFIABLE"
+  },
+  "local_packet_tests": {
+    "passed": 7,
+    "total": 7
+  },
+  "privacy": "Audio, screenshots and private utterance texts remain in private Behooz Library zip and are not uploaded to public GitHub.",
+  "speech_recognition_independently_repeated": false,
+  "teacher_semantic_interpretation_verified": false,
+  "orders_authorized": 0
+}
