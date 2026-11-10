@@ -42,6 +42,12 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
     # A verified exception or risk veto dominates entry regardless of rank.
     if any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows):
         return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO"}
+    # Do not silently override a simultaneous EXIT with a higher-ranked ENTER.
+    # Teacher-specific precedence is not yet evidenced, so block arbitration.
+    if any(r.kind == "entry" and r.action == "ENTER" for r in rows) and any(
+        r.kind == "exit" and r.action == "EXIT" for r in rows
+    ):
+        return {"decision": "BLOCKED", "reason": "ENTRY_EXIT_PRECEDENCE_UNVERIFIED", "executable": False}
     highest = max(r.priority for r in rows)
     top = [r for r in rows if r.priority == highest]
     if len({r.action for r in top}) != 1:
