@@ -1,44 +1,57 @@
 import copy
 import hashlib
 import io
-import json
 import unittest
 import zipfile
-from artin_video20_scene_boundary import verify_boundary
+from artin_video20_citation_scene_guard import build_audit
 
 
 def fixture():
-    items = [('frames/a_t0004215000_original.jpg',b'schematic fake image','educational_schematic',4215),
-             ('frames/a_t0004245000_original.jpg',b'chart fake image','historical_price_chart',4245)]
-    buf=io.BytesIO()
-    with zipfile.ZipFile(buf,'w') as z:
-        for name,data,_,_ in items:z.writestr(name,data)
+    frames = [(4215, 'educational_schematic'), (4245, 'historical_price_chart')]
+    buf = io.BytesIO()
+    pins = []
+    with zipfile.ZipFile(buf, 'w') as z:
+        for t, label in frames:
+            name = f'frames/frame_t{t*1000:010d}_original.jpg'
+            data = f'test frame {t}'.encode()
+            z.writestr(name, data)
+            pins.append({'time_seconds':t, 'observed_scene':label,
+                        'archive_member':name,'sha256':hashlib.sha256(data).hexdigest()})
     buf.seek(0)
-    labels=[{'archive_member':n,'sha256':hashlib.sha256(d).hexdigest(),
-             'observed_scene':category,'time_seconds':t} for n,d,category,t in items]
-    return buf,labels
+    citations = {'citations': [
+        {'session':20,'citation_index':1,'route_id':'A','source_start_seconds':4210.14,'source_end_seconds':4214.52},
+        {'session':20,'citation_index':2,'route_id':'B','source_start_seconds':4214.52,'source_end_seconds':4223.26},
+        {'session':20,'citation_index':3,'route_id':'C','source_start_seconds':4245,'source_end_seconds':4246},
+        {'session':20,'citation_index':4,'route_id':'D','source_start_seconds':4180,'source_end_seconds':4185},
+    ]}
+    return buf, {'frames':pins}, citations
 
-class TestSceneBoundary(unittest.TestCase):
-    def test_interval_not_exact_timestamp(self):
-        z,l=fixture();v=verify_boundary(z,l)
-        self.assertEqual(v['transition_observation'],{'after_seconds':4215,'at_or_before_seconds':4245,'exact_transition_time_known':False})
-        self.assertEqual(v['trade_orders_authorized'],0)
-    def test_changed_hash_rejected(self):
-        z,l=fixture();l[0]['sha256']='0'*64
-        with self.assertRaisesRegex(ValueError,'SHA'):verify_boundary(z,l)
-    def test_duplicate_timestamp_rejected(self):
-        z,l=fixture();l[1]['time_seconds']=l[0]['time_seconds']
-        with self.assertRaises(ValueError):verify_boundary(z,l)
-    def test_forged_member_rejected(self):
-        z,l=fixture();l[1]['archive_member']='fake'
-        with self.assertRaisesRegex(ValueError,'identity'):verify_boundary(z,l)
-    def test_inverted_observations_rejected(self):
-        z,l=fixture();l[0]['observed_scene'],l[1]['observed_scene']=l[1]['observed_scene'],l[0]['observed_scene']
-        with self.assertRaises(ValueError):verify_boundary(z,l)
-    def test_single_kind_rejected(self):
-        z,l=fixture();l[1]['observed_scene']='educational_schematic'
-        with self.assertRaisesRegex(ValueError,'transition'):verify_boundary(z,l)
-    def test_optimized_no_assert_bypass(self):
-        z,l=fixture();l[1]['sha256']='0'*64
-        with self.assertRaises(ValueError):verify_boundary(z,l)
+
+class Tests(unittest.TestCase):
+    def test_citation_no_inside_frame(self):
+        z,p,c=fixture(); r=build_audit(z,p,c)
+        self.assertEqual(r['cases'][0]['classification'],'NO_DIRECT_FRAME')
+        self.assertEqual(r['cases'][0]['nearby_later_frame_seconds_not_evidence'],4215)
+        self.assertEqual(r['mt5_orders_authorized'],0)
+    def test_transition_ambiguous_even_with_in_window_frame(self):
+        z,p,c=fixture();r=build_audit(z,p,c)
+        self.assertEqual(r['cases'][1]['classification'],'SCENE_AMBIGUOUS')
+        self.assertTrue(r['cases'][1]['touches_unknown_transition_interval'])
+    def test_after_transition_sample_is_not_decision(self):
+        z,p,c=fixture();r=build_audit(z,p,c)
+        self.assertEqual(r['cases'][2]['classification'],'SAMPLED_FRAME_ONLY')
+        self.assertFalse(r['cases'][2]['observed_trade_sequence_verified'])
+    def test_no_nearby_frame_does_not_create_evidence(self):
+        z,p,c=fixture();r=build_audit(z,p,c)
+        self.assertEqual(r['cases'][3]['classification'],'NO_DIRECT_FRAME')
+    def test_tampered_hash_rejected(self):
+        z,p,c=fixture();p['frames'][0]['sha256']='0'*64
+        with self.assertRaisesRegex(ValueError,'digest'):build_audit(z,p,c)
+    def test_fake_transition_anchor_rejected(self):
+        z,p,c=fixture();p['frames'][0]['observed_scene']='historical_price_chart'
+        with self.assertRaisesRegex(ValueError,'anchor'):build_audit(z,p,c)
+    def test_repeated_time_rejected(self):
+        z,p,c=fixture();p['frames'].append(copy.deepcopy(p['frames'][0]))
+        with self.assertRaisesRegex(ValueError,'repeated'):build_audit(z,p,c)
+
 if __name__=='__main__':unittest.main()
