@@ -68,3 +68,27 @@ jobs:
             throw 'Source has changed beyond the historic GitHub final newline'
           }
           Write-Host 'V2 source content matches pinned original ZIP byte-for-byte after one terminal LF.'
+
+      - name: Run fail-closed missing-MetaEditor branch on real Windows PowerShell
+        shell: powershell
+        run: |
+          $tempDir = Join-Path $env:RUNNER_TEMP 'artin-v3-compile-negative'
+          New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
+          $original = Join-Path $PWD 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
+          [byte[]]$raw = [System.IO.File]::ReadAllBytes($original)
+          $encoder = [System.Text.UTF8Encoding]::new($false, $true)
+          $normalized = $encoder.GetString($raw).Replace("`r`n","`n")
+          if (-not $normalized.EndsWith("`n")) { $normalized += "`n" }
+          [System.IO.File]::WriteAllBytes((Join-Path $tempDir 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'), $encoder.GetBytes($normalized))
+          $script = Join-Path $tempDir 'compile_artin_v13_shadow.ps1'
+          Copy-Item -LiteralPath (Join-Path $PWD 'compile_artin_v13_shadow.ps1') -Destination $script -Force
+          $arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $script + '" -MetaEditorPath "Z:\ARTIN_NOT_INSTALLED\metaeditor64.exe"'
+          $process = Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -Wait -PassThru
+          if ($process.ExitCode -ne 1) { throw 'Expected fail-closed exit code 1 when compiler unavailable' }
+          $receiptPath = Join-Path $env:LOCALAPPDATA 'ArtinV13\compile-check-v3\artin_v13_metaeditor_compile_receipt.json'
+          $receipt = Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
+          if ($receipt.status -ne 'BLOCKED_NOT_COMPILED') { throw 'Unexpected success claim without MetaEditor' }
+          if ($receipt.error -notlike 'METAEDITOR_NOT_FOUND*') { throw 'Wrong stop reason: ' + $receipt.error }
+          if ($receipt.source_sha256_verified -ne $true) { throw 'Pinned source was not verified' }
+          if ($receipt.ex5_sha256 -ne $null -or $receipt.mt5_orders_sent -ne 0) { throw 'Unsafe EX5/order claim' }
+          Write-Host 'PASS: Windows PowerShell fails closed when no real MetaEditor is found; no EX5 and no trade.'
