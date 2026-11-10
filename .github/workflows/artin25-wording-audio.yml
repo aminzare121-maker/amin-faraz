@@ -1,0 +1,38 @@
+name: Artin owner-approved wording audio evidence
+on:
+  push:
+    branches: [audit/artin25-cloud-evidence-20261109]
+    paths: [.github/workflows/artin25-wording-audio.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: artin25-unresolved-wording-audio
+  cancel-in-progress: false
+jobs:
+  prepare-source-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        sequence: [19,21,24]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install media reader without speech model
+        run: python3 -m pip install --quiet --disable-pip-version-check --target .ffmpeg-tools imageio-ffmpeg==0.6.0
+      - name: Prepare only owner-approved three excerpts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SEQUENCE: ${{ matrix.sequence }}
+          PYTHONPATH: .ffmpeg-tools
+        run: python3 audit/artin25-cloud/prepare_wording_audio.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: artin25-wording-audio-${{ matrix.sequence }}-PRIVATE
+          path: review_audio/
+          retention-days: 90
+          if-no-files-found: error
