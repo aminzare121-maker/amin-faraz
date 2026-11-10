@@ -93,5 +93,25 @@ class SemanticGateTests(unittest.TestCase):
         self.assertFalse(result["complete"])
 
 
+    def test_excessive_anchor_count_fails_closed(self):
+        # Synthetic stress fixture: must not enter an unbounded O(n^2) join.
+        from artin_semantic_gate import MAX_ANCHORS_PER_RULE
+        anchor = {"modality": "speech", "source_sha256": "a" * 64,
+                  "start": 1, "end": 2}
+        frame = {"modality": "image", "source_sha256": "a" * 64,
+                 "start": 1, "end": 2}
+        evidence = [anchor] * MAX_ANCHORS_PER_RULE + [frame]
+        rule = {
+            "kind": "entry", "status": "VERIFIED", "evidence": evidence,
+            "independent_comparison": {
+                "teacher_example_id": "synthetic", "reviewer": "test",
+                "expected_decision": "ENTER", "observed_decision": "ENTER",
+                "independent": True, "review_result": "PASS"},
+            "cross_session_checked": True, "ambiguity_resolved": True,
+        }
+        report = audit({"sessions": [{"session": 1, "rules": [rule]}]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 0)
+        self.assertTrue(any("unsupported VERIFIED" in e for e in report["errors"]))
+
 if __name__ == "__main__":
     unittest.main()
