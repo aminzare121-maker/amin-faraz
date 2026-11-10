@@ -933,6 +933,42 @@
       "direct_listening": false,
       "whole_lesson_verified": false,
       "execution_enabled": false
+    },
+    {
+      "sequence": 25,
+      "case": "FIXED_BOX_STARTING_BALANCE_RISK_BASIS",
+      "text_seconds": [
+        [
+          2180,
+          2345
+        ],
+        [
+          3230,
+          3430
+        ],
+        [
+          3736,
+          3861
+        ]
+      ],
+      "existing_frames_personally_rechecked": [
+        3289.8,
+        3400.24,
+        4244.72
+      ],
+      "image_sha_verified": true,
+      "result": "STARTING_BALANCE_FIXED_WITHIN_DESCRIBED_FIXED_BOX_MODEL_NOT_AUTOMATICALLY_ALL_FLOATING_PLANS",
+      "open_position_DD_and_day_boundary_unresolved": true,
+      "whole_lesson_verified": false
+    },
+    {
+      "sequence": 11,
+      "case": "FULL_EXISTING_NON_SENSITIVE_TEXT_REVIEWED",
+      "primary_rows_reviewed": 472,
+      "last_text_end_seconds": 1245.31,
+      "result": "MISSING_PROVIDER_DATA_DISTINCT_FROM_ACTUAL_TWO_SIDED_MARKET_REVIEW_NOT_AUTOMATIC_NEUTRAL",
+      "direct_listening": false,
+      "whole_lesson_verified": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
@@ -978,5 +1014,13 @@
     "missing_first_loss_branch": true,
     "percentage_base_and_costs_unresolved": true,
     "execution_enabled": false
+  },
+  "review_record_diagnostic": {
+    "actual_records_checked": 25,
+    "existing_original_av_available": 25,
+    "semantic_verified": 0,
+    "status_schema_regression_tests_passed": 10,
+    "media_reprocessed": 0,
+    "note": "Metadata validation only; no independent teacher-semantic approval"
   }
 }
