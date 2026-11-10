@@ -1,0 +1,56 @@
+name: Artin classroom 13-route motor executable tests
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_classroom_motor.py'
+      - 'test_artin_classroom_motor.py'
+      - '.github/workflows/artin-classroom-motor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  classroom-motor:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: b48fb06f8b2b0d134292025f5b27fc670ad2a293
+          path: pinned
+          persist-credentials: false
+      - name: Validate legacy engine immutable ref and create temporary byte manifest
+        shell: bash
+        run: |
+          test "$(git -C pinned rev-parse HEAD)" = "b48fb06f8b2b0d134292025f5b27fc670ad2a293"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          folder=Path('pinned/research/artin-independent-engine')
+          files=list(folder.glob('*.py'))
+          expected=['entry_engine.py','run_engine.py','trade_machine.py','raw_pipeline.py']
+          if not all((folder/x).is_file() for x in expected):raise SystemExit('missing real core engine')
+          files_hash={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+          docs=folder/'docs'/'S16_SOURCE_PATH_CASES.json'
+          if docs.is_file():files_hash['docs/S16_SOURCE_PATH_CASES.json']=hashlib.sha256(docs.read_bytes()).hexdigest()
+          (folder/'LEGACY_SHA_MANIFEST.json').write_text(json.dumps({'source_commit':'b48fb06f8b2b0d134292025f5b27fc670ad2a293','files_sha256':files_hash},sort_keys=True))
+          PY
+      - name: Run 13-path classroom motor tests (normal)
+        shell: bash
+        env:
+          ARTIN_PINNED_LEGACY_DIR: ${{ github.workspace }}/pinned/research/artin-independent-engine
+        run: python -m unittest discover -s project -p test_artin_classroom_motor.py -v
+      - name: Run 13-path classroom motor tests (optimized)
+        shell: bash
+        env:
+          ARTIN_PINNED_LEGACY_DIR: ${{ github.workspace }}/pinned/research/artin-independent-engine
+        run: python -O -m unittest discover -s project -p test_artin_classroom_motor.py -v

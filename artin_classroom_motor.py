@@ -1,0 +1,219 @@
+"""Execute source-anchored Artin *classroom cases* through the existing 13-route
+entry and paper-trade state machine. Nothing here sends broker orders.
+
+Unlike bare raw-OHLC replay, this path accepts explicit classroom predicates,
+source-verified at a given decision time; it NEVER guesses missing teacher facts.
+Original video source windows (25-session numbering) are validated against the
+existing private Behr(o)uz 24-citation document; that document stays private.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib
+import json
+import sys
+import re
+from pathlib import Path
+
+PINNED_COMMIT = 'b48fb06f8b2b0d134292025f5b27fc670ad2a293'
+ALLOWED_CHOICES = {'ENTER', 'NO_TRADE', 'WAIT', 'EXIT', 'HOLD'}
+
+class ClassroomMotorError(ValueError):
+    pass
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def load_pinned(core):
+    """No unreviewed modifications to the existing, tested motor permitted."""
+    core = Path(core).resolve()
+    manifest_path = core/'LEGACY_SHA_MANIFEST.json'
+    if not manifest_path.is_file():
+        raise ClassroomMotorError('PINNED_ENGINE_MANIFEST_MISSING')
+    m = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if m.get('source_commit') != PINNED_COMMIT:
+        raise ClassroomMotorError('PINNED_ENGINE_REVISION_CHANGED')
+    for name, digest in m.get('files_sha256', {}).items():
+        if sha256(core/name) != digest:
+            raise ClassroomMotorError('PINNED_ENGINE_SOURCE_CHANGED:'+name)
+    if not (core/'entry_engine.py').is_file() or not (core/'run_engine.py').is_file():
+        raise ClassroomMotorError('PINNED_ENTRY_OR_TRADE_ENGINE_MISSING')
+    sys.path.insert(0, str(core))
+    try:
+        eng = importlib.import_module('entry_engine')
+        paper = importlib.import_module('run_engine')
+        if Path(eng.__file__).resolve() != core/'entry_engine.py' or Path(paper.__file__).resolve() != core/'run_engine.py':
+            raise ClassroomMotorError('WRONG_IMPORTED_MOTOR')
+        return eng, paper
+    finally:
+        sys.path.remove(str(core))
+
+
+def index_original_citations(document, routes):
+    """Use corrected source IDs from the 25-session private dossier, not old 26-slot labels."""
+    if document.get('summary', {}).get('sessions') != 25:
+        raise ClassroomMotorError('REQUIRE_ORIGINAL_25_CLASS_SESSIONS')
+    citations = document.get('citations', [])
+    if len(citations) != 24 or len(set(c['citation_index'] for c in citations)) != 24:
+        raise ClassroomMotorError('REQUIRE_24_DISTINCT_CLASS_CITATIONS')
+    indexed = {}
+    for c in citations:
+        route = c['route_id']; session = c['session']; start = c['start_seconds']; stop = c['end_seconds']
+        if route not in routes or type(session) is not int or not 1 <= session <= 25 or not 0 <= start < stop:
+            raise ClassroomMotorError('INVALID_CLASS_CITATION')
+        intervals = tuple((x['start'],x['end'],x['asr_segment_id']) for x in c['excerpts'])
+        if any(not (a < b and max(start,a) < min(stop,b)) for a,b,_ in intervals):
+            raise ClassroomMotorError('SEGMENT_OUTSIDE_CLASS_CITATION')
+        indexed[c['citation_index']] = c
+    if {c['route_id'] for c in indexed.values()} != set(routes):
+        raise ClassroomMotorError('MISSING_CLASS_ROUTE')
+    return indexed
+
+
+def source_speech_polarity(cited, ids):
+    """Only literal source text polarity for *this exact classroom scene*.
+
+    A negated sentence is never interpreted as a global strategy veto, and an
+    affirmative sentence never becomes an order. Original audio may override
+    ASR; all this outputs is a provisional classroom instruction.
+    """
+    snippets=[x.get('text_unverified','') for x in cited['excerpts'] if x['asr_segment_id'] in ids]
+    if not snippets:
+        return 'UNKNOWN_UNANCHORED_MEANING'
+    string=' '.join(snippets).replace('\u200c',' ').replace('ي','ی').replace('ك','ک')
+    negative=bool(re.search(r'ورود\s+نمی\s*کن(?:یم|ید|م)|وارد\s+نمی\s*ش',string))
+    positive=bool(re.search(r'ورود\s+می\s*کن(?:یم|ید|م)|ورود\s+کن(?:یم|ید|م)',string))
+    return ('POSSIBLE_NO_TRADE_IN_THIS_SCENE' if negative and not positive
+            else 'POSSIBLE_CONDITIONAL_ENTER_IN_THIS_SCENE' if positive and not negative
+            else 'CONFLICTING_OR_UNCLEAR_TEACHER_WORDS')
+
+
+def compile_case(row, index, route_ids):
+    if not isinstance(row, dict):
+        raise ClassroomMotorError('CLASS_CASE_OBJECT_REQUIRED')
+    cid = row.get('case_id'); route = row.get('rule_id'); citation_id=row.get('citation_index')
+    if not isinstance(cid, str) or not cid.strip() or route not in route_ids or type(citation_id) is not int:
+        raise ClassroomMotorError('INVALID_CLASS_CASE_IDENTITY')
+    cited = index.get(citation_id)
+    if cited is None or cited['route_id'] != route:
+        raise ClassroomMotorError('CLASS_CITATION_ROUTE_MISMATCH')
+    if row.get('session') != cited['session']:
+        raise ClassroomMotorError('CLASS_SESSION_MISMATCH')
+    start,end = row.get('class_seconds', [None,None])
+    if type(start) not in (int,float) or type(end) not in (int,float) or not cited['start_seconds'] <= start <= end <= cited['end_seconds']:
+        raise ClassroomMotorError('CLASS_INTERVAL_MISMATCH')
+    # A classroom event can be analyzed while missing objective chart facts;
+    # MISSING stays REVIEW, never inferred from a word or image filename.
+    facts = row.get('facts')
+    if not isinstance(facts, dict):
+        raise ClassroomMotorError('FACTS_OBJECT_REQUIRED')
+    for name,f in facts.items():
+        if not isinstance(name,str) or not isinstance(f,dict) or not f.get('source') or 'known_at' not in f:
+            raise ClassroomMotorError('UNSOURCED_MARKET_FACT')
+        if f['source'].startswith('SYNTHETIC_') and row.get('source_class') != 'SYNTHETIC_TEST':
+            raise ClassroomMotorError('UNDECLARED_SYNTHETIC_SOURCE')
+    teacher_choice = row.get('teacher_choice')
+    if teacher_choice is not None and teacher_choice not in ALLOWED_CHOICES:
+        raise ClassroomMotorError('INVALID_CLASSROOM_DECISION_LABEL')
+    ids = row.get('source_asr_segment_ids', [])
+    if not isinstance(ids,list) or len(ids) != len(set(ids)):
+        raise ClassroomMotorError('INVALID_SOURCE_SEGMENT_IDS')
+    verified_source_ids = {x['asr_segment_id'] for x in cited['excerpts']}
+    if not set(ids).issubset(verified_source_ids):
+        raise ClassroomMotorError('CLASS_SOURCE_SEGMENT_NOT_IN_CITATION')
+    at = row.get('market_decision_at')
+    if type(at) is not int or at < 0:
+        raise ClassroomMotorError('INVALID_MARKET_DECISION_TIME')
+    if row.get('side') not in ('BUY','SELL'):
+        raise ClassroomMotorError('CLASS_CASE_SIDE_REQUIRED')
+    data = {'rule_id':route,'side':row['side'],'at':at,'facts':facts}
+    if 'paper_trade' in row:
+        if row.get('source_class') != 'SYNTHETIC_TEST' and not row.get('paper_trade_teacher_source'):
+            raise ClassroomMotorError('TEACHER_SOURCED_EXIT_RISK_REQUIRED')
+        data['paper_trade'] = row['paper_trade']
+    proof = {'case_id':cid,'route_id':route,'citation_index':citation_id,
+             'video_session':cited['session'],'class_interval_seconds':[start,end],
+             'source_asr_segment_ids':ids,'teacher_choice_in_record':teacher_choice,
+             'teacher_choice_independently_verified':row.get('teacher_choice_verified') is True,
+             'source_class':row.get('source_class','CLASSROOM_ASR_CANDIDATE'),
+             'teacher_visual_verified':row.get('teacher_visual_verified') is True,
+             'exact_scene_speech_polarity_unverified':source_speech_polarity(cited,ids)}
+    return data,proof
+
+
+def run(citation_path, cases_path, core, out):
+    eng, paper = load_pinned(core)
+    raw_citations = json.loads(Path(citation_path).read_text(encoding='utf8'))
+    index = index_original_citations(raw_citations, eng.RULE_IDS)
+    cases_doc = json.loads(Path(cases_path).read_text(encoding='utf8'))
+    if cases_doc.get('schema') != 'artin_teacher_class_cases_v1':
+        raise ClassroomMotorError('UNSUPPORTED_CLASS_CASE_FORMAT')
+    rows = cases_doc.get('cases')
+    if not isinstance(rows,list) or not rows:
+        raise ClassroomMotorError('NONEMPTY_CLASS_CASES_REQUIRED')
+    cases=[];proofs=[];seen=set()
+    for row in rows:
+        data, proof=compile_case(row,index,eng.RULE_IDS)
+        if proof['case_id'] in seen:
+            raise ClassroomMotorError('DUPLICATE_TEACHER_CLASS_CASE')
+        seen.add(proof['case_id']);cases.append(data);proofs.append(proof)
+    source = {'mode':'ANNOTATED_OFFLINE','plan_id':'ARTIN_CLASS_25_VIDEO_TEACHER_MOTOR',
+              'allowed_rules':list(eng.RULE_IDS),'cases':cases,
+              'synthetic_only':all(p['source_class']=='SYNTHETIC_TEST' for p in proofs)}
+    evaluated = paper.run_document(source)
+    results=[]
+    for proof,decision in zip(proofs,evaluated['decisions']):
+        status=decision['status']; teacher=proof['teacher_choice_in_record']
+        # Literal classroom NO_TRADE is a scene-scoped protection, not a rule
+        # that says all similar future market candles are prohibited. It can
+        # block this replay even if the generic entry-engine has other data.
+        utterance=proof['exact_scene_speech_polarity_unverified']
+        scene_state=('CLASSROOM_NO_ENTRY_CANDIDATE' if teacher=='NO_TRADE' and
+                     utterance=='POSSIBLE_NO_TRADE_IN_THIS_SCENE'
+                     else 'CLASSROOM_CONDITIONAL_ENTRY_CANDIDATE' if teacher=='ENTER' and
+                     utterance=='POSSIBLE_CONDITIONAL_ENTER_IN_THIS_SCENE'
+                     else 'CLASSROOM_INSTRUCTION_UNRESOLVED')
+        if teacher is None or not proof['teacher_choice_independently_verified'] or not proof['teacher_visual_verified']:
+            comparison='NOT_INDEPENDENTLY_CONFIRMED_FROM_CLASS'
+        elif teacher=='ENTER':
+            comparison='MATCH' if status=='ELIGIBLE' else 'MISMATCH_OR_MISSING_MARKET_FACTS'
+        elif teacher=='NO_TRADE':
+            comparison='MATCH' if status in ('REJECT','WAIT') else 'MISMATCH_OR_REVIEW_REQUIRED'
+        else:
+            comparison='NEEDS_SPECIFIC_TEACHER_OUTCOME_REPLAY'
+        results.append({**proof,'motor_status':status,'motor_reason':list(decision['reasons']),
+                        'motor_source_legacy_26_slot_ids':list(decision['sources']),
+                        'motor_source_25_video_citation':proof['citation_index'],
+                        'teacher_engine_comparison':comparison,'classroom_instruction_state':scene_state,
+                        'order_created':False})
+    summary={'schema':'artin_classroom_teacher_motor_execution_v1',
+             'pinned_motor_commit':PINNED_COMMIT,'original_25_class_source_sha256':sha256(citation_path),
+             'class_case_input_sha256':sha256(cases_path), 'motor_class_cases':len(results),
+             'motor_entry_decisions':sum(x['motor_status']=='ELIGIBLE' for x in results),
+             'motor_teacher_comparisons_confirmed':sum(x['teacher_engine_comparison']=='MATCH' for x in results),
+             'paper_lifecycle_cases':len(evaluated['paper_trades']),
+             'all_13_route_implementations_loaded':len(eng.RULE_IDS)==13,
+             'trading_authorized':False,'orders_sent':0,
+             'teacher_semantic_certification_auto_granted':False,
+             'cases':results,'paper_trades':evaluated['paper_trades']}
+    target=Path(out)
+    if target.exists():raise ClassroomMotorError('NO_OVERWRITE_CLASSROOM_OUTPUT')
+    target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_text(json.dumps(summary,ensure_ascii=False,indent=2,default=str)+'\n',encoding='utf8')
+    return summary
+
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument('--private-citations',type=Path,required=True)
+    p.add_argument('--classroom-cases',type=Path,required=True)
+    p.add_argument('--pinned-core',type=Path,required=True)
+    p.add_argument('--out',type=Path,required=True)
+    a=p.parse_args()
+    s=run(a.private_citations,a.classroom_cases,a.pinned_core,a.out)
+    print(json.dumps({k:s[k] for k in ('motor_class_cases','motor_entry_decisions','motor_teacher_comparisons_confirmed','paper_lifecycle_cases','orders_sent')}))
+
+if __name__=='__main__': main()
