@@ -58,6 +58,24 @@ class IntervalDifferentialTests(unittest.TestCase):
                              (case, speech, images))
             self.assertFalse(report["complete"])
 
+    def test_nested_long_speech_interval_is_not_lost(self):
+        # Regression: end-sorted two-pointer logic dropped a long enclosure.
+        speech = [(19, 97), (29, 36), (73, 80), (12, 42)]
+        images = [(60, 68)]
+        self.assertTrue(reference_overlap(speech, images))
+        report = audit({"sessions": [
+            {"session": 1, "rules": [make_rule(speech, images)]}
+        ]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 1)
+        self.assertFalse(report["complete"])
+
+    def test_disjoint_intervals_remain_unmatched(self):
+        report = audit({"sessions": [
+            {"session": 1, "rules": [make_rule([(10, 20), (80, 90)],
+                                               [(30, 60)])]}
+        ]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 0)
+
     def test_cross_source_cannot_substitute_for_same_source_overlap(self):
         rule = make_rule([(1, 10)], [(1, 10)])
         rule["evidence"][1]["source_sha256"] = "b" * 64
