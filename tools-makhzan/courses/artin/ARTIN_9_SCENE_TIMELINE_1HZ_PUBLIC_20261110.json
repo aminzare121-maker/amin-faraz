@@ -254,5 +254,15 @@
   "orders_authorized": 0,
   "public_script": "artin_9_scene_timeline.py",
   "public_test": "test_artin_9_scene_timeline_public.py",
-  "private_archive_sha256": "13a655287ce6b0c5d5608c9d79a784da84ec3a93e4cc6969e4eff9cb6e628693"
+  "private_archive_sha256": "13a655287ce6b0c5d5608c9d79a784da84ec3a93e4cc6969e4eff9cb6e628693",
+  "subsequent_viewport_registration_correction": {
+    "date": "2026-11-10",
+    "raw_pixel_events_remain_valid_as_screen_differences": true,
+    "raw_screen_change_does_not_prove_market_or_candle_change": true,
+    "chart_anchor_match_result": "Six of nine comparisons include chart viewport translation; three nearly stationary; no teacher decision match established.",
+    "source_report": "tools-makhzan/courses/artin/ARTIN_9_CHART_VIEWPORT_REGISTRATION_PUBLIC_20261110.json",
+    "gitHub_CI": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42825476239",
+    "teacher_semantics_verified": false,
+    "orders_authorized": 0
+  }
 }
