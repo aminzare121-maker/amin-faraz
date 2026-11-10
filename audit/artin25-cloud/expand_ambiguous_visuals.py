@@ -11,7 +11,7 @@ CASES={
 1:(13690841735,"b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",[680,1230,1390,2195,3438,3452],"Legacy first-lesson transcript unclear roles and direction-entry distinction; no model re-execution"),
 19:(13691172465,"164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",[4235,4288,4304],"Three completed drawings and Star SELL half-leg ambiguity"),
 20:(13690608979,"6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",[4203,4209,4215,4221,4233,4235,4238],"Pointed Stop/Punch variants and between-zone exception"),
-22:(13691432406,"8214f077a05969730c21015dc0f24c489835a9d1a9e9e3be4f73cca1000992ca",[1405,3546,3584,4755,4874,4887],"Pre-existing-zone requirement, confirmation line and rejected Three")}
+22:(13691432406,"8214f077a05969730c21015dc0f24c489835a9d1a9e9e3be4f73cca1000992ca",[4750,4762,4862,4870],"Pre-existing-zone requirement, confirmation line and rejected Three")}
 def main():
  n=int(os.environ["SEQUENCE"]);aid,expected,times,reason=CASES[n]
  if len(expected)!=64 or len(set(times))!=len(times) or any(t<0 for t in times):raise ValueError("INVALID_PLAN")
