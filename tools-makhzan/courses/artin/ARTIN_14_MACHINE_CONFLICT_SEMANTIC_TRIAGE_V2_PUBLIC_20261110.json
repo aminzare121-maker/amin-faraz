@@ -195,5 +195,40 @@
       "semantic_conflict_verified": false,
       "trade_permitted": false
     }
-  ]
+  ],
+  "github_ci": {
+    "run_id": 42814567243,
+    "run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42814567243",
+    "status": "completed",
+    "conclusion": "success",
+    "public_normal": "8/8 PASS",
+    "public_optimized": "8/8 PASS",
+    "private_AV_tests_executed_in_GitHub": false,
+    "verification": "GitHub Actions run/jobs and logs"
+  },
+  "private_original_AV_tests": {
+    "normal": "11/11 PASS",
+    "optimized": "11/11 PASS",
+    "date": "2026-11-10"
+  },
+  "private_audio_video_triage_packet": "/بهروز/ARTIN_14_PAIRS_LEXICAL_TRIAGE_V2_PRIVATE_20261110.zip",
+  "open_priority_pairs": {
+    "count": 9,
+    "ids": [
+      2,
+      3,
+      5,
+      7,
+      9,
+      10,
+      12,
+      13,
+      14
+    ],
+    "source_groups": 2,
+    "source_clips": [
+      "session19:4276-4331",
+      "session21:1896-1944"
+    ]
+  }
 }
