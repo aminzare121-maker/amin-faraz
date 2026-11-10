@@ -6,11 +6,15 @@ It does NOT verify teacher meaning or source authenticity.
 """
 import hashlib
 import json
+import os
 import stat
 from pathlib import Path
 
 REQUIRED = ("source_video", "speech", "visual", "semantic_review", "archive", "handoff")
 MAX_BYTES = 1024 * 1024 * 1024
+
+def fstat_artifact(file):
+    return os.fstat(file.fileno())
 
 def audit_artifacts(receipt, root):
     errors = []
@@ -32,43 +36,44 @@ def audit_artifacts(receipt, root):
         if not isinstance(expected, str) or len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
             errors.append("invalid SHA-256: " + kind)
             continue
-        # Resolve safely, then stat the artifact once rather than calling
-        # is_file() (which performs a second metadata read).
+        # Open the artifact once and verify/hash the SAME file descriptor.
+        # A path may be replaced between stat() and open(); fstat() on the
+        # opened descriptor prevents accepting an unchecked replacement.
         try:
             path = (root / name).resolve(strict=True)
             if not path.is_relative_to(root):
                 errors.append("missing or unsafe file: " + kind)
                 continue
-            metadata = path.stat()
-        except (OSError, RuntimeError):
-            errors.append("missing or unsafe file: " + kind)
-            continue
-        if not stat.S_ISREG(metadata.st_mode):
-            errors.append("missing or unsafe file: " + kind)
-            continue
-        if path in seen_paths:
-            errors.append("duplicate artifact file: " + kind)
-            continue
-        seen_paths.add(path)
-        size = metadata.st_size
-        identity = (metadata.st_dev, metadata.st_ino)
-        if identity in seen_inodes:
-            errors.append("duplicate artifact inode: " + kind)
-            continue
-        seen_inodes.add(identity)
-        if size > MAX_BYTES:
-            errors.append("artifact exceeds size limit: " + kind)
-            continue
-        digest = hashlib.sha256()
-        try:
             with path.open("rb") as f:
+                metadata = fstat_artifact(f)
+                if not stat.S_ISREG(metadata.st_mode):
+                    errors.append("missing or unsafe file: " + kind)
+                    continue
+                if path in seen_paths:
+                    errors.append("duplicate artifact file: " + kind)
+                    continue
+                identity = (metadata.st_dev, metadata.st_ino)
+                if identity in seen_inodes:
+                    errors.append("duplicate artifact inode: " + kind)
+                    continue
+                seen_paths.add(path)
+                seen_inodes.add(identity)
+                if metadata.st_size > MAX_BYTES:
+                    errors.append("artifact exceeds size limit: " + kind)
+                    continue
+                digest = hashlib.sha256()
+                total = 0
                 for block in iter(lambda: f.read(1024 * 1024), b""):
+                    total += len(block)
+                    if total > MAX_BYTES:
+                        errors.append("artifact exceeds size limit: " + kind)
+                        break
                     digest.update(block)
-        except OSError:
-            errors.append("unreadable artifact: " + kind)
-            continue
-        if digest.hexdigest() != expected:
-            errors.append("digest mismatch: " + kind)
+                else:
+                    if digest.hexdigest() != expected:
+                        errors.append("digest mismatch: " + kind)
+        except (OSError, RuntimeError):
+            errors.append("missing or unreadable file: " + kind)
     return {"passed": not errors, "errors": errors}
 
 def audit_file_backed_cycle(receipt, root):
