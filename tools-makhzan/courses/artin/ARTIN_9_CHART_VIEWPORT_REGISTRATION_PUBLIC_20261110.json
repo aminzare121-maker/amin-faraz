@@ -239,8 +239,22 @@
     "private_real_source": 11
   },
   "github_actions": {
-    "workflow_path": ".github/workflows/artin-chart-viewport-evidence.yml",
-    "status": "pending verification",
-    "public_media_uploaded": false
+    "run_id": 42825476239,
+    "url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42825476239",
+    "head_commit": "cb773ae93d31e337d57ddbf40583089173625384",
+    "status": "completed",
+    "conclusion": "success",
+    "public_synthetic_tests_normal": "8/8 PASS",
+    "public_synthetic_tests_python_O": "8/8 PASS",
+    "private_original_video_tests_executed_in_GitHub": false,
+    "verified_from": "GitHub Actions run, jobs, per-step conclusions, job log"
+  },
+  "actual_source_derived_summary": {
+    "pairs_with_chart_anchor_alignment": 9,
+    "pairs_with_viewport_shift_more_than_5_pixels": 6,
+    "pairs_with_nearly_fixed_viewport": 3,
+    "observed_chart_reprojection_error_pixels_less_than": 1.1,
+    "chart_anchor_aligned_does_not_mean_same_teacher_trade_condition": true,
+    "trade_authorized": 0
   }
 }
