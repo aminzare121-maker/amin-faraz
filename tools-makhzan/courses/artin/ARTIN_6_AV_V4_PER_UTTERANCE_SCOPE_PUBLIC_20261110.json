@@ -1,0 +1,28 @@
+{
+  "schema": "artin_six_original_av_review_v4_per_utterance_scope_public",
+  "date": "2026-11-10",
+  "citation_windows": 6,
+  "utterance_buttons": 42,
+  "fully_inside": 30,
+  "cross_boundary": 12,
+  "outside": 0,
+  "original_wav_files": 5,
+  "original_images": 4,
+  "private_listening_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V4_SCOPED_LABELS_20261110.zip",
+  "improvement": "Each utterance button now explicitly displays whether full text is inside citation or only a timed subset intersects it; speaker remains unverified. Existing retrieved-original-source recovery notes kept.",
+  "source_media_preserved_byte_for_byte": true,
+  "private_tests": {
+    "ordinary": 8,
+    "optimized": 8
+  },
+  "public_synthetic_tests": {
+    "ordinary": 4,
+    "optimized": 4
+  },
+  "public_script": "artin_citation_scope_ui_v4.py",
+  "public_test": "test_artin_citation_scope_ui_v4_public.py",
+  "github_ci_config_updated": true,
+  "github_actions_run_independently_verified": false,
+  "teacher_semantics_verified": false,
+  "orders_authorized": 0
+}
