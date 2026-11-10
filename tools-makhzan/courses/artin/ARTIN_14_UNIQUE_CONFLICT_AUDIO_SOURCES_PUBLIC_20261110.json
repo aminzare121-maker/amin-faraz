@@ -1,0 +1,64 @@
+{
+  "schema": "artin_14_unique_pair_original_wav_reconciliation_v1",
+  "date": "2026-11-10",
+  "unique_pair_count": 14,
+  "route_pair_occurrences": 16,
+  "unique_original_audio_sha256_count": 4,
+  "verified_source_groups": 1,
+  "unresolved_source_groups": 3,
+  "verified_pairs": 1,
+  "unresolved_pairs": 13,
+  "by_session": [
+    {
+      "session": 19,
+      "source_sha256": "0efe686fad25071c0116250072dfb555d74cff65640f33f59e44dbfc7fac81e1",
+      "unique_pairs": 2,
+      "source_found": false
+    },
+    {
+      "session": 19,
+      "source_sha256": "b96434bd9989bce5096fe24ae7c4d8419475d0a23235aea6022bfaddec65ab20",
+      "unique_pairs": 5,
+      "source_found": false
+    },
+    {
+      "session": 20,
+      "source_sha256": "b071b5ba121ade3771a3048150b4361fec2755cee9788e7424e52d422eab00f8",
+      "unique_pairs": 1,
+      "source_found": true,
+      "verified_source_file": "/بهروز/ARTIN_VIDEO_20_RECOVERED/AUDIO_11.zip",
+      "verified_source_interval_seconds": [
+        3288,
+        3612
+      ]
+    },
+    {
+      "session": 21,
+      "source_sha256": "d3ea03e2be921aa3db944ab3d2f43402cf85639345bd32d53497d0259f1f3df2",
+      "unique_pairs": 6,
+      "source_found": false
+    }
+  ],
+  "tests": {
+    "local_normal": {
+      "passed": 4,
+      "total": 4
+    },
+    "local_python_optimized": {
+      "passed": 4,
+      "total": 4
+    },
+    "public_no_private_sources": {
+      "passed": 3,
+      "total": 3
+    },
+    "private_wav_test_on_github": "skip when media missing"
+  },
+  "private_complete_report": "/بهروز/ARTIN_14_UNIQUE_PAIR_WAV_SOURCE_RECONCILIATION_PRIVATE_20261110.json",
+  "source_code": "artin_14_pair_source_reconciliation.py",
+  "source_tests": "test_artin_14_pair_source_reconciliation.py",
+  "interpretation": "Only the four original SHA-256 identities are source keys. Unmatched WAVs are UNRESOLVED, not proven absent. No independent teacher speech listening, speaker attribution, visual decision replay or semantic approval.",
+  "semantic_decisions_certified": 0,
+  "orders_authorized": 0,
+  "github_actions_new_run_verified": false
+}
