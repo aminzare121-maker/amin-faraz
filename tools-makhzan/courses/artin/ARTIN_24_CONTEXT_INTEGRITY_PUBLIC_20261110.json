@@ -1,0 +1,35 @@
+{
+  "schema": "artin_24_context_source_integrity_public_v1",
+  "date": "2026-11-10",
+  "original_private_archive": "/بهروز/ARTIN_25_SESSIONS_UNIFIED_10272_PRIVATE_20261110.zip",
+  "source_review_manifest": "/بهروز/ARTIN_13_ROUTE_24_CITATION_PRIVATE_REVIEW_20261110.json",
+  "generated_private_dossiers": "/بهروز/ARTIN_24_FULL_SOURCE_CONTEXT_PRIVATE_20261110.json",
+  "private_generator": "/بهروز/artin_24_full_context_integrity.py",
+  "private_tests": "/بهروز/test_artin_24_full_context_integrity.py",
+  "route_count": 13,
+  "citation_count": 24,
+  "source_excerpt_occurrences": 559,
+  "unique_session_segment_keys": 390,
+  "shared_segment_keys": 167,
+  "context_margin_seconds": 45,
+  "verified_against_original_archive_fields": [
+    "segment id",
+    "source timestamp",
+    "original machine ASR text",
+    "source audio SHA-256",
+    "record identity"
+  ],
+  "tests": {
+    "local_run": 6,
+    "passed": 6,
+    "failed": 0,
+    "first_run_failed": true,
+    "first_failure": "Route identity only checked by count; repaired with pinned exact 13-route set",
+    "github_actions_not_run": true
+  },
+  "teacher_semantics_certified": false,
+  "teacher_speaker_verified": false,
+  "visual_semantics_verified": false,
+  "orders_authorized": 0,
+  "privacy": "Complete machine speech excerpts retained privately in ChatGPT Library, not in GitHub"
+}
