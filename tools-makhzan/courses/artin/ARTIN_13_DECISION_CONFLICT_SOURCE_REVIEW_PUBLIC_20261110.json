@@ -1,0 +1,31 @@
+{
+  "schema": "artin_13_decision_conflict_source_review_public_v1",
+  "review_date": "2026-11-10",
+  "source_manifest": "/بهروز/ARTIN_13_ROUTE_24_CITATION_PRIVATE_REVIEW_20261110.json",
+  "private_per_route_review": "/بهروز/ARTIN_13_DECISION_CONFLICT_REVIEW_PRIVATE_20261110.json",
+  "total_routes": 13,
+  "total_citations": 24,
+  "source_excerpt_occurrences": 559,
+  "unique_source_segment_keys": 390,
+  "lexical_candidate_opposite_polarity_pairs": 16,
+  "not_a_semantic_contradiction": "These are unverified machine ASR keyword polarity candidates; speaker, referent, and conditions remain unknown.",
+  "tests_executed_local": {
+    "private_source_integrity": 8,
+    "public_synthetic_normal": 7,
+    "public_synthetic_optimized": 7
+  },
+  "tested_integrity": [
+    "24 exact citation identities",
+    "13 exact route names",
+    "repeated source segment integrity",
+    "invalid intervals",
+    "text privacy in public projection",
+    "no market authorization"
+  ],
+  "private_source_audio_independently_heard": false,
+  "teacher_decision_replays_approved": 0,
+  "orders_authorized": 0,
+  "github_actions_result": "NOT_VERIFIED",
+  "public_code": "artin_13_decision_conflict_replay.py",
+  "public_tests": "test_artin_13_decision_conflict_public.py"
+}
