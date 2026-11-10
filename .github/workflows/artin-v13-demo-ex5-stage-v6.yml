@@ -1,0 +1,33 @@
+name: Artin V13 V6 non-trading EX5 staging checks
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_mt5_demo_stage_v6.py'
+      - 'test_artin_mt5_demo_stage_v6.py'
+      - 'artin_compile_receipt_verifier.py'
+      - 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
+      - 'artin_mt5_local_observer_launcher.py'
+      - 'artin_mt5_durable_outbox_v5.py'
+      - '.github/workflows/artin-v13-demo-ex5-stage-v6.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  safe-stage:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Normal synthetic receipt, staging and V5 regression tests (not MetaEditor)
+        run: python -m unittest -v test_artin_mt5_demo_stage_v6 test_artin_mt5_local_observer_launcher test_artin_mt5_durable_outbox_v5
+      - name: Optimized synthetic receipt, staging and V5 regression tests (not MetaEditor)
+        run: python -O -m unittest -v test_artin_mt5_demo_stage_v6 test_artin_mt5_local_observer_launcher test_artin_mt5_durable_outbox_v5
