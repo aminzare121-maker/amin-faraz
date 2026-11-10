@@ -60,5 +60,18 @@
   "interpretation": "Only the four original SHA-256 identities are source keys. Unmatched WAVs are UNRESOLVED, not proven absent. No independent teacher speech listening, speaker attribution, visual decision replay or semantic approval.",
   "semantic_decisions_certified": 0,
   "orders_authorized": 0,
-  "github_actions_new_run_verified": false
+  "github_actions_new_run_verified": false,
+  "correction_20261110": {
+    "status": "ALL_FOUR_HISTORICAL_SOURCE_WAV_SHA256_NOW_EXACTLY_RESTORED",
+    "previous_status_superseded": true,
+    "unique_pairs_with_provenance_resolved": 14,
+    "unique_original_wavs_sha_exact_matched": 4,
+    "unresolved_original_wavs": 0,
+    "original_MP4_source_sha_verified": true,
+    "method": "reconstruct legacy WAV Lavf60 metadata from FFmpeg61 encoding; compare complete WAV SHA256, not merely time-window/audio PCM similarity",
+    "new_public_report": "tools-makhzan/courses/artin/ARTIN_14_EXACT_HISTORICAL_SOURCE_AUDIO_PUBLIC_20261110.json",
+    "new_private_packet": "/بهروز/ARTIN_14_PAIRS_EXACT_HISTORICAL_WAV_REVIEW_20261110.zip",
+    "teacher_semantics_verified": false,
+    "trades_authorized": 0
+  }
 }
