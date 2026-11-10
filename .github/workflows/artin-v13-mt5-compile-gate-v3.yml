@@ -1,0 +1,33 @@
+name: Artin V13 Windows MetaEditor compile-gate V3 (offline contract only)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'ArtinV13_ShadowProbe_RecoveryV2_DemoOnly.mq5'
+      - 'compile_artin_v13_shadow.ps1'
+      - 'compile_artin_v13_shadow.cmd'
+      - 'artin_compile_receipt_verifier.py'
+      - 'test_artin_compile_check_v3.py'
+      - 'MANIFEST.json'
+      - '.github/workflows/artin-v13-mt5-compile-gate-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  no-order-compile-receipt-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run normal offline compile-receipt integrity tests (NOT a MetaEditor compile)
+        shell: bash
+        run: python -m unittest -v test_artin_compile_check_v3
+      - name: Run optimized offline compile-receipt integrity tests (NOT a MetaEditor compile)
+        shell: bash
+        run: python -O -m unittest -v test_artin_compile_check_v3
