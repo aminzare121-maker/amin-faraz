@@ -711,6 +711,26 @@
       "direct_listening": false,
       "whole_lesson_verified": false,
       "execution_enabled": false
+    },
+    {
+      "sequence": 1,
+      "case": "ALL_LEGACY_TEXT_READ_AND_NEW_CONTEXT_FRAMES",
+      "source_sha256": "b23c618eb63af8c91c77d9a451411091bf7f5a57edbc0b6fdc20e01b86bcc8ff",
+      "run": 42784730453,
+      "frames_personally_viewed_seconds": [
+        680,
+        1230,
+        1390,
+        2195,
+        3438,
+        3452
+      ],
+      "crc_and_image_sha_verified": true,
+      "legacy_primary_segments_read": 950,
+      "legacy_transcript_audio_hash_binding": false,
+      "result": "SELECTED_FRAMES_SHOW_NESTED_CLASS_SCREEN_AND_CHAT_NOT_INSTRUCTIONAL_CHART_QA_REPETITION_DISAMBIGUATED",
+      "direct_listening": false,
+      "whole_lesson_verified": false
     }
   ],
   "note": "Targeted text/image review only; initial windows and viewed frames do not constitute continuous video, complete role attribution, final course semantic verification or a ready engine. Raw lecture material remains private. Missing evidence is not converted to a neutral input. No trades.",
@@ -731,5 +751,19 @@
     "blind": false,
     "whole_course_conformance": false,
     "orders_placed": 0
+  },
+  "owner_approved_wording_audio": {
+    "run": 42786472293,
+    "sequences": [
+      19,
+      21,
+      24
+    ],
+    "total_seconds": 120,
+    "clip_sha_and_headers_independently_validated": true,
+    "private_artifacts_only": true,
+    "models_executed": 0,
+    "direct_listening": false,
+    "semantic_verified": false
   }
 }
