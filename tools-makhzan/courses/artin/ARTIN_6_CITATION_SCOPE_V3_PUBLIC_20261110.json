@@ -1,0 +1,31 @@
+{
+  "schema": "artin_6_original_av_citation_scope_public_v3",
+  "date": "2026-11-10",
+  "private_listening_packet": "/بهروز/ARTIN_6_ORIGINAL_AV_LISTENING_PACKET_V3_SCOPED_20261110.zip",
+  "private_audit": "/بهروز/ARTIN_6_CITATION_SCOPE_AUDIT_PRIVATE_20261110.json",
+  "citation_windows": 6,
+  "asr_segment_occurrences": 42,
+  "asr_segment_temporal_membership": {
+    "fully_inside": 30,
+    "crosses_boundary": 12,
+    "outside": 0
+  },
+  "review_packet_zip_integrity": "ZIP CRC verified, 11 files",
+  "audio_source_repair": "v22 original WAV recovered and review clip extended beyond 4738.55 (previously fixed)",
+  "fixed_wav_integrity_check": "Reject short PCM payload even when WAV header indicates a longer duration",
+  "speaker_ambiguity": "Utterances addressing استاد marked as possibly student/question, not teacher rules",
+  "original_audio_bytes_unchanged_from_v2": true,
+  "local_tests": {
+    "private_normal": 10,
+    "private_optimized": 10,
+    "public_synthetic_normal": 6,
+    "public_synthetic_optimized": 6
+  },
+  "source": "artin_citation_scope_packet_v3.py",
+  "public_tests": "test_artin_citation_scope_packet_v3_public.py",
+  "github_workflow_file": ".github/workflows/artin-semantic-gate.yml",
+  "github_actions_run_result": "NOT_VERIFIED",
+  "independent_acoustic_semantics_certified": false,
+  "teacher_strategy_certified": false,
+  "mt5_orders_authorized": 0
+}
