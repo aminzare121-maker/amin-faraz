@@ -30,6 +30,15 @@ def evaluate():
     check("three_buy_below_half",D("4797.12") < D("4803.21"),True,19,"expanded:3668/3680/3695")
     check("star_sell_above_leg_half",D("4972.22") > D(4960),True,19,"expanded:4430/4468; visual approximate line")
     check("star_sell_below_first_body_half",D("4972.22") < D(4989),True,19,"expanded:4430/4468; unresolved ASR contradiction")
+    # Newly inspected source ruler endpoints in lesson24 at1125; observed board volume, not a broker API.
+    distance=D("1.16306")-D("1.16173")
+    check("source_ruler_endpoints",distance,D(".00133"),24,"expanded:1125")
+    check("ruler_00001_units",distance/D(".00001"),D(133),24,"expanded:1125 and board1197.86")
+    check("ruler_0001_units",distance/D(".0001"),D("13.3"),24,"expanded:1125 displayed13.3")
+    check("observed_015_lot_risk",D("100000")*distance*D(".15"),D("19.95"),24,"lesson2 contract-size premise plus lesson24 board volume")
+    check("observed_risk_within_example_budget",D("100000")*distance*D(".15")<=D(20),True,24,"lesson24 risk budget20")
+    check("nearer_fvg_stop_risk",D("4746.344")-D("4727.257"),D("19.087"),21,"expanded:635")
+    check("original_far_stop_risk",D("4773.442")-D("4727.257"),D("46.185"),21,"expanded:620")
     # These checks validate arithmetic/fidelity observations, NOT semantic approval or an entry engine.
     return dict(schema="artin_course_example_replay_v1", tests=cases,
                 passed=sum(x["passed"] for x in cases), orders_placed=0,
