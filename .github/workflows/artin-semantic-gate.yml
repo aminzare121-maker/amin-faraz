@@ -4,6 +4,8 @@ on:
     branches:
       - artin-v13-under180-development
     paths:
+      - 'artin_receipt_provenance_gate.py'
+      - 'test_artin_receipt_provenance_gate.py'
       - 'artin_real_cycle_receipt_gate.py'
       - 'test_artin_real_cycle_receipt_gate.py'
       - 'artin_semantic_gate.py'
@@ -128,6 +130,10 @@ jobs:
       - name: Validate real-cycle receipt audit (unit tests only; no performance claim)
         shell: bash
         run: python3 -m unittest -v test_artin_real_cycle_receipt_gate
+
+      - name: Validate file-backed receipt provenance (unit tests only)
+        shell: bash
+        run: python3 -m unittest -v test_artin_receipt_provenance_gate
 
       - name: Run interval differential oracle with optimized Python
         shell: bash
