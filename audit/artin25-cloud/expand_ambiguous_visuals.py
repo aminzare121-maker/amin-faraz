@@ -2,7 +2,7 @@
 import hashlib,json,os,pathlib,subprocess,zipfile
 CASES={
 19:(13691172465,"164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",[3668,3680,3695,3955,3980,4005,4410,4430,4468,4480],"Three completed drawings and Star SELL half-leg ambiguity"),
-20:(13690608979,"6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",[3948,4000,4038,4116,4204,4218,4236],"Pointed Stop/Punch variants and between-zone exception"),
+20:(13690608979,"6db1d227430e99facea0ba6cc2931f04f70f67ed42d8f6abb0bb58f9e087e3a9",[4203,4209,4215,4221,4233,4235,4238],"Pointed Stop/Punch variants and between-zone exception"),
 22:(13691432406,"8214f077a05969730c21015dc0f24c489835a9d1a9e9e3be4f73cca1000992ca",[1405,3546,3584,4755,4874,4887],"Pre-existing-zone requirement, confirmation line and rejected Three")}
 def main():
  n=int(os.environ["SEQUENCE"]);aid,expected,times,reason=CASES[n]
