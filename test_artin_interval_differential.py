@@ -69,6 +69,28 @@ class IntervalDifferentialTests(unittest.TestCase):
         self.assertEqual(report["sessions"][0]["verified_rules"], 1)
         self.assertFalse(report["complete"])
 
+    def test_nested_enclosure_with_unrelated_source_does_not_mask_match(self):
+        # Real CI failure 42770151232: nested intervals must retain
+        # a long enclosing speech anchor despite intervening short anchors.
+        rule = make_rule([(19, 97), (29, 36), (73, 80), (12, 42)],
+                         [(60, 68)])
+        rule["evidence"].insert(0, {
+            "modality": "image", "source_sha256": "b" * 64,
+            "start": 0, "end": 200,
+        })
+        report = audit({"sessions": [{"session": 1, "rules": [rule]}]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 1)
+
+        # Removing the only same-source image must fail closed even when
+        # the unrelated image completely encloses the speech timestamps.
+        rule["evidence"] = [
+            anchor for anchor in rule["evidence"]
+            if not (anchor["modality"] == "image"
+                    and anchor["source_sha256"] == "a" * 64)
+        ]
+        report = audit({"sessions": [{"session": 1, "rules": [rule]}]})
+        self.assertEqual(report["sessions"][0]["verified_rules"], 0)
+
     def test_disjoint_intervals_remain_unmatched(self):
         report = audit({"sessions": [
             {"session": 1, "rules": [make_rule([(10, 20), (80, 90)],
