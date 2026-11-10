@@ -11,6 +11,8 @@ import re
 import sys
 
 REQUIRED = {"entry", "exit", "exception", "decision_order"}
+# Bound untrusted evidence size before the quadratic speech/image join.
+MAX_ANCHORS_PER_RULE = 2000
 
 
 def audit(document):
@@ -66,7 +68,8 @@ def audit(document):
                 )
 
             refs_ok = False
-            if isinstance(evidence, list) and evidence and all(valid_anchor(x) for x in evidence):
+            if (isinstance(evidence, list) and 0 < len(evidence) <= MAX_ANCHORS_PER_RULE
+                    and all(valid_anchor(x) for x in evidence)):
                 # Match anchors on the same source video, with overlapping
                 # intervals. Zero-duration anchors are allowed if coincident.
                 refs_ok = any(
