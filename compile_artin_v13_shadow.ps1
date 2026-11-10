@@ -41,7 +41,10 @@ try {
 
   # Locate a MetaEditor already installed by the owner. Never download or install one.
   $Candidates = New-Object 'System.Collections.Generic.List[string]'
-  if ($MetaEditorPath) { $Candidates.Add($MetaEditorPath) }
+  if ($MetaEditorPath) {
+    # Explicit path is strict: never silently use another installed editor.
+    $Candidates.Add($MetaEditorPath)
+  } else {
   foreach ($Base in @($env:ProgramFiles, ${env:ProgramFiles(x86)})) {
     if (-not $Base -or -not (Test-Path -LiteralPath $Base)) { continue }
     foreach ($Folder in @('MetaTrader 5', 'MetaTrader5', 'Eplanet', 'EPlanet', 'Eplanet MetaTrader 5')) {
@@ -57,6 +60,7 @@ try {
           $Candidates.Add((Join-Path $_.FullName $Exe))
         }
       }
+  }
   }
   $Editor = $null
   foreach ($Candidate in $Candidates) {
