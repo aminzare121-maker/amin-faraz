@@ -1,0 +1,45 @@
+{
+  "schema": "artin_v13_demo_m15_recovery_v2_verified_receipt",
+  "date": "2026-11-10",
+  "branch": "artin-v13-under180-development",
+  "archive": "ARTIN_V13_MT5_M15_RECOVERY_V2_20261110.zip",
+  "archive_sha256": "5a80e25e6dd0d2b2539c5c4bc9c13bb509af38a34318c658afa0d7ef55f062a3",
+  "archive_entries": 11,
+  "archive_crc_test": "PASS",
+  "archive_sources_match_local": "PASS",
+  "mql5_source_sha256": "66f65c92275999e41835a1c414263cf7c5dd0ef4ea219dbef0e96b030bdcd361",
+  "offline_recovery_fixture": "SYNTHETIC_ONLY",
+  "github_actions_run": 42839755599,
+  "github_actions_run_url": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42839755599",
+  "github_ci_standard": {
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "github_ci_python_optimized": {
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "local_standard": {
+    "passed": 17,
+    "failed": 0
+  },
+  "local_python_optimized": {
+    "passed": 17,
+    "failed": 0
+  },
+  "covered_recovery_scenarios": [
+    "restart from exact historical CSV checkpoint",
+    "recover missed M15 bars oldest first",
+    "reject invalid CSV OHLC history and wall clock",
+    "reject duplicate, off-grid, absent source history",
+    "block unapproved trade/semantic flags"
+  ],
+  "source_is_read_only": true,
+  "orders_sent": 0,
+  "teacher_semantics_verified": false,
+  "mql5_metaeditor_compilation_verified": false,
+  "mt5_eplanet_demo_runtime_verified": false,
+  "important_limitation": "GitHub and local tests run Python/reference parser and static MQL5 source checks, not compiled MQL5 on Windows MT5."
+}
