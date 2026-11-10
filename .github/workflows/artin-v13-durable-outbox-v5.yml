@@ -1,0 +1,39 @@
+name: Artin V13 durable evidence outbox V5 (no orders)
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'artin_mt5_durable_outbox_v5.py'
+      - 'test_artin_mt5_durable_outbox_v5.py'
+      - 'v5_e2e_receipt_generator.py'
+      - 'artin_mt5_incremental_observer_v4.py'
+      - 'test_artin_mt5_incremental_observer_v4.py'
+      - 'artin_mt5_shadow_bridge.py'
+      - '.github/workflows/artin-v13-durable-outbox-v5.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  crash-safe-evidence-outbox:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Normal 24 synthetic crash recovery and integrity tests
+        run: python -m unittest -v test_artin_mt5_durable_outbox_v5
+      - name: Optimized 24 synthetic crash recovery and integrity tests
+        run: python -O -m unittest -v test_artin_mt5_durable_outbox_v5
+      - name: 70-bar offline V5 append-only end-to-end example
+        run: python v5_e2e_receipt_generator.py
+      - name: Verify synthetic-only receipt with 13 routes still blocked
+        run: python -c "import json; d=json.load(open('ARTIN_V13_V5_SYNTHETIC_E2E_RECEIPT_20261110.json')); assert d['synthetic_only'] and d['run_new_bars']==[5,3,62,0] and d['orders_sent']==0 and not d['teacher_semantics_certified']"
