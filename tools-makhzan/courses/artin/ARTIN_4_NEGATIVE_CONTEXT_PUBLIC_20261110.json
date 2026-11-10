@@ -1,0 +1,26 @@
+{
+  "schema": "artin_original_machine_asr_negative_context_public_v1",
+  "date": "2026-11-10",
+  "sources": "Private 25 session unified machine-ASR archive and pinned four negative-entry cases",
+  "private_review": "/بهروز/ARTIN_4_NEGATIVE_ORIGINAL_CONTEXT_PRIVATE_20261110.json",
+  "source_case_count": 4,
+  "source_sessions": [
+    19,
+    20,
+    21
+  ],
+  "context_machine_speech_occurrences": 25,
+  "local_real_source_tests": {
+    "passed": 4,
+    "total": 4
+  },
+  "github_self_contained_tests_created": 5,
+  "github_run_result": "NOT_VERIFIED",
+  "visual_reference_metadata": {
+    "case_with_any_nearby_reference": 3,
+    "case_without_reference": 1
+  },
+  "limitation": "Visual reference metadata is not evidence of an independently inspected correct teaching chart. Original speaker, words and teacher intent are unverified.",
+  "trade_action": "NO_TRADE",
+  "approved_teacher_rules": 0
+}
