@@ -67,6 +67,20 @@ class ProvenanceTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertIn("missing or unsafe file: speech", result["errors"])
 
+    def test_stream_size_limit_fails_closed(self):
+        # The byte limit must also apply to bytes actually read, not just
+        # metadata collected before streaming.
+        with patch("artin_receipt_provenance_gate.MAX_BYTES", 3):
+            result = audit_artifacts(self.receipt, self.root)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("artifact exceeds size limit" in e for e in result["errors"]))
+
+    def test_hash_uses_opened_descriptor_not_path_stat(self):
+        # Path.stat must not be used for validation after opening a file.
+        with patch.object(Path, "stat", side_effect=AssertionError("path stat called")):
+            result = audit_artifacts(self.receipt, self.root)
+        self.assertTrue(result["passed"], result["errors"])
+
     def test_tampering_fails(self):
         (self.root / "speech").write_bytes(b"changed")
         self.assertFalse(audit_artifacts(self.receipt, self.root)["passed"])
