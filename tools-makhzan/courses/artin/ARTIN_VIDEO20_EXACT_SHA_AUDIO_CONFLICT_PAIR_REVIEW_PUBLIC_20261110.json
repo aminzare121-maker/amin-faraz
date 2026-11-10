@@ -1,0 +1,57 @@
+{
+  "schema": "artin_video20_original_sha_audio_pair_review_public_v1",
+  "date": "2026-11-10",
+  "queue_video": 20,
+  "route": "BREAK_VERY_STRONG_RETEST",
+  "citation_number": 14,
+  "original_source_audio_archive": "/بهروز/ARTIN_VIDEO_20_RECOVERED/AUDIO_11.zip",
+  "source_wav_member": "audio/batch_001/part_12.wav",
+  "source_original_wav_sha256": "b071b5ba121ade3771a3048150b4361fec2755cee9788e7424e52d422eab00f8",
+  "source_time_window_seconds": [
+    3288,
+    3612
+  ],
+  "verified_excerpt_seconds": [
+    3363,
+    3394
+  ],
+  "reference_speech_segment_ids": [
+    "asr_390070bbb485b0bb574bafeb",
+    "asr_7ee805e35a39c8684cc7e2dc"
+  ],
+  "speech_intervals_seconds": [
+    [
+      3371.32,
+      3374.42
+    ],
+    [
+      3383,
+      3386.22
+    ]
+  ],
+  "original_reference_image_times_seconds": [
+    3345,
+    3375,
+    3405
+  ],
+  "all_original_reference_images_outside_two_speech_intervals": true,
+  "private_review_packet": "/بهروز/ARTIN_VIDEO20_3371_3383_SOURCE_AUDIO_REVIEW_20261110.zip",
+  "private_manifest": "/بهروز/ARTIN_VIDEO20_3371_3383_PRIVATE_MANIFEST_20261110.json",
+  "replay_script": "artin_conflict_pair20_packet.py",
+  "private_original_media_tests": {
+    "ordinary": {
+      "passed": 8,
+      "total": 8
+    },
+    "optimized_python": {
+      "passed": 8,
+      "total": 8
+    }
+  },
+  "source_audio_sha_matches_both_asr_and_original_manifest": true,
+  "original_speech_independently_heard": false,
+  "teacher_or_student_identity_verified": false,
+  "teacher_chart_action_verified": false,
+  "semantic_conflict_resolved": false,
+  "orders_authorized": 0
+}
