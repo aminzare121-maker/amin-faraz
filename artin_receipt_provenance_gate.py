@@ -18,6 +18,7 @@ def audit_artifacts(receipt, root):
     if not isinstance(artifacts, dict):
         return {"passed": False, "errors": ["missing artifacts map"]}
     seen_paths = set()
+    seen_inodes = set()
     for kind in REQUIRED:
         item = artifacts.get(kind)
         if not isinstance(item, dict):
@@ -43,6 +44,11 @@ def audit_artifacts(receipt, root):
         except OSError:
             errors.append("unreadable artifact metadata: " + kind)
             continue
+        identity = (path.stat().st_dev, path.stat().st_ino)
+        if identity in seen_inodes:
+            errors.append("duplicate artifact inode: " + kind)
+            continue
+        seen_inodes.add(identity)
         if size > MAX_BYTES:
             errors.append("artifact exceeds size limit: " + kind)
             continue
