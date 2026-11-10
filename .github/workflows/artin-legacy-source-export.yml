@@ -1,0 +1,46 @@
+name: Artin legacy code export for private offline replay
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - .github/workflows/artin-legacy-source-export.yml
+permissions:
+  contents: read
+jobs:
+  export-code-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout immutable legacy code branch
+        uses: actions/checkout@v4
+        with:
+          ref: b48fb06f8b2b0d134292025f5b27fc670ad2a293
+          persist-credentials: false
+      - name: Package unmodified Python source only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, zipfile, subprocess
+          expected='b48fb06f8b2b0d134292025f5b27fc670ad2a293'
+          got=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          if got!=expected: raise SystemExit('LEGACY_SOURCE_COMMIT_MISMATCH')
+          root=Path('research/artin-independent-engine')
+          files=sorted(root.glob('*.py'))
+          if len(files)<12 or not (root/'entry_engine.py').is_file() or not (root/'raw_pipeline.py').is_file():
+              raise SystemExit('LEGACY_ENGINE_MODULES_MISSING')
+          out=Path('/tmp/artin-legacy-core-pinned.zip')
+          manifest={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+          with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for p in files:z.write(p,arcname=p.name)
+              z.writestr('LEGACY_SHA_MANIFEST.json',json.dumps({'source_commit':expected,'files_sha256':manifest},sort_keys=True,indent=2))
+          print(json.dumps({'archive':str(out),'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'count':len(files)}))
+          PY
+      - name: Upload code-only archive (no videos, candles, or credentials)
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-legacy-core-unmodified-b48fb
+          path: /tmp/artin-legacy-core-pinned.zip
+          retention-days: 7
+          if-no-files-found: error
