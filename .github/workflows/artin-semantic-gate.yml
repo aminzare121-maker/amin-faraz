@@ -6,6 +6,7 @@ on:
     paths:
       - 'artin_receipt_provenance_gate.py'
       - 'test_artin_receipt_provenance_gate.py'
+      - 'test_artin_empty_artifact_gate.py'
       - 'test_artin_provenance_stable_snapshot.py'
       - 'test_artin_receipt_hardlink_gate.py'
       - 'artin_real_cycle_receipt_gate.py'
@@ -140,7 +141,7 @@ jobs:
 
       - name: Validate file-backed receipt provenance (unit tests only)
         shell: bash
-        run: python3 -m unittest -v test_artin_receipt_provenance_gate test_artin_receipt_hardlink_gate test_artin_provenance_stable_snapshot
+        run: python3 -m unittest -v test_artin_receipt_provenance_gate test_artin_receipt_hardlink_gate test_artin_provenance_stable_snapshot test_artin_empty_artifact_gate
 
       - name: Run interval differential oracle with optimized Python
         shell: bash
