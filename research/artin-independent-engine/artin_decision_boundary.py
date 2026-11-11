@@ -64,9 +64,9 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     ids = [r.rule_id for r in rows]
     if len(ids) != len(set(ids)):
         return {"decision": "BLOCKED", "reason": "DUPLICATE_RULE_ID", "executable": False}
-    # Replay approvals must refer to this exact decision batch. Extra IDs
+    # Replay approvals must refer only to this decision batch. Extra IDs
     # could otherwise be mistaken for independently checked evidence.
-    if approved and approved != frozenset(ids):
+    if approved.difference(ids):
         return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_SET_MISMATCH",
                 "executable": False}
     # A veto prevents NEW entries, but must not silently override an EXIT
