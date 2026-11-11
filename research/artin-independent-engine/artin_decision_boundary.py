@@ -50,7 +50,8 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     for row in rows:
         if (not isinstance(row, RuleOutcome) or
             not isinstance(row.rule_id, str) or not row.rule_id.strip() or
-            row.kind not in KINDS or row.action not in ACTIONS or
+            not isinstance(row.kind, str) or row.kind not in KINDS or
+            not isinstance(row.action, str) or row.action not in ACTIONS or
             type(row.priority) is not int or type(row.session) is not int or
             not 1 <= row.session <= 25 or
             type(row.verified) is not bool or not row.verified or
