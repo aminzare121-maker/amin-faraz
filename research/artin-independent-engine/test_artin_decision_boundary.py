@@ -40,7 +40,14 @@ class DecisionBoundaryTests(unittest.TestCase):
 
     def test_veto_prevents_entry(self):
         rows = [rule("entry", "ENTER", 3), rule("exception", "NO_TRADE")]
-        self.assertEqual(decide(rows)["decision"], "NO_TRADE")
+        self.assertEqual(decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])["decision"], "NO_TRADE")
+
+    def test_veto_without_replay_cannot_claim_verified_teacher_veto(self):
+        rows = [rule("entry", "ENTER", 3), rule("exception", "NO_TRADE")]
+        result = decide(rows)
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+        self.assertIs(result["executable"], False)
 
     def test_exit_not_suppressed_by_risk_veto(self):
         rows = [rule("exit", "EXIT", 1), rule("risk", "NO_TRADE", 10)]
