@@ -58,6 +58,13 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
         r.kind == "exit" and r.action == "EXIT" for r in rows
     ):
         return {"decision": "BLOCKED", "reason": "ENTRY_EXIT_PRECEDENCE_UNVERIFIED", "executable": False}
+    # Never silently suppress an EXIT signal behind a higher-ranked HOLD.
+    # Without time-anchored replay proving exit precedence, fail closed.
+    if any(r.kind == "exit" and r.action == "EXIT" for r in rows) and any(
+        r.action == "HOLD" for r in rows
+    ):
+        return {"decision": "BLOCKED", "reason": "EXIT_HOLD_PRECEDENCE_UNVERIFIED",
+                "executable": False}
     highest = max(r.priority for r in rows)
     top = [r for r in rows if r.priority == highest]
     if len({r.action for r in top}) != 1:
