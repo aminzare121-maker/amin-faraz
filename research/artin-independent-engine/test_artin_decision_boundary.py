@@ -36,6 +36,16 @@ class DecisionBoundaryTests(unittest.TestCase):
     def test_entry_requires_exit_and_risk(self):
         self.assertEqual(decide([rule("entry", "ENTER")])["reason"], "EXIT_OR_RISK_UNVERIFIED")
 
+    def test_approved_entry_without_exit_or_risk_is_still_blocked(self):
+        for rows in ([rule("entry", "ENTER")],
+                     [rule("entry", "ENTER"), rule("exit", "HOLD")],
+                     [rule("entry", "ENTER"), rule("risk", "HOLD")]):
+            with self.subTest(kinds=[r.kind for r in rows]):
+                result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
+                self.assertEqual(result["decision"], "BLOCKED")
+                self.assertEqual(result["reason"], "EXIT_OR_RISK_UNVERIFIED")
+                self.assertIs(result["executable"], False)
+
     def test_conflict_blocks(self):
         self.assertEqual(decide([rule("entry", "ENTER"), rule("exit", "EXIT")])["reason"], "ENTRY_EXIT_PRECEDENCE_UNVERIFIED")
 
