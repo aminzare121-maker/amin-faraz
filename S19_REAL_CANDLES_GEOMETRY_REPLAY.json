@@ -1,0 +1,18 @@
+{
+  "schema": "artin_s19_private_ohlc_geometry_replay_v1",
+  "source_sha256": "2dc3fa0fc3bd19ecf8a8d0d06025079917c5770f34afc9a0aa4ca906d8983826",
+  "source_rows": 23643,
+  "windows_checked": 23641,
+  "counts": {
+    "BUY_pivot_and_doubt_conditional": 2977,
+    "BUY_strict_local_pivot_candidate": 5218,
+    "GAPPED_THREE_CANDLE_WINDOW": 519,
+    "MEASURABLE_SHAPE_NOT_TEACHER_TRADE": 23122,
+    "SELL_pivot_and_doubt_conditional": 2899,
+    "SELL_strict_local_pivot_candidate": 5167
+  },
+  "teacher_semantics_verified": false,
+  "net_profit_calculated": false,
+  "demo_orders_submitted": 0,
+  "all_observations_are_conditional_not_trades": true
+}

@@ -8,6 +8,8 @@ on:
       - 'artin_automatic_trade_cycle.py'
       - 'artin_mt5_demo_automatic.py'
       - 'artin_teacher_13route_live_gate.py'
+      - 'artin_s19_auto_sequence.py'
+      - 'test_artin_s19_auto_sequence.py'
       - 'test_artin_teacher_13route_live_gate.py'
       - 'teacher_s19/**'
       - '.gitattributes'
@@ -82,6 +84,8 @@ jobs:
           python -O -m unittest -q test_artin_automatic_teacher_engine test_artin_automatic_demo_integration
           python -m unittest -q test_artin_teacher_13route_live_gate
           python -O -m unittest -q test_artin_teacher_13route_live_gate
+          python -m unittest -q test_artin_s19_auto_sequence
+          python -O -m unittest -q test_artin_s19_auto_sequence
       - name: One synthetic paper lifecycle; never actual MT5/PnL verification
         shell: bash
         run: |

@@ -53,6 +53,7 @@ def review_closed_bars(bars, *, limit=64):
     Caller must never infer authorization merely from `status == ELIGIBLE`.
     """
     manifest_sha=verified_core()
+    from artin_s19_auto_sequence import observe_s19_three
     if not isinstance(bars,(list,tuple)) or len(bars)<3:
         raise TeacherCoreUnavailable('CLOSED_M15_HISTORY_TOO_SHORT')
     if type(limit) is not int or limit<3 or limit>4096:
@@ -92,6 +93,7 @@ def review_closed_bars(bars, *, limit=64):
         candle=Candle(b.t,b.t+900,*(Decimal(str(getattr(b,k))) for k in ('open','high','low','close')))
         result=pipeline.step(candle)
     decisions=result['decisions']
+    s19_geometry=observe_s19_three(subset)
     if len(decisions)!=26:
         raise TeacherCoreUnavailable('NOT_ALL_13_ROUTES_REVIEWED')
     summary=[{'side':d['side'],'rule_id':d['rule_id'],'status':d['status'],
@@ -103,6 +105,7 @@ def review_closed_bars(bars, *, limit=64):
             'teacher_source_manifest_sha256':manifest_sha,'raw_ohlc_sha256':raw_hash,
             'rules_checked':13,'directions_checked':2,'decisions_checked':len(summary),
             'decisions':summary,
+            's19_three_candle_auto_measurement':s19_geometry,
             'video_teacher_semantics_independently_approved':False,
             'pdf_is_supplement_not_override':True,
             'broker_orders_authorized':False,
