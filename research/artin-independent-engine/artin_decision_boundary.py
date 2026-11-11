@@ -47,6 +47,13 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     ids = [r.rule_id for r in rows]
     if len(ids) != len(set(ids)):
         return {"decision": "BLOCKED", "reason": "DUPLICATE_RULE_ID"}
+    # A veto prevents NEW entries, but must not silently override an EXIT
+    # for an already open position. Position context and teacher precedence
+    # are not established here: unresolved exit/veto conflict fails closed.
+    if (any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows)
+            and any(r.kind == "exit" and r.action == "EXIT" for r in rows)):
+        return {"decision": "BLOCKED", "reason": "EXIT_VETO_PRECEDENCE_UNVERIFIED",
+                "executable": False}
     # A verified exception or risk veto dominates entry regardless of rank.
     if any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows):
         return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO"}
