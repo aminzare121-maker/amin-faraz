@@ -46,7 +46,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     if demo_only is not True:
         return {"decision": "BLOCKED", "reason": "REAL_DISABLED", "executable": False}
     if not rows:
-        return {"decision": "BLOCKED", "reason": "NO_VERIFIED_TEACHER_RULES"}
+        return {"decision": "BLOCKED", "reason": "NO_VERIFIED_TEACHER_RULES", "executable": False}
     for row in rows:
         if (not isinstance(row, RuleOutcome) or
             not isinstance(row.rule_id, str) or not row.rule_id.strip() or
@@ -60,10 +60,10 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
             (row.kind in ("risk", "exception", "decision_order") and row.action in ("ENTER", "EXIT")) or
             not isinstance(row.evidence_id, str) or
             not row.evidence_id.strip()):
-            return {"decision": "BLOCKED", "reason": "UNVERIFIED_OR_INVALID_RULE"}
+            return {"decision": "BLOCKED", "reason": "UNVERIFIED_OR_INVALID_RULE", "executable": False}
     ids = [r.rule_id for r in rows]
     if len(ids) != len(set(ids)):
-        return {"decision": "BLOCKED", "reason": "DUPLICATE_RULE_ID"}
+        return {"decision": "BLOCKED", "reason": "DUPLICATE_RULE_ID", "executable": False}
     # A veto prevents NEW entries, but must not silently override an EXIT
     # for an already open position. Position context and teacher precedence
     # are not established here: unresolved exit/veto conflict fails closed.
@@ -129,15 +129,15 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     highest = max(r.priority for r in rows)
     top = [r for r in rows if r.priority == highest]
     if len({r.action for r in top}) != 1:
-        return {"decision": "BLOCKED", "reason": "PRIORITY_CONFLICT"}
+        return {"decision": "BLOCKED", "reason": "PRIORITY_CONFLICT", "executable": False}
     action = top[0].action
     if action == "ENTER":
         # Only an entry rule may authorize an entry candidate.
         if not any(r.kind == "entry" and r.action == "ENTER" for r in top):
-            return {"decision": "BLOCKED", "reason": "NO_TOP_RANKED_ENTRY_RULE"}
+            return {"decision": "BLOCKED", "reason": "NO_TOP_RANKED_ENTRY_RULE", "executable": False}
         # An entry requires independently reviewed exit and risk rules.
         if not any(r.kind == "exit" for r in rows) or not any(r.kind == "risk" for r in rows):
-            return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED"}
+            return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED", "executable": False}
         if not all(r.rule_id in approved for r in rows):
             return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_MISSING", "executable": False}
     if action == "EXIT" and not all(r.rule_id in approved for r in rows):
