@@ -90,6 +90,19 @@ class DecisionBoundaryTests(unittest.TestCase):
         result = decide(rows, replay_approved_rule_ids=["entryENTER"])
         self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
 
+    def test_exit_requires_replay_approval(self):
+        rows = [rule("exit", "EXIT", 3)]
+        result = decide(rows)
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+        self.assertIs(result["executable"], False)
+
+    def test_exit_candidate_with_replay_still_non_executable(self):
+        rows = [rule("exit", "EXIT", 3)]
+        result = decide(rows, replay_approved_rule_ids=[rows[0].rule_id])
+        self.assertEqual(result["decision"], "EXIT")
+        self.assertIs(result["executable"], False)
+
     def test_non_executable_even_when_allowed(self):
         rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
         result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
