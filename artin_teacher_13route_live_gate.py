@@ -94,6 +94,8 @@ def review_closed_bars(bars, *, limit=64):
         result=pipeline.step(candle)
     decisions=result['decisions']
     s19_geometry=observe_s19_three(subset)
+    from artin_teacher_structure_observer import observe_structure
+    automatic_structure=observe_structure(subset)
     if len(decisions)!=26:
         raise TeacherCoreUnavailable('NOT_ALL_13_ROUTES_REVIEWED')
     summary=[{'side':d['side'],'rule_id':d['rule_id'],'status':d['status'],
@@ -106,6 +108,7 @@ def review_closed_bars(bars, *, limit=64):
             'rules_checked':13,'directions_checked':2,'decisions_checked':len(summary),
             'decisions':summary,
             's19_three_candle_auto_measurement':s19_geometry,
+            'automatic_structure':automatic_structure,
             'video_teacher_semantics_independently_approved':False,
             'pdf_is_supplement_not_override':True,
             'broker_orders_authorized':False,

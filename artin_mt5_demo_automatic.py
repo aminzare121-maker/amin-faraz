@@ -350,7 +350,8 @@ def main(argv=None):
                     'eligible_routes':[d['rule_id'] for d in teacher_review['decisions'] if d['status']=='ELIGIBLE'],
                     'source_manifest_sha256':teacher_review['teacher_source_manifest_sha256'],
                     'video_semantics_verified':teacher_review['video_teacher_semantics_independently_approved'],
-                    's19_closed_sequence_measurement':teacher_review['s19_three_candle_auto_measurement']},
+                    's19_closed_sequence_measurement':teacher_review['s19_three_candle_auto_measurement'],
+                    'automatic_structure':teacher_review['automatic_structure']},
                 'candidate_gate':teacher_candidates,'stop_management':move,
                 'previous_position_reconciliation':reconcile_status,
                 'orders_submitted_by_this_cycle':0}

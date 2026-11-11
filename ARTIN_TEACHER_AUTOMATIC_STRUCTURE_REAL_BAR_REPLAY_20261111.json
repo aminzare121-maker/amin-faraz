@@ -1,0 +1,115 @@
+{
+  "schema": "artin_25_source_raw_structure_replay_v1",
+  "input_sha256": "2dc3fa0fc3bd19ecf8a8d0d06025079917c5770f34afc9a0aa4ca906d8983826",
+  "source_rows": 23643,
+  "observed_counts": {
+    "bars": 23643,
+    "gaps": 260,
+    "raw_pivot_highs": 5167,
+    "raw_pivot_lows": 5218,
+    "raw_breaks": 3494,
+    "raw_retests": 2837
+  },
+  "samples_only": {
+    "pivots": [
+      {
+        "side_of_future_break": "SELL",
+        "level": "3963.58",
+        "pivot_candle_open": 1762341300,
+        "known_at": 1762343100,
+        "type": "STRICT_LOCAL_THREE_BAR_EXTREMUM_CANDIDATE",
+        "teacher_major_minor_pivot_confirmed": false
+      },
+      {
+        "side_of_future_break": "BUY",
+        "level": "3972.56",
+        "pivot_candle_open": 1762343100,
+        "known_at": 1762344900,
+        "type": "STRICT_LOCAL_THREE_BAR_EXTREMUM_CANDIDATE",
+        "teacher_major_minor_pivot_confirmed": false
+      },
+      {
+        "side_of_future_break": "SELL",
+        "level": "3956.07",
+        "pivot_candle_open": 1762344000,
+        "known_at": 1762345800,
+        "type": "STRICT_LOCAL_THREE_BAR_EXTREMUM_CANDIDATE",
+        "teacher_major_minor_pivot_confirmed": false
+      }
+    ],
+    "breaks": [
+      {
+        "side": "SELL",
+        "level": "3960.45",
+        "pivot_candle_open": 1762346700,
+        "pivot_confirmed_at": 1762348500,
+        "break_bar_open": 1762348500,
+        "known_at": 1762349400,
+        "type": "CLOSED_PRICE_BEYOND_CANDIDATE_PIVOT",
+        "teacher_break_strength_verified": false
+      },
+      {
+        "side": "BUY",
+        "level": "3969.71",
+        "pivot_candle_open": 1762352100,
+        "pivot_confirmed_at": 1762353900,
+        "break_bar_open": 1762354800,
+        "known_at": 1762355700,
+        "type": "CLOSED_PRICE_BEYOND_CANDIDATE_PIVOT",
+        "teacher_break_strength_verified": false
+      },
+      {
+        "side": "BUY",
+        "level": "3977.43",
+        "pivot_candle_open": 1762355700,
+        "pivot_confirmed_at": 1762357500,
+        "break_bar_open": 1762358400,
+        "known_at": 1762359300,
+        "type": "CLOSED_PRICE_BEYOND_CANDIDATE_PIVOT",
+        "teacher_break_strength_verified": false
+      }
+    ],
+    "retests": [
+      {
+        "side": "SELL",
+        "level": "3960.45",
+        "break_bar_open": 1762348500,
+        "retest_bar_open": 1762349400,
+        "known_at": 1762350300,
+        "type": "GEOMETRIC_RETURN_TO_BROKEN_PIVOT",
+        "teacher_retest_confirmed": false
+      },
+      {
+        "side": "BUY",
+        "level": "3969.71",
+        "break_bar_open": 1762354800,
+        "retest_bar_open": 1762355700,
+        "known_at": 1762356600,
+        "type": "GEOMETRIC_RETURN_TO_BROKEN_PIVOT",
+        "teacher_retest_confirmed": false
+      },
+      {
+        "side": "BUY",
+        "level": "3977.43",
+        "break_bar_open": 1762358400,
+        "retest_bar_open": 1762360200,
+        "known_at": 1762361100,
+        "type": "GEOMETRIC_RETURN_TO_BROKEN_PIVOT",
+        "teacher_retest_confirmed": false
+      }
+    ]
+  },
+  "elapsed_seconds_single_local_run": 0.111,
+  "references": [
+    "Technical(1).pdf#page=2",
+    "Technical(1).pdf#page=5",
+    "Technical(1).pdf#page=14",
+    "Technical(1).pdf#page=17",
+    "session12 machine speech ~2950s unverified"
+  ],
+  "classification": "CLOSED_OHLC_CANDIDATES_NOT_TEACHER_APPROVED_TRADES",
+  "teacher_semantics_verified": false,
+  "mt5_terminal_executed": false,
+  "broker_orders_submitted": 0,
+  "profitability_measured": false
+}

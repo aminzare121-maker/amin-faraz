@@ -9,6 +9,10 @@ on:
       - 'artin_mt5_demo_automatic.py'
       - 'artin_teacher_13route_live_gate.py'
       - 'artin_s19_auto_sequence.py'
+      - 'artin_teacher_structure_observer.py'
+      - 'test_artin_teacher_structure_observer.py'
+      - 'README_AUTO_S19_MEASUREMENT_FA.md'
+      - 'ARTIN_TEACHER_AUTOMATIC_STRUCTURE_REAL_BAR_REPLAY_20261111.json'
       - 'test_artin_s19_auto_sequence.py'
       - 'test_artin_teacher_13route_live_gate.py'
       - 'teacher_s19/**'
@@ -86,6 +90,8 @@ jobs:
           python -O -m unittest -q test_artin_teacher_13route_live_gate
           python -m unittest -q test_artin_s19_auto_sequence
           python -O -m unittest -q test_artin_s19_auto_sequence
+          python -m unittest -q test_artin_teacher_structure_observer
+          python -O -m unittest -q test_artin_teacher_structure_observer
       - name: One synthetic paper lifecycle; never actual MT5/PnL verification
         shell: bash
         run: |
