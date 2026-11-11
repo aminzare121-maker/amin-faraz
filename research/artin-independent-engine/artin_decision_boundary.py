@@ -38,6 +38,9 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
         approved_rows = tuple(replay_approved_rule_ids)
         if any(not isinstance(x, str) or not x.strip() for x in approved_rows):
             return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
+        # Duplicate approval IDs are ambiguous audit input, not independent replay.
+        if len(approved_rows) != len(set(approved_rows)):
+            return {"decision": "BLOCKED", "reason": "DUPLICATE_REPLAY_APPROVAL", "executable": False}
         approved = frozenset(approved_rows)
     except (TypeError, ValueError):
         return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
