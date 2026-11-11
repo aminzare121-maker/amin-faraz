@@ -36,7 +36,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
             type(row.verified) is not bool or not row.verified or
             (row.kind == "entry" and row.action not in ("ENTER", "NO_TRADE", "HOLD")) or
             (row.kind == "exit" and row.action == "ENTER") or
-            (row.kind in ("risk", "exception") and row.action in ("ENTER", "EXIT")) or
+            (row.kind in ("risk", "exception", "decision_order") and row.action in ("ENTER", "EXIT")) or
             not isinstance(row.evidence_id, str) or
             not row.evidence_id.strip()):
             return {"decision": "BLOCKED", "reason": "UNVERIFIED_OR_INVALID_RULE"}
@@ -64,6 +64,9 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
         return {"decision": "BLOCKED", "reason": "PRIORITY_CONFLICT"}
     action = top[0].action
     if action == "ENTER":
+        # Only an entry rule may authorize an entry candidate.
+        if not any(r.kind == "entry" and r.action == "ENTER" for r in top):
+            return {"decision": "BLOCKED", "reason": "NO_TOP_RANKED_ENTRY_RULE"}
         # An entry requires independently reviewed exit and risk rules.
         if not any(r.kind == "exit" for r in rows) or not any(r.kind == "risk" for r in rows):
             return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED"}
