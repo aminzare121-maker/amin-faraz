@@ -98,7 +98,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
             and any(r.kind == "exit" and r.action == "EXIT" for r in rows)):
         return {"decision": "BLOCKED", "reason": "EXIT_ENTRY_NO_TRADE_CONTEXT_UNVERIFIED",
                 "executable": False}
-    # A simultaneous NO_TRADE and HOLD is not resolved by arbitrary numeric
+    # Conflicting exit instructions cannot be arbitrated by priority alone.\n    # An exit NO_TRADE is not proof that an existing position should remain open.\n    if (any(r.kind == "exit" and r.action == "EXIT" for r in rows)\n            and any(r.kind == "exit" and r.action == "NO_TRADE" for r in rows)):\n        return {"decision": "BLOCKED", "reason": "EXIT_NO_TRADE_PRECEDENCE_UNVERIFIED",\n                "executable": False}\n    # A simultaneous NO_TRADE and HOLD is not resolved by arbitrary numeric
     # priority: the teacher's precedence must be replay-verified first.
     # This is especially important when a high-ranked HOLD would hide a
     # lower-ranked no-entry decision.
