@@ -23,7 +23,12 @@ class RuleOutcome:
 def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
            replay_approved_rule_ids: Iterable[str] = ()) -> dict:
     """Return a non-executable decision. Unresolved precedence blocks entry."""
-    rows = tuple(outcomes)
+    # Invalid/non-iterable input must fail closed rather than crash the
+    # decision boundary before it can return a non-executable result.
+    try:
+        rows = tuple(outcomes)
+    except (TypeError, ValueError):
+        return {"decision": "BLOCKED", "reason": "INVALID_RULE_OUTCOMES", "executable": False}
     # Caller assertions (verified=True and evidence_id) are not independent
     # audio/chart replay approval. Default deny all entry candidates.
     # A string is not a collection of independently reviewed rule IDs.
