@@ -90,5 +90,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
             return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED"}
         if not all(r.rule_id in approved for r in rows):
             return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_MISSING", "executable": False}
+    if action == "EXIT" and not all(r.rule_id in approved for r in rows):
+        return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_MISSING", "executable": False}
     return {"decision": action, "reason": "VERIFIED_RULE_ARBITRATION",
             "rule_ids": [r.rule_id for r in top], "executable": False}
