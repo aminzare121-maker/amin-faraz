@@ -6,6 +6,7 @@ on:
     paths:
       - 'teacher_s19/**'
       - '.github/workflows/artin-teacher-s19-source-check.yml'
+      - '.gitattributes'
   workflow_dispatch:
 permissions:
   contents: read
