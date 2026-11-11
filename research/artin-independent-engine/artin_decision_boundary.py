@@ -135,6 +135,15 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     ):
         return {"decision": "BLOCKED", "reason": "EXIT_PRECEDENCE_UNVERIFIED",
                 "executable": False}
+    # An exit-scoped NO_TRADE does not establish a no-entry decision.
+    # Without position context and a replayed teacher example, do not
+    # relabel an exit instruction as an entry veto.
+    if (any(r.kind == "exit" and r.action == "NO_TRADE" for r in rows)
+            and not any(r.kind == "entry" for r in rows)
+            and not any(r.kind in ("risk", "exception") and r.action == "NO_TRADE"
+                        for r in rows)):
+        return {"decision": "BLOCKED", "reason": "EXIT_NO_TRADE_POSITION_CONTEXT_UNVERIFIED",
+                "executable": False}
     # HOLD and standalone NO_TRADE must not be presented as verified teacher
     # arbitration solely from caller-supplied flags and evidence identifiers.
     if not all(r.rule_id in approved for r in rows):
