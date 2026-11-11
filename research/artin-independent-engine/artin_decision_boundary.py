@@ -89,6 +89,16 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     ):
         return {"decision": "BLOCKED", "reason": "EXIT_HOLD_PRECEDENCE_UNVERIFIED",
                 "executable": False}
+    # A higher-ranked non-exit signal cannot silently suppress a lower-ranked
+    # EXIT. Until teacher replay establishes the precedence, fail closed.
+    # This also covers NO_TRADE from an entry rule and decision_order/risk HOLD.
+    if any(r.kind == "exit" and r.action == "EXIT" for r in rows) and any(
+        r.action != "EXIT" and r.priority >= min(
+            e.priority for e in rows if e.kind == "exit" and e.action == "EXIT"
+        ) for r in rows
+    ):
+        return {"decision": "BLOCKED", "reason": "EXIT_PRECEDENCE_UNVERIFIED",
+                "executable": False}
     # HOLD and standalone NO_TRADE must not be presented as verified teacher
     # arbitration solely from caller-supplied flags and evidence identifiers.
     if not all(r.rule_id in approved for r in rows):
