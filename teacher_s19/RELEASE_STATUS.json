@@ -1,0 +1,18 @@
+{
+  "status": "PARTIAL_ENGINE_S19_PATCH_TESTED_NOT_FULL_TEACHER_TRADING_ENGINE",
+  "created_utc": "2026-11-11T05:16:53.106438+00:00",
+  "known_core_commit": "b48fb06f8b2b0d134292025f5b27fc670ad2a293",
+  "corrected_route": "REVERSAL_THREE",
+  "source": "machine ASR session19 seconds 3440.62..3654.0 (independent verification not completed)",
+  "modifications": [
+    "three candle doubt shape in sentiment direction (not all same colored)",
+    "pivot required; no unsourced pivot detection"
+  ],
+  "unit_tests_normal": 153,
+  "unit_tests_optimized": 153,
+  "recorded_candles_checked": 100,
+  "branch_evaluations": 2600,
+  "broker_orders_sent": 0,
+  "teacher_25_session_semantic_verification": false,
+  "real_mt5_demo_execution_of_this_patch": false
+}

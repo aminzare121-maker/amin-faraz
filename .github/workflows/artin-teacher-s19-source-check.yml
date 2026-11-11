@@ -1,0 +1,34 @@
+name: Artin teacher S19 source-corrected 13-route engine - offline only
+on:
+  push:
+    branches:
+      - artin-fxm-teacher-engine-20261110
+    paths:
+      - 'teacher_s19/**'
+      - '.github/workflows/artin-teacher-s19-source-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-corrected-offline:
+    name: source-corrected ( ${{ matrix.os }} )
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore exact pinned teacher core + apply only sourced S19 patch
+        run: python teacher_s19/restore_s19.py
+      - name: Run all corrected source tests normally
+        run: python -m unittest discover -s teacher_s19/teacher_core_s19 -p "test_*.py" -q
+      - name: Run all corrected source tests with -O
+        run: python -O -m unittest discover -s teacher_s19/teacher_core_s19 -p "test_*.py" -q
+      - name: Confirm pinned original source and patch hashes
+        run: python -c "import sys;sys.path.insert(0,'teacher_s19');from artin_teacher_corrected_execution import verify_source_correction;verify_source_correction();print('TEACHER_S19_SOURCED_PATCH_VERIFIED_NO_ORDERS')"
