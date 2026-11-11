@@ -65,6 +65,10 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
                 "executable": False}
     # A verified exception or risk veto dominates entry regardless of rank.
     if any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows):
+        # A caller-supplied verified flag cannot establish a teacher-approved veto.
+        if not all(r.rule_id in approved for r in rows):
+            return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_MISSING",
+                    "executable": False}
         return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO", "executable": False}
     # An entry NO_TRADE cannot be outranked by ENTER without replay evidence.
     if (any(r.kind == "entry" and r.action == "ENTER" for r in rows)
