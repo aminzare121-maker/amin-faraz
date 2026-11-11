@@ -19,7 +19,7 @@ class DecisionBoundaryTests(unittest.TestCase):
         self.assertEqual(decide([rule("entry", "ENTER")])["reason"], "EXIT_OR_RISK_UNVERIFIED")
 
     def test_conflict_blocks(self):
-        self.assertEqual(decide([rule("entry", "ENTER"), rule("exit", "EXIT")])["reason"], "PRIORITY_CONFLICT")
+        self.assertEqual(decide([rule("entry", "ENTER"), rule("exit", "EXIT")])["reason"], "ENTRY_EXIT_PRECEDENCE_UNVERIFIED")
 
     def test_lower_priority_entry_no_trade_blocks_high_priority_entry(self):
         rows = [rule("entry", "ENTER", 10),
@@ -66,9 +66,20 @@ class DecisionBoundaryTests(unittest.TestCase):
                 rows = [rule("decision_order", action, 10), rule("exit", "HOLD"), rule("risk", "HOLD")]
                 self.assertEqual(decide(rows)["reason"], "UNVERIFIED_OR_INVALID_RULE")
 
-    def test_verified_flag_without_replay_approval_blocks_entry(self):\n        rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]\n        result = decide(rows)\n        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")\n        self.assertIs(result["executable"], False)\n\n    def test_partial_replay_approval_blocks_entry(self):\n        rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]\n        result = decide(rows, replay_approved_rule_ids=["entryENTER"])\n        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")\n\n    def test_non_executable_even_when_allowed(self):
+    def test_verified_flag_without_replay_approval_blocks_entry(self):
         rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
         result = decide(rows)
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+        self.assertIs(result["executable"], False)
+
+    def test_partial_replay_approval_blocks_entry(self):
+        rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
+        result = decide(rows, replay_approved_rule_ids=["entryENTER"])
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+
+    def test_non_executable_even_when_allowed(self):
+        rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
+        result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
         self.assertEqual(result["decision"], "ENTER")
         self.assertIs(result["executable"], False)
 
