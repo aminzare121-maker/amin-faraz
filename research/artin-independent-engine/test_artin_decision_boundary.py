@@ -38,6 +38,21 @@ class DecisionBoundaryTests(unittest.TestCase):
         self.assertEqual(result["reason"], "EXIT_HOLD_PRECEDENCE_UNVERIFIED")
         self.assertIs(result["executable"], False)
 
+    def test_higher_ranked_entry_no_trade_cannot_suppress_exit(self):
+        rows = [rule("exit", "EXIT", 1),
+                rule("entry", "NO_TRADE", 10)]
+        result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
+        self.assertEqual(result["reason"], "EXIT_PRECEDENCE_UNVERIFIED")
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertIs(result["executable"], False)
+
+    def test_lower_ranked_entry_no_trade_does_not_suppress_exit(self):
+        rows = [rule("exit", "EXIT", 10),
+                rule("entry", "NO_TRADE", 1)]
+        result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
+        self.assertEqual(result["decision"], "EXIT")
+        self.assertIs(result["executable"], False)
+
     def test_veto_prevents_entry(self):
         rows = [rule("entry", "ENTER", 3), rule("exception", "NO_TRADE")]
         self.assertEqual(decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])["decision"], "NO_TRADE")
