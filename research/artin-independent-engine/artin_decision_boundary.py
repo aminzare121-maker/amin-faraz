@@ -20,9 +20,13 @@ class RuleOutcome:
     priority: int
     session: int
 
-def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,\n           replay_approved_rule_ids: Iterable[str] = ()) -> dict:
+def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
+           replay_approved_rule_ids: Iterable[str] = ()) -> dict:
     """Return a non-executable decision. Unresolved precedence blocks entry."""
-    rows = tuple(outcomes)\n    # Caller assertions (verified=True and evidence_id) are not independent\n    # audio/chart replay approval. Default deny all entry candidates.\n    approved = frozenset(replay_approved_rule_ids)
+    rows = tuple(outcomes)
+    # Caller assertions (verified=True and evidence_id) are not independent
+    # audio/chart replay approval. Default deny all entry candidates.
+    approved = frozenset(replay_approved_rule_ids)
     if not demo_only:
         return {"decision": "BLOCKED", "reason": "REAL_DISABLED"}
     if not rows:
@@ -77,5 +81,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,\n        
         # An entry requires independently reviewed exit and risk rules.
         if not any(r.kind == "exit" for r in rows) or not any(r.kind == "risk" for r in rows):
             return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED"}
+        if not all(r.rule_id in approved for r in rows):
+            return {"decision": "BLOCKED", "reason": "REPLAY_APPROVAL_MISSING", "executable": False}
     return {"decision": action, "reason": "VERIFIED_RULE_ARBITRATION",
             "rule_ids": [r.rule_id for r in top], "executable": False}
