@@ -31,6 +31,13 @@ class DecisionBoundaryTests(unittest.TestCase):
         self.assertEqual(result["reason"], "ENTRY_NO_TRADE_PRECEDENCE_UNVERIFIED")
         self.assertIs(result["executable"], False)
 
+    def test_lower_priority_exit_not_silently_suppressed_by_hold(self):
+        rows = [rule("exit", "EXIT", 1), rule("risk", "HOLD", 10)]
+        result = decide(rows)
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "EXIT_HOLD_PRECEDENCE_UNVERIFIED")
+        self.assertIs(result["executable"], False)
+
     def test_veto_prevents_entry(self):
         rows = [rule("entry", "ENTER", 3), rule("exception", "NO_TRADE")]
         self.assertEqual(decide(rows)["decision"], "NO_TRADE")
