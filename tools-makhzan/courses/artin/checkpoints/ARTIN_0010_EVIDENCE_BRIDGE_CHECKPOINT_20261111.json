@@ -1,0 +1,20 @@
+{
+  "schema": "artin-evidence-checkpoint-v1",
+  "date": "2026-11-11",
+  "course": "artin-course-001",
+  "entry": "0010",
+  "source_run": 42597293832,
+  "source_branch": "tools-makhzan-hub",
+  "source_commit": "18dedee4efab108e9b83b421df5883c5c5865a27",
+  "technical_status": "source-processing-jobs-success",
+  "semantic_status": "NOT_VERIFIED",
+  "next_step": "Connect actual timestamped speech/chat/board/frame evidence to classroom learner; verify against original source; do not infer rules from keywords.",
+  "blocker": "artin-classroom-learning.yml reads only tools-makhzan/courses/artin/inbox/session-*.json",
+  "artifact_expiration_risk": "Some original-audio and original-ocr artifacts expire 2026-11-16; source evidence must be preserved in private storage before expiry.",
+  "safety": {
+    "trading_disabled": true,
+    "original_v12_unchanged": true,
+    "no_private_evidence_committed": true
+  },
+  "continuation": "0010 until evidence-linked semantic verification, then 0011..0025"
+}
