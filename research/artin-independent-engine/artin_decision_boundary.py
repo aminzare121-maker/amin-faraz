@@ -144,6 +144,14 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
                         for r in rows)):
         return {"decision": "BLOCKED", "reason": "EXIT_NO_TRADE_POSITION_CONTEXT_UNVERIFIED",
                 "executable": False}
+    # Report missing exit/risk coverage before replay approval for an ENTER
+    # candidate. Otherwise a structurally incomplete entry is mislabeled
+    # merely as missing replay evidence, hiding the actual decision defect.
+    if (any(r.kind == "entry" and r.action == "ENTER" for r in rows)
+            and (not any(r.kind == "exit" for r in rows)
+                 or not any(r.kind == "risk" for r in rows))):
+        return {"decision": "BLOCKED", "reason": "EXIT_OR_RISK_UNVERIFIED",
+                "executable": False}
     # HOLD and standalone NO_TRADE must not be presented as verified teacher
     # arbitration solely from caller-supplied flags and evidence identifiers.
     if not all(r.rule_id in approved for r in rows):
