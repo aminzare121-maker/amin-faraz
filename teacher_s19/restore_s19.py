@@ -33,7 +33,7 @@ def run(origin=None):
     changed={'entry_engine.py','raw_pipeline.py','examples.py'}
     correction=json.loads((ROOT/'TEACHER_CORE_S19_PATCH_MANIFEST.json').read_text(encoding='utf8'))
     assert set(correction['changed_files'])==changed
-    for name in changed|{'test_s19_teacher_correction.py'}:
+    for name in changed|{'test_s19_teacher_correction.py','test_raw_pipeline.py'}:
         data=(ROOT/name).read_bytes()
         assert hashlib.sha256(data).hexdigest()==correction['sha256'][name]
         (target/name).write_bytes(data)

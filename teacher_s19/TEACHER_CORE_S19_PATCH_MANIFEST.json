@@ -91,5 +91,9 @@
       "status": "PRIOR_TEACHER_CORE_REFERENCE"
     }
   ],
-  "source_locator_correction": "3623.28..3625.96 specifically references the closing price of the third candle; recorded source window has not been independently audio-verified"
+  "source_locator_correction": "3623.28..3625.96 specifically references the closing price of the third candle; recorded source window has not been independently audio-verified",
+  "changed_test_files": [
+    "test_raw_pipeline.py",
+    "test_s19_teacher_correction.py"
+  ]
 }
