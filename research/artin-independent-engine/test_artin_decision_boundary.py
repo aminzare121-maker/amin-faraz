@@ -12,6 +12,13 @@ class DecisionBoundaryTests(unittest.TestCase):
     def test_real_blocks(self):
         self.assertEqual(decide([], demo_only=False)["reason"], "REAL_DISABLED")
 
+    def test_demo_boundary_rejects_truthy_non_boolean_values(self):
+        for value in ("true", "false", "DEMO", 1, [True], {"demo": True}, None):
+            with self.subTest(value=value):
+                result = decide([], demo_only=value)
+                self.assertEqual(result["reason"], "REAL_DISABLED")
+                self.assertIs(result["executable"], False)
+
     def test_unverified_blocks(self):
         self.assertEqual(decide([rule("entry", "ENTER", verified=False)])["reason"], "UNVERIFIED_OR_INVALID_RULE")
 
