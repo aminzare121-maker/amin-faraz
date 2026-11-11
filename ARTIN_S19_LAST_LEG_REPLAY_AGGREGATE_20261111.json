@@ -1,0 +1,33 @@
+{
+  "schema": "artin_s19_last_leg_private_replay_aggregate_v1",
+  "source": "PRIVATE_CAPTURED_EPLANET_CANDLE_SET_NOT_INDEPENDENTLY_REVALIDATED_ON_TERMINAL",
+  "source_sha256": "2dc3fa0fc3bd19ecf8a8d0d06025079917c5770f34afc9a0aa4ca906d8983826",
+  "rows": 23643,
+  "candidate_pivot_count": 9411,
+  "ambiguous_middle_pivot_count": 487,
+  "discontinuity_resets": 260,
+  "distinct_pivot_pair_candidates": 7432,
+  "statuses": {
+    "NO_COMPLETED_ALTERNATING_PIVOT_PAIR": 1598,
+    "LAST_OPPOSITE_PIVOT_PAIR_CANDIDATE_ONLY": 15165,
+    "THREE_CLOSES_COMPARED_TO_CANDIDATE_HALF_NOT_TEACHER_APPROVED": 2891,
+    "TWO_LAST_PIVOTS_SAME_KIND_NOT_A_SELECTED_LEG": 3988,
+    "gap_reset": 260,
+    "ZERO_RANGE_PIVOT_PAIR": 1
+  },
+  "directions_observed": {
+    "UP": 8992,
+    "DOWN": 9064
+  },
+  "half_comparison": {
+    "three_below_half": 1119,
+    "three_above_half": 1275,
+    "three_inside_candidate_range": 889,
+    "three_compared": 2891
+  },
+  "teacher_last_leg_semantically_verified": false,
+  "teacher_sentiment_verified": false,
+  "teacher_entry_approved_count": 0,
+  "orders_submitted": 0,
+  "remarks": "Geometric measurements only; no PnL, broker fill or teacher-rule certification."
+}
