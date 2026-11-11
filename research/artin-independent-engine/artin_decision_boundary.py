@@ -36,8 +36,10 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
         approved = frozenset(approved_rows)
     except (TypeError, ValueError):
         return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
-    if not demo_only:
-        return {"decision": "BLOCKED", "reason": "REAL_DISABLED"}
+    # Require the literal boolean True; truthy strings/integers must never
+    # bypass the research-only DEMO boundary.
+    if demo_only is not True:
+        return {"decision": "BLOCKED", "reason": "REAL_DISABLED", "executable": False}
     if not rows:
         return {"decision": "BLOCKED", "reason": "NO_VERIFIED_TEACHER_RULES"}
     for row in rows:
