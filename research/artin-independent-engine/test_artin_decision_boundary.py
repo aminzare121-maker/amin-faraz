@@ -53,6 +53,12 @@ class DecisionBoundaryTests(unittest.TestCase):
                 row = RuleOutcome("bad", kind, action, True, "session-01@00:01:00", 1, 1)
                 self.assertEqual(decide([row])["decision"], "BLOCKED")
 
+    def test_decision_order_cannot_authorize_entry_or_exit(self):
+        for action in ("ENTER", "EXIT"):
+            with self.subTest(action=action):
+                rows = [rule("decision_order", action, 10), rule("exit", "HOLD"), rule("risk", "HOLD")]
+                self.assertEqual(decide(rows)["reason"], "UNVERIFIED_OR_INVALID_RULE")
+
     def test_non_executable_even_when_allowed(self):
         rows = [rule("entry", "ENTER", 3), rule("exit", "HOLD"), rule("risk", "HOLD")]
         result = decide(rows)
