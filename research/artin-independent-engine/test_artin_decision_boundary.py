@@ -57,7 +57,8 @@ class DecisionBoundaryTests(unittest.TestCase):
         rows = [rule("exit", "EXIT", 10),
                 rule("entry", "NO_TRADE", 1)]
         result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
-        self.assertEqual(result["decision"], "EXIT")
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "EXIT_ENTRY_NO_TRADE_CONTEXT_UNVERIFIED")
         self.assertIs(result["executable"], False)
 
     def test_high_priority_hold_cannot_hide_no_trade(self):
