@@ -26,7 +26,16 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
     rows = tuple(outcomes)
     # Caller assertions (verified=True and evidence_id) are not independent
     # audio/chart replay approval. Default deny all entry candidates.
-    approved = frozenset(replay_approved_rule_ids)
+    # A string is not a collection of independently reviewed rule IDs.
+    if isinstance(replay_approved_rule_ids, (str, bytes)):
+        return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
+    try:
+        approved_rows = tuple(replay_approved_rule_ids)
+        if any(not isinstance(x, str) or not x.strip() for x in approved_rows):
+            return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
+        approved = frozenset(approved_rows)
+    except (TypeError, ValueError):
+        return {"decision": "BLOCKED", "reason": "INVALID_REPLAY_APPROVALS", "executable": False}
     if not demo_only:
         return {"decision": "BLOCKED", "reason": "REAL_DISABLED"}
     if not rows:
@@ -56,7 +65,7 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
                 "executable": False}
     # A verified exception or risk veto dominates entry regardless of rank.
     if any(r.kind in ("exception", "risk") and r.action == "NO_TRADE" for r in rows):
-        return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO"}
+        return {"decision": "NO_TRADE", "reason": "VERIFIED_VETO", "executable": False}
     # An entry NO_TRADE cannot be outranked by ENTER without replay evidence.
     if (any(r.kind == "entry" and r.action == "ENTER" for r in rows)
             and any(r.action == "NO_TRADE" for r in rows)):
