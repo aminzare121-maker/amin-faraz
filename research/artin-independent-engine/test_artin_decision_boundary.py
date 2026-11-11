@@ -97,6 +97,25 @@ class DecisionBoundaryTests(unittest.TestCase):
         result = decide(rows, replay_approved_rule_ids=["entryENTER"])
         self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
 
+    def test_hold_without_replay_is_not_verified_teacher_decision(self):
+        rows = [rule("risk", "HOLD")]
+        result = decide(rows)
+        self.assertEqual(result["decision"], "BLOCKED")
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+        self.assertIs(result["executable"], False)
+
+    def test_standalone_no_trade_without_replay_is_blocked(self):
+        rows = [rule("entry", "NO_TRADE")]
+        result = decide(rows)
+        self.assertEqual(result["reason"], "REPLAY_APPROVAL_MISSING")
+        self.assertIs(result["executable"], False)
+
+    def test_approved_hold_remains_non_executable(self):
+        rows = [rule("risk", "HOLD")]
+        result = decide(rows, replay_approved_rule_ids=[rows[0].rule_id])
+        self.assertEqual(result["decision"], "HOLD")
+        self.assertIs(result["executable"], False)
+
     def test_exit_requires_replay_approval(self):
         rows = [rule("exit", "EXIT", 3)]
         result = decide(rows)
