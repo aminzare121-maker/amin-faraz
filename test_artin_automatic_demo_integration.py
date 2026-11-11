@@ -38,20 +38,23 @@ class DemoSdkContractTests(unittest.TestCase):
           '--history-bars','10','--reference-balance','1000',
           '--winrate-evidence-file',str(winrate),'--broker-day-offset-minutes','0',
           '--mode','THREE_TP','--enable-demo-orders','--once']
-    def test_mock_demo_entry_exactly_once_persistent_restart(self):
+    def test_mock_demo_never_orders_without_13_route_teacher_verification(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);m=self.mock_sdk()
             with patch.dict(sys.modules,{'MetaTrader5':m}), patch('artin_mt5_demo_automatic.verify_teacher_pdf_sources',return_value=True):
                 main(self.args(root));main(self.args(root))
-            self.assertEqual(m.order_send.call_count,1)
+            m.order_send.assert_not_called()
+            m.order_check.assert_not_called()
             d=json.loads((root/'state.json').read_text())
             self.assertEqual(d['last_bar'],3600)
-            self.assertEqual(d['plan']['ticket'],123)
-            self.assertEqual(d['plan']['tp_levels'],['111.890','114.915','117.940'])
-            self.assertTrue(d['plan']['broker_fill_verified'])
-            report=(root/'report.jsonl').read_text()
-            self.assertIn('EPLANET_DEMO_ORDER_ACCEPTED_BROKER_RESULT',report)
-            self.assertIn('NO_NEW_CLOSED_M15',report)
+            self.assertIsNone(d['plan'])
+            records=[json.loads(x) for x in (root/'report.jsonl').read_text().splitlines()]
+            self.assertEqual(records[0]['status'],'BLOCKED_INCOMPLETE_13_ROUTE_TEACHER_VIDEO_PDF_EVIDENCE')
+            self.assertEqual(records[0]['teacher_review']['rules_checked'],13)
+            self.assertEqual(records[0]['teacher_review']['decisions_checked'],26)
+            self.assertFalse(records[0]['teacher_review']['video_semantics_verified'])
+            self.assertEqual(records[1]['status'],'NO_NEW_CLOSED_M15')
+
     def test_never_order_on_real_account_even_with_enable(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);m=self.mock_sdk(trade_mode=2)
@@ -75,6 +78,6 @@ class DemoSdkContractTests(unittest.TestCase):
             args.remove('--enable-demo-orders')
             with patch.dict(sys.modules,{'MetaTrader5':m}):main(args)
             m.order_send.assert_not_called();m.order_check.assert_not_called()
-            self.assertIn('OBSERVED_PDF_CANDIDATE_ORDERS_DISABLED',(root/'report.jsonl').read_text())
+            self.assertIn('BLOCKED_INCOMPLETE_13_ROUTE_TEACHER_VIDEO_PDF_EVIDENCE',(root/'report.jsonl').read_text())
 
 if __name__=='__main__':unittest.main()

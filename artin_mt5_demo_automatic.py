@@ -1,13 +1,15 @@
 """Artin measurable-PDF-subset autonomous DEMO bot for Windows MetaTrader5.
 
-Reads actual ePlanet DEMO XAUUSD.st 15m CLOSED bars; discovers candidate
-setups itself, derives risk from live broker contract, optionally places DEMO
-orders and moves stops by FXM page-4 ladder. Never connects/logs into an
+Reads ePlanet DEMO XAUUSD.st 15m CLOSED bars; recognizes candidate
+setups and reviews all 13 instructor routes from sourced S19 core. PDF-only
+candidates cannot authorize orders. Derives broker risk and preserves FXM
+stop management code; no instructor-approved entries currently exist. Never connects/logs into an
 account. Requires explicit documented winrate, broker-day offset, and an
 explicit --enable-demo-orders switch for any order API call.
 
-IMPORTANT: these are only TWO strict/measurable PDF candidate subsets;
-NOT all 13 video semantics, NOT a certified implementation of the instructor.
+IMPORTANT: two PDF candidate subsets are always checked against all 13
+source-indexed routes. The raw 13-route analysis does NOT verify all 25 videos
+or certify an instructor trade. Incomplete context blocks every new order.
 On unknown market state the bot refuses to send orders. No REAL accounts.
 Live execution has NOT been tested in this environment.
 """
@@ -16,6 +18,7 @@ import argparse,datetime as dt,json,os,time,sys,hashlib
 from decimal import Decimal as D, ROUND_FLOOR
 from pathlib import Path
 from artin_automatic_teacher_recognizer import Bar,AutoRecognizer
+from artin_teacher_13route_live_gate import review_closed_bars, gate_pdf_candidate
 from fxm_teacher_policy import AccountRisk,winrate_target_policy,day_trade_permission
 
 MAGIC=26011113
@@ -284,11 +287,20 @@ def main(argv=None):
                 atomic_state(state_path,state) if not state_path.exists() else _replace_state(state_path,state)
                 return {'status':'NO_NEW_CLOSED_M15','closed':closed,'stop_management':move}
             new=[s for s in signals if s.at==fence]
+            # Mandatory full instructor route review: the PDF-only recognizer
+            # has no authority to send a DEMO order without matching, sourced
+            # and independently verified video+PDF teacher entry conditions.
+            teacher_review=review_closed_bars(bars)
+            teacher_candidates=[gate_pdf_candidate(s,teacher_review) for s in new]
+            source_approved=(len(new)==1 and len(teacher_candidates)==1 and
+                             teacher_candidates[0]['teacher_entry_authorized'] is True)
             state['last_bar']=closed
             info=mt.symbol_info(SYMBOL)
             if info is None:raise BotBlocked('BROKER_SYMBOL_UNAVAILABLE')
             if len(new)!=1:
                 action='NO_SIGNAL_OR_AMBIGUOUS'
+            elif not source_approved:
+                action='BLOCKED_INCOMPLETE_13_ROUTE_TEACHER_VIDEO_PDF_EVIDENCE'
             elif positions:
                 action='POSITIONS_EXIST_NO_OVERLAPPING_ORDERS'
             elif state.get('plan') is not None:
@@ -332,7 +344,13 @@ def main(argv=None):
             _replace_state(state_path,state)
             return {'status':action,'closed':closed,'signals_at_latest_closed_bar':len(new),
                 'route':new[0].route if len(new)==1 else None,
-                'recognition_counts':detector.counts,'stop_management':move,
+                'recognition_counts':detector.counts,
+                'teacher_review':{'rules_checked':teacher_review['rules_checked'],
+                    'decisions_checked':teacher_review['decisions_checked'],
+                    'eligible_routes':[d['rule_id'] for d in teacher_review['decisions'] if d['status']=='ELIGIBLE'],
+                    'source_manifest_sha256':teacher_review['teacher_source_manifest_sha256'],
+                    'video_semantics_verified':teacher_review['video_teacher_semantics_independently_approved']},
+                'candidate_gate':teacher_candidates,'stop_management':move,
                 'previous_position_reconciliation':reconcile_status,
                 'orders_submitted_by_this_cycle':0}
         while True:
