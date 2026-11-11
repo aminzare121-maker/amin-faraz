@@ -20,9 +20,9 @@ class RuleOutcome:
     priority: int
     session: int
 
-def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True) -> dict:
+def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,\n           replay_approved_rule_ids: Iterable[str] = ()) -> dict:
     """Return a non-executable decision. Unresolved precedence blocks entry."""
-    rows = tuple(outcomes)
+    rows = tuple(outcomes)\n    # Caller assertions (verified=True and evidence_id) are not independent\n    # audio/chart replay approval. Default deny all entry candidates.\n    approved = frozenset(replay_approved_rule_ids)
     if not demo_only:
         return {"decision": "BLOCKED", "reason": "REAL_DISABLED"}
     if not rows:
