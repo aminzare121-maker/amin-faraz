@@ -51,6 +51,10 @@ def run_document(document):
         case_id=case.get('case_id',f'case-{case_index:04d}')
         if not isinstance(case_id,str) or not case_id.strip():
             raise ValueError('Each case requires a nonempty case_id when supplied')
+        # Case identity must be canonical: whitespace variants can otherwise
+        # attach different decisions to the same source example in a replay.
+        if case_id != case_id.strip():
+            raise ValueError('case_id must not contain surrounding whitespace')
         if case_id in seen_case_ids:
             raise ValueError('Duplicate case_id: '+case_id)
         seen_case_ids.add(case_id)
