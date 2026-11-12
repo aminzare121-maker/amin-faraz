@@ -164,8 +164,13 @@ def run(citation_path, cases_path, core, out):
               'allowed_rules':list(eng.RULE_IDS),'cases':cases,
               'synthetic_only':all(p['source_class']=='SYNTHETIC_TEST' for p in proofs)}
     evaluated = paper.run_document(source)
+    # A truncated or duplicated result stream cannot be compared to teacher scenes.
+    # zip() would otherwise silently discard unmatched classroom decisions.
+    decisions = evaluated.get('decisions')
+    if not isinstance(decisions, list) or len(decisions) != len(proofs):
+        raise ClassroomMotorError('CLASSROOM_DECISION_COUNT_MISMATCH')
     results=[]
-    for proof,decision in zip(proofs,evaluated['decisions']):
+    for proof,decision in zip(proofs,decisions):
         status=decision['status']; teacher=proof['teacher_choice_in_record']
         # Literal classroom NO_TRADE is a scene-scoped protection, not a rule
         # that says all similar future market candles are prohibited. It can
