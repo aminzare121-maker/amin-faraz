@@ -42,12 +42,18 @@ def run_paper_trade(engine,case,observation):
 def run_document(document):
     if document.get('mode')!='ANNOTATED_OFFLINE':raise ValueError('Only ANNOTATED_OFFLINE mode exists')
     engine=Engine(document['plan_id'],tuple(document['allowed_rules']))
-    rows=[];paper=[]
-    for case in document['cases']:
+    rows=[];paper=[];seen_case_ids=set()
+    for case_index,case in enumerate(document['cases']):
+        case_id=case.get('case_id',f'case-{case_index:04d}')
+        if not isinstance(case_id,str) or not case_id.strip():
+            raise ValueError('Each case requires a nonempty case_id when supplied')
+        if case_id in seen_case_ids:
+            raise ValueError('Duplicate case_id: '+case_id)
+        seen_case_ids.add(case_id)
         facts={k:Fact(v['value'],v['known_at'],v['source']) for k,v in case['facts'].items()}
         observation=Observation(case['side'],case['at'],facts)
-        rows.append(asdict(engine.evaluate(case['rule_id'],observation)))
-        if 'paper_trade' in case:paper.append({'rule_id':case['rule_id'],**run_paper_trade(engine,case,observation)})
+        rows.append({'case_id':case_id,'case_index':case_index,**asdict(engine.evaluate(case['rule_id'],observation))})
+        if 'paper_trade' in case:paper.append({'case_id':case_id,'case_index':case_index,'rule_id':case['rule_id'],**run_paper_trade(engine,case,observation)})
     return {'mode':'ANNOTATED_OFFLINE','plan_fingerprint':engine.fingerprint,
       'synthetic_only':document.get('synthetic_only') is True,'decisions':rows,'paper_trades':paper,
       'broker_connected':False,'orders_sent':0,'raw_chart_classifier_implemented':False,
