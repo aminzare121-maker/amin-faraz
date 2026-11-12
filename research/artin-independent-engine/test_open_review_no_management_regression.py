@@ -30,7 +30,7 @@ class InvalidFillReviewTest(unittest.TestCase):
         intent = machine.prepare("test-rule", observation, D("100"),
                                  D("99"), D("103"), D("10"), D("0.01"))
         self.assertEqual(intent["status"], "PAPER_ENTRY_INTENT")
-        fill = machine.fill_entry(D("101"), D("0.01"))
+        fill = machine.fill_entry(D("111"), D("0.01"))
         self.assertEqual(fill["status"], "OPEN_REVIEW")
         self.assertTrue(machine.budget_overrun)
         original_stop = machine.current_stop
