@@ -106,7 +106,9 @@ class TradeMachine:
 
     def manage(self,label,new_stop,trigger,at):
         self._fixed();self._time(at)
-        if self.state not in ('OPEN','OPEN_REVIEW'):raise ValueError('open paper trade required')
+        if self.state=='OPEN_REVIEW':
+            return self._event('REVIEW',reason='INVALID_ENTRY_FILL_REQUIRES_REVIEW_BEFORE_MANAGEMENT',realized_pnl=None)
+        if self.state!='OPEN':raise ValueError('open paper trade required')
         if label=='fulltarget':
             return self._event('REJECT',reason='FULLTARGET_IS_EXIT_OUTCOME_NOT_STOP_MOVE')
         if label not in self.box.management_choices:
