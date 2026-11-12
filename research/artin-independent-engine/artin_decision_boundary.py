@@ -104,6 +104,13 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
             and any(r.kind == "exit" and r.action == "NO_TRADE" for r in rows)):
         return {"decision": "BLOCKED", "reason": "EXIT_NO_TRADE_PRECEDENCE_UNVERIFIED",
                 "executable": False}
+    # A decision-order NO_TRADE and an EXIT also require teacher-confirmed
+    # precedence. Neither a higher EXIT priority nor a higher veto priority
+    # establishes which position context the instructor intended.
+    if (any(r.kind == "decision_order" and r.action == "NO_TRADE" for r in rows)
+            and any(r.kind == "exit" and r.action == "EXIT" for r in rows)):
+        return {"decision": "BLOCKED", "reason": "EXIT_DECISION_ORDER_NO_TRADE_UNVERIFIED",
+                "executable": False}
     # A simultaneous NO_TRADE and HOLD is not resolved by arbitrary numeric
     # priority: the teacher's precedence must be replay-verified first.
     # This is especially important when a high-ranked HOLD would hide a
