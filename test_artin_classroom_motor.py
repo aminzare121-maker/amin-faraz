@@ -7,6 +7,7 @@ import tempfile
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT))
@@ -66,6 +67,22 @@ class ClassroomEngineTests(unittest.TestCase):
         self.assertEqual(result['orders_sent'],0)
         self.assertTrue(self.out.exists())
         self.assertTrue(all(row['motor_status']=='ELIGIBLE' for row in result['cases']))
+
+    def test_dropped_or_extra_engine_decision_is_rejected(self):
+        # A mismatched result stream must never be silently paired via zip().
+        from run_engine import run_document as original_run
+        for delta in (-1, 1):
+            with self.subTest(delta=delta):
+                def corrupt(source, delta=delta):
+                    result = original_run(source)
+                    result['decisions'] = (result['decisions'][:delta]
+                                           if delta == -1
+                                           else result['decisions'] + result['decisions'][:1])
+                    return result
+                with patch('run_engine.run_document', side_effect=corrupt):
+                    with self.assertRaisesRegex(ClassroomMotorError, 'CLASSROOM_DECISION_COUNT_MISMATCH'):
+                        run(self.src, self.cases, CORE, self.out)
+                self.assertFalse(self.out.exists())
 
     def test_actual_classroom_excerpt_with_missing_market_facts_is_review_not_trade(self):
         row=self.cases_doc['cases'][0]
