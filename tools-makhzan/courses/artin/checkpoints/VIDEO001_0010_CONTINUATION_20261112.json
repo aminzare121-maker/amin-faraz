@@ -1,0 +1,32 @@
+{
+  "project": "VIDEO-001",
+  "magazine": "artin-course-001",
+  "branch_under_test": "artin-record-auth-fix-20261112",
+  "source_branch": "tools-makhzan-hub",
+  "current_item": "video-q-0010-artin-clip-08",
+  "checked_at_date": "2026-11-12",
+  "evidence": {
+    "run_id": 42597293832,
+    "failed_job_id": 129102811008,
+    "failed_step": "git fetch origin tools-makhzan-hub",
+    "failure": "exit 128, could not read Username",
+    "artifacts_count": 71,
+    "artifacts_expired": false,
+    "artifact_expiry_observed": "2026-11-24T10:16:04Z (sample; verify each artifact)",
+    "experimental_diff": "one-line workflow credential persistence adjustment",
+    "semantic_validation": "NOT_VERIFIED",
+    "learning_workflow_input": "tools-makhzan/courses/artin/inbox/session-*.json"
+  },
+  "next_actions": [
+    "Verify whether original evidence has a durable private archive, do not assume prior chat claims prove storage",
+    "Run isolated CI on experimental branch and verify authentication fix before merge",
+    "Map source ASR/OCR/chat/board/image timestamps into session evidence with SHA256 provenance",
+    "Compare each proposed semantic interpretation with actual instructor evidence; do not create executable trading rules without validation",
+    "Advance sequentially through 0025; preserve raw sources and V12"
+  ],
+  "safety": {
+    "real_or_demo_trades": false,
+    "raw_sources_modified": false,
+    "meaning_inferred_from_keywords": false
+  }
+}
