@@ -59,6 +59,11 @@ def run_document(document):
             raise ValueError('Duplicate case_id: '+case_id)
         seen_case_ids.add(case_id)
         case_ids.append(case_id)
+    # A single annotated batch is not an account risk ledger. Fail closed rather
+    # than treating each caller-supplied aggregate_risk_remaining as a shared reserve.
+    # Independent one-trade replays retain their historical behavior.
+    if sum('paper_trade' in case for case in document['cases']) > 1:
+        raise ValueError('MULTI_TRADE_AGGREGATE_RISK_NOT_RESERVED: account-wide reservation required before multi-trade replay')
     rows=[];paper=[]
     for case_index,case in enumerate(document['cases']):
         case_id=case_ids[case_index]
