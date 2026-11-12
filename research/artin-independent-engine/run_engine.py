@@ -46,6 +46,8 @@ def run_document(document):
     # This prevents partial decision/paper-trade processing on an invalid batch.
     case_ids=[];seen_case_ids=set()
     for case_index,case in enumerate(document['cases']):
+        if document.get('synthetic_only') is not True and 'case_id' not in case:
+            raise ValueError('Non-synthetic case requires explicit case_id for source replay traceability')
         case_id=case.get('case_id',f'case-{case_index:04d}')
         if not isinstance(case_id,str) or not case_id.strip():
             raise ValueError('Each case requires a nonempty case_id when supplied')
