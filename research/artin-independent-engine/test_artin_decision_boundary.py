@@ -6,6 +6,16 @@ def rule(kind, action, priority=1, verified=True):
     return RuleOutcome(kind + action, kind, action, verified, "session-01@00:01:00", priority, 1)
 
 class DecisionBoundaryTests(unittest.TestCase):
+    def test_exit_decision_order_no_trade_requires_teacher_precedence(self):
+        for exit_priority, veto_priority in ((10, 1), (1, 10), (5, 5)):
+            with self.subTest(exit_priority=exit_priority, veto_priority=veto_priority):
+                rows = [rule("exit", "EXIT", exit_priority),
+                        rule("decision_order", "NO_TRADE", veto_priority)]
+                result = decide(rows, replay_approved_rule_ids=[r.rule_id for r in rows])
+                self.assertEqual(result["decision"], "BLOCKED")
+                self.assertEqual(result["reason"], "EXIT_DECISION_ORDER_NO_TRADE_UNVERIFIED")
+                self.assertIs(result["executable"], False)
+
     def test_exit_scoped_no_trade_requires_position_context(self):
         for rows in (
             [rule("exit", "NO_TRADE")],
