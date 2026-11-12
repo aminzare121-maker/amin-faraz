@@ -113,7 +113,10 @@ class TradeMachine:
             return self._event('REJECT',reason='FULLTARGET_IS_EXIT_OUTCOME_NOT_STOP_MOVE')
         if label not in self.box.management_choices:
             return self._event('REJECT',reason='MANAGEMENT_NOT_IN_FIXED_BOX')
-        if not isinstance(trigger,Fact) or trigger.value is not True or trigger.known_at>at:
+        if (not isinstance(trigger,Fact) or trigger.value is not True
+                or type(trigger.known_at) is not int or trigger.known_at<0
+                or trigger.known_at>at or not isinstance(trigger.source,str)
+                or not trigger.source.strip()):
             return self._event('REVIEW',reason='MANAGEMENT_TRIGGER_NOT_ESTABLISHED')
         result=move_stop(label,self.plan['side'],self.fill['entry'],self.plan['stop'],
                          self.current_stop,new_stop,self.fill['lots'],self.instrument,self.costs)
