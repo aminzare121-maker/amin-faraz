@@ -42,7 +42,9 @@ def run_paper_trade(engine,case,observation):
 def run_document(document):
     if document.get('mode')!='ANNOTATED_OFFLINE':raise ValueError('Only ANNOTATED_OFFLINE mode exists')
     engine=Engine(document['plan_id'],tuple(document['allowed_rules']))
-    rows=[];paper=[];seen_case_ids=set()
+    # Validate the entire case identity mapping before evaluating any case.
+    # This prevents partial decision/paper-trade processing on an invalid batch.
+    case_ids=[];seen_case_ids=set()
     for case_index,case in enumerate(document['cases']):
         case_id=case.get('case_id',f'case-{case_index:04d}')
         if not isinstance(case_id,str) or not case_id.strip():
@@ -50,6 +52,10 @@ def run_document(document):
         if case_id in seen_case_ids:
             raise ValueError('Duplicate case_id: '+case_id)
         seen_case_ids.add(case_id)
+        case_ids.append(case_id)
+    rows=[];paper=[]
+    for case_index,case in enumerate(document['cases']):
+        case_id=case_ids[case_index]
         facts={k:Fact(v['value'],v['known_at'],v['source']) for k,v in case['facts'].items()}
         observation=Observation(case['side'],case['at'],facts)
         rows.append({'case_id':case_id,'case_index':case_index,**asdict(engine.evaluate(case['rule_id'],observation))})
