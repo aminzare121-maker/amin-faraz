@@ -99,6 +99,7 @@ class TradeMachine:
         stop=exit_quote<=self.current_stop if side=='BUY' else exit_quote>=self.current_stop
         target=exit_quote>=self.plan['target'] if side=='BUY' else exit_quote<=self.plan['target']
         if stop or target:
+            self.state='EXIT_PENDING_FILL'
             return self._event('EXIT_TRIGGER',reason='STOP' if stop else 'TARGET',
                                exit_quote=exit_quote,quote_side='BID' if side=='BUY' else 'ASK',
                                at=at,realized_pnl=None,fill_assumed=False)
@@ -126,7 +127,7 @@ class TradeMachine:
 
     def close(self,exit_fill,actual_round_trip_fee):
         self._fixed()
-        if self.state not in ('OPEN','OPEN_REVIEW','CLOSED_PENDING_COST'):raise ValueError('open or pending-cost paper trade required')
+        if self.state not in ('OPEN','OPEN_REVIEW','EXIT_PENDING_FILL','CLOSED_PENDING_COST'):raise ValueError('open or pending-cost paper trade required')
         if self.exit_fill is not None:
             if exit_fill is not None and exit_fill!=self.exit_fill:raise ValueError('recorded exit fill cannot be changed')
             exit_fill=self.exit_fill
