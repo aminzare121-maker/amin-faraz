@@ -1,0 +1,350 @@
+{
+  "mode": "DEMO",
+  "raw_files_and_csv_hashes_verified": 52,
+  "raw_rows_modified": false,
+  "m15_rows": 23643,
+  "tick_rows": 7915,
+  "monthly_m15_counts": {
+    "2025-11": 1598,
+    "2025-12": 2012,
+    "2026-01": 1924,
+    "2026-02": 1831,
+    "2026-03": 2024,
+    "2026-04": 1932,
+    "2026-05": 1925,
+    "2026-06": 2009,
+    "2026-07": 2101,
+    "2026-08": 1932,
+    "2026-09": 2015,
+    "2026-10": 2024,
+    "2026-11": 316
+  },
+  "unusual_range_flags": [
+    {
+      "time_utc": "2026-01-29T01:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T03:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T17:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T17:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T17:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T17:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-29T18:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T03:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T04:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T04:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T04:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T10:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T11:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T11:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T11:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T16:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T19:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T19:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T19:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T20:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T20:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T20:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-01-30T20:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T01:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T02:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T03:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T07:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T07:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T08:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T08:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T08:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T15:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T16:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-02T18:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-05T04:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-10T01:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-12T18:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-02-12T18:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-03T13:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-03T13:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-03T15:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-03T16:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-05T15:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-19T16:45:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T03:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T04:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T10:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T10:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T12:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T14:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-23T14:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-03-24T23:15:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-06-17T21:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-08-28T17:00:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    },
+    {
+      "time_utc": "2026-09-04T15:30:00+00:00",
+      "flag": "RANGE_GT_10X_DATASET_MEDIAN_REVIEW_ONLY"
+    }
+  ],
+  "range_threshold_method": "10x full-dataset median; retrospective descriptive QA only, never trading feature",
+  "gap_count": 260,
+  "unclassified_gap_slots": 11397,
+  "unusual_gap_windows": [
+    {
+      "from_utc": "2025-11-27T21:45:00+00:00",
+      "to_utc": "2025-11-28T01:00:00+00:00",
+      "missing_slots": 13,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2025-11-28T11:00:00+00:00",
+      "to_utc": "2025-11-28T11:15:00+00:00",
+      "missing_slots": 1,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2025-11-28T22:00:00+00:00",
+      "to_utc": "2025-12-01T01:00:00+00:00",
+      "missing_slots": 204,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2025-12-24T21:00:00+00:00",
+      "to_utc": "2025-12-26T01:00:00+00:00",
+      "missing_slots": 112,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-01-01T00:00:00+00:00",
+      "to_utc": "2026-01-02T01:00:00+00:00",
+      "missing_slots": 100,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-01-19T22:00:00+00:00",
+      "to_utc": "2026-01-20T01:00:00+00:00",
+      "missing_slots": 12,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-02-16T21:45:00+00:00",
+      "to_utc": "2026-02-17T01:00:00+00:00",
+      "missing_slots": 13,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-04-03T00:00:00+00:00",
+      "to_utc": "2026-04-06T01:00:00+00:00",
+      "missing_slots": 292,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-05-25T22:00:00+00:00",
+      "to_utc": "2026-05-25T22:15:00+00:00",
+      "missing_slots": 1,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-05-25T22:30:00+00:00",
+      "to_utc": "2026-05-26T01:00:00+00:00",
+      "missing_slots": 10,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-06-19T20:15:00+00:00",
+      "to_utc": "2026-06-22T01:00:00+00:00",
+      "missing_slots": 211,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-07-03T20:15:00+00:00",
+      "to_utc": "2026-07-06T01:00:00+00:00",
+      "missing_slots": 211,
+      "classification": "UNKNOWN_SESSION"
+    },
+    {
+      "from_utc": "2026-09-07T21:45:00+00:00",
+      "to_utc": "2026-09-08T01:00:00+00:00",
+      "missing_slots": 13,
+      "classification": "UNKNOWN_SESSION"
+    }
+  ],
+  "natural_closure_verified": false,
+  "tick_sample_spread_usd_per_oz": {
+    "min": 0.3099999999994907,
+    "median": 0.3100000000004002,
+    "max": 0.4000000000005457
+  },
+  "spread_sample_is_year_representative": false,
+  "bid_ask_history_year_available": false,
+  "full_year_tick_downloaded": false,
+  "costs": {
+    "commission": "SUPPORT_ZERO_ST",
+    "historical_swap": "UNKNOWN",
+    "slippage": "UNKNOWN"
+  },
+  "usable_for_final_backtest": false,
+  "reasons": [
+    "SESSION_AND_HOLIDAY_GAPS_UNRESOLVED",
+    "HISTORICAL_SWAP_UNKNOWN",
+    "SLIPPAGE_UNKNOWN",
+    "ONLY_30_MINUTES_TICKS",
+    "PRICE_SIDE_METADATA_REQUIRES_CONFIRMATION"
+  ],
+  "dukascopy_comparison": "NOT_RUN_NO_SECOND_DATASET"
+}
