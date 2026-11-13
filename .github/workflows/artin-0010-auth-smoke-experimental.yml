@@ -1,0 +1,26 @@
+name: Artin 0010 isolated checkout authentication smoke
+on:
+  push:
+    branches: [artin-record-auth-fix-20261112]
+    paths: ['.github/workflows/artin-0010-auth-smoke-experimental.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  auth-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout with same credential persistence as experimental record job
+        uses: actions/checkout@v4
+        with:
+          ref: tools-makhzan-hub
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Verify git fetch credential availability without modifying sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin tools-makhzan-hub
+          git rev-parse FETCH_HEAD >/dev/null
+          echo "AUTH_FETCH_OK"
