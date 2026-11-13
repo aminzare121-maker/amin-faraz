@@ -326,6 +326,16 @@ class ClassTradeActionsTests(unittest.TestCase):
         self.assertFalse(r['trade_authorized'])
         self.assertFalse(r['teacher_chart_meaning_independently_verified'])
 
+    def test_late_prior_bar_rejected_at_third_close(self):
+        e=self.three_candle_event()
+        for candle in e['candles']:
+            candle['source']='MT5_DEMO_M15'
+            candle['known_at']=candle['time']+900
+        e['candles'][0]['known_at']=3601
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'REJECT_LATE_M15_BAR_FOR_THIRD_CLOSE')
+        self.assertFalse(result['order_created'])
+
     def test_real_m15_candles_without_close_availability_must_wait(self):
         e=self.three_candle_event()
         for candle in e['candles']:
