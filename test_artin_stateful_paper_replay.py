@@ -1,5 +1,6 @@
 import unittest
-from artin_stateful_paper_replay import PaperReplayError, replay
+from unittest.mock import patch
+from artin_stateful_paper_replay import PaperReplayError, replay, execute_sourced_paper_replay
 
 
 def source(*actions):
@@ -38,6 +39,17 @@ class StatefulPaperReplayTests(unittest.TestCase):
            'old_stop':'3990','new_stop':'3985','lots_before':'0.01','lots_after':'0.01'}
         with self.assertRaisesRegex(PaperReplayError,'STOP_MUST_TIGHTEN'):
             replay(source(a),self.position)
+
+    def test_source_action_pipeline_updates_paper_position(self):
+        action={'decision':'MOVE_STOP_TO_ENTRY_PAPER','order_created':False,
+                'old_stop':'3990','new_stop':'4000',
+                'lots_before':'0.01','lots_after':'0.01'}
+        with patch('artin_classroom_trade_actions.execute',return_value=source(action)) as execute:
+            result=execute_sourced_paper_replay({'events':[]},'sources','core',self.position)
+        execute.assert_called_once()
+        self.assertEqual(result['paper_position']['current_stop'],'4000')
+        self.assertEqual(result['orders_sent'],0)
+        self.assertFalse(result['broker_connected'])
 
     def test_reject_order_creation(self):
         with self.assertRaisesRegex(PaperReplayError,'BROKER_ACTION_FORBIDDEN'):
