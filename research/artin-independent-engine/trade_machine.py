@@ -4,7 +4,7 @@ Caller supplies sourced observations, actual paper fills, explicit costs, target
 remaining aggregate budget. Instances do not share an account or enforce a global
 one-position rule. Budget reservation across instances belongs to the caller.
 """
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from types import MappingProxyType
 from entry_engine import Fact
 from capital import size_position, account_fill, move_stop
@@ -154,7 +154,10 @@ def execution_event(trade,event,available_at,fill_lots=None):
         return v
     def exact(v):
         if type(v) not in (str,int,Decimal):raise ValueError('exact event decimal required')
-        n=Decimal(v)
+        try:
+            n=Decimal(v)
+        except (InvalidOperation, ValueError, OverflowError) as exc:
+            raise ValueError('valid finite event decimal required') from exc
         if not n.is_finite():raise ValueError('finite event decimal required')
         return n
     at=moment(event['at']);known=moment(event['known_at']);moment(available_at)
