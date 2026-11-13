@@ -146,6 +146,11 @@ def _three_candle_close_entry(event, text):
             if type(known) is not int or known < candle['time']+900:
                 return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
                         'bar_open_time':candle['time']}
+            # A third-close signal cannot use an earlier candle that was
+            # only delivered after the third bar had already closed.
+            if known>times[2]+900:
+                return {'decision':'REJECT_LATE_M15_BAR_FOR_THIRD_CLOSE',
+                        'order_created':False,'bar_open_time':candle['time']}
             if known>at:
                 return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
                         'bar_open_time':candle['time']}
