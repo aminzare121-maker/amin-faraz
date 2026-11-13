@@ -163,7 +163,22 @@ def compile_case(row, index, route_ids):
     return data,proof
 
 
-def run(citation_path, cases_path, core, out):
+def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
+    # Optional private-source acceptance is deliberately fail-closed.
+    # The private dossiers currently certify zero routes. A self-declared
+    # teacher_verified flag in a case must not bypass that assessment.
+    if private_acceptance_sources is not None:
+        from artin_13_teacher_acceptance_matrix import evaluate
+        if len(private_acceptance_sources) != 3:
+            raise ClassroomMotorError('THREE_PRIVATE_ACCEPTANCE_SOURCES_REQUIRED')
+        private_docs = [json.loads(Path(p).read_text(encoding='utf8'))
+                        for p in private_acceptance_sources]
+        acceptance = evaluate(*private_docs)
+        accepted_routes = {r['route_id'] for r in acceptance['routes']
+                           if r['teacher_case_certified'] and
+                           r['engine_decision_replay_certified']}
+    else:
+        accepted_routes = None
     eng, paper = load_pinned(core)
     raw_citations = json.loads(Path(citation_path).read_text(encoding='utf8'))
     index = index_original_citations(raw_citations, eng.RULE_IDS)
@@ -176,6 +191,12 @@ def run(citation_path, cases_path, core, out):
     cases=[];proofs=[];seen=set()
     for row in rows:
         data, proof=compile_case(row,index,eng.RULE_IDS)
+        if accepted_routes is not None and (
+                proof['teacher_choice_independently_verified']
+                or proof['teacher_visual_verified']
+                or row.get('paper_trade_teacher_source')):
+            if proof['route_id'] not in accepted_routes:
+                raise ClassroomMotorError('PRIVATE_ACCEPTANCE_DOES_NOT_CERTIFY_TEACHER_CASE')
         if proof['case_id'] in seen:
             raise ClassroomMotorError('DUPLICATE_TEACHER_CLASS_CASE')
         seen.add(proof['case_id']);cases.append(data);proofs.append(proof)
@@ -295,8 +316,9 @@ def main():
     p.add_argument('--classroom-cases',type=Path,required=True)
     p.add_argument('--pinned-core',type=Path,required=True)
     p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--private-acceptance-sources',type=Path,nargs=3)
     a=p.parse_args()
-    s=run(a.private_citations,a.classroom_cases,a.pinned_core,a.out)
+    s=run(a.private_citations,a.classroom_cases,a.pinned_core,a.out,a.private_acceptance_sources)
     print(json.dumps({k:s[k] for k in ('motor_class_cases','motor_entry_decisions','motor_teacher_comparisons_confirmed','paper_lifecycle_cases','orders_sent')}))
 
 if __name__=='__main__': main()
