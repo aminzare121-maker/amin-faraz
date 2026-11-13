@@ -1,0 +1,66 @@
+name: Artin XAUUSD M15 public-source shadow data trial
+on:
+  workflow_dispatch:
+  push:
+    branches: [artin-v13-under180-development]
+    paths:
+      - '.github/workflows/artin-public-xauusd-m15-shadow.yml'
+permissions:
+  contents: read
+jobs:
+  historical-m15:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download public Dukascopy XAUUSD M15 BID candles for one year
+        run: |
+          mkdir -p shadow_data
+          cd shadow_data
+          npx --yes dukascopy-node -i xauusd -from 2025-11-13 -to 2026-11-13 -t m15 -f csv
+      - name: Verify actual source data and produce machine-readable audit
+        run: |
+          python - <<'PY'
+          import csv,glob,hashlib,json,os
+          from datetime import datetime,timezone
+          files=glob.glob('shadow_data/**/*.csv',recursive=True)
+          if len(files)!=1: raise SystemExit('EXPECTED_EXACTLY_ONE_REAL_CSV:'+str(files))
+          path=files[0]; raw=open(path,'rb').read()
+          rows=list(csv.DictReader(raw.decode('utf-8-sig').splitlines()))
+          if len(rows)<15000: raise SystemExit('INSUFFICIENT_M15_CANDLES:'+str(len(rows)))
+          timestamps=[]; previous=None; gaps=0
+          for row in rows:
+              ts=int(row.get('timestamp') or row.get('time'))
+              if ts>10**11:ts//=1000
+              if ts%900:raise SystemExit('NON_M15_TIMESTAMP')
+              if previous is not None:
+                  if ts<=previous:raise SystemExit('NON_MONOTONIC_TIME')
+                  if ts-previous>900:gaps+=1
+              previous=ts;timestamps.append(ts)
+              o,h,l,c=[float(row[k]) for k in ('open','high','low','close')]
+              if not (0<l<=min(o,c)<=max(o,c)<=h):raise SystemExit('INVALID_OHLC')
+          result={'schema':'artin_public_xauusd_m15_source_audit_v1',
+                  'provider':'Dukascopy public feed; NOT Eplanet',
+                  'symbol':'XAUUSD','timeframe':'M15','price_side':'BID',
+                  'requested_from':'2025-11-13','requested_to_exclusive':'2026-11-13',
+                  'source_sha256':hashlib.sha256(raw).hexdigest(),
+                  'actual_rows':len(rows),'first_utc':datetime.fromtimestamp(timestamps[0],timezone.utc).isoformat(),
+                  'last_utc':datetime.fromtimestamp(timestamps[-1],timezone.utc).isoformat(),
+                  'gap_events_unclassified':gaps,
+                  'teacher_rules_executed':False,'trade_backtest_executed':False,
+                  'profit_or_loss':None,'mt5_demo_trades':0}
+          os.makedirs('shadow_audit',exist_ok=True)
+          with open('shadow_audit/audit.json','w') as f:json.dump(result,f,indent=2)
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Save actual candle audit and source CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: artin-dukascopy-m15-one-year-source-and-audit
+          path: |
+            shadow_data/**/*.csv
+            shadow_audit/audit.json
+          retention-days: 7
