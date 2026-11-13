@@ -111,6 +111,14 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
             and any(r.kind == "exit" and r.action == "EXIT" for r in rows)):
         return {"decision": "BLOCKED", "reason": "EXIT_DECISION_ORDER_NO_TRADE_UNVERIFIED",
                 "executable": False}
+    # An exit-scoped NO_TRADE cannot be interpreted as a new-entry veto.
+    # Resolve its missing position context before generic HOLD arbitration.
+    if (any(r.kind == "exit" and r.action == "NO_TRADE" for r in rows)
+            and not any(r.kind == "entry" for r in rows)
+            and not any(r.kind in ("risk", "exception") and r.action == "NO_TRADE"
+                        for r in rows)):
+        return {"decision": "BLOCKED", "reason": "EXIT_NO_TRADE_POSITION_CONTEXT_UNVERIFIED",
+                "executable": False}
     # A simultaneous NO_TRADE and HOLD is not resolved by arbitrary numeric
     # priority: the teacher's precedence must be replay-verified first.
     # This is especially important when a high-ranked HOLD would hide a
