@@ -4,6 +4,7 @@ This is a software safety test, not validation of Artin's trading semantics.
 """
 import unittest
 from unittest.mock import Mock
+from types import SimpleNamespace
 from entry_engine import Fact
 from trade_machine import TradeMachine
 
@@ -15,6 +16,8 @@ class ManagementTriggerEvidenceTests(unittest.TestCase):
         self.trade._time = Mock()
         self.trade.state = 'OPEN'
         self.trade.trace = []
+        self.trade.box = SimpleNamespace(management_choices=('reduce',))
+        self.trade.last_at = None
 
     def test_rejects_invalid_timestamps_and_sources(self):
         # Fact rejects malformed timestamps/sources at construction time.
