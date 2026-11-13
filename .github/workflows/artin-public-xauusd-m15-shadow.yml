@@ -94,6 +94,39 @@ jobs:
           with open('shadow_audit/geometry.json','w') as f:json.dump(result,f,indent=2)
           print(json.dumps(result,indent=2))
           PY
+      - name: Audit all 13 Artin routes against actual public M15 data without fabricated predicates
+        run: |
+          python - <<'PY'
+          import csv,glob,json
+          from artin_13_real_m15_gap_audit import REQUIRED,COMMON,FAMILY,SHAPE_SUBSET_BY_ROUTE
+          with open('shadow_audit/geometry.json') as f: geometry=json.load(f)
+          with open('shadow_audit/audit.json') as f: source=json.load(f)
+          counts=geometry['raw_geometry_observations']
+          subset_map={'exact_shadowless_nonflat_subset':'exact_shadowless_nonflat',
+                      'three_same_direction_raw_candidate':'three_same_direction_contiguous',
+                      'exact_zero_body_subset':'flat'}
+          result={'schema':'artin_13_route_public_m15_dependency_audit_v1',
+                  'source_sha256':source['source_sha256'],
+                  'market':'Dukascopy XAUUSD M15 BID (NOT Eplanet)',
+                  'source_rows':source['actual_rows'],
+                  'routes':[],'routes_with_all_teacher_predicates':0,
+                  'teacher_trade_signals':0,'trades_executed':0,'profit':None}
+          for route,required in REQUIRED.items():
+              needed=list(dict.fromkeys(COMMON+FAMILY+required))
+              subset=SHAPE_SUBSET_BY_ROUTE.get(route)
+              result['routes'].append({'route_id':route,
+                  'unverified_teacher_predicates':needed,
+                  'unverified_predicate_count':len(needed),
+                  'raw_geometry_subset_name':subset,
+                  'raw_geometry_subset_count':counts[subset_map[subset]] if subset else None,
+                  'teacher_trade_approved':False})
+          if len(result['routes'])!=13:raise SystemExit('REQUIRE_13_ROUTES')
+          with open('shadow_audit/route_dependencies.json','w') as f:json.dump(result,f,indent=2)
+          print(json.dumps({'routes':len(result['routes']),
+                            'teacher_trade_signals':result['teacher_trade_signals'],
+                            'source_rows':result['source_rows'],
+                            'status':'SOURCE_DATA_AUDITED_TEACHER_PREDICATES_MISSING'},indent=2))
+          PY
       - name: Save actual candle audit and source CSV
         uses: actions/upload-artifact@v4
         with:
