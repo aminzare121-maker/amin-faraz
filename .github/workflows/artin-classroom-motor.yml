@@ -12,6 +12,8 @@ on:
       - 'test_artin_stateful_paper_replay.py'
       - 'artin_mt5_demo_evidence.py'
       - 'test_artin_mt5_demo_evidence.py'
+      - 'artin_mt5_demo_probe.py'
+      - 'test_artin_mt5_demo_probe.py'
       - '.github/workflows/artin-classroom-motor.yml'
   workflow_dispatch:
 permissions:
@@ -66,6 +68,9 @@ jobs:
       - name: Run MT5 DEMO evidence validation tests
         shell: bash
         run: python -m unittest discover -s project -p test_artin_mt5_demo_evidence.py -v
+      - name: Test read-only MT5 DEMO terminal probe with mocks
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_mt5_demo_probe.py -v
       - name: Run 13-path classroom motor tests (optimized)
         shell: bash
         env:
