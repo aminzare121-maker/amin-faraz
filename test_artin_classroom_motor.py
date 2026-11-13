@@ -104,6 +104,21 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_verified_teacher_no_entry_overrides_eligible_engine_without_trade(self):
+        row=self.cases_doc['cases'][0]
+        self.assertNotIn('paper_trade',row)
+        row['teacher_choice']='NO_TRADE'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        self.write()
+        result=run(self.src,self.cases,CORE,self.out)
+        self.assertEqual(result['cases'][0]['motor_status'],'ELIGIBLE')
+        self.assertEqual(result['cases'][0]['effective_classroom_action'],
+                         'NO_TRADE_TEACHER_VETO')
+        self.assertEqual(result['teacher_vetoed_cases'],1)
+        self.assertFalse(result['cases'][0]['teacher_entry_ready_for_paper_review'])
+        self.assertEqual(result['orders_sent'],0)
+
     def test_verified_teacher_no_trade_blocks_proposed_paper_lifecycle(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['teacher_choice']='NO_TRADE'
