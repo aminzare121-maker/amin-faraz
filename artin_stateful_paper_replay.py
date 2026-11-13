@@ -51,6 +51,17 @@ def replay(actions_result, position):
         seen.add(ident)
         action = row['execution']
         decision = action.get('decision')
+        if decision in ('MOVE_STOP_TO_ENTRY_PAPER','PAPER_STOP_MOVE_ACCEPTED',
+                        'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL',
+                        'PAPER_POSITION_HELD_STOP_NOT_HIT'):
+            # A classroom decision may refer to a different position. If
+            # identity is supplied, it must match the active paper position.
+            action_position = row.get('position_id')
+            active_position = position.get('position_id')
+            if action_position is not None or active_position is not None:
+                if (not isinstance(active_position,str) or not active_position
+                        or action_position != active_position):
+                    raise PaperReplayError('PAPER_POSITION_IDENTITY_MISMATCH')
         if action.get('order_created') is not False:
             raise PaperReplayError('BROKER_ACTION_FORBIDDEN')
         before = str(stop)
