@@ -51,6 +51,16 @@ class StatefulPaperReplayTests(unittest.TestCase):
         self.assertEqual(result['orders_sent'],0)
         self.assertFalse(result['broker_connected'])
 
+    def test_reject_stop_action_for_different_position_id(self):
+        self.position['position_id']='PAPER-001'
+        action={'decision':'MOVE_STOP_TO_ENTRY_PAPER','order_created':False,
+                'old_stop':'3990','new_stop':'4000',
+                'lots_before':'0.01','lots_after':'0.01'}
+        doc=source(action)
+        doc['classroom_decision_actions'][0]['position_id']='PAPER-002'
+        with self.assertRaisesRegex(PaperReplayError,'PAPER_POSITION_IDENTITY_MISMATCH'):
+            replay(doc,self.position)
+
     def test_reject_order_creation(self):
         with self.assertRaisesRegex(PaperReplayError,'BROKER_ACTION_FORBIDDEN'):
             replay(source({'decision':'NO_TRADE','order_created':True}),self.position)
