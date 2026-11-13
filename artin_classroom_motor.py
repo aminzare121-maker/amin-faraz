@@ -135,6 +135,9 @@ def compile_case(row, index, route_ids):
         raise ClassroomMotorError('INVALID_MARKET_DECISION_TIME')
     if row.get('side') not in ('BUY','SELL'):
         raise ClassroomMotorError('CLASS_CASE_SIDE_REQUIRED')
+    for fact_name,fact in facts.items():
+        if fact['known_at'] > at:
+            raise ClassroomMotorError('FUTURE_MARKET_FACT_IN_CLASS_CASE')
     data = {'rule_id':route,'side':row['side'],'at':at,'facts':facts}
     if 'paper_trade' in row:
         if row.get('source_class') != 'SYNTHETIC_TEST' and not row.get('paper_trade_teacher_source'):
