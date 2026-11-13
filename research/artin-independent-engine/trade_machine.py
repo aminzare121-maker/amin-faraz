@@ -60,9 +60,10 @@ class TradeMachine:
                 return self._event('REJECT',reason='FIXED_LOT_OUTSIDE_CONTRACT_GRID')
             if fixed_lots>sized['lots']:
                 return self._event('REJECT',reason='REQUESTED_FIXED_LOT_EXCEEDS_DECLARED_RISK_BUDGET')
-            fixed_loss=sized['modeled_loss']/sized['lots']*fixed_lots
+            maximum_budget_lots=sized['lots']
+            fixed_loss=sized['modeled_loss']/maximum_budget_lots*fixed_lots
             sized={**sized,'lots':fixed_lots,'modeled_loss':fixed_loss,'volume_policy':'EXPLICIT_FIXED_LOT',
-                   'maximum_budget_lots':sized['lots']}
+                   'maximum_budget_lots':maximum_budget_lots}
         self.plan=MappingProxyType(dict(side=observation.side,entry=entry_price,stop=initial_stop,target=target_price,
                        lots=sized['lots'],risk_budget=budget,box_fingerprint=self._box_fp,
                        target_definition=self.box.target_definition,
