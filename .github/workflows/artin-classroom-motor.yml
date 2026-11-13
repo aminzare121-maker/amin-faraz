@@ -8,6 +8,8 @@ on:
       - 'test_artin_classroom_motor.py'
       - 'artin_classroom_trade_actions.py'
       - 'test_artin_classroom_trade_actions.py'
+      - 'artin_stateful_paper_replay.py'
+      - 'test_artin_stateful_paper_replay.py'
       - '.github/workflows/artin-classroom-motor.yml'
   workflow_dispatch:
 permissions:
@@ -56,6 +58,9 @@ jobs:
         env:
           ARTIN_PINNED_LEGACY_DIR: ${{ github.workspace }}/pinned/research/artin-independent-engine
         run: python -m unittest discover -s project -p test_artin_classroom_trade_actions.py -v
+      - name: Run stateful classroom paper lifecycle tests
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_stateful_paper_replay.py -v
       - name: Run 13-path classroom motor tests (optimized)
         shell: bash
         env:
