@@ -127,6 +127,9 @@ jobs:
                             'source_rows':result['source_rows'],
                             'status':'SOURCE_DATA_AUDITED_TEACHER_PREDICATES_MISSING'},indent=2))
           PY
+      - name: Execute 13-route per-bar tri-state decision bridge
+        run: |
+          python artin_13_per_bar_teacher_bridge.py "$(find shadow_data -name '*.csv' -print -quit)" shadow_audit/tri_state_decisions.json
       - name: Save actual candle audit and source CSV
         uses: actions/upload-artifact@v4
         with:
