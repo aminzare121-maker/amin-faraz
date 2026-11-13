@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/artin-public-xauusd-m15-shadow.yml'
       - 'artin_non_teacher_proxy_backtest.py'
+      - 'artin_research_walkforward.py'
 permissions:
   contents: read
 jobs:
@@ -137,6 +138,9 @@ jobs:
       - name: Backtest two explicit non-teacher geometry proxies and compare spread sensitivity
         run: |
           python artin_non_teacher_proxy_backtest.py "$(find shadow_data -name '*.csv' -print -quit)" shadow_audit/proxy_comparison.json
+      - name: Train-only candidate selection and untouched holdout profitability gate
+        run: |
+          python artin_research_walkforward.py "$(find shadow_data -name '*.csv' -print -quit)" shadow_audit/research_walkforward.json
       - name: Save actual candle audit and source CSV
         uses: actions/upload-artifact@v4
         with:
