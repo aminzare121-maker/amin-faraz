@@ -91,3 +91,19 @@ def replay(actions_result, position):
             'lots': str(lots), 'stop_triggered_in_model': triggered,
             'position_closed_by_broker': False, 'realized_pnl': None,
             'orders_sent': 0, 'journal': journal}
+
+
+def execute_sourced_paper_replay(events_doc, source_folder, core_folder, position):
+    """Run cited teacher actions then reduce their paper position state.
+
+    Both stages are in-memory; errors produce no partial output and no orders.
+    """
+    from artin_classroom_trade_actions import execute
+    actions = execute(events_doc, source_folder, core_folder)
+    state = replay(actions, position)
+    return {'schema': 'artin_sourced_paper_execution_v1',
+            'classroom_actions': actions,
+            'paper_position': state,
+            'orders_sent': 0,
+            'broker_connected': False,
+            'teacher_semantic_certification_auto_granted': False}
