@@ -79,6 +79,18 @@ class ClassroomEngineTests(unittest.TestCase):
                     run(self.src,self.cases,CORE,self.out)
                 self.assertFalse(self.out.exists())
 
+    def test_unverified_real_teacher_scene_cannot_create_paper_entry(self):
+        row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
+        row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['paper_trade_teacher_source']='session_audio'
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=False
+        row['teacher_visual_verified']=False
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,'TEACHER_PAPER_LIFECYCLE_NOT_VERIFIED'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_run_all_thirteen_real_legacy_engines_and_paper_lifecycle(self):
         result=run(self.src,self.cases,CORE,self.out)
         self.assertEqual(result['motor_class_cases'],13)
