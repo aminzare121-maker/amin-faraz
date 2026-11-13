@@ -4,7 +4,7 @@
   "branch_under_test": "artin-record-auth-fix-20261112",
   "source_branch": "tools-makhzan-hub",
   "current_item": "video-q-0010-artin-clip-08",
-  "checked_at_date": "2026-11-12",
+  "checked_at_date": "2026-11-13",
   "evidence": {
     "run_id": 42597293832,
     "failed_job_id": 129102811008,
@@ -15,7 +15,18 @@
     "artifact_expiry_observed": "2026-11-24T10:16:04Z (sample; verify each artifact)",
     "experimental_diff": "one-line workflow credential persistence adjustment",
     "semantic_validation": "NOT_VERIFIED",
-    "learning_workflow_input": "tools-makhzan/courses/artin/inbox/session-*.json"
+    "learning_workflow_input": "tools-makhzan/courses/artin/inbox/session-*.json",
+    "latest_verification": "2026-11-13",
+    "experimental_branch_ahead_by": 2,
+    "experimental_changed_files": [
+      ".github/workflows/tools-makhzan-video001-v13-reusable.yml",
+      "tools-makhzan/courses/artin/checkpoints/VIDEO001_0010_CONTINUATION_20261112.json"
+    ],
+    "original_audio_ocr_expiry": "2026-11-16T10:07:52Z to 2026-11-16T10:08:26Z (observed examples)",
+    "derived_asr_ocr_expiry": "2026-11-24T10:11:13Z to 2026-11-24T10:20:22Z (observed examples)",
+    "fix_execution": "NOT_VERIFIED",
+    "durable_private_archive": "NOT_VERIFIED",
+    "workflow_note": "Reusable workflow uses workflow_call; branch comparison alone does not trigger a run"
   },
   "next_actions": [
     "Verify whether original evidence has a durable private archive, do not assume prior chat claims prove storage",
