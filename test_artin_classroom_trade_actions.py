@@ -62,6 +62,12 @@ class ClassTradeActionsTests(unittest.TestCase):
         return {'event_id':'case-'+kind,'kind':kind,'session':session,
                 'source_segment_ids':[segment],**kwargs}
 
+    def test_nonobject_classroom_event_rejected_before_source_loading(self):
+        for bad in (None, 'bad', 17, []):
+            with self.subTest(bad=bad):
+                with self.assertRaisesRegex(TeacherActionError,'CLASS_EVENT_OBJECT_REQUIRED'):
+                    self.run_events([self.base('NO_ENTRY',21,'before'),bad])
+
     def test_empty_pinned_manifest_cannot_authorize_classroom_actions(self):
         from shutil import copytree
         with tempfile.TemporaryDirectory() as directory:
