@@ -140,8 +140,16 @@ def compile_case(row, index, route_ids):
             raise ClassroomMotorError('FUTURE_MARKET_FACT_IN_CLASS_CASE')
     data = {'rule_id':route,'side':row['side'],'at':at,'facts':facts}
     if 'paper_trade' in row:
-        if row.get('source_class') != 'SYNTHETIC_TEST' and not row.get('paper_trade_teacher_source'):
-            raise ClassroomMotorError('TEACHER_SOURCED_EXIT_RISK_REQUIRED')
+        if row.get('source_class') != 'SYNTHETIC_TEST':
+            if not row.get('paper_trade_teacher_source'):
+                raise ClassroomMotorError('TEACHER_SOURCED_EXIT_RISK_REQUIRED')
+            # Machine ASR or a proposed teacher label is insufficient to
+            # simulate a purportedly teacher-approved entry lifecycle.
+            if (row.get('teacher_choice') != 'ENTER'
+                    or row.get('teacher_choice_verified') is not True
+                    or row.get('teacher_visual_verified') is not True
+                    or not ids):
+                raise ClassroomMotorError('TEACHER_PAPER_LIFECYCLE_NOT_VERIFIED')
         data['paper_trade'] = row['paper_trade']
     proof = {'case_id':cid,'route_id':route,'citation_index':citation_id,
              'video_session':cited['session'],'class_interval_seconds':[start,end],
