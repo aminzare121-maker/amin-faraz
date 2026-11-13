@@ -20,7 +20,7 @@ class TradeMachine:
         self._box_fp,self._engine_fp=box.fingerprint,engine.fingerprint
         self._contract=instrument,costs
         self.state='NEW';self.trace=[];self.plan=None;self.fill=None;self.last_at=None;self.exit_fill=None
-        self.modeled_exposure=None;self.budget_overrun=False;self.last_event_known_at=None
+        self.modeled_exposure=None;self.budget_overrun=False;self.last_event_known_at=None;self.last_coordinator_at=None
 
     def _event(self,status,**fields):
         result=dict(status=status,state=self.state,order_created=False,**fields)
@@ -159,6 +159,8 @@ def execution_event(trade,event,available_at,fill_lots=None):
         return n
     at=moment(event['at']);known=moment(event['known_at']);moment(available_at)
     if known<at or known>available_at:raise ValueError('event availability inconsistent with coordinator clock')
+    if trade.last_coordinator_at is not None and available_at<trade.last_coordinator_at:
+        raise ValueError('coordinator clock must be nondecreasing')
     source=event['source']
     if not isinstance(source,str) or not source.strip():raise ValueError('execution event source required')
     trade._time(at)
@@ -181,6 +183,7 @@ def execution_event(trade,event,available_at,fill_lots=None):
     else:raise ValueError('unsupported execution event')
     trade.last_at=at
     trade.last_event_known_at=known
+    trade.last_coordinator_at=available_at
     metadata=dict(event_at=at,event_known_at=known,event_source=source)
     r.update(metadata);trade.trace[-1].update(metadata)
     return r
