@@ -219,7 +219,13 @@ def run(citation_path, cases_path, core, out):
             comparison='MATCH' if status in ('REJECT','WAIT') else 'MISMATCH_OR_REVIEW_REQUIRED'
         else:
             comparison='NEEDS_SPECIFIC_TEACHER_OUTCOME_REPLAY'
-        results.append({**proof,'motor_status':status,'motor_reason':list(decision['reasons']),
+        teacher_entry_ready=(status=='ELIGIBLE' and teacher=='ENTER'
+                             and proof['teacher_choice_independently_verified']
+                             and proof['teacher_visual_verified']
+                             and comparison=='MATCH')
+        results.append({**proof,'teacher_entry_ready_for_paper_review':teacher_entry_ready,
+                        'live_or_demo_order_authorized':False,
+                        'motor_status':status,'motor_reason':list(decision['reasons']),
                         'motor_source_legacy_26_slot_ids':list(decision['sources']),
                         'motor_source_25_video_citation':proof['citation_index'],
                         'teacher_engine_comparison':comparison,'classroom_instruction_state':scene_state,
@@ -230,6 +236,11 @@ def run(citation_path, cases_path, core, out):
              'motor_entry_decisions':sum(x['motor_status']=='ELIGIBLE' for x in results),
              'motor_teacher_comparisons_confirmed':sum(x['teacher_engine_comparison']=='MATCH' for x in results),
              'paper_lifecycle_cases':len(evaluated['paper_trades']),
+             'teacher_entry_paper_review_ready_cases':sum(
+                 x['teacher_entry_ready_for_paper_review'] for x in results),
+             'unverified_eligible_motor_cases':sum(
+                 x['motor_status']=='ELIGIBLE' and not x['teacher_entry_ready_for_paper_review']
+                 for x in results),
              'all_13_route_implementations_loaded':len(eng.RULE_IDS)==13,
              'trading_authorized':False,'orders_sent':0,
              'teacher_semantic_certification_auto_granted':False,
