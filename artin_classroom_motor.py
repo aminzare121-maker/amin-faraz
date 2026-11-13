@@ -214,6 +214,10 @@ def run(citation_path, cases_path, core, out):
     # Re-evaluate each source-bound case with the pinned Engine to ensure
     # an equal-length reordered stream cannot be attributed to another scene.
     for proof,data,decision in zip(proofs,cases,decisions):
+        if (data['rule_id']!=proof['route_id']
+                or data['side'] not in ('BUY','SELL')
+                or proof['citation_index'] not in index):
+            raise ClassroomMotorError('CLASSROOM_CASE_PROOF_IDENTITY_MISMATCH')
         from entry_engine import Fact,Observation
         expected=eng.Engine(source['plan_id'],tuple(source['allowed_rules'])).evaluate(
             data['rule_id'],
