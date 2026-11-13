@@ -101,6 +101,11 @@ class ClassroomEngineTests(unittest.TestCase):
         self.assertEqual(result['motor_entry_decisions'],13)
         self.assertEqual(result['paper_lifecycle_cases'],1)
         self.assertEqual(result['motor_teacher_comparisons_confirmed'],0)
+        self.assertEqual(result['teacher_entry_paper_review_ready_cases'],0)
+        self.assertEqual(result['unverified_eligible_motor_cases'],13)
+        self.assertTrue(all(not c['teacher_entry_ready_for_paper_review']
+                            and not c['live_or_demo_order_authorized']
+                            for c in result['cases']))
         self.assertEqual(result['orders_sent'],0)
         self.assertTrue(self.out.exists())
         self.assertTrue(all(row['motor_status']=='ELIGIBLE' for row in result['cases']))
