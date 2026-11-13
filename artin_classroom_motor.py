@@ -130,6 +130,13 @@ def compile_case(row, index, route_ids):
     verified_source_ids = {x['asr_segment_id'] for x in cited['excerpts']}
     if not set(ids).issubset(verified_source_ids):
         raise ClassroomMotorError('CLASS_SOURCE_SEGMENT_NOT_IN_CITATION')
+    # A citation can span several distinct chart decisions. A segment from
+    # another moment in that citation cannot certify this case's scene.
+    excerpts_by_id = {x['asr_segment_id']: x for x in cited['excerpts']}
+    for segment_id in ids:
+        excerpt = excerpts_by_id[segment_id]
+        if not (excerpt['start'] < end and start < excerpt['end']):
+            raise ClassroomMotorError('CLASS_SOURCE_SEGMENT_OUTSIDE_CASE_SCENE')
     at = row.get('market_decision_at')
     if type(at) is not int or at < 0:
         raise ClassroomMotorError('INVALID_MARKET_DECISION_TIME')
