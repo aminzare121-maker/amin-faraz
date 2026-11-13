@@ -341,6 +341,15 @@ def _stop_triggered_exit(event, text):
         return {'decision':'WAIT_FOR_SOURCED_QUOTE','order_created':False,
                 'position_closed':False,'stop_unchanged':str(stop),
                 'lots_unchanged':str(lots)}
+    # If a decision clock is supplied, the market observation must have
+    # been available at that instant. Never replay a future quote as a stop.
+    if 'decision_at' in event:
+        at=event['decision_at']
+        known=quote.get('known_at')
+        if type(at) is not int or type(known) is not int or known>at:
+            return {'decision':'WAIT_FOR_CAUSAL_QUOTE','order_created':False,
+                    'position_closed':False,'stop_unchanged':str(stop),
+                    'lots_unchanged':str(lots)}
     bid=money(quote.get('bid'),'bid')
     ask=money(quote.get('ask'),'ask')
     if bid>ask:
