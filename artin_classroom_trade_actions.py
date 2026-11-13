@@ -368,6 +368,8 @@ def execute(events_doc, source_folder, core_folder):
         raise TeacherActionError('INVALID_EVENTS_SCHEMA')
     events=events_doc['events']
     if not events:raise TeacherActionError('EVENTS_REQUIRED')
+    if any(not isinstance(e,dict) for e in events):
+        raise TeacherActionError('CLASS_EVENT_OBJECT_REQUIRED')
     index,digests=source_index(source_folder,[e.get('session') for e in events])
     import sys
     core=Path(core_folder).resolve()
