@@ -76,11 +76,23 @@ def run_document(document):
     # Independent one-trade replays retain their historical behavior.
     if sum('paper_trade' in case for case in document['cases']) > 1:
         raise ValueError('MULTI_TRADE_AGGREGATE_RISK_NOT_RESERVED: account-wide reservation required before multi-trade replay')
+    # Validate every observation and rule before any paper lifecycle is run.
+    # A malformed later case must never leave an earlier case partially replayed.
+    prepared=[]
+    for case in document['cases']:
+        if not isinstance(case,dict):
+            raise ValueError('Each case must be an object')
+        if not isinstance(case.get('facts'),dict):
+            raise ValueError('Case facts must be a sourced mapping')
+        facts={k:Fact(v['value'],v['known_at'],v['source']) for k,v in case['facts'].items()}
+        observation=Observation(case['side'],case['at'],facts)
+        if not isinstance(case.get('rule_id'),str) or case['rule_id'] not in engine.allowed_rules:
+            raise ValueError('Case rule must belong to the fixed plan')
+        prepared.append(observation)
     rows=[];paper=[]
     for case_index,case in enumerate(document['cases']):
         case_id=case_ids[case_index]
-        facts={k:Fact(v['value'],v['known_at'],v['source']) for k,v in case['facts'].items()}
-        observation=Observation(case['side'],case['at'],facts)
+        observation=prepared[case_index]
         rows.append({'case_id':case_id,'case_index':case_index,**asdict(engine.evaluate(case['rule_id'],observation))})
         if 'paper_trade' in case:paper.append({'case_id':case_id,'case_index':case_index,'rule_id':case['rule_id'],**run_paper_trade(engine,case,observation)})
     return {'mode':'ANNOTATED_OFFLINE','plan_fingerprint':engine.fingerprint,
