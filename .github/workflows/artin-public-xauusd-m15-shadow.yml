@@ -5,6 +5,7 @@ on:
     branches: [artin-v13-under180-development]
     paths:
       - '.github/workflows/artin-public-xauusd-m15-shadow.yml'
+      - 'artin_non_teacher_proxy_backtest.py'
 permissions:
   contents: read
 jobs:
