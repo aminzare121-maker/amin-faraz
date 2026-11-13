@@ -127,6 +127,12 @@ def compile_case(row, index, route_ids):
     ids = row.get('source_asr_segment_ids', [])
     if not isinstance(ids,list) or len(ids) != len(set(ids)):
         raise ClassroomMotorError('INVALID_SOURCE_SEGMENT_IDS')
+    # A claimed independently verified teacher decision must name the exact
+    # in-scene speech segments. Route-level acceptance cannot substitute for
+    # case-level attribution; an empty list would otherwise pass subset checks.
+    if (row.get('teacher_choice_verified') is True
+            and row.get('source_class') != 'SYNTHETIC_TEST' and not ids):
+        raise ClassroomMotorError('VERIFIED_TEACHER_CASE_REQUIRES_SCENE_SPEECH')
     verified_source_ids = {x['asr_segment_id'] for x in cited['excerpts']}
     if not set(ids).issubset(verified_source_ids):
         raise ClassroomMotorError('CLASS_SOURCE_SEGMENT_NOT_IN_CITATION')
