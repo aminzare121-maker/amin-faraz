@@ -113,8 +113,14 @@ def compile_case(row, index, route_ids):
     for name,f in facts.items():
         if not isinstance(name,str) or not isinstance(f,dict) or not f.get('source') or 'known_at' not in f:
             raise ClassroomMotorError('UNSOURCED_MARKET_FACT')
+        if not isinstance(f['source'],str):
+            raise ClassroomMotorError('INVALID_MARKET_FACT_SOURCE')
         if f['source'].startswith('SYNTHETIC_') and row.get('source_class') != 'SYNTHETIC_TEST':
             raise ClassroomMotorError('UNDECLARED_SYNTHETIC_SOURCE')
+        # Source-backed predicates cannot be available after the decision
+        # clock, even if the pinned evaluator later decides to WAIT.
+        if type(f['known_at']) is not int or f['known_at'] < 0:
+            raise ClassroomMotorError('INVALID_MARKET_FACT_CLOCK')
     teacher_choice = row.get('teacher_choice')
     if teacher_choice is not None and teacher_choice not in ALLOWED_CHOICES:
         raise ClassroomMotorError('INVALID_CLASSROOM_DECISION_LABEL')
