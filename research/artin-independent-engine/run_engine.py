@@ -41,6 +41,10 @@ def run_paper_trade(engine,case,observation):
 
 def run_document(document):
     if document.get('mode')!='ANNOTATED_OFFLINE':raise ValueError('Only ANNOTATED_OFFLINE mode exists')
+    if not isinstance(document.get('cases'),list) or any(not isinstance(case,dict) for case in document['cases']):
+        raise ValueError('Cases must be a list of objects')
+    if not isinstance(document.get('allowed_rules'),list):
+        raise ValueError('Allowed rules must be a list')
     # A batch must not reach rule construction or any evaluation when it
     # cannot reserve aggregate exposure across multiple paper trades.
     if sum('paper_trade' in case for case in document['cases']) > 1:
