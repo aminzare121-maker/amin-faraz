@@ -58,6 +58,18 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_invalid_fact_clock_rejected_before_engine(self):
+        for clock in (-1, 1.5, '100', None):
+            with self.subTest(clock=clock):
+                self.cases_doc=records()
+                first=self.cases_doc['cases'][0]
+                key=next(iter(first['facts']))
+                first['facts'][key]['known_at']=clock
+                self.write()
+                with self.assertRaisesRegex(ClassroomMotorError,'INVALID_MARKET_FACT_CLOCK'):
+                    run(self.src,self.cases,CORE,self.out)
+                self.assertFalse(self.out.exists())
+
     def test_run_all_thirteen_real_legacy_engines_and_paper_lifecycle(self):
         result=run(self.src,self.cases,CORE,self.out)
         self.assertEqual(result['motor_class_cases'],13)
