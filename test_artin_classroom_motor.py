@@ -84,6 +84,18 @@ class ClassroomEngineTests(unittest.TestCase):
                         run(self.src, self.cases, CORE, self.out)
                 self.assertFalse(self.out.exists())
 
+    def test_reordered_equal_length_decisions_cannot_match_wrong_teacher_scenes(self):
+        from run_engine import run_document as original_run
+        def reorder(source):
+            result=original_run(source)
+            result['decisions'][0],result['decisions'][1] = (
+                result['decisions'][1],result['decisions'][0])
+            return result
+        with patch('run_engine.run_document', side_effect=reorder):
+            with self.assertRaisesRegex(ClassroomMotorError,'CLASSROOM_DECISION_IDENTITY_MISMATCH'):
+                run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_actual_classroom_excerpt_with_missing_market_facts_is_review_not_trade(self):
         row=self.cases_doc['cases'][0]
         row['source_class']='CLASSROOM_ASR_CANDIDATE'
