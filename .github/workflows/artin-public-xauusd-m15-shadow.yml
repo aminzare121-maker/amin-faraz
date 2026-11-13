@@ -56,11 +56,49 @@ jobs:
           with open('shadow_audit/audit.json','w') as f:json.dump(result,f,indent=2)
           print(json.dumps(result,indent=2))
           PY
+      - name: Scan actual M15 candle geometry without inventing teacher trade rules
+        run: |
+          python - <<'PY'
+          import csv,glob,json
+          p=glob.glob('shadow_data/**/*.csv',recursive=True)[0]
+          rows=list(csv.DictReader(open(p,encoding='utf-8-sig')))
+          metrics={'bullish':0,'bearish':0,'flat':0,'exact_shadowless_nonflat':0,
+                   'body_greater_than_both_shadows':0,'three_same_direction_contiguous':0,
+                   'up_fvg_raw':0,'down_fvg_raw':0,'outside_previous_range':0}
+          bars=[]
+          for row in rows:
+              t=int(row.get('timestamp') or row.get('time'))
+              if t>10**11:t//=1000
+              o,h,l,c=(float(row[k]) for k in ('open','high','low','close'))
+              bars.append((t,o,h,l,c))
+          for i,(t,o,h,l,c) in enumerate(bars):
+              direction=(c>o)-(c<o)
+              metrics['bullish' if direction>0 else 'bearish' if direction<0 else 'flat']+=1
+              upper=h-max(o,c);lower=min(o,c)-l;body=abs(c-o)
+              if direction and upper<1e-8 and lower<1e-8:metrics['exact_shadowless_nonflat']+=1
+              if body>upper and body>lower:metrics['body_greater_than_both_shadows']+=1
+              if i>0 and t-bars[i-1][0]==900:
+                  prev=bars[i-1]
+                  if h>prev[2] and l<prev[3]:metrics['outside_previous_range']+=1
+              if i>1 and t-bars[i-1][0]==900 and bars[i-1][0]-bars[i-2][0]==900:
+                  a,b=bars[i-2],bars[i-1]
+                  if direction and direction==((b[4]>b[1])-(b[4]<b[1]))==((a[4]>a[1])-(a[4]<a[1])):
+                      metrics['three_same_direction_contiguous']+=1
+                  if l>a[2]:metrics['up_fvg_raw']+=1
+                  if h<a[3]:metrics['down_fvg_raw']+=1
+          result={'schema':'artin_public_xauusd_m15_geometry_shadow_v1',
+                  'provider':'Dukascopy NOT Eplanet','source_rows':len(bars),
+                  'raw_geometry_observations':metrics,
+                  'teacher_decisions_verified':0,'executed_teacher_trades':0,
+                  'net_profit':None,'model_shadow_only':True}
+          with open('shadow_audit/geometry.json','w') as f:json.dump(result,f,indent=2)
+          print(json.dumps(result,indent=2))
+          PY
       - name: Save actual candle audit and source CSV
         uses: actions/upload-artifact@v4
         with:
           name: artin-dukascopy-m15-one-year-source-and-audit
           path: |
             shadow_data/**/*.csv
-            shadow_audit/audit.json
+            shadow_audit/*.json
           retention-days: 7
