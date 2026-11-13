@@ -17,7 +17,7 @@
     "semantic_validation": "NOT_VERIFIED",
     "learning_workflow_input": "tools-makhzan/courses/artin/inbox/session-*.json",
     "latest_verification": "2026-11-14",
-    "experimental_branch_ahead_by": 4,
+    "experimental_branch_ahead_by": 5,
     "experimental_changed_files": [
       ".github/workflows/tools-makhzan-video001-v13-reusable.yml",
       "tools-makhzan/courses/artin/checkpoints/VIDEO001_0010_CONTINUATION_20261112.json"
@@ -30,7 +30,19 @@
     "auth_smoke_run_id": 43491774761,
     "auth_smoke_job_id": 132114519026,
     "auth_smoke_conclusion": "success",
-    "full_record_job_after_fix": "NOT_RUN"
+    "full_record_job_after_fix": "NOT_RUN",
+    "original_artifact_sample_download": {
+      "artifact_id": 13665330108,
+      "artifact_name": "v13-video001-artin-course-001-video-q-0010-artin-clip-08-original-audio-10",
+      "zip_sha256": "b4d18c5ccbb4bb2803085a9b951949373a56bbd4562e14acb7535047834a866b",
+      "digest_matches_github": true,
+      "zip_entries": [
+        "audio/batch_001/part_11.wav",
+        "fast_av_manifest.json"
+      ],
+      "storage": "temporary execution workspace only; durable private archive NOT VERIFIED",
+      "verified_at": "2026-11-14"
+    }
   },
   "next_actions": [
     "Verify durable private archive of raw 0010 audio/images before 2026-11-16 observed expiry; compare SHA256",
