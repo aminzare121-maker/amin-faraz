@@ -68,6 +68,19 @@ class ClassTradeActionsTests(unittest.TestCase):
                 with self.assertRaisesRegex(TeacherActionError,'CLASS_EVENT_OBJECT_REQUIRED'):
                     self.run_events([self.base('NO_ENTRY',21,'before'),bad])
 
+    def test_future_quote_cannot_trigger_paper_stop(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'BUY','entry':'4000','current_stop':'3995','lots':'0.01'},
+                    quote={'bid':'3994','ask':'3995','source':'SYNTHETIC_QUOTE',
+                           'known_at':2000},
+                    decision_at=1000)
+        # The class exit words are split across two sourced segments.
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_QUOTE')
+        self.assertFalse(result['order_created'])
+        self.assertFalse(result['position_closed'])
+
     def test_empty_pinned_manifest_cannot_authorize_classroom_actions(self):
         from shutil import copytree
         with tempfile.TemporaryDirectory() as directory:
