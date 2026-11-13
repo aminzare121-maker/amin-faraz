@@ -133,6 +133,9 @@ jobs:
       - name: Execute existing 13-route source-linked teacher engine on annual M15
         run: |
           python artin_existing_engine_real_m15.py "$(find shadow_data -name '*.csv' -print -quit)" shadow_audit/existing_teacher_engine.json
+      - name: Backtest two explicit non-teacher geometry proxies and compare spread sensitivity
+        run: |
+          python artin_non_teacher_proxy_backtest.py "$(find shadow_data -name '*.csv' -print -quit)" shadow_audit/proxy_comparison.json
       - name: Save actual candle audit and source CSV
         uses: actions/upload-artifact@v4
         with:
