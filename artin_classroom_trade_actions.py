@@ -126,6 +126,11 @@ def _three_candle_close_entry(event, text):
             raise TeacherActionError('INVALID_THREE_CANDLE_OHLC')
         if not isinstance(candle.get('source'),str) or not candle['source'].strip():
             raise TeacherActionError('UNSOURCED_M15_CANDLE')
+        # A finalized candle is not valid until its actual close. The
+        # explicit source clock is required outside synthetic fixtures.
+        if not candle['source'].startswith('SYNTHETIC_') and 'known_at' not in candle:
+            return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
+                    'bar_open_time':t}
         direction.append('BUY' if c>o else 'SELL' if c<o else 'FLAT')
     if times[1]-times[0]!=900 or times[2]-times[1]!=900:
         return {'decision':'REJECT_THREE_CANDLE_SEQUENCE_GAP','order_created':False}
