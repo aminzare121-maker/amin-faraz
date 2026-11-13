@@ -280,6 +280,26 @@ class ClassroomEngineTests(unittest.TestCase):
         with self.assertRaisesRegex(ClassroomMotorError,'CLASS_CITATION_ROUTE_MISMATCH'):
             run(self.src,self.cases,CORE,self.out)
 
+    def test_same_citation_segment_from_different_scene_is_rejected(self):
+        # The citation is 100..200, but this decision scene is 150..160.
+        # ASR at 105..108 belongs to another moment of the lesson.
+        row=self.cases_doc['cases'][0]
+        row['class_seconds']=[150,160]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'CLASS_SOURCE_SEGMENT_OUTSIDE_CASE_SCENE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
+    def test_scene_boundary_touch_without_overlap_is_rejected(self):
+        row=self.cases_doc['cases'][0]
+        row['class_seconds']=[108,120]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'CLASS_SOURCE_SEGMENT_OUTSIDE_CASE_SCENE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_no_unverified_asr_ids_spliced(self):
         self.cases_doc['cases'][0]['source_asr_segment_ids']=['not-a-source'];self.write()
         with self.assertRaisesRegex(ClassroomMotorError,'CLASS_SOURCE_SEGMENT_NOT_IN_CITATION'):
