@@ -58,6 +58,15 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_future_fact_cannot_enter_classroom_engine(self):
+        first=self.cases_doc['cases'][0]
+        key=next(iter(first['facts']))
+        first['facts'][key]['known_at']=first['market_decision_at']+1
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,'FUTURE_MARKET_FACT_IN_CLASS_CASE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_invalid_fact_clock_rejected_before_engine(self):
         for clock in (-1, 1.5, '100', None):
             with self.subTest(clock=clock):
