@@ -58,6 +58,27 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_private_dossier_zero_certification_blocks_claimed_teacher_entry(self):
+        row=self.cases_doc['cases'][0]
+        row.pop('paper_trade',None)
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        self.write()
+        private=[]
+        for i in range(3):
+            p=self.root/('private_'+str(i)+'.json')
+            p.write_text('{}',encoding='utf8')
+            private.append(p)
+        with patch('artin_13_teacher_acceptance_matrix.evaluate',
+                   return_value={'routes':[{'route_id':row['rule_id'],
+                                            'teacher_case_certified':False,
+                                            'engine_decision_replay_certified':False}]}):
+            with self.assertRaisesRegex(ClassroomMotorError,
+                                        'PRIVATE_ACCEPTANCE_DOES_NOT_CERTIFY_TEACHER_CASE'):
+                run(self.src,self.cases,CORE,self.out,private)
+        self.assertFalse(self.out.exists())
+
     def test_future_fact_cannot_enter_classroom_engine(self):
         first=self.cases_doc['cases'][0]
         key=next(iter(first['facts']))
