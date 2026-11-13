@@ -4,7 +4,7 @@
   "branch_under_test": "artin-record-auth-fix-20261112",
   "source_branch": "tools-makhzan-hub",
   "current_item": "video-q-0010-artin-clip-08",
-  "checked_at_date": "2026-11-13",
+  "checked_at_date": "2026-11-14",
   "evidence": {
     "run_id": 42597293832,
     "failed_job_id": 129102811008,
@@ -16,24 +16,27 @@
     "experimental_diff": "one-line workflow credential persistence adjustment",
     "semantic_validation": "NOT_VERIFIED",
     "learning_workflow_input": "tools-makhzan/courses/artin/inbox/session-*.json",
-    "latest_verification": "2026-11-13",
-    "experimental_branch_ahead_by": 2,
+    "latest_verification": "2026-11-14",
+    "experimental_branch_ahead_by": 4,
     "experimental_changed_files": [
       ".github/workflows/tools-makhzan-video001-v13-reusable.yml",
       "tools-makhzan/courses/artin/checkpoints/VIDEO001_0010_CONTINUATION_20261112.json"
     ],
     "original_audio_ocr_expiry": "2026-11-16T10:07:52Z to 2026-11-16T10:08:26Z (observed examples)",
     "derived_asr_ocr_expiry": "2026-11-24T10:11:13Z to 2026-11-24T10:20:22Z (observed examples)",
-    "fix_execution": "NOT_VERIFIED",
+    "fix_execution": "ISOLATED_AUTH_SMOKE_SUCCESS_ONLY",
     "durable_private_archive": "NOT_VERIFIED",
-    "workflow_note": "Reusable workflow uses workflow_call; branch comparison alone does not trigger a run"
+    "workflow_note": "Reusable workflow uses workflow_call; branch comparison alone does not trigger a run",
+    "auth_smoke_run_id": 43491774761,
+    "auth_smoke_job_id": 132114519026,
+    "auth_smoke_conclusion": "success",
+    "full_record_job_after_fix": "NOT_RUN"
   },
   "next_actions": [
-    "Verify whether original evidence has a durable private archive, do not assume prior chat claims prove storage",
-    "Run isolated CI on experimental branch and verify authentication fix before merge",
-    "Map source ASR/OCR/chat/board/image timestamps into session evidence with SHA256 provenance",
-    "Compare each proposed semantic interpretation with actual instructor evidence; do not create executable trading rules without validation",
-    "Advance sequentially through 0025; preserve raw sources and V12"
+    "Verify durable private archive of raw 0010 audio/images before 2026-11-16 observed expiry; compare SHA256",
+    "Execute full corrected record job for 0010 on an authorized experimental path; inspect receipt and logs",
+    "Align speech/chat/board/image evidence by source timestamps and SHA256, then perform semantic validation",
+    "Advance sequentially from first missing verified receipt through 0025 without touching V12 or trading"
   ],
   "safety": {
     "real_or_demo_trades": false,
