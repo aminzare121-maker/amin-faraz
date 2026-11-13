@@ -107,6 +107,10 @@ class TradeMachine:
 
     def manage(self,label,new_stop,trigger,at):
         self._fixed();self._time(at)
+        # A rejected/reviewed management observation still advances the causal clock.
+        # Otherwise a later direct manage() call could replay an earlier timestamp.
+        if self.state in ('OPEN','OPEN_REVIEW'):
+            self.last_at=at
         if self.state=='OPEN_REVIEW':
             return self._event('REVIEW',reason='INVALID_ENTRY_FILL_REQUIRES_REVIEW_BEFORE_MANAGEMENT',realized_pnl=None)
         if self.state!='OPEN':raise ValueError('open paper trade required')
