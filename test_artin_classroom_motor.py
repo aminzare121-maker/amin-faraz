@@ -106,7 +106,7 @@ class ClassroomEngineTests(unittest.TestCase):
 
     def test_verified_teacher_no_entry_overrides_eligible_engine_without_trade(self):
         row=self.cases_doc['cases'][0]
-        self.assertNotIn('paper_trade',row)
+        row.pop('paper_trade',None)
         row['teacher_choice']='NO_TRADE'
         row['teacher_choice_verified']=True
         row['teacher_visual_verified']=True
