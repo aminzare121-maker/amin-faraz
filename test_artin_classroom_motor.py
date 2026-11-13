@@ -58,6 +58,22 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_real_teacher_claim_without_private_acceptance_is_blocked(self):
+        row=self.cases_doc['cases'][0]
+        row.pop('paper_trade',None)
+        row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        for fact in row['facts'].values():
+            fact['source']='CLASSROOM_SOURCE_UNVERIFIED'
+        self.cases_doc['cases']=[row]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                'PRIVATE_ACCEPTANCE_REQUIRED_FOR_REAL_TEACHER_CLAIM'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_private_dossier_zero_certification_blocks_claimed_teacher_entry(self):
         row=self.cases_doc['cases'][0]
         row.pop('paper_trade',None)
