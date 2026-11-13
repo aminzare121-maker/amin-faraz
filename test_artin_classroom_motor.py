@@ -79,6 +79,17 @@ class ClassroomEngineTests(unittest.TestCase):
                     run(self.src,self.cases,CORE,self.out)
                 self.assertFalse(self.out.exists())
 
+    def test_non_synthetic_paper_trade_requires_structured_payload(self):
+        row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
+        row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['paper_trade']='INVALID'
+        for fact in row['facts'].values():
+            fact['source']='CLASSROOM_TEST_NON_SYNTHETIC_SOURCE'
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,'PAPER_LIFECYCLE_OBJECT_REQUIRED'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_teacher_entry_engine_conflict_blocks_paper_lifecycle(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['teacher_choice']='ENTER'
