@@ -396,6 +396,11 @@ def execute(events_doc, source_folder, core_folder):
             raise TeacherActionError('EVENT_ID_DUPLICATE_OR_MISSING')
         seen.add(name)
         rows,text=_evidence(event,index)
+        # Reject out-of-order classroom evidence before interpreting or executing
+        # the associated action, not after producing its decision.
+        first=rows[0]['start_seconds'];last=rows[-1]['end_seconds'];sess=event['session']
+        if first<previous_time.get(sess,-1):raise TeacherActionError('CLASSROOM_SEQUENCE_REVERSED')
+        previous_time[sess]=last
         if kind in ('NO_ENTRY','ENTRY_AFTER_CONFIRMATION'):
             action=_decision(event,text)
         elif kind=='THREE_CANDLE_CLOSE_ENTRY':action=_three_candle_close_entry(event,text)
@@ -405,10 +410,6 @@ def execute(events_doc, source_folder, core_folder):
             action=_sourced_stop_move(event,text)
         elif kind=='STOP_EXIT_TRIGGER':action=_stop_triggered_exit(event,text)
         else:raise TeacherActionError('UNKNOWN_TEACHER_CLASS_EVENT')
-        # The speech must appear in strictly class chronological order per session.
-        first=rows[0]['start_seconds'];last=rows[-1]['end_seconds'];sess=event['session']
-        if first<previous_time.get(sess,-1):raise TeacherActionError('CLASSROOM_SEQUENCE_REVERSED')
-        previous_time[sess]=last
         results.append({'event_id':name,'session':sess,'start_seconds':first,
                         'end_seconds':last,'source_segment_ids':event['source_segment_ids'],
                         'original_audio_sha256s':list(dict.fromkeys(x['source_audio_sha256'] for x in rows)),
