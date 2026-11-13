@@ -374,8 +374,19 @@ def execute(events_doc, source_folder, core_folder):
     manifest=json.loads((core/'LEGACY_SHA_MANIFEST.json').read_text(encoding='utf8'))
     if manifest.get('source_commit') != 'b48fb06f8b2b0d134292025f5b27fc670ad2a293':
         raise TeacherActionError('PINNED_ENGINE_REVISION_MISMATCH')
-    for filename,expected in manifest.get('files_sha256',{}).items():
-        if hashlib.sha256((core/filename).read_bytes()).hexdigest()!=expected:
+    hashes=manifest.get('files_sha256')
+    required={'entry_engine.py','run_engine.py','trade_machine.py','raw_pipeline.py'}
+    if not isinstance(hashes,dict) or not required.issubset(hashes):
+        raise TeacherActionError('PINNED_ENGINE_HASH_COVERAGE_MISSING')
+    for filename,expected in hashes.items():
+        if (not isinstance(filename,str) or not isinstance(expected,str)
+                or not re.fullmatch(r'[0-9a-f]{64}',expected)
+                or Path(filename).is_absolute() or '..' in Path(filename).parts):
+            raise TeacherActionError('PINNED_ENGINE_MANIFEST_INVALID')
+        path=(core/filename).resolve()
+        if not path.is_relative_to(core) or not path.is_file():
+            raise TeacherActionError('PINNED_ENGINE_MANIFEST_INVALID')
+        if hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
             raise TeacherActionError('PINNED_ENGINE_SOURCE_TAMPERED')
     if str(core) not in sys.path:sys.path.insert(0,str(core))
     results=[];seen=set();previous_time={}
