@@ -346,7 +346,8 @@ def _stop_triggered_exit(event, text):
     if 'decision_at' in event:
         at=event['decision_at']
         known=quote.get('known_at')
-        if type(at) is not int or type(known) is not int or known>at:
+        if (type(at) is not int or type(known) is not int
+                or known>at or known<0):
             return {'decision':'WAIT_FOR_CAUSAL_QUOTE','order_created':False,
                     'position_closed':False,'stop_unchanged':str(stop),
                     'lots_unchanged':str(lots)}
@@ -354,6 +355,8 @@ def _stop_triggered_exit(event, text):
     ask=money(quote.get('ask'),'ask')
     if bid>ask:
         raise TeacherActionError('STOP_EXIT_BID_EXCEEDS_ASK')
+    # Quotes have to be strictly positive and finite (money() enforces both).
+    # A stop-trigger observation is not evidence of a broker fill.
     observed=bid if side=='BUY' else ask
     touched=observed<=stop if side=='BUY' else observed>=stop
     if not touched:
