@@ -354,7 +354,9 @@ class ClassTradeActionsTests(unittest.TestCase):
                 e=self.three_candle_event()
                 e['candles'][2]['known_at']=observed
                 result=self.run_events([e])['classroom_decision_actions'][0]['execution']
-                self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_M15_BAR')
+                expected=('REJECT_LATE_M15_BAR_FOR_THIRD_CLOSE' if observed==3601
+                          else 'WAIT_FOR_CAUSAL_M15_BAR')
+                self.assertEqual(result['decision'],expected)
                 self.assertFalse(result['order_created'])
         e=self.three_candle_event()
         e['candles'][2]['known_at']=3600
