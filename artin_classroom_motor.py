@@ -169,6 +169,15 @@ def run(citation_path, cases_path, core, out):
     decisions = evaluated.get('decisions')
     if not isinstance(decisions, list) or len(decisions) != len(proofs):
         raise ClassroomMotorError('CLASSROOM_DECISION_COUNT_MISMATCH')
+    # Never associate a decision with the wrong teacher scene merely because
+    # the stream length matches. The pinned runner may return an equal-length
+    # but reordered/duplicated stream, which must not become a false MATCH.
+    for position,(proof,decision) in enumerate(zip(proofs,decisions)):
+        if (not isinstance(decision,dict)
+                or decision.get('case_id') != proof['case_id']
+                or decision.get('case_index') != position
+                or decision.get('rule_id') != proof['route_id']):
+            raise ClassroomMotorError('CLASSROOM_DECISION_IDENTITY_MISMATCH')
     results=[]
     for proof,decision in zip(proofs,decisions):
         status=decision['status']; teacher=proof['teacher_choice_in_record']
