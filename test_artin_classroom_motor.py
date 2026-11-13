@@ -66,6 +66,9 @@ class ClassroomEngineTests(unittest.TestCase):
         row['teacher_choice_verified']=True
         row['teacher_visual_verified']=True
         row['source_asr_segment_ids']=[]
+        # Isolate the missing-speech guard from the separate synthetic-source guard.
+        for fact in row['facts'].values():
+            fact['source']='CLASSROOM_TEST_FIXTURE_NOT_ORIGINAL_EVIDENCE'
         idx=index_original_citations(self.source_doc,RULE_IDS)
         with self.assertRaisesRegex(
                 ClassroomMotorError,'VERIFIED_TEACHER_CASE_REQUIRES_SCENE_SPEECH'):
