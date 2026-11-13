@@ -187,11 +187,18 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
         private_docs = [json.loads(Path(p).read_text(encoding='utf8'))
                         for p in private_acceptance_sources]
         acceptance = evaluate(*private_docs)
-        accepted_routes = {r['route_id'] for r in acceptance['routes']
-                           if r['teacher_case_certified'] and
-                           r['engine_decision_replay_certified']}
+        # Route-level acceptance is not case-level proof. Only exact case IDs
+        # explicitly certified by the independent evaluator may authorize a
+        # teacher claim. The current evaluator publishes no such IDs.
+        accepted_cases = {
+            (r['route_id'], case_id)
+            for r in acceptance['routes']
+            if r['teacher_case_certified'] and r['engine_decision_replay_certified']
+            for case_id in r.get('certified_case_ids', [])
+            if isinstance(case_id, str) and case_id.strip()
+        }
     else:
-        accepted_routes = None
+        accepted_cases = None
     eng, paper = load_pinned(core)
     raw_citations = json.loads(Path(citation_path).read_text(encoding='utf8'))
     index = index_original_citations(raw_citations, eng.RULE_IDS)
@@ -204,16 +211,16 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
     cases=[];proofs=[];seen=set()
     for row in rows:
         data, proof=compile_case(row,index,eng.RULE_IDS)
-        if (proof['source_class'] != 'SYNTHETIC_TEST' and accepted_routes is None
+        if (proof['source_class'] != 'SYNTHETIC_TEST' and accepted_cases is None
                 and (proof['teacher_choice_independently_verified']
                      or proof['teacher_visual_verified']
                      or row.get('paper_trade_teacher_source'))):
             raise ClassroomMotorError('PRIVATE_ACCEPTANCE_REQUIRED_FOR_REAL_TEACHER_CLAIM')
-        if accepted_routes is not None and (
+        if accepted_cases is not None and (
                 proof['teacher_choice_independently_verified']
                 or proof['teacher_visual_verified']
                 or row.get('paper_trade_teacher_source')):
-            if proof['route_id'] not in accepted_routes:
+            if (proof['route_id'], proof['case_id']) not in accepted_cases:
                 raise ClassroomMotorError('PRIVATE_ACCEPTANCE_DOES_NOT_CERTIFY_TEACHER_CASE')
         if proof['case_id'] in seen:
             raise ClassroomMotorError('DUPLICATE_TEACHER_CLASS_CASE')
