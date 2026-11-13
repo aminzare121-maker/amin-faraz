@@ -177,6 +177,14 @@ def run(citation_path, cases_path, core, out):
         if proof['case_id'] in seen:
             raise ClassroomMotorError('DUPLICATE_TEACHER_CLASS_CASE')
         seen.add(proof['case_id']);cases.append(data);proofs.append(proof)
+    # Even a structurally valid paper trade must not be replayed against a
+    # verified teacher NO_TRADE instruction. Resolve the conflict before
+    # invoking the pinned lifecycle runner, not merely in the final report.
+    for data,proof in zip(cases,proofs):
+        if ('paper_trade' in data and proof['teacher_choice_in_record']=='NO_TRADE'
+                and proof['teacher_choice_independently_verified']
+                and proof['teacher_visual_verified']):
+            raise ClassroomMotorError('VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE')
     source = {'mode':'ANNOTATED_OFFLINE','plan_id':'ARTIN_CLASS_25_VIDEO_TEACHER_MOTOR',
               'allowed_rules':list(eng.RULE_IDS),'cases':cases,
               'synthetic_only':all(p['source_class']=='SYNTHETIC_TEST' for p in proofs)}
