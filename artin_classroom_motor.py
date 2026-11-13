@@ -251,7 +251,14 @@ def run(citation_path, cases_path, core, out):
                              and proof['teacher_choice_independently_verified']
                              and proof['teacher_visual_verified']
                              and comparison=='MATCH')
-        results.append({**proof,'teacher_entry_ready_for_paper_review':teacher_entry_ready,
+        effective_classroom_action=(
+            'NO_TRADE_TEACHER_VETO' if teacher=='NO_TRADE'
+            and proof['teacher_choice_independently_verified']
+            and proof['teacher_visual_verified']
+            else 'PAPER_ENTRY_REVIEW_CANDIDATE' if teacher_entry_ready
+            else 'WAIT_FOR_TEACHER_AND_ENGINE_ALIGNMENT')
+        results.append({**proof,'effective_classroom_action':effective_classroom_action,
+                        'teacher_entry_ready_for_paper_review':teacher_entry_ready,
                         'live_or_demo_order_authorized':False,
                         'motor_status':status,'motor_reason':list(decision['reasons']),
                         'motor_source_legacy_26_slot_ids':list(decision['sources']),
@@ -264,6 +271,8 @@ def run(citation_path, cases_path, core, out):
              'motor_entry_decisions':sum(x['motor_status']=='ELIGIBLE' for x in results),
              'motor_teacher_comparisons_confirmed':sum(x['teacher_engine_comparison']=='MATCH' for x in results),
              'paper_lifecycle_cases':len(evaluated['paper_trades']),
+             'teacher_vetoed_cases':sum(
+                 x['effective_classroom_action']=='NO_TRADE_TEACHER_VETO' for x in results),
              'teacher_entry_paper_review_ready_cases':sum(
                  x['teacher_entry_ready_for_paper_review'] for x in results),
              'unverified_eligible_motor_cases':sum(
