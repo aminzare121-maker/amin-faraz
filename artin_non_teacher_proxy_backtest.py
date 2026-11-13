@@ -83,7 +83,15 @@ def simulate(a,method,spread):
 
 def main(source,out):
     bars=load(source)
-    cases=[simulate(bars,m,s) for m in ('three_candle_raw','fvg_raw') for s in (0.0,0.3,0.6)]
+    methods=('three_candle_raw','fvg_raw')
+    spreads=(0.0,0.3,0.6)
+    cases=[simulate(bars,m,sp) for m in methods for sp in spreads]
+    split=int(len(bars)*0.7)
+    train,test=bars[:split],bars[split:]
+    holdout=[{'method':m,'spread_usd_per_oz':sp,
+              'train':{k:v for k,v in simulate(train,m,sp).items() if k!='trades_detail'},
+              'test':{k:v for k,v in simulate(test,m,sp).items() if k!='trades_detail'}}
+             for m in methods for sp in spreads]
     result={'schema':'artin_non_teacher_proxy_comparison_v1',
       'data':'Dukascopy public XAUUSD M15 BID NOT Eplanet',
       'rows':len(bars),'one_year_sample':True,
@@ -91,7 +99,7 @@ def main(source,out):
       'real_or_demo_broker_orders':0,'research_paper_only':True,
       'units':'USD per 1 troy ounce, not USD per MT5 lot',
       'rules':'NEXT_BAR_OPEN; 5 USD/oz stop; 10 USD/oz target; 16 M15 bars maximum; stop-first if both hit; no overlapping trades; constant spread sensitivity 0/0.3/0.6; no commission, slippage, swaps or volume sizing',
-      'cases':cases}
+      'cases':cases,'chronological_70_30_holdout':holdout,'holdout_note':'Chronological split; no optimization; positions at split boundary excluded.'}
     Path(out).write_text(json.dumps(result,indent=2))
     print(json.dumps({'rows':len(bars),'cases':[{k:v for k,v in c.items() if k!='trades_detail'} for c in cases]},indent=2))
 if __name__=='__main__':main(sys.argv[1],sys.argv[2])
