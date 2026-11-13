@@ -17,14 +17,13 @@ class ManagementTriggerEvidenceTests(unittest.TestCase):
         self.trade.trace = []
 
     def test_rejects_invalid_timestamps_and_sources(self):
-        bad = (
-            Fact(True, -1, 'video'),
-            Fact(True, True, 'video'),
-            Fact(True, 11, 'video'),
-            Fact(True, 5, ''),
-            Fact(True, 5, '   '),
-            Fact(True, 5, None),
-        )
+        # Fact rejects malformed timestamps/sources at construction time.
+        for at, source in ((-1, 'video'), (True, 'video'), (5, ''), (5, '   '), (5, None)):
+            with self.subTest(at=at, source=source):
+                with self.assertRaises(ValueError):
+                    Fact(True, at, source)
+        # A valid fact can still be unavailable at the management timestamp.
+        bad = (Fact(True, 11, 'video'),)
         for fact in bad:
             with self.subTest(fact=fact):
                 result = self.trade.manage('reduce', None, fact, 10)
