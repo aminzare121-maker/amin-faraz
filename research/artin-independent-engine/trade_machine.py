@@ -123,7 +123,7 @@ class TradeMachine:
                 or type(trigger.known_at) is not int or trigger.known_at<0
                 or trigger.known_at>at or not isinstance(trigger.source,str)
                 or not trigger.source.strip()):
-            return self._event('REVIEW',reason='MANAGEMENT_TRIGGER_NOT_ESTABLISHED')
+            return self._event('REVIEW',reason='MANAGEMENT_TRIGGER_NOT_ESTABLISHED',realized_pnl=None)
         result=move_stop(label,self.plan['side'],self.fill['entry'],self.plan['stop'],
                          self.current_stop,new_stop,self.fill['lots'],self.instrument,self.costs)
         if result['status']=='ACCEPT':self.current_stop=new_stop;self.last_at=at
