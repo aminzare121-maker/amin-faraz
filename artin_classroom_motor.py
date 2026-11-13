@@ -191,6 +191,11 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
     cases=[];proofs=[];seen=set()
     for row in rows:
         data, proof=compile_case(row,index,eng.RULE_IDS)
+        if (proof['source_class'] != 'SYNTHETIC_TEST' and accepted_routes is None
+                and (proof['teacher_choice_independently_verified']
+                     or proof['teacher_visual_verified']
+                     or row.get('paper_trade_teacher_source'))):
+            raise ClassroomMotorError('PRIVATE_ACCEPTANCE_REQUIRED_FOR_REAL_TEACHER_CLAIM')
         if accepted_routes is not None and (
                 proof['teacher_choice_independently_verified']
                 or proof['teacher_visual_verified']
