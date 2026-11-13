@@ -62,6 +62,19 @@ class ClassTradeActionsTests(unittest.TestCase):
         return {'event_id':'case-'+kind,'kind':kind,'session':session,
                 'source_segment_ids':[segment],**kwargs}
 
+    def test_empty_pinned_manifest_cannot_authorize_classroom_actions(self):
+        from shutil import copytree
+        with tempfile.TemporaryDirectory() as directory:
+            core=Path(directory)/'pinned'
+            copytree(CORE,core)
+            manifest=core/'LEGACY_SHA_MANIFEST.json'
+            doc=json.loads(manifest.read_text(encoding='utf8'))
+            doc['files_sha256']={}
+            manifest.write_text(json.dumps(doc),encoding='utf8')
+            event=self.base('NO_ENTRY',21,'before')
+            with self.assertRaisesRegex(TeacherActionError,'PINNED_ENGINE_HASH_COVERAGE_MISSING'):
+                execute({'schema':'artin_classroom_trade_actions_v1','events':[event]},self.folder,core)
+
     def test_no_entry_then_wait_then_scoped_chart_review(self):
         before=self.base('NO_ENTRY',21,'before')
         after=self.base('ENTRY_AFTER_CONFIRMATION',21,'after',chart={'closed':False})
