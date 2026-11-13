@@ -20,7 +20,7 @@ class TradeMachine:
         self._box_fp,self._engine_fp=box.fingerprint,engine.fingerprint
         self._contract=instrument,costs
         self.state='NEW';self.trace=[];self.plan=None;self.fill=None;self.last_at=None;self.exit_fill=None
-        self.modeled_exposure=None;self.budget_overrun=False
+        self.modeled_exposure=None;self.budget_overrun=False;self.last_event_known_at=None
 
     def _event(self,status,**fields):
         result=dict(status=status,state=self.state,order_created=False,**fields)
@@ -162,6 +162,10 @@ def execution_event(trade,event,available_at,fill_lots=None):
     source=event['source']
     if not isinstance(source,str) or not source.strip():raise ValueError('execution event source required')
     trade._time(at)
+    # Events are consumed only when available; later dispatches cannot rewind
+    # the evidence-availability clock even if occurrence timestamps ascend.
+    if trade.last_event_known_at is not None and known<trade.last_event_known_at:
+        raise ValueError('event availability must be nondecreasing')
     kind=event['event']
     if kind=='fill_entry':
         lots=exact(event['lots']) if fill_lots is None else fill_lots
@@ -176,6 +180,7 @@ def execution_event(trade,event,available_at,fill_lots=None):
                       None if event.get('actual_round_trip_fee') is None else exact(event['actual_round_trip_fee']))
     else:raise ValueError('unsupported execution event')
     trade.last_at=at
+    trade.last_event_known_at=known
     metadata=dict(event_at=at,event_known_at=known,event_source=source)
     r.update(metadata);trade.trace[-1].update(metadata)
     return r
