@@ -132,6 +132,18 @@ def _three_candle_close_entry(event, text):
     at=event.get('decision_at')
     if type(at) is not int or at<times[0]:
         raise TeacherActionError('INVALID_THREE_CANDLE_DECISION_TIME')
+    # A source candle timestamp is its bar OPEN, not evidence that its
+    # closing OHLC was available then. Optional explicit observation clocks
+    # must never place a bar's finalized OHLC before its M15 close.
+    for candle in observations:
+        known=candle.get('known_at')
+        if known is not None:
+            if type(known) is not int or known < candle['time']+900:
+                return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
+                        'bar_open_time':candle['time']}
+            if known>at:
+                return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
+                        'bar_open_time':candle['time']}
     if at<times[2]+900:
         return {'decision':'WAIT_FOR_THIRD_CANDLE_CLOSE','order_created':False,
                 'earliest_decision_at':times[2]+900}
