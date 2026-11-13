@@ -79,6 +79,17 @@ class ClassroomEngineTests(unittest.TestCase):
                     run(self.src,self.cases,CORE,self.out)
                 self.assertFalse(self.out.exists())
 
+    def test_verified_teacher_no_trade_blocks_proposed_paper_lifecycle(self):
+        row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
+        row['teacher_choice']='NO_TRADE'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        self.write()
+        with self.assertRaisesRegex(
+                ClassroomMotorError,'VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_unverified_real_teacher_scene_cannot_create_paper_entry(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['source_class']='CLASSROOM_ASR_CANDIDATE'
