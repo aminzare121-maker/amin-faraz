@@ -86,6 +86,10 @@ class ClassroomEngineTests(unittest.TestCase):
         row['teacher_choice']='ENTER'
         row['teacher_choice_verified']=False
         row['teacher_visual_verified']=False
+        # Replace synthetic fixture provenance so the test reaches the
+        # teacher-lifecycle gate rather than the earlier source-integrity gate.
+        for fact in row['facts'].values():
+            fact['source']='CLASSROOM_TEST_NON_SYNTHETIC_SOURCE'
         self.write()
         with self.assertRaisesRegex(ClassroomMotorError,'TEACHER_PAPER_LIFECYCLE_NOT_VERIFIED'):
             run(self.src,self.cases,CORE,self.out)
