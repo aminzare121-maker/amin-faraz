@@ -20,6 +20,25 @@ def json_value(value):
     if is_dataclass(value):return asdict(value)
     raise TypeError('Unsupported result object')
 
+def validate_paper_events(case,observation):
+    """Preflight event clocks and provenance before replay can mutate a trade."""
+    trade=case['paper_trade']
+    if not isinstance(trade,dict) or not isinstance(trade.get('events'),list):
+        raise ValueError('Paper trade requires an explicit event list')
+    last_at=observation.at
+    last_known=observation.at
+    for event in trade['events']:
+        if not isinstance(event,dict):
+            raise ValueError('Paper event must be an object')
+        at=event.get('at');known=event.get('known_at');source=event.get('source')
+        if type(at) is not int or type(known) is not int or at<last_at or known<at or known<last_known:
+            raise ValueError('Paper event clocks must be causal and nondecreasing')
+        if not isinstance(source,str) or not source.strip():
+            raise ValueError('Paper event requires provenance')
+        if event.get('event') not in ('fill_entry','quote','manage','close'):
+            raise ValueError('Unsupported paper event type')
+        last_at=at;last_known=known
+
 def run_paper_trade(engine,case,observation):
     t=case['paper_trade'];i=t['instrument'];c=t['costs'];b=t['box']
     instrument=Instrument(money(i['money_per_price_unit_per_lot']),money(i['min_lot']),money(i['lot_step']))
@@ -92,6 +111,8 @@ def run_document(document):
         observation=Observation(case['side'],case['at'],facts)
         if not isinstance(case.get('rule_id'),str) or case['rule_id'] not in engine.allowed_rules:
             raise ValueError('Case rule must belong to the fixed plan')
+        if 'paper_trade' in case:
+            validate_paper_events(case,observation)
         prepared.append(observation)
     rows=[];paper=[]
     for case_index,case in enumerate(document['cases']):
