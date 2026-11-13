@@ -79,6 +79,20 @@ class ClassroomEngineTests(unittest.TestCase):
                     run(self.src,self.cases,CORE,self.out)
                 self.assertFalse(self.out.exists())
 
+    def test_teacher_entry_engine_conflict_blocks_paper_lifecycle(self):
+        row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        # Missing is a supported objective fact state, never silently true.
+        key=next(iter(row['facts']))
+        row['facts'][key]['value']='MISSING'
+        self.write()
+        with self.assertRaisesRegex(
+                ClassroomMotorError,'TEACHER_ENTRY_ENGINE_CONFLICT_BLOCKS_PAPER_LIFECYCLE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_verified_teacher_no_trade_blocks_proposed_paper_lifecycle(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['teacher_choice']='NO_TRADE'
