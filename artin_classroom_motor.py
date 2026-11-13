@@ -207,6 +207,15 @@ def run(citation_path, cases_path, core, out):
         from dataclasses import asdict
         if not isinstance(decision,dict) or decision != asdict(expected):
             raise ClassroomMotorError('CLASSROOM_DECISION_IDENTITY_MISMATCH')
+    # Teacher-approved entry is necessary but not sufficient: the engine
+    # must independently return ELIGIBLE before a proposed paper lifecycle
+    # can run. Check before producing any output or paper trade result.
+    for data,proof,decision in zip(cases,proofs,decisions):
+        if ('paper_trade' in data and proof['teacher_choice_in_record']=='ENTER'
+                and proof['teacher_choice_independently_verified']
+                and proof['teacher_visual_verified']
+                and decision['status']!='ELIGIBLE'):
+            raise ClassroomMotorError('TEACHER_ENTRY_ENGINE_CONFLICT_BLOCKS_PAPER_LIFECYCLE')
     results=[]
     for proof,decision in zip(proofs,decisions):
         status=decision['status']; teacher=proof['teacher_choice_in_record']
