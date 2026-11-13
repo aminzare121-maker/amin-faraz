@@ -346,8 +346,11 @@ def _stop_triggered_exit(event, text):
     if 'decision_at' in event:
         at=event['decision_at']
         known=quote.get('known_at')
+        observed=quote.get('observed_at')
         if (type(at) is not int or type(known) is not int
-                or known>at or known<0):
+                or known>at or known<0
+                or (observed is not None and
+                    (type(observed) is not int or observed<0 or observed>known))):
             return {'decision':'WAIT_FOR_CAUSAL_QUOTE','order_created':False,
                     'position_closed':False,'stop_unchanged':str(stop),
                     'lots_unchanged':str(lots)}
