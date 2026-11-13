@@ -141,6 +141,8 @@ def compile_case(row, index, route_ids):
     data = {'rule_id':route,'side':row['side'],'at':at,'facts':facts}
     if 'paper_trade' in row:
         if row.get('source_class') != 'SYNTHETIC_TEST':
+            if not isinstance(row['paper_trade'],dict):
+                raise ClassroomMotorError('PAPER_LIFECYCLE_OBJECT_REQUIRED')
             if not row.get('paper_trade_teacher_source'):
                 raise ClassroomMotorError('TEACHER_SOURCED_EXIT_RISK_REQUIRED')
             # Machine ASR or a proposed teacher label is insufficient to
