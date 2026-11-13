@@ -9,6 +9,7 @@ class MalformedExecutionDecimalTests(unittest.TestCase):
     def test_malformed_quote_rejected_before_state_mutation(self):
         trade = SimpleNamespace(last_coordinator_at=None, last_event_known_at=None, last_at=None)
         trade._time = lambda at: None
+        trade.quote = lambda bid, ask, at: {'status': 'UNEXPECTED_QUOTE_CALL'}
         event = dict(event='quote', at=10, known_at=10, source='fixture', bid='not-a-number', ask='4001')
         with self.assertRaisesRegex(ValueError, 'valid finite event decimal required'):
             execution_event(trade, event, 10)
