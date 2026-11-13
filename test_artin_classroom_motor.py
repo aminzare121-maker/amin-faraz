@@ -58,6 +58,19 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_verified_real_case_requires_scene_speech_ids(self):
+        row=self.cases_doc['cases'][0]
+        row.pop('paper_trade',None)
+        row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        row['source_asr_segment_ids']=[]
+        idx=index_original_citations(self.source_doc,RULE_IDS)
+        with self.assertRaisesRegex(
+                ClassroomMotorError,'VERIFIED_TEACHER_CASE_REQUIRES_SCENE_SPEECH'):
+            compile_case(row,idx,RULE_IDS)
+
     def test_real_teacher_claim_without_private_acceptance_is_blocked(self):
         row=self.cases_doc['cases'][0]
         row.pop('paper_trade',None)
