@@ -1,0 +1,26 @@
+name: Artin independent engine regression tests
+on:
+  push:
+    branches:
+      - artin-v13-under180-development
+    paths:
+      - 'research/artin-independent-engine/**'
+      - '.github/workflows/artin-independent-engine-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-engine-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run offline paper-engine regression suite
+        shell: bash
+        run: python -m unittest discover -s research/artin-independent-engine -p 'test_*.py' -v
