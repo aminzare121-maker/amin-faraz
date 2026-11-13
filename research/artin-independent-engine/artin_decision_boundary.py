@@ -93,10 +93,14 @@ def decide(outcomes: Iterable[RuleOutcome], *, demo_only: bool = True,
                 "reason": "ENTRY_NO_TRADE_PRECEDENCE_UNVERIFIED",
                 "executable": False}
     # An entry NO_TRADE and an EXIT describe different position contexts.
-    # Do not infer that either one overrides the other from priority alone.
+    # A higher-ranked no-entry instruction must not suppress an open-position exit.
     if (any(r.kind == "entry" and r.action == "NO_TRADE" for r in rows)
             and any(r.kind == "exit" and r.action == "EXIT" for r in rows)):
-        return {"decision": "BLOCKED", "reason": "EXIT_ENTRY_NO_TRADE_CONTEXT_UNVERIFIED",
+        exit_priority = max(r.priority for r in rows if r.kind == "exit" and r.action == "EXIT")
+        entry_no_trade_priority = max(r.priority for r in rows if r.kind == "entry" and r.action == "NO_TRADE")
+        return {"decision": "BLOCKED",
+                "reason": ("EXIT_PRECEDENCE_UNVERIFIED" if entry_no_trade_priority > exit_priority
+                           else "EXIT_ENTRY_NO_TRADE_CONTEXT_UNVERIFIED"),
                 "executable": False}
     # Conflicting exit instructions cannot be arbitrated by priority alone.
     # An exit NO_TRADE is not proof that an existing position should remain open.
