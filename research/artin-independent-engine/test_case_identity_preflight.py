@@ -38,7 +38,7 @@ class CaseIdentityPreflightTests(unittest.TestCase):
             ],
         }
         with patch("run_engine.Engine.evaluate", side_effect=AssertionError("evaluated before preflight")) as evaluate:
-            with self.assertRaisesRegex(ValueError, "Duplicate case_id"):
+            with self.assertRaisesRegex(ValueError, "Non-synthetic case requires explicit case_id"):
                 run_document(document)
             evaluate.assert_not_called()
 
