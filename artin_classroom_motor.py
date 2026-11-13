@@ -185,6 +185,20 @@ def run(citation_path, cases_path, core, out):
                 and proof['teacher_choice_independently_verified']
                 and proof['teacher_visual_verified']):
             raise ClassroomMotorError('VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE')
+    # Evaluate the source-bound case before running any proposed paper
+    # lifecycle. This uses the same pinned entry evaluator as the runner.
+    from entry_engine import Fact,Observation
+    for data,proof in zip(cases,proofs):
+        if ('paper_trade' in data and proof['teacher_choice_in_record']=='ENTER'
+                and proof['teacher_choice_independently_verified']
+                and proof['teacher_visual_verified']):
+            observation=Observation(data['side'],data['at'],
+                {k:Fact(v['value'],v['known_at'],v['source'])
+                 for k,v in data['facts'].items()})
+            decision=eng.Engine('ARTIN_CLASS_25_VIDEO_TEACHER_MOTOR',
+                               tuple(eng.RULE_IDS)).evaluate(data['rule_id'],observation)
+            if decision.status!='ELIGIBLE':
+                raise ClassroomMotorError('TEACHER_ENTRY_ENGINE_CONFLICT_BLOCKS_PAPER_LIFECYCLE')
     source = {'mode':'ANNOTATED_OFFLINE','plan_id':'ARTIN_CLASS_25_VIDEO_TEACHER_MOTOR',
               'allowed_rules':list(eng.RULE_IDS),'cases':cases,
               'synthetic_only':all(p['source_class']=='SYNTHETIC_TEST' for p in proofs)}
@@ -207,15 +221,6 @@ def run(citation_path, cases_path, core, out):
         from dataclasses import asdict
         if not isinstance(decision,dict) or decision != asdict(expected):
             raise ClassroomMotorError('CLASSROOM_DECISION_IDENTITY_MISMATCH')
-    # Teacher-approved entry is necessary but not sufficient: the engine
-    # must independently return ELIGIBLE before a proposed paper lifecycle
-    # can run. Check before producing any output or paper trade result.
-    for data,proof,decision in zip(cases,proofs,decisions):
-        if ('paper_trade' in data and proof['teacher_choice_in_record']=='ENTER'
-                and proof['teacher_choice_independently_verified']
-                and proof['teacher_visual_verified']
-                and decision['status']!='ELIGIBLE'):
-            raise ClassroomMotorError('TEACHER_ENTRY_ENGINE_CONFLICT_BLOCKS_PAPER_LIFECYCLE')
     results=[]
     for proof,decision in zip(proofs,decisions):
         status=decision['status']; teacher=proof['teacher_choice_in_record']
