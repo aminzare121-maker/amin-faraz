@@ -326,6 +326,19 @@ class ClassTradeActionsTests(unittest.TestCase):
         self.assertFalse(r['trade_authorized'])
         self.assertFalse(r['teacher_chart_meaning_independently_verified'])
 
+    def test_three_candle_observation_clock_must_follow_actual_bar_close(self):
+        for observed in (2699,3601,'3600'):
+            with self.subTest(observed=observed):
+                e=self.three_candle_event()
+                e['candles'][2]['known_at']=observed
+                result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+                self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_M15_BAR')
+                self.assertFalse(result['order_created'])
+        e=self.three_candle_event()
+        e['candles'][2]['known_at']=3600
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'CLASSROOM_THIRD_CLOSE_SETUP_CANDIDATE')
+
     def test_three_candle_must_wait_exact_closed_bar(self):
         e=self.three_candle_event(decision_at=3500)
         r=self.run_events([e])['classroom_decision_actions'][0]['execution']
