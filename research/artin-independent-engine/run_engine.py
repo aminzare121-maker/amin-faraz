@@ -41,6 +41,18 @@ def run_paper_trade(engine,case,observation):
 
 def run_document(document):
     if document.get('mode')!='ANNOTATED_OFFLINE':raise ValueError('Only ANNOTATED_OFFLINE mode exists')
+    # A batch must not reach rule construction or any evaluation when it
+    # cannot reserve aggregate exposure across multiple paper trades.
+    if sum('paper_trade' in case for case in document['cases']) > 1:
+        raise ValueError('MULTI_TRADE_AGGREGATE_RISK_NOT_RESERVED: account-wide reservation required before multi-trade replay')
+    # An empty batch has no entry decision to make and requires no rule plan.
+    # Never manufacture a plan fingerprint for a plan that was not validated.
+    if not document['cases'] and not document['allowed_rules']:
+        return {'mode':'ANNOTATED_OFFLINE','plan_fingerprint':None,
+          'synthetic_only':document.get('synthetic_only') is True,
+          'decisions':[],'paper_trades':[],'broker_connected':False,
+          'orders_sent':0,'raw_chart_classifier_implemented':False,
+          'profitability_tested':False,'existing_engine_connected':False}
     engine=Engine(document['plan_id'],tuple(document['allowed_rules']))
     # Validate the entire case identity mapping before evaluating any case.
     # This prevents partial decision/paper-trade processing on an invalid batch.
