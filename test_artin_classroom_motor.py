@@ -146,6 +146,17 @@ class ClassroomEngineTests(unittest.TestCase):
         self.assertTrue(self.out.exists())
         self.assertTrue(all(row['motor_status']=='ELIGIBLE' for row in result['cases']))
 
+    def test_case_proof_route_identity_rejected_if_compiler_misattributed(self):
+        from artin_classroom_motor import compile_case as original_compile
+        def corrupt(*args,**kwargs):
+            data,proof=original_compile(*args,**kwargs)
+            proof['route_id']='WRONG_ROUTE'
+            return data,proof
+        with patch('artin_classroom_motor.compile_case',side_effect=corrupt):
+            with self.assertRaisesRegex(ClassroomMotorError,'CLASSROOM_CASE_PROOF_IDENTITY_MISMATCH'):
+                run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_dropped_or_extra_engine_decision_is_rejected(self):
         # A mismatched result stream must never be silently paired via zip().
         from run_engine import run_document as original_run
