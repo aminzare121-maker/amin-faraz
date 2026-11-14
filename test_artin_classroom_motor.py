@@ -368,6 +368,17 @@ class ClassroomEngineTests(unittest.TestCase):
         with self.assertRaisesRegex(ClassroomMotorError,'UNDECLARED_SYNTHETIC_SOURCE'):
             run(self.src,self.cases,CORE,self.out)
 
+    def test_distinct_case_ids_cannot_replay_same_teacher_scene_twice(self):
+        original=self.cases_doc['cases'][0]
+        duplicate=json.loads(json.dumps(original))
+        duplicate['case_id']='DIFFERENT_LABEL_SAME_SCENE'
+        self.cases_doc['cases'].append(duplicate)
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'DUPLICATE_CLASSROOM_SOURCE_SCENE'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_duplicate_case_id_rejected(self):
         self.cases_doc['cases'][1]['case_id']=self.cases_doc['cases'][0]['case_id'];self.write()
         with self.assertRaisesRegex(ClassroomMotorError,'DUPLICATE_TEACHER_CLASS_CASE'):
