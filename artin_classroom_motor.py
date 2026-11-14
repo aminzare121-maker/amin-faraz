@@ -36,8 +36,17 @@ def load_pinned(core):
     m = json.loads(manifest_path.read_text(encoding='utf-8'))
     if m.get('source_commit') != PINNED_COMMIT:
         raise ClassroomMotorError('PINNED_ENGINE_REVISION_CHANGED')
-    for name, digest in m.get('files_sha256', {}).items():
-        if sha256(core/name) != digest:
+    hashes = m.get('files_sha256')
+    required = {'entry_engine.py', 'run_engine.py', 'trade_machine.py'}
+    if (not isinstance(hashes, dict) or not required.issubset(hashes)
+            or any(not isinstance(name, str) or not isinstance(digest, str)
+                   or not re.fullmatch(r'[0-9a-f]{64}', digest)
+                   or Path(name).is_absolute() or '..' in Path(name).parts
+                   for name, digest in hashes.items())):
+        raise ClassroomMotorError('PINNED_ENGINE_MANIFEST_INVALID')
+    for name, digest in hashes.items():
+        target = (core/name).resolve()
+        if not target.is_relative_to(core) or not target.is_file() or sha256(target) != digest:
             raise ClassroomMotorError('PINNED_ENGINE_SOURCE_CHANGED:'+name)
     if not (core/'entry_engine.py').is_file() or not (core/'run_engine.py').is_file():
         raise ClassroomMotorError('PINNED_ENTRY_OR_TRADE_ENGINE_MISSING')
