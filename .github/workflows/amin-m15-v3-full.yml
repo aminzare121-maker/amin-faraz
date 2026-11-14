@@ -1,0 +1,90 @@
+name: Eplanet M15 V3 - complete 23643 candle research replay
+
+on:
+  push:
+    branches:
+      - research/amin-m15-voice-github-20261114
+    paths:
+      - .github/workflows/amin-m15-v3-full.yml
+      - research/amin_m15_voice_v3_full/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amin-m15-v3-full-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-v3-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: research/amin_m15_voice_v3_full
+    steps:
+      - name: Check out research branch
+        uses: actions/checkout@v4
+      - name: Configure Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Rebuild and verify full Eplanet M15 23643-row CSV
+        run: |
+          python reassemble_full.py
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+      - name: Compile and run actual V3 unit and causality tests
+        run: |
+          python -m py_compile amin_candle_voice_v3.py test_v3.py reassemble_full.py
+          python -c "import test_v3; tests=[(n,getattr(test_v3,n)) for n in sorted(dir(test_v3)) if n.startswith('test_') and callable(getattr(test_v3,n))]; [(fn(),print('PASS',n)) for n,fn in tests]; print('UNIT_TESTS_PASS',len(tests))"
+      - name: Execute complete V3 model training and 120 strategy validations
+        run: |
+          python amin_candle_voice_v3.py data/Eplanet_M15_20251105_20261105_merged.csv --output-dir results
+      - name: Independent result and provenance gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('results/report.json').read_text(encoding='utf-8'))
+          audit=p['research_audit']
+          assert p['input']['bars']==23643, p['input']
+          assert p['input']['sha256']=='06b60768cc6179d1985ce7ab173d421edb3adcacf62d781ca733adc331bc2604'
+          assert audit['validation_candidates_count']==120, audit
+          assert p['live_signal_approved'] is False
+          assert p['orders_sent']==0
+          summary={
+            'result':'FULL_V3_GITHUB_REPLAY_COMPLETE',
+            'bars':p['input']['bars'],
+            'candidate_count':audit['validation_candidates_count'],
+            'passing_candidates':audit['passing_validation_candidates_count'],
+            'selected_strategy':p['selected_strategy']['spec'] if p['selected_strategy'] else None,
+            'holdout':p['holdout']['status'],
+            'broker_assumptions_verified':False,
+            'signal_approved':p['live_signal_approved']
+          }
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          with open('results/ci_summary.json','w',encoding='utf-8') as f:
+            json.dump(summary,f,ensure_ascii=False,indent=2)
+          with open(Path(__import__('os').environ['GITHUB_STEP_SUMMARY']),'a',encoding='utf-8') as f:
+            f.write('## Eplanet M15 Full V3 research replay\n\n')
+            f.write('Exact-source 23643 M15 candles; 120 validation candidates.\n\n')
+            f.write(f"Passing validation candidates: {audit['passing_validation_candidates_count']}\n\n")
+            f.write(f"Holdout status: {p['holdout']['status']}\n\n")
+            f.write('No real orders; no live trading approval. Cost parameters are assumptions.\n')
+          PY
+      - name: Upload complete reproducible research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eplanet-m15-full-v3-23643-ci
+          path: |
+            research/amin_m15_voice_v3_full/results/report.json
+            research/amin_m15_voice_v3_full/results/all_validation_candidates.csv
+            research/amin_m15_voice_v3_full/results/ci_summary.json
+            research/amin_m15_voice_v3_full/results/voice_message_fa.txt
+            research/amin_m15_voice_v3_full/results/dashboard_fa.html
+          if-no-files-found: warn
+          retention-days: 7
