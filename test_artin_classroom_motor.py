@@ -181,8 +181,8 @@ class ClassroomEngineTests(unittest.TestCase):
         result=run(self.src,self.cases,CORE,self.out)
         self.assertEqual(result['cases'][0]['motor_status'],'ELIGIBLE')
         self.assertEqual(result['cases'][0]['effective_classroom_action'],
-                         'NO_TRADE_TEACHER_VETO')
-        self.assertEqual(result['teacher_vetoed_cases'],1)
+                         'WAIT_FOR_TEACHER_AND_ENGINE_ALIGNMENT')
+        self.assertEqual(result['teacher_vetoed_cases'],0)
         self.assertFalse(result['cases'][0]['teacher_entry_ready_for_paper_review'])
         self.assertEqual(result['orders_sent'],0)
 
@@ -192,10 +192,11 @@ class ClassroomEngineTests(unittest.TestCase):
         row['teacher_choice_verified']=True
         row['teacher_visual_verified']=True
         self.write()
-        with self.assertRaisesRegex(
-                ClassroomMotorError,'VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE'):
-            run(self.src,self.cases,CORE,self.out)
-        self.assertFalse(self.out.exists())
+        result=run(self.src,self.cases,CORE,self.out)
+        self.assertEqual(result['teacher_vetoed_cases'],0)
+        self.assertEqual(result['orders_sent'],0)
+        self.assertEqual(result['cases'][0]['effective_classroom_action'],
+                         'WAIT_FOR_TEACHER_AND_ENGINE_ALIGNMENT')
 
     def test_unverified_real_teacher_scene_cannot_create_paper_entry(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
