@@ -295,7 +295,11 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
                      else 'CLASSROOM_CONDITIONAL_ENTRY_CANDIDATE' if teacher=='ENTER' and
                      utterance=='POSSIBLE_CONDITIONAL_ENTER_IN_THIS_SCENE'
                      else 'CLASSROOM_INSTRUCTION_UNRESOLVED')
-        if teacher is None or not proof['teacher_choice_independently_verified'] or not proof['teacher_visual_verified']:
+        if (teacher is None or proof['source_class'] == 'SYNTHETIC_TEST'
+                or accepted_cases is None
+                or (proof['route_id'], proof['case_id']) not in accepted_cases
+                or not proof['teacher_choice_independently_verified']
+                or not proof['teacher_visual_verified']):
             comparison='NOT_INDEPENDENTLY_CONFIRMED_FROM_CLASS'
         elif teacher=='ENTER':
             comparison='MATCH' if status=='ELIGIBLE' else 'MISMATCH_OR_MISSING_MARKET_FACTS'
