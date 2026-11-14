@@ -143,6 +143,29 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_owner_initial_two_to_one_floor_for_real_classroom_lifecycle(self):
+        # This is the owner's risk policy, not a claim about teacher strategy.
+        row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
+        row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['paper_trade_teacher_source']='UNVERIFIED_FIXTURE'
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        index=index_original_citations(self.source_doc,RULE_IDS)
+        for target in ('103', '105.99', '100'):
+            with self.subTest(target=target):
+                row['paper_trade']['target_price']=target
+                with self.assertRaisesRegex(ClassroomMotorError,
+                        'OWNER_MINIMUM_INITIAL_REWARD_RISK_2_TO_1_NOT_MET'):
+                    compile_case(row,index,RULE_IDS)
+        row['paper_trade']['target_price']='106'
+        data,_=compile_case(row,index,RULE_IDS)
+        self.assertEqual(data['paper_trade']['target_price'],'106')
+        row['paper_trade']['target_price']='NaN'
+        with self.assertRaisesRegex(ClassroomMotorError,
+                'INITIAL_RISK_REWARD_INPUT_INVALID'):
+            compile_case(row,index,RULE_IDS)
+
     def test_teacher_entry_engine_conflict_blocks_paper_lifecycle(self):
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['teacher_choice']='ENTER'
