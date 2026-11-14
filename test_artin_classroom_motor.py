@@ -157,6 +157,20 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_synthetic_teacher_claim_cannot_become_paper_review_ready(self):
+        row=self.cases_doc['cases'][0]
+        row.pop('paper_trade',None)
+        row['teacher_choice']='ENTER'
+        row['teacher_choice_verified']=True
+        row['teacher_visual_verified']=True
+        self.cases_doc['cases']=[row]
+        self.write()
+        result=run(self.src,self.cases,CORE,self.out)
+        self.assertEqual(result['cases'][0]['motor_status'],'ELIGIBLE')
+        self.assertFalse(result['cases'][0]['teacher_entry_ready_for_paper_review'])
+        self.assertEqual(result['teacher_entry_paper_review_ready_cases'],0)
+        self.assertEqual(result['orders_sent'],0)
+
     def test_verified_teacher_no_entry_overrides_eligible_engine_without_trade(self):
         row=self.cases_doc['cases'][0]
         row.pop('paper_trade',None)
