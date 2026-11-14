@@ -1,0 +1,74 @@
+name: Eplanet M15 V4 - independent loss diagnostics and held-out gate
+
+on:
+  push:
+    branches:
+      - research/amin-m15-v4-diagnostic-20261114
+    paths:
+      - .github/workflows/amin-m15-v4-diagnostic.yml
+      - research/amin_m15_voice_v4_diagnostic/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amin-m15-v4-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evaluate-frozen-filter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out independent research branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reconstruct and hash-check all 23643 real M15 Eplanet candles
+        run: python research/amin_m15_voice_v3_full/reassemble_full.py
+      - name: Install locked baseline numerical dependencies
+        run: python -m pip install -r research/amin_m15_voice_v3_full/requirements.txt
+      - name: Check source syntax
+        run: python -m py_compile research/amin_m15_voice_v4_diagnostic/v4_diagnostic.py
+      - name: Refit V3 classifier and execute V4 diagnostics with the untouched holdout
+        run: python research/amin_m15_voice_v4_diagnostic/v4_diagnostic.py
+      - name: Independent holdout result gate (must honestly reject the failed signal)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          path=Path('research/amin_m15_voice_v4_diagnostic/results/v4_diagnostic_report.json')
+          result=json.loads(path.read_text(encoding='utf-8'))
+          assert result['source']['bars']==23643
+          assert result['source']['sha256']=='06b60768cc6179d1985ce7ab173d421edb3adcacf62d781ca733adc331bc2604'
+          assert result['new_filter_after_holdout_retuned'] is False
+          assert result['signal_approved'] is False and result['orders_sent']==0
+          assert result['results']['validation']['reference']['metrics']['signals']==246
+          assert result['results']['holdout']['filter']['metrics']['signals']==49
+          assert result['joint_val_holdout_pass'] is False
+          assert result['conclusion']=='FILTER_REJECTED_BY_UNSEEN_HOLDOUT'
+          print('GITHUB_V4_LOCKED_HOLDOUT_GATE_PASS')
+          print(json.dumps({
+              'outcome':result['conclusion'],
+              'validation_filtered':result['results']['validation']['filter']['metrics'],
+              'holdout_filtered':result['results']['holdout']['filter']['metrics'],
+              'approved':False},ensure_ascii=False))
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:
+              f.write('## V4 — real Eplanet M15, 23643 candles\n\n')
+              f.write('One frozen composite filter, V3 model, 1-time independent holdout.\n\n')
+              for k in ['validation','holdout']:
+                  m=result['results'][k]['filter']['metrics']
+                  f.write(f"{k}: trades={m['signals']}, net hypothetical USD={m['sum_usd_fixed_001_lot']}, PF={m['profit_factor']}\n\n")
+              f.write('**Research filter rejected. No live trading signal and no order.**\n')
+          PY
+      - name: Preserve reproducible results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eplanet-m15-v4-diagnostics-23643
+          path: research/amin_m15_voice_v4_diagnostic/results/
+          if-no-files-found: warn
+          retention-days: 7
