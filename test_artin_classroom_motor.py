@@ -336,6 +336,31 @@ class ClassroomEngineTests(unittest.TestCase):
         with self.assertRaisesRegex(ClassroomMotorError,'NO_OVERWRITE_CLASSROOM_OUTPUT'):
             run(self.src,self.cases,CORE,self.out)
 
+    def test_incomplete_pinned_manifest_cannot_bypass_hash_validation(self):
+        from shutil import copytree
+        with tempfile.TemporaryDirectory() as d:
+            cp=Path(d)/'core';copytree(CORE,cp)
+            manifest=cp/'LEGACY_SHA_MANIFEST.json'
+            original=json.loads(manifest.read_text(encoding='utf8'))
+            for hashes in ({}, {'entry_engine.py': original['files_sha256']['entry_engine.py']}):
+                modified=dict(original, files_sha256=hashes)
+                manifest.write_text(json.dumps(modified),encoding='utf8')
+                with self.assertRaisesRegex(ClassroomMotorError,'PINNED_ENGINE_MANIFEST_INVALID'):
+                    run(self.src,self.cases,cp,self.out)
+                self.assertFalse(self.out.exists())
+
+    def test_pinned_manifest_rejects_parent_path_escape(self):
+        from shutil import copytree
+        with tempfile.TemporaryDirectory() as d:
+            cp=Path(d)/'core';copytree(CORE,cp)
+            manifest=cp/'LEGACY_SHA_MANIFEST.json'
+            modified=json.loads(manifest.read_text(encoding='utf8'))
+            modified['files_sha256']['../outside.py']='0'*64
+            manifest.write_text(json.dumps(modified),encoding='utf8')
+            with self.assertRaisesRegex(ClassroomMotorError,'PINNED_ENGINE_MANIFEST_INVALID'):
+                run(self.src,self.cases,cp,self.out)
+            self.assertFalse(self.out.exists())
+
     def test_tampered_pinned_core_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             from shutil import copytree
