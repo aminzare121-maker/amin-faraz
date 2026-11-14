@@ -168,6 +168,9 @@ class ClassroomEngineTests(unittest.TestCase):
         result=run(self.src,self.cases,CORE,self.out)
         self.assertEqual(result['cases'][0]['motor_status'],'ELIGIBLE')
         self.assertFalse(result['cases'][0]['teacher_entry_ready_for_paper_review'])
+        self.assertEqual(result['cases'][0]['teacher_engine_comparison'],
+                         'NOT_INDEPENDENTLY_CONFIRMED_FROM_CLASS')
+        self.assertEqual(result['motor_teacher_comparisons_confirmed'],0)
         self.assertEqual(result['teacher_entry_paper_review_ready_cases'],0)
         self.assertEqual(result['orders_sent'],0)
 
