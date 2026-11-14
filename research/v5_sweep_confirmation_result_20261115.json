@@ -1,0 +1,49 @@
+{
+  "data": "Eplanet M15 23643 bars, 70/30 chronological split, holdout starts 2026-07-21T06:30Z",
+  "hypothesis": "sweep reclaim followed by completed same-direction M15 candle; enter next open",
+  "costs": "spread points * .01 + $0.60 slippage in gold price, $7 per lot commission, $1000 initial equity, 1% risk, 0.01 lot increments, 1 lot cap",
+  "development": {
+    "baseline": {
+      "trades": 153,
+      "net": -233.9,
+      "cost": 148.38,
+      "dd_pct": 24.35,
+      "days_ge_50": 0
+    },
+    "confirm": {
+      "trades": 74,
+      "net": -118.23,
+      "cost": 72.4,
+      "dd_pct": 16.19,
+      "days_ge_50": 0
+    }
+  },
+  "holdout": {
+    "baseline": {
+      "signals": 318,
+      "trades": 138,
+      "wins": 51,
+      "losses": 87,
+      "net": -230.5,
+      "gross": -87.52,
+      "cost": 142.98,
+      "dd_pct": 23.05,
+      "days_ge_50": 0
+    },
+    "confirm": {
+      "signals": 317,
+      "eligible": 158,
+      "trades": 94,
+      "wins": 43,
+      "losses": 51,
+      "net": -22.7,
+      "gross": 77.17,
+      "cost": 99.87,
+      "dd_pct": 10.48,
+      "days_ge_50": 0
+    }
+  },
+  "verdict": "Risk-reduction candidate only; still negative net holdout; do not enable demo",
+  "limitations": "OHLC intrabar ambiguity; spread point conversion and execution costs are assumptions; chronological sample only; no MT5 execution",
+  "private_data_committed": false
+}
