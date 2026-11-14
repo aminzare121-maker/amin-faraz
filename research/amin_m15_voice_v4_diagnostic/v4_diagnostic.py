@@ -98,6 +98,8 @@ def main():
                 "trend":cohorts(ra,lambda t: "up" if t["trend_24_atr"]>0 else "down_or_flat"),
                 "relative_cost":cohorts(ra,lambda t:"low" if t["spread_to_atr"]<=spread_cap else "high"),
                 "recent_gap":cohorts(ra,lambda t:"yes" if t["recent_gap"] else "no")}
+    print("PRE_ASSERT_METRICS",json.dumps({block:{mode:report["results"][block][mode]["metrics"] for mode in ("reference","filter")} for block in ("calibration","validation","holdout")},ensure_ascii=False))
+    (OUT/"pre_assert_metrics.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
     # Verify exact replication of past V3 validation candidate and frozen test outputs
     assert report["results"]["validation"]["reference"]["metrics"]["signals"]==246
     assert abs(report["results"]["validation"]["reference"]["metrics"]["sum_usd_fixed_001_lot"]-129.444)<.02
