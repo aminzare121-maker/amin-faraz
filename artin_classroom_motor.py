@@ -167,6 +167,24 @@ def compile_case(row, index, route_ids):
                 raise ClassroomMotorError('PAPER_LIFECYCLE_OBJECT_REQUIRED')
             if not row.get('paper_trade_teacher_source'):
                 raise ClassroomMotorError('TEACHER_SOURCED_EXIT_RISK_REQUIRED')
+            # Owner's research risk floor, NOT a rule attributed to the teacher.
+            # Apply before the pinned paper runner so a sourced classroom
+            # lifecycle cannot silently enter with an initial target below 2R.
+            from decimal import Decimal, InvalidOperation
+            try:
+                lifecycle = row['paper_trade']
+                entry = Decimal(str(lifecycle['entry_price']))
+                stop = Decimal(str(lifecycle['initial_stop']))
+                target = Decimal(str(lifecycle['target_price']))
+            except (KeyError, TypeError, ValueError, InvalidOperation) as exc:
+                raise ClassroomMotorError('INITIAL_RISK_REWARD_INPUT_INVALID') from exc
+            if not all(v.is_finite() and v > 0 for v in (entry, stop, target)):
+                raise ClassroomMotorError('INITIAL_RISK_REWARD_INPUT_INVALID')
+            sign = Decimal(1) if row['side'] == 'BUY' else Decimal(-1)
+            risk = sign * (entry - stop)
+            reward = sign * (target - entry)
+            if risk <= 0 or reward < 2 * risk:
+                raise ClassroomMotorError('OWNER_MINIMUM_INITIAL_REWARD_RISK_2_TO_1_NOT_MET')
             # Machine ASR or a proposed teacher label is insufficient to
             # simulate a purportedly teacher-approved entry lifecycle.
             if (row.get('teacher_choice') != 'ENTER'
