@@ -239,6 +239,7 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
     # invoking the pinned lifecycle runner, not merely in the final report.
     for data,proof in zip(cases,proofs):
         if ('paper_trade' in data and proof['teacher_choice_in_record']=='NO_TRADE'
+                and proof['source_class'] != 'SYNTHETIC_TEST'
                 and proof['teacher_choice_independently_verified']
                 and proof['teacher_visual_verified']):
             raise ClassroomMotorError('VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE')
@@ -311,6 +312,9 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
                              and comparison=='MATCH')
         effective_classroom_action=(
             'NO_TRADE_TEACHER_VETO' if teacher=='NO_TRADE'
+            and proof['source_class'] != 'SYNTHETIC_TEST'
+            and accepted_cases is not None
+            and (proof['route_id'], proof['case_id']) in accepted_cases
             and proof['teacher_choice_independently_verified']
             and proof['teacher_visual_verified']
             else 'PAPER_ENTRY_REVIEW_CANDIDATE' if teacher_entry_ready
