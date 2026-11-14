@@ -1,0 +1,41 @@
+name: Eplanet M15 - bounded real-candle CI (not full V3 backtest)
+
+on:
+  push:
+    branches:
+      - research/amin-m15-voice-github-20261114
+    paths:
+      - .github/workflows/amin-m15-voice-bounded.yml
+      - research/amin_m15_voice_ci/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amin-m15-voice-bounded-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bounded-m15-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout isolated research branch
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify source provenance, anti-leak safeguards, costs, and actual M15 sample replay
+        run: |
+          python -m py_compile research/amin_m15_voice_ci/bounded_test.py
+          python research/amin_m15_voice_ci/bounded_test.py
+      - name: Upload bounded result even if replay fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eplanet-m15-997-bounded-ci
+          path: research/amin_m15_voice_ci/bounded_ci_result.json
+          if-no-files-found: warn
+          retention-days: 7
