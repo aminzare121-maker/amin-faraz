@@ -147,6 +147,7 @@ class ClassroomEngineTests(unittest.TestCase):
         # This is the owner's risk policy, not a claim about teacher strategy.
         row=next(c for c in self.cases_doc['cases'] if 'paper_trade' in c)
         row['source_class']='CLASSROOM_ASR_CANDIDATE'
+        row['side']='BUY'  # Isolate owner 2R policy from synthetic fixture direction.
         row['paper_trade_teacher_source']='UNVERIFIED_FIXTURE'
         row['teacher_choice']='ENTER'
         row['teacher_choice_verified']=True
