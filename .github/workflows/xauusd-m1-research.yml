@@ -1,4 +1,4 @@
-name: XAUUSD M1 Dukascopy research download
+name: XAUUSD M1 Dukascopy coverage pilot
 on:
   push:
     branches: [research/v5-execution-audit-20261115]
@@ -17,10 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Download historical ticks and aggregate M1
-        run: python research/dukascopy_m1_download.py --start 2026-11-02 --end 2026-11-05
+      - name: Download one-day pilot and audit every hour
+        run: python research/dukascopy_m1_download.py --start 2026-11-03 --end 2026-11-04 --retries 2
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: xauusd-m1-dukascopy-20261102-05
-          path: research/data/dukascopy_xauusd_m1.csv
+          name: xauusd-m1-coverage-pilot
+          path: |
+            research/data/dukascopy_xauusd_m1.csv
+            research/data/dukascopy_xauusd_m1.coverage.json
           retention-days: 7
