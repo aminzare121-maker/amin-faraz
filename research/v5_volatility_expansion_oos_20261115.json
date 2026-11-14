@@ -1,0 +1,27 @@
+{
+  "hypothesis": "M15 volatility compression -> expansion trend breakout; 12-bar breakout, ATR20, EMA100, stop 1 ATR, target 1.8R, max cost/stop 24%",
+  "data_rows": 23643,
+  "holdout_start": "2026-07-21 06:30:00+00:00",
+  "development": {
+    "trades": 171,
+    "net_usd": -110.76,
+    "max_drawdown_pct": 18.56,
+    "wins": 68,
+    "losses": 103,
+    "days_with_trades": 107,
+    "days_ge_50": 0,
+    "total_cost_usd": 171.5
+  },
+  "holdout": {
+    "trades": 94,
+    "net_usd": -98.24,
+    "max_drawdown_pct": 10.77,
+    "wins": 33,
+    "losses": 61,
+    "days_with_trades": 60,
+    "days_ge_50": 0,
+    "total_cost_usd": 97.43
+  },
+  "decision": "REJECT: no positive out-of-sample edge; do not activate in demo",
+  "assumptions": "1000 USD initial capital separately in each segment, 1% equity risk per trade, variable lots .01 step max 1, 0.6 USD price slippage, $7 per lot commission, M15 stop-first, no overlapping trades; source private"
+}
