@@ -66,6 +66,28 @@ jobs:
                   f.write(f"{k}: trades={m['signals']}, net hypothetical USD={m['sum_usd_fixed_001_lot']}, PF={m['profit_factor']}\n\n")
               f.write('**Research filter rejected. No live trading signal and no order.**\n')
           PY
+      - name: Test trade-payoff diagnostic and hard no-order decision
+        run: python research/amin_m15_voice_v4_diagnostic/test_loss_postmortem.py
+      - name: Analyze existing V4 trades without retuning on holdout
+        run: |
+          python research/amin_m15_voice_v4_diagnostic/loss_postmortem.py
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("research/amin_m15_voice_v4_diagnostic/results/loss_postmortem.json")
+          d=json.loads(p.read_text(encoding="utf-8"))
+          assert d["decision"]["strategy_approved"] is False
+          assert d["decision"]["orders_allowed"] is False
+          assert d["blocks"]["holdout"]["filtered"]["net_usd_assumed"]<0
+          assert not d["decision"]["holdout_usable_for_new_selection"]
+          print("NO_TRADE_GUARD_PASS")
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              h=d["blocks"]["holdout"]["filtered"]
+              f.write(f"\n\n## Retrospective loss diagnosis (not signal tuning)\n\n")
+              f.write(f"Trade win rate: {h['win_rate']} | realized break-even rate: {h['realized_payoff_break_even_win_rate']}\n\n")
+              f.write(f"TP rate: {h['tp_event_rate']} | mean calibrated P(TP): {h['mean_predicted_tp_probability']}\n\n")
+              f.write("**No orders authorized; holdout consumed.**\n")
+          PY
       - name: Preserve reproducible results
         if: always()
         uses: actions/upload-artifact@v4
