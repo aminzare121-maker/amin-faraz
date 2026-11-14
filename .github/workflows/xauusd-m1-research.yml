@@ -1,0 +1,26 @@
+name: XAUUSD M1 Dukascopy research download
+on:
+  push:
+    branches: [research/v5-execution-audit-20261115]
+    paths:
+      - 'research/dukascopy_m1_download.py'
+      - '.github/workflows/xauusd-m1-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download historical ticks and aggregate M1
+        run: python research/dukascopy_m1_download.py --start 2026-11-02 --end 2026-11-05
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xauusd-m1-dukascopy-20261102-05
+          path: research/data/dukascopy_xauusd_m1.csv
+          retention-days: 7
