@@ -18,7 +18,7 @@ def run():
     a=p.describe(sample)
     assert a["trades"]==3
     assert a["net_usd_assumed"]==0
-    assert a["realized_payoff_break_even_win_rate"]==1/3
+    assert a["realized_payoff_break_even_win_rate"]==.3333
     assert a["win_rate"]==.3333
     assert a["worst_loss_streak"]==2
     assert a["tp_event_rate"]==.3333
@@ -37,7 +37,7 @@ def run():
         data=p.make_report(directory)
         assert len(data["blocks"])==3
         assert not data["decision"]["orders_allowed"]
-        assert data["blocks"]["calibration"]["filtered"]["realized_payoff_break_even_win_rate"]==1/3
+        assert data["blocks"]["calibration"]["filtered"]["realized_payoff_break_even_win_rate"]==.3333
     print("POSTMORTEM_UNIT_TESTS_PASS")
 
 if __name__=="__main__":
