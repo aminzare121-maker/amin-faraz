@@ -235,7 +235,7 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
     rows = cases_doc.get('cases')
     if not isinstance(rows,list) or not rows:
         raise ClassroomMotorError('NONEMPTY_CLASS_CASES_REQUIRED')
-    cases=[];proofs=[];seen=set()
+    cases=[];proofs=[];seen=set();seen_scenes=set()
     for row in rows:
         data, proof=compile_case(row,index,eng.RULE_IDS)
         if (proof['source_class'] != 'SYNTHETIC_TEST' and accepted_cases is None
@@ -251,6 +251,14 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
                 raise ClassroomMotorError('PRIVATE_ACCEPTANCE_DOES_NOT_CERTIFY_TEACHER_CASE')
         if proof['case_id'] in seen:
             raise ClassroomMotorError('DUPLICATE_TEACHER_CLASS_CASE')
+        # Distinct labels must not multiply one teacher scene into independent
+        # confirmations or paper lifecycles. Keep separate genuine time windows.
+        scene_key = (proof['route_id'], proof['citation_index'],
+                     tuple(proof['class_interval_seconds']),
+                     tuple(sorted(proof['source_asr_segment_ids'])))
+        if scene_key in seen_scenes:
+            raise ClassroomMotorError('DUPLICATE_CLASSROOM_SOURCE_SCENE')
+        seen_scenes.add(scene_key)
         seen.add(proof['case_id']);cases.append(data);proofs.append(proof)
     # Even a structurally valid paper trade must not be replayed against a
     # verified teacher NO_TRADE instruction. Resolve the conflict before
