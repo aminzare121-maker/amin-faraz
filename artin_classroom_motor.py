@@ -303,6 +303,9 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
         else:
             comparison='NEEDS_SPECIFIC_TEACHER_OUTCOME_REPLAY'
         teacher_entry_ready=(status=='ELIGIBLE' and teacher=='ENTER'
+                             and proof['source_class'] != 'SYNTHETIC_TEST'
+                             and accepted_cases is not None
+                             and (proof['route_id'], proof['case_id']) in accepted_cases
                              and proof['teacher_choice_independently_verified']
                              and proof['teacher_visual_verified']
                              and comparison=='MATCH')
