@@ -30,7 +30,9 @@ jobs:
       - name: Reconstruct and hash-check all 23643 real M15 Eplanet candles
         run: python research/amin_m15_voice_v3_full/reassemble_full.py
       - name: Install locked baseline numerical dependencies
-        run: |\n          python -m pip install -r research/amin_m15_voice_v3_full/requirements.txt\n          python -m pip install --no-deps scikit-learn==1.9.1 numpy==2.4.6 pandas==2.3.3
+        run: |
+          python -m pip install -r research/amin_m15_voice_v3_full/requirements.txt
+          python -m pip install --no-deps scikit-learn==1.9.1 numpy==2.4.6 pandas==2.3.3
       - name: Check source syntax
         run: python -m py_compile research/amin_m15_voice_v4_diagnostic/v4_diagnostic.py
       - name: Refit V3 classifier and execute V4 diagnostics with the untouched holdout
