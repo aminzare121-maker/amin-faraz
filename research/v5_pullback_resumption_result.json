@@ -1,0 +1,32 @@
+{
+  "hypothesis": "Trend pullback resumption after two countertrend candles and one breakout confirmation",
+  "rows": 23643,
+  "split_time": "2026-07-21 06:30:00+00:00",
+  "assumptions": "100 USD per $1 per lot; spread points *0.01; slippage 0.60 price roundtrip; commission $7/lot roundtrip; 1% equity risk; 0.01 minimum lot; stop first on OHLC ambiguity; no future features",
+  "development": {
+    "opportunities": 154,
+    "trades": 56,
+    "wins": 20,
+    "gross_profit": 181.37,
+    "gross_loss": -209.91,
+    "costs": 57.81,
+    "net": -86.35,
+    "max_drawdown_pct": 9.2,
+    "trading_days": 45,
+    "days_ge_50": 0
+  },
+  "holdout": {
+    "opportunities": 62,
+    "trades": 41,
+    "wins": 15,
+    "gross_profit": 128.67,
+    "gross_loss": -177.74,
+    "costs": 41.98,
+    "net": -91.05,
+    "max_drawdown_pct": 10.42,
+    "trading_days": 35,
+    "days_ge_50": 0
+  },
+  "decision": "REJECT standalone; no demo trades",
+  "note": "Private Eplanet CSV and trade-level holdout are not committed."
+}
