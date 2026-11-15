@@ -1,0 +1,47 @@
+{
+  "source": "Eplanet M15 private library CSV, 23643 rows",
+  "split_index": 15367,
+  "test_start_utc": "2026-07-02 06:00",
+  "hypothesis": "Fade consecutive directional candles with 30% declining tick volume",
+  "cost_model": "recorded spread points * 0.01 + 0.20 price slippage round-trip, plus 7 USD/lot commission",
+  "train_all": {
+    "trades": 239,
+    "gross_wins": 1052.48,
+    "gross_losses": -916.87,
+    "cost": 151.78,
+    "net": -16.16,
+    "closed_dd": 196.67,
+    "days_ge_50": 1
+  },
+  "train_filtered": {
+    "trades": 158,
+    "gross_wins": 519.89,
+    "gross_losses": -499.29,
+    "cost": 99.15,
+    "net": -78.55,
+    "closed_dd": 124.08,
+    "days_ge_50": 0
+  },
+  "test_all": {
+    "trades": 87,
+    "gross_wins": 222.2,
+    "gross_losses": -175.74,
+    "cost": 57.33,
+    "net": -10.87,
+    "closed_dd": 53.08,
+    "days_ge_50": 0,
+    "trading_days": 91
+  },
+  "test_filtered": {
+    "trades": 82,
+    "gross_wins": 219.24,
+    "gross_losses": -171.47,
+    "cost": 54.08,
+    "net": -6.31,
+    "closed_dd": 48.98,
+    "days_ge_50": 0,
+    "trading_days": 91
+  },
+  "decision": "reject for demo; no confirmed economic edge",
+  "limitations": "OHLC conservative stop-first; no tick-level fill, margin, swap, stop-out"
+}
