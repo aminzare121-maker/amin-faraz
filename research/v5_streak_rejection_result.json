@@ -1,0 +1,50 @@
+{
+  "rows": 23643,
+  "split": "2026-07-21 UTC",
+  "results": {
+    "fade": {
+      "train": {
+        "opportunities": 1121,
+        "trades": 274,
+        "gross_winners": 845.65,
+        "gross_losers": -909.02,
+        "costs": 285.51,
+        "net": -348.89,
+        "max_drawdown_pct": 38.93
+      },
+      "oos": {
+        "opportunities": 433,
+        "trades": 289,
+        "gross_winners": 1073.68,
+        "gross_losers": -860.6,
+        "costs": 286.44,
+        "net": -73.35,
+        "max_drawdown_pct": 15.4,
+        "active_days": 76,
+        "days_net_ge_50": 0
+      }
+    },
+    "continuation": {
+      "train": {
+        "opportunities": 1121,
+        "trades": 360,
+        "gross_winners": 1229.96,
+        "gross_losers": -1183.16,
+        "costs": 359.91,
+        "net": -313.11,
+        "max_drawdown_pct": 31.31
+      },
+      "oos": {
+        "opportunities": 433,
+        "trades": 245,
+        "gross_winners": 702.86,
+        "gross_losers": -784.59,
+        "costs": 237.15,
+        "net": -318.88,
+        "max_drawdown_pct": 32.75,
+        "active_days": 74,
+        "days_net_ge_50": 0
+      }
+    }
+  }
+}
