@@ -261,7 +261,9 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
         # Different window labels cannot count the same source speech as
         # independent teacher decisions when their time windows overlap.
         # Distinct non-overlapping classroom decisions remain separate.
-        scene_group=(proof['route_id'],proof['citation_index'])
+        # Citations may overlap within one video; the same speech must not
+        # certify two decisions merely because it has two citation indices.
+        scene_group=(proof['route_id'],proof['video_session'])
         start,end=proof['class_interval_seconds']
         segments=set(proof['source_asr_segment_ids'])
         for prev_start,prev_end,prev_segments in scene_segments.get(scene_group,[]):
