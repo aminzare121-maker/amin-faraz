@@ -1,0 +1,57 @@
+{
+  "rows": 23643,
+  "split": "2026-07-21 UTC",
+  "cost_model": "spread 0.26/oz, slippage 0.30/oz each side, commission $7/lot round trip; OHLC stop first",
+  "capital": 1000,
+  "results": {
+    "continuation": {
+      "oos": {
+        "opportunities": 88,
+        "trades": 67,
+        "gross_winners": 228.2,
+        "gross_losers": -299.25,
+        "costs": 66.96,
+        "net": -138.02,
+        "max_drawdown_pct": 15.52,
+        "days_ge_50": 0
+      }
+    },
+    "reversal": {
+      "oos": {
+        "opportunities": 88,
+        "trades": 76,
+        "gross_winners": 354.13,
+        "gross_losers": -292.16,
+        "costs": 78.12,
+        "net": -16.15,
+        "max_drawdown_pct": 7.54,
+        "days_ge_50": 0
+      }
+    },
+    "continuation_compression_filter": {
+      "oos": {
+        "opportunities": 6,
+        "trades": 3,
+        "gross_winners": 7.87,
+        "gross_losers": -15.14,
+        "costs": 2.79,
+        "net": -10.06,
+        "max_drawdown_pct": 1.7,
+        "days_ge_50": 0
+      }
+    },
+    "reversal_compression_filter": {
+      "oos": {
+        "opportunities": 6,
+        "trades": 3,
+        "gross_winners": 22.71,
+        "gross_losers": -5.24,
+        "costs": 2.79,
+        "net": 14.67,
+        "max_drawdown_pct": 0.6,
+        "days_ge_50": 0
+      }
+    }
+  },
+  "decision": "REJECT: filtered reversal has only 3 trades and does not reach $50 net per trading day. No demo activation."
+}
