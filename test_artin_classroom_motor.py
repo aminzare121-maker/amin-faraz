@@ -111,6 +111,19 @@ class ClassroomEngineTests(unittest.TestCase):
                 run(self.src,self.cases,CORE,self.out,private)
         self.assertFalse(self.out.exists())
 
+    def test_overlapping_teacher_speech_cannot_count_twice(self):
+        first=self.cases_doc['cases'][0]
+        first.pop('paper_trade',None)
+        duplicate=json.loads(json.dumps(first))
+        duplicate['case_id']='SECOND_LABEL_SAME_SPEECH'
+        duplicate['class_seconds']=[106,108]
+        self.cases_doc['cases']=[first,duplicate]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'OVERLAPPING_CLASSROOM_SOURCE_SEGMENT'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_future_fact_cannot_enter_classroom_engine(self):
         first=self.cases_doc['cases'][0]
         key=next(iter(first['facts']))
