@@ -124,6 +124,28 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_same_speech_in_overlapping_citations_cannot_count_twice(self):
+        first=self.cases_doc['cases'][0]
+        first.pop('paper_trade',None)
+        original=self.source_doc['citations'][0]
+        second_citation=json.loads(json.dumps(original))
+        # Replace a later citation for the same route, keeping the 24-citation
+        # contract and unique citation IDs intact.
+        replacement=next(c for c in self.source_doc['citations'][1:]
+                         if c['route_id']==original['route_id'])
+        second_citation['citation_index']=replacement['citation_index']
+        self.source_doc['citations'][self.source_doc['citations'].index(replacement)]=second_citation
+        duplicate=json.loads(json.dumps(first))
+        duplicate['case_id']='OTHER_CITATION_SAME_SCENE'
+        duplicate['citation_index']=second_citation['citation_index']
+        duplicate['class_seconds']=[106,108]
+        self.cases_doc['cases']=[first,duplicate]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'OVERLAPPING_CLASSROOM_SOURCE_SEGMENT'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_future_fact_cannot_enter_classroom_engine(self):
         first=self.cases_doc['cases'][0]
         key=next(iter(first['facts']))
