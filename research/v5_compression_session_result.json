@@ -1,0 +1,52 @@
+{
+  "hypothesis": "M15 four-bar compression breakout; 12-18 UTC filter as separate loss reduction",
+  "bars": 23643,
+  "holdout_start": "2026-07-21 06:30 UTC",
+  "assumptions": "100 USD per $1 per lot; spread points*0.01; 0.60 USD/oz roundtrip slippage; 7 USD/lot roundtrip commission; 1% equity risk; min 0.01 lot; stop-first",
+  "all_hours": {
+    "development": {
+      "opportunities": 1079,
+      "trades": 179,
+      "gross_wins": 663.89,
+      "gross_losses": -703.33,
+      "costs": 175.63,
+      "net": -215.07,
+      "max_dd_pct": 25.25,
+      "days_ge_50": 0
+    },
+    "holdout": {
+      "opportunities": 529,
+      "trades": 102,
+      "gross_wins": 275.61,
+      "gross_losses": -418.29,
+      "costs": 109.13,
+      "net": -251.81,
+      "max_dd_pct": 28.55,
+      "days_ge_50": 0
+    }
+  },
+  "session_12_18_utc": {
+    "development": {
+      "opportunities": 204,
+      "trades": 50,
+      "gross_wins": 163.6,
+      "gross_losses": -233.14,
+      "costs": 47.4,
+      "net": -116.94,
+      "max_dd_pct": 15.22,
+      "days_ge_50": 0
+    },
+    "holdout": {
+      "opportunities": 89,
+      "trades": 54,
+      "gross_wins": 183.14,
+      "gross_losses": -255.72,
+      "costs": 53.37,
+      "net": -125.95,
+      "max_dd_pct": 14.15,
+      "days_ge_50": 0
+    }
+  },
+  "decision": "reject entry; filter lowers absolute loss but is not independently profitable; no demo activation",
+  "data": "Private Eplanet_History(3).zip; not published"
+}
