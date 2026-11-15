@@ -1,0 +1,42 @@
+{
+  "hypothesis": "tick-volume >= 1.5x prior 20-bar median",
+  "split_time": "2026-07-21 06:30 UTC",
+  "development": {
+    "baseline": {
+      "trades": 153,
+      "net": -233.9,
+      "cost": 148.38,
+      "drawdown_pct": 24.35
+    },
+    "gate": {
+      "trades": 86,
+      "net": -120.08,
+      "cost": 83.73,
+      "drawdown_pct": 16.09
+    }
+  },
+  "holdout": {
+    "baseline": {
+      "opportunities": 318,
+      "trades": 138,
+      "wins": 51,
+      "net": -230.5,
+      "cost": 142.98,
+      "drawdown_pct": 23.05,
+      "days_ge_50": 0
+    },
+    "gate": {
+      "opportunities": 324,
+      "rejected": 230,
+      "trades": 54,
+      "wins": 14,
+      "gross_gain": 137.91,
+      "gross_loss": -248.81,
+      "net": -166.33,
+      "cost": 55.43,
+      "drawdown_pct": 17.58,
+      "days_ge_50": 0
+    }
+  },
+  "decision": "reject as profitable strategy; possible risk reduction only; no demo"
+}
