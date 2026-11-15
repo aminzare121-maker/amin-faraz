@@ -1,0 +1,33 @@
+{
+  "hypothesis": "cost <= 8% of 1R",
+  "development": {
+    "baseline": {
+      "trades": 153,
+      "net": -233.9,
+      "cost": 148.38,
+      "max_dd_pct": 24.35
+    },
+    "gate": {
+      "candidates": 686,
+      "rejected": 517,
+      "trades": 0,
+      "net": 0
+    }
+  },
+  "holdout": {
+    "baseline": {
+      "trades": 138,
+      "net": -230.5,
+      "cost": 142.98,
+      "max_dd_pct": 23.05
+    },
+    "gate": {
+      "candidates": 333,
+      "rejected": 315,
+      "trades": 0,
+      "net": 0
+    }
+  },
+  "conclusion": "gate rejects all executable trades; not profitable; no demo activation",
+  "note": "Candidates differ because skipping rejected entries changes scanning cadence. OHLC adverse-first assumptions; spread /100, $0.6 slippage + $7 commission per lot."
+}
