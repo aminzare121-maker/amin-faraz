@@ -1,0 +1,49 @@
+{
+  "rows": 23643,
+  "split": "2026-07-21 UTC",
+  "cost_model": "spread .26/oz, slippage .30/oz each side, commission $7/lot roundtrip; OHLC stop-first",
+  "capital": 1000,
+  "results": {
+    "breakout_train": {
+      "opportunities": 37,
+      "trades": 37,
+      "gross_winners": 133.96,
+      "gross_losers": -190.15,
+      "costs": 34.41,
+      "net": -90.61,
+      "max_drawdown_usd": 134.92,
+      "days_ge_50": 0
+    },
+    "breakout_oos": {
+      "opportunities": 39,
+      "trades": 39,
+      "gross_winners": 177.33,
+      "gross_losers": -213.93,
+      "costs": 36.27,
+      "net": -72.87,
+      "max_drawdown_usd": 97.89,
+      "days_ge_50": 0
+    },
+    "fade_train": {
+      "opportunities": 37,
+      "trades": 37,
+      "gross_winners": 159.45,
+      "gross_losers": -169.63,
+      "costs": 34.41,
+      "net": -44.59,
+      "max_drawdown_usd": 77.87,
+      "days_ge_50": 0
+    },
+    "fade_oos": {
+      "opportunities": 39,
+      "trades": 39,
+      "gross_winners": 283.46,
+      "gross_losers": -169.87,
+      "costs": 36.27,
+      "net": 77.31,
+      "max_drawdown_usd": 38.84,
+      "days_ge_50": 0
+    }
+  },
+  "decision": "REJECT: positive fade OOS is sparse, zero days >= $50 net; no demo activation."
+}
