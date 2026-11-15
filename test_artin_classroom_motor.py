@@ -495,10 +495,18 @@ class ClassroomEngineTests(unittest.TestCase):
             with self.assertRaisesRegex(ClassroomMotorError,'PINNED_ENGINE_SOURCE_CHANGED'):
                 run(self.src,self.cases,cp,self.out)
 
-    def test_citation_interval_overlap_not_full_containment_is_allowed(self):
-        self.source_doc['citations'][0]['excerpts'][0]['start']=99
-        self.write()
-        self.assertEqual(len(index_original_citations(self.source_doc, RULE_IDS)),24)
+    def test_citation_partial_speech_overlap_is_rejected_at_both_edges(self):
+        # A speech excerpt partially outside the citation is not evidence
+        # for the full cited scene, even when the intervals overlap.
+        for edge, start, end in (('before', 99, 108), ('after', 105, 201)):
+            with self.subTest(edge=edge):
+                excerpt = self.source_doc['citations'][0]['excerpts'][0]
+                excerpt['start'], excerpt['end'] = start, end
+                with self.assertRaisesRegex(ClassroomMotorError, 'SEGMENT_OUTSIDE_CLASS_CITATION'):
+                    index_original_citations(self.source_doc, RULE_IDS)
+        # The original fully contained excerpt remains valid.
+        excerpt['start'], excerpt['end'] = 105, 108
+        self.assertEqual(len(index_original_citations(self.source_doc, RULE_IDS)), 24)
 
     def test_unanchored_source_segment_is_rejected(self):
         self.source_doc['citations'][0]['excerpts'][0]['start']=97
