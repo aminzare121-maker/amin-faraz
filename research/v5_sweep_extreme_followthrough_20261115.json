@@ -1,0 +1,42 @@
+{
+  "study": "Sweep-reclaim: confirmed candle must close beyond sweep candle extreme",
+  "split": "70/30 chronological; holdout begins 2026-07-21 06:30 UTC",
+  "development": {
+    "confirmation": {
+      "trades": 74,
+      "net_usd": -118.23,
+      "drawdown_pct": 16.19,
+      "cost_usd": 72.4
+    },
+    "extreme": {
+      "trades": 55,
+      "net_usd": -123.41,
+      "drawdown_pct": 15.77,
+      "cost_usd": 53.53
+    }
+  },
+  "holdout": {
+    "confirmation": {
+      "trades": 94,
+      "net_usd": -22.7,
+      "drawdown_pct": 10.48,
+      "cost_usd": 99.87,
+      "days_ge_50": 0
+    },
+    "extreme": {
+      "signals": 320,
+      "eligible": 119,
+      "trades": 79,
+      "wins": 41,
+      "net_usd": 54.89,
+      "gross_usd": 139.22,
+      "cost_usd": 84.33,
+      "drawdown_pct": 5.72,
+      "days_ge_50": 0,
+      "trading_days": 52
+    }
+  },
+  "assumptions": "Eplanet M15 OHLC; spread*0.01 + 0.6 price slippage + $7/lot commission; 1% risk, 0.01 lot min; 7-bar holding; stop-first intrabar; $1000 restart per split",
+  "decision": "DO NOT ENABLE DEMO: development negative, holdout positive only, target $50/day unmet; independent forward validation required",
+  "private_data_committed": false
+}
