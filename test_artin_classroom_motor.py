@@ -58,6 +58,17 @@ class ClassroomEngineTests(unittest.TestCase):
         self.src.write_text(json.dumps(self.source_doc),encoding='utf8')
         self.cases.write_text(json.dumps(self.cases_doc),encoding='utf8')
 
+    def test_citation_rejects_partially_outside_speech_excerpt(self):
+        # Overlap alone is insufficient: the excerpt must be fully contained.
+        for start, end in ((99, 106), (195, 201)):
+            with self.subTest(start=start, end=end):
+                doc=citations()
+                doc['citations'][0]['excerpts'][0]['start']=start
+                doc['citations'][0]['excerpts'][0]['end']=end
+                with self.assertRaisesRegex(
+                        ClassroomMotorError, 'SEGMENT_OUTSIDE_CLASS_CITATION'):
+                    index_original_citations(doc, RULE_IDS)
+
     def test_verified_real_case_requires_scene_speech_ids(self):
         row=self.cases_doc['cases'][0]
         row.pop('paper_trade',None)
