@@ -1,0 +1,79 @@
+{
+  "rows": 23643,
+  "split_utc": "2026-07-21 06:30:00+00:00",
+  "assumptions": "100 oz/lot, 1% equity risk, min 0.01 lot, spread 0.26/oz, roundtrip slippage 0.60/oz, $7/lot commission, stop-first, no tick or margin stopout",
+  "results": {
+    "train": {
+      "fade": {
+        "opportunities": 460,
+        "trades": 258,
+        "net": -357.34,
+        "max_closed_equity_drawdown": 361.18,
+        "costs": 254.82
+      },
+      "fade_riskfilter": {
+        "opportunities": 461,
+        "trades": 129,
+        "net": -178.26,
+        "max_closed_equity_drawdown": 227.49,
+        "costs": 124.62
+      },
+      "follow": {
+        "opportunities": 447,
+        "trades": 291,
+        "net": -367.42,
+        "max_closed_equity_drawdown": 414.92,
+        "costs": 291.09
+      },
+      "follow_riskfilter": {
+        "opportunities": 450,
+        "trades": 150,
+        "net": -67.77,
+        "max_closed_equity_drawdown": 127.44,
+        "costs": 153.45
+      }
+    },
+    "holdout": {
+      "fade": {
+        "opportunities": 216,
+        "trades": 209,
+        "gross_winners": 727.68,
+        "gross_losers": -778.16,
+        "costs": 203.67,
+        "net": -254.15,
+        "max_closed_equity_drawdown": 265.41,
+        "days_net_ge_50": 0
+      },
+      "fade_riskfilter": {
+        "opportunities": 218,
+        "trades": 95,
+        "gross_winners": 297.78,
+        "gross_losers": -397.61,
+        "costs": 96.72,
+        "net": -196.55,
+        "max_closed_equity_drawdown": 212.92,
+        "days_net_ge_50": 0
+      },
+      "follow": {
+        "opportunities": 204,
+        "trades": 201,
+        "gross_winners": 744.32,
+        "gross_losers": -771.87,
+        "costs": 204.6,
+        "net": -232.15,
+        "max_closed_equity_drawdown": 305.04,
+        "days_net_ge_50": 0
+      },
+      "follow_riskfilter": {
+        "opportunities": 209,
+        "trades": 87,
+        "gross_winners": 416.64,
+        "gross_losers": -300.15,
+        "costs": 94.86,
+        "net": 21.64,
+        "max_closed_equity_drawdown": 59.31,
+        "days_net_ge_50": 0
+      }
+    }
+  }
+}
