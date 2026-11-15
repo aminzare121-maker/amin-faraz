@@ -1,0 +1,31 @@
+{
+  "hypothesis": "Low-range inside-bar directional continuation during 12-17 UTC",
+  "n": 23643,
+  "cut": "2026-07-21 06:30:00+00:00",
+  "assumptions": "1% equity risk; 0.01-lot steps; spread*0.01; $0.60/oz slippage; $7/lot commission; stop-first intrabar",
+  "development": {
+    "opportunities": 70,
+    "trades": 32,
+    "wins": 11,
+    "net_usd": -70.82,
+    "gross_wins_usd": 85.46,
+    "gross_losses_usd": -156.28,
+    "cost_usd": 31.51,
+    "max_drawdown_pct": 12.13,
+    "days_traded": 30,
+    "days_ge_50": 0
+  },
+  "holdout": {
+    "opportunities": 30,
+    "trades": 28,
+    "wins": 12,
+    "net_usd": -13.89,
+    "gross_wins_usd": 97.65,
+    "gross_losses_usd": -111.54,
+    "cost_usd": 27.64,
+    "max_drawdown_pct": 2.47,
+    "days_traded": 27,
+    "days_ge_50": 0
+  },
+  "decision": "REJECT: both partitions negative; no demo activation"
+}
