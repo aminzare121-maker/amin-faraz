@@ -1,0 +1,99 @@
+{
+  "source": "Eplanet_M15_20251105_20261105_merged.csv (private; not published)",
+  "rows": 23643,
+  "split_index": 16550,
+  "initial_usd": 1000,
+  "results": {
+    "fade_baseline_train": [
+      84,
+      35,
+      126.54,
+      -183.7,
+      34.41,
+      -91.57,
+      92.55,
+      0
+    ],
+    "fade_baseline_oos": [
+      27,
+      25,
+      105.2,
+      -35.96,
+      26.04,
+      43.2,
+      28.77,
+      0
+    ],
+    "fade_filtered_train": [
+      84,
+      12,
+      49.24,
+      -62.61,
+      11.16,
+      -24.53,
+      38.9,
+      0
+    ],
+    "fade_filtered_oos": [
+      27,
+      9,
+      29.56,
+      -21.01,
+      9.3,
+      -0.75,
+      17.8,
+      0
+    ],
+    "follow_baseline_train": [
+      84,
+      38,
+      218.33,
+      -141.19,
+      38.13,
+      39.01,
+      55.06,
+      0
+    ],
+    "follow_baseline_oos": [
+      27,
+      23,
+      35.96,
+      -90.27,
+      23.25,
+      -77.56,
+      78.29,
+      0
+    ],
+    "follow_filtered_train": [
+      84,
+      12,
+      62.61,
+      -49.24,
+      11.16,
+      2.21,
+      19.95,
+      0
+    ],
+    "follow_filtered_oos": [
+      27,
+      9,
+      21.01,
+      -29.56,
+      9.3,
+      -17.85,
+      30.36,
+      0
+    ]
+  },
+  "columns": [
+    "opportunities",
+    "trades",
+    "gross_wins_usd",
+    "gross_losses_usd",
+    "cost_usd",
+    "net_usd",
+    "max_drawdown_usd",
+    "days_net_ge_50"
+  ],
+  "caveats": "No tick execution or margin/stopout; open-price fill after gap optimistic; cost hypothetical; results not evidence of demo profitability"
+}
