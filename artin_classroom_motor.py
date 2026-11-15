@@ -150,7 +150,7 @@ def compile_case(row, index, route_ids):
     excerpts_by_id = {x['asr_segment_id']: x for x in cited['excerpts']}
     for segment_id in ids:
         excerpt = excerpts_by_id[segment_id]
-        if not (excerpt['start'] < end and start < excerpt['end']):
+        if not (start <= excerpt['start'] < excerpt['end'] <= end):
             raise ClassroomMotorError('CLASS_SOURCE_SEGMENT_OUTSIDE_CASE_SCENE')
     at = row.get('market_decision_at')
     if type(at) is not int or at < 0:
