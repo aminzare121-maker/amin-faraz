@@ -263,7 +263,9 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
         # Distinct non-overlapping classroom decisions remain separate.
         # Citations may overlap within one video; the same speech must not
         # certify two decisions merely because it has two citation indices.
-        scene_group=(proof['route_id'],proof['video_session'])
+        # One spoken scene cannot independently certify two different routes.
+        # Route-specific labels are not independent original evidence.
+        scene_group=proof['video_session']
         start,end=proof['class_interval_seconds']
         segments=set(proof['source_asr_segment_ids'])
         for prev_start,prev_end,prev_segments in scene_segments.get(scene_group,[]):
