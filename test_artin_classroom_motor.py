@@ -431,6 +431,18 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_partial_speech_outside_decision_scene_rejected_at_both_edges(self):
+        # A cited excerpt at 105..108 cannot substantiate a scene that
+        # contains only its beginning or ending, even when it overlaps.
+        for window in ([106,120], [100,107]):
+            with self.subTest(window=window):
+                self.cases_doc['cases'][0]['class_seconds']=window
+                self.write()
+                with self.assertRaisesRegex(
+                        ClassroomMotorError, 'CLASS_SOURCE_SEGMENT_OUTSIDE_CASE_SCENE'):
+                    run(self.src,self.cases,CORE,self.out)
+                self.assertFalse(self.out.exists())
+
     def test_no_unverified_asr_ids_spliced(self):
         self.cases_doc['cases'][0]['source_asr_segment_ids']=['not-a-source'];self.write()
         with self.assertRaisesRegex(ClassroomMotorError,'CLASS_SOURCE_SEGMENT_NOT_IN_CITATION'):
