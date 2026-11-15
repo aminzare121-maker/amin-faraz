@@ -1,0 +1,52 @@
+{
+  "data": "Eplanet_M15_20251105_20261105_merged.csv (private; not committed)",
+  "cut": "2026-07-21 UTC",
+  "initial_equity_usd": 1000,
+  "assumed_costs": {
+    "spread_usd_per_oz": 0.26,
+    "slippage_usd_per_oz_roundtrip": 0.6,
+    "commission_usd_per_lot_roundtrip": 7
+  },
+  "continuation_train": {
+    "trades": 88,
+    "gross_wins": 240.07,
+    "gross_losses": -292.74,
+    "cost": 82.77,
+    "net": -135.44,
+    "max_drawdown_pct": 16.24,
+    "days_traded": 62,
+    "days_net_ge_50": 0
+  },
+  "continuation_oos": {
+    "trades": 50,
+    "gross_wins": 121.79,
+    "gross_losses": -136.17,
+    "cost": 46.5,
+    "net": -60.88,
+    "max_drawdown_pct": 7.81,
+    "days_traded": 39,
+    "days_net_ge_50": 0
+  },
+  "reversal_train": {
+    "trades": 85,
+    "gross_wins": 244.07,
+    "gross_losses": -246.68,
+    "cost": 79.98,
+    "net": -82.59,
+    "max_drawdown_pct": 9.27,
+    "days_traded": 60,
+    "days_net_ge_50": 0
+  },
+  "reversal_oos": {
+    "trades": 56,
+    "gross_wins": 157.83,
+    "gross_losses": -167.6,
+    "cost": 53.01,
+    "net": -62.78,
+    "max_drawdown_pct": 6.28,
+    "days_traded": 42,
+    "days_net_ge_50": 0
+  },
+  "decision": "REJECT both; no demo orders",
+  "limitations": "M15 OHLC cannot establish intrabar fill sequencing; assumed costs, no tick replay."
+}
