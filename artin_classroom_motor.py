@@ -235,7 +235,7 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
     rows = cases_doc.get('cases')
     if not isinstance(rows,list) or not rows:
         raise ClassroomMotorError('NONEMPTY_CLASS_CASES_REQUIRED')
-    cases=[];proofs=[];seen=set();seen_scenes=set()
+    cases=[];proofs=[];seen=set();seen_scenes=set();scene_segments={}
     for row in rows:
         data, proof=compile_case(row,index,eng.RULE_IDS)
         if (proof['source_class'] != 'SYNTHETIC_TEST' and accepted_cases is None
@@ -258,6 +258,16 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
                      tuple(sorted(proof['source_asr_segment_ids'])))
         if scene_key in seen_scenes:
             raise ClassroomMotorError('DUPLICATE_CLASSROOM_SOURCE_SCENE')
+        # Different window labels cannot count the same source speech as
+        # independent teacher decisions when their time windows overlap.
+        # Distinct non-overlapping classroom decisions remain separate.
+        scene_group=(proof['route_id'],proof['citation_index'])
+        start,end=proof['class_interval_seconds']
+        segments=set(proof['source_asr_segment_ids'])
+        for prev_start,prev_end,prev_segments in scene_segments.get(scene_group,[]):
+            if start < prev_end and prev_start < end and segments.intersection(prev_segments):
+                raise ClassroomMotorError('OVERLAPPING_CLASSROOM_SOURCE_SEGMENT')
+        scene_segments.setdefault(scene_group,[]).append((start,end,segments))
         seen_scenes.add(scene_key)
         seen.add(proof['case_id']);cases.append(data);proofs.append(proof)
     # Even a structurally valid paper trade must not be replayed against a
