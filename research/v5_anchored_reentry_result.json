@@ -1,0 +1,82 @@
+{
+  "source": "Private Eplanet_History(3).zip M15 CSV chunks; data not published",
+  "rows": 23643,
+  "split_index": 16550,
+  "initial_usd": 1000,
+  "assumptions": "Bid M15 OHLC, spread points 0.01 USD, 0.30 USD/oz slippage each side, commission 7 USD/lot, 100oz/lot, leverage 1:200, no swap or tick stopout",
+  "columns": [
+    "opportunities",
+    "trades",
+    "net_usd",
+    "max_closed_equity_drawdown_usd",
+    "estimated_cost_including_entry",
+    "days_net_ge_50"
+  ],
+  "results": {
+    "train_fade_base": [
+      374,
+      276,
+      -167.57,
+      224.98,
+      268.57,
+      0
+    ],
+    "train_fade_riskfilter": [
+      377,
+      116,
+      -240.33,
+      252.58,
+      114.83,
+      0
+    ],
+    "train_follow_base": [
+      366,
+      230,
+      -144.98,
+      189.45,
+      221.9,
+      0
+    ],
+    "train_follow_riskfilter": [
+      365,
+      122,
+      48.73,
+      88.9,
+      126.17,
+      0
+    ],
+    "oos_fade_base": [
+      158,
+      146,
+      -130.1,
+      130.35,
+      150.05,
+      0
+    ],
+    "oos_fade_riskfilter": [
+      158,
+      75,
+      -76,
+      109.79,
+      83.18,
+      0
+    ],
+    "oos_follow_base": [
+      161,
+      154,
+      28.87,
+      167.5,
+      186.9,
+      0
+    ],
+    "oos_follow_riskfilter": [
+      161,
+      80,
+      -19.28,
+      61.07,
+      90.03,
+      0
+    ]
+  },
+  "caveats": "Local code executed on private Eplanet CSV; GitHub source not independently rerun; data source clock unverified; risk filter evaluated separately, no demo trading."
+}
