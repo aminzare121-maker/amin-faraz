@@ -283,7 +283,7 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
             raise ClassroomMotorError('VERIFIED_TEACHER_NO_TRADE_BLOCKS_PAPER_LIFECYCLE')
     # Evaluate the source-bound case before running any proposed paper
     # lifecycle. This uses the same pinned entry evaluator as the runner.
-    from entry_engine import Fact,Observation
+    Fact,Observation=eng.Fact,eng.Observation
     for data,proof in zip(cases,proofs):
         if ('paper_trade' in data and proof['teacher_choice_in_record']=='ENTER'
                 and proof['teacher_choice_independently_verified']
@@ -312,7 +312,7 @@ def run(citation_path, cases_path, core, out, private_acceptance_sources=None):
                 or data['side'] not in ('BUY','SELL')
                 or proof['citation_index'] not in index):
             raise ClassroomMotorError('CLASSROOM_CASE_PROOF_IDENTITY_MISMATCH')
-        from entry_engine import Fact,Observation
+        Fact,Observation=eng.Fact,eng.Observation
         expected=eng.Engine(source['plan_id'],tuple(source['allowed_rules'])).evaluate(
             data['rule_id'],
             Observation(data['side'],data['at'],
