@@ -146,6 +146,29 @@ class ClassroomEngineTests(unittest.TestCase):
             run(self.src,self.cases,CORE,self.out)
         self.assertFalse(self.out.exists())
 
+    def test_same_speech_cannot_certify_two_different_routes(self):
+        first=self.cases_doc['cases'][0]
+        first.pop('paper_trade',None)
+        original=self.source_doc['citations'][0]
+        other=next(c for c in self.source_doc['citations'][1:]
+                   if c['route_id']!=original['route_id'])
+        # Two routes may cite one original utterance, but that utterance is
+        # not two independently verified classroom decisions.
+        other['session']=original['session']
+        other['start_seconds']=original['start_seconds']
+        other['end_seconds']=original['end_seconds']
+        other['excerpts']=json.loads(json.dumps(original['excerpts']))
+        second=json.loads(json.dumps(first))
+        second['case_id']='DIFFERENT_ROUTE_SAME_SPEECH'
+        second['rule_id']=other['route_id']
+        second['citation_index']=other['citation_index']
+        self.cases_doc['cases']=[first,second]
+        self.write()
+        with self.assertRaisesRegex(ClassroomMotorError,
+                                    'OVERLAPPING_CLASSROOM_SOURCE_SEGMENT'):
+            run(self.src,self.cases,CORE,self.out)
+        self.assertFalse(self.out.exists())
+
     def test_future_fact_cannot_enter_classroom_engine(self):
         first=self.cases_doc['cases'][0]
         key=next(iter(first['facts']))
