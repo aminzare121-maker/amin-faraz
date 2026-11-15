@@ -74,7 +74,7 @@ def index_original_citations(document, routes):
         if route not in routes or type(session) is not int or not 1 <= session <= 25 or not 0 <= start < stop:
             raise ClassroomMotorError('INVALID_CLASS_CITATION')
         intervals = tuple((x['start'],x['end'],x['asr_segment_id']) for x in c['excerpts'])
-        if any(not (a < b and max(start,a) < min(stop,b)) for a,b,_ in intervals):
+        if any(not (start <= a < b <= stop) for a,b,_ in intervals):
             raise ClassroomMotorError('SEGMENT_OUTSIDE_CLASS_CITATION')
         indexed[c['citation_index']] = c
     if {c['route_id'] for c in indexed.values()} != set(routes):
