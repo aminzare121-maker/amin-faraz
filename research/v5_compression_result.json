@@ -1,0 +1,47 @@
+{
+  "source": "Private Eplanet M15 CSV, 23643 rows, not uploaded",
+  "validation": "Local script run; GitHub copy not independently rerun",
+  "test": {
+    "breakout": {
+      "trades": 431,
+      "opportunities": 857,
+      "positive_net_trade_sum": 1067.46,
+      "negative_net_trade_sum": -1683.99,
+      "estimated_cost": 431.52,
+      "net": -616.53,
+      "max_closed_equity_drawdown": 627.16,
+      "days_ge_50": 0
+    },
+    "breakout_filtered": {
+      "trades": 472,
+      "opportunities": 847,
+      "positive_net_trade_sum": 1164.33,
+      "negative_net_trade_sum": -1755.69,
+      "estimated_cost": 469.65,
+      "net": -591.36,
+      "max_closed_equity_drawdown": 606.53,
+      "days_ge_50": 0
+    },
+    "reverse": {
+      "trades": 688,
+      "opportunities": 838,
+      "positive_net_trade_sum": 2026.73,
+      "negative_net_trade_sum": -2592.19,
+      "estimated_cost": 694.71,
+      "net": -565.46,
+      "max_closed_equity_drawdown": 586.43,
+      "days_ge_50": 0
+    },
+    "reverse_filtered": {
+      "trades": 590,
+      "opportunities": 863,
+      "positive_net_trade_sum": 1621.86,
+      "negative_net_trade_sum": -2187.91,
+      "estimated_cost": 604.5,
+      "net": -566.06,
+      "max_closed_equity_drawdown": 595.6,
+      "days_ge_50": 0
+    }
+  },
+  "limitations": "No tick replay, real swap, margin stopout. PnL categories are NET of fees; estimated_cost is shown separately and must not be subtracted again. Risk filter changes trade sequence and opportunity count."
+}
