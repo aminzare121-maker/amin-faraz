@@ -1,0 +1,49 @@
+{
+  "hypothesis": "20-bar liquidity sweep reclaim vs opposite control",
+  "bars": 23643,
+  "cut": "2026-07-21 06:30 UTC",
+  "costs": "spread 0.26 USD/oz, slippage 0.30 each side, commission $7/lot",
+  "development": {
+    "reclaim": {
+      "opportunities": 875,
+      "trades": 446,
+      "gross_wins": 1585.26,
+      "gross_losses": -1573.23,
+      "costs": 471.51,
+      "net": -459.47,
+      "max_dd_pct": 48.51
+    },
+    "opposite": {
+      "opportunities": 855,
+      "trades": 420,
+      "gross_wins": 1521.43,
+      "gross_losses": -1452.32,
+      "costs": 449.19,
+      "net": -380.08,
+      "max_dd_pct": 39.68
+    }
+  },
+  "holdout": {
+    "reclaim": {
+      "opportunities": 413,
+      "trades": 265,
+      "gross_wins": 715.96,
+      "gross_losses": -928.7,
+      "costs": 265.05,
+      "net": -477.79,
+      "max_dd_pct": 48.41,
+      "days_ge_50": 0
+    },
+    "opposite": {
+      "opportunities": 386,
+      "trades": 352,
+      "gross_wins": 1284.85,
+      "gross_losses": -1228.34,
+      "costs": 370.14,
+      "net": -313.64,
+      "max_dd_pct": 38.2,
+      "days_ge_50": 0
+    }
+  },
+  "decision": "REJECT"
+}
