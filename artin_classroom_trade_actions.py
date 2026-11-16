@@ -128,7 +128,7 @@ def _three_candle_close_entry(event, text):
             raise TeacherActionError('UNSOURCED_M15_CANDLE')
         # A finalized candle is not valid until its actual close. The
         # explicit source clock is required outside synthetic fixtures.
-        if not candle['source'].startswith('SYNTHETIC_') and 'known_at' not in candle:
+        if candle['source'] != 'SYNTHETIC_TEST_M15' and 'known_at' not in candle:
             return {'decision':'WAIT_FOR_CAUSAL_M15_BAR','order_created':False,
                     'bar_open_time':t}
         direction.append('BUY' if c>o else 'SELL' if c<o else 'FLAT')
