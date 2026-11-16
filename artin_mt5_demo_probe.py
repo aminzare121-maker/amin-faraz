@@ -25,13 +25,17 @@ def probe(mt5):
             raise ProbeBlocked('MT5_ACCOUNT_IS_NOT_DEMO')
         if getattr(terminal, 'connected', False) is not True:
             raise ProbeBlocked('MT5_TERMINAL_DISCONNECTED')
-        symbol = mt5.symbol_info('XAUUSD')
+        # Prefer the Eplanet executable contract, retaining generic XAUUSD
+        # for terminals that expose the unsuffixed symbol only.
+        symbol = mt5.symbol_info('XAUUSD.st')
         if symbol is None:
+            symbol = mt5.symbol_info('XAUUSD')
+        if symbol is None or getattr(symbol, 'name', None) not in ('XAUUSD.st', 'XAUUSD'):
             raise ProbeBlocked('MT5_XAUUSD_NOT_FOUND')
         # Never export login, server, password, token, balance, or positions.
         return {'schema':'artin_mt5_demo_readonly_probe_v1',
                 'terminal_connected':True,'account_mode':'DEMO',
-                'symbol':'XAUUSD','symbol_available':True,
+                'symbol':symbol.name,'symbol_available':True,
                 'terminal_trade_allowed':bool(getattr(terminal,'trade_allowed',False)),
                 'orders_sent':0,'order_functions_called':False,
                 'broker_fills_verified':False,'demo_trade_test_passed':False}
