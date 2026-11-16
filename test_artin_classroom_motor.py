@@ -127,7 +127,7 @@ class ClassroomEngineTests(unittest.TestCase):
         first.pop('paper_trade',None)
         duplicate=json.loads(json.dumps(first))
         duplicate['case_id']='SECOND_LABEL_SAME_SPEECH'
-        duplicate['class_seconds']=[106,108]
+        duplicate['class_seconds']=[105,108]
         self.cases_doc['cases']=[first,duplicate]
         self.write()
         with self.assertRaisesRegex(ClassroomMotorError,
@@ -149,7 +149,7 @@ class ClassroomEngineTests(unittest.TestCase):
         duplicate=json.loads(json.dumps(first))
         duplicate['case_id']='OTHER_CITATION_SAME_SCENE'
         duplicate['citation_index']=second_citation['citation_index']
-        duplicate['class_seconds']=[106,108]
+        duplicate['class_seconds']=[105,108]
         self.cases_doc['cases']=[first,duplicate]
         self.write()
         with self.assertRaisesRegex(ClassroomMotorError,
