@@ -1,0 +1,55 @@
+{
+  "dataset": "Eplanet_M15_20251105_20261105_merged.csv (private, not committed)",
+  "rows": 23643,
+  "split": "first 65% train, last 35% test",
+  "capital_usd": 1000,
+  "goal": "at least $50 net every trading day",
+  "assumptions": "100 oz per lot; min .01 max .07; $10 nominal risk target; spread*0.01 plus $0.20/oz slippage and $7/lot commission; no tick replay or margin; closed equity drawdown",
+  "results": [
+    {
+      "method": "reversal",
+      "test_trades": 137,
+      "gross_wins": 757.61,
+      "gross_losses": -657.29,
+      "costs": 84.49,
+      "net": 15.83,
+      "closed_drawdown": 107.61,
+      "days_ge_50": 0,
+      "train_net": -258.83
+    },
+    {
+      "method": "reversal_filtered",
+      "test_trades": 133,
+      "gross_wins": 709.45,
+      "gross_losses": -649.16,
+      "costs": 82.13,
+      "net": -21.84,
+      "closed_drawdown": 136.85,
+      "days_ge_50": 0,
+      "train_net": -307.98
+    },
+    {
+      "method": "continuation_control",
+      "test_trades": 137,
+      "gross_wins": 644.99,
+      "gross_losses": -769.91,
+      "costs": 84.49,
+      "net": -209.41,
+      "closed_drawdown": 270.38,
+      "days_ge_50": 0,
+      "train_net": -3.55
+    },
+    {
+      "method": "continuation_filtered",
+      "test_trades": 133,
+      "gross_wins": 636.86,
+      "gross_losses": -721.75,
+      "costs": 82.13,
+      "net": -167.02,
+      "closed_drawdown": 227.99,
+      "days_ge_50": 0,
+      "train_net": 125.76
+    }
+  ],
+  "decision": "Reject all for MT5 demo"
+}
