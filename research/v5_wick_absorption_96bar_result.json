@@ -1,0 +1,55 @@
+{
+  "input": "Private Eplanet M15 CSV; not committed",
+  "split": "2026-07-21 UTC",
+  "assumptions": "100oz/lot, risk 1% equity, min 0.01 lot, max 0.5 lot, fixed 0.26 spread + 0.60 roundtrip slippage per oz + 7 USD/lot, conservative SL priority, no margin or ticks",
+  "result": {
+    "reversal_train": {
+      "opportunities": 290,
+      "trades": 203,
+      "gross_wins": 732.37,
+      "gross_losses": -815.54,
+      "cost": 229.71,
+      "net": -312.88,
+      "max_drawdown_usd": 367.31,
+      "final_equity": 687.12,
+      "active_days": 106,
+      "days_ge_50": 0
+    },
+    "reversal_oos": {
+      "opportunities": 136,
+      "trades": 124,
+      "gross_wins": 388.9,
+      "gross_losses": -467.41,
+      "cost": 138.57,
+      "net": -217.08,
+      "max_drawdown_usd": 217.08,
+      "final_equity": 782.92,
+      "active_days": 69,
+      "days_ge_50": 0
+    },
+    "continuation_train": {
+      "opportunities": 290,
+      "trades": 201,
+      "gross_wins": 676.89,
+      "gross_losses": -757.92,
+      "cost": 213.9,
+      "net": -294.93,
+      "max_drawdown_usd": 296.42,
+      "final_equity": 705.07,
+      "active_days": 108,
+      "days_ge_50": 0
+    },
+    "continuation_oos": {
+      "opportunities": 136,
+      "trades": 124,
+      "gross_wins": 483.95,
+      "gross_losses": -481.29,
+      "cost": 154.38,
+      "net": -151.72,
+      "max_drawdown_usd": 209.65,
+      "final_equity": 848.28,
+      "active_days": 69,
+      "days_ge_50": 0
+    }
+  }
+}
