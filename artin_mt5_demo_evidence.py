@@ -29,7 +29,9 @@ def evaluate_demo_receipt(receipt):
         raise DemoEvidenceError('REAL_ACCOUNT_FORBIDDEN')
     if receipt.get('terminal_connected') is not True:
         raise DemoEvidenceError('DEMO_TERMINAL_CONNECTION_NOT_VERIFIED')
-    if receipt.get('symbol') != 'XAUUSD':
+    # Eplanet exposes the executable gold contract as XAUUSD.st. Keep the
+    # original generic XAUUSD fixture compatible, but reject other symbols.
+    if receipt.get('symbol') not in ('XAUUSD', 'XAUUSD.st'):
         raise DemoEvidenceError('DEMO_SYMBOL_MISMATCH')
     if not isinstance(receipt.get('terminal_id'), str) or not receipt['terminal_id'].strip():
         raise DemoEvidenceError('DEMO_TERMINAL_ID_REQUIRED')
@@ -75,7 +77,7 @@ def evaluate_demo_receipt(receipt):
             raise DemoEvidenceError('DEMO_EVENT_KIND_UNSUPPORTED')
     return {'schema':'artin_mt5_demo_assessment_v1',
             'run_id':receipt['run_id'], 'terminal_id':receipt['terminal_id'],
-            'account_mode':'DEMO', 'symbol':'XAUUSD',
+            'account_mode':'DEMO', 'symbol':receipt['symbol'],
             'filled_entries':len(entered), 'filled_exits':len(closed),
             'open_tickets':sorted(entered-closed),
             'evidence_structurally_valid':True,
