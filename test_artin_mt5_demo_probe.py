@@ -24,6 +24,28 @@ class DemoProbeTests(unittest.TestCase):
         mt5.order_send.assert_not_called()
         mt5.shutdown.assert_called_once()
 
+    def test_eplanet_contract_preferred_and_no_order(self):
+        mt5=fake_mt5()
+        mt5.symbol_info.side_effect=lambda name: SimpleNamespace(name=name)
+        result=probe(mt5)
+        self.assertEqual(result['symbol'],'XAUUSD.st')
+        mt5.symbol_info.assert_called_once_with('XAUUSD.st')
+        mt5.order_send.assert_not_called()
+
+    def test_fallback_generic_contract_remains_readonly(self):
+        mt5=fake_mt5()
+        mt5.symbol_info.side_effect=lambda name: None if name=='XAUUSD.st' else SimpleNamespace(name=name)
+        result=probe(mt5)
+        self.assertEqual(result['symbol'],'XAUUSD')
+        mt5.order_send.assert_not_called()
+
+    def test_missing_both_gold_symbols_is_blocked(self):
+        mt5=fake_mt5()
+        mt5.symbol_info.return_value=None
+        with self.assertRaisesRegex(ProbeBlocked,'MT5_XAUUSD_NOT_FOUND'):
+            probe(mt5)
+        mt5.order_send.assert_not_called()
+
     def test_real_account_blocked(self):
         mt5=fake_mt5(mode=2)
         with self.assertRaisesRegex(ProbeBlocked,'NOT_DEMO'):
