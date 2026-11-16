@@ -127,7 +127,9 @@ class ClassroomEngineTests(unittest.TestCase):
         first.pop('paper_trade',None)
         duplicate=json.loads(json.dumps(first))
         duplicate['case_id']='SECOND_LABEL_SAME_SPEECH'
-        duplicate['class_seconds']=[105,108]
+        # Different scene bounds, same contained speech: exercise overlap guard,
+        # not the earlier exact-scene-identity guard.
+        duplicate['class_seconds']=[104,109]
         self.cases_doc['cases']=[first,duplicate]
         self.write()
         with self.assertRaisesRegex(ClassroomMotorError,
