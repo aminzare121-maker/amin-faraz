@@ -37,6 +37,19 @@ class DossierDecisionGateTests(unittest.TestCase):
         d['trading_authorized'] = True
         self.assertFalse(inspect_dossier(d)['trade_authorized'])
 
+    def test_unhashable_route_identifier_blocks_without_crashing(self):
+        for invalid in ([], {'route': 'REVERSAL_THREE'}, None, 7):
+            d = fixture()
+            d['routes'][0]['route_id'] = invalid
+            result = inspect_dossier(d)
+            self.assertEqual(result['reason'], 'INVALID_PRIVATE_ROUTE_SET')
+            self.assertFalse(result['trade_authorized'])
+
+    def test_out_of_range_citation_blocks(self):
+        d = fixture()
+        d['routes'][0]['citation_intervals'][0]['index'] = 25
+        self.assertEqual(inspect_dossier(d)['reason'], 'INVALID_SOURCE_INTERVAL')
+
     def test_invalid_time_fails(self):
         d = fixture()
         d['routes'][0]['citation_intervals'][0]['end'] = float('nan')
