@@ -336,6 +336,19 @@ class ClassTradeActionsTests(unittest.TestCase):
         self.assertEqual(result['decision'],'REJECT_LATE_M15_BAR_FOR_THIRD_CLOSE')
         self.assertFalse(result['order_created'])
 
+    def test_synthetic_prefix_cannot_bypass_real_m15_close_clock(self):
+        e=self.three_candle_event()
+        for candle in e['candles']:
+            candle['source']='SYNTHETIC_SPOOFED_BROKER_M15'
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_M15_BAR')
+        self.assertFalse(result['order_created'])
+        for candle in e['candles']:
+            candle['known_at']=candle['time']+900
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'CLASSROOM_THIRD_CLOSE_SETUP_CANDIDATE')
+        self.assertFalse(result['order_created'])
+
     def test_real_m15_candles_without_close_availability_must_wait(self):
         e=self.three_candle_event()
         for candle in e['candles']:
