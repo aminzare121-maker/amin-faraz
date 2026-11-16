@@ -1,0 +1,149 @@
+{
+  "tool": "faraz_local_offline_research_v1",
+  "data_sha256": "da0e566373a04415eeb06841dac9afb409a31d0e986bf5a85b58dec367a686be",
+  "candles_observed": 23643,
+  "timeframe_seconds": 900,
+  "segments": 261,
+  "data_policy": "Existing prices-only M15 CSV; original timestamps unconverted; no interpolation",
+  "limits": [
+    "IN_SAMPLE: repeatedly studied period, no untouched holdout",
+    "OHLC BID assumption, not verified execution quotes",
+    "Fixed scenario cost, not historical broker spread/swap",
+    "Unresolved gaps and after-gap resets mean no annual PnL",
+    "Fixed 0.01 lot, flat-start each segment, not live sizing",
+    "No intrabar mark-to-market DD",
+    "Quarter labels derived from raw timestamps; UTC/DST not verified"
+  ],
+  "cost_model": {
+    "spread_price": 0.5,
+    "slippage_each_side_price": 0.2,
+    "commission_per_lot_roundtrip_usd": 10.0
+  },
+  "research_params": {
+    "lot": 0.01,
+    "risk_budget_usd": 25.0,
+    "stop_atr_multiple": 1.5,
+    "horizon_bars": 8,
+    "tp": "NONE_TIME_EXIT"
+  },
+  "methods": [
+    {
+      "family": "trend_pullback",
+      "observed_entries": 315,
+      "closed": 266,
+      "unresolved": 49,
+      "risk_veto": 72,
+      "unfilled_entry_due_to_segment_end": 13,
+      "winning_closed": 113,
+      "losing_closed": 153,
+      "stops_closed": 98,
+      "timed_closed": 168,
+      "known_partial_net_usd": -227.23,
+      "known_partial_profit_factor": 0.8695,
+      "closed_expectancy_usd": -0.8542,
+      "max_independent_segment_closed_dd_usd": 44.7,
+      "raw_label_quarters": [
+        {
+          "period_raw": "2025-Q4",
+          "closed": 47,
+          "known_partial_net_usd": -53.55
+        },
+        {
+          "period_raw": "2026-Q1",
+          "closed": 52,
+          "known_partial_net_usd": -71.93
+        },
+        {
+          "period_raw": "2026-Q2",
+          "closed": 62,
+          "known_partial_net_usd": 93.73
+        },
+        {
+          "period_raw": "2026-Q3",
+          "closed": 74,
+          "known_partial_net_usd": -67.6
+        },
+        {
+          "period_raw": "2026-Q4",
+          "closed": 31,
+          "known_partial_net_usd": -127.87
+        }
+      ],
+      "research_decision": "EXPLORATORY_ONLY_NOT_APPROVED"
+    },
+    {
+      "family": "range_reversion",
+      "observed_entries": 153,
+      "closed": 146,
+      "unresolved": 7,
+      "risk_veto": 51,
+      "unfilled_entry_due_to_segment_end": 1,
+      "winning_closed": 62,
+      "losing_closed": 84,
+      "stops_closed": 68,
+      "timed_closed": 78,
+      "known_partial_net_usd": -85.74,
+      "known_partial_profit_factor": 0.9207,
+      "closed_expectancy_usd": -0.5872,
+      "max_independent_segment_closed_dd_usd": 43.11,
+      "raw_label_quarters": [
+        {
+          "period_raw": "2025-Q4",
+          "closed": 37,
+          "known_partial_net_usd": 51.75
+        },
+        {
+          "period_raw": "2026-Q1",
+          "closed": 28,
+          "known_partial_net_usd": -86.86
+        },
+        {
+          "period_raw": "2026-Q2",
+          "closed": 29,
+          "known_partial_net_usd": -101.48
+        },
+        {
+          "period_raw": "2026-Q3",
+          "closed": 38,
+          "known_partial_net_usd": 51.16
+        },
+        {
+          "period_raw": "2026-Q4",
+          "closed": 14,
+          "known_partial_net_usd": -0.3
+        }
+      ],
+      "research_decision": "EXPLORATORY_ONLY_NOT_APPROVED"
+    },
+    {
+      "family": "compression_expansion",
+      "observed_entries": 11,
+      "closed": 5,
+      "unresolved": 6,
+      "risk_veto": 0,
+      "unfilled_entry_due_to_segment_end": 0,
+      "winning_closed": 2,
+      "losing_closed": 3,
+      "stops_closed": 2,
+      "timed_closed": 3,
+      "known_partial_net_usd": 27.2,
+      "known_partial_profit_factor": 2.039,
+      "closed_expectancy_usd": 5.44,
+      "max_independent_segment_closed_dd_usd": 15.77,
+      "raw_label_quarters": [
+        {
+          "period_raw": "2026-Q1",
+          "closed": 3,
+          "known_partial_net_usd": 9.21
+        },
+        {
+          "period_raw": "2026-Q3",
+          "closed": 2,
+          "known_partial_net_usd": 17.99
+        }
+      ],
+      "research_decision": "EXPLORATORY_ONLY_NOT_APPROVED"
+    }
+  ],
+  "overall_conclusion": "NO_STRATEGY_APPROVED; verification requires a separate prelocked independent-period test"
+}
