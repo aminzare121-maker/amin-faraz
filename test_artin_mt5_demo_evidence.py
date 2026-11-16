@@ -20,6 +20,18 @@ class DemoEvidenceTests(unittest.TestCase):
         self.assertFalse(result['demo_success_certified'])
         self.assertFalse(result['broker_receipt_independently_authenticated'])
 
+    def test_eplanet_gold_contract_keeps_exact_symbol_without_certifying(self):
+        r=receipt();r['symbol']='XAUUSD.st'
+        result=evaluate_demo_receipt(r)
+        self.assertEqual(result['symbol'],'XAUUSD.st')
+        self.assertFalse(result['demo_success_certified'])
+        self.assertFalse(result['broker_receipt_independently_authenticated'])
+
+    def test_unrelated_symbol_is_rejected(self):
+        r=receipt();r['symbol']='EURUSD'
+        with self.assertRaisesRegex(DemoEvidenceError,'DEMO_SYMBOL_MISMATCH'):
+            evaluate_demo_receipt(r)
+
     def test_real_account_is_forbidden(self):
         r=receipt();r['account_mode']='REAL'
         with self.assertRaisesRegex(DemoEvidenceError,'REAL_ACCOUNT_FORBIDDEN'):
