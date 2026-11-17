@@ -1,0 +1,6 @@
+# V5 six-bar efficiency persistence, 2026-11-17
+Private Eplanet M15 CSV, 23643 bars; SHA256 06b60768cc6179d1985ce7ab173d421edb3adcacf62d781ca733adc331bc2604. Data not committed. Chronological holdout last 40% (index 14185 onward).
+Signal uses six completed bars: absolute displacement/path >0.78, displacement 1.1–2.8x preceding 96-bar median range; next-bar open entry, stop 1x range, target 1.8x range, timeout four bars. 1000 USD initial, 1% equity risk, variable lots 0.01–0.10; estimated roundtrip 1.46 USD/oz; 100oz/lot. Stop first on same-bar ambiguity.
+Base: 364 encountered opportunities, 338 trades, gross +234.49 USD, costs 493.48, net -258.99, maximum closed equity drawdown 329.39, zero days >=50 net, 96 active days. Worst observed single-trade adverse excursion 31.58 USD (not portfolio intrabar DD).
+Independent guard: exclude cost/stop >12% or signal bar >2x median range. 614 encountered signal events, zero trades, zero net and drawdown. Different opportunity counts because base skips bars during open trades, guard does not. Not proof of profitable filtering.
+FAIL. Costs are estimates, not broker verified; OHLC cannot establish tick-level fills. No demo or live trades. Source file: research/v5_efficiency_sixbar.py.
