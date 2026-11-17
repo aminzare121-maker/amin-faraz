@@ -68,6 +68,21 @@ class ClassTradeActionsTests(unittest.TestCase):
                 with self.assertRaisesRegex(TeacherActionError,'CLASS_EVENT_OBJECT_REQUIRED'):
                     self.run_events([self.base('NO_ENTRY',21,'before'),bad])
 
+    def test_broker_quote_without_decision_clock_never_triggers_stop(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'BUY','entry':'4000','current_stop':'3995','lots':'0.01'},
+                    quote={'bid':'3994','ask':'3995','source':'MT5_DEMO_TICK',
+                           'observed_at':1000,'known_at':1000})
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        action=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(action['decision'],'WAIT_FOR_CAUSAL_QUOTE')
+        self.assertFalse(action['position_closed'])
+        self.assertFalse(action['order_created'])
+        e['decision_at']=1000
+        action=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(action['decision'],'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL')
+        self.assertFalse(action['broker_fill_verified'])
+
     def test_future_observation_timestamp_cannot_trigger_paper_stop(self):
         e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
                     position={'side':'BUY','entry':'4000','current_stop':'3995','lots':'0.01'},
