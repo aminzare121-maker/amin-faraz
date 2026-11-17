@@ -62,5 +62,33 @@ class RewardRiskGateTests(unittest.TestCase):
         result = machine.fill_entry(D("100"), D("0.01"))
         self.assertEqual(result["status"], "OPEN")
 
+    def test_sell_adverse_fill_requires_review_without_order(self):
+        machine, observation = self.make()
+        observation.side = "SELL"
+        machine.instrument.money_per_price_unit_per_lot = D("1")
+        machine.costs.adverse_price_allowance = D("0")
+        machine.costs.round_trip_fee_per_lot = D("0")
+        sized = {"status": "ACCEPT", "lots": D("0.01"), "modeled_loss": D("0.05")}
+        with patch("trade_machine.size_position", return_value=sized):
+            intent = machine.prepare("ANY", observation, D("100"), D("105"), D("90"), D("100"))
+        self.assertEqual(intent["status"], "PAPER_ENTRY_INTENT")
+        self.assertFalse(intent["order_created"])
+        adverse = machine.fill_entry(D("99"), D("0.01"))
+        self.assertEqual(adverse["status"], "OPEN_REVIEW")
+        self.assertFalse(adverse["order_created"])
+
+    def test_sell_exact_two_to_one_fill_remains_paper_only(self):
+        machine, observation = self.make()
+        observation.side = "SELL"
+        machine.instrument.money_per_price_unit_per_lot = D("1")
+        machine.costs.adverse_price_allowance = D("0")
+        machine.costs.round_trip_fee_per_lot = D("0")
+        sized = {"status": "ACCEPT", "lots": D("0.01"), "modeled_loss": D("0.05")}
+        with patch("trade_machine.size_position", return_value=sized):
+            machine.prepare("ANY", observation, D("100"), D("105"), D("90"), D("100"))
+        result = machine.fill_entry(D("100"), D("0.01"))
+        self.assertEqual(result["status"], "OPEN")
+        self.assertFalse(result["order_created"])
+
 if __name__ == "__main__":
     unittest.main()
