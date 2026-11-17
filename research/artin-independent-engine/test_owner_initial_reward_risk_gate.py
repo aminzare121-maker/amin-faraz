@@ -90,5 +90,23 @@ class RewardRiskGateTests(unittest.TestCase):
         self.assertEqual(result["status"], "OPEN")
         self.assertFalse(result["order_created"])
 
+    def test_sell_wrong_side_stop_rejected_before_sizing(self):
+        machine, observation = self.make()
+        observation.side = "SELL"
+        with patch("trade_machine.size_position", side_effect=AssertionError("must not size")):
+            result = machine.prepare("ANY", observation, D("100"), D("95"), D("90"), D("100"))
+        self.assertEqual(result["reason"], "INITIAL_STOP_WRONG_SIDE")
+        self.assertFalse(result["order_created"])
+        self.assertEqual(machine.state, "NEW")
+
+    def test_sell_insufficient_reward_rejected_before_sizing(self):
+        machine, observation = self.make()
+        observation.side = "SELL"
+        with patch("trade_machine.size_position", side_effect=AssertionError("must not size")):
+            result = machine.prepare("ANY", observation, D("100"), D("105"), D("91"), D("100"))
+        self.assertEqual(result["reason"], "INITIAL_REWARD_RISK_BELOW_TWO")
+        self.assertFalse(result["order_created"])
+        self.assertEqual(machine.state, "NEW")
+
 if __name__ == "__main__":
     unittest.main()
