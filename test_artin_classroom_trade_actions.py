@@ -269,6 +269,24 @@ class ClassTradeActionsTests(unittest.TestCase):
         with self.assertRaisesRegex(TeacherActionError,'STOP_EXIT_CLASS_WORDS_NOT_PRESENT'):self.run_events([e])
 
 
+    def test_broker_stop_quote_requires_observation_clock(self):
+        e=self.base('STOP_EXIT_TRIGGER',24,'stop-reference',
+                    position={'side':'BUY','entry':'4000','current_stop':'4005','lots':'0.01'},
+                    quote={'bid':'4004','ask':'4004.1','source':'MT5_DEMO_QUOTE',
+                           'known_at':120})
+        e['source_segment_ids']=['stop-reference','stop-exit']
+        e['decision_at']=120
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_QUOTE')
+        self.assertFalse(result['order_created'])
+        e['quote']['observed_at']=121
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'WAIT_FOR_CAUSAL_QUOTE')
+        e['quote']['observed_at']=119
+        result=self.run_events([e])['classroom_decision_actions'][0]['execution']
+        self.assertEqual(result['decision'],'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL')
+        self.assertFalse(result['broker_fill_verified'])
+
     def test_teacher_half_risk_auto_computes_stop_for_buy_and_sell(self):
         for side,initial,expected in [('BUY','3990','3995'),('SELL','4010','4005')]:
             with self.subTest(side=side):
