@@ -287,6 +287,26 @@ class ClassTradeActionsTests(unittest.TestCase):
         self.assertEqual(result['decision'],'STOP_EXIT_TRIGGER_PAPER_NOT_A_FILL')
         self.assertFalse(result['broker_fill_verified'])
 
+    def test_external_stop_trigger_requires_causal_observation_times(self):
+        event=self.base('HALVE_RISK_STOP',24,'half-speech',
+            position=frame_position(),observed_management_trigger=True,
+            trigger_source='MT5_DEMO_OBSERVATION')
+        event['source_segment_ids']=['half-speech','half-risk']
+        for observed,known,decision,expected in [
+            (None,None,None,'WAIT_FOR_CLASSROOM_TRIGGER'),
+            (121,121,120,'WAIT_FOR_CLASSROOM_TRIGGER'),
+            (119,121,120,'WAIT_FOR_CLASSROOM_TRIGGER'),
+            (119,120,120,'PAPER_STOP_MOVE_ACCEPTED'),
+        ]:
+            with self.subTest(observed=observed,known=known,decision=decision):
+                candidate=copy.deepcopy(event)
+                if observed is not None:candidate['trigger_observed_at']=observed
+                if known is not None:candidate['trigger_known_at']=known
+                if decision is not None:candidate['decision_at']=decision
+                result=self.run_events([candidate])['classroom_decision_actions'][0]['execution']
+                self.assertEqual(result['decision'],expected)
+                self.assertFalse(result['order_created'])
+
     def test_teacher_half_risk_auto_computes_stop_for_buy_and_sell(self):
         for side,initial,expected in [('BUY','3990','3995'),('SELL','4010','4005')]:
             with self.subTest(side=side):
