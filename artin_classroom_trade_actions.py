@@ -378,6 +378,7 @@ def _stop_triggered_exit(event, text):
         observed=quote.get('observed_at')
         if (type(at) is not int or type(known) is not int
                 or known>at or known<0
+                or (not str(quote['source']).startswith('SYNTHETIC_') and observed is None)
                 or (observed is not None and
                     (type(observed) is not int or observed<0 or observed>known))):
             return {'decision':'WAIT_FOR_CAUSAL_QUOTE','order_created':False,
