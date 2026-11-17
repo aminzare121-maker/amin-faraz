@@ -1,0 +1,24 @@
+{
+  "schema": "artin_video001_artifact_retention_audit_v1",
+  "checked_date": "2026-11-18",
+  "source_run": 42597293832,
+  "video_id": "video-q-0010-artin-clip-08",
+  "artifacts_listed": 41,
+  "expired": 0,
+  "first_expiration_utc": "2026-11-24T10:07:10Z",
+  "complete_source_artifact": [
+    {
+      "id": 13664819243,
+      "expires_at": "2026-12-09T10:21:24Z"
+    }
+  ],
+  "behrooz_artifact": [
+    {
+      "id": 13664903533,
+      "expires_at": "2026-11-24T10:21:23Z"
+    }
+  ],
+  "status": "TECHNICAL_EXTRACTION_ONLY",
+  "semantic_verification": "NOT_DONE",
+  "next_step": "Preserve original artifacts before 2026-11-24; independently align original video/audio, chat, board and Q&A for 0010. Do not create trading rules."
+}
