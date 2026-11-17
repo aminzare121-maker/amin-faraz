@@ -24,7 +24,7 @@ def run(guard=False):
     if o[k]>=sl:exitp=o[k]
     elif o[k]<=tp:exitp=tp
     elif h[k]>=sl:exitp=sl
-    elif l[k]<=tp:exitp=sl
+    elif l[k]<=tp:exitp=tp
    if exitp is not None:break
   if exitp is None:exitp=c[min(i+3,n-1)];k=min(i+3,n-1)
   gross=(exitp-entry)*side*qty;cost=qty*1.46;net=gross-cost;equity+=net;peak=max(peak,equity);dd=max(dd,peak-equity)
