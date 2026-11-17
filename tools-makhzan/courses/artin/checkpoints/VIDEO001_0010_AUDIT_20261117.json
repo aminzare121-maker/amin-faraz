@@ -1,0 +1,22 @@
+{
+  "schema": "artin_video001_resume_checkpoint_v1",
+  "created_utc": "2026-11-17",
+  "source_branch": "tools-makhzan-hub",
+  "source_run_id": 42597293832,
+  "video_id": "video-q-0010-artin-clip-08",
+  "source_sha256": "1f63842913a250bf1fe81bab3dc7dcc90f282c4026ee41ac88cc31687b8e65ea",
+  "behrooz_text_artifact_id": 13664903533,
+  "verified_artifact_read": {
+    "archive_downloaded": true,
+    "nested_zip_inspected": true,
+    "asr_part_files": 14,
+    "asr_segments_unverified": 1774,
+    "chat_worker_files": 16,
+    "chat_frames_ocr_candidates": 454,
+    "board_frames_processed": 132,
+    "board_missing_frames": 0
+  },
+  "semantic_verification": "NOT_DONE",
+  "next_step": "Independently compare timestamped original audio/video/board/chat and student Q&A for 0010; do not convert ASR/OCR candidates to trading rules without source validation.",
+  "safety": "No trades, no changes to V12 or source archives; this checkpoint contains metadata only."
+}
