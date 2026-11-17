@@ -92,7 +92,12 @@ class TradeMachine:
         sign=Decimal(1) if self.plan['side']=='BUY' else Decimal(-1)
         distance=sign*(fill_price-self.plan['stop'])
         modeled_loss=((distance+self.costs.adverse_price_allowance)*self.instrument.money_per_price_unit_per_lot+self.costs.round_trip_fee_per_lot)*lots
-        invalid=distance<=0 or sign*(self.plan['target']-fill_price)<=0 or modeled_loss>self.plan['risk_budget']
+        actual_reward=sign*(self.plan['target']-fill_price)
+        # The 2:1 owner research gate must survive adverse entry slippage.
+        # A paper fill is recorded, but cannot become a normal OPEN position
+        # when the executed-price geometry violates the initial plan.
+        reward_risk_breached=distance>0 and actual_reward<Decimal(2)*distance
+        invalid=distance<=0 or actual_reward<=0 or modeled_loss>self.plan['risk_budget'] or reward_risk_breached
         self.modeled_exposure=max(Decimal(0),modeled_loss)
         self.budget_overrun=modeled_loss>self.plan['risk_budget']
         self.state='OPEN_REVIEW' if invalid else 'OPEN'
