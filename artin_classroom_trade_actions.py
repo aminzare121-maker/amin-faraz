@@ -204,6 +204,19 @@ def _three_candle_close_entry(event, text):
             'teacher_chart_observations_externally_supplied':True,
             'teacher_chart_meaning_independently_verified':False}
 
+def _management_trigger_causal(event):
+    """External stop-management triggers require observed, available timestamps."""
+    if event.get('observed_management_trigger') is not True or not event.get('trigger_source'):
+        return False
+    if str(event['trigger_source']).startswith('SYNTHETIC_'):
+        return True
+    at=event.get('decision_at')
+    observed=event.get('trigger_observed_at')
+    known=event.get('trigger_known_at')
+    return (type(at) is int and type(observed) is int and type(known) is int
+            and 0 <= observed <= known <= at)
+
+
 def _riskfree(event, text):
     if 'استاپ' not in text or 'نقطه' not in text or not re.search(r'بیار|بذار|بردار',text):
         raise TeacherActionError('RISKFREE_STOP_WORDS_NOT_PRESENT')
@@ -217,7 +230,7 @@ def _riskfree(event, text):
     sign=Decimal(1) if side=='BUY' else Decimal(-1)
     if sign*(entry-old)<=0:
         raise TeacherActionError('STOP_ALREADY_AT_OR_BEYOND_ENTRY')
-    if event.get('observed_management_trigger') is not True or not event.get('trigger_source'):
+    if not _management_trigger_causal(event):
         return {'decision':'WAIT_FOR_SOURCED_RISKFREE_TRIGGER', 'order_created':False,
                 'current_stop_unchanged':str(old),'position_lots_unchanged':str(lots)}
     # Session 25 describes moving SL to the entry while remaining in position;
@@ -318,7 +331,7 @@ def _sourced_stop_move(event, text):
         position['new_stop']=money(trade['new_stop'],'new_stop')
     if position['lots']<instrument.min_lot or position['lots']%instrument.lot_step:
         raise TeacherActionError('LOTS_NOT_ON_CONTRACT_GRID')
-    if event.get('observed_management_trigger') is not True or not event.get('trigger_source'):
+    if not _management_trigger_causal(event):
         return {'decision':'WAIT_FOR_CLASSROOM_TRIGGER','label':label,'order_created':False,
                 'current_stop_unchanged':str(position['current_stop']),
                 'position_lots_unchanged':str(position['lots'])}
