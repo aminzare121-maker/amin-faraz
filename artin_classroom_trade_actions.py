@@ -363,6 +363,13 @@ def _stop_triggered_exit(event, text):
         return {'decision':'WAIT_FOR_SOURCED_QUOTE','order_created':False,
                 'position_closed':False,'stop_unchanged':str(stop),
                 'lots_unchanged':str(lots)}
+    # Broker-sourced observations require an explicit causal clock. A missing
+    # decision timestamp must never turn a future quote into a historical stop.
+    # Synthetic classroom fixtures remain no-order tests, not market evidence.
+    if not str(quote['source']).startswith('SYNTHETIC_') and 'decision_at' not in event:
+        return {'decision':'WAIT_FOR_CAUSAL_QUOTE','order_created':False,
+                'position_closed':False,'stop_unchanged':str(stop),
+                'lots_unchanged':str(lots)}
     # If a decision clock is supplied, the market observation must have
     # been available at that instant. Never replay a future quote as a stop.
     if 'decision_at' in event:
