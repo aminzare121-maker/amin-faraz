@@ -51,6 +51,14 @@ class TradeMachine:
         sign=Decimal(1) if observation.side=='BUY' else Decimal(-1)
         if sign*(target_price-entry_price)<=0:
             return self._event('REJECT',reason='TARGET_WRONG_SIDE')
+        # Owner's research admission criterion, not a verified teacher rule.
+        # Reject insufficient initial reward/risk before sizing or any paper fill.
+        initial_risk=sign*(entry_price-initial_stop)
+        initial_reward=sign*(target_price-entry_price)
+        if initial_risk<=0:
+            return self._event('REJECT',reason='INITIAL_STOP_WRONG_SIDE')
+        if initial_reward<Decimal(2)*initial_risk:
+            return self._event('REJECT',reason='INITIAL_REWARD_RISK_BELOW_TWO')
         budget=min(self.box.risk_budget,aggregate_risk_remaining)
         sized=size_position(observation.side,entry_price,initial_stop,budget,self.instrument,self.costs)
         if sized['status']!='ACCEPT':return self._event('REJECT',reason=sized['reason'])
