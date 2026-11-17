@@ -39,5 +39,28 @@ class RewardRiskGateTests(unittest.TestCase):
         self.assertEqual(result["status"], "PAPER_ENTRY_INTENT")
         sizing.assert_called_once()
 
+    def test_adverse_fill_rechecks_two_to_one_and_enters_review(self):
+        machine, observation = self.make()
+        machine.instrument.money_per_price_unit_per_lot = D("1")
+        machine.costs.adverse_price_allowance = D("0")
+        machine.costs.round_trip_fee_per_lot = D("0")
+        sized = {"status": "ACCEPT", "lots": D("0.01"), "modeled_loss": D("0.05")}
+        with patch("trade_machine.size_position", return_value=sized):
+            machine.prepare("ANY", observation, D("100"), D("95"), D("110"), D("100"))
+        result = machine.fill_entry(D("101"), D("0.01"))
+        self.assertEqual(result["status"], "OPEN_REVIEW")
+        self.assertEqual(machine.state, "OPEN_REVIEW")
+
+    def test_exact_two_to_one_fill_remains_open(self):
+        machine, observation = self.make()
+        machine.instrument.money_per_price_unit_per_lot = D("1")
+        machine.costs.adverse_price_allowance = D("0")
+        machine.costs.round_trip_fee_per_lot = D("0")
+        sized = {"status": "ACCEPT", "lots": D("0.01"), "modeled_loss": D("0.05")}
+        with patch("trade_machine.size_position", return_value=sized):
+            machine.prepare("ANY", observation, D("100"), D("95"), D("110"), D("100"))
+        result = machine.fill_entry(D("100"), D("0.01"))
+        self.assertEqual(result["status"], "OPEN")
+
 if __name__ == "__main__":
     unittest.main()
