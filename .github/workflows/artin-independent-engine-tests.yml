@@ -9,6 +9,7 @@ on:
       - 'artin_dossier_decision_gate.py'
       - 'test_artin_per_bar_dossier_integration.py'
       - 'test_artin_13_per_bar_source_boundary.py'
+      - 'test_artin_13_per_bar_route_dependencies.py'
       - '.github/workflows/artin-independent-engine-tests.yml'
   workflow_dispatch:
 permissions:
@@ -31,4 +32,4 @@ jobs:
 
       - name: Verify M15 dossier-to-decision boundary
         shell: bash
-        run: python -m unittest -v test_artin_per_bar_dossier_integration test_artin_13_per_bar_source_boundary
+        run: python -m unittest -v test_artin_per_bar_dossier_integration test_artin_13_per_bar_source_boundary test_artin_13_per_bar_route_dependencies
