@@ -1,0 +1,10 @@
+# V5 compression breakout — 2026-11-18
+Research-only, NOT deployable to MT5.
+Hypothesis: after four consecutive M15 bars form an unusually narrow range, a completed-bar breakout may trigger stop-flow continuation. Entry at next bar open; four-bar maximum hold; stop-first on ambiguous OHLC bars. Signal uses only completed price bars.
+Dataset: private Eplanet M15 CSV, 23,643 rows; 60% chronological train (14,185), 40% holdout (9,458), 104 holdout trading dates. Private dataset NOT committed.
+Threshold grid (box width / 24-bar ATR): 0.8, 1.0, 1.2, 1.4, 1.6. Training net USD respectively -25.80 (9 trades), -115.34 (51), -234.99 (86), -219.71 (151), -217.79 (228). Selected 0.8 based on training net; **all training candidates negative**, selected candidate only 9 trades, insufficient evidence.
+Holdout base: 69 candidate opportunities, 21 executed, gross -13.57 USD, estimated transaction costs 17.05 USD, net -30.62 USD, closed-equity max drawdown 49.82 USD, estimated intrabar drawdown 52.66 USD, 0 / 104 days reached +50 USD.
+Independent risk guard: reject if signal bar true range > 2.2 x ATR or entry opening gap > 0.4 x ATR. Holdout: 69 opportunities, 21 executed; gross -13.57, costs 17.05, net -30.62, drawdown 49.82. Guard rejected no executed trades, therefore **no demonstrated protection**.
+Sizing: start 1000 USD, floor to 0.01 lots, max 0.15 lots, risk budget 1% of current equity / stop distance; stop=max(4,1.2*ATR) USD/oz, target=1.8*stop. Estimated costs: spread points*0.01 USD/oz + 0.30 USD/oz roundtrip slippage + 7 USD/lot commission, 100 oz/lot. Broker execution costs and tick-level path not verified.
+Important limitations: signals calculated using M15 OHLC, intrabar stop-first convention, no verified tick replay; opportunity counts include signals not tradable due to lot minimum. Not a profitable strategy. No demo or live order placed.
+Reproduction code and full trade log generated locally as v5_compression_breakout_20261118.py and v5_compression_breakout_20261118_results.json; these local files are NOT committed by this report commit.
