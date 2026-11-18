@@ -151,8 +151,8 @@
   ],
   "first_incomplete_stage": {
     "queue_id": "video-q-0010-artin-clip-08",
-    "stage": "time_aligned_semantic_review_then_archive_0015",
-    "note": "0010-0014 complete source ZIPs archived; teacher semantic review of 0010 pending; archive 0015 next."
+    "stage": "time_aligned_semantic_review_then_archive_0016",
+    "note": "0010-0015 complete source ZIPs archived; teacher semantic review of 0010 pending; archive 0016 next."
   },
   "run_0010": {
     "run_id": 42597293832,
@@ -168,7 +168,7 @@
     "original_sources_untouched": true,
     "v12_untouched": true
   },
-  "archive_status": "PARTIAL_0010_THROUGH_0014_COMPLETE_SOURCES_ARCHIVED_IN_PRIVATE_LIBRARY",
+  "archive_status": "PARTIAL_0010_THROUGH_0015_COMPLETE_SOURCES_ARCHIVED_IN_PRIVATE_LIBRARY",
   "semantic_alignment_status": "NOT_VERIFIED",
   "archived_sources": [
     {
@@ -215,6 +215,15 @@
       "zip_integrity": "unzip -tqq passed",
       "source_video_sha256": "0ae6e579e15a32ec02e67e67ff0707972cdbdaa4565a2836482e60e38d4001ca",
       "artifact_id": 13668392091
+    },
+    {
+      "queue_id": "video-q-0015-artin-clip-13",
+      "library_path": "/بهروز/VIDEO-001/artin-course-001/raw/video-q-0015-artin-clip-13-complete-source.zip",
+      "library_file_id": "libfile_5a0cf8ae54848191b0c8e9cc084c2976",
+      "zip_sha256": "a1f9ae014030e900385c5155923cf459c9050e02c234d8edb9ceb032e71d9bbf",
+      "zip_integrity": "unzip -tqq passed",
+      "source_video_sha256": "e7490c59cc2e5b6d5c4f4940b9db1ae8a18ca5ea861980850e108c4e672b16e2",
+      "artifact_id": 13668298819
     }
   ]
 }
