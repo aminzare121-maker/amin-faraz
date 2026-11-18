@@ -151,8 +151,8 @@
   ],
   "first_incomplete_stage": {
     "queue_id": "video-q-0010-artin-clip-08",
-    "stage": "time_aligned_semantic_review_then_archive_0019",
-    "note": "0010-0018 source ZIPs archived; semantic review from 0010 pending; archive 0019 next."
+    "stage": "semantic_review_0010_and_private_archive_0019",
+    "note": "0010-0018 archived per checkpoint. 0019 receipt, jobs, and source artifact verified; binary archive to private Library not yet completed."
   },
   "run_0010": {
     "run_id": 42597293832,
@@ -252,5 +252,18 @@
       "source_video_sha256": "5b896a56747b6e1d5ab5c01c6d01dcce7ed396a471dfa170cbad3193aaecd6ed",
       "artifact_id": 13674130150
     }
-  ]
+  ],
+  "archive_next_verified_artifact": {
+    "queue_id": "video-q-0019-artin-clip-17",
+    "github_run_id": 42618004424,
+    "artifact_id": 13675226891,
+    "artifact_size_bytes": 293333998,
+    "artifact_zip_sha256": "52f7109647db21c18eff7e12b4fb9ff14ec9f449d8fe4b936f3795dfd30c0b9b",
+    "source_video_sha256": "164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",
+    "artifact_expires_at": "2026-12-09T12:48:09Z",
+    "receipt_verified": true,
+    "github_jobs_verified": true,
+    "private_archive_completed": false,
+    "semantic_review_completed": false
+  }
 }
