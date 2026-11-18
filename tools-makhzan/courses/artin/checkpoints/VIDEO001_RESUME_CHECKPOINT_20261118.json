@@ -151,8 +151,8 @@
   ],
   "first_incomplete_stage": {
     "queue_id": "video-q-0010-artin-clip-08",
-    "stage": "semantic_review_0010_and_private_archive_0020",
-    "note": "0010-0019 complete source ZIPs archived; semantic review from 0010 remains unverified; next private source archive 0020."
+    "stage": "semantic_review_0010_and_complete_source_archive_0020",
+    "note": "0010-0019 full sources archived. 0020 text-only artifact archived separately. Complete-source artifact 13677241597 is 778115587 bytes and GitHub connector download rejected it with 536870912 byte limit. Need alternate authenticated artifact transfer or source re-pack into chunks; do not claim complete archive."
   },
   "run_0010": {
     "run_id": 42597293832,
@@ -260,6 +260,21 @@
       "zip_integrity": "unzip -tqq passed",
       "source_video_sha256": "164d6a5ef28b29e3500d4211b7a5954b95dd9fe1393d99d7e5806e693ca8dc03",
       "artifact_id": 13675226891
+    }
+  ],
+  "partial_archived_sources": [
+    {
+      "queue_id": "video-q-0020-artin-clip-18",
+      "library_path": "/بهروز/VIDEO-001/artin-course-001/partial/video-q-0020-artin-clip-18-text-only.zip",
+      "library_file_id": "libfile_eb1f120cb6088191850118a715da4e3b",
+      "artifact_id": 13677326457,
+      "zip_sha256": "0b6e6aaadb2337160fb3dab888987f6921964a8b974db97c3fa79c7c288d1c4c",
+      "zip_integrity": "unzip -tqq passed",
+      "complete_source_artifact_id": 13677241597,
+      "complete_source_size_bytes": 778115587,
+      "complete_source_archive_completed": false,
+      "blocker": "connector 512MiB download limit",
+      "complete_source_expires_at": "2026-12-09T13:14:46Z"
     }
   ]
 }
