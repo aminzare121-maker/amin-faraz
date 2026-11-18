@@ -33,6 +33,7 @@ def evaluate(path, dossier=None, *, as_of=None):
     if not bars:
         raise ValueError("EMPTY_SOURCE_BARS")
     counts={route:Counter() for route in REQUIRED}
+    side_counts={route:{side:Counter() for side in ('BUY','SELL')} for route in REQUIRED}
     examples={}
     for i,(t,o,h,l,c) in enumerate(bars):
         # Raw candle direction is not the teacher-defined three-candle setup.
@@ -47,11 +48,16 @@ def evaluate(path, dossier=None, *, as_of=None):
             # Even a known false cannot become a confirmed NO_TRADE without the teacher's rule semantics.
             state="UNRESOLVED_TEACHER_CONTEXT" if missing else "ALL_PREDICATES_OBSERVED_NOT_SEMANTICALLY_VERIFIED"
             counts[route][state]+=1
+            for side in ('BUY','SELL'):
+                # The decision gate is per-side; unresolved teacher predicates
+                # never become a BUY/SELL signal or a teacher-confirmed NO_TRADE.
+                side_counts[route][side]['BLOCKED_TEACHER_AV_UNVERIFIED']+=1
             if route not in examples:examples[route]={"timestamp":t,"known_market_facts":known,"unknown_teacher_predicates":missing,"unknown_by_side":{side:[k for k in keys if k not in facts] for side,keys in needed_by_side.items()}}
     return {"schema":"artin_13_per_bar_tri_state_bridge_v1","source_rows":len(bars),
-            "routes":[{"route_id":r,"states":dict(counts[r]),"first_bar_example":examples[r]} for r in REQUIRED],
+            "routes":[{"route_id":r,"states":dict(counts[r]),"side_decisions":{side:{"states":dict(side_counts[r][side]),"trade_permitted":False} for side in ("BUY","SELL")},"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
+            "side_decision_evaluations":len(bars)*len(REQUIRED)*2,
             "causal_close_clock_checked":as_of is not None,
             "evidence_gate":{"decision":evidence["decision"],"reason":evidence["reason"],
                              "trade_authorized":False},
