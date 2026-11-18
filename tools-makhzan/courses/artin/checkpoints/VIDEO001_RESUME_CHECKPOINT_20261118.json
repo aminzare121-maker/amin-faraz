@@ -152,7 +152,7 @@
   "first_incomplete_stage": {
     "queue_id": "video-q-0010-artin-clip-08",
     "stage": "semantic_review_0010_and_complete_source_archive_0020",
-    "note": "0010-0019 full sources archived. 0020 text-only artifact archived separately. Complete-source artifact 13677241597 is 778115587 bytes and GitHub connector download rejected it with 536870912 byte limit. Need alternate authenticated artifact transfer or source re-pack into chunks; do not claim complete archive."
+    "note": "0010-0019 complete sources archived; 0020 text-only and original-board independently archived (board SHA256 verified). Complete source 0020 artifact 13677241597 remains unarchived due 512MiB connector limit; semantic review from 0010 pending."
   },
   "run_0010": {
     "run_id": 42597293832,
@@ -288,5 +288,16 @@
     "result": "All three receipts report source/asr/ocr/verify/board/register success; none certifies teacher semantics; 0020 complete source archive remains blocked by connector 512MiB download cap",
     "first_pending": "0020 complete-source archive via reversible split transfer; semantic alignment begins 0010",
     "no_new_source_archive_this_audit": true
+  },
+  "board_0020_archive": {
+    "status": "ARCHIVED_VERIFIED_ZIP",
+    "artifact_id": 13676801616,
+    "library_path": "/بهروز/VIDEO-001/artin-course-001/raw/video-q-0020-artin-clip-18-original-board.zip",
+    "library_file_id": "libfile_69931808f9388191894097e598b4bbe0",
+    "zip_sha256": "4ee123ee806c848b4b733f3bbc1e7ae4f2f12f1ef94f96095cda7312c45f319f",
+    "zip_integrity": "unzip -tqq passed",
+    "zip_size_bytes": 166574927,
+    "semantic_review": "NOT_VERIFIED",
+    "source_complete_archive": "NOT_YET"
   }
 }
