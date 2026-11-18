@@ -35,10 +35,9 @@ def evaluate(path, dossier=None, *, as_of=None):
     counts={route:Counter() for route in REQUIRED}
     examples={}
     for i,(t,o,h,l,c) in enumerate(bars):
-        contiguous=i>=2 and t-bars[i-1][0]==900 and bars[i-1][0]-bars[i-2][0]==900
-        directions=([(b[4]>b[1])-(b[4]<b[1]) for b in bars[i-2:i+1]] if contiguous else [])
-        facts={"decision_close":c,"decision_candle_closed":True,
-               "three_same_direction_sequence":bool(directions and directions[0]!=0 and directions.count(directions[0])==3)}
+        # Raw candle direction is not the teacher-defined three-candle setup.
+        # Preserve it as an unresolved teacher predicate until original AV replay.
+        facts={"decision_close":c,"decision_candle_closed":True}
         for route,required in REQUIRED.items():
             needed_by_side={side: requirements(route, side) for side in ('BUY', 'SELL')}
             needed=tuple(dict.fromkeys(needed_by_side['BUY']+needed_by_side['SELL']))
