@@ -8,7 +8,11 @@ from collections import Counter
 from artin_13_real_m15_gap_audit import REQUIRED, COMMON, FAMILY
 from artin_dossier_decision_gate import inspect_dossier
 
-def evaluate(path, dossier=None):
+def evaluate(path, dossier=None, *, as_of=None):
+    # In a causal replay, the decision clock must not precede any bar close.
+    # Historical imports without as_of remain observation-only, never executable.
+    if as_of is not None and (type(as_of) is not int or as_of < 0):
+        raise ValueError('INVALID_DECISION_CLOCK')
     # Validate private evidence at the actual M15 decision boundary, never via a caller's approval flag.
     evidence = inspect_dossier(dossier)
     if evidence['executable'] or evidence['trade_authorized'] or evidence['approved_rule_outcomes']:
@@ -23,6 +27,8 @@ def evaluate(path, dossier=None):
                 or not 0<l<=min(o,c)<=max(o,c)<=h
                 or (bars and t<=bars[-1][0])):
             raise ValueError("INVALID_SOURCE_BAR")
+        if as_of is not None and t + 900 > as_of:
+            raise ValueError('UNCLOSED_OR_FUTURE_SOURCE_BAR')
         bars.append((t,o,h,l,c))
     if not bars:
         raise ValueError("EMPTY_SOURCE_BARS")
@@ -46,6 +52,7 @@ def evaluate(path, dossier=None):
             "routes":[{"route_id":r,"states":dict(counts[r]),"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
+            "causal_close_clock_checked":as_of is not None,
             "evidence_gate":{"decision":evidence["decision"],"reason":evidence["reason"],
                              "trade_authorized":False},
             "note":"Unknown teacher conditions are not inferred from candle geometry."}
