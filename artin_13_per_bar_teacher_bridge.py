@@ -3,7 +3,7 @@
 Market observations are not teacher signals; no orders or P&L are generated.
 """
 from __future__ import annotations
-import csv,glob,json,sys
+import csv,glob,json,sys,math
 from collections import Counter
 from artin_13_real_m15_gap_audit import REQUIRED, COMMON, FAMILY
 
@@ -14,9 +14,13 @@ def evaluate(path):
         t=int(row.get("timestamp") or row.get("time"))
         if t>10**11:t//=1000
         o,h,l,c=[float(row[k]) for k in ("open","high","low","close")]
-        if t%900 or not 0<l<=min(o,c)<=max(o,c)<=h or (bars and t<=bars[-1][0]):
+        if (t%900 or not all(math.isfinite(v) for v in (o,h,l,c))
+                or not 0<l<=min(o,c)<=max(o,c)<=h
+                or (bars and t<=bars[-1][0])):
             raise ValueError("INVALID_SOURCE_BAR")
         bars.append((t,o,h,l,c))
+    if not bars:
+        raise ValueError("EMPTY_SOURCE_BARS")
     counts={route:Counter() for route in REQUIRED}
     examples={}
     for i,(t,o,h,l,c) in enumerate(bars):
