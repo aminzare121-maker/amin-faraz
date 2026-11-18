@@ -5,7 +5,7 @@ Market observations are not teacher signals; no orders or P&L are generated.
 from __future__ import annotations
 import csv,glob,json,sys,math
 from collections import Counter
-from artin_13_real_m15_gap_audit import REQUIRED, COMMON, FAMILY
+from artin_13_real_m15_gap_audit import REQUIRED, requirements
 from artin_dossier_decision_gate import inspect_dossier
 
 def evaluate(path, dossier=None, *, as_of=None):
@@ -40,14 +40,15 @@ def evaluate(path, dossier=None, *, as_of=None):
         facts={"decision_close":c,"decision_candle_closed":True,
                "three_same_direction_sequence":bool(directions and directions[0]!=0 and directions.count(directions[0])==3)}
         for route,required in REQUIRED.items():
-            needed=tuple(dict.fromkeys(COMMON+FAMILY+required))
+            needed_by_side={side: requirements(route, side) for side in ('BUY', 'SELL')}
+            needed=tuple(dict.fromkeys(needed_by_side['BUY']+needed_by_side['SELL']))
             known={k:facts[k] for k in needed if k in facts}
             missing=[k for k in needed if k not in facts]
             # A source-derived teacher predicate is required before entering.
             # Even a known false cannot become a confirmed NO_TRADE without the teacher's rule semantics.
             state="UNRESOLVED_TEACHER_CONTEXT" if missing else "ALL_PREDICATES_OBSERVED_NOT_SEMANTICALLY_VERIFIED"
             counts[route][state]+=1
-            if route not in examples:examples[route]={"timestamp":t,"known_market_facts":known,"unknown_teacher_predicates":missing}
+            if route not in examples:examples[route]={"timestamp":t,"known_market_facts":known,"unknown_teacher_predicates":missing,"unknown_by_side":{side:[k for k in keys if k not in facts] for side,keys in needed_by_side.items()}}
     return {"schema":"artin_13_per_bar_tri_state_bridge_v1","source_rows":len(bars),
             "routes":[{"route_id":r,"states":dict(counts[r]),"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
