@@ -21,6 +21,15 @@ class DossierDecisionGateTests(unittest.TestCase):
         self.assertFalse(result['trade_authorized'])
         self.assertEqual(result['approved_rule_outcomes'], [])
 
+    def test_source_session_index_must_match_cited_sessions(self):
+        d = fixture()
+        d['routes'][0]['source_sessions'] = [22]
+        self.assertEqual(inspect_dossier(d)['reason'], 'SOURCE_SESSION_INDEX_MISMATCH')
+        d['routes'][0]['source_sessions'] = [21]
+        self.assertEqual(inspect_dossier(d)['reason'], 'ORIGINAL_TEACHER_AV_REPLAY_NOT_CERTIFIED')
+        d['routes'][0]['source_sessions'] = [21, 21]
+        self.assertEqual(inspect_dossier(d)['reason'], 'INVALID_SOURCE_SESSION_INDEX')
+
     def test_missing_citation_fails(self):
         d = fixture()
         d['routes'][0]['citation_intervals'].pop()
