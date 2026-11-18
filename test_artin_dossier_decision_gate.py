@@ -54,6 +54,24 @@ class DossierDecisionGateTests(unittest.TestCase):
             self.assertEqual(result['reason'], 'INVALID_PRIVATE_ROUTE_SET')
             self.assertFalse(result['trade_authorized'])
 
+    def test_malformed_session_evidence_never_crashes_motor(self):
+        for bad in ([], {'unexpected': 21}, None, '21', 21.0):
+            d = fixture()
+            d['routes'][0]['source_sessions'] = [21]
+            d['routes'][0]['citation_intervals'][0]['session'] = bad
+            result = inspect_dossier(d)
+            self.assertEqual(result['reason'], 'INVALID_SOURCE_INTERVAL')
+            self.assertFalse(result['executable'])
+            self.assertFalse(result['trade_authorized'])
+
+    def test_malformed_interval_rejected_before_session_comparison(self):
+        d = fixture()
+        d['routes'][0]['source_sessions'] = [21]
+        d['routes'][0]['citation_intervals'][0] = ['invalid']
+        result = inspect_dossier(d)
+        self.assertEqual(result['reason'], 'INVALID_SOURCE_INTERVAL')
+        self.assertFalse(result['trade_authorized'])
+
     def test_out_of_range_citation_blocks(self):
         d = fixture()
         d['routes'][0]['citation_intervals'][0]['index'] = 25
