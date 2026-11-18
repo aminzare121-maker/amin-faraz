@@ -26,8 +26,18 @@ def inspect_dossier(dossier: Mapping) -> dict:
     seen = set()
     for route in routes:
         intervals = route.get('citation_intervals')
+        # The private source-session index must agree with cited intervals.
+        # A mismatched index cannot be used to locate an original AV replay.
+        declared_sessions = route.get('source_sessions')
+        if declared_sessions is not None:
+            if (not isinstance(declared_sessions, list) or
+                any(type(x) is not int or not 1 <= x <= 25 for x in declared_sessions) or
+                len(set(declared_sessions)) != len(declared_sessions)):
+                return {**blocked, 'reason': 'INVALID_SOURCE_SESSION_INDEX'}
         if not isinstance(intervals, list) or not intervals:
             return {**blocked, 'reason': 'MISSING_SOURCE_INTERVALS'}
+        if declared_sessions is not None and set(declared_sessions) != {x.get('session') for x in intervals if isinstance(x, Mapping)}:
+            return {**blocked, 'reason': 'SOURCE_SESSION_INDEX_MISMATCH'}
         for interval in intervals:
             if not isinstance(interval, Mapping):
                 return {**blocked, 'reason': 'INVALID_SOURCE_INTERVAL'}
