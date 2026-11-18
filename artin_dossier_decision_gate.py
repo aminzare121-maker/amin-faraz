@@ -36,7 +36,13 @@ def inspect_dossier(dossier: Mapping) -> dict:
                 return {**blocked, 'reason': 'INVALID_SOURCE_SESSION_INDEX'}
         if not isinstance(intervals, list) or not intervals:
             return {**blocked, 'reason': 'MISSING_SOURCE_INTERVALS'}
-        if declared_sessions is not None and set(declared_sessions) != {x.get('session') for x in intervals if isinstance(x, Mapping)}:
+        # Validate interval objects and scalar session IDs before set operations:
+        # malformed private evidence must be rejected, never crash the motor.
+        if any(not isinstance(x, Mapping) for x in intervals):
+            return {**blocked, 'reason': 'INVALID_SOURCE_INTERVAL'}
+        if any(type(x.get('session')) is not int for x in intervals):
+            return {**blocked, 'reason': 'INVALID_SOURCE_INTERVAL'}
+        if declared_sessions is not None and set(declared_sessions) != {x['session'] for x in intervals}:
             return {**blocked, 'reason': 'SOURCE_SESSION_INDEX_MISMATCH'}
         for interval in intervals:
             if not isinstance(interval, Mapping):
