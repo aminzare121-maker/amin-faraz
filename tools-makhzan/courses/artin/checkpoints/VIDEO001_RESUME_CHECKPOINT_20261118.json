@@ -276,5 +276,17 @@
       "blocker": "connector 512MiB download limit",
       "complete_source_expires_at": "2026-12-09T13:14:46Z"
     }
-  ]
+  ],
+  "last_verified_audit": {
+    "date": "2026-11-19",
+    "receipts_checked": [
+      "0020",
+      "0021",
+      "0025"
+    ],
+    "receipt_branch": "tools-makhzan-hub",
+    "result": "All three receipts report source/asr/ocr/verify/board/register success; none certifies teacher semantics; 0020 complete source archive remains blocked by connector 512MiB download cap",
+    "first_pending": "0020 complete-source archive via reversible split transfer; semantic alignment begins 0010",
+    "no_new_source_archive_this_audit": true
+  }
 }
