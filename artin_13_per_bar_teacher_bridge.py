@@ -6,8 +6,13 @@ from __future__ import annotations
 import csv,glob,json,sys,math
 from collections import Counter
 from artin_13_real_m15_gap_audit import REQUIRED, COMMON, FAMILY
+from artin_dossier_decision_gate import inspect_dossier
 
-def evaluate(path):
+def evaluate(path, dossier=None):
+    # Validate private evidence at the actual M15 decision boundary, never via a caller's approval flag.
+    evidence = inspect_dossier(dossier)
+    if evidence['executable'] or evidence['trade_authorized'] or evidence['approved_rule_outcomes']:
+        raise AssertionError('UNEXPECTED_EXECUTABLE_TEACHER_EVIDENCE')
     rows=list(csv.DictReader(open(path,encoding="utf-8-sig")))
     bars=[]
     for row in rows:
@@ -41,9 +46,12 @@ def evaluate(path):
             "routes":[{"route_id":r,"states":dict(counts[r]),"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
+            "evidence_gate":{"decision":evidence["decision"],"reason":evidence["reason"],
+                             "trade_authorized":False},
             "note":"Unknown teacher conditions are not inferred from candle geometry."}
 
 if __name__=="__main__":
-    result=evaluate(sys.argv[1])
+    dossier=json.load(open(sys.argv[3],encoding="utf-8")) if len(sys.argv)>3 else None
+    result=evaluate(sys.argv[1], dossier)
     with open(sys.argv[2],"w") as f:json.dump(result,f,indent=2)
     print(json.dumps({"rows":result["source_rows"],"route_bar_evaluations":result["total_route_bar_evaluations"],"teacher_approved_entries":0}))
