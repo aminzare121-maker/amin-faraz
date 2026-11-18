@@ -31,6 +31,32 @@ class PerBarDossierIntegrationTests(unittest.TestCase):
                 self.assertEqual(result["evidence_gate"]["reason"], reason)
                 self.assertEqual(len(result["routes"]), 13)
 
+    def test_claimed_teacher_approval_cannot_turn_market_bars_into_orders(self):
+        # An untrusted private JSON can claim approval, but cannot supply
+        # independently replayed original audio/video or a certified rule.
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "m15.csv"
+            source.write_text(
+                "timestamp,open,high,low,close\n"
+                "900,4000,4002,3999,4001\n"
+                "1800,4001,4003,4000,4002\n"
+                "2700,4002,4004,4001,4003\n", encoding="utf-8")
+            dossier = fixture()
+            dossier["semantics_independently_approved"] = 13
+            dossier["trading_authorized"] = True
+            for route in dossier["routes"]:
+                route["teacher_case_certified"] = True
+                route["orders_authorized"] = 1
+                route["entry_signal"] = "BUY"
+            result = evaluate(str(source), dossier)
+            self.assertEqual(result["source_rows"], 3)
+            self.assertEqual(result["total_route_bar_evaluations"], 39)
+            self.assertEqual(result["teacher_approved_entries"], 0)
+            self.assertEqual(result["trades_executed"], 0)
+            self.assertEqual(result["evidence_gate"]["reason"],
+                             "ORIGINAL_TEACHER_AV_REPLAY_NOT_CERTIFIED")
+            self.assertFalse(result["evidence_gate"]["trade_authorized"])
+
     def test_corrupted_dossier_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "m15.csv"
