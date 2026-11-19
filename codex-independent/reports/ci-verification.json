@@ -1,0 +1,45 @@
+{
+  "run_id": 42875029687,
+  "head_sha": "3fd814a5247cd8c8be1f2b1b841ee6a3cfa08711",
+  "platform_artifacts": [
+    {
+      "artifact": "codex-independent-offline-ubuntu-latest",
+      "modes": [
+        {
+          "mode": "normal",
+          "tests": 49,
+          "passed": true,
+          "test_log_sha256": "1656c0a91a8b306bcf4cdf1f338bc072089b2dc26dc3d0af9de13d8737c9559f"
+        },
+        {
+          "mode": "optimized",
+          "tests": 49,
+          "passed": true,
+          "test_log_sha256": "1656c0a91a8b306bcf4cdf1f338bc072089b2dc26dc3d0af9de13d8737c9559f"
+        }
+      ]
+    },
+    {
+      "artifact": "codex-independent-offline-windows-latest",
+      "modes": [
+        {
+          "mode": "normal",
+          "tests": 49,
+          "passed": true,
+          "test_log_sha256": "f1499b25809070ee981816671d0466e97ae2679125e13c73791c1624c1e29031"
+        },
+        {
+          "mode": "optimized",
+          "tests": 49,
+          "passed": true,
+          "test_log_sha256": "50f9bdba6dc9256971a3482f99270c5dc2988a11b86780719a6aa3863a34d442"
+        }
+      ]
+    }
+  ],
+  "canonical_synthetic_head": "710dd7630212e4e9b6b84b5591b34dcbd09abc748d589cf90de38b8167ced0b4",
+  "actual_mt5_run_in_CI": false,
+  "actual_metaeditor_compile_in_CI": false,
+  "semantic_verified": false,
+  "orders_enabled": false
+}
