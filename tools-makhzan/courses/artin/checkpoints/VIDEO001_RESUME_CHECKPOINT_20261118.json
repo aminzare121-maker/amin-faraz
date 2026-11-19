@@ -152,7 +152,7 @@
   "first_incomplete_stage": {
     "queue_id": "video-q-0010-artin-clip-08",
     "stage": "semantic_review_0010_and_complete_source_archive_0020",
-    "note": "0010-0019 complete sources archived; 0020 text-only and original-board independently archived (board SHA256 verified). Complete source 0020 artifact 13677241597 remains unarchived due 512MiB connector limit; semantic review from 0010 pending."
+    "note": "0010-0019 complete sources archived; 0020 text-only, original board, and original chat index independently archived and SHA256 verified. Complete source 0020 still blocked by connector 512MiB limit; semantic alignment from 0010 pending."
   },
   "run_0010": {
     "run_id": 42597293832,
@@ -299,5 +299,17 @@
     "zip_size_bytes": 166574927,
     "semantic_review": "NOT_VERIFIED",
     "source_complete_archive": "NOT_YET"
+  },
+  "chat_0020_archive": {
+    "status": "ARCHIVED_VERIFIED",
+    "artifact_id": 13676872132,
+    "library_path": "/بهروز/VIDEO-001/artin-course-001/partial/video-q-0020-artin-clip-18-original-chat-index.zip",
+    "library_file_id": "libfile_c7543561d2a88191b9de09dea15c81db",
+    "zip_sha256": "944712a4d23a351c7c16bcd01b8d13a00a2653d097b595028df2253cee177660",
+    "zip_integrity": "unzip -tqq passed",
+    "contents": [
+      "chat_selected_index.json"
+    ],
+    "semantic_verified": false
   }
 }
