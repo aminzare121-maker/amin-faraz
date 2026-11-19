@@ -6,6 +6,8 @@ on:
     paths:
       - 'artin_classroom_motor.py'
       - 'artin_13_per_bar_teacher_bridge.py'
+      - 'artin_mt5_to_13_route_readonly.py'
+      - 'test_artin_mt5_to_13_route_readonly.py'
       - 'test_artin_per_bar_side_decisions.py'
       - 'test_artin_classroom_motor.py'
       - 'artin_classroom_trade_actions.py'
@@ -73,6 +75,9 @@ jobs:
       - name: Test read-only MT5 DEMO terminal probe with mocks
         shell: bash
         run: python -m unittest discover -s project -p test_artin_mt5_demo_probe.py -v
+      - name: Test MT5 closed-bar to 13-route integration (no orders)
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_mt5_to_13_route_readonly.py -v
       - name: Test fail-closed BUY and SELL decisions for every M15 bar
         shell: bash
         run: python -m unittest discover -s project -p test_artin_per_bar_side_decisions.py -v
