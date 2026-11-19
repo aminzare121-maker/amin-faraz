@@ -37,7 +37,7 @@ class TestMt5To13Route(unittest.TestCase):
             evaluate_mt5_closed_bars(collector_csv(), as_of=1800001799)
 
     def test_forged_teacher_authorization_rejected(self):
-        raw = collector_csv().replace(b",0,0\\r\\n", b",1,1\\r\\n")
+        raw = collector_csv().replace(b",0,0", b",1,1")
         with self.assertRaises(SourceRejected):
             evaluate_mt5_closed_bars(raw)
 
