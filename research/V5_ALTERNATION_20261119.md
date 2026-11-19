@@ -1,0 +1,5 @@
+# V5 four-candle alternation — 2026-11-19
+
+New hypothesis: four alternating M15 candle bodies reflect two-sided inventory churn; fade last body at next candle open. Stop 1.5 ATR(20), exit after 4 bars, no overlapping trades. Dynamic lots risk 1% of equity with 0.01 lot minimum, 0.10 cap. Assumed 100 oz per lot, observed spread points / 100 and $0.30/oz round-trip slippage. Commissions, swap, intrabar stop slippage and actual broker contract specs remain unverified.
+
+Private Eplanet CSV: 23,643 rows, chronological 60/40 split. Training: 105 trades, gross -$131.45, costs $60.18, net -$191.63. OOS 104 days: base 1038 candidate opportunities, 212 trades, gross +$121.96, costs $146.19, net -$24.23, closed drawdown $123.96, zero days >=$50. Independent volatility/spread guard (ATR>=3 and spread/ATR<=0.08): 1084 candidate opportunities, 161 trades, gross +$97.76, costs $100.38, net -$2.62, closed drawdown $103.73, zero days >=$50. Candidate counts differ due to nonoverlap sequencing. Guard improves losses but does not produce an edge. Both rejected for demo. Code and full ledger generated locally; not yet committed to this branch. No private dataset committed.
