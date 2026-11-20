@@ -45,6 +45,7 @@ def evaluate(path, dossier=None, *, as_of=None):
         raise ValueError('ROUTE_SET_MISMATCH')
     engine=entry.Engine('ARTIN_PER_BAR_SOURCE_GATED',tuple(entry.RULE_IDS))
     engine_statuses={route:Counter() for route in REQUIRED}
+    engine_reasons={route:Counter() for route in REQUIRED}
     counts={route:Counter() for route in REQUIRED}
     side_counts={route:{side:Counter() for side in ('BUY','SELL')} for route in REQUIRED}
     examples={}
@@ -64,6 +65,8 @@ def evaluate(path, dossier=None, *, as_of=None):
                 if decision.order_created or decision.status=='ELIGIBLE':
                     raise AssertionError('UNVERIFIED_TEACHER_ENTRY_NOT_BLOCKED')
                 engine_statuses[route][decision.status]+=1
+                for reason in decision.reasons:
+                    engine_reasons[route][reason]+=1
             needed_by_side={side: requirements(route, side) for side in ('BUY', 'SELL')}
             needed=tuple(dict.fromkeys(needed_by_side['BUY']+needed_by_side['SELL']))
             known={k:facts[k] for k in needed if k in facts}
@@ -80,7 +83,8 @@ def evaluate(path, dossier=None, *, as_of=None):
     return {"schema":"artin_13_per_bar_tri_state_bridge_v1","source_rows":len(bars),
             "routes":[{"route_id":r,"states":dict(counts[r]),"side_decisions":{side:{"states":dict(side_counts[r][side]),"trade_permitted":False} for side in ("BUY","SELL")},"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
-            "independent_engine":{"fingerprint":engine.fingerprint,"evaluations":len(bars)*len(REQUIRED)*2,"route_statuses":{r:dict(engine_statuses[r]) for r in REQUIRED},"orders_created":0},
+            "independent_engine":{"fingerprint":engine.fingerprint,"evaluations":len(bars)*len(REQUIRED)*2,"route_statuses":{r:dict(engine_statuses[r]) for r in REQUIRED},
+                                  "route_reasons":{r:dict(engine_reasons[r]) for r in REQUIRED},"orders_created":0},
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
             "side_decision_evaluations":len(bars)*len(REQUIRED)*2,
             "causal_close_clock_checked":as_of is not None,
