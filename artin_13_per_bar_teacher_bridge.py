@@ -43,6 +43,19 @@ def evaluate(path, dossier=None, *, as_of=None):
     spec.loader.exec_module(entry)
     if set(REQUIRED)!=set(entry.RULE_IDS):
         raise ValueError('ROUTE_SET_MISMATCH')
+    # The legacy engine's hard-coded session references are not authoritative.
+    # Keep dossier session identities separate and flag conflicts for original
+    # audiovisual review rather than silently attributing a rule to a video.
+    source_conflicts={}
+    for route, identity in evidence.get('route_source_identity', {}).items():
+        legacy_sessions=sorted({session for session, *_ in entry.SOURCES.get(route, ())})
+        dossier_sessions=identity['source_sessions']
+        if legacy_sessions != dossier_sessions:
+            source_conflicts[route]={
+                'engine_sessions_unverified':legacy_sessions,
+                'dossier_sessions_unverified':dossier_sessions,
+                'status':'SOURCE_IDENTITY_CONFLICT_REQUIRES_ORIGINAL_AV',
+            }
     engine=entry.Engine('ARTIN_PER_BAR_SOURCE_GATED',tuple(entry.RULE_IDS))
     engine_statuses={route:Counter() for route in REQUIRED}
     engine_reasons={route:Counter() for route in REQUIRED}
@@ -93,6 +106,7 @@ def evaluate(path, dossier=None, *, as_of=None):
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
             "side_decision_evaluations":len(bars)*len(REQUIRED)*2,
             "causal_close_clock_checked":as_of is not None,
+            "source_identity_conflicts":source_conflicts,
             "evidence_gate":{"decision":evidence["decision"],"reason":evidence["reason"],
                              "trade_authorized":False},
             "note":"Unknown teacher conditions are not inferred from candle geometry."}
