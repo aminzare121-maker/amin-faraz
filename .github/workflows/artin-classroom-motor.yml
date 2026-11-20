@@ -9,6 +9,8 @@ on:
       - 'artin_mt5_to_13_route_readonly.py'
       - 'test_artin_mt5_to_13_route_readonly.py'
       - 'test_artin_per_bar_side_decisions.py'
+      - 'test_artin_13_per_bar_integrated_entry.py'
+      - 'research/artin-independent-engine/entry_engine.py'
       - 'test_artin_classroom_motor.py'
       - 'artin_classroom_trade_actions.py'
       - 'test_artin_classroom_trade_actions.py'
@@ -81,6 +83,9 @@ jobs:
       - name: Test fail-closed BUY and SELL decisions for every M15 bar
         shell: bash
         run: python -m unittest discover -s project -p test_artin_per_bar_side_decisions.py -v
+      - name: Test real entry-engine integration for all 13 routes and both sides (no orders)
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_13_per_bar_integrated_entry.py -v
       - name: Run 13-path classroom motor tests (optimized)
         shell: bash
         env:
