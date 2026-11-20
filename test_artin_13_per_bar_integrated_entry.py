@@ -1,0 +1,44 @@
+"""Regression checks for the real independent entry-engine / M15 bridge.
+Synthetic bars test software wiring only, never teacher meaning or P&L.
+"""
+import csv
+import tempfile
+import unittest
+from pathlib import Path
+from artin_13_per_bar_teacher_bridge import evaluate
+from artin_13_real_m15_gap_audit import REQUIRED
+
+class TestIntegratedEntryBridge(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory()
+        self.path=Path(self.tmp.name)/"bars.csv"
+        with self.path.open("w",newline="",encoding="utf-8") as f:
+            w=csv.writer(f)
+            w.writerow(("timestamp","open","high","low","close"))
+            w.writerow((1800000000,4000,4002,3999,4001))
+            w.writerow((1800000900,4001,4003,4000,4002))
+    def tearDown(self):
+        self.tmp.cleanup()
+    def test_all_routes_both_sides_reach_real_engine_and_remain_blocked(self):
+        result=evaluate(self.path,as_of=1800001800)
+        self.assertEqual(result["source_rows"],2)
+        self.assertEqual(result["independent_engine"]["evaluations"],2*len(REQUIRED)*2)
+        self.assertEqual(set(result["independent_engine"]["route_statuses"]),set(REQUIRED))
+        self.assertEqual(result["independent_engine"]["orders_created"],0)
+        self.assertEqual(result["teacher_approved_entries"],0)
+        self.assertEqual(result["trades_executed"],0)
+        self.assertIsNone(result["net_profit"])
+        self.assertFalse(result["evidence_gate"]["trade_authorized"])
+        for route in result["routes"]:
+            for side in ("BUY","SELL"):
+                self.assertFalse(route["side_decisions"][side]["trade_permitted"])
+    def test_future_bar_is_rejected_before_entry_evaluation(self):
+        with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
+            evaluate(self.path,as_of=1800001799)
+    def test_private_approval_flag_cannot_authorize(self):
+        result=evaluate(self.path,{"trading_authorized":True},as_of=1800001800)
+        self.assertEqual(result["independent_engine"]["orders_created"],0)
+        self.assertFalse(result["evidence_gate"]["trade_authorized"])
+
+if __name__=="__main__":
+    unittest.main()
