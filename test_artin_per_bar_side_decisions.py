@@ -23,8 +23,12 @@ class TestSideDecisions(unittest.TestCase):
         for route in result["routes"]:
             for side in ("BUY", "SELL"):
                 self.assertFalse(route["side_decisions"][side]["trade_permitted"])
-                self.assertEqual(route["side_decisions"][side]["states"],
-                                 {"BLOCKED_TEACHER_AV_UNVERIFIED": 2})
+                states = route["side_decisions"][side]["states"]
+                self.assertEqual(states["BLOCKED_TEACHER_AV_UNVERIFIED"], 2)
+                # The entry engine exposes review diagnostics, never execution.
+                self.assertEqual(states["ENGINE_REVIEW"], 2)
+                self.assertEqual(states["REASON:MISSING:sentiment_permission"], 2)
+                self.assertEqual(result["independent_engine"]["orders_created"], 0)
 
 if __name__ == "__main__":
     unittest.main()
