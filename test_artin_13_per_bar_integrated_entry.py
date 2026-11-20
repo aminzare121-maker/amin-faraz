@@ -38,6 +38,16 @@ class TestIntegratedEntryBridge(unittest.TestCase):
     def test_future_bar_is_rejected_before_entry_evaluation(self):
         with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
             evaluate(self.path,as_of=1800001799)
+    def test_duplicate_or_out_of_order_bar_is_rejected(self):
+        with self.path.open("a",newline="",encoding="utf-8") as f:
+            csv.writer(f).writerow((1800000900,4002,4003,4001,4002))
+        with self.assertRaisesRegex(ValueError,"INVALID_SOURCE_BAR"):
+            evaluate(self.path,as_of=1800002700)
+
+    def test_unclosed_bar_is_rejected_even_with_untrusted_approval(self):
+        with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
+            evaluate(self.path,{"trading_authorized":True},as_of=1800001799)
+
     def test_private_approval_flag_cannot_authorize(self):
         result=evaluate(self.path,{"trading_authorized":True},as_of=1800001800)
         self.assertEqual(result["independent_engine"]["orders_created"],0)
