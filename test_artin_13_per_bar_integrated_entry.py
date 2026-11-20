@@ -38,6 +38,33 @@ class TestIntegratedEntryBridge(unittest.TestCase):
                 self.assertEqual(route["side_decisions"][side]["states"]["ENGINE_REVIEW"],2)
                 self.assertEqual(route["side_decisions"][side]["states"]["REASON:MISSING:sentiment_permission"],2)
                 self.assertEqual(route["side_decisions"][side]["states"]["BLOCKED_TEACHER_AV_UNVERIFIED"],2)
+    def test_private_dossier_session_mismatch_is_diagnostic_only(self):
+        from artin_13_teacher_acceptance_matrix import EXPECTED_ROUTES
+        # Build a structurally complete *synthetic* dossier, with no approval.
+        # All 24 indexes are unique; a deliberate session conflict must surface.
+        ids=sorted(EXPECTED_ROUTES)
+        routes=[]
+        for i,route in enumerate(ids):
+            intervals=[{'index':j+1,'session':15 if route=='PULLBACK_STANDARD' else 20,
+                        'start':j*10,'end':j*10+5} for j in range(i*24//len(ids),(i+1)*24//len(ids))]
+            if not intervals:
+                intervals=[{'index':i+1,'session':20,'start':i*10,'end':i*10+5}]
+            routes.append({'route_id':route,'citation_intervals':intervals})
+        # Normalize coverage without claiming these intervals came from videos.
+        for r in routes:r['citation_intervals']=[]
+        for j in range(24):
+            route=routes[j%len(routes)]
+            route['citation_intervals'].append({'index':j+1,
+                'session':15 if route['route_id']=='PULLBACK_STANDARD' else 20,
+                'start':j*10,'end':j*10+5})
+        dossier={'routes':routes,'citations':24,'trading_authorized':False}
+        result=evaluate(self.path,dossier,as_of=1800001800)
+        conflict=result['source_identity_conflicts']['PULLBACK_STANDARD']
+        self.assertEqual(conflict['dossier_sessions_unverified'],[15])
+        self.assertEqual(conflict['engine_sessions_unverified'],[16])
+        self.assertFalse(result['evidence_gate']['trade_authorized'])
+        self.assertEqual(result['independent_engine']['orders_created'],0)
+
     def test_future_bar_is_rejected_before_entry_evaluation(self):
         with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
             evaluate(self.path,as_of=1800001799)
