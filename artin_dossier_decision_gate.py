@@ -57,6 +57,12 @@ def inspect_dossier(dossier: Mapping) -> dict:
             seen.add(idx)
     if seen != set(range(1, 25)) or dossier.get('citations') != 24:
         return {**blocked, 'reason': 'INCOMPLETE_CITATION_COVERAGE'}
+    # Source identity only: never pass candidate words or chart interpretation to entry predicates.
+    # This per-route mapping permits auditing the exact dossier coverage at the engine boundary.
+    route_sources = {r['route_id']: {'citation_indexes': sorted(x['index'] for x in r['citation_intervals']),
+                                   'source_sessions': sorted({x['session'] for x in r['citation_intervals']})}
+                     for r in routes}
     # Caller-provided approval flags cannot replace original AV review.
     return {**blocked, 'reason': 'ORIGINAL_TEACHER_AV_REPLAY_NOT_CERTIFIED',
-            'candidate_routes': len(routes), 'source_intervals': len(seen)}
+            'candidate_routes': len(routes), 'source_intervals': len(seen),
+            'route_source_identity': route_sources}
