@@ -25,6 +25,9 @@ class TestIntegratedEntryBridge(unittest.TestCase):
         self.assertEqual(result["independent_engine"]["evaluations"],2*len(REQUIRED)*2)
         self.assertEqual(set(result["independent_engine"]["route_statuses"]),set(REQUIRED))
         self.assertEqual(result["independent_engine"]["orders_created"],0)
+        for route_id in REQUIRED:
+            self.assertEqual(result["independent_engine"]["route_statuses"][route_id].get("REVIEW"),4)
+            self.assertEqual(result["independent_engine"]["route_reasons"][route_id].get("MISSING:sentiment_permission"),4)
         self.assertEqual(result["teacher_approved_entries"],0)
         self.assertEqual(result["trades_executed"],0)
         self.assertIsNone(result["net_profit"])
