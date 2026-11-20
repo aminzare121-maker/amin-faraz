@@ -8,6 +8,7 @@ on:
       - 'artin_13_per_bar_teacher_bridge.py'
       - 'artin_dossier_decision_gate.py'
       - 'test_artin_dossier_identity_integrated_entry.py'
+      - 'test_artin_source_interval_identity.py'
       - 'artin_mt5_to_13_route_readonly.py'
       - 'test_artin_mt5_to_13_route_readonly.py'
       - 'test_artin_per_bar_side_decisions.py'
@@ -91,6 +92,9 @@ jobs:
       - name: Test private dossier citation identity through real entry engine (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_dossier_identity_integrated_entry.py -v
+      - name: Test same-session source interval identity (no orders)
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_source_interval_identity.py -v
       - name: Run 13-path classroom motor tests (optimized)
         shell: bash
         env:
