@@ -4,6 +4,7 @@ Market observations are not teacher signals; no orders or P&L are generated.
 """
 from __future__ import annotations
 import csv,glob,json,sys,math,importlib.util
+from decimal import Decimal
 from pathlib import Path
 from collections import Counter
 from artin_13_real_m15_gap_audit import REQUIRED, requirements
@@ -51,9 +52,15 @@ def evaluate(path, dossier=None, *, as_of=None):
         # Raw candle direction is not the teacher-defined three-candle setup.
         # Preserve it as an unresolved teacher predicate until original AV replay.
         facts={"decision_close":c,"decision_candle_closed":True}
+        # Only causal market facts cross the engine boundary. Teacher predicates
+        # remain absent; the entry engine cannot infer teacher AV approval.
+        market_facts={
+            "decision_close":entry.Fact(Decimal(str(c)),t+900,"M15_CSV_CLOSE_UNVERIFIED_PROVENANCE"),
+            "decision_candle_closed":entry.Fact(True,t+900,"M15_CSV_CLOSED_BAR"),
+        }
         for route,required in REQUIRED.items():
             for side in ('BUY','SELL'):
-                decision=engine.evaluate(route,entry.Observation(side,t+900,{}))
+                decision=engine.evaluate(route,entry.Observation(side,t+900,market_facts))
                 if decision.order_created or decision.status=='ELIGIBLE':
                     raise AssertionError('UNVERIFIED_TEACHER_ENTRY_NOT_BLOCKED')
                 engine_statuses[route][decision.status]+=1
