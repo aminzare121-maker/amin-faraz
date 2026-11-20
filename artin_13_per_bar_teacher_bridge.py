@@ -86,7 +86,7 @@ def evaluate(path, dossier=None, *, as_of=None):
                 side_counts[route][side]['BLOCKED_TEACHER_AV_UNVERIFIED']+=1
             if route not in examples:examples[route]={"timestamp":t,"known_market_facts":known,"unknown_teacher_predicates":missing,"unknown_by_side":{side:[k for k in keys if k not in facts] for side,keys in needed_by_side.items()}}
     return {"schema":"artin_13_per_bar_tri_state_bridge_v1","source_rows":len(bars),
-            "routes":[{"route_id":r,"states":dict(counts[r]),"side_decisions":{side:{"states":dict(side_counts[r][side]),"trade_permitted":False} for side in ("BUY","SELL")},"first_bar_example":examples[r]} for r in REQUIRED],
+            "routes":[{"route_id":r,"source_identity":evidence.get("route_source_identity",{}).get(r),"states":dict(counts[r]),"side_decisions":{side:{"states":dict(side_counts[r][side]),"trade_permitted":False} for side in ("BUY","SELL")},"first_bar_example":examples[r]} for r in REQUIRED],
             "total_route_bar_evaluations":len(bars)*len(REQUIRED),
             "independent_engine":{"fingerprint":engine.fingerprint,"evaluations":len(bars)*len(REQUIRED)*2,"route_statuses":{r:dict(engine_statuses[r]) for r in REQUIRED},
                                   "route_reasons":{r:dict(engine_reasons[r]) for r in REQUIRED},"orders_created":0},
