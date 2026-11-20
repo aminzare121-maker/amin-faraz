@@ -35,6 +35,9 @@ class TestIntegratedEntryBridge(unittest.TestCase):
         for route in result["routes"]:
             for side in ("BUY","SELL"):
                 self.assertFalse(route["side_decisions"][side]["trade_permitted"])
+                self.assertEqual(route["side_decisions"][side]["states"]["ENGINE_REVIEW"],2)
+                self.assertEqual(route["side_decisions"][side]["states"]["REASON:MISSING:sentiment_permission"],2)
+                self.assertEqual(route["side_decisions"][side]["states"]["BLOCKED_TEACHER_AV_UNVERIFIED"],2)
     def test_future_bar_is_rejected_before_entry_evaluation(self):
         with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
             evaluate(self.path,as_of=1800001799)
