@@ -50,10 +50,20 @@ def evaluate(path, dossier=None, *, as_of=None):
     for route, identity in evidence.get('route_source_identity', {}).items():
         legacy_sessions=sorted({session for session, *_ in entry.SOURCES.get(route, ())})
         dossier_sessions=identity['source_sessions']
-        if legacy_sessions != dossier_sessions:
+        # Matching session numbers alone cannot establish identical source clips.
+        # Compare time intervals only when the dossier carries exact ranges;
+        # both sides remain unverified until original audiovisual replay.
+        dossier_route = next((r for r in dossier['routes'] if r['route_id'] == route), None)
+        dossier_ranges = sorted((int(x['session']), float(x['start']), float(x['end']))
+                                for x in dossier_route['citation_intervals']) if dossier_route else []
+        engine_ranges = sorted((int(s), float(a), float(b))
+                               for s, a, b in entry.SOURCES.get(route, ()))
+        range_mismatch = dossier_ranges != engine_ranges
+        if legacy_sessions != dossier_sessions or range_mismatch:
             source_conflicts[route]={
                 'engine_sessions_unverified':legacy_sessions,
                 'dossier_sessions_unverified':dossier_sessions,
+                'interval_identity_mismatch':range_mismatch,
                 'status':'SOURCE_IDENTITY_CONFLICT_REQUIRES_ORIGINAL_AV',
             }
     engine=entry.Engine('ARTIN_PER_BAR_SOURCE_GATED',tuple(entry.RULE_IDS))
