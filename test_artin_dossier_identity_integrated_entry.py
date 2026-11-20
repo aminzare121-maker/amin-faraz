@@ -26,6 +26,13 @@ class DossierIdentityBridgeTest(unittest.TestCase):
         self.assertEqual(set(mapped),set(ids))
         self.assertEqual(sum(len(x['citation_indexes']) for x in mapped.values()),24)
         self.assertEqual(mapped[ids[0]]['citation_indexes'],[1,14])
+        # Synthetic session 20 conflicts with multiple engine source references;
+        # this must appear on each affected route, not only in a top-level audit.
+        for route in result['routes']:
+            expected = ('SOURCE_IDENTITY_CONFLICT_REQUIRES_ORIGINAL_AV'
+                        if route['route_id'] in result['source_identity_conflicts']
+                        else 'SOURCE_IDENTITY_MATCH_UNVERIFIED')
+            self.assertEqual(route['source_identity_status'], expected)
         self.assertEqual(result['independent_engine']['orders_created'],0)
         self.assertEqual(result['teacher_approved_entries'],0)
         self.assertFalse(result['evidence_gate']['trade_authorized'])
