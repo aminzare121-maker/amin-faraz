@@ -65,6 +65,7 @@ class ModelAdapterTests(unittest.TestCase):
         self.assertEqual(self.call("طبق مستند [1] وضعیت اتصال را بررسی کنید."),
                          "طبق مستند [1] وضعیت اتصال را بررسی کنید.")
         self.assertEqual(FakeModel.last_request["model"], "synthetic-stub-model")
+        self.assertGreaterEqual(FakeModel.last_request["max_tokens"], 32)
         self.assertIn("docs/guide.md", FakeModel.last_request["messages"][1]["content"])
 
     def test_reject_uncited_or_nonexistent_sources(self):
