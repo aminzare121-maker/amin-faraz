@@ -5,6 +5,7 @@ on:
     paths:
       - "amin-ai-support/**"
       - ".github/workflows/amin-ai-support-ci.yml"
+      - ".github/workflows/amin-report-directive.yml"
   pull_request:
     paths:
       - "amin-ai-support/**"
@@ -29,6 +30,10 @@ jobs:
       - name: Run offline tests
         working-directory: amin-ai-support
         run: python -m unittest discover -s tests -v
+      - name: Test report-to-directive controller (no remote execution)
+        run: python -m unittest discover -s amin-ai-support/control/tests -v
+      - name: Compile controller
+        run: python -m py_compile amin-ai-support/control/continuation.py
       - name: Synthetic project knowledge regression (not real-world acceptance)
         working-directory: amin-ai-support
         run: python evaluation.py --strict
