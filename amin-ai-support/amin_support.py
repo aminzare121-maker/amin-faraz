@@ -245,9 +245,9 @@ def model_completion(question: str, project: dict, evidence: list[dict], hint: s
     # Citation-only source headers are not answers. The real 0.5B pilot
     # produced "[1] README.md section 0"; old validation incorrectly accepted it.
     # Reject metadata-only replies without weakening the numbered-source gate.
-    meaning = re.sub(r"\\[\\d+\\]", "", value).strip()
+    meaning = re.sub(r"\[\d+\]", "", value).strip()
     if len(meaning.replace(" ", "")) < 8 or re.fullmatch(
-            r"(?:[\\w./-]+\\.(?:md|txt|rst|json)\\s+(?:section|بخش)\\s+\\d+\\s*)+",
+            r"(?:[\w./-]+\.(?:md|txt|rst|json)\s+(?:section|بخش)\s+\d+\s*)+",
             meaning, flags=re.IGNORECASE):
         return None
     # The assistant has no executor for customer devices or live accounts.
