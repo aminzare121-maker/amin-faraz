@@ -232,7 +232,20 @@ def model_completion(question: str, project: dict, evidence: list[dict], hint: s
     with urlopen(request, timeout=30) as response:
         result = json.load(response)
     value = result["choices"][0]["message"]["content"]
-    return value.strip() if isinstance(value, str) and value.strip() else None
+    if not isinstance(value, str) or not value.strip():
+        return None
+    # A model reply must identify at least one supplied source. This is a
+    # mechanical citation gate, not proof that its statements are correct.
+    available = {str(i) for i in range(1, len(evidence) + 1)}
+    cited = set(re.findall(r"\[(\d+)\]", value))
+    if not (cited & available) or not cited.issubset(available):
+        return None
+    # The assistant has no executor for customer devices or live accounts.
+    if any(phrase in normalize(value) for phrase in (
+            "من نصب کردم", "من اصلاح کردم", "من معامله کردم",
+            "خودم اجرا کردم", "مشکل را برطرف کردم")):
+        return None
+    return value.strip()
 
 
 class SupportEngine:
