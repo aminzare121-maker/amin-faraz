@@ -21,6 +21,10 @@ from amin_support import SupportEngine
 from model_probe import probe_model, validate_base_url
 
 
+def has_first_source_citation(value: str) -> bool:
+    return bool(re.search(r"\[1\]", value))
+
+
 def run():
     base = os.environ.get("AMIN_MODEL_BASE_URL", "")
     model = os.environ.get("AMIN_MODEL_NAME", "")
@@ -80,7 +84,7 @@ def run():
             with urlopen(raw_request, timeout=45) as remote_response:
                 raw = json.load(remote_response)["choices"][0]["message"]["content"]
             result["raw_model_sample"] = str(raw)[:450]
-            result["raw_sample_cited"] = bool(re.search(r"\\[1\\]", str(raw)))
+            result["raw_sample_cited"] = has_first_source_citation(str(raw))
             start = monotonic()
             answer = engine.answer("trial", "طبق راهنمای پروژه آزمایشی، شماره پورت سرویس چیست؟")
             result["query_latency_ms"] = round((monotonic() - start) * 1000, 1)

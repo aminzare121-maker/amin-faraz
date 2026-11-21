@@ -5,7 +5,7 @@ import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from unittest.mock import patch
 
-from amin_support import model_completion
+from amin_support import model_completion, _identifier_focus
 from evaluation import evaluate
 
 
@@ -79,6 +79,36 @@ class ModelAdapterTests(unittest.TestCase):
         self.assertIsNone(self.call("docs/guide.md section 0 [1]"))
         self.assertIsNone(self.call("[1]"))
         self.assertIsNotNone(self.call("طبق راهنمای [1] ابتدا سرویس اتصال را بررسی کنید."))
+
+    def test_identifier_question_uses_matching_source_row_and_rejects_wrong_version(self):
+        evidence = [{
+            "path": "INDEX_FA.md",
+            "section": 0,
+            "excerpt": (
+                "| کد | نام ابزار | وضعیت |\n"
+                "| --- | --- | --- |\n"
+                "| VIDEO-001 | پردازشگر مستقل فیلم و کلاس | ابزار اصلی |\n"
+                "| VIDEO-001-V13 | ارتقای آزمایشی پردازشگر فیلم | غیرعملیاتی |"
+            )
+        }]
+        question = "شناسه ثبت‌شده پردازشگر فیلم و کلاس در مخزن ابزارها چیست؟"
+        focus = _identifier_focus(question, evidence)
+        self.assertIsNotNone(focus)
+        self.assertEqual(focus[1], "VIDEO-001")
+        self.assertIn("پردازشگر مستقل فیلم و کلاس", focus[0])
+        FakeModel.reply = "شناسه ابزار VIDEO-001-V13 است. [1]"
+        self.assertIsNone(model_completion(question, {"name": "آرتین"}, evidence, None))
+        self.assertIn("بخش دقیقاً مرتبط", FakeModel.last_request["messages"][1]["content"])
+        FakeModel.reply = "طبق سند [1] شناسه ابزار اصلی VIDEO-001 است."
+        self.assertEqual(
+            model_completion(question, {"name": "آرتین"}, evidence, None),
+            FakeModel.reply)
+        self.assertIsNone(_identifier_focus("اتصال MT5", evidence))
+
+    def test_identifier_source_without_clear_matching_row_is_not_forced(self):
+        sources = [{"path": "docs/help.md", "section": 0,
+                    "excerpt": "| APP-100 | سرویس شبکه | فعال |"}]
+        self.assertIsNone(_identifier_focus("شناسه پردازشگر فیلم و کلاس چیست؟", sources))
 
     def test_reject_claims_of_actions_not_performed(self):
         self.assertIsNone(self.call("من نصب کردم. طبق سند [1]"))
