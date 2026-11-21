@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "faraz",
+      "name": "فراز — پژوهش طلای جهانی",
+      "git_url": "https://github.com/aminzare121-maker/amin-faraz.git",
+      "ref": "main",
+      "source_prefixes": [
+        "README.md",
+        "FARAZ_STATUS_AND_HANDOFF_FA.md",
+        "faraz-mt5-readonly-20261116"
+      ],
+      "public_paths": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "artin",
+      "name": "آرتین — موتور آموزش معامله‌گری",
+      "git_url": "https://github.com/aminzare121-maker/amin-faraz.git",
+      "ref": "tools-makhzan-hub",
+      "source_prefixes": [
+        "README.md",
+        "tools-makhzan/INDEX_FA.md",
+        "tools-makhzan/VIDEO_ENGINE_STATE_FA.md",
+        "tools-makhzan/courses/artin"
+      ],
+      "public_paths": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "v5",
+      "name": "V5 — موتور پژوهش معاملات",
+      "git_url": "https://github.com/aminzare121-maker/amin-faraz.git",
+      "ref": "research/v5-alternating-exhaustion-20261121",
+      "source_prefixes": [
+        "README.md",
+        "research/V5_ALTERNATING_EXHAUSTION_20261121.md"
+      ],
+      "public_paths": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "cabin",
+      "name": "کابین متاتریدر امین",
+      "git_url": "https://github.com/aminzare121-maker/amin-faraz.git",
+      "ref": "research/amin-cabin-v2-offline",
+      "source_prefixes": [
+        "README.md",
+        "research/amin-cabin-v2"
+      ],
+      "public_paths": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "iran-strategy",
+      "name": "اپ راهبردی ایران",
+      "git_url": "",
+      "ref": "",
+      "source_prefixes": [],
+      "public_paths": []
+    }
+  ]
+}
