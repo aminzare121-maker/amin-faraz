@@ -179,7 +179,7 @@ class Knowledge:
         # returned to clients or sent as context to the language model.
         rows.extend((
             f"approved_resolutions/{ticket_id}", 0,
-            (f"مسئله عمومی: {public_problem}\\n" if public_problem else "") +
+            (f"مسئله عمومی: {public_problem}\n" if public_problem else "") +
             f"راه‌حل تأییدشده: {resolution}",
             "public", public_problem + " " + resolution
         ) for ticket_id, public_problem, resolution in self.tickets.approved(project_id))
