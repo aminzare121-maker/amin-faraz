@@ -29,6 +29,9 @@ jobs:
       - name: Run offline tests
         working-directory: amin-ai-support
         run: python -m unittest discover -s tests -v
+      - name: Synthetic project knowledge regression (not real-world acceptance)
+        working-directory: amin-ai-support
+        run: python evaluation.py --strict
       - name: Verify project configuration
         working-directory: amin-ai-support
         run: python -c "from amin_support import load_projects; print(sorted(load_projects()))"
