@@ -33,9 +33,11 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <textarea id="message" maxlength="2500" placeholder="نام نسخه، نوع دستگاه و متن خطا را بنویسید..."></textarea>
 <div class="actions">
 <button id="ask">ارسال به پشتیبان</button>
+<button class="secondary" id="ticket" type="button">ثبت درخواست بررسی</button>
 <button class="secondary" id="mic" type="button">🎙 گفتار فارسی</button>
 <button class="secondary" id="speak" type="button">🔊 خواندن پاسخ</button>
 </div>
+<label class="muted"><input id="consent" type="checkbox" style="width:auto"> با ذخیره متن این درخواست در سامانه پشتیبانی موافقم.</label>
 <p id="status" aria-live="polite"></p>
 </section>
 <section class="panel" aria-live="polite">
@@ -82,7 +84,21 @@ async function ask(){
    (data.needs_human?" | نیازمند بررسی پشتیبان انسانی":" | پاسخ مبتنی بر مستندات"));
  }catch(e){status("خطا: "+e.message)}finally{button.disabled=false}
 }
+async function submitTicket(){
+ const msg=$("message").value.trim();
+ if(!msg){status("ابتدا مشکل را بنویسید.");return}
+ if(!$("consent").checked){status("برای ثبت و نگهداری درخواست، رضایت صریح لازم است.");return}
+ try{
+  const r=await fetch("/api/ticket",{method:"POST",
+   headers:{"Content-Type":"application/json",...authorization()},
+   body:JSON.stringify({project:$("project").value,message:msg,consent:true})});
+  const data=await r.json();
+  if(!r.ok)throw Error(data.error||"ثبت درخواست ناموفق بود");
+  status("درخواست ثبت شد. شناسه پیگیری: "+data.id+" — هنوز بررسی یا حل نشده است.");
+ }catch(e){status("ثبت ناموفق: "+e.message)}
+}
 $("ask").addEventListener("click",ask);
+$("ticket").addEventListener("click",submitTicket);
 $("key").addEventListener("change",load);
 $("project").addEventListener("change",showInfo);
 $("mic").addEventListener("click",()=>{
