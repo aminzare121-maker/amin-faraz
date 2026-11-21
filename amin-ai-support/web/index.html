@@ -37,6 +37,8 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <button class="secondary" id="mic" type="button">🎙 گفتار فارسی</button>
 <button class="secondary" id="speak" type="button">🔊 خواندن پاسخ</button>
 </div>
+<label class="muted"><input id="remoteConsent" type="checkbox" style="width:auto"> فقط برای همین سؤال، اجازه می‌دهم متن سؤال و بخش‌های مستندات بازیابی‌شده به مدل خارجی انتخاب‌شده توسط مدیر سامانه ارسال شوند. این گزینه پیش‌فرض خاموش است.</label>
+<p class="muted">این اجازه با رضایت ذخیره تیکت متفاوت است. اگر مدل محلی باشد، هیچ انتقال خارجی لازم نیست. سیاست نگهداری داده سرویس خارجی باید جداگانه بررسی شود.</p>
 <label class="muted"><input id="consent" type="checkbox" style="width:auto"> با ذخیره متن این درخواست در سامانه پشتیبانی موافقم.</label>
 <p id="status" aria-live="polite"></p>
 </section>
@@ -76,7 +78,8 @@ async function ask(){
  button.disabled=true;status("در حال بررسی دانش همان پروژه...");
  try{
  const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json",...authorization()},
- body:JSON.stringify({project:$("project").value,message:msg})});
+ body:JSON.stringify({project:$("project").value,message:msg,
+                     external_model_consent:$("remoteConsent").checked === true})});
  const data=await r.json();if(!r.ok)throw Error(data.error||"خطای سرویس");
  lastResponse=data.answer;$("reply").textContent=lastResponse;
  $("sources").textContent=(data.sources||[]).map((x,i)=>"["+(i+1)+"] "+x.path+" — بخش "+x.section).join("\n");

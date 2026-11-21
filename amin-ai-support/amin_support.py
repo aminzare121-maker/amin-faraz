@@ -19,7 +19,8 @@ import sys
 import tempfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit
+from model_probe import validate_base_url
 from urllib.request import Request, urlopen
 from tickets import TicketStore
 from github_evidence import update_provenance
@@ -215,14 +216,23 @@ def classify_issue(question: str) -> str | None:
     return None
 
 
-def model_completion(question: str, project: dict, evidence: list[dict], hint: str | None) -> str | None:
+def model_completion(question: str, project: dict, evidence: list[dict], hint: str | None,
+                     role: str = "customer", external_consent: bool = False) -> str | None:
     base_url = os.environ.get("AMIN_MODEL_BASE_URL", "").strip().rstrip("/")
     model = os.environ.get("AMIN_MODEL_NAME", "").strip()
     if not base_url or not model:
         return None
-    # Works with OpenAI-compatible /v1/chat/completions APIs, including self-hosted models.
-    if not base_url.startswith(("http://127.0.0.1:", "http://localhost:", "https://")):
-        raise ValueError("Only HTTPS or loopback model endpoints are allowed")
+    # A model endpoint alone never grants consent to transmit user questions
+    # or project evidence. Validate URL structure and require opt-in at both
+    # the operator and the individual request for external HTTPS services.
+    base_url = validate_base_url(base_url)
+    hostname = urlsplit(base_url).hostname
+    local_only = hostname in {"127.0.0.1", "localhost", "::1"}
+    if not local_only:
+        if os.environ.get("AMIN_MODEL_REMOTE_CONSENT") != "allow" or external_consent is not True:
+            return None
+        if role == "developer" and os.environ.get("AMIN_MODEL_INTERNAL_CONSENT") != "allow":
+            return None
     context = "\n\n".join(f"منبع [{i}]، فایل: {x['path']}، بخش: {x['section']}\nمتن مستند: {x['excerpt']}"
                           for i, x in enumerate(evidence, 1))
     system = (
@@ -305,7 +315,8 @@ class SupportEngine:
         self.projects = dict(self._static_projects)
         self.projects.update(dynamic)
 
-    def answer(self, project_id: str, question: str, role: str = "customer") -> dict:
+    def answer(self, project_id: str, question: str, role: str = "customer",
+               external_consent: bool = False) -> dict:
         if project_id not in self.projects:
             raise ValueError("Unknown project")
         if not isinstance(question, str) or not question.strip() or len(question) > 2500:
@@ -317,7 +328,8 @@ class SupportEngine:
         used_model = False
         if matches:
             try:
-                answer = model_completion(question, self.projects[project_id], matches, hint)
+                answer = model_completion(question, self.projects[project_id], matches, hint,
+                                          role=role, external_consent=external_consent)
                 used_model = answer is not None
             except (HTTPError, URLError, TimeoutError, KeyError, ValueError, OSError):
                 pass  # Explicitly fall back to local, evidence-only guidance.
@@ -465,7 +477,8 @@ def make_handler(engine: SupportEngine, api_key: str):
                     self.send_json(201, {"id": ticket_id, "project": project,
                                          "status": "new", "reviewed": False})
                 else:
-                    response = engine.answer(body.get("project", ""), body.get("message", ""))
+                    response = engine.answer(body.get("project", ""), body.get("message", ""),
+                                             external_consent=body.get("external_model_consent") is True)
                     self.send_json(200, response)
             except (ValueError, TypeError, json.JSONDecodeError) as exc:
                 self.send_json(400, {"error": str(exc)})
@@ -488,6 +501,8 @@ def main(argv=None):
     ask.add_argument("--message", required=True)
     ask.add_argument("--role", choices=["customer", "developer"], default="customer",
                      help="Developer mode is available only through trusted local CLI")
+    ask.add_argument("--external-model-consent", action="store_true", default=False,
+                     help="Explicit consent to send THIS question and retrieved evidence to configured external model")
     diag = sub.add_parser("diagnose", help="Read-only Python syntax check")
     diag.add_argument("--project", required=True)
     diag.add_argument("--source", required=True, type=Path)
@@ -558,7 +573,8 @@ def main(argv=None):
             print(json.dumps(sync_one(engine.projects[name], engine.knowledge),
                              ensure_ascii=False), flush=True)
     elif args.command == "ask":
-        print(json.dumps(engine.answer(args.project, args.message, role=args.role),
+        print(json.dumps(engine.answer(args.project, args.message, role=args.role,
+                                       external_consent=args.external_model_consent),
                          ensure_ascii=False, indent=2))
     elif args.command == "diagnose":
         print(json.dumps(diagnose_source(engine.projects[args.project], args.source),
