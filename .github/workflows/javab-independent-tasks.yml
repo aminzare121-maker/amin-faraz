@@ -1,0 +1,47 @@
+name: Javab - independent task directives
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+# Each report gets its own runner group: distinct tasks never share a concurrency lock.
+# GitHub's available runner capacity and rate limits may still introduce queueing.
+concurrency:
+  group: javab-issue-${{ github.event.issue.number }}-comment-${{ github.event.comment.id }}
+  cancel-in-progress: false
+
+jobs:
+  javab-directive:
+    if: >-
+      github.repository == 'aminzare121-maker/amin-faraz' &&
+      !github.event.issue.pull_request &&
+      github.event.issue.state == 'open' &&
+      startsWith(github.event.issue.title, 'برنامه جواب | ') &&
+      github.event.issue.user.login == 'aminzare121-maker' &&
+      github.event.comment.user.login == 'aminzare121-maker' &&
+      github.event.comment.author_association == 'OWNER' &&
+      startsWith(github.event.comment.body, 'JAVAB_REPORT_V1')
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Fetch trusted controller from main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Generate scoped instruction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 amin-ai-support/control/javab.py             --event "$GITHUB_EVENT_PATH"             --output "$RUNNER_TEMP/javab-directive.txt"
+      - name: Reply to the same task (not another issue)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TASK_ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$TASK_ISSUE" --repo "$GH_REPO"             --body-file "$RUNNER_TEMP/javab-directive.txt"
