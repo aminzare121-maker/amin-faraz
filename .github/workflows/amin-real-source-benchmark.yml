@@ -1,0 +1,73 @@
+name: Support Hub live model benchmark on actual project docs
+
+on:
+  push:
+    branches: [feature/support-real-source-benchmark-20261122]
+    paths:
+      - "amin-ai-support/real_source_benchmark.py"
+      - ".github/workflows/amin-real-source-benchmark.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amin-real-source-benchmark-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test-real-project-docs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 27
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve Artin reference from real versioned GitHub branch
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin tools-makhzan-hub
+          git show FETCH_HEAD:tools-makhzan/INDEX_FA.md > "$RUNNER_TEMP/artin-index.md"
+          test -s "$RUNNER_TEMP/artin-index.md"
+          test -s FARAZ_STATUS_AND_HANDOFF_FA.md
+          echo "Faraz ref: $(git rev-parse HEAD)"
+          echo "Artin reference ref: $(git rev-parse FETCH_HEAD)"
+      - name: Start disposable Ollama CPU model and pull Apache Qwen2.5-7B-Instruct
+        run: |
+          set -euo pipefail
+          docker run -d --name amin-qwen-benchmark --pull=always \
+            -p 127.0.0.1:11434:11434 \
+            -e OLLAMA_NUM_PARALLEL=1 \
+            ollama/ollama:latest
+          for i in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:11434/api/tags >/dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl --fail --silent http://127.0.0.1:11434/api/tags >/dev/null
+          docker exec amin-qwen-benchmark ollama pull qwen2.5:7b-instruct
+      - name: Measure five cases from actual project documents (not customer acceptance)
+        env:
+          AMIN_MODEL_BASE_URL: http://127.0.0.1:11434/v1
+          AMIN_MODEL_NAME: qwen2.5:7b-instruct
+          AMIN_MODEL_TIMEOUT_SECONDS: "120"
+          AMIN_MODEL_MAX_TOKENS: "192"
+          PYTHONUNBUFFERED: "1"
+        working-directory: amin-ai-support
+        run: |
+          python real_source_benchmark.py \
+            --faraz-doc ../FARAZ_STATUS_AND_HANDOFF_FA.md \
+            --artin-doc "$RUNNER_TEMP/artin-index.md" \
+            --report "$RUNNER_TEMP/real-source-benchmark.json"
+      - name: Persist numeric and source-only report as CI artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: amin-real-source-benchmark
+          path: ${{ runner.temp }}/real-source-benchmark.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Clean up temporary model
+        if: always()
+        run: docker rm -f amin-qwen-benchmark || true
