@@ -17,7 +17,9 @@ from urllib.request import Request, urlopen
 
 def repository_slug(git_url: str) -> str:
     parsed = urlparse(git_url)
-    if parsed.scheme != "https" or parsed.hostname != "github.com" or parsed.port is not None:
+    if (parsed.scheme != "https" or parsed.hostname != "github.com" or
+        parsed.port is not None or parsed.username is not None or
+        parsed.password is not None or parsed.query or parsed.fragment):
         raise ValueError("GitHub HTTPS repository is required")
     path = parsed.path.strip("/")
     if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\.git", path):
@@ -69,7 +71,7 @@ def index_issues(project: dict, knowledge, issues: list[dict], scrub):
         number = issue.get("number")
         if not isinstance(number, int) or number <= 0:
             continue
-        kind = "pulls" if issue.get("pull_request") else "issues"
+        kind = "pulls" if "pull_request" in issue else "issues"
         source = f"__github__/{kind}/{number}"
         body = (issue.get("body") or "")[:5000]
         title = (issue.get("title") or "")[:500]
