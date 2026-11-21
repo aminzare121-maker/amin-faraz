@@ -281,13 +281,30 @@ def sync_one(project: dict, knowledge: Knowledge) -> dict:
         raise ValueError("Unsupported Git remote or ref")
     with tempfile.TemporaryDirectory(prefix="amin-support-") as temp:
         result = subprocess.run(
-            ["git", "-c", "core.hooksPath=/dev/null", "clone", "--depth", "1",
+            ["git", "-c", "core.hooksPath=/dev/null", "clone", "--depth", "30",
              "--single-branch", "--branch", ref, url, temp + "/repo"],
             capture_output=True, text=True, timeout=180, check=False)
         if result.returncode:
             raise RuntimeError("Git clone failed for " + project["id"] +
                                "; verify network and repo permissions")
-        return knowledge.ingest(project, Path(temp) / "repo")
+        checkout = Path(temp) / "repo"
+        report = knowledge.ingest(project, checkout)
+        head = subprocess.run(["git", "-C", str(checkout), "rev-parse", "HEAD"],
+                              capture_output=True, text=True, timeout=15, check=True)
+        history = subprocess.run(
+            ["git", "-C", str(checkout), "log", "-30", "--date=short",
+             "--pretty=format:%h %ad %s"], capture_output=True, text=True,
+            timeout=15, check=True)
+        # Git history is an internal engineering source; never show it to ordinary users.
+        rows = chunks(scrub(history.stdout), size=1300, overlap=0)
+        with knowledge.connect() as db:
+            db.executemany("INSERT OR REPLACE INTO passages VALUES (?,?,?,?,?,?)",
+                           [(project["id"], "__git__/commit_history", i,
+                             "developer", body, hashlib.sha256(body.encode()).hexdigest())
+                            for i, body in enumerate(rows)])
+        report["commit_sha"] = head.stdout.strip()
+        report["history_passages"] = len(rows)
+        return report
 
 
 def diagnose_source(project: dict, root: Path) -> dict:
