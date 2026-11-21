@@ -14,6 +14,8 @@ import tempfile
 from pathlib import Path
 from time import monotonic
 from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
+import re
 
 from amin_support import SupportEngine
 from model_probe import probe_model, validate_base_url
@@ -64,6 +66,21 @@ def run():
             ]}, ensure_ascii=False), encoding="utf-8")
             engine = SupportEngine(config, root / "trial.sqlite3")
             engine.knowledge.ingest(engine.projects["trial"], source)
+            # Inspect a real model answer against the same toy evidence. Only
+            # a synthetic public sentence can appear in CI logs, never user data.
+            raw_request = Request(
+                checked + "/chat/completions",
+                data=json.dumps({
+                    "model": model, "temperature": 0.1, "max_tokens": 110,
+                    "messages": [
+                        {"role": "system", "content": "از سند [1] استفاده کن. پاسخ کوتاه و فارسی، با ارجاع [1]."},
+                        {"role": "user", "content": "شواهد [1]: پورت سرویس آزمایشی 8765 است. شماره پورت چیست؟"}
+                    ]}, ensure_ascii=False).encode("utf-8"),
+                headers={"Content-Type": "application/json"}, method="POST")
+            with urlopen(raw_request, timeout=45) as remote_response:
+                raw = json.load(remote_response)["choices"][0]["message"]["content"]
+            result["raw_model_sample"] = str(raw)[:450]
+            result["raw_sample_cited"] = bool(re.search(r"\\[1\\]", str(raw)))
             start = monotonic()
             answer = engine.answer("trial", "طبق راهنمای پروژه آزمایشی، شماره پورت سرویس چیست؟")
             result["query_latency_ms"] = round((monotonic() - start) * 1000, 1)
