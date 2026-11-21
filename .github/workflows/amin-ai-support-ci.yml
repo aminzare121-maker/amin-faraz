@@ -1,0 +1,34 @@
+name: Amin AI Support Hub CI
+
+on:
+  push:
+    paths:
+      - "amin-ai-support/**"
+      - ".github/workflows/amin-ai-support-ci.yml"
+  pull_request:
+    paths:
+      - "amin-ai-support/**"
+      - ".github/workflows/amin-ai-support-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile source
+        run: python -m py_compile amin-ai-support/amin_support.py
+      - name: Run offline tests
+        working-directory: amin-ai-support
+        run: python -m unittest discover -s tests -v
+      - name: Verify project configuration
+        working-directory: amin-ai-support
+        run: python -c "from amin_support import load_projects; print(sorted(load_projects()))"
