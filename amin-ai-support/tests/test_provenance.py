@@ -1,9 +1,11 @@
 import json
+import io
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
-from amin_support import SupportEngine, scrub
+from amin_support import SupportEngine, main, scrub
 from github_evidence import repository_slug, relevant, update_provenance
 
 
@@ -72,6 +74,29 @@ class ProvenanceTests(unittest.TestCase):
                           scrub, lambda url: [])
         self.assertEqual(self.engine.knowledge.search("faraz", "candles missing", "developer"), [])
         self.assertTrue(self.engine.knowledge.search("artin", "extraction", "developer"))
+
+
+    def test_developer_cli_can_read_internal_issues_not_public_api(self):
+        update_provenance(self.engine.projects["faraz"], self.engine.knowledge,
+                          scrub, lambda url: self.data)
+        args = ["--config", str(self.engine.projects_config_path) if hasattr(
+            self.engine, "projects_config_path") else str(Path(self.temp.name) / "projects.json"),
+                "--db", str(self.engine.knowledge.db_path), "ask",
+                "--project", "faraz", "--message", "candles",
+                "--role", "developer"]
+        output = io.StringIO()
+        with redirect_stdout(output):
+            main(args)
+        result = json.loads(output.getvalue())
+        self.assertTrue(result["sources"])
+        self.assertEqual(result["role"], "developer")
+        args[-1] = "customer"
+        output = io.StringIO()
+        with redirect_stdout(output):
+            main(args)
+        result = json.loads(output.getvalue())
+        self.assertTrue(result["needs_human"])
+        self.assertEqual(result["sources"], [])
 
 
 if __name__ == "__main__":
