@@ -30,8 +30,18 @@
     "source media hash verification",
     "semantic comparison",
     "Behrooz update",
-    "workflow dispatch"
+    "workflow dispatch",
+    "permanent preservation of 40 short-retention artifacts"
   ],
   "trading_permitted": false,
-  "reference_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42597293832"
+  "reference_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42597293832",
+  "last_checked_utc": "2026-11-21",
+  "artifact_retention_alert": {
+    "run_id": 42597293832,
+    "total_artifacts": 41,
+    "expiring_2026_11_24": 40,
+    "original_source_expiry_utc": "2026-12-09",
+    "status": "NOT_CONFIRMED_PERMANENTLY_ARCHIVED",
+    "required_action": "Preserve all 40 short-retention evidence artifacts in private archive before expiration; verify hashes; do not publish raw content"
+  }
 }
