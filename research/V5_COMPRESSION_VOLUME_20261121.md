@@ -1,0 +1,4 @@
+# V5 Compression-volume breakout — 2026-11-21
+Hypothesis: compression of previous 4 M15 true ranges below 0.7 of lagged ATR20, followed by breakout of previous 12-bar range on >1.4x previous 20-bar median tick volume. Entry next bar open; stop 1 ATR, target 1.8 ATR, 4-bar maximum hold. 1% equity risk, 0.01 minimum lot, 100 USD per $1 move per lot, assumed round-trip costs $0.45 per 0.01 lot. Conservative stop-first OHLC assumption. Chronological 60/40 split, test begins 2026-06-15 05:45 UTC. No training optimisation performed. Private data omitted.
+23,643 bars. OOS: 11 signals, 11 trades, 0 lot rejections, gross profits $77.17, gross losses $35.66, costs $5.40, net +$36.11, max closed-equity drawdown $21.72, 11 active days, 0 days >=$50. Trailing variant: same outcome. Not approved for MT5 demo. No live orders.
+Limitations: estimated costs, OHLC only, unknown intrabar path and spread variation; small signal sample; performance below target.
