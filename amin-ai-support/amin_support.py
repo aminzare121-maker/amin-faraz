@@ -172,11 +172,20 @@ class Knowledge:
                 "SELECT path,section,body,visibility FROM passages WHERE project_id=?"
                 + (" AND visibility='public'" if role != "developer" else ""),
                 (project_id,)).fetchall()
-        rows.extend((f"approved_resolutions/{ticket_id}", 0, resolution, "public")
-                    for ticket_id, resolution in self.tickets.approved(project_id))
+        rows = [(path, section, body, visibility, body)
+                for path, section, body, visibility in rows]
+        # Only a reviewed, explicitly PUBLIC problem summary is searchable.
+        # The customer's original ticket is never used for public retrieval,
+        # returned to clients or sent as context to the language model.
+        rows.extend((
+            f"approved_resolutions/{ticket_id}", 0,
+            (f"مسئله عمومی: {public_problem}\n" if public_problem else "") +
+            f"راه‌حل تأییدشده: {resolution}",
+            "public", public_problem + " " + resolution
+        ) for ticket_id, public_problem, resolution in self.tickets.approved(project_id))
         ranked = []
-        for path, section, body, visibility in rows:
-            hay = terms(body)
+        for path, section, body, visibility, search_text in rows:
+            hay = terms(search_text)
             hit = needle & hay
             if not hit:
                 continue
@@ -467,6 +476,8 @@ def main(argv=None):
     approve_cmd.add_argument("--project", required=True)
     approve_cmd.add_argument("--id", required=True)
     approve_cmd.add_argument("--resolution", required=True)
+    approve_cmd.add_argument("--public-problem", default="",
+                             help="Reviewer-written generic public problem summary; no private ticket text")
     serve = sub.add_parser("serve", help="Launch local support web UI/API")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -496,7 +507,8 @@ def main(argv=None):
     elif args.command == "tickets":
         print(json.dumps(engine.tickets.pending(args.project), ensure_ascii=False, indent=2))
     elif args.command == "approve-ticket":
-        approved = engine.tickets.approve(args.project, args.id, scrub(args.resolution))
+        approved = engine.tickets.approve(args.project, args.id,
+                                          scrub(args.resolution), scrub(args.public_problem))
         print(json.dumps({"approved": approved, "project": args.project}, ensure_ascii=False))
 
 

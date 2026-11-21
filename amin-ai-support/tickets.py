@@ -19,6 +19,12 @@ class TicketStore:
                 created_at TEXT NOT NULL
             )""")
             db.execute("CREATE INDEX IF NOT EXISTS tickets_project ON support_tickets(project_id, status)")
+            # Existing user databases are upgraded in-place; private messages
+            # remain private. Only a reviewer's explicitly approved, generic
+            # problem summary is eligible for public retrieval.
+            columns = {row[1] for row in db.execute("PRAGMA table_info(support_tickets)")}
+            if "public_problem" not in columns:
+                db.execute("ALTER TABLE support_tickets ADD COLUMN public_problem TEXT NOT NULL DEFAULT ''")
 
     def _connect(self):
         return sqlite3.connect(str(self.db_path), timeout=20)
@@ -43,18 +49,24 @@ class TicketStore:
         return [dict(zip(("id", "project", "message", "status", "created_at"), row))
                 for row in rows]
 
-    def approve(self, project_id: str, ticket_id: str, resolution: str) -> bool:
+    def approve(self, project_id: str, ticket_id: str, resolution: str,
+                public_problem: str = "") -> bool:
         if not isinstance(resolution, str) or not resolution.strip() or len(resolution) > 4000:
             raise ValueError("Resolution must contain 1-4000 characters")
+        if not isinstance(public_problem, str) or len(public_problem) > 500:
+            raise ValueError("Public problem summary must be at most 500 characters")
+        # This summary is intentionally not derived from the private message.
+        # The reviewer must write generic, non-personal wording.
         with self._connect() as db:
             cursor = db.execute(
-                "UPDATE support_tickets SET resolution=?, status='resolved', approved=1 "
+                "UPDATE support_tickets SET resolution=?, public_problem=?, "
+                "status='resolved', approved=1 "
                 "WHERE id=? AND project_id=?",
-                (resolution.strip(), ticket_id, project_id))
+                (resolution.strip(), public_problem.strip(), ticket_id, project_id))
         return cursor.rowcount == 1
 
     def approved(self, project_id: str) -> list[tuple]:
         with self._connect() as db:
             return db.execute(
-                "SELECT id,resolution FROM support_tickets WHERE project_id=? AND approved=1",
+                "SELECT id,public_problem,resolution FROM support_tickets WHERE project_id=? AND approved=1",
                 (project_id,)).fetchall()
