@@ -41,7 +41,7 @@ BENCHMARK = (
         "question": "شناسه ثبت‌شده پردازشگر فیلم و کلاس در مخزن ابزارها چیست؟",
         "source": "INDEX_FA.md",
         "doc_anchor": "VIDEO-001",
-        "answer_regex": r"VIDEO-001",
+        "answer_regex": r"VIDEO-001(?!-V13)",
     },
     {
         "id": "artin_v13_not_operational", "project": "artin",
