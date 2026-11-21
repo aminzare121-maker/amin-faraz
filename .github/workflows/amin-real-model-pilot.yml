@@ -36,12 +36,13 @@ jobs:
             sleep 2
           done
           curl --fail --silent http://127.0.0.1:11434/api/tags >/dev/null
-          docker exec amin-qwen ollama pull qwen2.5:1.5b-instruct
+          docker exec amin-qwen ollama pull qwen2.5:7b-instruct
       - name: Verify live Persian inference and project-aware answer through actual model
         env:
           AMIN_MODEL_BASE_URL: http://127.0.0.1:11434/v1
-          AMIN_MODEL_NAME: qwen2.5:1.5b-instruct
+          AMIN_MODEL_NAME: qwen2.5:7b-instruct
           PYTHONUNBUFFERED: "1"
+          AMIN_MODEL_PROBE_TIMEOUT_SECONDS: "90"
         working-directory: amin-ai-support
         run: |
           python model_probe.py
