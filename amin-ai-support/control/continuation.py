@@ -53,10 +53,10 @@ def parse_report(body: str, policy: dict) -> dict:
         raise ProtocolError("Unknown status")
     if not 5 <= len(item["summary"].strip()) <= 1200:
         raise ProtocolError("Summary must contain 5-1200 characters")
-    if len(item.get("blocker", "")) > 300:
-        raise ProtocolError("Blocker too long")
     if "blocker" in item and not isinstance(item["blocker"], str):
         raise ProtocolError("Invalid blocker")
+    if len(item.get("blocker", "")) > 300:
+        raise ProtocolError("Blocker too long")
     sha = item.get("commit_sha")
     if sha is not None and (not isinstance(sha, str) or not SHA_PATTERN.fullmatch(sha)):
         raise ProtocolError("Invalid commit SHA")
@@ -161,8 +161,6 @@ def main():
     parser.add_argument("--event", type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--verified-ci", action="store_true",
-                        help="For offline tests only; prohibited for event production")
     args = parser.parse_args()
     policy = policy_data()
     if args.event:
@@ -173,7 +171,6 @@ def main():
         verified = False  # Offline report cannot claim successful CI.
     else:
         parser.error("Provide --event or --report")
-    # --verified-ci is intentionally ignored in production for safety.
     output = decide(report, policy, verified)
     args.output.write_text(DIRECTIVE_TAG + "\n" +
                            json.dumps(output, ensure_ascii=False, indent=2),
