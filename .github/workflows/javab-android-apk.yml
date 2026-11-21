@@ -1,0 +1,61 @@
+name: Build installable Javab Android companion (debug APK)
+
+on:
+  push:
+    branches: [feature/javab-android-installable-companion-20261122]
+    paths:
+      - "amin-ai-support/android-companion/**"
+      - ".github/workflows/javab-android-apk.yml"
+  pull_request:
+    paths:
+      - "amin-ai-support/android-companion/**"
+      - ".github/workflows/javab-android-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-debug-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout project sources
+        uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Configure Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install SDK platform 35
+        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+      - name: Verify Javab task-state machine
+        run: |
+          mkdir -p "$RUNNER_TEMP/javab-tests"
+          javac -d "$RUNNER_TEMP/javab-tests" \
+            amin-ai-support/android-companion/JavabActivationState.java \
+            amin-ai-support/android-companion/tests/JavabActivationStateTest.java
+          java -cp "$RUNNER_TEMP/javab-tests" com.amin.javab.screen.JavabActivationStateTest
+      - name: Compile Android app and produce signed debug APK
+        working-directory: amin-ai-support/android-companion
+        run: gradle --no-daemon --stacktrace :app:assembleDebug
+      - name: Inspect APK identity and size
+        run: |
+          APK="amin-ai-support/android-companion/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | head -12
+          sha256sum "$APK"
+          ls -lh "$APK"
+      - name: Upload installable test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: amin-javab-android-test-apk
+          path: amin-ai-support/android-companion/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
