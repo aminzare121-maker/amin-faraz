@@ -104,6 +104,42 @@ class SupportTests(unittest.TestCase):
         self.assertNotIn("NEVER_SHOW_CUSTOMER", data["answer"])
         self.assertEqual(data["role"], "customer")
 
+    def test_ticket_consent_review_and_project_isolation(self):
+        with self.assertRaises(ValueError):
+            self.engine.tickets.submit("alpha", "مشکل اتصال", False)
+        ticket_id = self.engine.tickets.submit("alpha", "مشکل اتصال", True)
+        self.assertEqual(len(self.engine.tickets.pending("alpha")), 1)
+        self.assertFalse(self.engine.knowledge.search("alpha", "راهکار آزمایش شده"))
+        self.assertTrue(self.engine.tickets.approve(
+            "alpha", ticket_id, "راهکار آزمایش شده: بررسی نسخه برنامه"))
+        approved = self.engine.knowledge.search("alpha", "راهکار آزمایش شده")
+        self.assertTrue(approved)
+        self.assertTrue(approved[0]["path"].startswith("approved_resolutions/"))
+        self.assertFalse(self.engine.knowledge.search("beta", "راهکار آزمایش شده"))
+        self.assertFalse(self.engine.tickets.approve("beta", ticket_id, "تأیید اشتباه"))
+
+    def test_ticket_api_consent_enforced(self):
+        server = ThreadingHTTPServer(("127.0.0.1", 0),
+                                     make_handler(self.engine, "test-token"))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        self.addCleanup(server.server_close)
+        self.addCleanup(server.shutdown)
+        url = f"http://127.0.0.1:{server.server_port}/api/ticket"
+        headers = {"Authorization": "Bearer test-token",
+                   "Content-Type": "application/json"}
+        def post(consent):
+            body = json.dumps({"project": "alpha", "message": "نیاز به راهنمایی",
+                               "consent": consent}).encode()
+            return urlopen(Request(url, data=body, headers=headers, method="POST"),
+                           timeout=2)
+        with self.assertRaises(HTTPError) as err:
+            post(False)
+        self.assertEqual(err.exception.code, 400)
+        with post(True) as response:
+            self.assertEqual(response.status, 201)
+            self.assertEqual(json.load(response)["status"], "new")
+
     def test_reindex_removes_stale_passages(self):
         self.engine.knowledge.ingest(self.engine.projects["alpha"], self.source)
         (self.source / "README.md").unlink()
