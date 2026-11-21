@@ -1,0 +1,37 @@
+{
+  "schema": "artin_semantic_handoff_checkpoint_v1",
+  "date_utc": "2026-11-21",
+  "source_branch": "tools-makhzan-hub",
+  "magazine_id": "artin-course-001",
+  "verified_receipt_range": {
+    "from": 10,
+    "to": 25,
+    "count": 16,
+    "status": "COMPLETE_SOURCE_VERIFIED_SEMANTIC_REVIEW_REQUIRED",
+    "all_have_recorded_source_sha256": true,
+    "all_teacher_meaning_verified": false
+  },
+  "next_unfinished": {
+    "sequence": 10,
+    "queue_id": "video-q-0010-artin-clip-08",
+    "stage": "SOURCE_MEDIA_SEMANTIC_ALIGNMENT",
+    "requirements": [
+      "retrieve original video and private speech/chat/board evidence",
+      "verify original SHA256 against receipt",
+      "align time-coded teacher speech, board, chat and Q&A",
+      "preserve incomplete concepts and subsequent corrections",
+      "review executable rules only after verification"
+    ]
+  },
+  "completed": [
+    "read 16 receipts"
+  ],
+  "not_completed": [
+    "source media hash verification",
+    "semantic comparison",
+    "Behrooz update",
+    "workflow dispatch"
+  ],
+  "trading_permitted": false,
+  "reference_run": "https://github.com/aminzare121-maker/amin-faraz/actions/runs/42597293832"
+}
