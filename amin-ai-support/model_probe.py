@@ -66,9 +66,13 @@ def probe_model(env=None, opener=None) -> dict:
     req = Request(endpoint, data=body, headers=headers, method="POST")
     if opener is None:
         opener = urlopen
+    try:
+        timeout_seconds = min(90, max(1, int(env.get("AMIN_MODEL_PROBE_TIMEOUT_SECONDS", "15"))))
+    except (ValueError, TypeError):
+        timeout_seconds = 15
     start = monotonic()
     try:
-        with opener(req, timeout=15) as response:
+        with opener(req, timeout=timeout_seconds) as response:
             data = json.load(response)
         elapsed_ms = round((monotonic() - start) * 1000, 1)
         text = data["choices"][0]["message"]["content"]

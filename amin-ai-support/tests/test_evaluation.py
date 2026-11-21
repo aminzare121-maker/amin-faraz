@@ -65,12 +65,20 @@ class ModelAdapterTests(unittest.TestCase):
         self.assertEqual(self.call("طبق مستند [1] وضعیت اتصال را بررسی کنید."),
                          "طبق مستند [1] وضعیت اتصال را بررسی کنید.")
         self.assertEqual(FakeModel.last_request["model"], "synthetic-stub-model")
+        self.assertGreaterEqual(FakeModel.last_request["max_tokens"], 32)
         self.assertIn("docs/guide.md", FakeModel.last_request["messages"][1]["content"])
 
     def test_reject_uncited_or_nonexistent_sources(self):
         self.assertIsNone(self.call("اتصال درست شد."))
         self.assertIsNone(self.call("طبق سند [4] این مشکل حل شده."))
         self.assertIsNone(self.call("طبق سند [1] و [4] اتصال برقرار است."))
+
+    def test_reject_metadata_only_source_header(self):
+        # Found by live Qwen model pilot; citations alone cannot count as support.
+        self.assertIsNone(self.call("[1] docs/guide.md section 0"))
+        self.assertIsNone(self.call("docs/guide.md section 0 [1]"))
+        self.assertIsNone(self.call("[1]"))
+        self.assertIsNotNone(self.call("طبق راهنمای [1] ابتدا سرویس اتصال را بررسی کنید."))
 
     def test_reject_claims_of_actions_not_performed(self):
         self.assertIsNone(self.call("من نصب کردم. طبق سند [1]"))
