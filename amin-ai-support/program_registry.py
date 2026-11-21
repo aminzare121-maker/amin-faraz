@@ -127,6 +127,14 @@ class ProgramStore:
                 previous_json TEXT NOT NULL, new_json TEXT NOT NULL,
                 changed_at TEXT NOT NULL
             )""")
+            db.execute("""CREATE TABLE IF NOT EXISTS learning_review_events(
+                event_id TEXT PRIMARY KEY,
+                program_id TEXT NOT NULL,
+                feedback_id TEXT NOT NULL,
+                action TEXT NOT NULL,
+                reviewer_id TEXT NOT NULL,
+                occurred_at TEXT NOT NULL
+            )""")
 
     def connect(self):
         return sqlite3.connect(str(self.db_path), timeout=20)
@@ -234,6 +242,33 @@ class ProgramStore:
                 "WHERE feedback_id=? AND program_id=? AND state='pending'",
                 (public_problem, solution, visibility, _utc_now(),
                  feedback_id, program_id))
+        if cursor.rowcount == 1:
+            with self.connect() as db:
+                db.execute(
+                    "INSERT INTO learning_review_events VALUES (?,?,?,?,?,?)",
+                    (uuid4().hex, program_id, feedback_id, "approved",
+                     director_id, _utc_now()))
+        return cursor.rowcount == 1
+
+    def revoke(self, program_id: str, director_id: str, feedback_id: str) -> bool:
+        """Withdraw a mistaken lesson without erasing its private audit record."""
+        if not isinstance(feedback_id, str) or not re.fullmatch(r"[a-f0-9]{32}", feedback_id):
+            raise ValueError("Invalid feedback id")
+        with self.connect() as db:
+            row = db.execute(
+                "SELECT director_id FROM onboarded_programs WHERE program_id=?",
+                (program_id,)).fetchone()
+            if row is None or row[0] != director_id:
+                raise ValueError("Program/director mismatch")
+            cursor = db.execute(
+                "UPDATE learning_feedback SET state='revoked' "
+                "WHERE program_id=? AND feedback_id=? AND state='approved'",
+                (program_id, feedback_id))
+            if cursor.rowcount == 1:
+                db.execute(
+                    "INSERT INTO learning_review_events VALUES (?,?,?,?,?,?)",
+                    (uuid4().hex, program_id, feedback_id, "revoked",
+                     director_id, _utc_now()))
         return cursor.rowcount == 1
 
     def reviewed(self, program_id: str, role: str = "customer") -> list[dict]:
