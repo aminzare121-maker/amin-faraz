@@ -35,6 +35,15 @@ jobs:
         run: python -m unittest discover -s amin-ai-support/control/tests -v
       - name: Compile controller
         run: python -m py_compile amin-ai-support/control/continuation.py
+      - name: Execute JVM state-machine tests for Javab activation/stop
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/javab-jvm"
+          javac -d "$RUNNER_TEMP/javab-jvm" \
+            amin-ai-support/android-companion/JavabActivationState.java \
+            amin-ai-support/android-companion/tests/JavabActivationStateTest.java
+          java -cp "$RUNNER_TEMP/javab-jvm" \
+            com.amin.javab.screen.JavabActivationStateTest
       - name: Synthetic project knowledge regression (not real-world acceptance)
         working-directory: amin-ai-support
         run: python evaluation.py --strict

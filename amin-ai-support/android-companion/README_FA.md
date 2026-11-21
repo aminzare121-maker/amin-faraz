@@ -1,32 +1,60 @@
-# قابلیت روشن‌ماندن صفحه گوشی در برنامه جواب
+# کنترل خودکار نمایشگر با فرمان فعال/متوقف «برنامه جواب»
 
-**درخواست مالک:** «هنگام اجرای برنامه جواب، هر زمان صفحه گوشی خاموش شد، مجدداً روشن شود.»
+## خواسته قطعی مالک
 
-## چیزی که فعلاً در کد ساخته شده
-فایل `ScreenAwakeSession.kt` کمک‌کد بومی اندروید برای یک برنامه نصب‌شده روی گوشی است که پس از رضایت صریح مالک و فقط در مدت نمایش Activity و فعال بودن کارِ «جواب» از `FLAG_KEEP_SCREEN_ON` استفاده می‌کند. همچنین `Activity.setTurnScreenOn(true)` را برای حالتی که Android اجازه نمایش مجدد Activity می‌دهد تنظیم می‌کند.
+**«برنامه جواب فعال کن»** باید هم‌زمان و بدون یک کلید جداگانه، قابلیت روشن‌ماندن صفحه را **در کلاینت بومی نصب‌شده اندروید** فعال کند.
 
-برنامه میزبان باید تابع زیر را روی UI thread در `onResume` و پس از تغییر وضعیت اجرای کار/رضایت کاربر فراخوانی کند و در `onPause` با `isForeground=false` و نیز هنگام توقف کار پرچم‌ها را پاک کند:
+**«برنامه جواب متوقف کن»** باید با تأیید توقف، این قابلیت را غیرفعال کند. اگر چند کار مجزای «جواب» فعال‌اند، توقف یک کار نباید مدیریت صفحه کارهای فعال دیگر را از بین ببرد. با توقف آخرین کار، پرچم‌های نمایشگر آزاد می‌شوند.
+
+این قابلیت ساعت‌محور نیست؛ فقط وضعیت واقعی کارهای فعال «جواب» و وضعیت نمایش اپ روی گوشی آن را تعیین می‌کند.
+
+## بخش‌های ساخته‌شده در کد
+
+- `JavabActivationState.java`: منطق مستقل وضعیت فرمان‌ها؛ فعال‌سازی، توقف یک کار، توقف همه، بازیابی فهرست کارهای واقعاً فعال، مدیریت چندکار هم‌زمان و غیرفعال‌شدن در پس‌زمینه
+- `ScreenAwakeSession.kt`: اتصال این وضعیت به `FLAG_KEEP_SCREEN_ON` و در شرایط مجاز `Activity.setTurnScreenOn`
+- `tests/JavabActivationStateTest.java`: آزمون اجرایی با `javac` و `java` برای وضعیت و جداسازی کارها
+
+کلاینت واقعی پس از **تأیید دریافت فرمان و ایجاد کار** باید `controller.onActivated(taskId)` را فراخوانی کند؛ پس از **تأیید دستور توقف**، `controller.onStopped(taskId)` و اگر توقف همه درخواست شده `controller.onAllStopped()` را اجرا کند. این فراخوانی‌ها نباید فقط بر اساس متن غیرقابل اعتماد چت انجام شوند؛ وضعیت باید از کانال معتبر همان کلاینت تأیید شود.
+
+نمونه پیوند در Activity:
 
 ```kotlin
-ScreenAwakeSession.sync(
-    activity = this,
-    isJavabTaskActive = taskRunning,
-    ownerOptedIn = screenFeatureEnabledByUser,
-    isForeground = activityIsVisible
-)
+private lateinit var controller: JavabScreenController
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    controller = JavabScreenController(this)
+}
+override fun onResume() {
+    super.onResume()
+    controller.onResume()
+}
+override fun onPause() {
+    controller.onPause()
+    super.onPause()
+}
+
+// Only after Javab activation is confirmed:
+fun javabTaskStarted(verifiedTaskId: String) = controller.onActivated(verifiedTaskId)
+
+// Only after the requested Javab stop is confirmed:
+fun javabTaskStopped(verifiedTaskId: String) = controller.onStopped(verifiedTaskId)
+
+// Only after the owner requested and confirmed stopping all tasks:
+fun allJavabTasksStopped() = controller.onAllStopped()
 ```
 
-در صورت توقف برنامه جواب، خروج از صفحه، یا غیرفعال‌کردن گزینه توسط مالک، پرچم روشن‌ماندن صفحه برداشته می‌شود.
+در شروع مجدد Activity، اطلاعات کارهای فعال باید از سامانه معتبر بازیابی و با `syncVerifiedActiveTasks(ids)` به‌روز شود؛ ادعای وجود یک سرویس همگام‌سازی بومی در این نسخه نداریم.
 
-## محدودیت صریح
-- این نسخه **یک کمک‌کد برای ادغام در اپ اندروید است**؛ APK قابل نصب یا اتصال عملی به گوشی در این مرحله ساخته و آزمایش نشده است.
-- خاموشی خودکار هنگام نمایش برنامه قابل جلوگیری است؛ روشن‌کردن مجدد پس از فشار دادن پاور، قفل‌کردن گوشی یا زمانی که برنامه در پس‌زمینه است تضمین نمی‌شود. Android از راه‌اندازی دلخواه Activity از پس‌زمینه جلوگیری می‌کند.
-- حتی `setTurnScreenOn(true)` فقط زمانی مؤثر است که Android اجازه بدهد Activity قابل مشاهده و Resume شود؛ راهی برای دورزدن قفل گوشی نیست.
-- GitHub Actions و ChatGPT مستقیماً روی نمایشگر Samsung یا هر گوشی دیگری کنترل ندارند.
-- هیچ `ACQUIRE_CAUSES_WAKEUP` قدیمی، سرویس مخفیِ دائمی یا دورزدن امنیت قفل استفاده نشده است.
-- روشن‌ماندن صفحه باتری مصرف می‌کند و باید قابل‌خاموش‌کردن باشد.
+## محدوده واقعی و وضعیت
 
-## آزمون قبولی واقعی باقی‌مانده
-یک APK باید با UI رضایت و کلید خاموش/روشن ساخته و روی گوشی واقعی نصب شود. سپس آزمون روشن‌ماندن در اجرای جلوی چشم، بازگشت به حالت عادی در توقف، قفل دستی، تغییر برنامه، خاموشی صفحه و مصرف باتری انجام شود. **وضعیت فعلی: کدنویسی نمونه، نه اجرای تأییدشده روی دستگاه.**
+**مدیریت نمایشگر به فرمان‌های فعال‌سازی/توقف در کد وصل است، ولی به گوشی کاربر یا اپ ChatGPT وصل نشده است.** هنوز APK این بخش ساخته/نصب نشده و آزمون واقعی اندروید انجام نشده است.
 
-منابع اندروید: https://developer.android.com/develop/background-work/background-tasks/awake/screen-on و https://developer.android.com/reference/android/app/Activity#setTurnScreenOn(boolean).
+- امکان جلوگیری از خاموش‌شدن خودکار، هنگام بازبودن Activity و فعال بودن کار وجود دارد.
+- روشن‌کردن قطعی صفحه پس از زدن پاور، قفل دستی یا وقتی برنامه در پس‌زمینه است **پیاده‌سازی نشده و تضمین‌شده نیست**.
+- دورزدن قفل گوشی یا روشن‌کردن نمایشگر از یک پیام GitHub بدون عامل بومی نصب‌شده مجاز یا ممکن نیست.
+- مدیریت خودکار صفحه باعث مصرف باتری می‌شود؛ با توقف کار یا خروج Activity، پرچم‌های مربوط حذف می‌شوند.
+
+**قبولی عملی باقی‌مانده:** ساخت APK، اتصال به رویدادهای معتبر شروع/توقف برنامه جواب، نصب روی اندروید واقعی، آزمون آغاز و توقف هم‌زمان چندکار، آزمون خاموشی و قفل دستی، و اندازه‌گیری اثر روی باتری.
+
+مستندات اندروید: https://developer.android.com/develop/background-work/background-tasks/awake/screen-on
