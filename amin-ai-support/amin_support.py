@@ -204,7 +204,7 @@ def model_completion(question: str, project: dict, evidence: list[dict], hint: s
     # Works with OpenAI-compatible /v1/chat/completions APIs, including self-hosted models.
     if not base_url.startswith(("http://127.0.0.1:", "http://localhost:", "https://")):
         raise ValueError("Only HTTPS or loopback model endpoints are allowed")
-    context = "\n\n".join(f"[{i}] {x['path']} section {x['section']}\n{x['excerpt']}"
+    context = "\n\n".join(f"منبع [{i}]، فایل: {x['path']}، بخش: {x['section']}\nمتن مستند: {x['excerpt']}"
                           for i, x in enumerate(evidence, 1))
     system = (
         "تو پشتیبان فنی فارسی پروژه «" + project["name"] + "» هستی. "
