@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "feature": "javab_phone_screen_management",
+  "owner_requested_behavior_fa": "وقتی برنامه جواب روی گوشی در حال اجراست، اگر صفحه خاموش شد مجدداً روشن شود.",
+  "request_scope": "phone running an installed, foreground Javab-capable Android client",
+  "user_opt_in_required": true,
+  "on_task_stop": "release all screen-on flags immediately",
+  "native_android_companion_installed": false,
+  "verified_on_physical_device": false,
+  "implementation": {
+    "keep_screen_on_while_activity_visible": "source_helper_implemented_not_device_tested",
+    "turn_screen_on_when_activity_is_resumed": "source_helper_implemented_not_device_tested",
+    "automatically_wake_after_all_screen_off_events": "not_implemented",
+    "restart_from_github_issue_comment": "not_possible_without_connected_device_agent",
+    "bypass_lockscreen": "prohibited",
+    "force_screen_after_power_button": "not_implemented"
+  },
+  "known_limitations_fa": "وقتی برنامه در پس‌زمینه است یا کاربر با دکمه پاور گوشی را قفل می‌کند، Android تضمینی برای روشن‌شدن دوباره صفحه نمی‌دهد. GitHub و ChatGPT به سخت‌افزار نمایشگر دسترسی ندارند. برنامه بومی باید با رضایت مالک روی دستگاه نصب و روی همان دستگاه آزموده شود."
+}
