@@ -1,0 +1,18 @@
+{
+  "schema": "artin_0010_evidence_temporal_inventory_v1",
+  "source_run": 42597293832,
+  "artifact_id": 13664903533,
+  "video_sequence": 10,
+  "queue_id": "video-q-0010-artin-clip-08",
+  "recorded_video_sha256": "1f63842913a250bf1fe81bab3dc7dcc90f282c4026ee41ac88cc31687b8e65ea",
+  "downloaded_text_bundle_sha256": "0158550acf9cec08ffad88ffc24dc87305bb91e85474b63abb62deb0a9fb5157",
+  "asr_segments_unverified": 1774,
+  "last_asr_end_seconds": 3932.15,
+  "board_ocr_frames_unverified": 132,
+  "unique_chat_frames_unverified": 454,
+  "source_video_independently_verified": false,
+  "teacher_meaning_verified": false,
+  "rules_executable": false,
+  "next_stage": "Compare original media with time-coded speech, chat and board; distinguish teacher Q&A from proximity before any semantic claim.",
+  "warning": "This is an evidence inventory only; not semantic validation. Text artifact expires 2026-11-24."
+}
