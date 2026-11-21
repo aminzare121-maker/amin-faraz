@@ -55,6 +55,17 @@ def style_instructions(style: dict) -> str:
     return " ".join(STYLE_HINTS[key][style[key]] for key in ALLOWED_STYLE)
 
 
+_INLINE_SECRET = re.compile(
+    r"(?i)\b(?:password|api[_-]?key|access[_-]?token|private[_-]?key)"
+    r"\s*[:=]\s*[^\s,;]+"
+)
+
+
+def redact_observation(text: str, scrub) -> str:
+    """Defense-in-depth for inline credentials, not complete PII detection."""
+    return _INLINE_SECRET.sub("[REDACTED]", scrub(text))
+
+
 def _reasonable_text(value: str, minimum: int, maximum: int, label: str) -> str:
     if not isinstance(value, str) or not minimum <= len(value.strip()) <= maximum:
         raise ValueError(f"{label} length must be {minimum}-{maximum}")
@@ -187,7 +198,7 @@ class ProgramStore:
             db.execute(
                 "INSERT INTO learning_feedback(feedback_id,program_id,private_observation,consent,created_at) "
                 "VALUES (?,?,?,?,?)",
-                (feedback_id, program_id, scrub(observation), 1, _utc_now()))
+                (feedback_id, program_id, redact_observation(observation, scrub), 1, _utc_now()))
         return feedback_id
 
     def pending(self, program_id: str) -> list[dict]:
@@ -208,7 +219,8 @@ class ProgramStore:
         if not isinstance(feedback_id, str) or not re.fullmatch(r"[a-f0-9]{32}", feedback_id):
             raise ValueError("Invalid feedback id")
         # Reject redacted secrets: they are not suitable as public knowledge.
-        if scrub(public_problem) != public_problem or scrub(solution) != solution:
+        if (redact_observation(public_problem, scrub) != public_problem or
+                redact_observation(solution, scrub) != solution):
             raise ValueError("Reviewed knowledge contains a recognized secret")
         with self.connect() as db:
             row = db.execute(
