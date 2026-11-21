@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>هوش پشتیبان امین</title>
+<style>
+:root{font-family:Tahoma,Arial,sans-serif;color:#122336;background:#f2f6fa}
+*{box-sizing:border-box}body{margin:0}header{background:#12345b;color:#fff;padding:18px 20px}
+main{max-width:850px;margin:0 auto;padding:20px}h1{font-size:1.35rem;margin:0 0 7px}
+header p{margin:0;font-size:.86rem;color:#d4e5fb}
+.panel{background:#fff;border:1px solid #dce4ed;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 20px #112c4e0a}
+label{font-weight:700;display:block;margin-bottom:8px}select,input,textarea,button{font:inherit;border:1px solid #acbed1;border-radius:9px;padding:11px}
+select,input{width:100%;background:#fff}textarea{display:block;resize:vertical;min-height:95px;width:100%}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}button{cursor:pointer;background:#1556a6;color:#fff;border:0}
+button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86rem;line-height:1.85}
+#reply{white-space:pre-wrap;line-height:2.05;margin:0;overflow-wrap:anywhere}
+#status{font-size:.85rem;color:#46627e;min-height:23px}.sources{margin-top:12px;font-size:.82rem;color:#4e647e;overflow-wrap:anywhere}
+.secondary{background:#e6eff9;color:#17416d}.warning{border-right:4px solid #d08727;padding-right:10px}
+@media(max-width:530px){main{padding:12px}.panel{padding:13px}.actions button{flex:1 1 42%}}
+</style></head><body>
+<header><main style="padding:0"><h1>هوش پشتیبان امین — نسخه آزمایشی</h1>
+<p>پشتیبانی فارسی هر پروژه بر اساس دانش همان پروژه، با اعلام محدودیت‌ها</p></main></header>
+<main>
+<section class="panel">
+<label for="key">کلید دسترسی (فقط اگر سرور درخواست کند)</label>
+<input id="key" type="password" autocomplete="off" placeholder="در اجرای محلی لازم نیست">
+<p class="muted">کلید فقط در حافظه همین صفحه نگه داشته می‌شود. برای استفاده عمومی باید ورود کاربران و HTTPS جداگانه پیاده‌سازی شود.</p>
+<label for="project">پروژه</label><select id="project"><option>در حال دریافت فهرست...</option></select>
+<p id="availability" class="muted"></p>
+</section>
+<section class="panel">
+<label for="message">مشکل یا سؤال شما</label>
+<textarea id="message" maxlength="2500" placeholder="نام نسخه، نوع دستگاه و متن خطا را بنویسید..."></textarea>
+<div class="actions">
+<button id="ask">ارسال به پشتیبان</button>
+<button class="secondary" id="mic" type="button">🎙 گفتار فارسی</button>
+<button class="secondary" id="speak" type="button">🔊 خواندن پاسخ</button>
+</div>
+<p id="status" aria-live="polite"></p>
+</section>
+<section class="panel" aria-live="polite">
+<strong>پاسخ پشتیبان</strong>
+<p id="reply">پروژه را انتخاب کنید و سؤال خود را بنویسید.</p>
+<div class="sources" id="sources"></div>
+</section>
+<p class="muted warning">این نسخه جایگزین پشتیبانی انسانی یا کنترل کیفیت انتشار نیست. به حساب معاملاتی، سفارش واقعی و دستگاه کاربران دسترسی اجرایی ندارد.</p>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), button=$("ask");
+let lastResponse="";
+function authorization(){const k=$("key").value.trim();return k?{"Authorization":"Bearer "+k}:{}}
+function status(s){$("status").textContent=s}
+async function load(){
+ try {
+  const r=await fetch("/api/projects",{headers:authorization(),cache:"no-store"});
+  if(!r.ok)throw Error("دسترسی مجاز نیست یا سرور آماده نیست ("+r.status+")");
+  const data=await r.json();$("project").replaceChildren();
+  for(const p of data.projects){const o=document.createElement("option");o.value=p.id;
+   o.textContent=p.name;$("project").appendChild(o)}
+  $("project").dataset.info=JSON.stringify(data.projects);
+  showInfo();
+ } catch(e){status(e.message)}
+}
+function showInfo(){
+ const data=JSON.parse($("project").dataset.info||"[]");
+ const p=data.find(x=>x.id===$("project").value);
+ $("availability").textContent=p?(p.indexed_passages?
+  "بخش‌های عمومی مستندات نمایه‌شده: "+p.indexed_passages:
+  "هنوز سند عمومی تأییدشده‌ای برای پاسخ مستقل این پروژه ثبت نشده است."):"";
+}
+async function ask(){
+ const msg=$("message").value.trim();if(!msg){status("ابتدا سؤال را بنویسید.");return}
+ button.disabled=true;status("در حال بررسی دانش همان پروژه...");
+ try{
+ const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json",...authorization()},
+ body:JSON.stringify({project:$("project").value,message:msg})});
+ const data=await r.json();if(!r.ok)throw Error(data.error||"خطای سرویس");
+ lastResponse=data.answer;$("reply").textContent=lastResponse;
+ $("sources").textContent=(data.sources||[]).map((x,i)=>"["+(i+1)+"] "+x.path+" — بخش "+x.section).join("\n");
+ status((data.model_used?"مدل هوش مصنوعی متصل":"جستجوی مستندات محلی")+
+   (data.needs_human?" | نیازمند بررسی پشتیبان انسانی":" | پاسخ مبتنی بر مستندات"));
+ }catch(e){status("خطا: "+e.message)}finally{button.disabled=false}
+}
+$("ask").addEventListener("click",ask);
+$("key").addEventListener("change",load);
+$("project").addEventListener("change",showInfo);
+$("mic").addEventListener("click",()=>{
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){status("تشخیص گفتار در این مرورگر موجود نیست؛ سؤال را تایپ کنید.");return}
+ const recognition=new SpeechRecognition();recognition.lang="fa-IR";recognition.interimResults=false;
+ recognition.onresult=e=>{$("message").value=e.results[0][0].transcript;status("متن گفتار دریافت شد.")};
+ recognition.onerror=e=>status("دریافت گفتار ناموفق بود: "+e.error);
+ recognition.start();status("در حال دریافت گفتار فارسی...");
+});
+$("speak").addEventListener("click",()=>{
+ if(!lastResponse){status("هنوز پاسخی دریافت نشده است.");return}
+ if(!("speechSynthesis" in window)){status("پخش گفتار در این مرورگر پشتیبانی نمی‌شود.");return}
+ const voices=speechSynthesis.getVoices();const voice=voices.find(v=>v.lang.toLowerCase().startsWith("fa"));
+ if(!voice){status("صدای فارسی روی این دستگاه شناسایی نشد؛ کیفیت خواندن تضمین نیست.")}
+ speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(lastResponse);
+ utter.lang="fa-IR";if(voice)utter.voice=voice;speechSynthesis.speak(utter);
+});
+load();
+</script></body></html>
