@@ -6,6 +6,7 @@ on:
       - "amin-ai-support/**"
       - ".github/workflows/amin-ai-support-ci.yml"
       - ".github/workflows/amin-report-directive.yml"
+      - ".github/workflows/javab-independent-tasks.yml"
   pull_request:
     paths:
       - "amin-ai-support/**"
