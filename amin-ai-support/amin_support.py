@@ -525,6 +525,10 @@ def main(argv=None):
     approve_learning.add_argument("--solution", required=True)
     approve_learning.add_argument("--visibility", choices=["public", "developer"],
                                   default="developer")
+    revoke_learning = sub.add_parser("revoke-learning", help="Withdraw wrong approved lesson from retrieval")
+    revoke_learning.add_argument("--project", required=True)
+    revoke_learning.add_argument("--director-id", required=True)
+    revoke_learning.add_argument("--feedback-id", required=True)
     stats_cmd = sub.add_parser("learning-stats", help="Count pending and approved lessons")
     stats_cmd.add_argument("--project", required=True)
     for style_cmd in (enroll, style_update):
@@ -593,6 +597,11 @@ def main(argv=None):
             args.solution, args.visibility, scrub)
         print(json.dumps({"approved": approved, "project": args.project,
                           "visibility": args.visibility}, ensure_ascii=False))
+    elif args.command == "revoke-learning":
+        revoked = engine.programs.revoke(
+            args.project, args.director_id, args.feedback_id)
+        print(json.dumps({"revoked": revoked, "project": args.project},
+                         ensure_ascii=False))
     elif args.command == "learning-stats":
         print(json.dumps(engine.programs.stats(args.project), ensure_ascii=False))
 
