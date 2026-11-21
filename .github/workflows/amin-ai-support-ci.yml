@@ -32,3 +32,9 @@ jobs:
       - name: Verify project configuration
         working-directory: amin-ai-support
         run: python -c "from amin_support import load_projects; print(sorted(load_projects()))"
+      - name: Verify actual GitHub integration and project isolation
+        working-directory: amin-ai-support
+        run: |
+          python amin_support.py sync --project faraz
+          python amin_support.py sync --project artin
+          python -c "from amin_support import SupportEngine; e=SupportEngine(); assert e.knowledge.count('faraz')>0 and e.knowledge.count('artin')>0; assert e.knowledge.count('v5')==0; print('Real branches indexed into isolated namespaces')"
