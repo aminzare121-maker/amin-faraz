@@ -46,6 +46,10 @@ jobs:
             amin-ai-support/android-companion/JavabActivationState.java \
             amin-ai-support/android-companion/tests/JavabActivationStateTest.java
           java -cp "$RUNNER_TEMP/javab-tests" com.amin.javab.screen.JavabActivationStateTest
+      - name: Ensure Android state machine and JVM tests use identical logic
+        run: |
+          cmp amin-ai-support/android-companion/JavabActivationState.java \
+            amin-ai-support/android-companion/app/src/main/java/com/amin/javab/screen/JavabActivationState.java
       - name: Compile Android app and produce signed debug APK
         working-directory: amin-ai-support/android-companion
         run: gradle --no-daemon --stacktrace :app:assembleDebug
