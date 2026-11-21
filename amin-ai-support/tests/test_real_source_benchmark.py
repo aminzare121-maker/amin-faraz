@@ -2,6 +2,7 @@
 import unittest
 
 from real_source_benchmark import BENCHMARK, score_case
+from real_model_smoke import has_first_source_citation
 
 
 class ActualProjectBenchmarkTests(unittest.TestCase):
@@ -37,6 +38,11 @@ class ActualProjectBenchmarkTests(unittest.TestCase):
         self.assertFalse(score_case(case, dict(empty, model_used=True))["passed"])
         self.assertFalse(score_case(case, dict(
             empty, sources=[{"path": "INDEX_FA.md", "section": 0}]))["passed"])
+
+    def test_raw_live_model_citation_metric_is_not_false_negative(self):
+        self.assertTrue(has_first_source_citation("شماره پورت 8765 است. [1]"))
+        self.assertFalse(has_first_source_citation("شماره پورت 8765 است."))
+        self.assertFalse(has_first_source_citation("[12]"))
 
     def test_cases_use_two_real_projects_with_clear_provenance(self):
         self.assertEqual({c["project"] for c in BENCHMARK}, {"faraz", "artin"})
