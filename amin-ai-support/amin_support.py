@@ -422,6 +422,8 @@ def main(argv=None):
     ask = sub.add_parser("ask", help="Ask a question via CLI")
     ask.add_argument("--project", required=True)
     ask.add_argument("--message", required=True)
+    ask.add_argument("--role", choices=["customer", "developer"], default="customer",
+                     help="Developer mode is available only through trusted local CLI")
     diag = sub.add_parser("diagnose", help="Read-only Python syntax check")
     diag.add_argument("--project", required=True)
     diag.add_argument("--source", required=True, type=Path)
@@ -452,7 +454,8 @@ def main(argv=None):
             print(json.dumps(sync_one(engine.projects[name], engine.knowledge),
                              ensure_ascii=False), flush=True)
     elif args.command == "ask":
-        print(json.dumps(engine.answer(args.project, args.message), ensure_ascii=False, indent=2))
+        print(json.dumps(engine.answer(args.project, args.message, role=args.role),
+                         ensure_ascii=False, indent=2))
     elif args.command == "diagnose":
         print(json.dumps(diagnose_source(engine.projects[args.project], args.source),
                          ensure_ascii=False, indent=2))
