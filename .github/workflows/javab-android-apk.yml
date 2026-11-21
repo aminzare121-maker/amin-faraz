@@ -31,10 +31,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
-      - name: Configure Android SDK
-        uses: android-actions/setup-android@v3
-      - name: Install SDK platform 35
-        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+      - name: Use Android SDK preinstalled on GitHub Ubuntu runner
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          command -v sdkmanager
+          sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
       - name: Verify Javab task-state machine
         run: |
           mkdir -p "$RUNNER_TEMP/javab-tests"
