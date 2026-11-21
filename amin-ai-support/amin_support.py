@@ -19,7 +19,8 @@ import sys
 import tempfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit
+from model_probe import validate_base_url
 from urllib.request import Request, urlopen
 from tickets import TicketStore
 from github_evidence import update_provenance
@@ -205,14 +206,24 @@ def classify_issue(question: str) -> str | None:
     return None
 
 
-def model_completion(question: str, project: dict, evidence: list[dict], hint: str | None) -> str | None:
+def model_completion(question: str, project: dict, evidence: list[dict], hint: str | None,
+                     role: str = "customer") -> str | None:
     base_url = os.environ.get("AMIN_MODEL_BASE_URL", "").strip().rstrip("/")
     model = os.environ.get("AMIN_MODEL_NAME", "").strip()
     if not base_url or not model:
         return None
-    # Works with OpenAI-compatible /v1/chat/completions APIs, including self-hosted models.
-    if not base_url.startswith(("http://127.0.0.1:", "http://localhost:", "https://")):
-        raise ValueError("Only HTTPS or loopback model endpoints are allowed")
+    # Validate the full URL, not its textual prefix. Do not silently send
+    # user questions or developer evidence to an external LLM.
+    base_url = validate_base_url(base_url)
+    model_host = urlsplit(base_url).hostname
+    local_only = model_host in {"127.0.0.1", "localhost", "::1"}
+    if not local_only:
+        if os.environ.get("AMIN_MODEL_REMOTE_CONSENT") != "allow":
+            return None
+        if role == "developer" and os.environ.get("AMIN_MODEL_INTERNAL_CONSENT") != "allow":
+            return None
+    # An operator-wide opt-in is not the end user's consent. A customer-facing
+    # production deployment requires a per-request privacy consent layer too.
     context = "\n\n".join(f"منبع [{i}]، فایل: {x['path']}، بخش: {x['section']}\nمتن مستند: {x['excerpt']}"
                           for i, x in enumerate(evidence, 1))
     system = (
@@ -296,7 +307,7 @@ class SupportEngine:
         used_model = False
         if matches:
             try:
-                answer = model_completion(question, self.projects[project_id], matches, hint)
+                answer = model_completion(question, self.projects[project_id], matches, hint, role=role)
                 used_model = answer is not None
             except (HTTPError, URLError, TimeoutError, KeyError, ValueError, OSError):
                 pass  # Explicitly fall back to local, evidence-only guidance.
