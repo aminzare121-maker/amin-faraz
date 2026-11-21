@@ -63,6 +63,21 @@ def _reasonable_text(value: str, minimum: int, maximum: int, label: str) -> str:
     return value.strip()
 
 
+def checked_paths(paths: list[str], label: str) -> list[str]:
+    if not isinstance(paths, list) or len(paths) > 40:
+        raise ValueError(f"{label} must be an array of at most 40 paths")
+    result = []
+    for path in paths:
+        if (not isinstance(path, str) or not 1 <= len(path) <= 180
+                or path.startswith("/") or "\\" in path or "\x00" in path
+                or path.endswith("/") or ":" in path
+                or any(part in {"", ".."} for part in path.split("/"))):
+            raise ValueError(f"Unsafe {label} path")
+        if path not in result:
+            result.append(path)
+    return result
+
+
 def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -78,6 +93,8 @@ class ProgramStore:
                 director_id TEXT NOT NULL,
                 director_label TEXT NOT NULL,
                 style_json TEXT NOT NULL,
+                source_prefixes_json TEXT NOT NULL DEFAULT '[]',
+                public_paths_json TEXT NOT NULL DEFAULT '[]',
                 registered_at TEXT NOT NULL
             )""")
             db.execute("""CREATE TABLE IF NOT EXISTS learning_feedback(
@@ -106,18 +123,22 @@ class ProgramStore:
     def programs(self) -> dict[str, dict]:
         with self.connect() as db:
             rows = db.execute(
-                "SELECT program_id,program_name,director_id,director_label,style_json "
+                "SELECT program_id,program_name,director_id,director_label,style_json,"
+                "source_prefixes_json,public_paths_json "
                 "FROM onboarded_programs ORDER BY program_id").fetchall()
         # An onboarding record does not grant access to any repository or private docs.
         return {
             ident: {"id": ident, "name": name, "director_id": director,
                     "director_label": label, "style": json.loads(style),
-                    "source_prefixes": [], "public_paths": [], "registered": True}
-            for ident, name, director, label, style in rows
+                    "source_prefixes": json.loads(prefixes),
+                    "public_paths": json.loads(public_paths), "registered": True}
+            for ident, name, director, label, style, prefixes, public_paths in rows
         }
 
     def register(self, program_id: str, name: str, director_id: str,
-                 director_label: str, style: dict | None = None) -> dict:
+                 director_label: str, style: dict | None = None,
+                 source_prefixes: list[str] | None = None,
+                 public_paths: list[str] | None = None) -> dict:
         if not isinstance(program_id, str) or not APP_ID.fullmatch(program_id):
             raise ValueError("Unsafe application id")
         if not isinstance(director_id, str) or not DIRECTOR_ID.fullmatch(director_id):
@@ -125,11 +146,18 @@ class ProgramStore:
         name = _reasonable_text(name, 3, 120, "Program name")
         director_label = _reasonable_text(director_label, 2, 100, "Director label")
         style = checked_style(style if style is not None else DEFAULT_STYLE)
+        source_prefixes = checked_paths(source_prefixes or [], "source prefix")
+        public_paths = checked_paths(public_paths or [], "public path")
+        if any(not any(p == prefix or p.startswith(prefix + "/") or prefix == "."
+                       for prefix in source_prefixes) for p in public_paths):
+            raise ValueError("Public paths must be within approved source prefixes")
         with self.connect() as db:
             db.execute(
-                "INSERT INTO onboarded_programs VALUES (?,?,?,?,?,?)",
+                "INSERT INTO onboarded_programs VALUES (?,?,?,?,?,?,?,?)",
                 (program_id, name, director_id, director_label,
-                 json.dumps(style, ensure_ascii=False), _utc_now()))
+                 json.dumps(style, ensure_ascii=False),
+                 json.dumps(source_prefixes, ensure_ascii=False),
+                 json.dumps(public_paths, ensure_ascii=False), _utc_now()))
         return self.programs()[program_id]
 
     def update_style(self, program_id: str, director_id: str, style: dict) -> dict:
