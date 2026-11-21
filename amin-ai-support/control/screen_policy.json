@@ -1,19 +1,28 @@
 {
-  "version": 1,
+  "version": 2,
   "feature": "javab_phone_screen_management",
   "owner_requested_behavior_fa": "وقتی برنامه جواب روی گوشی در حال اجراست، اگر صفحه خاموش شد مجدداً روشن شود.",
   "request_scope": "phone running an installed, foreground Javab-capable Android client",
   "user_opt_in_required": true,
-  "on_task_stop": "release all screen-on flags immediately",
+  "on_task_stop": "release screen flags immediately if no other active Javab tasks; always release in background",
   "native_android_companion_installed": false,
   "verified_on_physical_device": false,
   "implementation": {
-    "keep_screen_on_while_activity_visible": "source_helper_implemented_not_device_tested",
-    "turn_screen_on_when_activity_is_resumed": "source_helper_implemented_not_device_tested",
+    "keep_screen_on_while_activity_visible": "source_controller_implemented_not_device_tested",
+    "turn_screen_on_when_activity_is_resumed": "source_controller_implemented_not_device_tested",
     "automatically_wake_after_all_screen_off_events": "not_implemented",
     "restart_from_github_issue_comment": "not_possible_without_connected_device_agent",
     "bypass_lockscreen": "prohibited",
-    "force_screen_after_power_button": "not_implemented"
+    "force_screen_after_power_button": "not_implemented",
+    "command_state_adapter": "pure_java_state_and_android_lifecycle_adapter_written_not_installed",
+    "no_clock_or_timer": true
   },
-  "known_limitations_fa": "وقتی برنامه در پس‌زمینه است یا کاربر با دکمه پاور گوشی را قفل می‌کند، Android تضمینی برای روشن‌شدن دوباره صفحه نمی‌دهد. GitHub و ChatGPT به سخت‌افزار نمایشگر دسترسی ندارند. برنامه بومی باید با رضایت مالک روی دستگاه نصب و روی همان دستگاه آزموده شود."
+  "known_limitations_fa": "این رفتار در کد به فرمان‌های فعال‌سازی/توقفِ تأییدشده وصل شده است؛ در ChatGPT و GitHub دسترسی مستقیم به نمایشگر گوشی وجود ندارد. اجرای واقعی مشروط به نصب کلاینت بومی و اتصال پیام‌های فعال/متوقف همان کلاینت است. هنگام پس‌زمینه، قفل دستی یا خاموشی با دکمه پاور روشن‌شدن مجدد تضمین نیست.",
+  "activation_command_fa": "برنامه جواب فعال کن",
+  "deactivation_command_fa": "برنامه جواب متوقف کن",
+  "activation_coupling": "automatically_on_confirmed_javab_activation",
+  "deactivation_coupling": "automatically_on_confirmed_javab_stop",
+  "separate_screen_toggle_required": false,
+  "consent_source": "the explicit Javab activation command; no additional screen toggle",
+  "multiple_tasks_policy": "keep foreground screen awake while one or more verified Javab tasks are active; stopping a single task preserves the others"
 }
