@@ -22,6 +22,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from tickets import TicketStore
+from github_evidence import update_provenance
 
 HOME = Path(__file__).resolve().parent
 DEFAULT_CONFIG = HOME / "projects.json"
@@ -304,6 +305,10 @@ def sync_one(project: dict, knowledge: Knowledge) -> dict:
                             for i, body in enumerate(rows)])
         report["commit_sha"] = head.stdout.strip()
         report["history_passages"] = len(rows)
+        try:
+            report["provenance"] = update_provenance(project, knowledge, scrub)
+        except (HTTPError, URLError, TimeoutError, ValueError, OSError) as exc:
+            report["provenance"] = {"status": "unavailable", "error_type": type(exc).__name__}
         return report
 
 
