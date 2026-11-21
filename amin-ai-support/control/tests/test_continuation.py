@@ -36,7 +36,7 @@ class ControllerTests(unittest.TestCase):
             "action": "created",
             "repository": {"full_name": "aminzare121-maker/amin-faraz"},
             "issue": {"number": 68,
-                      "title": "AMIN-CONTINUATION-CONTROL — فرمان‌دهی پروژه‌ها"},
+                      "title": "برنامه جواب — کانال پایه گزارش‌ها"},
             "comment": {"user": {"login": "aminzare121-maker"},
                         "author_association": "OWNER",
                         "body": body or self.body()},
