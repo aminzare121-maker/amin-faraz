@@ -5,6 +5,8 @@ on:
     branches: [feature/support-real-source-benchmark-20261122]
     paths:
       - "amin-ai-support/real_source_benchmark.py"
+      - "amin-ai-support/amin_support.py"
+      - "amin-ai-support/tests/test_evaluation.py"
       - ".github/workflows/amin-real-source-benchmark.yml"
   workflow_dispatch:
 
@@ -59,7 +61,8 @@ jobs:
           python real_source_benchmark.py \
             --faraz-doc ../FARAZ_STATUS_AND_HANDOFF_FA.md \
             --artin-doc "$RUNNER_TEMP/artin-index.md" \
-            --report "$RUNNER_TEMP/real-source-benchmark.json"
+            --report "$RUNNER_TEMP/real-source-benchmark.json" \
+            --strict
       - name: Persist numeric and source-only report as CI artifact
         uses: actions/upload-artifact@v4
         if: always()
