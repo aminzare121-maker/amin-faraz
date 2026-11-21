@@ -15,14 +15,21 @@
     "bypass_lockscreen": "prohibited",
     "force_screen_after_power_button": "not_implemented",
     "command_state_adapter": "pure_java_state_and_android_lifecycle_adapter_written_not_installed",
-    "no_clock_or_timer": true
+    "no_clock_or_timer": true,
+    "foreground_client_github_issue_polling": "compiled_in_debug_apk_not_device_tested",
+    "live_chatgpt_screen_wake": "not_implemented",
+    "mqtt_webhook_push_to_phone": "not_implemented"
   },
-  "known_limitations_fa": "این رفتار در کد به فرمان‌های فعال‌سازی/توقفِ تأییدشده وصل شده است؛ در ChatGPT و GitHub دسترسی مستقیم به نمایشگر گوشی وجود ندارد. اجرای واقعی مشروط به نصب کلاینت بومی و اتصال پیام‌های فعال/متوقف همان کلاینت است. هنگام پس‌زمینه، قفل دستی یا خاموشی با دکمه پاور روشن‌شدن مجدد تضمین نیست.",
+  "known_limitations_fa": "APK واقعی ساخته شد اما روی گوشی کاربر نصب/آزمایش نشده است. اپ فقط وقتی خودش در پیش‌زمینه است می‌تواند پنجره خودش را روشن نگه دارد؛ در اپ ChatGPT یا پس از قفل دستی اثر تأییدشده‌ای ندارد. وضعیت فعال از پرونده‌های باز GitHub حدوداً هر ۱۲۰ ثانیه خوانده می‌شود و با اینترنت ملی ممکن است در دسترس نباشد.",
   "activation_command_fa": "برنامه جواب فعال کن",
   "deactivation_command_fa": "برنامه جواب متوقف کن",
   "activation_coupling": "automatically_on_confirmed_javab_activation",
   "deactivation_coupling": "automatically_on_confirmed_javab_stop",
   "separate_screen_toggle_required": false,
   "consent_source": "the explicit Javab activation command; no additional screen toggle",
-  "multiple_tasks_policy": "keep foreground screen awake while one or more verified Javab tasks are active; stopping a single task preserves the others"
+  "multiple_tasks_policy": "keep foreground screen awake while one or more verified Javab tasks are active; stopping a single task preserves the others",
+  "android_apk_built": true,
+  "android_apk_verified_sha256": "a6ea7fccb8993858ec503b3dd8593269deba542f3d835b020f4b6491cebd7da2",
+  "android_apk_build_run": 44961677445,
+  "android_apk_artifact_id": 14729743394
 }
