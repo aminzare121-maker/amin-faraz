@@ -69,7 +69,7 @@ class SupportTests(unittest.TestCase):
         self.assertFalse(permitted_path("private.py", ["README.md"]))
         self.assertTrue(permitted_path("docs/help.md", ["docs"]))
         self.assertEqual(normalize("كی يک"), "کی یک")
-        self.assertIn("شبکه", classify_issue("connection refused"))
+        self.assertIn("سرویس", classify_issue("connection refused"))
 
     def test_readonly_diagnostic(self):
         (self.source / "broken.py").write_text("def nope(:\n", encoding="utf-8")
