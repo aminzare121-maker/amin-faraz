@@ -21,6 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
+from tickets import TicketStore
 
 HOME = Path(__file__).resolve().parent
 DEFAULT_CONFIG = HOME / "projects.json"
@@ -113,6 +114,7 @@ class Knowledge:
                 visibility TEXT NOT NULL, body TEXT NOT NULL, digest TEXT NOT NULL,
                 PRIMARY KEY(project_id, path, section))""")
             db.execute("CREATE INDEX IF NOT EXISTS passages_scope ON passages(project_id, visibility)")
+        self.tickets = TicketStore(db_path)
 
     def connect(self):
         return sqlite3.connect(str(self.db_path), timeout=20)
@@ -169,6 +171,8 @@ class Knowledge:
                 "SELECT path,section,body,visibility FROM passages WHERE project_id=?"
                 + (" AND visibility='public'" if role != "developer" else ""),
                 (project_id,)).fetchall()
+        rows.extend((f"approved_resolutions/{ticket_id}", 0, resolution, "public")
+                    for ticket_id, resolution in self.tickets.approved(project_id))
         ranked = []
         for path, section, body, visibility in rows:
             hay = terms(body)
@@ -234,6 +238,7 @@ class SupportEngine:
     def __init__(self, config_path: Path = DEFAULT_CONFIG, db_path: Path = DEFAULT_DB):
         self.projects = load_projects(config_path)
         self.knowledge = Knowledge(db_path)
+        self.tickets = self.knowledge.tickets
 
     def answer(self, project_id: str, question: str, role: str = "customer") -> dict:
         if project_id not in self.projects:
@@ -350,7 +355,8 @@ def make_handler(engine: SupportEngine, api_key: str):
             self.send_json(404, {"error": "Not found"})
 
         def do_POST(self):
-            if urlparse(self.path).path != "/api/chat":
+            path = urlparse(self.path).path
+            if path not in {"/api/chat", "/api/ticket"}:
                 self.send_json(404, {"error": "Not found"})
                 return
             if not self.authorized():
@@ -364,8 +370,17 @@ def make_handler(engine: SupportEngine, api_key: str):
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise ValueError("Invalid JSON body")
-                response = engine.answer(body.get("project", ""), body.get("message", ""))
-                self.send_json(200, response)
+                if path == "/api/ticket":
+                    project = body.get("project", "")
+                    if project not in engine.projects:
+                        raise ValueError("Unknown project")
+                    ticket_id = engine.tickets.submit(project, body.get("message", ""),
+                                                      body.get("consent") is True)
+                    self.send_json(201, {"id": ticket_id, "project": project,
+                                         "status": "new", "reviewed": False})
+                else:
+                    response = engine.answer(body.get("project", ""), body.get("message", ""))
+                    self.send_json(200, response)
             except (ValueError, TypeError, json.JSONDecodeError) as exc:
                 self.send_json(400, {"error": str(exc)})
 
@@ -388,6 +403,12 @@ def main(argv=None):
     diag = sub.add_parser("diagnose", help="Read-only Python syntax check")
     diag.add_argument("--project", required=True)
     diag.add_argument("--source", required=True, type=Path)
+    tickets_cmd = sub.add_parser("tickets", help="Review stored tickets (trusted local CLI)")
+    tickets_cmd.add_argument("--project", required=True)
+    approve_cmd = sub.add_parser("approve-ticket", help="Publish a reviewed solution")
+    approve_cmd.add_argument("--project", required=True)
+    approve_cmd.add_argument("--id", required=True)
+    approve_cmd.add_argument("--resolution", required=True)
     serve = sub.add_parser("serve", help="Launch local support web UI/API")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -413,6 +434,11 @@ def main(argv=None):
     elif args.command == "diagnose":
         print(json.dumps(diagnose_source(engine.projects[args.project], args.source),
                          ensure_ascii=False, indent=2))
+    elif args.command == "tickets":
+        print(json.dumps(engine.tickets.pending(args.project), ensure_ascii=False, indent=2))
+    elif args.command == "approve-ticket":
+        approved = engine.tickets.approve(args.project, args.id, scrub(args.resolution))
+        print(json.dumps({"approved": approved, "project": args.project}, ensure_ascii=False))
 
 
 if __name__ == "__main__":
