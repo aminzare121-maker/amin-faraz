@@ -43,6 +43,8 @@ jobs:
           AMIN_MODEL_NAME: qwen2.5:7b-instruct
           PYTHONUNBUFFERED: "1"
           AMIN_MODEL_PROBE_TIMEOUT_SECONDS: "90"
+          AMIN_MODEL_TIMEOUT_SECONDS: "90"
+          AMIN_MODEL_MAX_TOKENS: "96"
         working-directory: amin-ai-support
         run: |
           python model_probe.py
