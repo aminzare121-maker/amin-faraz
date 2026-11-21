@@ -105,10 +105,14 @@ def evaluate(faraz_file: Path, artin_file: Path) -> dict:
         for project, file in files.items():
             source = root / project
             source.mkdir()
-            (source / file.name).write_text(docs[project], encoding="utf-8")
+            # Keep the canonical repository path regardless of the temporary
+            # download filename chosen by the CI runner.
+            canonical_name = ("FARAZ_STATUS_AND_HANDOFF_FA.md"
+                              if project == "faraz" else "INDEX_FA.md")
+            (source / canonical_name).write_text(docs[project], encoding="utf-8")
             settings["projects"].append({
                 "id": project, "name": project,
-                "source_prefixes": [file.name], "public_paths": [],
+                "source_prefixes": [canonical_name], "public_paths": [],
             })
         cfg = root / "projects.json"
         cfg.write_text(json.dumps(settings, ensure_ascii=False), encoding="utf-8")
