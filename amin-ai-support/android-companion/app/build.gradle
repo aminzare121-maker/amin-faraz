@@ -14,14 +14,6 @@ android {
         versionName '0.1.0-test'
     }
 
-    sourceSets {
-        main {
-            // Reuse the existing JVM-tested canonical JavabActivationState.
-            java.srcDirs += ['..']
-            java.exclude('tests/**')
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
