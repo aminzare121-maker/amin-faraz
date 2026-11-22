@@ -95,6 +95,14 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/NeuralAudioPolicy.java \
             amin-ai-support/android-client/tests/NeuralAudioPolicyTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.NeuralAudioPolicyTest
+      - name: Test independent checkout HTTPS, invoice and transaction validation
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/SupportEndpoint.java \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/CheckoutPolicy.java \
+            amin-ai-support/android-client/tests/CheckoutPolicyTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.CheckoutPolicyTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
