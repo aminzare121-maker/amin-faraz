@@ -26,7 +26,7 @@ from model_probe import validate_base_url
 from zero_payment_policy import permits_model_url
 from urllib.request import Request, urlopen
 from tickets import TicketStore
-from handoff import HandoffStore, publish_public_marker
+from handoff import HandoffStore, publish_private_marker
 from github_evidence import update_provenance
 from program_registry import ProgramStore, DEFAULT_STYLE, style_instructions
 from access_control import ScopedAccess
@@ -565,7 +565,7 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                             engine.quotas.refund(principal["token_id"], "ticket", debit)
                         raise
                     if path == "/api/handoff":
-                        github_state = publish_public_marker(engine.handoffs, request_id)
+                        github_state = publish_private_marker(engine.handoffs, request_id)
                         self.send_json(201, {"id": request_id, "project": project,
                                              "status": "pending", "github_state": github_state,
                                              "chatgpt_invoked": False,
