@@ -13,12 +13,32 @@ import re
 import secrets
 import sys
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 REPO_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,99}/[A-Za-z0-9][A-Za-z0-9_.-]{0,99}\Z")
 ID_PATTERN = re.compile(r"[a-f0-9]{32}\Z")
 API = "https://api.github.com/repos/"
 MAX_BYTES = 256000
+RELEASE_APK = re.compile(r"/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/releases/download/"
+                         r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.apk\\Z")
+
+
+def validated_delivery(raw):
+    if not isinstance(raw, dict) or raw.get("environment") != "android":
+        return None
+    url, digest = raw.get("url"), raw.get("sha256")
+    if not isinstance(url, str) or len(url) > 400 or not isinstance(digest, str):
+        return None
+    parsed = urlsplit(url)
+    if (parsed.scheme != "https" or parsed.netloc != "github.com"
+            or parsed.query or parsed.fragment or "%" in parsed.path
+            or ".." in parsed.path or not RELEASE_APK.fullmatch(parsed.path)
+            or not re.fullmatch(r"[a-fA-F0-9]{64}", digest)):
+        return None
+    return {"environment": "android", "url": url, "sha256": digest.lower(),
+            "user_approval_required": True, "download_verified": False,
+            "installed": False}
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -130,12 +150,16 @@ class GitHubPrivateBridge:
                 continue
             if not isinstance(answer, str) or not (0 < len(answer) <= 4000):
                 continue
-            return {"status": "answered", "request_id": request_id,
-                    "issue_number": issue, "answer": answer,
-                    "needs_human": reply.get("needs_human", True) is not False,
-                    "action_performed": reply.get("action_performed") is True,
-                    "chatgpt_invoked": reply.get("chatgpt_invoked") is True,
-                    "source": reply.get("source", "unverified")}
+            result = {"status": "answered", "request_id": request_id,
+                      "issue_number": issue, "answer": answer,
+                      "needs_human": reply.get("needs_human", True) is not False,
+                      "action_performed": reply.get("action_performed") is True,
+                      "chatgpt_invoked": reply.get("chatgpt_invoked") is True,
+                      "source": reply.get("source", "unverified")}
+            delivery = validated_delivery(reply.get("artifact"))
+            if delivery is not None:
+                result["artifact"] = delivery
+            return result
         return {"status": "pending", "request_id": request_id, "issue_number": issue}
 
     def approve(self, issue: int, request_id: str, project: str):
