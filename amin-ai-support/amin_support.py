@@ -29,6 +29,7 @@ from github_evidence import update_provenance
 from program_registry import ProgramStore, DEFAULT_STYLE, style_instructions
 from access_control import ScopedAccess
 from request_limits import SlidingLimits
+from owner_quotas import OwnerQuotas
 
 HOME = Path(__file__).resolve().parent
 DEFAULT_CONFIG = HOME / "projects.json"
@@ -311,6 +312,7 @@ class SupportEngine:
         self.refresh_programs()
         self.tickets = self.knowledge.tickets
         self.access = ScopedAccess(db_path)
+        self.quotas = OwnerQuotas(db_path)
 
     def refresh_programs(self):
         dynamic = self.programs.programs()
@@ -513,18 +515,49 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                     if not principal["allow_ticket"]:
                         self.send_json(403, {"error": "Ticket permission required"})
                         return
-                    ticket_id = engine.tickets.submit(project, body.get("message", ""),
-                                                      body.get("consent") is True)
+                    # Validate consent and message before charging a paid unit.
+                    if body.get("consent") is not True:
+                        raise ValueError("Ticket consent required")
+                    message = body.get("message")
+                    if not isinstance(message, str) or not message.strip():
+                        raise ValueError("Ticket message is required")
+                    debit = (engine.quotas.reserve(principal["token_id"], "ticket")
+                             if principal["kind"] == "scoped" else "unmetered")
+                    if debit == "exhausted":
+                        self.send_json(402, {"error": "Quota exhausted; buy top-up from software owner",
+                                             "payment_gateway_connected": False})
+                        return
+                    try:
+                        ticket_id = engine.tickets.submit(project, message, True)
+                    except Exception:
+                        if principal["kind"] == "scoped":
+                            engine.quotas.refund(principal["token_id"], "ticket", debit)
+                        raise
                     self.send_json(201, {"id": ticket_id, "project": project,
                                          "status": "new", "reviewed": False})
                 else:
                     if not chat_slots.acquire(blocking=False):
                         self.send_json(503, {"error": "Support model is busy; retry later"})
                         return
+                    debit = "unmetered"
                     try:
-                        response = engine.answer(
-                            project, body.get("message", ""),
-                            external_consent=body.get("external_model_consent") is True)
+                        question = body.get("message")
+                        if not isinstance(question, str) or not question.strip():
+                            raise ValueError("Question is required")
+                        if principal["kind"] == "scoped":
+                            debit = engine.quotas.reserve(principal["token_id"], "chat")
+                        if debit == "exhausted":
+                            self.send_json(402, {"error": "Quota exhausted; buy top-up from software owner",
+                                                 "payment_gateway_connected": False})
+                            return
+                        try:
+                            response = engine.answer(
+                                project, question,
+                                external_consent=body.get("external_model_consent") is True)
+                        except Exception:
+                            if principal["kind"] == "scoped":
+                                engine.quotas.refund(principal["token_id"], "chat", debit)
+                            raise
                     finally:
                         chat_slots.release()
                     self.send_json(200, response)
@@ -600,6 +633,18 @@ def main(argv=None):
         style_cmd.add_argument("--detail", choices=["short", "balanced", "thorough"], default="balanced")
         style_cmd.add_argument("--expertise", choices=["beginner", "intermediate", "expert", "adaptive"],
                                default="adaptive")
+    free_quota = sub.add_parser("configure-quota", help="Set free monthly allowances for one client token (owner CLI)")
+    free_quota.add_argument("--token-id", required=True)
+    free_quota.add_argument("--free-chat", type=int, required=True)
+    free_quota.add_argument("--free-ticket", type=int, required=True)
+    grant_quota = sub.add_parser("grant-credits", help="Credit client ONLY after owner independently verifies payment")
+    grant_quota.add_argument("--token-id", required=True)
+    grant_quota.add_argument("--receipt-ref", required=True)
+    grant_quota.add_argument("--chat-units", type=int, default=0)
+    grant_quota.add_argument("--ticket-units", type=int, default=0)
+    grant_quota.add_argument("--verified-by", required=True)
+    quota_status = sub.add_parser("quota-status", help="Show client's remaining free and prepaid credits")
+    quota_status.add_argument("--token-id", required=True)
     issue_token = sub.add_parser("issue-access", help="Issue one program-scoped customer key (trusted CLI)")
     issue_token.add_argument("--project", required=True)
     issue_token.add_argument("--allow-ticket", action="store_true", default=False)
@@ -637,6 +682,15 @@ def main(argv=None):
             server.socket = context.wrap_socket(server.socket, server_side=True)
         print(f"Support UI: http://{args.host}:{args.port} (stop with Ctrl+C)", flush=True)
         server.serve_forever()
+    elif args.command == "configure-quota":
+        print(json.dumps(engine.quotas.configure(
+            args.token_id, args.free_chat, args.free_ticket), ensure_ascii=False))
+    elif args.command == "grant-credits":
+        print(json.dumps(engine.quotas.grant(
+            args.token_id, args.receipt_ref, args.chat_units,
+            args.ticket_units, args.verified_by), ensure_ascii=False))
+    elif args.command == "quota-status":
+        print(json.dumps(engine.quotas.status(args.token_id), ensure_ascii=False))
     elif args.command == "issue-access":
         if args.project not in engine.projects:
             parser.error("Unknown software program")
