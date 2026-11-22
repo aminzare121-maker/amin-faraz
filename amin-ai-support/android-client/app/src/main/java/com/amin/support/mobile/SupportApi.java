@@ -26,6 +26,11 @@ public final class SupportApi {
     }
 
     public JSONObject ask(String projectId, String question) throws Exception {
+        return ask(projectId, question, false);
+    }
+
+    /** A model may receive the current question only after explicit user opt-in. */
+    public JSONObject ask(String projectId, String question, boolean onlineConsent) throws Exception {
         if (projectId == null || !projectId.matches("[a-z][a-z0-9_-]{1,50}")) {
             throw new IllegalArgumentException("شناسه برنامه معتبر نیست.");
         }
@@ -35,8 +40,9 @@ public final class SupportApi {
         JSONObject payload = new JSONObject();
         payload.put("project", projectId);
         payload.put("message", question.trim());
-        // Never send project documents to remote paid inference from the phone.
-        payload.put("external_model_consent", false);
+        // Never silently transmit private questions to Cloudflare's model.
+        // The default overload keeps the historical opt-out semantics.
+        payload.put("external_model_consent", onlineConsent);
         return exchange("/api/chat", payload);
     }
 

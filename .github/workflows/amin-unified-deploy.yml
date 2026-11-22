@@ -1,0 +1,76 @@
+name: Amin unified Cloudflare deploy - owner authorized
+on:
+  workflow_dispatch:
+    inputs:
+      authorize:
+        description: "Type DEPLOY after preparing your real Cloudflare account and two D1 databases"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: amin-unified-cloudflare-production
+  cancel-in-progress: false
+jobs:
+  deploy-after-setup:
+    if: inputs.authorize == 'DEPLOY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    environment: amin-production
+    defaults:
+      run:
+        working-directory: amin-ai-support/cloudflare-unified
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AMIN_BILLING_D1_ID: ${{ secrets.AMIN_BILLING_D1_ID }}
+      AMIN_KNOWLEDGE_D1_ID: ${{ secrets.AMIN_KNOWLEDGE_D1_ID }}
+      AMIN_OWNER_TOKEN: ${{ secrets.AMIN_OWNER_TOKEN }}
+      OWNER_ADMIN_TOKEN: ${{ secrets.OWNER_ADMIN_TOKEN }}
+      CUSTOMER_ENROLLMENT_SECRET: ${{ secrets.CUSTOMER_ENROLLMENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Require actual Cloudflare and D1 configuration
+        run: |
+          set -euo pipefail
+          for key in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID AMIN_BILLING_D1_ID AMIN_KNOWLEDGE_D1_ID AMIN_OWNER_TOKEN OWNER_ADMIN_TOKEN CUSTOMER_ENROLLMENT_SECRET; do
+            test -n "$(printenv "$key")" || { echo "Required setup missing: $key"; exit 1; }
+          done
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          cfg=os.environ
+          for name in ("AMIN_BILLING_D1_ID","AMIN_KNOWLEDGE_D1_ID"):
+              assert re.fullmatch(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",cfg[name]),name
+          assert re.fullmatch(r"amin_[A-Za-z0-9_-]{40,60}",cfg["AMIN_OWNER_TOKEN"])
+          assert len(cfg["OWNER_ADMIN_TOKEN"])>=40
+          assert len(cfg["CUSTOMER_ENROLLMENT_SECRET"])>=32
+          p=Path("wrangler.toml")
+          text=p.read_text(encoding="utf-8")
+          text=text.replace("REPLACE_BILLING_DB_ID",cfg["AMIN_BILLING_D1_ID"])
+          text=text.replace("REPLACE_KNOWLEDGE_DB_ID",cfg["AMIN_KNOWLEDGE_D1_ID"])
+          assert "REPLACE_" not in text
+          p.write_text(text,encoding="utf-8")
+          PY
+      - name: Install Cloudflare CLI
+        run: npm install --no-save wrangler@4
+      - name: Apply safe D1 schemas to real account
+        run: |
+          set -euo pipefail
+          npx wrangler d1 execute DB --remote --file=../managed-subscriptions/db/schema.sql --yes
+          npx wrangler d1 execute KNOWLEDGE_DB --remote --file=db/ai-schema.sql --yes
+      - name: Deploy with payment collection OFF
+        run: npx wrangler deploy
+      - name: Install secrets only in Cloudflare
+        run: |
+          set -euo pipefail
+          printf '%s' "$AMIN_OWNER_TOKEN" | npx wrangler secret put AMIN_OWNER_TOKEN
+          printf '%s' "$OWNER_ADMIN_TOKEN" | npx wrangler secret put OWNER_ADMIN_TOKEN
+          printf '%s' "$CUSTOMER_ENROLLMENT_SECRET" | npx wrangler secret put CUSTOMER_ENROLLMENT_SECRET
+      - name: Confirm only the deployment commands completed
+        run: |
+          echo "Worker and D1 installation commands completed; actual AI inference still needs live test."
+          echo "Payments, exchange deposits, and Google Pay card charges remain OFF."
