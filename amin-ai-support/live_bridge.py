@@ -566,6 +566,9 @@ class LiveGateway:
                                     agent_result_json=json.dumps(safe_result, ensure_ascii=False))
             await self.send(socket, "work_state", ident,
                             id_of_job=job_id, status=status, agent_result=safe_result,
+                            answer=result.get("answer", ""),
+                            pr_number=result.get("pr_number"),
+                            tests_passed=result.get("tests_passed", False),
                             action_performed=result.get("action_performed", False),
                             chatgpt_invoked=result.get("model_used", False))
             return
