@@ -7,7 +7,10 @@ const BASE="https://api.trongrid.io";
 const TX_AMOUNT=/^[0-9]{1,32}$/;
 
 function tronAuth(env){
-  if(env.PAYMENT_DESTINATION_VERIFIED!=="1" ||
+  // An exchange deposit address does not prove the exchange credited the owner.
+  // Public-chain reconciliation alone is sufficient only for OWNER self-custody.
+  if(env.PAYMENT_RECEIVER_KIND!=="self_custody" ||
+     env.PAYMENT_DESTINATION_VERIFIED!=="1" ||
      env.PAYMENT_RECEIVER_CONSENT!=="1" ||
      typeof env.TRONGRID_API_KEY!=="string" ||
      env.TRONGRID_API_KEY.length<16 ||

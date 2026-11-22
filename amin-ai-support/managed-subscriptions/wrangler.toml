@@ -6,6 +6,7 @@ workers_dev = true
 OWNER_RENT_MONTHLY_MICROUSDT = "0"
 PAYMENT_DESTINATION_VERIFIED = "0"
 PAYMENT_RECEIVER_CONSENT = "0"
+PAYMENT_RECEIVER_KIND = "exchange_unverified"
 # PRODUCT is fixed to amin-ai-monthly; no made-up provider pricing.
 # Everything else is private Cloudflare secret and explicitly configured.
 [[d1_databases]]

@@ -208,7 +208,8 @@ export default {
       fulfillment_ready:!!env.SUPPLIER_WEBHOOK_SIGNING_SECRET,
       destination_verified:env.PAYMENT_DESTINATION_VERIFIED==="1" &&
         env.PAYMENT_RECEIVER_CONSENT==="1",
-      tron_reconciliation_ready:env.PAYMENT_DESTINATION_VERIFIED==="1" &&
+      tron_reconciliation_ready:env.PAYMENT_RECEIVER_KIND==="self_custody" &&
+        env.PAYMENT_DESTINATION_VERIFIED==="1" &&
         env.PAYMENT_RECEIVER_CONSENT==="1" && !!env.TRONGRID_API_KEY,
       automatic_google_pay_charge:false});
     if(!path.startsWith("/v1/"))return denied("not_found",404);
@@ -228,7 +229,8 @@ export default {
   },
   async scheduled(event,env,ctx){
     // Cron is not a payment processor. Query a genuine finalized USDT event.
-    if(env.PAYMENT_DESTINATION_VERIFIED==="1" &&
+    if(env.PAYMENT_RECEIVER_KIND==="self_custody" &&
+       env.PAYMENT_DESTINATION_VERIFIED==="1" &&
        env.PAYMENT_RECEIVER_CONSENT==="1" && !!env.TRONGRID_API_KEY && env.DB)
       ctx.waitUntil(reconcileDue(env));
   }

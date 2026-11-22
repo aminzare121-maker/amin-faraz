@@ -32,7 +32,7 @@ test("require finalized chain execution and at least 20 finalized blocks after t
   assert.equal(finalizedBlocks(receipt,{...body,ret:[{contractRet:"REVERT"}]},head,tx),0);
 });
 test("automatically verifies genuine TRON indexer plus solidity, never a screenshot",async()=>{
-  const env={PAYMENT_DESTINATION_VERIFIED:"1",PAYMENT_RECEIVER_CONSENT:"1",
+  const env={PAYMENT_RECEIVER_KIND:"self_custody",PAYMENT_DESTINATION_VERIFIED:"1",PAYMENT_RECEIVER_CONSENT:"1",
     TRONGRID_API_KEY:"test_rpc_key_123456789",PAYMENT_TRON_ADDRESS:dest};
   const requests=[];
   const fakeFetch=async(url,options)=>{
@@ -54,4 +54,10 @@ test("disabled receiver or missing Tron API key cannot approve payment",async()=
 test("no database events or money claims if no API and consent",async()=>{
   await assert.rejects(reconcileDue({},async()=>{throw new Error("must not call");}),
     /automatic_reconciliation_not_configured/);
+});
+
+test("exchange wallet cannot be marked as owner-received merely because TRON shows an inbound transfer",async()=>{
+ const env={PAYMENT_RECEIVER_KIND:"exchange",PAYMENT_DESTINATION_VERIFIED:"1",
+   PAYMENT_RECEIVER_CONSENT:"1",TRONGRID_API_KEY:"test_rpc_key_123456789",PAYMENT_TRON_ADDRESS:dest};
+ await assert.rejects(verifyTronInvoice(env,invoice),/automatic_reconciliation_not_configured/);
 });
