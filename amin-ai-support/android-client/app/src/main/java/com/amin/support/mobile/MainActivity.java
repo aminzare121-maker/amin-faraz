@@ -85,6 +85,7 @@ public final class MainActivity extends Activity {
     private CheckBox preferNeuralVoice;
     private NeuralVoicePlayer neuralVoicePlayer;
     private String neuralPendingId = "";
+    private String focusedAskId = "";
     private String neuralPendingText = "";
     private boolean neuralStarted = false;
     private Runnable neuralTimeout;
@@ -142,7 +143,9 @@ public final class MainActivity extends Activity {
                         String id = liveClient.ask(
                                 LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
                                 words, requested, voicePersonaSelector.getSelectedItemPosition());
+                        focusedAskId = id;
                         if (requested) beginNeuralVoice(id);
+                        else clearNeuralVoice(true);
                         setStatus("درخواست صوتی به کانال زنده ارسال شد؛ منتظر پاسخ واقعی هستیم.");
                     } catch (Exception error) {
                         onlineVoice.requestUnavailable("ارسال صوتی در کانال زنده ناموفق بود.");
@@ -1507,6 +1510,13 @@ public final class MainActivity extends Activity {
                                 disconnectLive();
                             }
                         } else if ("answer".equals(type)) {
+                            String receivedId = event.optString("id", "");
+                            // Text and speech from previous concurrent asks must
+                            // never replace the current conversation or interrupt it.
+                            if (!focusedAskId.isEmpty() && !focusedAskId.equals(receivedId)) {
+                                liveMessage("پاسخ درخواست دیگری رسید؛ صدای مکالمهٔ جاری دست‌نخورده ماند.");
+                                return;
+                            }
                             latestAnswer = event.optString("answer", "");
                             answer.setText(latestAnswer);
                             boolean pending = event.optBoolean("voice_pending", false)
@@ -1666,7 +1676,9 @@ public final class MainActivity extends Activity {
                     LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
                     question.getText().toString().trim(),
                     requested, voicePersonaSelector.getSelectedItemPosition());
+            focusedAskId = requestId;
             if (requested) beginNeuralVoice(requestId);
+            else clearNeuralVoice(true);
             liveMessage("سؤال " + requestId + " در کانال زنده ارسال شد.");
         } catch (Exception problem) {
             liveMessage("ارسال سؤال ناموفق: " + problem.getMessage());
@@ -1732,6 +1744,7 @@ public final class MainActivity extends Activity {
     }
 
     private void disconnectLive() {
+        focusedAskId = "";
         clearNeuralVoice(true);
         ++liveGeneration; // Prevent callbacks from stale WSS connections.
         if (liveClient != null) {
