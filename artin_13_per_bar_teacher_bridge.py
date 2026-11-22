@@ -19,6 +19,10 @@ def evaluate(path, dossier=None, *, as_of=None):
     evidence = inspect_dossier(dossier)
     if evidence['executable'] or evidence['trade_authorized'] or evidence['approved_rule_outcomes']:
         raise AssertionError('UNEXPECTED_EXECUTABLE_TEACHER_EVIDENCE')
+    # A malformed private dossier must not reach source-identity indexing or
+    # cause a partial market replay. Reject it before loading any candles.
+    if dossier is not None and evidence.get('reason') != 'ORIGINAL_TEACHER_AV_REPLAY_NOT_CERTIFIED':
+        raise ValueError('INVALID_PRIVATE_DOSSIER:'+str(evidence.get('reason')))
     rows=list(csv.DictReader(open(path,encoding="utf-8-sig")))
     bars=[]
     for row in rows:
