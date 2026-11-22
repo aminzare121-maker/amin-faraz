@@ -119,6 +119,9 @@ class LiveGateway:
         self.jobs = LiveJobs(engine.knowledge.db_path)
         self.repo = repo
         self.github_token = github_token
+        # A server-wide private GitHub token is OWNER-ONLY. Customers must
+        # connect their own private repository from their own device.
+        self.owner_token_id = os.environ.get("AMIN_LIVE_OWNER_TOKEN_ID", "")
         self.poll_seconds = max(2, int(poll_seconds))
         self.limits = SlidingLimits()
         self.sem = asyncio.Semaphore(8)
@@ -186,7 +189,7 @@ class LiveGateway:
                         not self.limits.allow(access["token_id"], route, 30 if action == "ask" else 8)):
                     await self.send(socket, "error", ident, message="Project denied or rate limit exceeded")
                     continue
-                if len(outstanding) >= 8 or ident in active_ids:
+                if len(outstanding) >= 8 or len(self.detached_work) >= 32 or ident in active_ids:
                     await self.send(socket, "error", ident, message="Busy or duplicate id")
                     continue
                 if action == "work" and not access["allow_ticket"]:
@@ -281,12 +284,16 @@ class LiveGateway:
             target, operation)
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="queued", action_performed=False)
-        if not self.repo or not self.github_token:
+        if (not self.repo or not self.github_token
+                or not self.owner_token_id
+                or access["token_id"] != self.owner_token_id):
             if units not in {"unmetered", "exhausted"}:
                 await asyncio.to_thread(self.engine.quotas.refund, access["token_id"], "ticket", units)
             await asyncio.to_thread(self.jobs.change, job_id, "needs_setup")
             await self.send(socket, "work_state", ident, id_of_job=job_id,
-                            status="needs_setup", message="Private GitHub worker not configured",
+                            status="needs_setup",
+                            message="Only owner-scoped bridge may use configured GitHub token. "
+                                    "Customers use their own private GitHub connection.",
                             action_performed=False, chatgpt_invoked=False)
             return
         async with self.sem:
