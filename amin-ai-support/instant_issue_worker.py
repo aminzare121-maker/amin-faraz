@@ -88,15 +88,12 @@ def build_reply(question: str, project: str, source: Path) -> dict:
     with tempfile.TemporaryDirectory(prefix="amin-on-demand-") as tempdir:
         base_config = source / "amin-ai-support" / "projects.json"
         config = json.loads(base_config.read_text(encoding="utf-8"))
-        if project == "support":
-            paths = ["amin-ai-support/README_FA.md",
-                     "amin-ai-support/OWNER_REQUIREMENTS_FA.md",
-                     "amin-ai-support/HANDOFF_PRIVATE_BRIDGE_FA.md",
-                     "amin-ai-support/DIRECT_PRIVATE_GITHUB_CHAT_FA.md"]
-            config["projects"].append({
-                "id": "support", "name": "هوش امین",
-                "source_prefixes": paths, "public_paths": paths
-            })
+        # The support project is registered in projects.json. Duplicating it
+        # in the GitHub runner breaks project registration and on-demand reply.
+        # Use the committed, reviewed project list without mutation.
+        if project == "support" and not any(
+                item.get("id") == "support" for item in config.get("projects", [])):
+            raise RuntimeError("Support project missing from reviewed repository config")
         cfg = Path(tempdir) / "projects.json"
         cfg.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
         engine = SupportEngine(cfg, Path(tempdir) / "kb.sqlite3")

@@ -2,9 +2,13 @@ package com.amin.support.mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
+import android.speech.tts.UtteranceProgressListener;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -73,6 +77,9 @@ public final class MainActivity extends Activity {
     private LiveSocketClient liveClient;
     private int liveGeneration = 0;
     private static final int VOICE_REQUEST = 2401;
+    private static final int LIVE_VOICE_PERMISSION = 2402;
+    private OnlinePersianVoice onlineVoice;
+    private Button onlineVoiceToggle;
     private TextToSpeech speech;
     private boolean speechReady = false;
     private CheckBox voiceReplies;
@@ -112,6 +119,41 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         setTitle("هوش پشتیبان امین");
         setContentView(createContent());
+        onlineVoice = new OnlinePersianVoice(this, new OnlinePersianVoice.Events() {
+            @Override public void onTranscript(String words) {
+                if (!active) return;
+                question.setText(words);
+                // The user explicitly opted into continuous submission in startOnlineVoice().
+                if (liveClient != null && liveClient.isReady()) {
+                    try {
+                        liveClient.ask(
+                                LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                                words);
+                        setStatus("درخواست صوتی به کانال زنده ارسال شد؛ منتظر پاسخ واقعی هستیم.");
+                    } catch (Exception error) {
+                        onlineVoice.requestUnavailable("ارسال صوتی در کانال زنده ناموفق بود.");
+                    }
+                } else if (GitHubDirectVault.available(MainActivity.this)
+                        && GitHubDirectVault.repo(MainActivity.this)
+                            .equalsIgnoreCase(ghRepo.getText().toString().trim())) {
+                    try {
+                        String project = GitHubBridgePolicy.project(
+                                ghProject.getText().toString().trim());
+                        submitDirectGitHub(project, words);
+                    } catch (Exception error) {
+                        onlineVoice.requestUnavailable("ارسال درخواست صوتی به GitHub ممکن نشد.");
+                    }
+                } else {
+                    onlineVoice.requestUnavailable("هیچ کانال آنلاین مجاز متصل نیست؛ پاسخ هوشمند ساخته نشد.");
+                }
+            }
+            @Override public void onState(String state) {
+                if (active) setStatus(state);
+            }
+            @Override public void onFailure(String reason) {
+                if (active) setStatus(reason);
+            }
+        });
         speech = new TextToSpeech(this, code -> {
             ui.post(() -> {
                 if (!active || speech == null) return;
@@ -123,6 +165,20 @@ public final class MainActivity extends Activity {
                 int support = speech.setLanguage(new Locale("fa", "IR"));
                 speechReady = support != TextToSpeech.LANG_MISSING_DATA
                         && support != TextToSpeech.LANG_NOT_SUPPORTED;
+                if (speechReady) configurePersianVoice();
+                speech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override public void onStart(String utteranceId) {}
+                    @Override public void onDone(String utteranceId) {
+                        ui.post(() -> {
+                            if (active && onlineVoice != null) onlineVoice.replyFinished();
+                        });
+                    }
+                    @Override public void onError(String utteranceId) {
+                        ui.post(() -> {
+                            if (active && onlineVoice != null) onlineVoice.replyFinished();
+                        });
+                    }
+                });
             });
         });
         String existing = TokenVault.endpoint(this);
@@ -202,9 +258,20 @@ public final class MainActivity extends Activity {
         root.addView(question);
 
         root.addView(section("مکالمه صوتی و نوشتاری"));
-        root.addView(text("با لمس میکروفون، تشخیص گفتار دستگاه فعال می‌شود و متن برای "
-                + "بازبینی نمایش داده می‌شود. بسته به موتور گفتار گوشی، صدای شما "
-                + "ممکن است به ارائه‌دهنده آن سرویس منتقل شود؛ حالت صوتی اختیاری است.", 14, false));
+        root.addView(text("نسخهٔ سبک آنلاین: هیچ مدل سنگین صدایی داخل APK نیست. "
+                + "تشخیص و پخش فارسی از سرویس‌های گفتار Android استفاده می‌کند؛ "
+                + "بسته به موتور نصب‌شده، پردازش صدا ممکن است به ارائه‌دهندهٔ آن منتقل شود. "
+                + "برای پاسخ هوشمند، اتصال WSS یا مخزن خصوصی GitHubِ مجاز لازم است؛ "
+                + "صرف ثبت درخواست در GitHub به معنی اجرای ChatGPT نیست.", 14, false));
+        onlineVoiceToggle = button("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
+        onlineVoiceToggle.setOnClickListener(v -> toggleOnlineVoice());
+        root.addView(onlineVoiceToggle);
+        Button interruptVoice = button("قطع صدای پاسخ و شنیدن دستور جدید");
+        interruptVoice.setOnClickListener(v -> {
+            if (speech != null) speech.stop();
+            if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replyFinished();
+        });
+        root.addView(interruptVoice);
         Button mic = button("میکروفون: گفتار فارسی به متن");
         mic.setOnClickListener(v -> startVoiceInput());
         root.addView(mic);
@@ -220,7 +287,12 @@ public final class MainActivity extends Activity {
         speakAnswer.setOnClickListener(v -> speakPersian(latestAnswer));
         root.addView(speakAnswer);
         Button silence = button("توقف گفتار");
-        silence.setOnClickListener(v -> { if (speech != null) speech.stop(); });
+        silence.setOnClickListener(v -> {
+            if (speech != null) speech.stop();
+            if (onlineVoice != null) onlineVoice.stop();
+            if (onlineVoiceToggle != null)
+                onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
+        });
         root.addView(silence);
 
         send = button("پرسش از هوش پشتیبان");
@@ -781,8 +853,12 @@ public final class MainActivity extends Activity {
                             + ". اکنون منتظر پاسخ عامل متصل به ChatGPT است.");
                 });
             } catch (Exception e) {
-                ui.post(() -> { if (active && requestVersion == version)
-                    setStatus("ثبت مستقیم ناموفق: " + e.getMessage()); });
+                ui.post(() -> {
+                    if (!active || requestVersion != version) return;
+                    setStatus("ثبت مستقیم ناموفق: " + e.getMessage());
+                    if (onlineVoice != null && onlineVoice.isEnabled())
+                        onlineVoice.requestUnavailable("ارسال درخواست به GitHub خصوصی ناموفق بود.");
+                });
             }
         });
     }
@@ -957,6 +1033,7 @@ public final class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (onlineVoice != null) onlineVoice.resumeForeground();
         resumed = true;
         ui.removeCallbacks(githubDirectPoll);
         ui.postDelayed(githubDirectPoll, 2_000L);
@@ -964,6 +1041,7 @@ public final class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
+        if (onlineVoice != null) onlineVoice.pauseForBackground();
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
         super.onPause();
@@ -985,6 +1063,81 @@ public final class MainActivity extends Activity {
         } catch (Exception error) {
             setStatus("پاک‌کردن اتصال GitHub ناموفق بود.");
         }
+    }
+
+    private void toggleOnlineVoice() {
+        if (onlineVoice == null) return;
+        if (onlineVoice.isEnabled()) {
+            onlineVoice.stop();
+            if (speech != null) speech.stop();
+            onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
+            return;
+        }
+        if (!((liveClient != null && liveClient.isReady())
+                || GitHubDirectVault.available(this))) {
+            setStatus("برای مکالمهٔ آنلاین ابتدا WSS یا GitHub خصوصی را متصل کن.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("مکالمهٔ پیوستهٔ آنلاین فارسی")
+                .setMessage("با روشن کردن این حالت، میکروفون در پیش‌زمینه گوش می‌دهد. "
+                        + "خروجی تشخیص گفتار اندروید پس از هر نوبت بدون تأیید دوباره به "
+                        + "WSS متصل یا Issue خصوصی GitHub ارسال می‌شود. "
+                        + "ممکن است سرویس تشخیص و صدای اندروید به اینترنت نیاز داشته باشد. "
+                        + "بدون پاسخ واقعی مدل، هیچ پاسخ هوشمندی جعل نمی‌شود. ادامه می‌دهی؟")
+                .setPositiveButton("فعال کردن", (dialog, which) -> {
+                    if (checkSelfPermission(Manifest.permission.RECORD_AUDIO)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
+                                LIVE_VOICE_PERMISSION);
+                    } else {
+                        startOnlineVoice();
+                    }
+                })
+                .setNegativeButton("انصراف", (dialog, which) -> {})
+                .show();
+    }
+
+    private void startOnlineVoice() {
+        voiceReplies.setChecked(true);
+        if (speech != null) speech.stop();
+        onlineVoice.start();
+        if (onlineVoice.isEnabled()) {
+            onlineVoiceToggle.setText("توقف مکالمهٔ پیوستهٔ فارسی");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LIVE_VOICE_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startOnlineVoice();
+            } else {
+                setStatus("اجازهٔ میکروفون داده نشد؛ حالت پیوسته فعال نیست.");
+            }
+        }
+    }
+
+    private void configurePersianVoice() {
+        if (speech == null) return;
+        // Prefer best available Persian voice, including installed cloud voices.
+        // No extra models are embedded or downloaded by this application.
+        Voice best = null;
+        for (Voice candidate : speech.getVoices() == null
+                ? java.util.Collections.<Voice>emptySet() : speech.getVoices()) {
+            if (!"fa".equals(candidate.getLocale().getLanguage())) continue;
+            if (best == null || (candidate.getQuality() +
+                    (candidate.isNetworkConnectionRequired() ? 150 : 0)) >
+                    (best.getQuality() +
+                    (best.isNetworkConnectionRequired() ? 150 : 0))) {
+                best = candidate;
+            }
+        }
+        if (best != null) speech.setVoice(best);
+        speech.setSpeechRate(0.97f);
     }
 
     private void startVoiceInput() {
@@ -1034,10 +1187,15 @@ public final class MainActivity extends Activity {
         }
         if (!speechReady || speech == null) {
             setStatus("موتور گفتار فارسی روی گوشی حاضر نیست. متن همچنان قابل مشاهده است.");
+            if (onlineVoice != null && onlineVoice.isEnabled())
+                onlineVoice.requestUnavailable("بدون صدای فارسی روی گوشی، پاسخ فقط به شکل متن دریافت شد.");
             return;
         }
         String safe = value.length() > 3700 ? value.substring(0, 3700) : value;
-        speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
+        if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replySpeaking();
+        int queued = speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
+        if (queued == TextToSpeech.ERROR && onlineVoice != null)
+            onlineVoice.requestUnavailable("پخش صدای فارسی روی این گوشی در دسترس نیست.");
     }
 
     private void acceptArtifact(JSONObject artifact) {
@@ -1355,6 +1513,10 @@ public final class MainActivity extends Activity {
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
         disconnectLive();
+        if (onlineVoice != null) {
+            onlineVoice.stop();
+            onlineVoice = null;
+        }
         if (speech != null) {
             speech.stop();
             speech.shutdown();
