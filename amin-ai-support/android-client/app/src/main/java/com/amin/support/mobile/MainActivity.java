@@ -122,6 +122,7 @@ public final class MainActivity extends Activity {
     private String latestHandoffId = "";
     private String latestHandoffProject = "";
     private String latestAnswer = "";
+    private final ConversationMemory conversationMemory = new ConversationMemory();
     private ScrollView scroll;
     private boolean active = true;
     private int version = 0;
@@ -302,7 +303,7 @@ public final class MainActivity extends Activity {
         root.addView(question);
 
         allowCloudModel = new CheckBox(this);
-        allowCloudModel.setText("اجازه می‌دهم متن این سؤال و مدارک مجاز برنامه برای دریافت پاسخ آنلاین به مدل Cloudflare ارسال شوند.");
+        allowCloudModel.setText("با رضایت من، متن سؤال و حداکثر سه نوبت اخیر همین گفت‌وگو برای پاسخ آنلاین به مدل Cloudflare ارسال شود.");
         allowCloudModel.setChecked(false);
         root.addView(allowCloudModel);
 
@@ -325,6 +326,12 @@ public final class MainActivity extends Activity {
             setStatus("پاسخ در کلیپ‌بورد کپی شد؛ هنگام اشتراک‌گذاری مراقب اطلاعات خصوصی باش.");
         });
         root.addView(copy);
+        Button forgetConversation = button("پاک‌کردن حافظهٔ موقت همین گفت‌وگو");
+        forgetConversation.setOnClickListener(v -> {
+            conversationMemory.clear();
+            setStatus("حافظهٔ چندنوبتی پاک شد؛ متن پاسخ فعلی تغییر نکرد.");
+        });
+        root.addView(forgetConversation);
 
         root.addView(section("مکالمهٔ صوتی فارسی"));
         Button voiceSettingsButton = button("نمایش تنظیمات صدا و میکروفون");
@@ -639,6 +646,7 @@ public final class MainActivity extends Activity {
                 secret = SupportEndpoint.validateToken(entered);
             }
             TokenVault.save(this, address, secret);
+            conversationMemory.clear(); // New authenticated session cannot reuse prior context.
             token.setText("");
             token.setHint("کلید امن ذخیره شد؛ نیازی به ورود دوباره نیست");
         } catch (Exception issue) {
@@ -718,10 +726,13 @@ public final class MainActivity extends Activity {
         setStatus("در حال پردازش سؤال؛ اطلاعات فقط به سرور HTTPS تنظیم‌شده فرستاده می‌شود.");
         // Read UI consent before entering the worker thread; default stays OFF.
         final boolean approvedCloudModel = allowCloudModel != null && allowCloudModel.isChecked();
+        final java.util.List<ConversationMemory.Turn> previousTurns = approvedCloudModel
+                ? conversationMemory.snapshot(selectedProject)
+                : java.util.Collections.emptyList();
         background.execute(() -> {
             try {
                 JSONObject reply = new SupportApi(address, secret).ask(
-                        selectedProject, message, approvedCloudModel);
+                        selectedProject, message, approvedCloudModel, previousTurns);
                 String response = reply.optString("answer", "");
                 if (response.trim().isEmpty()) throw new IllegalStateException("پاسخ معتبر دریافت نشد.");
                 boolean usedModel = reply.optBoolean("model_used", false);
@@ -749,6 +760,8 @@ public final class MainActivity extends Activity {
                     if (!active || id != version) return;
                     latestAnswer = formatted;
                     answer.setText(formatted);
+                    if (approvedCloudModel) conversationMemory.remember(
+                            selectedProject, message, response);
                     if (voiceReplies.isChecked()) speakPersian(formatted);
                     send.setEnabled(true);
                     setStatus("پاسخ دریافت شد. بدون ذخیره دائمی مکالمه در این گوشی.");
@@ -1790,6 +1803,7 @@ public final class MainActivity extends Activity {
         try {
             disconnectLive();
             TokenVault.clear(this);
+            conversationMemory.clear();
             LiveTokenVault.clear(this);
             getPreferences(MODE_PRIVATE).edit().clear().apply();
             latestHandoffId = "";
