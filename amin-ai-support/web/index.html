@@ -34,12 +34,15 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <div class="actions">
 <button id="ask">ارسال به پشتیبان</button>
 <button class="secondary" id="ticket" type="button">ثبت درخواست بررسی</button>
+<button class="secondary" id="handoff" type="button">ارجاع به صف هوش و پیگیری</button>
+<button class="secondary" id="handoffStatus" type="button">بررسی پاسخ ارجاع</button>
 <button class="secondary" id="mic" type="button">🎙 گفتار فارسی</button>
 <button class="secondary" id="speak" type="button">🔊 خواندن پاسخ</button>
 </div>
 <label class="muted"><input id="remoteConsent" type="checkbox" style="width:auto"> فقط برای همین سؤال، اجازه می‌دهم متن سؤال و بخش‌های مستندات بازیابی‌شده به مدل خارجی انتخاب‌شده توسط مدیر سامانه ارسال شوند. این گزینه پیش‌فرض خاموش است.</label>
 <p class="muted">این اجازه با رضایت ذخیره تیکت متفاوت است. اگر مدل محلی باشد، هیچ انتقال خارجی لازم نیست. سیاست نگهداری داده سرویس خارجی باید جداگانه بررسی شود.</p>
 <label class="muted"><input id="consent" type="checkbox" style="width:auto"> با ذخیره متن این درخواست در سامانه پشتیبانی موافقم.</label>
+<p class="muted">ارجاع در سرور خصوصی ذخیره می‌شود؛ GitHub عمومی متن درخواست را نمی‌بیند. اتصال خودکار به گفت‌وگوی شخصی ChatGPT هنوز برقرار نشده است. شناسه پیگیری فقط در حافظه موقت این صفحه نگه داشته می‌شود.</p>
 <p id="status" aria-live="polite"></p>
 </section>
 <section class="panel" aria-live="polite">
@@ -52,7 +55,7 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <script>
 "use strict";
 const $=id=>document.getElementById(id), button=$("ask");
-let lastResponse="";
+let lastResponse="",lastHandoffId="",lastHandoffProject="";
 function authorization(){const k=$("key").value.trim();return k?{"Authorization":"Bearer "+k}:{}}
 function status(s){$("status").textContent=s}
 async function load(){
@@ -100,6 +103,36 @@ async function submitTicket(){
   status("درخواست ثبت شد. شناسه پیگیری: "+data.id+" — هنوز بررسی یا حل نشده است.");
  }catch(e){status("ثبت ناموفق: "+e.message)}
 }
+async function handoff(){
+ const msg=$("message").value.trim();
+ if(!msg){status("ابتدا درخواست را بنویسید.");return}
+ if(!$("consent").checked){status("برای ذخیره خصوصی و ارجاع، رضایت صریح لازم است.");return}
+ if(!confirm("درخواست در موتور خصوصی ذخیره می‌شود و شاید از سهمیه تیکت کم کند. ارسال متن به ChatGPT خودکار نیست. ادامه می‌دهید؟"))return;
+ try{
+  const r=await fetch("/api/handoff",{method:"POST",cache:"no-store",
+   headers:{"Content-Type":"application/json",...authorization()},
+   body:JSON.stringify({project:$("project").value,message:msg,consent:true})});
+  const data=await r.json();if(!r.ok)throw Error(data.error||"ثبت ارجاع ناموفق بود");
+  lastHandoffId=data.id;lastHandoffProject=$("project").value;
+  status("ارجاع ثبت شد. شناسه: "+data.id+" | GitHub خصوصی: "+data.github_state
+   +" | در انتظار پاسخ بررسی‌شده");
+ }catch(e){status("ارجاع ناموفق: "+e.message)}
+}
+async function handoffStatus(){
+ if(!lastHandoffId){status("ابتدا یک درخواست را از همین صفحه ثبت کنید.");return}
+ try{
+  const q=new URLSearchParams({id:lastHandoffId,project:lastHandoffProject});
+  const r=await fetch("/api/handoff?"+q.toString(),
+    {headers:authorization(),cache:"no-store"});
+  const data=await r.json();if(!r.ok)throw Error(data.error||"پیگیری ناموفق بود");
+  if(data.status==="answered"){
+   lastResponse=data.answer;$("reply").textContent=lastResponse;
+   status("پاسخ بررسی‌شده دریافت شد. انتشار راه‌حل برای دیگران نیازمند تأیید جداگانه است.");
+  }else{status("درخواست هنوز در صف است؛ پاسخ ChatGPT اجراشده محسوب نمی‌شود.")}
+ }catch(e){status("پیگیری ناموفق: "+e.message)}
+}
+$("handoff").addEventListener("click",handoff);
+$("handoffStatus").addEventListener("click",handoffStatus);
 $("ask").addEventListener("click",ask);
 $("ticket").addEventListener("click",submitTicket);
 $("key").addEventListener("change",load);
