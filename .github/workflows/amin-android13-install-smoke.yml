@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   fresh-android-13-install:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 19
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +23,15 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
+      - name: Confirm Android emulator hardware acceleration
+        run: |
+          set -euo pipefail
+          if [ ! -c /dev/kvm ]; then
+            echo "::error::This GitHub runner lacks /dev/kvm; APK INSTALLATION HAS NOT BEEN TESTED."
+            exit 1
+          fi
+          sudo chmod 666 /dev/kvm
+          ls -l /dev/kvm
       - name: Build isolated Android APK
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
@@ -36,6 +45,7 @@ jobs:
           cores: 2
           ram-size: 2048M
           disk-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
           emulator-boot-timeout: 600
           script: |
