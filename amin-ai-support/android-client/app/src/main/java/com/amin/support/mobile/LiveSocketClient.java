@@ -104,8 +104,27 @@ public final class LiveSocketClient {
     }
 
     public String ask(String project, String message) throws Exception {
+        return ask(project, message, false, 0);
+    }
+
+    /** Audio never carries credentials or the user's microphone recording. */
+    public String ask(String project, String message, boolean neuralVoice, int voiceStyle)
+            throws Exception {
         requireText(message);
-        return send("ask", project, message, null);
+        if (voiceStyle != 0 && voiceStyle != 1)
+            throw new IllegalArgumentException("Invalid Persian voice style");
+        if (!ready) throw new IllegalStateException("WSS is not authenticated");
+        String ident = "a" + ids.incrementAndGet();
+        JSONObject event = new JSONObject();
+        event.put("type", "ask");
+        event.put("id", ident);
+        event.put("project", LiveEndpointPolicy.project(project));
+        event.put("message", message);
+        event.put("neural_voice", neuralVoice);
+        event.put("voice_style", voiceStyle);
+        if (!socket.send(event.toString()))
+            throw new IllegalStateException("Voice-enabled question could not be queued");
+        return ident;
     }
 
     public String work(String project, String message) throws Exception {
