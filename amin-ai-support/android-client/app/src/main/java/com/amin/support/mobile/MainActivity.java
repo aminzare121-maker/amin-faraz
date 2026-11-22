@@ -102,6 +102,7 @@ public final class MainActivity extends Activity {
     private ScrollView scroll;
     private boolean active = true;
     private int version = 0;
+    private int diagnosticVersion = 0;
 
     @Override
     protected void onCreate(Bundle state) {
@@ -1035,12 +1036,12 @@ public final class MainActivity extends Activity {
     private void diagnoseConnectivity() {
         String raw = liveWss.getText().toString().trim();
         liveMessage("در حال بررسی اتصال بدون ارسال کلید یا مکالمه...");
-        int id = ++version;
+        int id = ++diagnosticVersion;
         background.execute(() -> {
             JSONObject github = ConnectivityProbe.github();
             JSONObject wss = raw.isEmpty() ? null : ConnectivityProbe.liveTls(raw);
             ui.post(() -> {
-                if (!active || id != version) return;
+                if (!active || id != diagnosticVersion) return;
                 String output = ConnectivityProbe.explain("GitHub API", github);
                 if (wss != null) output += "\\n" + ConnectivityProbe.explain("WSS", wss);
                 else output += "\\nنشانی WSS خالی است؛ فقط GitHub بررسی شد.";
