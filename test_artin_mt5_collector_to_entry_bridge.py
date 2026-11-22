@@ -48,6 +48,15 @@ class CollectorToEntryTests(unittest.TestCase):
         self.write()
         with self.assertRaises(SourceRejected):
             evaluate_collector_csv(self.path, as_of=1800001800)
+    def test_missing_m15_interval_blocks_entry_replay(self):
+        # The intake may count missing intervals, but entry decisions must not
+        # interpret bars separated by a gap as adjacent candles.
+        self.rows[1][1] = 1800001800
+        self.rows[1][2] = "2027.01.15 10:30:00"
+        self.write()
+        with self.assertRaisesRegex(ValueError, "DISCONTINUOUS_M15_ENTRY_REPLAY"):
+            evaluate_collector_csv(self.path, as_of=1800002700)
+
     def test_dossier_flag_cannot_authorize(self):
         with self.assertRaisesRegex(ValueError, "INVALID_PRIVATE_DOSSIER"):
             evaluate_collector_csv(self.path, dossier={"trading_authorized": True},
