@@ -66,6 +66,16 @@ def evaluate(path, dossier=None, *, as_of=None):
                 'interval_identity_mismatch':range_mismatch,
                 'status':'SOURCE_IDENTITY_CONFLICT_REQUIRES_ORIGINAL_AV',
             }
+    # Exercise the actual arbitration boundary in the same candle replay. An
+    # empty evidence batch is intentional until original teacher AV is reviewed.
+    boundary_path=Path(__file__).resolve().parent/'research/artin-independent-engine/artin_decision_boundary.py'
+    boundary_spec=importlib.util.spec_from_file_location('artin_integrated_decision_boundary',boundary_path)
+    boundary=importlib.util.module_from_spec(boundary_spec)
+    sys.modules[boundary_spec.name]=boundary
+    boundary_spec.loader.exec_module(boundary)
+    arbitration=boundary.decide((),demo_only=True)
+    if arbitration.get('decision')!='BLOCKED' or arbitration.get('executable') is not False:
+        raise AssertionError('UNVERIFIED_TEACHER_ARBITRATION_NOT_BLOCKED')
     engine=entry.Engine('ARTIN_PER_BAR_SOURCE_GATED',tuple(entry.RULE_IDS))
     engine_statuses={route:Counter() for route in REQUIRED}
     engine_reasons={route:Counter() for route in REQUIRED}
@@ -114,6 +124,9 @@ def evaluate(path, dossier=None, *, as_of=None):
             "independent_engine":{"fingerprint":engine.fingerprint,"evaluations":len(bars)*len(REQUIRED)*2,"route_statuses":{r:dict(engine_statuses[r]) for r in REQUIRED},
                                   "route_reasons":{r:dict(engine_reasons[r]) for r in REQUIRED},"orders_created":0},
             "teacher_approved_entries":0,"trades_executed":0,"net_profit":None,
+            "decision_arbitration":{"decision":arbitration["decision"],
+                                    "reason":arbitration["reason"],
+                                    "executable":False,"replayed_teacher_cases":0},
             "side_decision_evaluations":len(bars)*len(REQUIRED)*2,
             "causal_close_clock_checked":as_of is not None,
             "source_identity_conflicts":source_conflicts,
