@@ -35,6 +35,7 @@ try {
         Write-Host "1 - ارسال درخواست خصوصی"
         Write-Host "2 - فهرست درخواست‌ها"
         Write-Host "3 - دریافت پاسخ"
+        Write-Host "4 - تأیید پاسخ بررسی‌شده برای یادگیری"
         Write-Host "0 - خروج و حذف کلید این جلسه"
         $choice = Read-Host "انتخاب"
         switch ($choice) {
@@ -54,6 +55,28 @@ try {
                 $rid = Read-Host "شناسه ۳۲ رقمی درخواست"
                 if ($number -match '^[1-9][0-9]*$') {
                     & python $client --repo $Repo status --issue $number --id $rid
+                } else { Write-Host "شماره Issue نامعتبر است." }
+            }
+            "4" {
+                $number = Read-Host "شماره Issue"
+                $rid = Read-Host "شناسه ۳۲ رقمی درخواست"
+                $project = Read-Host "شناسه برنامه"
+                if ($number -match '^[1-9][0-9]*
+            default { Write-Host "انتخاب معتبر نیست." }
+        }
+        if ($choice -eq "0") { break }
+    }
+}
+finally {
+    Remove-Item Env:\AMIN_PRIVATE_GITHUB_TOKEN -ErrorAction SilentlyContinue
+    Remove-Item Env:\PYTHONIOENCODING -ErrorAction SilentlyContinue
+    Write-Host "کلید نشست از محیط برنامه پاک شد."
+}
+) {
+                    $decision = Read-Host "پاسخ را واقعاً بررسی و تأیید می‌کنی؟ (yes/no)"
+                    if ($decision -eq "yes") {
+                        & python $client --repo $Repo approve --issue $number --id $rid --project $project
+                    }
                 } else { Write-Host "شماره Issue نامعتبر است." }
             }
             "0" { break }
