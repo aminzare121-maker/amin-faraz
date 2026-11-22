@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -12,6 +13,13 @@ android {
         targetSdk 33
         versionCode 1
         versionName '0.1.0-test'
+    }
+
+    packaging {
+        jniLibs { useLegacyPackaging true }
+    }
+    androidResources {
+        noCompress 'onnx', 'mdl', 'fst', 'ark', 'res', 'conf', 'bin'
     }
 
     buildTypes {
@@ -30,4 +38,8 @@ android {
 dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'androidx.core:core:1.13.1'
+    // Persian ASR is fully offline and bundled inside this APK.
+    implementation 'com.alphacephei:vosk-android:0.3.47'
+    // Pinned offline ONNX runtime is provisioned by scripts/provision_persian_voice.sh.
+    implementation files('libs/sherpa-onnx.aar')
 }
