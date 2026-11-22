@@ -27,6 +27,7 @@ from chatgpt_work_event import prepare_work_event
 from chatgpt_plan_direct import ask as chatgpt_plan_ask, PlanConnectionUnavailable
 from chatgpt_git_agent import run_agent as run_chatgpt_git_agent
 from github_agent_tools import AgentToolError
+from neural_live_voice import from_environment as neural_voice_from_environment, VoiceUnavailable
 from request_limits import SlidingLimits
 
 try:
@@ -229,6 +230,10 @@ class LiveGateway:
             raise ValueError("Authorized project repository mapping must be an object")
         self.agent_project_repos = mapping
         self.agent_public_optin = os.environ.get("AMIN_AGENT_ALLOW_PUBLIC") == "1"
+        # Server-side voice model is optional and NEVER downloaded to phone/PC.
+        # A configured model must reside on an explicitly authorized voice host.
+        self.neural_voice = neural_voice_from_environment()
+        self.voice_sem = asyncio.Semaphore(1)
         self.poll_seconds = max(2, int(poll_seconds))
         self.limits = SlidingLimits()
         self.sem = asyncio.Semaphore(8)
@@ -263,7 +268,10 @@ class LiveGateway:
                              if self.use_chatgpt_plan
                              and self.owner_token_id == access["token_id"]
                              else "disabled"),
-                        live_tools="owner_hosted")
+                        live_tools="owner_hosted",
+                        neural_voice_ready=bool(self.neural_voice and self.owner_token_id
+                                                and self.owner_token_id == access["token_id"]),
+                        neural_voice_id="amin-persian-neural-v1" if self.neural_voice else None)
         return access
 
     async def handler(self, socket):
@@ -311,6 +319,12 @@ class LiveGateway:
                     message = command.get("message")
                     if not isinstance(message, str) or not message.strip() or len(message) > 2500:
                         await self.send(socket, "error", ident, message="Question must be 1-2500 characters")
+                        continue
+                    if action == "ask" and (
+                        not isinstance(command.get("neural_voice", False), bool) or
+                        type(command.get("voice_style", 0)) is not int or
+                        command.get("voice_style", 0) not in (0, 1)):
+                        await self.send(socket, "error", ident, message="Invalid voice preference")
                         continue
                     if action == "work" and command.get("consent") is not True:
                         await self.send(socket, "error", ident, message="Explicit work consent required")
@@ -377,6 +391,9 @@ class LiveGateway:
                     await self.send(socket, "error", ident, message="Chat quota exhausted")
                     return
                 await self.send(socket, "accepted", ident, mode="answer", status="working")
+                voice_requested = command.get("neural_voice", False) is True
+                voice_approved = bool(voice_requested and self.neural_voice
+                    and self.owner_token_id and self.owner_token_id == access["token_id"])
                 if self.use_chatgpt_plan:
                     if not self.owner_token_id or access["token_id"] != self.owner_token_id:
                         await self.send(socket, "error", ident,
@@ -394,7 +411,7 @@ class LiveGateway:
                                     answer=result["answer"], sources=[],
                                     model_used=True, provider="ChatGPT plan OAuth",
                                     model=result["model"], needs_human=False,
-                                    action_performed=False)
+                                    action_performed=False, voice_pending=voice_approved)
                 else:
                     async with self.sem:
                         result = await asyncio.to_thread(
@@ -402,7 +419,10 @@ class LiveGateway:
                     await self.send(socket, "answer", ident, status="answered",
                                     answer=result["answer"], sources=result["sources"],
                                     model_used=result["model_used"],
-                                    needs_human=result["needs_human"], action_performed=False)
+                                    needs_human=result["needs_human"], action_performed=False,
+                                    voice_pending=voice_approved)
+                if voice_approved:
+                    await self.stream_neural_voice(socket, ident, result["answer"])
             elif action == "work":
                 await self.run_work(socket, access, command)
             else:
@@ -427,6 +447,35 @@ class LiveGateway:
             # Exception class only: never leak credentials or private questions.
             with suppress(ConnectionClosed):
                 await self.send(socket, "error", ident, message="Operation failed: " + type(error).__name__)
+
+    async def stream_neural_voice(self, socket, ident, text):
+        """Send actual independently validated PCM packets for this same ask ID.
+
+        Text remains between the authenticated caller and configured owner host.
+        No public GitHub issues, model tokens, disk cache, or API fallback.
+        """
+        sent_parts = 0
+        try:
+            async with self.voice_sem:
+                # One bounded Piper synthesis subprocess per short phrase.
+                # next(iter, None) must be wrapped: StopIteration must never
+                # propagate through a Future in asyncio.
+                iterator = iter(self.neural_voice.synthesize(text))
+                def next_packet():
+                    return next(iterator, None)
+                while True:
+                    packet = await asyncio.to_thread(next_packet)
+                    if packet is None:
+                        break
+                    await self.send(socket, "voice_frame", ident, **packet)
+                    sent_parts += 1
+        except (VoiceUnavailable, OSError, RuntimeError):
+            await self.send(socket, "voice_error", ident,
+                            message="Neural Persian voice is unavailable on the online host",
+                            fallback_to_android=sent_parts == 0,
+                            partial_audio=sent_parts > 0)
+        except asyncio.CancelledError:
+            raise
 
     async def run_work(self, socket, access, command):
         ident = command["id"]
