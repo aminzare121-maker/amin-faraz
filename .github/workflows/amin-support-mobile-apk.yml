@@ -88,6 +88,13 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/AminVoicePersona.java \
             amin-ai-support/android-client/tests/AminVoicePersonaTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.AminVoicePersonaTest
+      - name: Verify neural audio protocol and SHA-256 on JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/NeuralAudioPolicy.java \
+            amin-ai-support/android-client/tests/NeuralAudioPolicyTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.NeuralAudioPolicyTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
