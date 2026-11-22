@@ -6,9 +6,14 @@ workers_dev = true
 OWNER_RENT_MONTHLY_MICROUSDT = "0"
 PAYMENT_DESTINATION_VERIFIED = "0"
 PAYMENT_RECEIVER_CONSENT = "0"
+PAYMENT_RECEIVER_KIND = "exchange_unverified"
 # PRODUCT is fixed to amin-ai-monthly; no made-up provider pricing.
 # Everything else is private Cloudflare secret and explicitly configured.
 [[d1_databases]]
 binding = "DB"
 database_name = "amin-managed-subscriptions"
 database_id = "REPLACE_WITH_REAL_D1_ID"
+
+# A public Cloudflare Worker can reconcile verified TRON transfers every five minutes.
+[triggers]
+crons = ["*/5 * * * *"]

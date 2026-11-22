@@ -3,6 +3,7 @@ import {
  combinedPrice,displayUSDT,checkSupplierQuote,checkConfirmation,
  checkProvisioning,sha256,validWebhook
 } from "./rules.mjs";
+import {reconcileDue} from "./tron-watch.mjs";
 const HEADERS={"Cache-Control":"no-store","X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer"};
 const json=(data,status=200)=>Response.json(data,{status,headers:HEADERS});
 const denied=(code,status=400)=>json({ok:false,error:code},status);
@@ -207,6 +208,9 @@ export default {
       fulfillment_ready:!!env.SUPPLIER_WEBHOOK_SIGNING_SECRET,
       destination_verified:env.PAYMENT_DESTINATION_VERIFIED==="1" &&
         env.PAYMENT_RECEIVER_CONSENT==="1",
+      tron_reconciliation_ready:env.PAYMENT_RECEIVER_KIND==="self_custody" &&
+        env.PAYMENT_DESTINATION_VERIFIED==="1" &&
+        env.PAYMENT_RECEIVER_CONSENT==="1" && !!env.TRONGRID_API_KEY,
       automatic_google_pay_charge:false});
     if(!path.startsWith("/v1/"))return denied("not_found",404);
     if(request.headers.has("Origin"))return denied("browser_origin_not_allowed",403);
@@ -222,5 +226,12 @@ export default {
       return denied("not_found",404);
     }catch(e){return denied(e instanceof GateError?e.code:"backend_unavailable",
       e instanceof GateError?e.status:503);}
+  },
+  async scheduled(event,env,ctx){
+    // Cron is not a payment processor. Query a genuine finalized USDT event.
+    if(env.PAYMENT_RECEIVER_KIND==="self_custody" &&
+       env.PAYMENT_DESTINATION_VERIFIED==="1" &&
+       env.PAYMENT_RECEIVER_CONSENT==="1" && !!env.TRONGRID_API_KEY && env.DB)
+      ctx.waitUntil(reconcileDue(env));
   }
 };
