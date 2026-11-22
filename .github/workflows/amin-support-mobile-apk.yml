@@ -112,6 +112,18 @@ jobs:
           APK="amin-ai-support/android-client/app/build/outputs/apk/debug/app-debug.apk"
           test -s "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | head -15
+          echo "::group::Validate complete APK v2 signature across Android 8.0-13"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify \
+            --min-sdk-version 26 --verbose --print-certs "$APK"
+          echo "::endgroup::"
+          echo "::group::ZIP alignment and package manifest"
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -v 4 "$APK"
+          PACKAGE=$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | sed -n "s/^package: name='\\([^']*\\)'.*/\\1/p" | head -1)
+          test "$PACKAGE" = "com.amin.support.mobile.compat"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -Fx "sdkVersion:'26'"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -Fx "targetSdkVersion:'33'"
+          echo "::endgroup::"
+          echo "::warning::Debug certificates differ across GitHub runner builds; never describe this artifact as an updatable owner-signed release."
           sha256sum "$APK"
           ls -lh "$APK"
       - name: Publish test APK artifact
