@@ -853,11 +853,12 @@ public final class MainActivity extends Activity {
                             + ". اکنون منتظر پاسخ عامل متصل به ChatGPT است.");
                 });
             } catch (Exception e) {
-                ui.post(() -> { if (active && requestVersion == version)
+                ui.post(() -> {
+                    if (!active || requestVersion != version) return;
                     setStatus("ثبت مستقیم ناموفق: " + e.getMessage());
                     if (onlineVoice != null && onlineVoice.isEnabled())
                         onlineVoice.requestUnavailable("ارسال درخواست به GitHub خصوصی ناموفق بود.");
-                }); });
+                });
             }
         });
     }
