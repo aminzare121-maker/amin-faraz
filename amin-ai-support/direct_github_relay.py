@@ -123,7 +123,11 @@ class GitHubPrivateBridge:
             if not isinstance(answer, str) or not (0 < len(answer) <= 4000):
                 continue
             return {"status": "answered", "request_id": request_id,
-                    "issue_number": issue, "answer": answer}
+                    "issue_number": issue, "answer": answer,
+                    "needs_human": reply.get("needs_human", True) is not False,
+                    "action_performed": reply.get("action_performed") is True,
+                    "chatgpt_invoked": reply.get("chatgpt_invoked") is True,
+                    "source": reply.get("source", "unverified")}
         return {"status": "pending", "request_id": request_id, "issue_number": issue}
 
     def approve(self, issue: int, request_id: str, project: str):
