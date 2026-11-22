@@ -24,6 +24,7 @@ from urllib.parse import urlsplit
 from amin_support import DEFAULT_CONFIG, DEFAULT_DB, SupportEngine
 from direct_github_relay import GitHubPrivateBridge
 from chatgpt_work_event import prepare_work_event
+from chatgpt_plan_direct import ask as chatgpt_plan_ask, PlanConnectionUnavailable
 from request_limits import SlidingLimits
 
 try:
@@ -197,6 +198,9 @@ class LiveGateway:
         # A server-wide private GitHub token is OWNER-ONLY. Customers must
         # connect their own private repository from their own device.
         self.owner_token_id = os.environ.get("AMIN_LIVE_OWNER_TOKEN_ID", "")
+        # Explicit opt-in only. This is personal plan usage for the OWNER,
+        # not a shared unlimited AI subscription for all customers.
+        self.use_chatgpt_plan = os.environ.get("AMIN_SIWC_ENABLE") == "1"
         self.poll_seconds = max(2, int(poll_seconds))
         self.limits = SlidingLimits()
         self.sem = asyncio.Semaphore(8)
@@ -226,7 +230,12 @@ class LiveGateway:
             return None
         await self.send(socket, "ready", "auth", protocol=LIVE_PROTOCOL,
                         project=access["project_id"], duplex=True,
-                        personal_chatgpt_connected=False, live_tools="owner_hosted")
+                        personal_chatgpt_connected=False,
+                        chatgpt_plan_mode=("siwc_user_authorized"
+                             if self.use_chatgpt_plan
+                             and self.owner_token_id == access["token_id"]
+                             else "disabled"),
+                        live_tools="owner_hosted")
         return access
 
     async def handler(self, socket):
@@ -328,12 +337,32 @@ class LiveGateway:
                     await self.send(socket, "error", ident, message="Chat quota exhausted")
                     return
                 await self.send(socket, "accepted", ident, mode="answer", status="working")
-                async with self.sem:
-                    result = await asyncio.to_thread(
-                        self.engine.answer, project, command["message"], "customer", False)
-                await self.send(socket, "answer", ident, status="answered", answer=result["answer"],
-                                sources=result["sources"], model_used=result["model_used"],
-                                needs_human=result["needs_human"], action_performed=False)
+                if self.use_chatgpt_plan:
+                    if not self.owner_token_id or access["token_id"] != self.owner_token_id:
+                        await self.send(socket, "error", ident,
+                                        message="ChatGPT plan is owner-only; user must authorize own plan")
+                        return
+                    try:
+                        async with self.sem:
+                            result = await asyncio.to_thread(chatgpt_plan_ask, command["message"])
+                    except PlanConnectionUnavailable as error:
+                        await self.send(socket, "error", ident,
+                                        message="ChatGPT sign-in/plan usage unavailable; no paid fallback",
+                                        chatgpt_connected=False)
+                        return
+                    await self.send(socket, "answer", ident, status="answered",
+                                    answer=result["answer"], sources=[],
+                                    model_used=True, provider="ChatGPT plan OAuth",
+                                    model=result["model"], needs_human=False,
+                                    action_performed=False)
+                else:
+                    async with self.sem:
+                        result = await asyncio.to_thread(
+                            self.engine.answer, project, command["message"], "customer", False)
+                    await self.send(socket, "answer", ident, status="answered",
+                                    answer=result["answer"], sources=result["sources"],
+                                    model_used=result["model_used"],
+                                    needs_human=result["needs_human"], action_performed=False)
             elif action == "work":
                 await self.run_work(socket, access, command)
             else:
