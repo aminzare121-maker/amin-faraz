@@ -1,7 +1,8 @@
 """Private, project-scoped mobile/desktop handoff queue.
 
 Only a reference marker (never user text or an answer) may be published to a
-PUBLIC GitHub issue. There is no automatic ChatGPT session/API invocation.
+VERIFIED PRIVATE GitHub repository. Public repositories are rejected.
+There is no automatic ChatGPT session/API invocation.
 A trusted human/agent must read private requests from the owner-hosted engine
 and submit a reviewed answer through the local CLI.
 """
@@ -109,7 +110,7 @@ class HandoffStore:
                        (issue_number, state, ident))
 
 
-def publish_public_marker(store: HandoffStore, request_id: str) -> str:
+def publish_private_marker(store: HandoffStore, request_id: str) -> str:
     """Best-effort GitHub issue. NEVER exports private request body or response.
 
     Server-only environment variables; no credential in Android or web client.
@@ -119,7 +120,21 @@ def publish_public_marker(store: HandoffStore, request_id: str) -> str:
     repo = os.environ.get("AMIN_HANDOFF_GITHUB_REPO", "").strip()
     if not token or not REPOSITORY.fullmatch(repo):
         return "not_configured"
-    # Only random identifier and non-sensitive protocol flags may reach public GitHub.
+    # Verify the target repository really is PRIVATE before any write.
+    # Source code can stay public while each user's transport remains private.
+    headers = {"Authorization": "Bearer " + token,
+               "Accept": "application/vnd.github+json",
+               "User-Agent": "amin-support-handoff/0.2"}
+    try:
+        check = Request("https://api.github.com/repos/" + repo, headers=headers)
+        with urlopen(check, timeout=8) as response:
+            repository = json.load(response)
+        if repository.get("private") is not True:
+            store.record_issue(request_id, None, "failed")
+            return "failed"
+    except (OSError, ValueError, HTTPError, URLError):
+        store.record_issue(request_id, None, "failed")
+        return "failed"
     payload = json.dumps({
         "title": "[Amin handoff] " + request_id[:12],
         "body": "AMIN_HANDOFF_MARKER_V1\\n"
@@ -128,10 +143,7 @@ def publish_public_marker(store: HandoffStore, request_id: str) -> str:
     }).encode("utf-8")
     request = Request("https://api.github.com/repos/" + repo + "/issues",
                       data=payload,
-                      headers={"Authorization": "Bearer " + token,
-                               "Accept": "application/vnd.github+json",
-                               "Content-Type": "application/json",
-                               "User-Agent": "amin-support-handoff/0.1"},
+                      headers={**headers, "Content-Type": "application/json"},
                       method="POST")
     try:
         with urlopen(request, timeout=8) as response:
