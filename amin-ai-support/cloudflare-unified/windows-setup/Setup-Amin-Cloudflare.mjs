@@ -6,6 +6,7 @@ import { spawnSync } from "node:child_process";
 import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import { ownerAuthorized } from "./owner-authorization.mjs";
+import { resumeWranglerConfig, recoverOwnerSecrets } from "./resume-setup.mjs";
 
 const root=path.dirname(fileURLToPath(import.meta.url));
 const worker=path.join(root,"amin-ai-support","cloudflare-unified");
@@ -27,7 +28,15 @@ function run(args,{capture=false,input}={}){
   return capture?r.stdout:"";
 }
 function databases(){
-  const result=run(["d1","list","--json"],{capture:true});
+  let result;
+  for(let attempt=1;attempt<=3;attempt++){
+    try { result=run(["d1","list","--json"],{capture:true}); break; }
+    catch(error){
+      if(attempt===3)throw error;
+      report("D1 connection failed. Automatic retry "+attempt+"/2; no new login needed.");
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,800*attempt);
+    }
+  }
   const first=result.indexOf("["),last=result.lastIndexOf("]");
   if(first<0||last<first)fail("Cloudflare did not return a D1 JSON list");
   const entries=JSON.parse(result.slice(first,last+1));
@@ -57,7 +66,7 @@ async function main(){
   const configPath=path.join(worker,"wrangler.toml");
   if(!fs.existsSync(configPath)||!fs.existsSync(path.join(billing,"db","schema.sql")))
     fail("Missing source files. Extract the FULL ZIP first.");
-  if(fs.existsSync(privatePath))fail("Existing owner key file found. Refusing to overwrite private access.");
+  if(fs.existsSync(privatePath))report("Existing private owner keys detected; will reuse if they match the deployed HTTPS Worker.");
   if(process.platform!=="win32")fail("This installer is intended for Windows 11.");
   const nodeMajor=Number(process.versions.node.split(".")[0]);
   if(nodeMajor<20)fail("Node.js 20+ required. Official installer: https://nodejs.org/en/download");
@@ -71,16 +80,22 @@ async function main(){
   // OAuth device flow is documented by Cloudflare for environments where
   // localhost:8976 is unreachable. This keeps authorization user-controlled
   // and avoids browser-to-localhost callbacks entirely.
-  report("Cloudflare account authorization uses device code, not localhost:8976.");
-  report("If a verification code appears, approve it in your own Cloudflare browser session.");
-  run(["login","--device"]);
-  run(["whoami"]);
+  // Use previously authorized Wrangler session; do not trigger a new OAuth prompt.
+  // Only fall back to official device authorization when whoami is not successful.
+  try {
+    run(["whoami"],{capture:true});
+    report("Existing Cloudflare login recognized. No new browser approval needed.");
+  } catch {
+    report("Existing login is not usable; requesting official Cloudflare device authorization.");
+    run(["login","--device"]);
+    run(["whoami"],{capture:true});
+  }
   const bill=d1("amin-managed-subscriptions");
   const knowledge=d1("amin-ai-knowledge");
   const toml=fs.readFileSync(configPath,"utf8");
-  if(!toml.includes("REPLACE_BILLING_DB_ID")||!toml.includes("REPLACE_KNOWLEDGE_DB_ID"))
-    fail("Expected original empty Wrangler database placeholders.");
-  fs.writeFileSync(configPath,toml.replace("REPLACE_BILLING_DB_ID",bill).replace("REPLACE_KNOWLEDGE_DB_ID",knowledge));
+  // Recovery: D1 IDs written before an earlier failure remain valid and must not
+  // force deletion or re-creation of already provisioned databases.
+  fs.writeFileSync(configPath,resumeWranglerConfig(toml,bill,knowledge));
   run(["d1","execute","DB","--remote","--file=../managed-subscriptions/db/schema.sql","--yes"]);
   run(["d1","execute","KNOWLEDGE_DB","--remote","--file=db/ai-schema.sql","--yes"]);
   report("Deploying Worker. Payments are OFF by default.");
@@ -88,9 +103,13 @@ async function main(){
   const found=deployed.match(/https:\/\/[a-zA-Z0-9.-]+\.workers\.dev/);
   if(!found)fail("Cloudflare URL not found. Check Cloudflare dashboard; do not guess its value.");
   const endpoint=found[0];
-  const owner="amin_"+randomSecret();
-  const admin=randomSecret();
-  const enrollment=randomSecret();
+  const previously=fs.existsSync(privatePath)
+    ? recoverOwnerSecrets(fs.readFileSync(privatePath,"utf8"),endpoint) : null;
+  const owner=previously?.owner||"amin_"+randomSecret();
+  const admin=previously?.admin||randomSecret();
+  const enrollment=previously?.enrollment||randomSecret();
+  if(previously)report("Reusing previously saved private credentials for the same Worker.");
+  else report("New private owner credentials generated on this computer only.");
   // Save keys LOCALLY before uploading, to preserve recovery on partial failures.
   notePrivate("PRIVATE AMIN AI OWNER ACCESS - DO NOT SHARE\n"+
     "STATUS: NOT VERIFIED UNTIL /api/health PASSES\n"+
