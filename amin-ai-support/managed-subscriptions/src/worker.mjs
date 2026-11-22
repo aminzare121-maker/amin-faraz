@@ -4,6 +4,22 @@ import {
  checkProvisioning,sha256,validWebhook
 } from "./rules.mjs";
 import {reconcileDue} from "./tron-watch.mjs";
+const OWNER_CONSOLE = `<!doctype html><html lang="fa" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>مدیریت اجارهٔ هوش امین</title><style>body{font:16px Tahoma,Arial;background:#f3f5f9;color:#223;max-width:660px;margin:auto;padding:22px;line-height:1.8}section{background:white;border:1px solid #ddd;border-radius:12px;padding:17px;margin:14px 0}input,button{box-sizing:border-box;padding:13px;width:100%;margin:6px 0;font:inherit}button{background:#1c528d;color:white;border:0;border-radius:8px}pre{white-space:pre-wrap;overflow-wrap:anywhere}small{color:#444}</style><h2>مدیریت اجارهٔ هوش امین</h2><section><p>فقط مالک. کلید مدیر فقط در حافظه همین صفحه باقی می‌ماند و ذخیره نمی‌شود.</p><input type="password" id="secret" autocomplete="off" placeholder="کلید خصوصی مدیر"><input type="text" id="rent" inputmode="decimal" placeholder="اجاره ماهانه، مثلاً 12.50 تتر"><button id="save">ذخیره مبلغ اجاره برای فاکتورهای بعدی</button><button id="load">نمایش اجاره فعلی</button><button id="queue">سفارش‌های دارای وصول تأییدشده که شارژ نشده‌اند</button><button id="clear">پاک‌کردن کلید از این صفحه</button><pre id="out">هنوز درخواستی ارسال نشده است.</pre></section><small>رسید مشتری به‌تنهایی پرداخت واقعی نیست. Google Pay از این صفحه به‌طور خودکار شارژ نمی‌شود؛ فعال‌سازی اشتراک فقط با تأیید واقعی تأمین‌کننده است.</small><script>
+const el=id=>document.getElementById(id);
+async function call(path,method,body){
+ const headers={'Authorization':'Bearer '+el('secret').value,'Accept':'application/json'};
+ if(body)headers['Content-Type']='application/json';
+ const response=await fetch(path,{method,headers,body:body?JSON.stringify(body):undefined,cache:'no-store'});
+ const data=await response.json();
+ if(!response.ok)throw Error('درخواست رد شد: '+(data.error||response.status));
+ return data;
+}
+el('save').onclick=async()=>{try{const d=await call('/v1/owner/rent','POST',{monthly_rent_usdt:el('rent').value.trim()});el('out').textContent=d.saved?'اجاره جدید ثبت شد: '+d.monthly_rent_usdt+' USDT. فقط برای فاکتورهای بعدی.':'ثبت انجام نشد';}catch(e){el('out').textContent=e.message;}};
+el('load').onclick=async()=>{try{const d=await call('/v1/owner/rent','GET');el('out').textContent='اجاره فعلی: '+d.monthly_rent_usdt+' USDT';}catch(e){el('out').textContent=e.message;}};
+el('queue').onclick=async()=>{try{const d=await call('/v1/owner/queue','GET');el('out').textContent=JSON.stringify(d.awaiting_owner_topup,null,2);if(!d.awaiting_owner_topup?.length)el('out').textContent='سفارش منتظر شارژ وجود ندارد.';}catch(e){el('out').textContent=e.message;}};
+el('clear').onclick=()=>{el('secret').value='';el('out').textContent='کلید از این صفحه پاک شد.'};
+</script></html>`;
+
 const HEADERS={"Cache-Control":"no-store","X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer"};
 const json=(data,status=200)=>Response.json(data,{status,headers:HEADERS});
 const denied=(code,status=400)=>json({ok:false,error:code},status);
@@ -61,11 +77,45 @@ async function supplierQuote(env,fetcher=fetch){
   const raw=await res.json();
   return checkSupplierQuote(raw,PRODUCT);
 }
-function settings(env){
+function parseOwnerRent(value){
+  if(typeof value!=="string" || !/^(0|[1-9]\d{0,6})(?:\.\d{1,6})?$/.test(value))
+    throw new GateError("invalid_owner_rent",400);
+  const [whole,tail=""]=value.split(".");
+  const n=Number(whole)*1000000+Number(tail.padEnd(6,"0"));
+  if(!Number.isSafeInteger(n) || n<=0)throw new GateError("invalid_owner_rent",400);
+  return n;
+}
+async function settings(env){
+  const row=await env.DB.prepare(
+    "SELECT value_microunits FROM owner_settings WHERE setting_key='monthly_rent_usdt'"
+  ).first();
+  if(row){
+    if(!Number.isSafeInteger(row.value_microunits) || row.value_microunits<=0)
+      throw new GateError("rent_not_configured",503);
+    return row.value_microunits;
+  }
   if(!/^[1-9]\d{0,11}$/.test(env.OWNER_RENT_MONTHLY_MICROUSDT||""))
     throw new GateError("rent_not_configured",503);
   return Number(env.OWNER_RENT_MONTHLY_MICROUSDT);
 }
+async function ownerRent(request,env){
+  ensureRuntime(env);await owner(request,env);
+  if(request.method==="GET"){
+    const amount=await settings(env);
+    return json({monthly_rent_usdt:displayUSDT(amount),owner_only:true});
+  }
+  const b=await readJson(request);
+  const amount=parseOwnerRent(b.monthly_rent_usdt);
+  // Atomic settings change + immutable audit entry; older invoices retain price.
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO owner_settings(setting_key,value_microunits,updated_at) VALUES('monthly_rent_usdt',?,CURRENT_TIMESTAMP) ON CONFLICT(setting_key) DO UPDATE SET value_microunits=excluded.value_microunits,updated_at=CURRENT_TIMESTAMP")
+      .bind(amount),
+    env.DB.prepare("INSERT INTO owner_settings_audit(id,setting_key,value_microunits) VALUES(?,?,?)")
+      .bind(unique(),"monthly_rent_usdt",amount)
+  ]);
+  return json({saved:true,monthly_rent_usdt:displayUSDT(amount),new_invoices_only:true});
+}
+
 function destination(env){
   // Never guess an AbanTether deposit wallet. The account holder must verify
   // independent third-party deposits are allowed by the receiver.
@@ -80,7 +130,7 @@ async function createQuote(request,env,fetcher){
   const b=await readJson(request);
   if(b.product!==PRODUCT || b.months!==1)throw new GateError("only_one_month_product");
   const quote=await supplierQuote(env,fetcher);
-  const rent=settings(env);
+  const rent=await settings(env);
   const total=combinedPrice(quote.cost_microunits,rent);
   const id=unique();
   const created=new Date().toISOString();
@@ -201,6 +251,11 @@ async function enrol(request,env){
 export default {
   async fetch(request,env,ctx){
     const url=new URL(request.url),path=url.pathname;
+    if(path==="/owner" && request.method==="GET")
+      return new Response(OWNER_CONSOLE,{status:200,headers:{
+        "Content-Type":"text/html; charset=utf-8",
+        "Content-Security-Policy":"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+        ...HEADERS}});
     if(path==="/health" && request.method==="GET")return json({
       service:"amin-managed-subscriptions",deployed:true,
       supplier_ready:!!env.SUPPLIER_QUOTE_URL && !!env.SUPPLIER_QUOTE_TOKEN,
@@ -213,7 +268,8 @@ export default {
         env.PAYMENT_RECEIVER_CONSENT==="1" && !!env.TRONGRID_API_KEY,
       automatic_google_pay_charge:false});
     if(!path.startsWith("/v1/"))return denied("not_found",404);
-    if(request.headers.has("Origin"))return denied("browser_origin_not_allowed",403);
+    const browserOrigin=request.headers.get("Origin");
+    if(browserOrigin && browserOrigin!==url.origin)return denied("browser_origin_not_allowed",403);
     try{
       if(path==="/v1/quote" && request.method==="POST")return await createQuote(request,env,fetch);
       if(path==="/v1/order" && request.method==="POST")return await paymentInstructions(request,env);
@@ -221,6 +277,7 @@ export default {
       if(path==="/v1/invoice" && request.method==="GET")return await readInvoice(request,env,url);
       if(path==="/v1/webhook/payment" && request.method==="POST")return await signedEvent(request,env,"payment");
       if(path==="/v1/webhook/supplier" && request.method==="POST")return await signedEvent(request,env,"supplier");
+      if(path==="/v1/owner/rent" && (request.method==="GET" || request.method==="POST"))return await ownerRent(request,env);
       if(path==="/v1/owner/queue" && request.method==="GET")return await ownerQueue(request,env);
       if(path==="/v1/owner/enroll" && request.method==="POST")return await enrol(request,env);
       return denied("not_found",404);

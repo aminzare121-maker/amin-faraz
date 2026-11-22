@@ -72,3 +72,46 @@ test("public health cannot pretend charging owner Google Pay is automated",async
   assert.equal(j.payment_reconciliation_ready,false);
   assert.equal(j.destination_verified,false);
 });
+
+test("owner rent cannot be set by anonymous customer or any receipt",async()=>{
+ const request=new Request("https://billing.example/v1/owner/rent",{method:"POST",
+   headers:{"Content-Type":"application/json",Authorization:"Bearer amin_"+"A".repeat(44)},
+   body:JSON.stringify({monthly_rent_usdt:"1.000001"})});
+ const res=await worker.fetch(request,{DB:{},CUSTOMER_ENROLLMENT_SECRET:"a".repeat(48),
+   OWNER_ADMIN_TOKEN:"B".repeat(48)});
+ assert.equal(res.status,401);
+});
+
+test("owner can set an exact monthly rent and gets an auditable write",async()=>{
+ const ownerSecret="OWNER_"+"x".repeat(50), calls=[];
+ const DB={prepare(sql){const st={sql,params:[],
+   bind(...params){this.params=params;calls.push({sql,params});return this;},
+   first:async()=>({value_microunits:12_500_001}),
+   run:async()=>({meta:{changes:1}}),all:async()=>({results:[]})};
+   return st;},batch:async()=>[{meta:{changes:1}},{meta:{changes:1}}]};
+ const env={DB,OWNER_ADMIN_TOKEN:ownerSecret,CUSTOMER_ENROLLMENT_SECRET:"a".repeat(48)};
+ const req=new Request("https://billing.example/v1/owner/rent",{method:"POST",
+   headers:{"Authorization":"Bearer "+ownerSecret,"Content-Type":"application/json"},
+   body:JSON.stringify({monthly_rent_usdt:"12.500001"})});
+ const response=await worker.fetch(req,env);
+ assert.equal(response.status,200);
+ const result=await response.json();
+ assert.equal(result.saved,true);assert.equal(result.monthly_rent_usdt,"12.500001");
+ const writes=calls.filter(x=>x.sql.includes("owner_settings"));
+ assert.equal(writes.length,2);
+ assert.equal(writes[0].params[0],12_500_001);
+ assert.equal(writes[1].params[2],12_500_001);
+ const read=await worker.fetch(new Request("https://billing.example/v1/owner/rent",{
+   headers:{"Authorization":"Bearer "+ownerSecret}}),env);
+ assert.equal((await read.json()).monthly_rent_usdt,"12.500001");
+});
+test("invalid monthly rent precision or exponent cannot enter owner settings",async()=>{
+ const secret="S".repeat(50),env={DB:{prepare:()=>({})},
+   OWNER_ADMIN_TOKEN:secret,CUSTOMER_ENROLLMENT_SECRET:"a".repeat(48)};
+ for(const value of ["-1","1e4","0","0.0000001","1.1234567","",12.5]){
+   const r=await worker.fetch(new Request("https://billing.example/v1/owner/rent",{
+     method:"POST",headers:{"Authorization":"Bearer "+secret},
+     body:JSON.stringify({monthly_rent_usdt:value})}),env);
+   assert.equal(r.status,400);
+ }
+});

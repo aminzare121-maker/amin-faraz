@@ -29,3 +29,16 @@ CREATE TABLE IF NOT EXISTS external_events(
  invoice_id TEXT NOT NULL REFERENCES invoices(id),
  tx_hash TEXT UNIQUE
 );
+
+-- Owner adjusts monthly rent without rebuilding client; audit is never shown to customers.
+CREATE TABLE IF NOT EXISTS owner_settings(
+  setting_key TEXT PRIMARY KEY,
+  value_microunits INTEGER NOT NULL CHECK(value_microunits>0),
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS owner_settings_audit(
+  id TEXT PRIMARY KEY,
+  setting_key TEXT NOT NULL,
+  value_microunits INTEGER NOT NULL CHECK(value_microunits>0),
+  recorded_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
