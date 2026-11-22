@@ -61,11 +61,45 @@ async function supplierQuote(env,fetcher=fetch){
   const raw=await res.json();
   return checkSupplierQuote(raw,PRODUCT);
 }
-function settings(env){
+function parseOwnerRent(value){
+  if(typeof value!=="string" || !/^(0|[1-9]\d{0,6})(?:\.\d{1,6})?$/.test(value))
+    throw new GateError("invalid_owner_rent",400);
+  const [whole,tail=""]=value.split(".");
+  const n=Number(whole)*1000000+Number(tail.padEnd(6,"0"));
+  if(!Number.isSafeInteger(n) || n<=0)throw new GateError("invalid_owner_rent",400);
+  return n;
+}
+async function settings(env){
+  const row=await env.DB.prepare(
+    "SELECT value_microunits FROM owner_settings WHERE setting_key='monthly_rent_usdt'"
+  ).first();
+  if(row){
+    if(!Number.isSafeInteger(row.value_microunits) || row.value_microunits<=0)
+      throw new GateError("rent_not_configured",503);
+    return row.value_microunits;
+  }
   if(!/^[1-9]\d{0,11}$/.test(env.OWNER_RENT_MONTHLY_MICROUSDT||""))
     throw new GateError("rent_not_configured",503);
   return Number(env.OWNER_RENT_MONTHLY_MICROUSDT);
 }
+async function ownerRent(request,env){
+  ensureRuntime(env);await owner(request,env);
+  if(request.method==="GET"){
+    const amount=await settings(env);
+    return json({monthly_rent_usdt:displayUSDT(amount),owner_only:true});
+  }
+  const b=await readJson(request);
+  const amount=parseOwnerRent(b.monthly_rent_usdt);
+  // Atomic settings change + immutable audit entry; older invoices retain price.
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO owner_settings(setting_key,value_microunits,updated_at) VALUES('monthly_rent_usdt',?,CURRENT_TIMESTAMP) ON CONFLICT(setting_key) DO UPDATE SET value_microunits=excluded.value_microunits,updated_at=CURRENT_TIMESTAMP")
+      .bind(amount),
+    env.DB.prepare("INSERT INTO owner_settings_audit(id,setting_key,value_microunits) VALUES(?,?,?)")
+      .bind(unique(),"monthly_rent_usdt",amount)
+  ]);
+  return json({saved:true,monthly_rent_usdt:displayUSDT(amount),new_invoices_only:true});
+}
+
 function destination(env){
   // Never guess an AbanTether deposit wallet. The account holder must verify
   // independent third-party deposits are allowed by the receiver.
@@ -80,7 +114,7 @@ async function createQuote(request,env,fetcher){
   const b=await readJson(request);
   if(b.product!==PRODUCT || b.months!==1)throw new GateError("only_one_month_product");
   const quote=await supplierQuote(env,fetcher);
-  const rent=settings(env);
+  const rent=await settings(env);
   const total=combinedPrice(quote.cost_microunits,rent);
   const id=unique();
   const created=new Date().toISOString();
@@ -221,6 +255,7 @@ export default {
       if(path==="/v1/invoice" && request.method==="GET")return await readInvoice(request,env,url);
       if(path==="/v1/webhook/payment" && request.method==="POST")return await signedEvent(request,env,"payment");
       if(path==="/v1/webhook/supplier" && request.method==="POST")return await signedEvent(request,env,"supplier");
+      if(path==="/v1/owner/rent" && (request.method==="GET" || request.method==="POST"))return await ownerRent(request,env);
       if(path==="/v1/owner/queue" && request.method==="GET")return await ownerQueue(request,env);
       if(path==="/v1/owner/enroll" && request.method==="POST")return await enrol(request,env);
       return denied("not_found",404);

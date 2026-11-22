@@ -72,3 +72,12 @@ test("public health cannot pretend charging owner Google Pay is automated",async
   assert.equal(j.payment_reconciliation_ready,false);
   assert.equal(j.destination_verified,false);
 });
+
+test("owner rent cannot be set by anonymous customer or any receipt",async()=>{
+ const request=new Request("https://billing.example/v1/owner/rent",{method:"POST",
+   headers:{"Content-Type":"application/json",Authorization:"Bearer amin_"+"A".repeat(44)},
+   body:JSON.stringify({monthly_rent_usdt:"1.000001"})});
+ const res=await worker.fetch(request,{DB:{},CUSTOMER_ENROLLMENT_SECRET:"a".repeat(48),
+   OWNER_ADMIN_TOKEN:"B".repeat(48)});
+ assert.equal(res.status,401);
+});
