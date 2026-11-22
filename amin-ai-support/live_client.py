@@ -10,6 +10,7 @@ import asyncio
 import json
 import os
 import re
+import secrets
 from pathlib import Path
 from urllib.parse import urlsplit
 from windows_delivery import deliver, validate_release
@@ -130,6 +131,7 @@ async def run(url, token):
                     message["message"] = requested
                     message["target_environment"] = target
                     message["requested_operation"] = operation
+                    message["request_key"] = secrets.token_hex(16)
                     message["consent"] = True
                     message["chatgpt_work_event"] = ask_chatgpt
                 await ws.send(json.dumps(message, ensure_ascii=False))
