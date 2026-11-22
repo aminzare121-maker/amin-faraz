@@ -2,6 +2,9 @@ package com.amin.support.mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,6 +62,11 @@ public final class MainActivity extends Activity {
     private EditText liveJob;
     private TextView liveStatus;
     private LiveSocketClient liveClient;
+    private static final int VOICE_REQUEST = 2401;
+    private TextToSpeech speech;
+    private boolean speechReady = false;
+    private CheckBox voiceReplies;
+    private CheckBox voiceAutoSend;
     private Button ghCheck;
     private int ghIssueNumber = 0;
     private String ghRequestId = "";
@@ -92,6 +101,19 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         setTitle("هوش پشتیبان امین");
         setContentView(createContent());
+        speech = new TextToSpeech(this, code -> {
+            ui.post(() -> {
+                if (!active || speech == null) return;
+                if (code != TextToSpeech.SUCCESS) {
+                    speechReady = false;
+                    setStatus("صدای فارسی روی دستگاه آماده نیست.");
+                    return;
+                }
+                int support = speech.setLanguage(new Locale("fa", "IR"));
+                speechReady = support != TextToSpeech.LANG_MISSING_DATA
+                        && support != TextToSpeech.LANG_NOT_SUPPORTED;
+            });
+        });
         String existing = TokenVault.endpoint(this);
         if (!existing.isEmpty()) server.setText(existing);
         token.setHint(TokenVault.hasToken(this)
@@ -167,6 +189,28 @@ public final class MainActivity extends Activity {
         question.setMinLines(3);
         question.setMaxLines(5);
         root.addView(question);
+
+        root.addView(section("مکالمه صوتی و نوشتاری"));
+        root.addView(text("با لمس میکروفون، تشخیص گفتار دستگاه فعال می‌شود و متن برای "
+                + "بازبینی نمایش داده می‌شود. بسته به موتور گفتار گوشی، صدای شما "
+                + "ممکن است به ارائه‌دهنده آن سرویس منتقل شود؛ حالت صوتی اختیاری است.", 14, false));
+        Button mic = button("میکروفون: گفتار فارسی به متن");
+        mic.setOnClickListener(v -> startVoiceInput());
+        root.addView(mic);
+        voiceAutoSend = new CheckBox(this);
+        voiceAutoSend.setText("پس از تشخیص گفتار، سؤال را خودکار در کانال زنده بفرست (اگر متصل است)");
+        voiceAutoSend.setChecked(false);
+        root.addView(voiceAutoSend);
+        voiceReplies = new CheckBox(this);
+        voiceReplies.setText("پاسخ‌ها با صدای فارسی خوانده شوند (اگر صدای فارسی موجود باشد)");
+        voiceReplies.setChecked(false);
+        root.addView(voiceReplies);
+        Button speakAnswer = button("بلندخوانی پاسخ");
+        speakAnswer.setOnClickListener(v -> speakPersian(latestAnswer));
+        root.addView(speakAnswer);
+        Button silence = button("توقف گفتار");
+        silence.setOnClickListener(v -> { if (speech != null) speech.stop(); });
+        root.addView(silence);
 
         send = button("پرسش از هوش پشتیبان");
         send.setEnabled(false);
@@ -468,6 +512,7 @@ public final class MainActivity extends Activity {
                     if (!active || id != version) return;
                     latestAnswer = formatted;
                     answer.setText(formatted);
+                    if (voiceReplies.isChecked()) speakPersian(formatted);
                     send.setEnabled(true);
                     setStatus("پاسخ دریافت شد. بدون ذخیره دائمی مکالمه در این گوشی.");
                     if (human && autoHandoff.isChecked()) {
@@ -825,6 +870,59 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private void startVoiceInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa-IR");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "سؤال یا درخواستت را به فارسی بگو");
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        try {
+            startActivityForResult(intent, VOICE_REQUEST);
+        } catch (android.content.ActivityNotFoundException error) {
+            setStatus("برنامه تشخیص گفتار روی گوشی وجود ندارد؛ سؤال را تایپ کن.");
+        } catch (SecurityException error) {
+            setStatus("دسترسی میکروفون یا سرویس گفتار مجاز نیست.");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != VOICE_REQUEST || resultCode != RESULT_OK || data == null) return;
+        ArrayList<String> results = data.getStringArrayListExtra(
+                RecognizerIntent.EXTRA_RESULTS);
+        if (results == null || results.isEmpty()) {
+            setStatus("گفتار قابل تبدیل به متن نبود.");
+            return;
+        }
+        String transcript = results.get(0).trim();
+        if (transcript.isEmpty()) {
+            setStatus("متن گفتار خالی است.");
+            return;
+        }
+        if (transcript.length() > 2500) transcript = transcript.substring(0, 2500);
+        question.setText(transcript);
+        setStatus("متن گفتار دریافت شد؛ می‌توانی آن را اصلاح و ارسال کنی.");
+        if (voiceAutoSend != null && voiceAutoSend.isChecked()) {
+            if (liveClient != null && liveClient.isReady()) sendLiveQuestion();
+            else setStatus("گفتار به متن تبدیل شد؛ کانال زنده متصل نیست و متن خودکار ارسال نشد.");
+        }
+    }
+
+    private void speakPersian(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            setStatus("متنی برای خواندن وجود ندارد.");
+            return;
+        }
+        if (!speechReady || speech == null) {
+            setStatus("موتور گفتار فارسی روی گوشی حاضر نیست. متن همچنان قابل مشاهده است.");
+            return;
+        }
+        String safe = value.length() > 3700 ? value.substring(0, 3700) : value;
+        speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
+    }
+
     private void liveMessage(String value) {
         if (active && liveStatus != null) liveStatus.setText(value);
     }
@@ -859,6 +957,7 @@ public final class MainActivity extends Activity {
                         } else if ("answer".equals(type)) {
                             latestAnswer = event.optString("answer", "");
                             answer.setText(latestAnswer);
+                            if (voiceReplies.isChecked()) speakPersian(latestAnswer);
                             liveMessage("پاسخ زنده دریافت شد؛ عملیات اجرایی انجام نشده.");
                         } else if ("work_state".equals(type)) {
                             String jobId = event.optString("id_of_job", "");
@@ -870,6 +969,7 @@ public final class MainActivity extends Activity {
                             if (event.has("answer")) {
                                 latestAnswer = event.optString("answer", "");
                                 answer.setText(latestAnswer);
+                                if (voiceReplies.isChecked()) speakPersian(latestAnswer);
                             }
                             liveMessage("وضعیت ساخت/اجرا: " + state
                                     + (event.optBoolean("action_performed", false)
@@ -1003,6 +1103,11 @@ public final class MainActivity extends Activity {
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
         disconnectLive();
+        if (speech != null) {
+            speech.stop();
+            speech.shutdown();
+            speech = null;
+        }
         ++version;
         background.shutdownNow();
         super.onDestroy();
