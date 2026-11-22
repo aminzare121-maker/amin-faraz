@@ -68,7 +68,12 @@ async function main(){
   terminal.close();
   if(!ownerAuthorized(answer))fail("Owner did not authorize deployment.");
   run(["--version"]);
-  run(["login"]);
+  // OAuth device flow is documented by Cloudflare for environments where
+  // localhost:8976 is unreachable. This keeps authorization user-controlled
+  // and avoids browser-to-localhost callbacks entirely.
+  report("Cloudflare account authorization uses device code, not localhost:8976.");
+  report("If a verification code appears, approve it in your own Cloudflare browser session.");
+  run(["login","--device"]);
   run(["whoami"]);
   const bill=d1("amin-managed-subscriptions");
   const knowledge=d1("amin-ai-knowledge");
