@@ -7,11 +7,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.amin.support.mobile'
+        applicationId 'com.amin.support.mobile.compat'
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName '0.1.0-test'
+        versionCode 2
+        versionName '0.2.0-compat-test'
     }
 
     buildTypes {

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:label="هوش پشتیبان امین"
+        android:label="هوش امین - نصب مستقل"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
@@ -25,7 +25,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.amin.support.mobile.verifiedfiles"
+            android:authorities="${applicationId}.verifiedfiles"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
