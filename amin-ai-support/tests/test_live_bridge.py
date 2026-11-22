@@ -123,7 +123,9 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         class FakePrivateGitHub:
             def __init__(self, repo, token):
                 self.repo = repo
-            def submit(self, project, question):
+            def submit(self, project, question, device, target, operation):
+                assert target in {"none", "android", "windows", "web", "github"}
+                assert operation in {"answer", "build", "repair", "analyze", "release"}
                 return {"issue_number": 9, "request_id": "f"*32}
             def status(self, issue, req_id):
                 return {"status": "answered", "answer": "Documented guidance",
