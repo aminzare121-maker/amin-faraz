@@ -78,6 +78,8 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <option value="answer">پاسخ</option>
 </select>
 <label for="liveWorkChatGPT"><input id="liveWorkChatGPT" type="checkbox"> با همان درخواست، رویداد خصوصی ChatGPT Work نیز ایجاد شود (اگر وظیفهٔ رویدادمحور قبلاً فعال شده باشد)</label>
+<label for="liveAllowGitHubWrite"><input id="liveAllowGitHubWrite" type="checkbox"> اجازه ویرایش کد در شاخهٔ جداگانه و ثبت PR پیش‌نویس توسط مدل ChatGPT (بدون ادغام یا نصب)</label>
+<label for="liveAllowPublic"><input id="liveAllowPublic" type="checkbox"> اجازهٔ جداگانه برای مخزن عمومیِ ثبت‌شده در تنظیمات مالک</label>
 <label for="liveJob">شناسه کار برای ادامه بعد از قطع اتصال</label>
 <input id="liveJob" autocomplete="off" placeholder="شناسه ۳۲ رقمی کار">
 <button id="liveResume" type="button">پیگیری زندهٔ کار</button>
@@ -252,7 +254,9 @@ $("liveWork").addEventListener("click",()=>{
    target_environment:$("liveTarget").value,
    requested_operation:$("liveOperation").value,
    request_key:crypto.randomUUID().replaceAll("-",""),
-   chatgpt_work_event:$("liveWorkChatGPT").checked===true});
+   chatgpt_work_event:$("liveWorkChatGPT").checked===true,
+   authorize_github_write:$("liveAllowGitHubWrite").checked===true,
+   authorize_public_repo:$("liveAllowPublic").checked===true});
 });
 $("liveResume").addEventListener("click",()=>{
  const job=$("liveJob").value.trim();if(!/^[a-f0-9]{32}$/.test(job)){liveStatus("شناسه کار معتبر نیست.");return}

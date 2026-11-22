@@ -115,9 +115,15 @@ async def run(url, token):
                               "Send request to private GitHub for stated environment? (yes/no): ")).strip().lower()
                     if confirm != "yes":
                         continue
-                    ask_chatgpt = (await asyncio.to_thread(input,
-                        "Also emit a private PR event to ChatGPT Work now? (yes/no): "
+                    ask_chatgpt = False  # Direct SIWC model mode does not need Work.
+                    permit_write = (await asyncio.to_thread(input,
+                        "Allow ChatGPT to commit to isolated branch and create DRAFT PR? (yes/no): "
                         )).strip().lower() == "yes"
+                    permit_public = False
+                    if permit_write:
+                        permit_public = (await asyncio.to_thread(input,
+                            "If configured repo is PUBLIC, also allow public code changes? (yes/no): "
+                            )).strip().lower() == "yes"
                 if kind == "resume" and not JOB.fullmatch(data.strip()):
                     print("Invalid job id")
                     continue
@@ -134,6 +140,8 @@ async def run(url, token):
                     message["request_key"] = secrets.token_hex(16)
                     message["consent"] = True
                     message["chatgpt_work_event"] = ask_chatgpt
+                    message["authorize_github_write"] = permit_write
+                    message["authorize_public_repo"] = permit_public
                 await ws.send(json.dumps(message, ensure_ascii=False))
         except (EOFError, KeyboardInterrupt):
             pass
