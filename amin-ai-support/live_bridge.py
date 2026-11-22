@@ -59,6 +59,7 @@ class LiveJobs:
                 answer TEXT NOT NULL DEFAULT '',
                 needs_human INTEGER NOT NULL DEFAULT 1,
                 action_performed INTEGER NOT NULL DEFAULT 0,
+                artifact_json TEXT NOT NULL DEFAULT '',
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )""")
@@ -67,6 +68,8 @@ class LiveJobs:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN target_environment TEXT NOT NULL DEFAULT 'none'")
             if "requested_operation" not in cols:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN requested_operation TEXT NOT NULL DEFAULT 'answer'")
+            if "artifact_json" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN artifact_json TEXT NOT NULL DEFAULT ''")
             db.execute("CREATE INDEX IF NOT EXISTS amin_live_owner ON amin_live_work(token_id,project_id)")
 
     def connect(self):
@@ -88,18 +91,19 @@ class LiveJobs:
         with self.connect() as db:
             row = db.execute(
                 "SELECT status,repo,issue_number,request_id,answer,needs_human,"
-                "action_performed,target_environment,requested_operation FROM amin_live_work "
+                "action_performed,target_environment,requested_operation,artifact_json FROM amin_live_work "
                 "WHERE id=? AND project_id=? AND token_id=?",
                 (ident, project, token_id)).fetchone()
         if not row:
             return None
         return dict(zip(("status", "repo", "issue_number", "request_id",
                          "answer", "needs_human", "action_performed",
-                         "target_environment", "requested_operation"), row), id=ident,
+                         "target_environment", "requested_operation", "artifact_json"), row), id=ident,
                     project=project)
 
     def change(self, ident, status, **fields):
-        keys = {"repo", "issue_number", "request_id", "answer", "needs_human", "action_performed"}
+        keys = {"repo", "issue_number", "request_id", "answer", "needs_human",
+                "action_performed", "artifact_json"}
         if any(k not in keys for k in fields):
             raise ValueError("Unsafe state field")
         fields = {"status": status, **fields}
@@ -247,9 +251,12 @@ class LiveGateway:
                 if job is None:
                     await self.send(socket, "error", ident, message="Job not found")
                     return
+                payload = {key: value for key, value in job.items()
+                           if key not in {"id", "artifact_json"}}
+                if job.get("artifact_json"):
+                    payload["artifact"] = json.loads(job["artifact_json"])
                 await self.send(socket, "work_state", ident,
-                                id_of_job=job["id"],
-                                **{key: value for key, value in job.items() if key != "id"})
+                                id_of_job=job["id"], **payload)
                 if job["status"] == "github_dispatched":
                     await self.watch(socket, ident, job)
         except asyncio.CancelledError:
@@ -327,15 +334,24 @@ class LiveGateway:
                 continue
             needs_human = bool(result.get("needs_human", True))
             action_performed = bool(result.get("action_performed", False))
-            state = ("needs_action" if needs_human else
-                     "executed" if action_performed else "answered_no_execution")
+            artifact = result.get("artifact")
+            if artifact and artifact.get("environment") != job.get("target_environment"):
+                artifact = None
+            # A GitHub comment is a report, NOT independently verified execution.
+            state = ("deliverable_ready" if artifact else
+                     "execution_reported_unverified" if action_performed else
+                     "needs_action" if needs_human else "answered_no_execution")
             await asyncio.to_thread(self.jobs.change, job["id"], state,
                                     answer=result["answer"],
                                     needs_human=int(needs_human),
-                                    action_performed=int(action_performed))
-            await self.send(socket, "work_state", ident, id_of_job=job["id"],
-                            status=state, answer=result["answer"],
-                            needs_human=needs_human, action_performed=action_performed)
+                                    action_performed=0,
+                                    artifact_json=json.dumps(artifact) if artifact else "")
+            outgoing = {"id_of_job": job["id"], "status": state,
+                        "answer": result["answer"], "needs_human": needs_human,
+                        "action_performed": False}
+            if artifact:
+                outgoing["artifact"] = artifact
+            await self.send(socket, "work_state", ident, **outgoing)
             return
         await self.send(socket, "progress", ident, status="still_pending",
                         message="Work remains in GitHub; resume later with job id")
