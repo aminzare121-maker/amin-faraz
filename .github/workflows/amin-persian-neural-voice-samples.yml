@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "amin-ai-support/voice-neural-prototype/**"
+      - "amin-ai-support/neural_live_voice.py"
+      - "amin-ai-support/tests/test_neural_live_voice.py"
       - ".github/workflows/amin-persian-neural-voice-samples.yml"
   workflow_dispatch:
 
@@ -51,6 +53,43 @@ jobs:
             "$RUNNER_TEMP/amin-neural/model.onnx.json" \
             "$RUNNER_TEMP/amin-neural/output"
           ls -lh "$RUNNER_TEMP/amin-neural/output"
+      - name: Verify new LIVE WSS voice synthesizer with REAL ONNX inference
+        env:
+          PYTHONPATH: amin-ai-support
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json, os
+          from pathlib import Path
+          from neural_live_voice import PiperPersianVoice, SAMPLE_RATE
+          root = Path(os.environ["RUNNER_TEMP"])/"amin-neural"
+          voice = PiperPersianVoice(root/"model.onnx", root/"model.onnx.json", speaker=2)
+          frames = list(voice.synthesize(
+              "سلام، من هوش امین هستم. با صدای فارسی پاسخ می‌دهم."))
+          assert 1 <= len(frames) <= 7
+          duration = 0
+          for i, frame in enumerate(frames):
+              payload = base64.b64decode(frame["data"], validate=True)
+              assert frame["sample_rate"] == SAMPLE_RATE
+              assert frame["part_index"] == i
+              assert frame["part_count"] == len(frames)
+              assert hashlib.sha256(payload).hexdigest() == frame["sha256"]
+              assert 11025 <= len(payload) < 650000
+              duration += frame["duration_seconds"]
+          assert duration > 1
+          report = {
+              "test": "ACTUAL Python Piper inference through neural_live_voice.py",
+              "real_inference": True, "model": "alifthi/persian-TTS",
+              "sample_rate": SAMPLE_RATE, "speaker": 2,
+              "frame_count": len(frames), "seconds": round(duration, 2),
+              "device_playback_verified": False,
+              "host_24h_deployed": False,
+              "subjective_voice_quality_verified": False
+          }
+          (root/"output"/"neural_wss_inference_report.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2)+"\\n")
+          print("PASS REAL LIVE MODULE PIPER INFERENCE:", report)
+          PY
       - name: Upload WAV research samples only (NEVER model weights)
         uses: actions/upload-artifact@v4
         with:

@@ -431,6 +431,79 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("ValueError", first["message"])
             await ws.close()
 
+    async def test_neural_voice_stream_is_owner_only_and_keeps_reply_identity(self):
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.engine.answer = lambda project, question, role, external: {
+            "answer": "سلام؛ این پاسخ هوشمند جدید نیست، فقط آزمایش صداست.",
+            "sources": [], "model_used": False, "needs_human": False}
+        class FakeVoice:
+            def synthesize(self, text):
+                assert "فقط آزمایش صداست" in text
+                yield {"encoding":"pcm_s16le_base64", "sample_rate":22050, "channels":1,
+                       "voice_id":"amin-persian-neural-v1", "part_index":0,
+                       "part_count":1, "final":True, "speaker":2,
+                       "sha256":"a"*64, "data":"AA==", "duration_seconds":1,
+                       "credit":"mocked offline test"}
+        self.gateway.neural_voice = FakeVoice()
+        ws, ready = await self.login(self.alpha["token"])
+        self.assertTrue(ready["neural_voice_ready"])
+        await ws.send(json.dumps({"type":"ask", "id":"voice-one", "project":"alpha",
+                                  "message":"سلام", "neural_voice":True,
+                                  "voice_style":0}))
+        rows=[json.loads(await asyncio.wait_for(ws.recv(),4)) for _ in range(3)]
+        self.assertEqual([x["type"] for x in rows],
+                         ["accepted", "answer", "voice_frame"])
+        self.assertEqual({x["id"] for x in rows}, {"voice-one"})
+        self.assertTrue(rows[1]["voice_pending"])
+        self.assertEqual(rows[2]["part_count"],1)
+        await ws.close()
+        other, readya = await self.login(self.other["token"])
+        self.assertFalse(readya["neural_voice_ready"])
+        await other.send(json.dumps({"type":"ask", "id":"voice-other",
+                            "project":"alpha", "message":"Test", "neural_voice":True}))
+        rows=[json.loads(await asyncio.wait_for(other.recv(),4)) for _ in range(2)]
+        self.assertEqual([x["type"] for x in rows], ["accepted", "answer"])
+        self.assertFalse(rows[1]["voice_pending"])
+        with self.assertRaises(asyncio.TimeoutError):
+            await asyncio.wait_for(other.recv(), .15)
+        await other.close()
+
+    async def test_bad_voice_flag_and_style_rejected_before_inference(self):
+        ws, _ = await self.login(self.alpha["token"])
+        for ident, attrs in (("bad-bool", {"neural_voice":"true"}),
+                             ("bad-style", {"voice_style":6}),
+                             ("bad-style-bool", {"voice_style":True})):
+            await ws.send(json.dumps({"type":"ask", "id":ident, "project":"alpha",
+                        "message":"test", **attrs}))
+            row=json.loads(await asyncio.wait_for(ws.recv(),3))
+            self.assertEqual(row["type"],"error")
+            self.assertIn("voice",row["message"])
+        await ws.close()
+
+    async def test_partial_neural_audio_fails_without_repeating_from_start(self):
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.engine.answer = lambda *a: {"answer":"test", "sources":[],
+                                       "model_used":False,"needs_human":False}
+        from neural_live_voice import VoiceUnavailable
+        class PartialVoice:
+            def synthesize(self, text):
+                yield {"encoding":"pcm_s16le_base64", "sample_rate":22050,
+                       "channels":1, "voice_id":"amin-persian-neural-v1",
+                       "part_index":0,"part_count":2,"final":False,
+                       "speaker":2,"sha256":"a"*64,"data":"AA=="}
+                raise VoiceUnavailable("private not sent to client")
+        self.gateway.neural_voice = PartialVoice()
+        ws, _=await self.login(self.alpha["token"])
+        await ws.send(json.dumps({"type":"ask", "id":"partial", "project":"alpha",
+                                  "message":"test","neural_voice":True}))
+        rows=[json.loads(await asyncio.wait_for(ws.recv(),4)) for _ in range(4)]
+        self.assertEqual([x["type"] for x in rows],
+                         ["accepted","answer","voice_frame","voice_error"])
+        self.assertFalse(rows[-1]["fallback_to_android"])
+        self.assertTrue(rows[-1]["partial_audio"])
+        self.assertNotIn("private",rows[-1]["message"])
+        await ws.close()
+
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
             await run_server(self.engine, "0.0.0.0", 0)
