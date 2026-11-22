@@ -161,6 +161,45 @@ public final class GitHubDirectBridge {
         return result;
     }
 
+    public JSONObject approve(int issue, String requestId, String project) throws Exception {
+        GitHubBridgePolicy.issue(issue);
+        GitHubBridgePolicy.requestId(requestId);
+        GitHubBridgePolicy.project(project);
+        JSONObject state = status(issue, requestId);
+        if (!"answered".equals(state.optString("status", "")))
+            throw new IllegalStateException("فقط پاسخ دریافت‌شده قابل تأیید است");
+        JSONObject source = call("GET", "/issues/" + issue, null);
+        String body = source.optString("body", "");
+        if (!body.startsWith("AMIN_CHAT_BRIDGE_V1\\n"))
+            throw new IllegalStateException("درخواست معتبر نیست");
+        JSONObject envelope = new JSONObject(body.substring("AMIN_CHAT_BRIDGE_V1\\n".length()));
+        if (!project.equals(envelope.optString("project", "")))
+            throw new IllegalStateException("پروژه درخواست مطابقت ندارد");
+        String owner = verifyPrivate().getJSONObject("owner").getString("login");
+        JSONArray comments = readComments(issue);
+        for (int i = 0; i < comments.length(); i++) {
+            JSONObject c = comments.optJSONObject(i);
+            if (c == null || c.optJSONObject("user") == null) continue;
+            if (!owner.equalsIgnoreCase(c.getJSONObject("user").optString("login", ""))) continue;
+            String comment = c.optString("body", "");
+            if (!comment.startsWith("AMIN_LESSON_APPROVED_V1\\n")) continue;
+            try {
+                JSONObject approval = new JSONObject(comment.substring("AMIN_LESSON_APPROVED_V1\\n".length()));
+                if (requestId.equals(approval.optString("request_id"))
+                        && project.equals(approval.optString("project"))) {
+                    return new JSONObject().put("approved", true).put("already_approved", true);
+                }
+            } catch (org.json.JSONException malformed) { /* ignore malformed comments */ }
+        }
+        JSONObject approval = new JSONObject();
+        approval.put("request_id", requestId);
+        approval.put("project", project);
+        approval.put("approved", true);
+        call("POST", "/issues/" + issue + "/comments",
+                new JSONObject().put("body", "AMIN_LESSON_APPROVED_V1\\n" + approval.toString()));
+        return new JSONObject().put("approved", true).put("already_approved", false);
+    }
+
     public JSONObject status(int issue, String id) throws Exception {
         GitHubBridgePolicy.issue(issue);
         GitHubBridgePolicy.requestId(id);
