@@ -106,7 +106,9 @@ public final class OnlinePersianVoice implements RecognitionListener {
 
     /** TTS onDone or onError both release the next microphone turn. */
     public void replyFinished() {
-        if (!enabled) return;
+        // A stale callback from an older TTS utterance must not cancel a newer
+        // remote request or restart the microphone while waiting for that reply.
+        if (!enabled || !speaking) return;
         speaking = false;
         awaitingReply = false;
         retries = 0;
