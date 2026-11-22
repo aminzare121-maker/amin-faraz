@@ -335,6 +335,9 @@ public final class MainActivity extends Activity {
         liveStatus = text("کانال زنده متصل نیست.", 14, false);
         liveStatus.setTextIsSelectable(true);
         root.addView(liveStatus);
+        Button diagnoseLive = button("آزمایش اتصال GitHub و TLS کانال زنده بدون ارسال رمز");
+        diagnoseLive.setOnClickListener(v -> diagnoseConnectivity());
+        root.addView(diagnoseLive);
         root.addView(section("تحویل خروجی ساخت‌شده به این گوشی"));
         root.addView(text("اگر عامل سازنده APK را در انتشار رسمی GitHub قرار دهد "
                 + "و اثرانگشت SHA-256 معتبر اعلام کند، فایل با تأیید تو دانلود و "
@@ -1027,6 +1030,25 @@ public final class MainActivity extends Activity {
 
     private void liveMessage(String value) {
         if (active && liveStatus != null) liveStatus.setText(value);
+    }
+
+    private void diagnoseConnectivity() {
+        String raw = liveWss.getText().toString().trim();
+        liveMessage("در حال بررسی اتصال بدون ارسال کلید یا مکالمه...");
+        int id = ++version;
+        background.execute(() -> {
+            JSONObject github = ConnectivityProbe.github();
+            JSONObject wss = raw.isEmpty() ? null : ConnectivityProbe.liveTls(raw);
+            ui.post(() -> {
+                if (!active || id != version) return;
+                String output = ConnectivityProbe.explain("GitHub API", github);
+                if (wss != null) output += "\\n" + ConnectivityProbe.explain("WSS", wss);
+                else output += "\\nنشانی WSS خالی است؛ فقط GitHub بررسی شد.";
+                output += "\\nاین آزمایش فقط از همین گوشی انجام شده؛ "
+                        + "وصل شدن به ChatGPT یا اجرای درخواست را تأیید نمی‌کند.";
+                liveMessage(output);
+            });
+        });
     }
 
     private void connectLive() {
