@@ -10,8 +10,6 @@ import android.util.Base64;
 
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -73,32 +71,22 @@ public final class NeuralVoicePlayer {
         final byte[] pcm;
         final int index, total;
         try {
-            if (!"amin-persian-neural-v1".equals(event.optString("voice_id")) ||
-                    !"pcm_s16le_base64".equals(event.optString("encoding")) ||
-                    event.optInt("sample_rate", -1) != RATE ||
-                    event.optInt("channels", -1) != 1 ||
-                    event.optInt("speaker", -1) < 0 ||
-                    event.optInt("speaker", -1) >= 7) {
-                throw new IllegalArgumentException("Unexpected neural voice format");
-            }
             index = event.getInt("part_index");
             total = event.getInt("part_count");
-            if (total < 1 || total > MAX_PARTS || index < 0 || index >= total ||
-                    event.optBoolean("final") != (index == total - 1)) {
-                throw new IllegalArgumentException("Invalid neural voice sequence");
+            if (!NeuralAudioPolicy.allowed(requestId, id,
+                    event.optString("voice_id", ""), event.optString("encoding", ""),
+                    event.optInt("sample_rate", -1), event.optInt("channels", -1),
+                    event.optInt("speaker", -1), index, total, event.optBoolean("final"))) {
+                throw new IllegalArgumentException("Invalid neural voice identity or sequence");
             }
             String b64 = event.getString("data");
             String checksum = event.getString("sha256");
             if (b64.length() > 900_000 || !checksum.matches("[a-f0-9]{64}"))
                 throw new IllegalArgumentException("Oversized/invalid neural audio packet");
             pcm = Base64.decode(b64, Base64.NO_WRAP);
-            if (pcm.length < 1024 || pcm.length > MAX_PACKET_BYTES || pcm.length % 2 != 0)
+            if (!NeuralAudioPolicy.allowedPcm(pcm))
                 throw new IllegalArgumentException("Invalid PCM length");
-            StringBuilder digest = new StringBuilder(64);
-            for (byte byteValue : MessageDigest.getInstance("SHA-256").digest(pcm)) {
-                digest.append(String.format(Locale.ROOT, "%02x", byteValue & 0xff));
-            }
-            if (!checksum.equals(digest.toString()))
+            if (!checksum.equals(NeuralAudioPolicy.sha256(pcm)))
                 throw new IllegalArgumentException("Neural audio digest mismatch");
         } catch (Exception error) {
             failIfCurrent(sequence, "بستهٔ صوت عصبی معتبر نیست.", callback);
