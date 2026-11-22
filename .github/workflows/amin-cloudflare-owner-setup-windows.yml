@@ -3,10 +3,20 @@ on:
   push:
     paths:
       - 'amin-ai-support/cloudflare-unified/windows-setup/**'
+      - 'amin-ai-support/cloudflare-unified/src/**'
+      - 'amin-ai-support/cloudflare-unified/db/**'
+      - 'amin-ai-support/cloudflare-unified/wrangler.toml'
+      - 'amin-ai-support/managed-subscriptions/src/**'
+      - 'amin-ai-support/managed-subscriptions/db/**'
       - '.github/workflows/amin-cloudflare-owner-setup-windows.yml'
   pull_request:
     paths:
       - 'amin-ai-support/cloudflare-unified/windows-setup/**'
+      - 'amin-ai-support/cloudflare-unified/src/**'
+      - 'amin-ai-support/cloudflare-unified/db/**'
+      - 'amin-ai-support/cloudflare-unified/wrangler.toml'
+      - 'amin-ai-support/managed-subscriptions/src/**'
+      - 'amin-ai-support/managed-subscriptions/db/**'
       - '.github/workflows/amin-cloudflare-owner-setup-windows.yml'
 permissions: {contents: read}
 jobs:
