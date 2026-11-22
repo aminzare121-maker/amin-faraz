@@ -6,7 +6,7 @@ const script=fs.readFileSync(new URL("../windows-setup/Setup-Amin-Cloudflare.mjs
 const bill="12345678-1234-1234-1234-123456789012";
 const knowledge="87654321-4321-4321-4321-210987654321";
 test("resume same D1 IDs without rebuilding or resetting existing databases",()=>{
-  const first=resumeWranglerConfig('database_id = "REPLACE_BILLING_DB_ID"\ndatabase_id = "REPLACE_KNOWLEDGE_DB_ID"',bill,knowledge);
+  const first=resumeWranglerConfig('[[d1_databases]]\nbinding = "DB"\ndatabase_id = "REPLACE_BILLING_DB_ID"\n[[d1_databases]]\nbinding = "KNOWLEDGE_DB"\ndatabase_id = "REPLACE_KNOWLEDGE_DB_ID"',bill,knowledge);
   assert.equal(resumeWranglerConfig(first,bill,knowledge),first);
   assert.throws(()=>resumeWranglerConfig(first,knowledge,bill),/different D1 IDs/);
   assert.throws(()=>resumeWranglerConfig(first,bill,bill),/two distinct/);

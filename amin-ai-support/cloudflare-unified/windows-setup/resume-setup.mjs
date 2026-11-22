@@ -7,8 +7,17 @@ export function resumeWranglerConfig(source,billingId,knowledgeId){
   const bill="REPLACE_BILLING_DB_ID", knowledge="REPLACE_KNOWLEDGE_DB_ID";
   if(source.includes(bill)&&source.includes(knowledge))
     return source.replace(bill,billingId).replace(knowledge,knowledgeId);
-  if(!source.includes("REPLACE_")&&source.includes('database_id = "'+billingId+'"')&&
-     source.includes('database_id = "'+knowledgeId+'"'))return source;
+  if(!source.includes("REPLACE_")){
+    const blocks=source.split(/\[\[d1_databases\]\]/).slice(1);
+    const values=new Map();
+    for(const block of blocks){
+      const binding=block.match(/^\s*binding\s*=\s*"([^"]+)"\s*$/m)?.[1];
+      const id=block.match(/^\s*database_id\s*=\s*"([^"]+)"\s*$/m)?.[1];
+      if(binding&&id)values.set(binding,id);
+    }
+    if(values.get("DB")===billingId&&values.get("KNOWLEDGE_DB")===knowledgeId)
+      return source;
+  }
   throw Error("Existing Wrangler configuration uses different D1 IDs; refusing to overwrite.");
 }
 export function recoverOwnerSecrets(content,endpoint){
