@@ -164,6 +164,14 @@ class PiperPersianVoice:
                     # Never put model, user text or stderr contents in client-visible errors.
                     raise VoiceUnavailable("Remote neural synthesis failed")
                 pcm, duration, rms = read_pcm16_wav(out)
+            if style == 1 and index < len(parts) - 1:
+                # Deliberate Persian narration adds restrained phrase pauses;
+                # do not alter the licensed model's timbre or fake voice pitch.
+                silence = b"\\x00\\x00" * int(SAMPLE_RATE * 0.16)
+                pcm += silence
+                duration = round(duration + 0.16, 3)
+                if len(pcm) > MAX_AUDIO_BYTES:
+                    raise VoiceUnavailable("Narration pause exceeds safe packet size")
             yield {
                 "encoding": "pcm_s16le_base64", "sample_rate": SAMPLE_RATE,
                 "channels": 1, "speaker": self.speaker,
