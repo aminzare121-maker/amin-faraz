@@ -68,6 +68,7 @@ public final class MainActivity extends Activity {
     private String availableApkUrl = "";
     private String availableApkSha = "";
     private LiveSocketClient liveClient;
+    private int liveGeneration = 0;
     private static final int VOICE_REQUEST = 2401;
     private TextToSpeech speech;
     private boolean speechReady = false;
@@ -1029,32 +1030,49 @@ public final class MainActivity extends Activity {
     }
 
     private void connectLive() {
-        final String endpoint, secret, project;
+        final String endpoint, secret, project, freshToken;
         try {
             endpoint = LiveEndpointPolicy.requireWss(liveWss.getText().toString());
             project = LiveEndpointPolicy.project(liveProject.getText().toString().trim());
-            String entered = liveToken.getText().toString().trim();
-            secret = SupportEndpoint.validateToken(
-                    entered.isEmpty() ? TokenVault.token(this) : entered);
+            freshToken = liveToken.getText().toString().trim();
+            // The HTTPS engine token is NOT a generic WSS token. This vault
+            // is bound to one endpoint and cannot silently follow an address edit.
+            secret = freshToken.isEmpty()
+                    ? LiveTokenVault.token(this, endpoint)
+                    : SupportEndpoint.validateToken(freshToken);
         } catch (Exception problem) {
             liveMessage("تنظیمات اتصال زنده معتبر نیست: " + problem.getMessage());
             return;
         }
         disconnectLive();
+        final int attempt = ++liveGeneration;
         liveMessage("در حال اتصال و احراز هویت WSS...");
-        getPreferences(MODE_PRIVATE).edit()
-                .putString("live_wss", endpoint).putString("live_project", project).apply();
         try {
             liveClient = new LiveSocketClient(endpoint, secret, new LiveSocketClient.Listener() {
                 @Override public void onMessage(JSONObject event) {
                     ui.post(() -> {
-                        if (!active) return;
+                        if (!active || attempt != liveGeneration) return;
                         String type = event.optString("type", "");
                         if ("ready".equals(type)) {
-                            liveToken.setText("");
-                            liveMessage("کانال دوطرفه وصل شد. پروژه مجاز: "
-                                    + event.optString("project", "?")
-                                    + ". اتصال شخصی ChatGPT هنوز به این کانال اضافه نشده.");
+                            if (!project.equals(event.optString("project", ""))) {
+                                liveMessage("پروژه پاسخ‌دهنده با کلید انتخابی مطابقت ندارد؛ اتصال قطع شد.");
+                                disconnectLive();
+                                return;
+                            }
+                            try {
+                                // Only persist a new secret after verified WSS + auth response.
+                                if (!freshToken.isEmpty()) LiveTokenVault.save(
+                                        MainActivity.this, endpoint, freshToken);
+                                getPreferences(MODE_PRIVATE).edit()
+                                        .putString("live_wss", endpoint)
+                                        .putString("live_project", project).apply();
+                                liveToken.setText("");
+                                liveMessage("کانال دوطرفه امن متصل است؛ کلید فقط برای همین نشانی ذخیره شد. "
+                                        + "ChatGPT شخصی هنوز به کانال اضافه نشده.");
+                            } catch (Exception failure) {
+                                liveMessage("ذخیره امن کلید ممکن نشد؛ اتصال قطع شد.");
+                                disconnectLive();
+                            }
                         } else if ("answer".equals(type)) {
                             latestAnswer = event.optString("answer", "");
                             answer.setText(latestAnswer);
@@ -1087,7 +1105,9 @@ public final class MainActivity extends Activity {
                     });
                 }
                 @Override public void onClosed(String description) {
-                    ui.post(() -> liveMessage(description));
+                    ui.post(() -> {
+                        if (attempt == liveGeneration) liveMessage(description);
+                    });
                 }
             });
         } catch (Exception failure) {
@@ -1153,6 +1173,7 @@ public final class MainActivity extends Activity {
     }
 
     private void disconnectLive() {
+        ++liveGeneration; // Prevent callbacks from stale WSS connections.
         if (liveClient != null) {
             liveClient.close();
             liveClient = null;
@@ -1162,7 +1183,9 @@ public final class MainActivity extends Activity {
 
     private void clearConnection() {
         try {
+            disconnectLive();
             TokenVault.clear(this);
+            LiveTokenVault.clear(this);
             getPreferences(MODE_PRIVATE).edit().clear().apply();
             latestHandoffId = "";
             latestHandoffProject = "";
