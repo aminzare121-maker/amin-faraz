@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import android.util.Base64;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -159,6 +160,80 @@ public final class GitHubDirectBridge {
         result.put("status", "submitted_to_private_github");
         result.put("chatgpt_invoked", false);
         return result;
+    }
+
+    /**
+     * Create a PRIVATE GitHub Pull Request event supported by ChatGPT Work.
+     * Does NOT call ChatGPT, use Codex, or send an OpenAI API key.
+     * A separately configured ChatGPT Work event-triggered task is required.
+     *
+     * GitHub fine-grained PAT needs Issues:read, Contents:write, Pull requests:write.
+     */
+    public JSONObject triggerChatGPTWork(int issue, String requestId) throws Exception {
+        GitHubBridgePolicy.issue(issue);
+        GitHubBridgePolicy.requestId(requestId);
+        JSONObject repository = verifyPrivate();
+        JSONObject original = call("GET", "/issues/" + issue, null);
+        String owner = repository.getJSONObject("owner").getString("login");
+        JSONObject author = original.optJSONObject("user");
+        if (original.has("pull_request") || author == null
+                || !owner.equalsIgnoreCase(author.optString("login", "")))
+            throw new IllegalStateException("فقط درخواست مالک مخزن خصوصی مجاز است");
+        String raw = original.optString("body", "");
+        String marker = "AMIN_CHAT_BRIDGE_V1\n";
+        if (!raw.startsWith(marker))
+            throw new IllegalStateException("قالب درخواست ChatGPT معتبر نیست");
+        JSONObject details = new JSONObject(raw.substring(marker.length()));
+        if (!requestId.equals(details.optString("request_id", ""))
+                || !details.optBoolean("consent", false)
+                || details.optBoolean("test_only", false))
+            throw new IllegalStateException("رضایت کاربر یا شناسه درخواست معتبر نیست");
+        String project = GitHubBridgePolicy.project(details.optString("project", ""));
+        String base = repository.optString("default_branch", "main");
+        if (!base.matches("[A-Za-z0-9_.-]{1,80}"))
+            throw new IllegalStateException("نام شاخه اصلی مخزن پشتیبانی نمی‌شود");
+        JSONObject baseline = call("GET", "/git/ref/heads/" + base, null);
+        String sha = baseline.getJSONObject("object").getString("sha");
+        if (!sha.matches("[a-fA-F0-9]{40}"))
+            throw new IllegalStateException("SHA پایه مخزن معتبر نیست");
+
+        String branch = "amin-chatgpt-work/" + requestId;
+        JSONObject branchRequest = new JSONObject()
+                .put("ref", "refs/heads/" + branch).put("sha", sha);
+        call("POST", "/git/refs", branchRequest);
+
+        // Deliberately keep the QUESTION in the private Issue only, not in
+        // committed Git files or the PR body.
+        JSONObject payload = new JSONObject()
+                .put("protocol", "AMIN_CHATGPT_WORK_PR_V1")
+                .put("request_id", requestId)
+                .put("issue_number", issue)
+                .put("project", project)
+                .put("consent", true)
+                .put("execution_authorized", false)
+                .put("personal_chatgpt_invoked", false);
+        String content = Base64.encodeToString(
+                (payload.toString() + "\n").getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+        call("PUT", "/contents/.amin-chatgpt-work/requests/" + requestId + ".json",
+                new JSONObject().put("message", "chore: request ChatGPT Work " + requestId.substring(0, 12))
+                        .put("branch", branch).put("content", content));
+        JSONObject prBody = new JSONObject()
+                .put("request_id", requestId).put("issue_number", issue)
+                .put("project", project).put("question_location", "private_issue")
+                .put("permission", "read_and_respond_only")
+                .put("execution_authorized", false);
+        JSONObject pr = call("POST", "/pulls", new JSONObject()
+                .put("title", "[Amin ChatGPT Work] " + requestId.substring(0, 12))
+                .put("body", "AMIN_CHATGPT_WORK_PR_V1\n" + prBody.toString())
+                .put("head", branch).put("base", base).put("draft", false));
+        int prNumber = pr.optInt("number", 0);
+        if (prNumber <= 0) throw new IllegalStateException("شماره Pull Request دریافت نشد");
+        return new JSONObject()
+                .put("pull_request_number", prNumber)
+                .put("private_pr_event_created", true)
+                .put("chatgpt_invoked", false)
+                .put("chatgpt_task_configured", false)
+                .put("reply_delivered", false);
     }
 
     public JSONObject approve(int issue, String requestId, String project) throws Exception {
