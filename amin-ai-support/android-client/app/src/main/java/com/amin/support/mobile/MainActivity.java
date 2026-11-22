@@ -38,7 +38,8 @@ import javax.net.ssl.SSLException;
  *
  * Only HTTPS, per-program scoped access, Keystore-protected bearer token.
  * No customer questions/transcripts are persisted on this device.
- * No paid external model, VPN, Google account, microphone, or GitHub token.
+ * No paid external model or VPN is required. The OPTIONAL direct-private mode
+ * stores the user's repo-scoped GitHub credential in a separate Android Keystore.
  */
 public final class MainActivity extends Activity {
     private final Handler ui = new Handler(Looper.getMainLooper());
@@ -48,6 +49,24 @@ public final class MainActivity extends Activity {
     private EditText server;
     private EditText token;
     private EditText question;
+    private EditText ghRepo;
+    private EditText ghToken;
+    private EditText ghProject;
+    private Button ghCheck;
+    private int ghIssueNumber = 0;
+    private String ghRequestId = "";
+    private String ghNotifiedRequestId = "";
+    private boolean resumed = false;
+    private boolean directPollBusy = false;
+    private final Runnable githubDirectPoll = new Runnable() {
+        @Override public void run() {
+            if (!active || !resumed) return;
+            if (ghIssueNumber > 0 && GitHubDirectVault.available(MainActivity.this) && !directPollBusy) {
+                pollDirectQuietly();
+            }
+            ui.postDelayed(this, 120_000L);
+        }
+    };
     private Spinner projects;
     private TextView status;
     private TextView answer;
@@ -78,6 +97,15 @@ public final class MainActivity extends Activity {
         latestHandoffId = getPreferences(MODE_PRIVATE).getString("handoff_id", "");
         latestHandoffProject = getPreferences(MODE_PRIVATE).getString("handoff_project", "");
         if (checkHandoff != null) checkHandoff.setEnabled(!latestHandoffId.isEmpty());
+        ghRepo.setText(GitHubDirectVault.repo(this));
+        ghProject.setText(getPreferences(MODE_PRIVATE).getString("direct_gh_project", "support"));
+        ghIssueNumber = getPreferences(MODE_PRIVATE).getInt("direct_gh_issue", 0);
+        ghRequestId = getPreferences(MODE_PRIVATE).getString("direct_gh_request_id", "");
+        ghCheck.setEnabled(ghIssueNumber > 0 && ghRequestId.matches("[a-f0-9]{32}"));
+        ghToken.setHint(GitHubDirectVault.available(this)
+                ? "توکن قبلی رمزگذاری شده؛ در صورت عدم تغییر مخزن خالی بگذار"
+                : "توکن محدود GitHub مخصوص مخزن خصوصی");
+
     }
 
     private View createContent() {
@@ -152,7 +180,7 @@ public final class MainActivity extends Activity {
 
         root.addView(section("ارجاع به هوش مرکزی و پیگیری درخواست"));
         root.addView(text("اگر پاسخی قطعی یا ابزار لازم موجود نباشد، درخواست با رضایت تو "
-                + "در موتور خصوصی ثبت می‌شود. GitHub عمومی فقط شناسه بی‌نام می‌بیند؛ "
+                + "در موتور خصوصی ثبت می‌شود. مخزن عمومی GitHub هیچ متنی دریافت نمی‌کند؛ "
                 + "ارسال به ChatGPT فعلاً خودکار نیست و به عامل مجاز نیاز دارد.", 14, false));
         autoHandoff = new CheckBox(this);
         autoHandoff.setText("وقتی موتور شواهد کافی ندارد، با رضایت من خودکار به صف ارجاع بده"
@@ -167,11 +195,43 @@ public final class MainActivity extends Activity {
         checkHandoff.setOnClickListener(v -> checkHandoff());
         root.addView(checkHandoff);
 
+        root.addView(section("پل مستقیم GitHub خصوصی — بدون نیاز به روشن بودن لپ‌تاپ"));
+        root.addView(text("برای هر کاربر یک مخزن خصوصی GitHub و کلید دسترسی محدود همان مخزن لازم است. "
+                + "متن سؤال در Issue خصوصی ذخیره می‌شود و برای همکاران مجاز آن مخزن قابل مشاهده است. "
+                + "اتصال خودکار به چت شخصی ChatGPT صرفاً با نصب این اپ انجام نمی‌شود.", 14, false));
+        ghRepo = edit("owner/private-repository", false);
+        ghRepo.setSingleLine(true);
+        root.addView(ghRepo);
+        ghToken = edit("توکن GitHub با مجوز Issues", false);
+        ghToken.setSingleLine(true);
+        ghToken.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        root.addView(ghToken);
+        ghProject = edit("شناسه نرم‌افزار، مثلاً support", false);
+        ghProject.setSingleLine(true);
+        root.addView(ghProject);
+        Button ghConnect = button("تأیید خصوصی بودن مخزن و اتصال");
+        ghConnect.setOnClickListener(v -> connectDirectGitHub());
+        root.addView(ghConnect);
+        Button ghSend = button("ارسال سؤال به صف GitHub خصوصی");
+        ghSend.setOnClickListener(v -> confirmDirectGitHub());
+        root.addView(ghSend);
+        ghCheck = button("دریافت پاسخ از GitHub خصوصی");
+        ghCheck.setEnabled(false);
+        ghCheck.setOnClickListener(v -> checkDirectGitHub());
+        root.addView(ghCheck);
+        Button ghApprove = button("تأیید پاسخ صحیح برای حافظه پروژه");
+        ghApprove.setOnClickListener(v -> confirmDirectApproval());
+        root.addView(ghApprove);
+        Button ghClear = button("حذف کلید اتصال GitHub از گوشی");
+        ghClear.setOnClickListener(v -> clearDirectGitHub());
+        root.addView(ghClear);
+
         root.addView(section("محدودیت نسخه آزمایشی"));
         root.addView(text(
                 "این اپ خودش مدل زبانی دانلود یا اجرا نمی‌کند. پاسخ از همان موتور "
                 + "پشتیبانی تنظیم‌شده روی رایانه یا سرور دریافت می‌شود. "
-                + "بدون اتصال HTTPS معتبر و روشن‌بودن موتور، گفت‌وگوی هوشمند کار نمی‌کند.\n"
+                + "در حالت موتور مرکزی، بدون اتصال HTTPS معتبر و روشن‌بودن موتور پاسخ هوشمند دریافت نمی‌شود.\n"
+                + "در حالت مستقیم GitHub، موتور لازم نیست ولی حساب مخزن خصوصی و عامل ChatGPT مجاز لازم است.\n"
                 + "هیچ سرویس هوش مصنوعی پولی از طرف این اپ فعال نمی‌شود. "
                 + "پاسخ‌ها در حافظه دائمی گوشی ذخیره نمی‌شوند و کلید دسترسی با "
                 + "Android Keystore رمزگذاری می‌شود.\n"
@@ -395,7 +455,7 @@ public final class MainActivity extends Activity {
         new AlertDialog.Builder(this)
                 .setTitle("اجازه ثبت و ارجاع درخواست")
                 .setMessage("متن درخواست در حافظه خصوصی موتور ذخیره می‌شود. "
-                        + "در مخزن عمومی GitHub فقط شناسه بی‌نام ثبت می‌شود. "
+                        + "هیچ اطلاعاتی در مخزن عمومی GitHub ثبت نمی‌شود. "
                         + "ارسال خودکار متن به ChatGPT فعال نیست. "
                         + "این درخواست ممکن است از سهمیه تیکت کم کند. تأیید می‌کنی؟")
                 .setNegativeButton("انصراف", (d, w) -> {})
@@ -480,6 +540,244 @@ public final class MainActivity extends Activity {
         });
     }
 
+    private void connectDirectGitHub() {
+        final String repository;
+        final String credential;
+        try {
+            repository = GitHubBridgePolicy.repo(ghRepo.getText().toString());
+            String entered = ghToken.getText().toString().trim();
+            if (entered.isEmpty()) {
+                if (!repository.equalsIgnoreCase(GitHubDirectVault.repo(this))) {
+                    setStatus("برای تغییر مخزن باید توکن اختصاصی جدید وارد کنی.");
+                    return;
+                }
+                credential = GitHubDirectVault.token(this);
+            } else {
+                credential = entered;
+            }
+            GitHubBridgePolicy.token(credential);
+        } catch (Exception failure) {
+            setStatus("تنظیمات GitHub معتبر نیست: " + failure.getMessage());
+            return;
+        }
+        setStatus("در حال بررسی خصوصی بودن مخزن و دسترسی...");
+        int requestVersion = ++version;
+        background.execute(() -> {
+            try {
+                GitHubDirectBridge client = new GitHubDirectBridge(repository, credential);
+                client.verifyPrivate();
+                GitHubDirectVault.save(this, repository, credential);
+                ui.post(() -> {
+                    if (!active || requestVersion != version) return;
+                    ghToken.setText("");
+                    ghToken.setHint("کلید GitHub به صورت رمزگذاری‌شده ذخیره شد");
+                    setStatus("اتصال به مخزن خصوصی تأیید شد؛ اتصال ChatGPT هنوز جداگانه لازم است.");
+                });
+            } catch (Exception failure) {
+                ui.post(() -> { if (active && requestVersion == version) {
+                    setStatus("اتصال GitHub تأیید نشد: " + failure.getMessage());
+                } });
+            }
+        });
+    }
+
+    private void confirmDirectGitHub() {
+        final String project;
+        final String message = question.getText().toString().trim();
+        try {
+            project = GitHubBridgePolicy.project(ghProject.getText().toString().trim());
+            if (message.isEmpty() || message.length() > 2500)
+                throw new IllegalArgumentException("سؤال باید ۱ تا ۲۵۰۰ نویسه باشد");
+            if (!GitHubDirectVault.available(this))
+                throw new IllegalArgumentException("ابتدا اتصال مخزن خصوصی را تأیید کن");
+            if (!GitHubDirectVault.repo(this).equalsIgnoreCase(ghRepo.getText().toString().trim()))
+                throw new IllegalArgumentException("نشانی مخزن تغییر کرده؛ دوباره تأیید کن");
+        } catch (Exception invalid) {
+            setStatus(invalid.getMessage());
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("اجازه ارسال سؤال به GitHub خصوصی")
+                .setMessage("متن سؤال در Issue مخزن خصوصی خودت ثبت می‌شود. "
+                        + "تمام افراد دارای دسترسی به آن مخزن می‌توانند متن را ببینند. "
+                        + "این کار چت شخصی ChatGPT را خودکار فعال نمی‌کند. ارسال انجام شود؟")
+                .setNegativeButton("انصراف", (d, w) -> {})
+                .setPositiveButton("ارسال خصوصی", (d, w) -> submitDirectGitHub(project, message))
+                .show();
+    }
+
+    private void submitDirectGitHub(String project, String message) {
+        final String repo = GitHubDirectVault.repo(this);
+        final String credential;
+        try { credential = GitHubDirectVault.token(this); }
+        catch (Exception e) { setStatus("توکن GitHub قابل خواندن نیست"); return; }
+        setStatus("در حال ارسال به مخزن خصوصی...");
+        int requestVersion = ++version;
+        background.execute(() -> {
+            try {
+                JSONObject response = new GitHubDirectBridge(repo, credential).submit(project, message);
+                int issue = response.getInt("issue_number");
+                String rid = response.getString("request_id");
+                ui.post(() -> {
+                    if (!active || requestVersion != version) return;
+                    ghIssueNumber = issue;
+                    ghRequestId = rid;
+                    getPreferences(MODE_PRIVATE).edit()
+                            .putInt("direct_gh_issue", issue)
+                            .putString("direct_gh_request_id", rid)
+                            .putString("direct_gh_project", project).apply();
+                    ghCheck.setEnabled(true);
+                    ghNotifiedRequestId = "";
+                    setStatus("درخواست در مخزن خصوصی ثبت شد؛ شماره Issue: " + issue
+                            + ". اکنون منتظر پاسخ عامل متصل به ChatGPT است.");
+                });
+            } catch (Exception e) {
+                ui.post(() -> { if (active && requestVersion == version)
+                    setStatus("ثبت مستقیم ناموفق: " + e.getMessage()); });
+            }
+        });
+    }
+
+    private void checkDirectGitHub() {
+        if (ghIssueNumber < 1 || !ghRequestId.matches("[a-f0-9]{32}")) {
+            setStatus("ابتدا سؤال را در مخزن خصوصی ثبت کن");
+            return;
+        }
+        final String repo = GitHubDirectVault.repo(this);
+        final String credential;
+        try { credential = GitHubDirectVault.token(this); }
+        catch (Exception e) { setStatus("توکن اتصال GitHub در دسترس نیست"); return; }
+        setStatus("در حال بررسی پاسخ در مخزن خصوصی...");
+        int requestVersion = ++version;
+        background.execute(() -> {
+            try {
+                JSONObject response = new GitHubDirectBridge(repo, credential).status(
+                        ghIssueNumber, ghRequestId);
+                ui.post(() -> {
+                    if (!active || requestVersion != version) return;
+                    if ("answered".equals(response.optString("status", ""))) {
+                        latestAnswer = response.optString("answer", "");
+                        answer.setText(latestAnswer);
+                        setStatus("پاسخ از مخزن خصوصی دریافت شد. صحت اجرای عملیات باید جدا بررسی شود.");
+                    } else {
+                        setStatus("پاسخ هنوز در Issue خصوصی ثبت نشده است.");
+                    }
+                });
+            } catch (Exception e) {
+                ui.post(() -> { if (active && requestVersion == version)
+                    setStatus("دریافت پاسخ ناموفق: " + e.getMessage()); });
+            }
+        });
+    }
+
+    private void confirmDirectApproval() {
+        if (ghIssueNumber < 1 || !ghRequestId.matches("[a-f0-9]{32}")) {
+            setStatus("درخواستی برای تأیید وجود ندارد");
+            return;
+        }
+        final String project;
+        try {
+            project = GitHubBridgePolicy.project(ghProject.getText().toString().trim());
+            if (!GitHubDirectVault.available(this))
+                throw new IllegalArgumentException("مخزن خصوصی متصل نیست");
+        } catch (Exception error) { setStatus(error.getMessage()); return; }
+        new AlertDialog.Builder(this)
+                .setTitle("تأیید پاسخ برای یادگیری")
+                .setMessage("فقط وقتی پاسخ را واقعاً بررسی کرده‌ای و درست است تأیید کن. "
+                        + "این تأیید در مخزن خصوصی ثبت می‌شود تا عامل ChatGPT در درخواست‌های بعدی "
+                        + "همین نرم‌افزار از آن استفاده کند. مدل به صورت خودکار بازآموزی نمی‌شود.")
+                .setNegativeButton("انصراف", (d, w) -> {})
+                .setPositiveButton("پاسخ درست است", (d, w) -> {
+                    final String repo = GitHubDirectVault.repo(this);
+                    final String secret;
+                    try { secret = GitHubDirectVault.token(this); }
+                    catch (Exception e) { setStatus("کلید GitHub در دسترس نیست"); return; }
+                    final int issue = ghIssueNumber;
+                    final String rid = ghRequestId;
+                    int requestVersion = ++version;
+                    setStatus("در حال ثبت بازخورد تأییدشده...");
+                    background.execute(() -> {
+                        try {
+                            JSONObject confirmation = new GitHubDirectBridge(repo, secret)
+                                    .approve(issue, rid, project);
+                            ui.post(() -> {
+                                if (!active || requestVersion != version) return;
+                                setStatus(confirmation.optBoolean("already_approved")
+                                        ? "این پاسخ قبلاً برای حافظه همین پروژه تأیید شده است."
+                                        : "تأیید پاسخ در مخزن خصوصی ثبت شد؛ استفاده مجدد به عامل مجاز بستگی دارد.");
+                            });
+                        } catch (Exception error) {
+                            ui.post(() -> { if (active && requestVersion == version)
+                                setStatus("تأیید ثبت نشد: " + error.getMessage()); });
+                        }
+                    });
+                }).show();
+    }
+
+    private void pollDirectQuietly() {
+        final int issue = ghIssueNumber;
+        final String rid = ghRequestId;
+        if (issue <= 0 || !rid.matches("[a-f0-9]{32}")) return;
+        final String repo = GitHubDirectVault.repo(this);
+        final String credential;
+        try { credential = GitHubDirectVault.token(this); }
+        catch (Exception ignored) { return; }
+        directPollBusy = true;
+        background.execute(() -> {
+            try {
+                JSONObject response = new GitHubDirectBridge(repo, credential).status(issue, rid);
+                ui.post(() -> {
+                    directPollBusy = false;
+                    if (!active || !resumed || issue != ghIssueNumber
+                            || !rid.equals(ghRequestId) || !GitHubDirectVault.available(this)) return;
+                    if ("answered".equals(response.optString("status"))
+                            && !rid.equals(ghNotifiedRequestId)) {
+                        ghNotifiedRequestId = rid;
+                        latestAnswer = response.optString("answer", "");
+                        answer.setText(latestAnswer);
+                        setStatus("پاسخ جدید از GitHub خصوصی دریافت شد؛ صحت اجرای آن مستقل بررسی شود.");
+                    }
+                });
+            } catch (Exception ignored) {
+                // Network unavailable: do not claim completion or display stale data.
+                ui.post(() -> directPollBusy = false);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resumed = true;
+        ui.removeCallbacks(githubDirectPoll);
+        ui.postDelayed(githubDirectPoll, 2_000L);
+    }
+
+    @Override
+    protected void onPause() {
+        resumed = false;
+        ui.removeCallbacks(githubDirectPoll);
+        super.onPause();
+    }
+
+    private void clearDirectGitHub() {
+        try {
+            GitHubDirectVault.clear(this);
+            getPreferences(MODE_PRIVATE).edit()
+                    .remove("direct_gh_issue").remove("direct_gh_request_id")
+                    .remove("direct_gh_project").apply();
+            ghIssueNumber = 0;
+            ghRequestId = "";
+            ghNotifiedRequestId = "";
+            ghRepo.setText("");
+            ghToken.setText("");
+            ghCheck.setEnabled(false);
+            setStatus("توکن GitHub این گوشی پاک شد.");
+        } catch (Exception error) {
+            setStatus("پاک‌کردن اتصال GitHub ناموفق بود.");
+        }
+    }
+
     private void clearConnection() {
         try {
             TokenVault.clear(this);
@@ -526,6 +824,8 @@ public final class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         active = false;
+        resumed = false;
+        ui.removeCallbacks(githubDirectPoll);
         ++version;
         background.shutdownNow();
         super.onDestroy();

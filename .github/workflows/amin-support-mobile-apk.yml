@@ -52,6 +52,13 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/SupportEndpoint.java \
             amin-ai-support/android-client/tests/MobileEndpointTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.MobileEndpointTest
+      - name: Test PRIVATE GitHub relay policy with JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/GitHubBridgePolicy.java \
+            amin-ai-support/android-client/tests/GitHubBridgePolicyTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.GitHubBridgePolicyTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
