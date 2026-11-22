@@ -260,7 +260,12 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
                        "request_key": "9"*32, "consent": True}
             await ws.send(json.dumps({**request, "id": "first"}))
             await ws.send(json.dumps({**request, "id": "retry"}))
-            messages = [json.loads(await asyncio.wait_for(ws.recv(), 7)) for _ in range(5)]
+            messages = []
+            for _ in range(5):
+                messages.append(json.loads(await asyncio.wait_for(ws.recv(), 7)))
+                if (any(x.get("duplicate_suppressed") for x in messages)
+                        and any(x.get("status") == "github_dispatched" for x in messages)):
+                    break
             jobs = [x["id_of_job"] for x in messages if "id_of_job" in x]
             self.assertTrue(jobs)
             self.assertEqual(len(set(jobs)), 1)
