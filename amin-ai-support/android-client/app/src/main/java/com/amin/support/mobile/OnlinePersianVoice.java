@@ -3,6 +3,7 @@ package com.amin.support.mobile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.RecognitionListener;
@@ -30,6 +31,8 @@ public final class OnlinePersianVoice implements RecognitionListener {
     private final Events events;
     private final Handler main = new Handler(Looper.getMainLooper());
     private SpeechRecognizer recognizer;
+    private int preferredMode = VoiceModePolicy.ONLINE;
+    private int activeMode = VoiceModePolicy.UNAVAILABLE;
     private boolean enabled = false;
     private boolean listening = false;
     private boolean awaitingReply = false;
@@ -50,10 +53,31 @@ public final class OnlinePersianVoice implements RecognitionListener {
     }
 
     public boolean isEnabled() { return enabled; }
+    public boolean isUsingDeviceRecognition() {
+        return enabled && activeMode == VoiceModePolicy.DEVICE_OFFLINE;
+    }
+
+    /** May only be set while idle; never infer offline support from UI labels. */
+    public void setPreferredMode(int requested) {
+        if (enabled) throw new IllegalStateException("Stop listening before changing voice mode");
+        if (requested != VoiceModePolicy.ONLINE &&
+                requested != VoiceModePolicy.DEVICE_OFFLINE &&
+                requested != VoiceModePolicy.AUTOMATIC) {
+            throw new IllegalArgumentException("Unrecognized voice mode");
+        }
+        preferredMode = requested;
+    }
 
     public void start() {
-        if (!SpeechRecognizer.isRecognitionAvailable(app)) {
-            events.onFailure("سرویس تشخیص گفتار فارسی روی اندروید موجود نیست");
+        boolean remoteAvailable = SpeechRecognizer.isRecognitionAvailable(app);
+        boolean localAvailable = Build.VERSION.SDK_INT >= 31
+                && SpeechRecognizer.isOnDeviceRecognitionAvailable(app);
+        activeMode = VoiceModePolicy.effectiveRecognition(
+                preferredMode, remoteAvailable, localAvailable);
+        if (activeMode == VoiceModePolicy.UNAVAILABLE) {
+            events.onFailure(preferredMode == VoiceModePolicy.DEVICE_OFFLINE
+                    ? "موتور تشخیص فارسی آفلاین در گوشی نصب نیست؛ هیچ دانلود خودکاری انجام نمی‌شود."
+                    : "سرویس تشخیص گفتار روی این گوشی در دسترس نیست.");
             return;
         }
         enabled = true;
@@ -62,9 +86,22 @@ public final class OnlinePersianVoice implements RecognitionListener {
         speaking = false;
         retries = 0;
         if (recognizer == null) {
-            recognizer = SpeechRecognizer.createSpeechRecognizer(app);
-            recognizer.setRecognitionListener(this);
+            try {
+                recognizer = activeMode == VoiceModePolicy.DEVICE_OFFLINE
+                        ? SpeechRecognizer.createOnDeviceSpeechRecognizer(app)
+                        : SpeechRecognizer.createSpeechRecognizer(app);
+                recognizer.setRecognitionListener(this);
+            } catch (RuntimeException problem) {
+                enabled = false;
+                activeMode = VoiceModePolicy.UNAVAILABLE;
+                events.onFailure("راه‌اندازی موتور گفتار ممکن نشد: "
+                        + problem.getClass().getSimpleName());
+                return;
+            }
         }
+        events.onState(activeMode == VoiceModePolicy.DEVICE_OFFLINE
+                ? "میکروفون با موتور تشخیص آفلاین اندروید فعال شد؛ پاسخ هوشمند همچنان آنلاین است."
+                : "میکروفون فارسی با سرویس گفتار اندروید فعال شد.");
         listen();
     }
 
@@ -74,6 +111,7 @@ public final class OnlinePersianVoice implements RecognitionListener {
         listening = false;
         awaitingReply = false;
         speaking = false;
+        activeMode = VoiceModePolicy.UNAVAILABLE;
         main.removeCallbacks(listenAgain);
         main.removeCallbacks(responseTimeout);
         if (recognizer != null) {
@@ -148,13 +186,16 @@ public final class OnlinePersianVoice implements RecognitionListener {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa-IR");
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "fa-IR");
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, false);
+        intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE,
+                activeMode == VoiceModePolicy.DEVICE_OFFLINE);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 900L);
         try {
             listening = true;
             recognizer.startListening(intent);
-            events.onState("در حال شنیدن فارسی؛ پس از سکوت درخواست ارسال می‌شود");
+            events.onState(activeMode == VoiceModePolicy.DEVICE_OFFLINE
+                    ? "در حال شنیدن با سرویس آفلاین گوشی؛ پس از سکوت متن ارسال می‌شود"
+                    : "در حال شنیدن فارسی؛ پس از سکوت درخواست آنلاین ارسال می‌شود");
         } catch (RuntimeException error) {
             listening = false;
             events.onFailure("تشخیص گفتار اندروید قابل اجرا نیست: "
@@ -205,6 +246,9 @@ public final class OnlinePersianVoice implements RecognitionListener {
         }
         if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) {
             events.onFailure("مجوز میکروفون داده نشده است");
+        } else if (activeMode == VoiceModePolicy.DEVICE_OFFLINE) {
+            events.onFailure("تشخیص فارسی آفلاین روی این گوشی برای این زبان کار نمی‌کند؛ "
+                    + "برنامه به‌صورت پنهانی از اینترنت استفاده نکرد.");
         } else if (error == SpeechRecognizer.ERROR_NETWORK
                 || error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT) {
             events.onFailure("تشخیص گفتار آنلاین به اینترنت دسترسی ندارد");

@@ -80,6 +80,7 @@ public final class MainActivity extends Activity {
     private static final int LIVE_VOICE_PERMISSION = 2402;
     private OnlinePersianVoice onlineVoice;
     private Button onlineVoiceToggle;
+    private Spinner voiceModeSelector;
     private TextToSpeech speech;
     private boolean speechReady = false;
     private CheckBox voiceReplies;
@@ -144,7 +145,19 @@ public final class MainActivity extends Activity {
                         onlineVoice.requestUnavailable("ارسال درخواست صوتی به GitHub ممکن نشد.");
                     }
                 } else {
-                    onlineVoice.requestUnavailable("هیچ کانال آنلاین مجاز متصل نیست؛ پاسخ هوشمند ساخته نشد.");
+                    // Purely local fallback: deterministic commands only,
+                    // never fabricate a remote ChatGPT response.
+                    String fixed = OfflineVoiceCommands.respond(
+                            words, !latestAnswer.isEmpty());
+                    if ("__READ_LAST_ANSWER__".equals(fixed)) {
+                        speakPersian(latestAnswer);
+                    } else if (!fixed.isEmpty()) {
+                        speakPersian(fixed);
+                    } else {
+                        onlineVoice.requestUnavailable(
+                                "گفتار آفلاین ثبت شد؛ موتور هوش آنلاین متصل نیست. "
+                                + "فرمان «راهنما» را بگو تا دستورهای ثابت را بشنوی.");
+                    }
                 }
             }
             @Override public void onState(String state) {
@@ -263,6 +276,17 @@ public final class MainActivity extends Activity {
                 + "بسته به موتور نصب‌شده، پردازش صدا ممکن است به ارائه‌دهندهٔ آن منتقل شود. "
                 + "برای پاسخ هوشمند، اتصال WSS یا مخزن خصوصی GitHubِ مجاز لازم است؛ "
                 + "صرف ثبت درخواست در GitHub به معنی اجرای ChatGPT نیست.", 14, false));
+        root.addView(text("حالت گفتار: اینترنتی، آفلاین با امکانات موجود گوشی، یا خودکار. "
+                + "آفلاین فقط شنیدن و خواندن پاسخ است؛ تولید پاسخ تازهٔ ChatGPT اینترنت می‌خواهد.", 14, false));
+        voiceModeSelector = new Spinner(this);
+        voiceModeSelector.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"آنلاین: کیفیت بهترین صدای فارسی موجود",
+                        "آفلاین: فقط امکانات نصب‌شدهٔ گوشی (بدون دانلود مدل)",
+                        "خودکار: ترجیح آفلاین و سپس آنلاین"}));
+        voiceModeSelector.setSelection(Math.max(0, Math.min(2,
+                getPreferences(MODE_PRIVATE).getInt("voice_recognition_mode", 0))));
+        root.addView(voiceModeSelector);
         onlineVoiceToggle = button("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
         onlineVoiceToggle.setOnClickListener(v -> toggleOnlineVoice());
         root.addView(onlineVoiceToggle);
@@ -290,6 +314,7 @@ public final class MainActivity extends Activity {
         silence.setOnClickListener(v -> {
             if (speech != null) speech.stop();
             if (onlineVoice != null) onlineVoice.stop();
+            if (voiceModeSelector != null) voiceModeSelector.setEnabled(true);
             if (onlineVoiceToggle != null)
                 onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
         });
@@ -1073,12 +1098,15 @@ public final class MainActivity extends Activity {
         if (onlineVoice.isEnabled()) {
             onlineVoice.stop();
             if (speech != null) speech.stop();
+            voiceModeSelector.setEnabled(true);
             onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
             return;
         }
         if (!((liveClient != null && liveClient.isReady())
-                || GitHubDirectVault.available(this))) {
-            setStatus("برای مکالمهٔ آنلاین ابتدا WSS یا GitHub خصوصی را متصل کن.");
+                || GitHubDirectVault.available(this))
+                && voiceModeSelector.getSelectedItemPosition() != VoiceModePolicy.DEVICE_OFFLINE) {
+            setStatus("برای پاسخ هوشمند آنلاین ابتدا WSS یا GitHub خصوصی را متصل کن. "
+                    + "در حالت آفلاین می‌توانی با امکانات خود گوشی چند فرمان ثابت بگویی.");
             return;
         }
         new AlertDialog.Builder(this)
@@ -1102,10 +1130,22 @@ public final class MainActivity extends Activity {
     }
 
     private void startOnlineVoice() {
+        int mode = voiceModeSelector.getSelectedItemPosition();
+        getPreferences(MODE_PRIVATE).edit()
+                .putInt("voice_recognition_mode", mode).apply();
+        if (mode == VoiceModePolicy.DEVICE_OFFLINE
+                && android.os.Build.VERSION.SDK_INT >= 31
+                && !android.speech.SpeechRecognizer.isOnDeviceRecognitionAvailable(this)) {
+            setStatus("موتور گفتار آفلاین در گوشی وجود ندارد؛ مدل حجیم دانلود نمی‌شود.");
+            return;
+        }
+        onlineVoice.setPreferredMode(mode);
+        configurePersianVoice();
         voiceReplies.setChecked(true);
         if (speech != null) speech.stop();
         onlineVoice.start();
         if (onlineVoice.isEnabled()) {
+            voiceModeSelector.setEnabled(false);
             onlineVoiceToggle.setText("توقف مکالمهٔ پیوستهٔ فارسی");
         }
     }
@@ -1139,7 +1179,28 @@ public final class MainActivity extends Activity {
                 best = candidate;
             }
         }
-        if (best != null) speech.setVoice(best);
+        if (voiceModeSelector != null
+                && voiceModeSelector.getSelectedItemPosition() == VoiceModePolicy.DEVICE_OFFLINE) {
+            best = null;
+            for (Voice candidate : speech.getVoices() == null
+                    ? java.util.Collections.<Voice>emptySet() : speech.getVoices()) {
+                if (!"fa".equals(candidate.getLocale().getLanguage())
+                        || candidate.isNetworkConnectionRequired()) continue;
+                if (best == null || candidate.getQuality() > best.getQuality()) best = candidate;
+            }
+            if (best == null) {
+                speechReady = false;
+                setStatus("برای صدای فارسی آفلاین، موتور محلی مناسب روی گوشی نصب نشده است.");
+                return;
+            }
+        }
+        if (best != null) {
+            if (speech.setVoice(best) != TextToSpeech.SUCCESS) {
+                setStatus("انتخاب صدای فارسی در موتور اندروید ناموفق بود.");
+            } else {
+                speechReady = true;
+            }
+        }
         speech.setSpeechRate(0.97f);
     }
 
