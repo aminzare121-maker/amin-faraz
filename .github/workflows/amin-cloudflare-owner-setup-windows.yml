@@ -1,0 +1,50 @@
+name: Package Amin Cloudflare owner setup for Windows
+on:
+  push:
+    paths:
+      - 'amin-ai-support/cloudflare-unified/windows-setup/**'
+      - '.github/workflows/amin-cloudflare-owner-setup-windows.yml'
+  pull_request:
+    paths:
+      - 'amin-ai-support/cloudflare-unified/windows-setup/**'
+      - '.github/workflows/amin-cloudflare-owner-setup-windows.yml'
+permissions: {contents: read}
+jobs:
+  portable-setup:
+    runs-on: windows-2022
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Syntax check setup and AI service
+        shell: pwsh
+        run: |
+          node --check amin-ai-support/cloudflare-unified/windows-setup/Setup-Amin-Cloudflare.mjs
+          node --check amin-ai-support/cloudflare-unified/src/ai.mjs
+          node --check amin-ai-support/cloudflare-unified/src/index.mjs
+          node --test amin-ai-support/cloudflare-unified/test/*.test.mjs
+      - name: Copy deploy bundle
+        shell: pwsh
+        run: |
+          $root=Join-Path $env:RUNNER_TEMP 'amin-ai-cloudflare-owner-setup'
+          New-Item -ItemType Directory -Path $root -Force | Out-Null
+          Copy-Item -Path 'amin-ai-support/cloudflare-unified/windows-setup/*' -Destination $root
+          $ai=Join-Path $root 'amin-ai-support/cloudflare-unified'
+          $billing=Join-Path $root 'amin-ai-support/managed-subscriptions'
+          New-Item -ItemType Directory -Path $ai -Force | Out-Null
+          New-Item -ItemType Directory -Path $billing -Force | Out-Null
+          Copy-Item 'amin-ai-support/cloudflare-unified/src' $ai -Recurse
+          Copy-Item 'amin-ai-support/cloudflare-unified/db' $ai -Recurse
+          Copy-Item 'amin-ai-support/cloudflare-unified/wrangler.toml' $ai
+          Copy-Item 'amin-ai-support/managed-subscriptions/src' $billing -Recurse
+          Copy-Item 'amin-ai-support/managed-subscriptions/db' $billing -Recurse
+          if(!(Test-Path (Join-Path $ai 'src/index.mjs'))){throw 'Missing AI source'}
+          if(!(Test-Path (Join-Path $billing 'db/schema.sql'))){throw 'Missing Billing schema'}
+          Write-Host "Offline deployment files packaged. No Cloudflare login was used."
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amin-ai-cloudflare-owner-setup
+          path: '${{ runner.temp }}/amin-ai-cloudflare-owner-setup/'
+          if-no-files-found: error
+          retention-days: 7
