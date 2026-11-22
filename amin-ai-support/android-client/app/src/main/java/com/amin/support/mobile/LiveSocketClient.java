@@ -114,6 +114,11 @@ public final class LiveSocketClient {
 
     public String work(String project, String message, String target,
                        String operation) throws Exception {
+        return work(project, message, target, operation, false);
+    }
+
+    public String work(String project, String message, String target,
+                       String operation, boolean chatgptWorkEvent) throws Exception {
         requireText(message);
         if (!("none".equals(target) || "android".equals(target) || "windows".equals(target)
                 || "web".equals(target) || "github".equals(target))) {
@@ -134,6 +139,9 @@ public final class LiveSocketClient {
         event.put("consent", true);
         event.put("target_environment", target);
         event.put("requested_operation", operation);
+        // Explicit opt-in: one request may create a private Issue and PR event.
+        // The PR event does NOT prove ChatGPT Work has run.
+        event.put("chatgpt_work_event", chatgptWorkEvent);
         if (!socket.send(event.toString()))
             throw new IllegalStateException("ارسال درخواست در کانال زنده ناموفق بود");
         return ident;
