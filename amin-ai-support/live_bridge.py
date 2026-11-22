@@ -19,6 +19,7 @@ import ssl
 from contextlib import suppress
 from pathlib import Path
 from uuid import uuid4
+from urllib.parse import urlsplit
 
 from amin_support import DEFAULT_CONFIG, DEFAULT_DB, SupportEngine
 from direct_github_relay import GitHubPrivateBridge
@@ -37,6 +38,36 @@ JOB_ID = re.compile(r"^[a-f0-9]{32}$")
 LIVE_PROTOCOL = "amin.live.v1"
 ALLOWED_TARGETS = {"android", "windows", "web", "github", "none"}
 ALLOWED_OPERATIONS = {"answer", "build", "repair", "analyze", "release"}
+
+
+def trusted_browser_origins(local_host: bool, configured=""):
+    """Deny arbitrary browser origins; Android/Windows native clients send no Origin.
+
+    Public browser deployments must opt in the exact HTTPS site hosting the UI.
+    Origins cannot contain credentials, paths, query strings or wildcards.
+    """
+    allowed = [None]
+    if local_host:
+        allowed.extend(["http://127.0.0.1:8765", "http://localhost:8765"])
+    for item in configured.split(","):
+        candidate = item.strip()
+        if not candidate:
+            continue
+        if len(candidate) > 260 or "*" in candidate or "\\" in candidate:
+            raise ValueError("Invalid WebSocket origin allowlist entry")
+        parsed = urlsplit(candidate)
+        host = parsed.hostname
+        if (not host or parsed.username or parsed.password or parsed.path
+                or parsed.query or parsed.fragment or parsed.port == 0
+                or (parsed.scheme != "https"
+                    and not (local_host and parsed.scheme == "http"
+                             and host in {"127.0.0.1", "localhost", "::1"}))):
+            raise ValueError("Only explicit HTTPS browser origins or local loopback are permitted")
+        if parsed.port is not None and parsed.port > 65535:
+            raise ValueError("Invalid WebSocket origin port")
+        if candidate not in allowed:
+            allowed.append(candidate)
+    return allowed
 
 
 class LiveJobs:
@@ -364,7 +395,7 @@ class LiveGateway:
                         message="Work remains in GitHub; resume later with job id")
 
 
-async def run_server(engine, host, port, cert=None, key=None, repo="", github_token=""):
+async def run_server(engine, host, port, cert=None, key=None, repo="", github_token="", allowed_origins=""):
     if serve is None:
         raise RuntimeError("Install the open-source 'websockets' package for live transport")
     if bool(cert) != bool(key):
@@ -377,9 +408,10 @@ async def run_server(engine, host, port, cert=None, key=None, repo="", github_to
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.minimum_version = ssl.TLSVersion.TLSv1_2
         context.load_cert_chain(str(cert), str(key))
+    browser_origins = trusted_browser_origins(local, allowed_origins)
     gateway = LiveGateway(engine, repo, github_token)
-    async with serve(gateway.handler, host, port, ssl=context, max_size=16000,
-                     ping_interval=20, ping_timeout=20, max_queue=16) as server:
+    async with serve(gateway.handler, host, port, ssl=context, origins=browser_origins,
+                     max_size=16000, ping_interval=20, ping_timeout=20, max_queue=16) as server:
         await server.serve_forever()
 
 
@@ -391,14 +423,17 @@ def main(argv=None):
     parser.add_argument("--port", type=int, default=8766)
     parser.add_argument("--tls-cert", type=Path)
     parser.add_argument("--tls-key", type=Path)
+    parser.add_argument("--allowed-origin", action="append", default=[],
+                        help="Exact trusted HTTPS web UI origin; repeat for each public site")
     args = parser.parse_args(argv)
     engine = SupportEngine(args.config, args.db)
     if engine.access.active_count() == 0:
         parser.error("Issue a project-scoped token before starting the live gateway")
     repo = os.environ.get("AMIN_LIVE_GITHUB_REPO", "")
     secret = os.environ.get("AMIN_LIVE_GITHUB_TOKEN", "")
+    origins = ",".join(args.allowed_origin) or os.environ.get("AMIN_LIVE_ALLOWED_ORIGINS", "")
     asyncio.run(run_server(engine, args.host, args.port, args.tls_cert, args.tls_key,
-                           repo, secret))
+                           repo, secret, origins))
 
 
 if __name__ == "__main__":
