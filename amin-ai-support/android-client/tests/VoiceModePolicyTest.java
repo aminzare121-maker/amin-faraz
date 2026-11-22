@@ -28,6 +28,16 @@ public final class VoiceModePolicyTest {
         if (VoiceModePolicy.requiresLocalVoice(VoiceModePolicy.ONLINE)) {
             throw new AssertionError("Online mode should allow approved network voice");
         }
-        System.out.println("PASS: bounded voice mode routing; forced offline never falls back to cloud");
+        if (!OfflineVoiceCommands.respond("راهنما", false).contains("فرمان‌های آفلاین")) {
+            throw new AssertionError("Local Persian fixed help command missing");
+        }
+        if (!OfflineVoiceCommands.respond("پاسخ قبلی را بخوان", true)
+                .equals("__READ_LAST_ANSWER__")) {
+            throw new AssertionError("Read-previous-answer command not routed");
+        }
+        if (!OfflineVoiceCommands.respond("اخبار طلا امروز چیست؟", false).isEmpty()) {
+            throw new AssertionError("Offline commands must not invent AI answers");
+        }
+        System.out.println("PASS: bounded voice mode routing and fixed Persian commands; no fake AI");
     }
 }
