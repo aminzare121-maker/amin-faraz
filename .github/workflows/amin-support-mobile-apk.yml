@@ -1,0 +1,72 @@
+name: Build Amin AI Support Mobile APK (debug)
+
+on:
+  push:
+    branches:
+      - main
+      - feature/amin-mobile-support-client-20261122
+    paths:
+      - "amin-ai-support/android-client/**"
+      - ".github/workflows/amin-support-mobile-apk.yml"
+  pull_request:
+    paths:
+      - "amin-ai-support/android-client/**"
+      - ".github/workflows/amin-support-mobile-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android-mobile-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
+      - name: Locate Android SDK
+        run: |
+          set -euo pipefail
+          test -n "$ANDROID_HOME"
+          SDK_MANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -1)"
+          test -x "$SDK_MANAGER"
+          "$SDK_MANAGER" --install "platforms;android-35" "build-tools;35.0.0"
+      - name: Test HTTPS and scoped token policy with JVM
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/amin-mobile-jvm"
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/SupportEndpoint.java \
+            amin-ai-support/android-client/tests/MobileEndpointTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.MobileEndpointTest
+      - name: Build actual installable Android app
+        working-directory: amin-ai-support/android-client
+        run: gradle --no-daemon --stacktrace :app:assembleDebug
+      - name: Inspect mobile APK
+        run: |
+          set -euo pipefail
+          APK="amin-ai-support/android-client/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | head -15
+          sha256sum "$APK"
+          ls -lh "$APK"
+      - name: Publish test APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: amin-support-mobile-debug-apk
+          path: amin-ai-support/android-client/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          if-no-files-found: error
