@@ -25,6 +25,7 @@ from urllib.request import Request, urlopen
 from tickets import TicketStore
 from github_evidence import update_provenance
 from program_registry import ProgramStore, DEFAULT_STYLE, style_instructions
+from access_control import ScopedAccess
 
 HOME = Path(__file__).resolve().parent
 DEFAULT_CONFIG = HOME / "projects.json"
@@ -306,6 +307,7 @@ class SupportEngine:
         self._static_projects = load_projects(config_path)
         self.refresh_programs()
         self.tickets = self.knowledge.tickets
+        self.access = ScopedAccess(db_path)
 
     def refresh_programs(self):
         dynamic = self.programs.programs()
@@ -408,7 +410,7 @@ def diagnose_source(project: dict, root: Path) -> dict:
             "syntax_issues": issues, "scope": "syntax-only; no execution"}
 
 
-def make_handler(engine: SupportEngine, api_key: str):
+def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False):
     ui = (HOME / "web" / "index.html").read_bytes()
 
     class Handler(BaseHTTPRequestHandler):
@@ -423,9 +425,25 @@ def make_handler(engine: SupportEngine, api_key: str):
             self.end_headers()
             self.wfile.write(data)
 
-        def authorized(self) -> bool:
-            token = self.headers.get("Authorization", "").removeprefix("Bearer ").strip()
-            return not api_key or hmac.compare_digest(token, api_key)
+        def principal(self) -> dict | None:
+            """Resolve the bearer to one approved project (or local legacy admin).
+
+            External listeners use scoped_only=True, so a shared global key
+            cannot unlock every program on a publicly reachable server.
+            """
+            header = self.headers.get("Authorization", "")
+            if header.startswith("Bearer "):
+                token = header[7:].strip()
+                scoped = engine.access.verify(token)
+                if scoped and scoped["project_id"] in engine.projects:
+                    return scoped
+                if (not scoped_only and api_key and token
+                        and hmac.compare_digest(token, api_key)):
+                    return {"kind": "local_legacy", "project_id": "*", "allow_ticket": True}
+                return None
+            if not scoped_only and not api_key and not header:
+                return {"kind": "local_legacy", "project_id": "*", "allow_ticket": True}
+            return None
 
         def do_GET(self):
             path = urlparse(self.path).path
@@ -442,12 +460,15 @@ def make_handler(engine: SupportEngine, api_key: str):
                 self.wfile.write(ui)
                 return
             if path == "/api/projects":
-                if not self.authorized():
+                principal = self.principal()
+                if principal is None:
                     self.send_json(401, {"error": "Unauthorized"})
                     return
+                eligible = (engine.projects.values() if principal["project_id"] == "*"
+                            else [engine.projects[principal["project_id"]]])
                 projects = [{"id": x["id"], "name": x["name"],
                              "indexed_passages": engine.knowledge.count(x["id"], True)}
-                            for x in engine.projects.values()]
+                            for x in eligible]
                 self.send_json(200, {"projects": projects})
                 return
             self.send_json(404, {"error": "Not found"})
@@ -457,7 +478,8 @@ def make_handler(engine: SupportEngine, api_key: str):
             if path not in {"/api/chat", "/api/ticket"}:
                 self.send_json(404, {"error": "Not found"})
                 return
-            if not self.authorized():
+            principal = self.principal()
+            if principal is None:
                 self.send_json(401, {"error": "Unauthorized"})
                 return
             try:
@@ -468,16 +490,21 @@ def make_handler(engine: SupportEngine, api_key: str):
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise ValueError("Invalid JSON body")
+                project = body.get("project", "")
+                if (project not in engine.projects or
+                        principal["project_id"] not in {"*", project}):
+                    self.send_json(403, {"error": "Project not permitted"})
+                    return
                 if path == "/api/ticket":
-                    project = body.get("project", "")
-                    if project not in engine.projects:
-                        raise ValueError("Unknown project")
+                    if not principal["allow_ticket"]:
+                        self.send_json(403, {"error": "Ticket permission required"})
+                        return
                     ticket_id = engine.tickets.submit(project, body.get("message", ""),
                                                       body.get("consent") is True)
                     self.send_json(201, {"id": ticket_id, "project": project,
                                          "status": "new", "reviewed": False})
                 else:
-                    response = engine.answer(body.get("project", ""), body.get("message", ""),
+                    response = engine.answer(project, body.get("message", ""),
                                              external_consent=body.get("external_model_consent") is True)
                     self.send_json(200, response)
             except (ValueError, TypeError, json.JSONDecodeError) as exc:
@@ -552,6 +579,13 @@ def main(argv=None):
         style_cmd.add_argument("--detail", choices=["short", "balanced", "thorough"], default="balanced")
         style_cmd.add_argument("--expertise", choices=["beginner", "intermediate", "expert", "adaptive"],
                                default="adaptive")
+    issue_token = sub.add_parser("issue-access", help="Issue one program-scoped customer key (trusted CLI)")
+    issue_token.add_argument("--project", required=True)
+    issue_token.add_argument("--allow-ticket", action="store_true", default=False)
+    revoke_token = sub.add_parser("revoke-access", help="Revoke a scoped customer key (trusted CLI)")
+    revoke_token.add_argument("--token-id", required=True)
+    list_tokens = sub.add_parser("list-access", help="List token IDs, never secrets (trusted CLI)")
+    list_tokens.add_argument("--project", default=None)
     serve = sub.add_parser("serve", help="Launch local support web UI/API")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -559,11 +593,26 @@ def main(argv=None):
     engine = SupportEngine(args.config, args.db)
     if args.command == "serve":
         key = os.environ.get("AMIN_SUPPORT_API_KEY", "")
-        if args.host not in {"127.0.0.1", "localhost", "::1"} and not key:
-            parser.error("AMIN_SUPPORT_API_KEY is required on non-local interfaces")
-        server = ThreadingHTTPServer((args.host, args.port), make_handler(engine, key))
+        non_local = args.host not in {"127.0.0.1", "localhost", "::1"}
+        # Non-local listeners never accept global/anonymous API access.
+        # HTTPS still must be provided by a trusted TLS reverse proxy.
+        if non_local and not engine.access.active_count():
+            parser.error("Public interface requires at least one scoped customer key")
+        server = ThreadingHTTPServer(
+            (args.host, args.port), make_handler(engine, key, scoped_only=non_local))
         print(f"Support UI: http://{args.host}:{args.port} (stop with Ctrl+C)", flush=True)
         server.serve_forever()
+    elif args.command == "issue-access":
+        if args.project not in engine.projects:
+            parser.error("Unknown software program")
+        print(json.dumps(engine.access.issue(args.project, args.allow_ticket),
+                         ensure_ascii=False))
+    elif args.command == "revoke-access":
+        print(json.dumps({"revoked": engine.access.revoke(args.token_id)},
+                         ensure_ascii=False))
+    elif args.command == "list-access":
+        print(json.dumps({"keys": engine.access.list(args.project)},
+                         ensure_ascii=False))
     elif args.command == "ingest":
         print(json.dumps(engine.knowledge.ingest(engine.projects[args.project], args.source),
                          ensure_ascii=False))
