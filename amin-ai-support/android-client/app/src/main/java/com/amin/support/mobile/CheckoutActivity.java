@@ -40,7 +40,8 @@ public final class CheckoutActivity extends Activity {
         host.setHint("https://billing-host.example");
         host.setSingleLine(true);
         host.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_URI);
-        host.setText(getPreferences(MODE_PRIVATE).getString("checkout_host",""));
+        host.setText(getPreferences(MODE_PRIVATE).getString("checkout_host",
+            TokenVault.endpoint(this)));
         root.addView(host);
         Button quote=button("استعلام قیمت نهایی یک ماه",root);
         quote.setOnClickListener(v->runNetwork(api->api.quote(),"price"));

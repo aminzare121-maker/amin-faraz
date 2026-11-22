@@ -117,6 +117,7 @@ public final class MainActivity extends Activity {
     private Button connect;
     private Button send;
     private CheckBox autoHandoff;
+    private CheckBox allowCloudModel;
     private Button checkHandoff;
     private String latestHandoffId = "";
     private String latestHandoffProject = "";
@@ -380,6 +381,11 @@ public final class MainActivity extends Activity {
                 onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
         });
         root.addView(silence);
+
+        allowCloudModel = new CheckBox(this);
+        allowCloudModel.setText("اجازه می‌دهم متن این سؤال و مدارک مجاز برنامه برای دریافت پاسخ آنلاین به مدل Cloudflare ارسال شوند.");
+        allowCloudModel.setChecked(false);
+        root.addView(allowCloudModel);
 
         send = button("پرسش از هوش پشتیبان");
         send.setEnabled(false);
@@ -697,9 +703,12 @@ public final class MainActivity extends Activity {
         send.setEnabled(false);
         answer.setText("در حال دریافت پاسخ از موتور پشتیبان ...");
         setStatus("در حال پردازش سؤال؛ اطلاعات فقط به سرور HTTPS تنظیم‌شده فرستاده می‌شود.");
+        // Read UI consent before entering the worker thread; default stays OFF.
+        final boolean approvedCloudModel = allowCloudModel != null && allowCloudModel.isChecked();
         background.execute(() -> {
             try {
-                JSONObject reply = new SupportApi(address, secret).ask(selectedProject, message);
+                JSONObject reply = new SupportApi(address, secret).ask(
+                        selectedProject, message, approvedCloudModel);
                 String response = reply.optString("answer", "");
                 if (response.trim().isEmpty()) throw new IllegalStateException("پاسخ معتبر دریافت نشد.");
                 boolean usedModel = reply.optBoolean("model_used", false);
