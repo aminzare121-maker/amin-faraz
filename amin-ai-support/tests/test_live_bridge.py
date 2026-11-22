@@ -329,6 +329,108 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("no paid fallback", result["message"])
             await ws.close()
 
+    async def test_direct_chatgpt_agent_routes_tools_to_per_project_repo_only(self):
+        self.gateway.use_github_agent = True
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.agent_token = "fake-injected-private-token"
+        self.gateway.agent_project_repos = {"alpha": "myowner/privateapp"}
+        self.gateway.agent_public_optin = False
+        observed = []
+        def fake_agent(question, repo, token, job_id, **kwargs):
+            observed.append((question, repo, token, job_id, kwargs))
+            return {"status": "draft_pr_created", "answer": "تغییرات در شاخه ثبت شد",
+                    "repository": repo, "request_id": job_id,
+                    "pr_number": 44, "changed_files": ["README.md"],
+                    "tests_passed": False, "model_used": False,
+                    "simulation": True, "action_performed": False,
+                    "deployed": False, "merged": False, "installed": False}
+        with patch("live_bridge.run_chatgpt_git_agent", side_effect=fake_agent):
+            ws, _ = await self.login(self.alpha["token"])
+            await ws.send(json.dumps({
+                "type": "work", "id": "agent-1", "project": "alpha",
+                "message": "Create a test Android app", "consent": True,
+                "request_key": "7"*32, "target_environment": "android",
+                "requested_operation": "build", "authorize_github_write": True}))
+            frames = [json.loads(await asyncio.wait_for(ws.recv(), 3)) for _ in range(3)]
+            self.assertEqual([x["status"] for x in frames],
+                             ["queued", "chatgpt_running", "draft_pr_created"])
+            self.assertEqual(len(observed), 1)
+            self.assertEqual(observed[0][1], "myowner/privateapp")
+            self.assertTrue(observed[0][4]["allow_write"])
+            self.assertFalse(observed[0][4]["allow_public"])
+            self.assertFalse(frames[-1]["chatgpt_invoked"])
+            self.assertFalse(frames[-1]["action_performed"])
+            self.assertFalse(frames[-1]["agent_result"]["tests_passed"])
+            job_id = frames[0]["id_of_job"]
+            await ws.send(json.dumps({"type": "resume", "id": "resume-agent",
+                                      "project": "alpha", "job_id": job_id}))
+            resumed = json.loads(await asyncio.wait_for(ws.recv(), 3))
+            self.assertEqual(resumed["agent_result"]["pr_number"], 44)
+            self.assertEqual(resumed["id_of_job"], job_id)
+            await ws.close()
+
+    async def test_direct_agent_rejects_another_users_plan_access(self):
+        self.gateway.use_github_agent = True
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.agent_token = "fake-injected-private-token"
+        self.gateway.agent_project_repos = {"alpha": "myowner/privateapp"}
+        with patch("live_bridge.run_chatgpt_git_agent") as agent:
+            ws, _ = await self.login(self.other["token"])
+            await ws.send(json.dumps({
+                "type": "work", "id": "another", "project": "alpha",
+                "message": "Create a new app", "consent": True,
+                "request_key": "8"*32, "authorize_github_write": True}))
+            frames = [json.loads(await asyncio.wait_for(ws.recv(), 3)) for _ in range(2)]
+            self.assertEqual(frames[-1]["status"], "agent_needs_setup")
+            self.assertFalse(frames[-1]["action_performed"])
+            agent.assert_not_called()
+            await ws.close()
+
+    async def test_direct_agent_never_sends_write_permission_implicitly(self):
+        self.gateway.use_github_agent = True
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.agent_token = "fake-injected-private-token"
+        self.gateway.agent_project_repos = {"alpha": "myowner/privateapp"}
+        def stub(question, repo, token, job_id, **kwargs):
+            self.assertFalse(kwargs["allow_write"])
+            return {"status": "answered_read_only", "answer": "Only reviewed",
+                    "pr_number": None, "model_used": False, "action_performed": False}
+        with patch("live_bridge.run_chatgpt_git_agent", side_effect=stub):
+            ws, _ = await self.login(self.alpha["token"])
+            await ws.send(json.dumps({
+                "type": "work", "id": "readonly", "project": "alpha",
+                "message": "Review architecture", "consent": True,
+                "request_key": "6"*32, "requested_operation": "analyze"}))
+            frames = [json.loads(await asyncio.wait_for(ws.recv(), 3)) for _ in range(3)]
+            self.assertEqual(frames[-1]["status"], "answered_read_only")
+            self.assertFalse(frames[-1]["action_performed"])
+            await ws.close()
+
+    async def test_direct_agent_permissions_are_bound_to_idempotency_key(self):
+        self.gateway.use_github_agent = True
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.agent_token = "fake-test"
+        self.gateway.agent_project_repos = {"alpha": "myowner/privateapp"}
+        with patch("live_bridge.run_chatgpt_git_agent", return_value={
+                "status": "answered_read_only", "answer": "Done",
+                "model_used": False, "action_performed": False}):
+            ws, _ = await self.login(self.alpha["token"])
+            base = {"type": "work", "project": "alpha", "message": "Review",
+                    "request_key": "5"*32, "consent": True}
+            await ws.send(json.dumps({**base, "id": "first-permission"}))
+            for _ in range(3):
+                await asyncio.wait_for(ws.recv(), 3)
+            await ws.send(json.dumps({**base, "id": "changed-permission",
+                                      "authorize_github_write": True}))
+            first = json.loads(await asyncio.wait_for(ws.recv(), 3))
+            self.assertEqual(first["type"], "error")
+            self.assertIn("ValueError", first["message"])
+            await ws.close()
+
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
             await run_server(self.engine, "0.0.0.0", 0)
