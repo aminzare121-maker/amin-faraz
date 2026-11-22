@@ -282,6 +282,13 @@ public final class MainActivity extends Activity {
         status.setTextIsSelectable(true);
         root.addView(status);
 
+        root.addView(section("خرید اشتراک یک‌ماهه هوش امین"));
+        root.addView(text("قیمت نهایی یکپارچه، تأیید مستقل وصول و فعال‌سازی پس از شارژ واقعی؛ فقط در نسخه مستقل خارج از Google Play.", 14, false));
+        Button openCheckout = button("صورتحساب و پیگیری پرداخت");
+        openCheckout.setOnClickListener(v -> startActivity(
+                new Intent(MainActivity.this, CheckoutActivity.class)));
+        root.addView(openCheckout);
+
         root.addView(section("گفت‌وگو با پشتیبان"));
         projects = new Spinner(this);
         projects.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
