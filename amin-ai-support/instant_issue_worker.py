@@ -13,7 +13,7 @@ import re
 import sys
 import tempfile
 from pathlib import Path
-from urllib.request import Request, urlopen
+from urllib.request import Request, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
 
 MARKER = "AMIN_CHAT_BRIDGE_V1\n"
@@ -153,6 +153,11 @@ def process(event: dict, repo: str, token: str, source: Path, opener) -> dict:
             "chatgpt_invoked": False}
 
 
+class NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 def main():
     import urllib.request
     repo = os.environ["GITHUB_REPOSITORY"]
@@ -162,7 +167,7 @@ def main():
     event = json.loads(event_path.read_text(encoding="utf-8"))
     # Keep OAuth token, question and response out of logs.
     out = process(event, repo, token, source, urllib.request.build_opener(
-        urllib.request.HTTPHandler(), urllib.request.HTTPSHandler()))
+        NoRedirect()))
     print(json.dumps(out, ensure_ascii=False))
 
 
