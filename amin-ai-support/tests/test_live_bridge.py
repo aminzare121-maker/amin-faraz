@@ -202,7 +202,7 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
                 "type": "work", "id": "request1", "project": "alpha",
                 "message": "Build Android app", "consent": True,
                 "target_environment": "android", "requested_operation": "build",
-                "chatgpt_work_event": True}))
+                "chatgpt_work_event": True, "request_key": "f"*32}))
             rows = [json.loads(await asyncio.wait_for(ws.recv(), timeout=5))
                     for _ in range(4)]
             self.assertEqual([x["status"] for x in rows],
@@ -215,6 +215,68 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(dispatched), 1)
             trigger.assert_called_once()
             await ws.close()
+
+    async def test_atomic_idempotency_under_simultaneous_retries_and_isolation(self):
+        """Same key creates one job even when 20 submissions race."""
+        key = "1"*32
+        def submit(token_id, project="alpha", question="Build program",
+                   work_event=True):
+            return self.gateway.jobs.new_once(
+                project, token_id, question, "android", "build", key, work_event)
+        results = await asyncio.gather(
+            *(asyncio.to_thread(submit, self.alpha["token_id"]) for _ in range(20)))
+        self.assertEqual(len({job for job, _created in results}), 1)
+        self.assertEqual(sum(int(created) for _job, created in results), 1)
+        different_user = await asyncio.to_thread(submit, self.other["token_id"])
+        different_project = await asyncio.to_thread(submit, self.beta["token_id"], "beta")
+        self.assertTrue(different_user[1])
+        self.assertTrue(different_project[1])
+        self.assertNotEqual(results[0][0], different_user[0])
+        self.assertNotEqual(results[0][0], different_project[0])
+        with self.assertRaisesRegex(ValueError, "different work request"):
+            submit(self.alpha["token_id"], question="Changed question")
+        with self.assertRaisesRegex(ValueError, "different work request"):
+            submit(self.alpha["token_id"], work_event=False)
+
+    async def test_duplicate_live_work_does_not_dispatch_second_github_pr(self):
+        dispatches = []
+        class FakePrivateGitHub:
+            def __init__(self, repo, token):
+                self.repo = repo
+            def submit(self, project, question, device, target, operation):
+                dispatches.append(question)
+                return {"issue_number": 10, "request_id": "e"*32}
+            def status(self, issue, req_id):
+                return {"status": "answered", "answer": "No code ran",
+                        "needs_human": True, "action_performed": False}
+        self.gateway.repo = "owner/private"
+        self.gateway.github_token = "testing-secret-only"
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.poll_seconds = 2
+        with patch("live_bridge.GitHubPrivateBridge", FakePrivateGitHub):
+            ws, _ = await self.login(self.alpha["token"])
+            request = {"type": "work", "project": "alpha", "message": "Build safe app",
+                       "target_environment": "android", "requested_operation": "build",
+                       "request_key": "9"*32, "consent": True}
+            await ws.send(json.dumps({**request, "id": "first"}))
+            await ws.send(json.dumps({**request, "id": "retry"}))
+            messages = [json.loads(await asyncio.wait_for(ws.recv(), 7)) for _ in range(5)]
+            jobs = [x["id_of_job"] for x in messages if "id_of_job" in x]
+            self.assertTrue(jobs)
+            self.assertEqual(len(set(jobs)), 1)
+            self.assertTrue(any(x.get("duplicate_suppressed") for x in messages))
+            self.assertEqual(dispatches, ["Build safe app"])
+            await ws.close()
+
+    async def test_chatgpt_event_requires_idempotency_key(self):
+        ws, _ = await self.login(self.alpha["token"])
+        await ws.send(json.dumps({
+            "type":"work", "id":"invalid", "project":"alpha", "message":"Build",
+            "consent":True, "chatgpt_work_event":True}))
+        result = json.loads(await asyncio.wait_for(ws.recv(), 3))
+        self.assertEqual(result["type"], "error")
+        self.assertIn("request key", result["message"])
+        await ws.close()
 
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
