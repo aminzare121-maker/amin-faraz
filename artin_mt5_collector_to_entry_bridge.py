@@ -24,6 +24,10 @@ def evaluate_collector_csv(source: Path, *, dossier=None, as_of: int):
         raise ValueError("INVALID_DECISION_CLOCK")
     raw = Path(source).read_bytes()
     metrics = parse_csv_bytes(raw)
+    # A missing M15 interval breaks candle adjacency. The collector importer may
+    # report gaps, but the entry engine must never treat separated bars as neighbors.
+    if metrics["gaps_unclassified"]:
+        raise ValueError("DISCONTINUOUS_M15_ENTRY_REPLAY")
     rows = csv.DictReader(io.StringIO(raw.decode("utf-8-sig"), newline=""))
     with tempfile.TemporaryDirectory(prefix="artin_readonly_") as temp:
         path = Path(temp) / "closed_m15.csv"
