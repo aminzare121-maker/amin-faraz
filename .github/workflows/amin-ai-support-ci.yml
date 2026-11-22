@@ -32,6 +32,10 @@ jobs:
         run: python -m py_compile amin-ai-support/amin_support.py
       - name: Install open-source WebSocket runtime for full-duplex tests
         run: python -m pip install "websockets>=14,<18"
+      - name: Install free official SIWC OAuth and system-keychain dependencies
+        run: python -m pip install -r amin-ai-support/requirements-siwc.txt
+      - name: Compile direct ChatGPT plan adapter
+        run: python -m py_compile amin-ai-support/chatgpt_plan_direct.py
       - name: Run offline tests
         working-directory: amin-ai-support
         run: python -m unittest discover -s tests -v
