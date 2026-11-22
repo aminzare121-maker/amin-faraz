@@ -104,10 +104,15 @@ class LiveGateway:
         self.poll_seconds = max(2, int(poll_seconds))
         self.limits = SlidingLimits()
         self.sem = asyncio.Semaphore(8)
+        self.detached_work = set()
 
     async def send(self, socket, kind, message_id, **fields):
-        await socket.send(json.dumps({"type": kind, "id": message_id, **fields},
-                                     ensure_ascii=False, separators=(",", ":")))
+        try:
+            await socket.send(json.dumps({"type": kind, "id": message_id, **fields},
+                                         ensure_ascii=False, separators=(",", ":")))
+        except ConnectionClosed:
+            # A disconnected client must not cancel server-side approved work.
+            pass
 
     async def auth(self, socket):
         try:
@@ -181,8 +186,13 @@ class LiveGateway:
                 task = asyncio.create_task(
                     self.perform(socket, access, command),
                     name="amin-live-" + ident)
-                outstanding.add(task)
-                task.add_done_callback(outstanding.discard)
+                if action == "work":
+                    # Persist approved work even if the phone loses connectivity.
+                    self.detached_work.add(task)
+                    task.add_done_callback(self.detached_work.discard)
+                else:
+                    outstanding.add(task)
+                    task.add_done_callback(outstanding.discard)
                 task.add_done_callback(lambda _task, msg_id=ident: active_ids.discard(msg_id))
         except ConnectionClosed:
             pass
@@ -243,6 +253,8 @@ class LiveGateway:
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="queued", action_performed=False)
         if not self.repo or not self.github_token:
+            if units not in {"unmetered", "exhausted"}:
+                await asyncio.to_thread(self.engine.quotas.refund, access["token_id"], "ticket", units)
             await asyncio.to_thread(self.jobs.change, job_id, "needs_setup")
             await self.send(socket, "work_state", ident, id_of_job=job_id,
                             status="needs_setup", message="Private GitHub worker not configured",
@@ -254,6 +266,8 @@ class LiveGateway:
                 bridge = GitHubPrivateBridge(self.repo, self.github_token)
                 result = await asyncio.to_thread(bridge.submit, project, command["message"])
             except (ValueError, RuntimeError):
+                if units not in {"unmetered", "exhausted"}:
+                    await asyncio.to_thread(self.engine.quotas.refund, access["token_id"], "ticket", units)
                 await asyncio.to_thread(self.jobs.change, job_id, "dispatch_failed")
                 await self.send(socket, "work_state", ident, id_of_job=job_id,
                                 status="dispatch_failed", action_performed=False)
