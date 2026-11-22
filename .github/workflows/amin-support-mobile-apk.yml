@@ -81,6 +81,13 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/OfflineVoiceCommands.java \
             amin-ai-support/android-client/tests/VoiceModePolicyTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.VoiceModePolicyTest
+      - name: Test original Amin Persian prosody persona on JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/AminVoicePersona.java \
+            amin-ai-support/android-client/tests/AminVoicePersonaTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.AminVoicePersonaTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
