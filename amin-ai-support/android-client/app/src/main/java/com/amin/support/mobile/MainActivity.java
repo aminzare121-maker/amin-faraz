@@ -219,6 +219,9 @@ public final class MainActivity extends Activity {
         ghCheck.setEnabled(false);
         ghCheck.setOnClickListener(v -> checkDirectGitHub());
         root.addView(ghCheck);
+        Button ghApprove = button("تأیید پاسخ صحیح برای حافظه پروژه");
+        ghApprove.setOnClickListener(v -> confirmDirectApproval());
+        root.addView(ghApprove);
         Button ghClear = button("حذف کلید اتصال GitHub از گوشی");
         ghClear.setOnClickListener(v -> clearDirectGitHub());
         root.addView(ghClear);
@@ -665,6 +668,50 @@ public final class MainActivity extends Activity {
                     setStatus("دریافت پاسخ ناموفق: " + e.getMessage()); });
             }
         });
+    }
+
+    private void confirmDirectApproval() {
+        if (ghIssueNumber < 1 || !ghRequestId.matches("[a-f0-9]{32}")) {
+            setStatus("درخواستی برای تأیید وجود ندارد");
+            return;
+        }
+        final String project;
+        try {
+            project = GitHubBridgePolicy.project(ghProject.getText().toString().trim());
+            if (!GitHubDirectVault.available(this))
+                throw new IllegalArgumentException("مخزن خصوصی متصل نیست");
+        } catch (Exception error) { setStatus(error.getMessage()); return; }
+        new AlertDialog.Builder(this)
+                .setTitle("تأیید پاسخ برای یادگیری")
+                .setMessage("فقط وقتی پاسخ را واقعاً بررسی کرده‌ای و درست است تأیید کن. "
+                        + "این تأیید در مخزن خصوصی ثبت می‌شود تا عامل ChatGPT در درخواست‌های بعدی "
+                        + "همین نرم‌افزار از آن استفاده کند. مدل به صورت خودکار بازآموزی نمی‌شود.")
+                .setNegativeButton("انصراف", (d, w) -> {})
+                .setPositiveButton("پاسخ درست است", (d, w) -> {
+                    final String repo = GitHubDirectVault.repo(this);
+                    final String secret;
+                    try { secret = GitHubDirectVault.token(this); }
+                    catch (Exception e) { setStatus("کلید GitHub در دسترس نیست"); return; }
+                    final int issue = ghIssueNumber;
+                    final String rid = ghRequestId;
+                    int requestVersion = ++version;
+                    setStatus("در حال ثبت بازخورد تأییدشده...");
+                    background.execute(() -> {
+                        try {
+                            JSONObject confirmation = new GitHubDirectBridge(repo, secret)
+                                    .approve(issue, rid, project);
+                            ui.post(() -> {
+                                if (!active || requestVersion != version) return;
+                                setStatus(confirmation.optBoolean("already_approved")
+                                        ? "این پاسخ قبلاً برای حافظه همین پروژه تأیید شده است."
+                                        : "تأیید پاسخ در مخزن خصوصی ثبت شد؛ استفاده مجدد به عامل مجاز بستگی دارد.");
+                            });
+                        } catch (Exception error) {
+                            ui.post(() -> { if (active && requestVersion == version)
+                                setStatus("تأیید ثبت نشد: " + error.getMessage()); });
+                        }
+                    });
+                }).show();
     }
 
     private void pollDirectQuietly() {
