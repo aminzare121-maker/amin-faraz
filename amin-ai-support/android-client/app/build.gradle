@@ -25,3 +25,8 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
+
+// Open-source WSS transport; no paid API or embedded server secret.
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+}
