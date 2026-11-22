@@ -39,6 +39,11 @@ class FakeOpener:
             return FakeResponse(self.issues[12])
         if url.endswith("/issues/12/comments?per_page=100"):
             return FakeResponse(self.comments.get(12, []))
+        if url.endswith("/issues/12/comments") and req.method == "POST":
+            data = json.loads(req.data.decode("utf8"))
+            self.comments.setdefault(12, []).append(
+                {"user": {"login": "owner"}, "body": data["body"]})
+            return FakeResponse({"id": 44})
         if url.endswith("/issues?state=all&per_page=100"):
             return FakeResponse([{"body": i["body"], "number": n, "created_at": "2026-11-22"}
                                  for n,i in self.issues.items()])
@@ -72,6 +77,18 @@ class PrivateRelayTests(unittest.TestCase):
         self.assertEqual(bridge.status(12, request["request_id"])["answer"], "پاسخ بررسی‌شده")
         self.assertEqual(len(bridge.list_requests()), 1)
         self.assertEqual(bridge.list_requests()[0]["request_id"], request["request_id"])
+        self.assertEqual(bridge.approve(12, request["request_id"], "support"),
+                         {"approved": True, "already_approved": False})
+        self.assertEqual(bridge.approve(12, request["request_id"], "support"),
+                         {"approved": True, "already_approved": True})
+        self.assertIn("AMIN_LESSON_APPROVED_V1", opener.comments[12][-1]["body"])
+
+    def test_unanswered_request_cannot_be_approved(self):
+        opener = FakeOpener()
+        bridge = GitHubPrivateBridge("owner/repo", self.TOKEN, opener=opener)
+        request = bridge.submit("support", "question")
+        with self.assertRaisesRegex(RuntimeError, "Only answered"):
+            bridge.approve(12, request["request_id"], "support")
 
     def test_cross_issue_id_and_fake_reply_blocked(self):
         opener = FakeOpener()
