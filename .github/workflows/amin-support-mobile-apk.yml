@@ -105,6 +105,13 @@ jobs:
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.CheckoutPolicyTest
       - name: Check chat response visibility and optional voice layout
         run: python3 amin-ai-support/android-client/tests/test_mobile_screen_order.py
+      - name: Test temporary project-isolated conversation memory on JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \\
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/ConversationMemory.java \\
+            amin-ai-support/android-client/tests/ConversationMemoryTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.ConversationMemoryTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug

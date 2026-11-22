@@ -46,6 +46,31 @@ public final class SupportApi {
         return exchange("/api/chat", payload);
     }
 
+    /** Optional short-lived history, sent only when the user consented for Cloudflare. */
+    public JSONObject ask(String projectId, String question, boolean onlineConsent,
+                          java.util.List<ConversationMemory.Turn> previousTurns) throws Exception {
+        if (projectId == null || !projectId.matches("[a-z][a-z0-9_-]{1,50}")
+                || question == null || question.trim().isEmpty() || question.length() > 2500) {
+            throw new IllegalArgumentException("درخواست گفت‌وگو معتبر نیست.");
+        }
+        JSONObject payload = new JSONObject();
+        payload.put("project", projectId);
+        payload.put("message", question.trim());
+        payload.put("external_model_consent", onlineConsent);
+        if (onlineConsent && previousTurns != null && !previousTurns.isEmpty()) {
+            org.json.JSONArray context = new org.json.JSONArray();
+            if (previousTurns.size() > 6) throw new IllegalArgumentException("تاریخچهٔ بیش از حد مجاز.");
+            for (ConversationMemory.Turn turn : previousTurns) {
+                JSONObject item = new JSONObject();
+                item.put("role", turn.role);
+                item.put("content", turn.content);
+                context.put(item);
+            }
+            payload.put("history", context);
+        }
+        return exchange("/api/chat", payload);
+    }
+
     public JSONObject handoff(String projectId, String question) throws Exception {
         if (projectId == null || !projectId.matches("[a-z][a-z0-9_-]{1,50}")
                 || question == null || question.trim().isEmpty() || question.length() > 2500) {
