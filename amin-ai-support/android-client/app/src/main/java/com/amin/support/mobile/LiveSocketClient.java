@@ -1,5 +1,6 @@
 package com.amin.support.mobile;
 
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -32,11 +33,25 @@ public final class LiveSocketClient {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(0, TimeUnit.MILLISECONDS)
                 .pingInterval(20, TimeUnit.SECONDS)
+                // Redirects must never send a saved scoped token to a new host.
+                .followRedirects(false)
+                .followSslRedirects(false)
                 .build();
         socket = transport.newWebSocket(new Request.Builder().url(url)
                 .header("Cache-Control", "no-store").build(), new WebSocketListener() {
             @Override public void onOpen(WebSocket ws, Response response) {
-                // The server authenticates after WSS negotiation. No redirect/token in URL.
+                // Fail closed if a server or intermediary changed the authenticated target.
+                URI expected = URI.create(url);
+                String host = response.request().url().host();
+                int port = response.request().url().port();
+                int expectedPort = expected.getPort() == -1 ? 443 : expected.getPort();
+                if (!expected.getHost().equalsIgnoreCase(host) || port != expectedPort
+                        || !"https".equals(response.request().url().scheme())) {
+                    ws.cancel();
+                    listener.onClosed("مقصد کانال زنده تغییر کرده؛ کلید ارسال نشد.");
+                    return;
+                }
+                // The server authenticates after WSS negotiation. No credential in URL.
                 JSONObject payload = new JSONObject();
                 try {
                     payload.put("type", "auth");
