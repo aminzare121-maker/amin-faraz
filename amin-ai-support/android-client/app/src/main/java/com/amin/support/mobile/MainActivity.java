@@ -145,7 +145,19 @@ public final class MainActivity extends Activity {
                         onlineVoice.requestUnavailable("ارسال درخواست صوتی به GitHub ممکن نشد.");
                     }
                 } else {
-                    onlineVoice.requestUnavailable("هیچ کانال آنلاین مجاز متصل نیست؛ پاسخ هوشمند ساخته نشد.");
+                    // Purely local fallback: deterministic commands only,
+                    // never fabricate a remote ChatGPT response.
+                    String fixed = OfflineVoiceCommands.respond(
+                            words, !latestAnswer.isEmpty());
+                    if ("__READ_LAST_ANSWER__".equals(fixed)) {
+                        speakPersian(latestAnswer);
+                    } else if (!fixed.isEmpty()) {
+                        speakPersian(fixed);
+                    } else {
+                        onlineVoice.requestUnavailable(
+                                "گفتار آفلاین ثبت شد؛ موتور هوش آنلاین متصل نیست. "
+                                + "فرمان «راهنما» را بگو تا دستورهای ثابت را بشنوی.");
+                    }
                 }
             }
             @Override public void onState(String state) {
@@ -1091,8 +1103,10 @@ public final class MainActivity extends Activity {
             return;
         }
         if (!((liveClient != null && liveClient.isReady())
-                || GitHubDirectVault.available(this))) {
-            setStatus("برای مکالمهٔ آنلاین ابتدا WSS یا GitHub خصوصی را متصل کن.");
+                || GitHubDirectVault.available(this))
+                && voiceModeSelector.getSelectedItemPosition() != VoiceModePolicy.DEVICE_OFFLINE) {
+            setStatus("برای پاسخ هوشمند آنلاین ابتدا WSS یا GitHub خصوصی را متصل کن. "
+                    + "در حالت آفلاین می‌توانی با امکانات خود گوشی چند فرمان ثابت بگویی.");
             return;
         }
         new AlertDialog.Builder(this)
