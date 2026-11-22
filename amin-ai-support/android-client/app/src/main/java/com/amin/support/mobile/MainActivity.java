@@ -63,6 +63,7 @@ public final class MainActivity extends Activity {
     private EditText liveJob;
     private Spinner liveTarget;
     private Spinner liveOperation;
+    private CheckBox liveWorkChatGPT;
     private TextView liveStatus;
     private Button verifiedApkInstall;
     private String availableApkUrl = "";
@@ -322,6 +323,11 @@ public final class MainActivity extends Activity {
                 android.R.layout.simple_spinner_dropdown_item,
                 new String[]{"پاسخ", "ساخت برنامه", "اصلاح برنامه", "تحلیل", "آماده‌سازی انتشار"}));
         root.addView(liveOperation);
+        liveWorkChatGPT = new CheckBox(this);
+        liveWorkChatGPT.setText("با یک تأیید، درخواست خصوصی به ChatGPT Work هم ارجاع شود "
+                + "(نیازمند اتصال رویدادمحور مجاز در حساب ChatGPT و مجوز GitHub)");
+        liveWorkChatGPT.setChecked(false);
+        root.addView(liveWorkChatGPT);
         Button startLive = button("اتصال زنده به موتور");
         startLive.setOnClickListener(v -> connectLive());
         root.addView(startLive);
@@ -1227,6 +1233,10 @@ public final class MainActivity extends Activity {
                 .setTitle("ارسال درخواست ساخت/اجرا")
                 .setMessage("این دستور در موتور خصوصی ثبت می‌شود؛ در صورت تنظیم "
                         + "مخزن خصوصی به GitHub ارجاع می‌شود. "
+                        + (liveWorkChatGPT.isChecked()
+                            ? "همچنین رویداد Pull Request خصوصی برای ChatGPT Work ساخته می‌شود؛ "
+                              + "دریافت توسط ChatGPT نیازمند وظیفهٔ فعال و مجوزهای حساب است. "
+                            : "")
                         + "قبولی ساخت یا اجرای نهایی فقط پس از ارائه شواهد است. ارسال شود؟")
                 .setPositiveButton("تأیید و ارسال", (d, which) -> {
                     try {
@@ -1236,7 +1246,8 @@ public final class MainActivity extends Activity {
                                 LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
                                 message,
                                 destinations[liveTarget.getSelectedItemPosition()],
-                                operations[liveOperation.getSelectedItemPosition()]);
+                                operations[liveOperation.getSelectedItemPosition()],
+                                liveWorkChatGPT.isChecked());
                         liveMessage("کار در صف زنده ثبت می‌شود؛ منتظر شناسه و وضعیت هستیم.");
                     } catch (Exception problem) {
                         liveMessage("ثبت کار ناموفق: " + problem.getMessage());
