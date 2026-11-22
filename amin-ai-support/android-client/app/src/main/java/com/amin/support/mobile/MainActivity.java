@@ -38,7 +38,8 @@ import javax.net.ssl.SSLException;
  *
  * Only HTTPS, per-program scoped access, Keystore-protected bearer token.
  * No customer questions/transcripts are persisted on this device.
- * No paid external model, VPN, Google account, microphone, or GitHub token.
+ * No paid external model or VPN is required. The OPTIONAL direct-private mode
+ * stores the user's repo-scoped GitHub credential in a separate Android Keystore.
  */
 public final class MainActivity extends Activity {
     private final Handler ui = new Handler(Looper.getMainLooper());
@@ -179,7 +180,7 @@ public final class MainActivity extends Activity {
 
         root.addView(section("ارجاع به هوش مرکزی و پیگیری درخواست"));
         root.addView(text("اگر پاسخی قطعی یا ابزار لازم موجود نباشد، درخواست با رضایت تو "
-                + "در موتور خصوصی ثبت می‌شود. GitHub عمومی فقط شناسه بی‌نام می‌بیند؛ "
+                + "در موتور خصوصی ثبت می‌شود. مخزن عمومی GitHub هیچ متنی دریافت نمی‌کند؛ "
                 + "ارسال به ChatGPT فعلاً خودکار نیست و به عامل مجاز نیاز دارد.", 14, false));
         autoHandoff = new CheckBox(this);
         autoHandoff.setText("وقتی موتور شواهد کافی ندارد، با رضایت من خودکار به صف ارجاع بده"
@@ -226,7 +227,8 @@ public final class MainActivity extends Activity {
         root.addView(text(
                 "این اپ خودش مدل زبانی دانلود یا اجرا نمی‌کند. پاسخ از همان موتور "
                 + "پشتیبانی تنظیم‌شده روی رایانه یا سرور دریافت می‌شود. "
-                + "بدون اتصال HTTPS معتبر و روشن‌بودن موتور، گفت‌وگوی هوشمند کار نمی‌کند.\n"
+                + "در حالت موتور مرکزی، بدون اتصال HTTPS معتبر و روشن‌بودن موتور پاسخ هوشمند دریافت نمی‌شود.\n"
+                + "در حالت مستقیم GitHub، موتور لازم نیست ولی حساب مخزن خصوصی و عامل ChatGPT مجاز لازم است.\n"
                 + "هیچ سرویس هوش مصنوعی پولی از طرف این اپ فعال نمی‌شود. "
                 + "پاسخ‌ها در حافظه دائمی گوشی ذخیره نمی‌شوند و کلید دسترسی با "
                 + "Android Keystore رمزگذاری می‌شود.\n"
@@ -450,7 +452,7 @@ public final class MainActivity extends Activity {
         new AlertDialog.Builder(this)
                 .setTitle("اجازه ثبت و ارجاع درخواست")
                 .setMessage("متن درخواست در حافظه خصوصی موتور ذخیره می‌شود. "
-                        + "در مخزن عمومی GitHub فقط شناسه بی‌نام ثبت می‌شود. "
+                        + "هیچ اطلاعاتی در مخزن عمومی GitHub ثبت نمی‌شود. "
                         + "ارسال خودکار متن به ChatGPT فعال نیست. "
                         + "این درخواست ممکن است از سهمیه تیکت کم کند. تأیید می‌کنی؟")
                 .setNegativeButton("انصراف", (d, w) -> {})
