@@ -90,6 +90,8 @@ with zipfile.ZipFile(cache/'vosk-small-fa.zip') as z:
         copied+=1
     if copied < 10 or not (assets/'model-fa/am/final.mdl').is_file():
         raise RuntimeError('Persian offline recognition model incomplete')
+    # StorageService.unpack requires a version marker in the Android assets.
+    (assets/'model-fa/uuid').write_text('vosk-model-small-fa-0.42-amin-v1\n', encoding='utf8')
 with zipfile.ZipFile(aar) as z:
     if not any(n.endswith('libonnxruntime.so') or n.endswith('libsherpa-onnx-jni.so') for n in z.namelist()):
         raise RuntimeError('Sherpa native Android runtime not found in AAR')
