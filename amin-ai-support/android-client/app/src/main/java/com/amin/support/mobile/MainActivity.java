@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -63,6 +64,9 @@ public final class MainActivity extends Activity {
     private Spinner liveTarget;
     private Spinner liveOperation;
     private TextView liveStatus;
+    private Button verifiedApkInstall;
+    private String availableApkUrl = "";
+    private String availableApkSha = "";
     private LiveSocketClient liveClient;
     private static final int VOICE_REQUEST = 2401;
     private TextToSpeech speech;
@@ -330,6 +334,15 @@ public final class MainActivity extends Activity {
         liveStatus = text("کانال زنده متصل نیست.", 14, false);
         liveStatus.setTextIsSelectable(true);
         root.addView(liveStatus);
+        root.addView(section("تحویل خروجی ساخت‌شده به این گوشی"));
+        root.addView(text("اگر عامل سازنده APK را در انتشار رسمی GitHub قرار دهد "
+                + "و اثرانگشت SHA-256 معتبر اعلام کند، فایل با تأیید تو دانلود و "
+                + "بررسی می‌شود؛ فقط نصب‌کننده رسمی Android اجازه نصب را دریافت می‌کند. "
+                + "بدون تأیید شما نصب انجام نمی‌شود.", 14, false));
+        verifiedApkInstall = button("دریافت و نصبِ فایل APK بررسی‌شده");
+        verifiedApkInstall.setEnabled(false);
+        verifiedApkInstall.setOnClickListener(v -> confirmVerifiedDelivery());
+        root.addView(verifiedApkInstall);
 
         root.addView(section("محدودیت نسخه آزمایشی"));
         root.addView(text(
@@ -764,6 +777,8 @@ public final class MainActivity extends Activity {
                     if ("answered".equals(response.optString("status", ""))) {
                         latestAnswer = response.optString("answer", "");
                         answer.setText(latestAnswer);
+                        if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                        acceptArtifact(response.optJSONObject("artifact"));
                         setStatus("پاسخ از مخزن خصوصی دریافت شد. صحت اجرای عملیات باید جدا بررسی شود.");
                     } else {
                         setStatus("پاسخ هنوز در Issue خصوصی ثبت نشده است.");
@@ -841,6 +856,8 @@ public final class MainActivity extends Activity {
                         ghNotifiedRequestId = rid;
                         latestAnswer = response.optString("answer", "");
                         answer.setText(latestAnswer);
+                        if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                        acceptArtifact(response.optJSONObject("artifact"));
                         setStatus("پاسخ جدید از GitHub خصوصی دریافت شد؛ صحت اجرای آن مستقل بررسی شود.");
                     }
                 });
@@ -937,6 +954,76 @@ public final class MainActivity extends Activity {
         speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
     }
 
+    private void acceptArtifact(JSONObject artifact) {
+        if (artifact == null || !"android".equals(artifact.optString("environment", ""))) return;
+        try {
+            availableApkUrl = DeliveryPolicy.releaseUrl(artifact.getString("url"));
+            availableApkSha = DeliveryPolicy.sha256(artifact.getString("sha256"));
+            verifiedApkInstall.setEnabled(true);
+            liveMessage("خروجی APK برای اندروید معرفی شد؛ نصب هنوز انجام نشده است.");
+        } catch (Exception invalid) {
+            availableApkUrl = "";
+            availableApkSha = "";
+            verifiedApkInstall.setEnabled(false);
+            liveMessage("اطلاعات APK معتبر نیست؛ نصب مسدود شد.");
+        }
+    }
+
+    private void confirmVerifiedDelivery() {
+        final String url = availableApkUrl;
+        final String sha = availableApkSha;
+        try {
+            DeliveryPolicy.releaseUrl(url);
+            DeliveryPolicy.sha256(sha);
+        } catch (Exception invalid) {
+            liveMessage("خروجی نصب معتبر نیست.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("اجازه دانلود و نصب در اندروید")
+                .setMessage("فقط APK رسمی Github دریافت می‌شود؛ پس از بررسی SHA-256، "
+                        + "نصب‌کنندهٔ اندروید باز خواهد شد. اعتبار SHA جایگزین "
+                        + "اعتماد به سازنده و مجوزهای برنامه نیست. "
+                        + "نصب بدون تأیید دوباره در سیستم ممکن نیست. ادامه می‌دهی؟")
+                .setNegativeButton("انصراف", (d, which) -> {})
+                .setPositiveButton("تأیید دریافت", (d, which) -> {
+                    if (!AndroidDelivery.canRequestInstall(this)) {
+                        liveMessage("اجازه نصب از این برنامه غیرفعال است؛ در تنظیمات فعال کن "
+                                + "و سپس دوباره دکمه دریافت را بزن.");
+                        try { AndroidDelivery.askInstallPermission(this); }
+                        catch (Exception e) { liveMessage("باز کردن تنظیمات نصب ممکن نشد."); }
+                        return;
+                    }
+                    verifiedApkInstall.setEnabled(false);
+                    liveMessage("در حال دانلود و بررسی اثرانگشت فایل APK...");
+                    background.execute(() -> {
+                        try {
+                            File verified = AndroidDelivery.downloadVerified(
+                                    getApplicationContext(), url, sha);
+                            ui.post(() -> {
+                                if (!active) return;
+                                verifiedApkInstall.setEnabled(true);
+                                liveMessage("اثر انگشت فایل تأیید شد. در حال باز کردن نصب‌کنندهٔ Android...");
+                                try {
+                                    AndroidDelivery.launchSystemInstaller(this, verified);
+                                } catch (Exception problem) {
+                                    liveMessage("نصب‌کننده باز نشد: " + problem.getClass().getSimpleName());
+                                }
+                            });
+                        } catch (Exception error) {
+                            ui.post(() -> {
+                                if (active) {
+                                    verifiedApkInstall.setEnabled(true);
+                                    liveMessage("دریافت/بررسی فایل ناموفق: "
+                                            + error.getClass().getSimpleName());
+                                }
+                            });
+                        }
+                    });
+                })
+                .show();
+    }
+
     private void liveMessage(String value) {
         if (active && liveStatus != null) liveStatus.setText(value);
     }
@@ -980,6 +1067,7 @@ public final class MainActivity extends Activity {
                                 getPreferences(MODE_PRIVATE).edit().putString("live_job", jobId).apply();
                             }
                             String state = event.optString("status", "");
+                            acceptArtifact(event.optJSONObject("artifact"));
                             if (event.has("answer")) {
                                 latestAnswer = event.optString("answer", "");
                                 answer.setText(latestAnswer);
