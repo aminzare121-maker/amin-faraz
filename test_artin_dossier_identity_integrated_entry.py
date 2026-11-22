@@ -35,6 +35,10 @@ class DossierIdentityBridgeTest(unittest.TestCase):
             self.assertEqual(route['source_identity_status'], expected)
         self.assertEqual(result['independent_engine']['orders_created'],0)
         self.assertEqual(result['teacher_approved_entries'],0)
+        self.assertEqual(result['decision_arbitration']['decision'],'BLOCKED')
+        self.assertEqual(result['decision_arbitration']['reason'],'NO_VERIFIED_TEACHER_RULES')
+        self.assertFalse(result['decision_arbitration']['executable'])
+        self.assertEqual(result['decision_arbitration']['replayed_teacher_cases'],0)
         self.assertFalse(result['evidence_gate']['trade_authorized'])
         self.assertTrue(all(not x['side_decisions'][side]['trade_permitted'] for x in result['routes'] for side in ('BUY','SELL')))
 
