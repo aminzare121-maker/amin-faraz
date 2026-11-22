@@ -10,7 +10,9 @@ import asyncio
 import json
 import os
 import re
+from pathlib import Path
 from urllib.parse import urlsplit
+from windows_delivery import deliver, validate_release
 
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
@@ -40,10 +42,12 @@ async def run(url, token):
             raise RuntimeError("Live handshake failed")
         project = ready["project"]
         print("Connected to scoped live project:", project, flush=True)
-        print("Commands: ask <text>, work <text>, resume <32-char job-id>, quit", flush=True)
+        print("Commands: ask <text>, work windows build <text>, resume <job-id>, deliver, quit", flush=True)
         ident = 0
+        most_recent_artifact = None
 
         async def read_updates():
+            nonlocal most_recent_artifact
             async for text in ws:
                 message = json.loads(text)
                 kind = message.get("type")
@@ -56,6 +60,15 @@ async def run(url, token):
                           flush=True)
                     if message.get("answer"):
                         print("[WORK ANSWER] " + message["answer"], flush=True)
+                    artifact = message.get("artifact")
+                    if isinstance(artifact, dict) and artifact.get("environment") == "windows":
+                        try:
+                            validate_release(artifact["url"], artifact["sha256"])
+                            most_recent_artifact = artifact
+                            print("[DELIVERY READY] Verified metadata; type 'deliver' to download"
+                                  " after explicit permission. No automatic execution.", flush=True)
+                        except (ValueError, KeyError, TypeError):
+                            print("[DELIVERY REJECTED] Unsafe artifact metadata", flush=True)
                 elif kind in {"progress", "error"}:
                     print("\n[" + kind.upper() + "] " + str(message.get("message", "")),
                           flush=True)
@@ -69,12 +82,36 @@ async def run(url, token):
                 if line in {"quit", "exit", "0"}:
                     break
                 kind, _, data = line.partition(" ")
+                if kind == "deliver":
+                    if not most_recent_artifact:
+                        print("No validated Windows release was returned.")
+                        continue
+                    permission = (await asyncio.to_thread(input,
+                          "Download verified release to Downloads/Amin AI? (yes/no): ")).strip().lower()
+                    if permission != "yes":
+                        continue
+                    try:
+                        destination = Path.home() / "Downloads" / "Amin AI"
+                        result = await asyncio.to_thread(
+                            deliver, most_recent_artifact["url"],
+                            most_recent_artifact["sha256"], destination)
+                        print("[DELIVERED] " + json.dumps(result, ensure_ascii=False))
+                    except (ValueError, OSError, RuntimeError) as problem:
+                        print("[DELIVERY FAILED] " + str(problem))
+                    continue
                 if kind not in {"ask", "work", "resume"} or not data.strip():
-                    print("Use: ask <text> | work <text> | resume <jobid> | quit")
+                    print("Use: ask <text> | work windows build <text> | resume <jobid> | deliver | quit")
                     continue
                 if kind == "work":
+                    target, sep, remainder = data.partition(" ")
+                    operation, sep2, requested = remainder.partition(" ")
+                    if target not in {"android", "windows", "web", "github", "none"} or (
+                       operation not in {"answer", "build", "repair", "analyze", "release"}) or not requested:
+                        print("Use: work <android|windows|web|github|none> "
+                              "<build|repair|analyze|release|answer> <request text>")
+                        continue
                     confirm = (await asyncio.to_thread(input,
-                              "Allow private GitHub work request? (yes/no): ")).strip().lower()
+                              "Send request to private GitHub for stated environment? (yes/no): ")).strip().lower()
                     if confirm != "yes":
                         continue
                 if kind == "resume" and not JOB.fullmatch(data.strip()):
@@ -87,6 +124,9 @@ async def run(url, token):
                 else:
                     message["message"] = data.strip()
                 if kind == "work":
+                    message["message"] = requested
+                    message["target_environment"] = target
+                    message["requested_operation"] = operation
                     message["consent"] = True
                 await ws.send(json.dumps(message, ensure_ascii=False))
         except (EOFError, KeyboardInterrupt):
