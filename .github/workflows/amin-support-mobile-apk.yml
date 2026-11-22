@@ -78,6 +78,7 @@ jobs:
           set -euo pipefail
           javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/VoiceModePolicy.java \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/OfflineVoiceCommands.java \
             amin-ai-support/android-client/tests/VoiceModePolicyTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.VoiceModePolicyTest
       - name: Build actual installable Android app
