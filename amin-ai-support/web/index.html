@@ -50,6 +50,41 @@ button:disabled{opacity:.5;cursor:not-allowed}.muted{color:#55687e;font-size:.86
 <p id="reply">پروژه را انتخاب کنید و سؤال خود را بنویسید.</p>
 <div class="sources" id="sources"></div>
 </section>
+<section class="panel">
+<strong>کانال دوطرفهٔ زنده — گوشی / ویندوز</strong>
+<p class="muted">وقتی موتور زنده فعال و قابل دسترس باشد، می‌توان هم‌زمان سؤال ارسال کرد و وضعیت کار GitHub را دریافت کرد. این کانال به گفت‌وگوی خصوصی ChatGPT متصل نیست و ساخت یا اجرای برنامه بدون عامل اجرایی مجاز تضمین نمی‌شود.</p>
+<label for="liveUrl">نشانی امن کانال WebSocket</label>
+<input id="liveUrl" autocomplete="off" placeholder="wss://your-server.example:8766">
+<div class="actions">
+<button id="liveConnect" type="button">اتصال زنده</button>
+<button id="liveDisconnect" class="secondary" type="button">قطع اتصال زنده</button>
+<button id="liveAsk" type="button">پرسش زنده</button>
+<button id="liveWork" type="button">درخواست ساخت / اجرای کار</button>
+</div>
+<label for="liveTarget">محیط مقصد برای ساخت یا اصلاح</label>
+<select id="liveTarget">
+<option value="windows">ویندوز</option>
+<option value="android">اندروید</option>
+<option value="web">وب</option>
+<option value="github">GitHub</option>
+<option value="none">بدون محیط مشخص</option>
+</select>
+<label for="liveOperation">نوع درخواست</label>
+<select id="liveOperation">
+<option value="build">ساخت</option>
+<option value="repair">اصلاح</option>
+<option value="analyze">تحلیل</option>
+<option value="release">آماده‌سازی انتشار</option>
+<option value="answer">پاسخ</option>
+</select>
+<label for="liveJob">شناسه کار برای ادامه بعد از قطع اتصال</label>
+<input id="liveJob" autocomplete="off" placeholder="شناسه ۳۲ رقمی کار">
+<button id="liveResume" type="button">پیگیری زندهٔ کار</button>
+<p id="liveStatus" class="muted" aria-live="polite">متصل نیست.</p>
+<div class="actions"><button id="liveRelease" class="secondary" disabled>مشاهده خروجی منتشرشده</button></div>
+<p class="muted">نسخهٔ منتشرشده پیش از نصب باید جداگانه تأیید شود. نصب خودکار روی ویندوز از مرورگر انجام نمی‌شود.</p>
+<pre id="liveLog" style="white-space:pre-wrap;word-break:break-word;line-height:1.8;max-height:250px;overflow:auto"></pre>
+</section>
 <p class="muted warning">این نسخه جایگزین پشتیبانی انسانی یا کنترل کیفیت انتشار نیست. به حساب معاملاتی، سفارش واقعی و دستگاه کاربران دسترسی اجرایی ندارد.</p>
 </main>
 <script>
@@ -131,6 +166,95 @@ async function handoffStatus(){
   }else{status("درخواست هنوز در صف است؛ پاسخ ChatGPT اجراشده محسوب نمی‌شود.")}
  }catch(e){status("پیگیری ناموفق: "+e.message)}
 }
+let liveSocket=null,liveSequence=0,lastRelease=null;
+$("liveRelease").addEventListener("click",()=>{
+ if(lastRelease && /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/releases\/download\//.test(lastRelease.url)){
+  GenUIOpenRelease(lastRelease.url);
+ }
+});
+function GenUIOpenRelease(url){window.open(url,"_blank","noopener,noreferrer");}
+const liveStatus=message=>$("liveStatus").textContent=message;
+const livePrint=message=>{
+ const node=document.createElement("div");
+ node.textContent=message;
+ $("liveLog").prepend(node);
+ while($("liveLog").children.length>40) $("liveLog").lastChild.remove();
+};
+function liveSend(kind,body={}){
+ if(!liveSocket||liveSocket.readyState!==WebSocket.OPEN){liveStatus("ابتدا کانال زنده را متصل کن.");return}
+ const project=$("project").value;
+ if(!project||!/^[a-z][a-z0-9_-]{1,60}$/.test(project)){
+  liveStatus("ابتدا نرم‌افزار را انتخاب کن.");return
+ }
+ const id="live"+(++liveSequence);
+ liveSocket.send(JSON.stringify({type:kind,id,project,...body}));
+ return id;
+}
+$("liveUrl").value=(location.protocol==="https:"?"wss://":"ws://")+
+ location.hostname+":8766";
+$("liveConnect").addEventListener("click",()=>{
+ const url=$("liveUrl").value.trim();
+ try {
+  const parsed=new URL(url);
+  const local=["localhost","127.0.0.1","[::1]"].includes(parsed.hostname);
+  if((parsed.protocol!=="wss:"&&!(parsed.protocol==="ws:"&&local))
+      ||parsed.username||parsed.password||parsed.search||parsed.hash
+      ||parsed.pathname!=="/")throw Error("نشانی باید WSS باشد؛ WS فقط برای رایانه محلی مجاز است.");
+  if(!$("key").value.trim())throw Error("کلید اختصاصی نرم‌افزار لازم است.");
+  if(liveSocket)liveSocket.close();
+  const connection=new WebSocket(parsed.href);
+  liveSocket=connection;
+  liveStatus("در حال برقراری اتصال زنده...");
+  connection.onopen=()=>{
+   // Credentials only in first TLS-protected auth frame, never in URL.
+   connection.send(JSON.stringify({type:"auth",token:$("key").value.trim()}));
+  };
+  connection.onmessage=event=>{
+   let data;try{data=JSON.parse(event.data)}catch{return}
+   if(data.type==="ready"){liveStatus("اتصال دوطرفه فعال است؛ سرویس ChatGPT خصوصی متصل نیست.");return}
+   if(data.type==="answer"){
+    lastResponse=data.answer||"";$("reply").textContent=lastResponse;
+    livePrint("پاسخ "+data.id+": "+lastResponse);
+   }else if(data.type==="work_state"){
+    if(data.id_of_job)$("liveJob").value=data.id_of_job;
+    livePrint("وضعیت "+data.id+": "+data.status+
+     (data.answer?" | "+data.answer:"")+
+     (data.action_performed?" | عملیات گزارش شده؛ نیازمند راستی‌آزمایی":" | عملیات انجام نشده/تأیید نشده"));
+    if(data.artifact&&data.artifact.user_approval_required&&
+       /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/releases\/download\//.test(data.artifact.url)&&
+       /^[a-f0-9]{64}$/.test(data.artifact.sha256)){
+      lastRelease=data.artifact;$("liveRelease").disabled=false;
+      livePrint("خروجی "+data.artifact.environment+" معرفی شد؛ SHA256: "+
+                data.artifact.sha256+"؛ نصب به موافقت کاربر نیاز دارد.");
+    }
+   }else if(data.type==="error"){
+    livePrint("خطا "+data.id+": "+(data.message||""));
+   }else if(data.type==="progress"){
+    livePrint("پیشرفت "+data.id+": "+(data.message||data.status));
+   }else if(data.type==="accepted"){
+    livePrint("پذیرفته شد "+data.id+"؛ پاسخ در همین اتصال ارسال می‌شود.");
+   }
+  };
+  connection.onerror=()=>liveStatus("ارتباط زنده با خطا مواجه شد؛ اتصال و گواهی سرور را بررسی کن.");
+  connection.onclose=()=>{if(liveSocket===connection)liveStatus("کانال قطع شد؛ شناسه کار را برای ادامه نگه دار.");};
+ }catch(error){liveStatus(error.message)}
+});
+$("liveDisconnect").addEventListener("click",()=>{if(liveSocket)liveSocket.close(1000);liveSocket=null;liveStatus("قطع شد.");});
+$("liveAsk").addEventListener("click",()=>{
+ const msg=$("message").value.trim();if(!msg){liveStatus("سؤال را وارد کن.");return}
+ liveSend("ask",{message:msg});
+});
+$("liveWork").addEventListener("click",()=>{
+ const msg=$("message").value.trim();if(!msg){liveStatus("درخواست ساخت را بنویس.");return}
+ if(!confirm("درخواست در پایگاه خصوصی موتور ثبت می‌شود و در صورت تنظیم، به مخزن GitHub خصوصی ارسال خواهد شد. اجرای برنامه و تأیید نتیجه جداگانه است. موافقی؟"))return;
+ liveSend("work",{message:msg,consent:true,
+   target_environment:$("liveTarget").value,
+   requested_operation:$("liveOperation").value});
+});
+$("liveResume").addEventListener("click",()=>{
+ const job=$("liveJob").value.trim();if(!/^[a-f0-9]{32}$/.test(job)){liveStatus("شناسه کار معتبر نیست.");return}
+ liveSend("resume",{job_id:job});
+});
 $("handoff").addEventListener("click",handoff);
 $("handoffStatus").addEventListener("click",handoffStatus);
 $("ask").addEventListener("click",ask);

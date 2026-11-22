@@ -227,9 +227,24 @@ public final class GitHubDirectBridge {
                         || !"answered".equals(reply.optString("status", ""))) continue;
                 String answer = reply.optString("answer", "");
                 if (answer.isEmpty() || answer.length() > 4000) continue;
-                return new JSONObject().put("status", "answered")
+                JSONObject result = new JSONObject().put("status", "answered")
                         .put("answer", answer).put("issue_number", issue)
                         .put("request_id", id);
+                JSONObject artifact = reply.optJSONObject("artifact");
+                if (artifact != null && "android".equals(artifact.optString("environment", ""))) {
+                    try {
+                        String release = DeliveryPolicy.releaseUrl(artifact.optString("url", ""));
+                        String digest = DeliveryPolicy.sha256(artifact.optString("sha256", ""));
+                        result.put("artifact", new JSONObject()
+                                .put("environment", "android")
+                                .put("url", release).put("sha256", digest)
+                                .put("user_approval_required", true)
+                                .put("installed", false));
+                    } catch (IllegalArgumentException invalid) {
+                        // Ignore unsafe or incomplete delivery metadata.
+                    }
+                }
+                return result;
             } catch (org.json.JSONException malformed) {
                 // Untrusted comment is ignored.
             }

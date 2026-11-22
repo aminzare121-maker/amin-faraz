@@ -2,6 +2,9 @@ package com.amin.support.mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -27,6 +30,8 @@ import org.json.JSONObject;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.io.File;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,6 +57,22 @@ public final class MainActivity extends Activity {
     private EditText ghRepo;
     private EditText ghToken;
     private EditText ghProject;
+    private EditText liveWss;
+    private EditText liveToken;
+    private EditText liveProject;
+    private EditText liveJob;
+    private Spinner liveTarget;
+    private Spinner liveOperation;
+    private TextView liveStatus;
+    private Button verifiedApkInstall;
+    private String availableApkUrl = "";
+    private String availableApkSha = "";
+    private LiveSocketClient liveClient;
+    private static final int VOICE_REQUEST = 2401;
+    private TextToSpeech speech;
+    private boolean speechReady = false;
+    private CheckBox voiceReplies;
+    private CheckBox voiceAutoSend;
     private Button ghCheck;
     private int ghIssueNumber = 0;
     private String ghRequestId = "";
@@ -86,6 +107,19 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         setTitle("هوش پشتیبان امین");
         setContentView(createContent());
+        speech = new TextToSpeech(this, code -> {
+            ui.post(() -> {
+                if (!active || speech == null) return;
+                if (code != TextToSpeech.SUCCESS) {
+                    speechReady = false;
+                    setStatus("صدای فارسی روی دستگاه آماده نیست.");
+                    return;
+                }
+                int support = speech.setLanguage(new Locale("fa", "IR"));
+                speechReady = support != TextToSpeech.LANG_MISSING_DATA
+                        && support != TextToSpeech.LANG_NOT_SUPPORTED;
+            });
+        });
         String existing = TokenVault.endpoint(this);
         if (!existing.isEmpty()) server.setText(existing);
         token.setHint(TokenVault.hasToken(this)
@@ -105,6 +139,10 @@ public final class MainActivity extends Activity {
         ghToken.setHint(GitHubDirectVault.available(this)
                 ? "توکن قبلی رمزگذاری شده؛ در صورت عدم تغییر مخزن خالی بگذار"
                 : "توکن محدود GitHub مخصوص مخزن خصوصی");
+        liveWss.setText(getPreferences(MODE_PRIVATE).getString("live_wss", ""));
+        liveProject.setText(getPreferences(MODE_PRIVATE).getString("live_project", "support"));
+        liveJob.setText(getPreferences(MODE_PRIVATE).getString("live_job", ""));
+
 
     }
 
@@ -157,6 +195,28 @@ public final class MainActivity extends Activity {
         question.setMinLines(3);
         question.setMaxLines(5);
         root.addView(question);
+
+        root.addView(section("مکالمه صوتی و نوشتاری"));
+        root.addView(text("با لمس میکروفون، تشخیص گفتار دستگاه فعال می‌شود و متن برای "
+                + "بازبینی نمایش داده می‌شود. بسته به موتور گفتار گوشی، صدای شما "
+                + "ممکن است به ارائه‌دهنده آن سرویس منتقل شود؛ حالت صوتی اختیاری است.", 14, false));
+        Button mic = button("میکروفون: گفتار فارسی به متن");
+        mic.setOnClickListener(v -> startVoiceInput());
+        root.addView(mic);
+        voiceAutoSend = new CheckBox(this);
+        voiceAutoSend.setText("پس از تشخیص گفتار، سؤال را خودکار در کانال زنده بفرست (اگر متصل است)");
+        voiceAutoSend.setChecked(false);
+        root.addView(voiceAutoSend);
+        voiceReplies = new CheckBox(this);
+        voiceReplies.setText("پاسخ‌ها با صدای فارسی خوانده شوند (اگر صدای فارسی موجود باشد)");
+        voiceReplies.setChecked(false);
+        root.addView(voiceReplies);
+        Button speakAnswer = button("بلندخوانی پاسخ");
+        speakAnswer.setOnClickListener(v -> speakPersian(latestAnswer));
+        root.addView(speakAnswer);
+        Button silence = button("توقف گفتار");
+        silence.setOnClickListener(v -> { if (speech != null) speech.stop(); });
+        root.addView(silence);
 
         send = button("پرسش از هوش پشتیبان");
         send.setEnabled(false);
@@ -225,6 +285,64 @@ public final class MainActivity extends Activity {
         Button ghClear = button("حذف کلید اتصال GitHub از گوشی");
         ghClear.setOnClickListener(v -> clearDirectGitHub());
         root.addView(ghClear);
+
+        root.addView(section("گفت‌وگوی دوطرفه زنده (WSS)"));
+        root.addView(text("در این حالت درخواست‌ها و وضعیت کار به‌طور هم‌زمان در یک اتصال زنده "
+                + "ردوبدل می‌شوند؛ نیازی به زمان‌بندی ساعتی نیست. موتور باید روی "
+                + "رایانه یا سرور قابل‌دسترسی فعال و دارای گواهی HTTPS معتبر باشد. "
+                + "این کانال مستقیماً به چت شخصی ChatGPT متصل نیست.", 14, false));
+        liveWss = edit("wss://your-support-server.example:8766", false);
+        liveWss.setSingleLine(true);
+        root.addView(liveWss);
+        liveToken = edit("کلید اختصاصی کانال زنده (یا خالی برای استفاده از کلید موتور)", false);
+        liveToken.setSingleLine(true);
+        liveToken.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        root.addView(liveToken);
+        liveProject = edit("شناسه نرم‌افزار برای کانال زنده", false);
+        liveProject.setSingleLine(true);
+        root.addView(liveProject);
+        root.addView(text("محیطی که نتیجه باید برای آن آماده شود:", 14, false));
+        liveTarget = new Spinner(this);
+        liveTarget.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"بدون محیط مشخص", "گوشی اندروید", "ویندوز", "وب", "مخزن GitHub"}));
+        root.addView(liveTarget);
+        root.addView(text("نوع درخواست:", 14, false));
+        liveOperation = new Spinner(this);
+        liveOperation.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"پاسخ", "ساخت برنامه", "اصلاح برنامه", "تحلیل", "آماده‌سازی انتشار"}));
+        root.addView(liveOperation);
+        Button startLive = button("اتصال زنده به موتور");
+        startLive.setOnClickListener(v -> connectLive());
+        root.addView(startLive);
+        Button askLive = button("ارسال سؤال هم‌زمان");
+        askLive.setOnClickListener(v -> sendLiveQuestion());
+        root.addView(askLive);
+        Button workLive = button("درخواست ساخت یا اجرای برنامه");
+        workLive.setOnClickListener(v -> confirmLiveWork());
+        root.addView(workLive);
+        liveJob = edit("شناسه کار برای پیگیری بدون قطع ارتباط", false);
+        liveJob.setSingleLine(true);
+        root.addView(liveJob);
+        Button resumeLive = button("پیگیری کار روی کانال زنده");
+        resumeLive.setOnClickListener(v -> resumeLiveWork());
+        root.addView(resumeLive);
+        Button stopLive = button("قطع کانال زنده");
+        stopLive.setOnClickListener(v -> disconnectLive());
+        root.addView(stopLive);
+        liveStatus = text("کانال زنده متصل نیست.", 14, false);
+        liveStatus.setTextIsSelectable(true);
+        root.addView(liveStatus);
+        root.addView(section("تحویل خروجی ساخت‌شده به این گوشی"));
+        root.addView(text("اگر عامل سازنده APK را در انتشار رسمی GitHub قرار دهد "
+                + "و اثرانگشت SHA-256 معتبر اعلام کند، فایل با تأیید تو دانلود و "
+                + "بررسی می‌شود؛ فقط نصب‌کننده رسمی Android اجازه نصب را دریافت می‌کند. "
+                + "بدون تأیید شما نصب انجام نمی‌شود.", 14, false));
+        verifiedApkInstall = button("دریافت و نصبِ فایل APK بررسی‌شده");
+        verifiedApkInstall.setEnabled(false);
+        verifiedApkInstall.setOnClickListener(v -> confirmVerifiedDelivery());
+        root.addView(verifiedApkInstall);
 
         root.addView(section("محدودیت نسخه آزمایشی"));
         root.addView(text(
@@ -421,6 +539,7 @@ public final class MainActivity extends Activity {
                     if (!active || id != version) return;
                     latestAnswer = formatted;
                     answer.setText(formatted);
+                    if (voiceReplies.isChecked()) speakPersian(formatted);
                     send.setEnabled(true);
                     setStatus("پاسخ دریافت شد. بدون ذخیره دائمی مکالمه در این گوشی.");
                     if (human && autoHandoff.isChecked()) {
@@ -658,6 +777,8 @@ public final class MainActivity extends Activity {
                     if ("answered".equals(response.optString("status", ""))) {
                         latestAnswer = response.optString("answer", "");
                         answer.setText(latestAnswer);
+                        if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                        acceptArtifact(response.optJSONObject("artifact"));
                         setStatus("پاسخ از مخزن خصوصی دریافت شد. صحت اجرای عملیات باید جدا بررسی شود.");
                     } else {
                         setStatus("پاسخ هنوز در Issue خصوصی ثبت نشده است.");
@@ -735,6 +856,8 @@ public final class MainActivity extends Activity {
                         ghNotifiedRequestId = rid;
                         latestAnswer = response.optString("answer", "");
                         answer.setText(latestAnswer);
+                        if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                        acceptArtifact(response.optJSONObject("artifact"));
                         setStatus("پاسخ جدید از GitHub خصوصی دریافت شد؛ صحت اجرای آن مستقل بررسی شود.");
                     }
                 });
@@ -776,6 +899,265 @@ public final class MainActivity extends Activity {
         } catch (Exception error) {
             setStatus("پاک‌کردن اتصال GitHub ناموفق بود.");
         }
+    }
+
+    private void startVoiceInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa-IR");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "سؤال یا درخواستت را به فارسی بگو");
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        try {
+            startActivityForResult(intent, VOICE_REQUEST);
+        } catch (android.content.ActivityNotFoundException error) {
+            setStatus("برنامه تشخیص گفتار روی گوشی وجود ندارد؛ سؤال را تایپ کن.");
+        } catch (SecurityException error) {
+            setStatus("دسترسی میکروفون یا سرویس گفتار مجاز نیست.");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != VOICE_REQUEST || resultCode != RESULT_OK || data == null) return;
+        ArrayList<String> results = data.getStringArrayListExtra(
+                RecognizerIntent.EXTRA_RESULTS);
+        if (results == null || results.isEmpty()) {
+            setStatus("گفتار قابل تبدیل به متن نبود.");
+            return;
+        }
+        String transcript = results.get(0).trim();
+        if (transcript.isEmpty()) {
+            setStatus("متن گفتار خالی است.");
+            return;
+        }
+        if (transcript.length() > 2500) transcript = transcript.substring(0, 2500);
+        question.setText(transcript);
+        setStatus("متن گفتار دریافت شد؛ می‌توانی آن را اصلاح و ارسال کنی.");
+        if (voiceAutoSend != null && voiceAutoSend.isChecked()) {
+            if (liveClient != null && liveClient.isReady()) sendLiveQuestion();
+            else setStatus("گفتار به متن تبدیل شد؛ کانال زنده متصل نیست و متن خودکار ارسال نشد.");
+        }
+    }
+
+    private void speakPersian(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            setStatus("متنی برای خواندن وجود ندارد.");
+            return;
+        }
+        if (!speechReady || speech == null) {
+            setStatus("موتور گفتار فارسی روی گوشی حاضر نیست. متن همچنان قابل مشاهده است.");
+            return;
+        }
+        String safe = value.length() > 3700 ? value.substring(0, 3700) : value;
+        speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
+    }
+
+    private void acceptArtifact(JSONObject artifact) {
+        if (artifact == null || !"android".equals(artifact.optString("environment", ""))) return;
+        try {
+            availableApkUrl = DeliveryPolicy.releaseUrl(artifact.getString("url"));
+            availableApkSha = DeliveryPolicy.sha256(artifact.getString("sha256"));
+            verifiedApkInstall.setEnabled(true);
+            liveMessage("خروجی APK برای اندروید معرفی شد؛ نصب هنوز انجام نشده است.");
+        } catch (Exception invalid) {
+            availableApkUrl = "";
+            availableApkSha = "";
+            verifiedApkInstall.setEnabled(false);
+            liveMessage("اطلاعات APK معتبر نیست؛ نصب مسدود شد.");
+        }
+    }
+
+    private void confirmVerifiedDelivery() {
+        final String url = availableApkUrl;
+        final String sha = availableApkSha;
+        try {
+            DeliveryPolicy.releaseUrl(url);
+            DeliveryPolicy.sha256(sha);
+        } catch (Exception invalid) {
+            liveMessage("خروجی نصب معتبر نیست.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("اجازه دانلود و نصب در اندروید")
+                .setMessage("فقط APK رسمی Github دریافت می‌شود؛ پس از بررسی SHA-256، "
+                        + "نصب‌کنندهٔ اندروید باز خواهد شد. اعتبار SHA جایگزین "
+                        + "اعتماد به سازنده و مجوزهای برنامه نیست. "
+                        + "نصب بدون تأیید دوباره در سیستم ممکن نیست. ادامه می‌دهی؟")
+                .setNegativeButton("انصراف", (d, which) -> {})
+                .setPositiveButton("تأیید دریافت", (d, which) -> {
+                    if (!AndroidDelivery.canRequestInstall(this)) {
+                        liveMessage("اجازه نصب از این برنامه غیرفعال است؛ در تنظیمات فعال کن "
+                                + "و سپس دوباره دکمه دریافت را بزن.");
+                        try { AndroidDelivery.askInstallPermission(this); }
+                        catch (Exception e) { liveMessage("باز کردن تنظیمات نصب ممکن نشد."); }
+                        return;
+                    }
+                    verifiedApkInstall.setEnabled(false);
+                    liveMessage("در حال دانلود و بررسی اثرانگشت فایل APK...");
+                    background.execute(() -> {
+                        try {
+                            File verified = AndroidDelivery.downloadVerified(
+                                    getApplicationContext(), url, sha);
+                            ui.post(() -> {
+                                if (!active) return;
+                                verifiedApkInstall.setEnabled(true);
+                                liveMessage("اثر انگشت فایل تأیید شد. در حال باز کردن نصب‌کنندهٔ Android...");
+                                try {
+                                    AndroidDelivery.launchSystemInstaller(this, verified);
+                                } catch (Exception problem) {
+                                    liveMessage("نصب‌کننده باز نشد: " + problem.getClass().getSimpleName());
+                                }
+                            });
+                        } catch (Exception error) {
+                            ui.post(() -> {
+                                if (active) {
+                                    verifiedApkInstall.setEnabled(true);
+                                    liveMessage("دریافت/بررسی فایل ناموفق: "
+                                            + error.getClass().getSimpleName());
+                                }
+                            });
+                        }
+                    });
+                })
+                .show();
+    }
+
+    private void liveMessage(String value) {
+        if (active && liveStatus != null) liveStatus.setText(value);
+    }
+
+    private void connectLive() {
+        final String endpoint, secret, project;
+        try {
+            endpoint = LiveEndpointPolicy.requireWss(liveWss.getText().toString());
+            project = LiveEndpointPolicy.project(liveProject.getText().toString().trim());
+            String entered = liveToken.getText().toString().trim();
+            secret = SupportEndpoint.validateToken(
+                    entered.isEmpty() ? TokenVault.token(this) : entered);
+        } catch (Exception problem) {
+            liveMessage("تنظیمات اتصال زنده معتبر نیست: " + problem.getMessage());
+            return;
+        }
+        disconnectLive();
+        liveMessage("در حال اتصال و احراز هویت WSS...");
+        getPreferences(MODE_PRIVATE).edit()
+                .putString("live_wss", endpoint).putString("live_project", project).apply();
+        try {
+            liveClient = new LiveSocketClient(endpoint, secret, new LiveSocketClient.Listener() {
+                @Override public void onMessage(JSONObject event) {
+                    ui.post(() -> {
+                        if (!active) return;
+                        String type = event.optString("type", "");
+                        if ("ready".equals(type)) {
+                            liveToken.setText("");
+                            liveMessage("کانال دوطرفه وصل شد. پروژه مجاز: "
+                                    + event.optString("project", "?")
+                                    + ". اتصال شخصی ChatGPT هنوز به این کانال اضافه نشده.");
+                        } else if ("answer".equals(type)) {
+                            latestAnswer = event.optString("answer", "");
+                            answer.setText(latestAnswer);
+                            if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                            liveMessage("پاسخ زنده دریافت شد؛ عملیات اجرایی انجام نشده.");
+                        } else if ("work_state".equals(type)) {
+                            String jobId = event.optString("id_of_job", "");
+                            if (jobId.matches("[a-f0-9]{32}")) {
+                                liveJob.setText(jobId);
+                                getPreferences(MODE_PRIVATE).edit().putString("live_job", jobId).apply();
+                            }
+                            String state = event.optString("status", "");
+                            acceptArtifact(event.optJSONObject("artifact"));
+                            if (event.has("answer")) {
+                                latestAnswer = event.optString("answer", "");
+                                answer.setText(latestAnswer);
+                                if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                            }
+                            liveMessage("وضعیت ساخت/اجرا: " + state
+                                    + (event.optBoolean("action_performed", false)
+                                            ? "؛ اجرای عملیات گزارش شده (نیازمند بررسی)"
+                                            : "؛ انجام عملیات هنوز تأیید نشده"));
+                        } else if ("accepted".equals(type)) {
+                            liveMessage("درخواست پذیرفته شد؛ کانال برای پرسش‌های بعدی باز است.");
+                        } else if ("progress".equals(type)) {
+                            liveMessage(event.optString("message", event.optString("status")));
+                        } else if ("error".equals(type)) {
+                            liveMessage("خطای درخواست زنده: " + event.optString("message", ""));
+                        }
+                    });
+                }
+                @Override public void onClosed(String description) {
+                    ui.post(() -> liveMessage(description));
+                }
+            });
+        } catch (Exception failure) {
+            liveMessage("اتصال برقرار نشد: " + failure.getMessage());
+        }
+    }
+
+    private void sendLiveQuestion() {
+        try {
+            if (liveClient == null) throw new IllegalStateException("ابتدا اتصال زنده را برقرار کن");
+            String requestId = liveClient.ask(
+                    LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                    question.getText().toString().trim());
+            liveMessage("سؤال " + requestId + " در کانال زنده ارسال شد.");
+        } catch (Exception problem) {
+            liveMessage("ارسال سؤال ناموفق: " + problem.getMessage());
+        }
+    }
+
+    private void confirmLiveWork() {
+        if (liveClient == null || !liveClient.isReady()) {
+            liveMessage("ابتدا کانال زنده را متصل کن.");
+            return;
+        }
+        String message = question.getText().toString().trim();
+        if (message.isEmpty() || message.length() > 2500) {
+            liveMessage("متن درخواست ساخت باید بین ۱ و ۲۵۰۰ نویسه باشد.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("ارسال درخواست ساخت/اجرا")
+                .setMessage("این دستور در موتور خصوصی ثبت می‌شود؛ در صورت تنظیم "
+                        + "مخزن خصوصی به GitHub ارجاع می‌شود. "
+                        + "قبولی ساخت یا اجرای نهایی فقط پس از ارائه شواهد است. ارسال شود؟")
+                .setPositiveButton("تأیید و ارسال", (d, which) -> {
+                    try {
+                        String[] destinations = {"none", "android", "windows", "web", "github"};
+                        String[] operations = {"answer", "build", "repair", "analyze", "release"};
+                        liveClient.work(
+                                LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                                message,
+                                destinations[liveTarget.getSelectedItemPosition()],
+                                operations[liveOperation.getSelectedItemPosition()]);
+                        liveMessage("کار در صف زنده ثبت می‌شود؛ منتظر شناسه و وضعیت هستیم.");
+                    } catch (Exception problem) {
+                        liveMessage("ثبت کار ناموفق: " + problem.getMessage());
+                    }
+                })
+                .setNegativeButton("انصراف", (d, which) -> {})
+                .show();
+    }
+
+    private void resumeLiveWork() {
+        try {
+            if (liveClient == null) throw new IllegalStateException("کانال زنده برقرار نیست");
+            liveClient.resume(
+                    LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                    LiveEndpointPolicy.jobId(liveJob.getText().toString().trim()));
+            liveMessage("درخواست پیگیری زنده ارسال شد.");
+        } catch (Exception problem) {
+            liveMessage("پیگیری ناموفق: " + problem.getMessage());
+        }
+    }
+
+    private void disconnectLive() {
+        if (liveClient != null) {
+            liveClient.close();
+            liveClient = null;
+        }
+        liveMessage("کانال زنده قطع شد.");
     }
 
     private void clearConnection() {
@@ -826,6 +1208,12 @@ public final class MainActivity extends Activity {
         active = false;
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
+        disconnectLive();
+        if (speech != null) {
+            speech.stop();
+            speech.shutdown();
+            speech = null;
+        }
         ++version;
         background.shutdownNow();
         super.onDestroy();

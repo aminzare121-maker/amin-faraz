@@ -13,12 +13,40 @@ import re
 import secrets
 import sys
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 REPO_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,99}/[A-Za-z0-9][A-Za-z0-9_.-]{0,99}\Z")
 ID_PATTERN = re.compile(r"[a-f0-9]{32}\Z")
 API = "https://api.github.com/repos/"
 MAX_BYTES = 256000
+RELEASE_APK = re.compile(r"/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/releases/download/"
+                         r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\.apk\Z")
+
+
+def validated_delivery(raw):
+    if not isinstance(raw, dict) or raw.get("environment") not in {"android", "windows"}:
+        return None
+    environment = raw["environment"]
+    url, digest = raw.get("url"), raw.get("sha256")
+    if not isinstance(url, str) or len(url) > 400 or not isinstance(digest, str):
+        return None
+    if environment == "windows":
+        try:
+            from windows_delivery import validate_release
+            validate_release(url, digest)
+        except (ValueError, TypeError):
+            return None
+    else:
+        parsed = urlsplit(url)
+        if (parsed.scheme != "https" or parsed.netloc != "github.com"
+                or parsed.query or parsed.fragment or "%" in parsed.path
+                or ".." in parsed.path or not RELEASE_APK.fullmatch(parsed.path)
+                or not re.fullmatch(r"[a-fA-F0-9]{64}", digest)):
+            return None
+    return {"environment": environment, "url": url, "sha256": digest.lower(),
+            "user_approval_required": True, "download_verified": False,
+            "installed": False, "executed": False}
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -73,7 +101,12 @@ class GitHubPrivateBridge:
             raise RuntimeError("Issues disabled")
         return repo
 
-    def submit(self, project: str, message: str, device: str = "windows"):
+    def submit(self, project: str, message: str, device: str = "windows",
+               target_environment: str = "none", requested_operation: str = "answer"):
+        if target_environment not in {"none", "android", "windows", "web", "github"}:
+            raise ValueError("Invalid destination environment")
+        if requested_operation not in {"answer", "build", "repair", "analyze", "release"}:
+            raise ValueError("Invalid operation")
         if not re.fullmatch(r"[a-z][a-z0-9_-]{1,50}", project):
             raise ValueError("Invalid project")
         if not message or len(message) > 2500:
@@ -83,6 +116,9 @@ class GitHubPrivateBridge:
         body = "AMIN_CHAT_BRIDGE_V1\n" + json.dumps({
             "request_id": request_id, "project": project, "device": device,
             "question": message.strip(), "consent": True,
+            "target_environment": target_environment,
+            "requested_operation": requested_operation,
+            "execution_authorized": False,
             "result_required": "AMIN_CHAT_REPLY_V1"}, ensure_ascii=False)
         result = self.request("POST", "/issues", {
             "title": "[Amin private support] " + request_id[:12], "body": body})
@@ -122,8 +158,16 @@ class GitHubPrivateBridge:
                 continue
             if not isinstance(answer, str) or not (0 < len(answer) <= 4000):
                 continue
-            return {"status": "answered", "request_id": request_id,
-                    "issue_number": issue, "answer": answer}
+            result = {"status": "answered", "request_id": request_id,
+                      "issue_number": issue, "answer": answer,
+                      "needs_human": reply.get("needs_human", True) is not False,
+                      "action_performed": reply.get("action_performed") is True,
+                      "chatgpt_invoked": reply.get("chatgpt_invoked") is True,
+                      "source": reply.get("source", "unverified")}
+            delivery = validated_delivery(reply.get("artifact"))
+            if delivery is not None:
+                result["artifact"] = delivery
+            return result
         return {"status": "pending", "request_id": request_id, "issue_number": issue}
 
     def approve(self, issue: int, request_id: str, project: str):

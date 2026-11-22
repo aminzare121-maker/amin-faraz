@@ -59,6 +59,20 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/GitHubBridgePolicy.java \
             amin-ai-support/android-client/tests/GitHubBridgePolicyTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.GitHubBridgePolicyTest
+      - name: Test secure WSS live endpoint with JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/LiveEndpointPolicy.java \
+            amin-ai-support/android-client/tests/LiveEndpointPolicyTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.LiveEndpointPolicyTest
+      - name: Test signed APK delivery and allowed GitHub hosts with JVM
+        run: |
+          set -euo pipefail
+          javac -d "$RUNNER_TEMP/amin-mobile-jvm" \
+            amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/DeliveryPolicy.java \
+            amin-ai-support/android-client/tests/DeliveryPolicyTest.java
+          java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.DeliveryPolicyTest
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
