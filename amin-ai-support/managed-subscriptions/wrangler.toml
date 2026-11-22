@@ -1,0 +1,14 @@
+name = "amin-managed-subscriptions"
+main = "src/worker.mjs"
+compatibility_date = "2026-11-22"
+workers_dev = true
+[vars]
+OWNER_RENT_MONTHLY_MICROUSDT = "0"
+PAYMENT_DESTINATION_VERIFIED = "0"
+PAYMENT_RECEIVER_CONSENT = "0"
+# PRODUCT is fixed to amin-ai-monthly; no made-up provider pricing.
+# Everything else is private Cloudflare secret and explicitly configured.
+[[d1_databases]]
+binding = "DB"
+database_name = "amin-managed-subscriptions"
+database_id = "REPLACE_WITH_REAL_D1_ID"

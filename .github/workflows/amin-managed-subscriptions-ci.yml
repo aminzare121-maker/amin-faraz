@@ -1,0 +1,26 @@
+name: Amin managed subscriptions - no fictitious paid status
+on:
+  push:
+    paths:
+      - 'amin-ai-support/managed-subscriptions/**'
+      - '.github/workflows/amin-managed-subscriptions-ci.yml'
+  pull_request:
+    paths:
+      - 'amin-ai-support/managed-subscriptions/**'
+      - '.github/workflows/amin-managed-subscriptions-ci.yml'
+permissions:
+  contents: read
+jobs:
+  state-machine-and-payment-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate exact price and payment reconciliation rules
+        run: |
+          node --check amin-ai-support/managed-subscriptions/src/rules.mjs
+          node --check amin-ai-support/managed-subscriptions/src/worker.mjs
+          node --test amin-ai-support/managed-subscriptions/tests/*.test.mjs
