@@ -52,6 +52,8 @@ class WindowsNeuralSpeaker:
                     or packet.get("encoding") != "pcm_s16le_base64"
                     or packet.get("sample_rate") != 22050
                     or packet.get("channels") != 1
+                    or type(packet.get("speaker")) is not int
+                    or packet.get("speaker") not in range(7)
                     or type(idx) is not int or type(count) is not int
                     or count not in range(1, 8)
                     or idx != self.next_index or idx not in range(count)
