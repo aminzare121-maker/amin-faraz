@@ -1,0 +1,6 @@
+# V5 two-bar followthrough — 2026-11-22
+Private source: Eplanet_M15_20251105_20261105_merged.csv; 23643 rows, SHA256 06b60768cc6179d1985ce7ab173d421edb3adcacf62d781ca733adc331bc2604. No private data committed.
+Hypothesis: two strong same-direction M15 bodies imply continuation over next four bars; independent ATR/spread guard. Chronological 60/40 split; OOS from 2026-06-15. Entry next open, stop 0.75 ATR or $2 minimum, target 1.5R, stop-first OHLC, 1% equity risk, 0.01 min/step, 100 oz/lot, $0.63/oz round-trip estimated costs. OOS begins with fresh $1000.
+OOS base: 647 candidates, 147 min-lot rejections, 499 trades, gross gains $1591.30, gross losses -$1691.70, costs $362.25, net -$462.64, max closed drawdown $513.45, 0 days >= $50.
+OOS independent guard (ATR <=1.25 times trailing 96-bar ATR median and spread <=40): 668 candidates (sequential blocking), 59 min-lot rejections, 439 trades, gross gains $1420.25, gross losses -$1557.16, costs $331.38, net -$468.29, max closed drawdown $594.39, 1 day >= $50.
+Training base -$422.11; guard -$398.94. Guard worsens OOS despite training improvement. Both REJECTED; no demo/live orders. Assumed costs and contract spec not broker-verified; intrabar drawdown not tick-verified. Script was executed locally, not independently on GitHub.
