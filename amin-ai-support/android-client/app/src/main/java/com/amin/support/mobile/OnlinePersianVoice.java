@@ -38,6 +38,11 @@ public final class OnlinePersianVoice implements RecognitionListener {
     private int retries = 0;
     private int generation = 0;
     private final Runnable listenAgain = this::listen;
+    private final Runnable responseTimeout = () -> {
+        if (enabled && awaitingReply) {
+            requestUnavailable("درخواست صوتی در مهلت مقرر پاسخ نگرفت؛ پاسخ ChatGPT تأیید نشده است.");
+        }
+    };
 
     public OnlinePersianVoice(Context context, Events events) {
         app = context.getApplicationContext();
@@ -70,6 +75,7 @@ public final class OnlinePersianVoice implements RecognitionListener {
         awaitingReply = false;
         speaking = false;
         main.removeCallbacks(listenAgain);
+        main.removeCallbacks(responseTimeout);
         if (recognizer != null) {
             try { recognizer.cancel(); } catch (Exception ignored) {}
             recognizer.destroy();
@@ -82,6 +88,7 @@ public final class OnlinePersianVoice implements RecognitionListener {
         foreground = false;
         generation++;
         main.removeCallbacks(listenAgain);
+        main.removeCallbacks(responseTimeout);
         listening = false;
         if (recognizer != null) recognizer.cancel();
         events.onState("میکروفون در پس‌زمینه متوقف شد");
@@ -100,6 +107,7 @@ public final class OnlinePersianVoice implements RecognitionListener {
         generation++;
         listening = false;
         main.removeCallbacks(listenAgain);
+        main.removeCallbacks(responseTimeout);
         if (recognizer != null) recognizer.cancel();
         events.onState("در حال پخش پاسخ فارسی");
     }
@@ -120,17 +128,15 @@ public final class OnlinePersianVoice implements RecognitionListener {
         if (!enabled) return;
         awaitingReply = false;
         speaking = false;
+        main.removeCallbacks(responseTimeout);
         events.onFailure(why);
         schedule(1200);
     }
 
     private void schedule(long delay) {
         if (!enabled || !foreground || awaitingReply || speaking) return;
-        final int round = generation;
         main.removeCallbacks(listenAgain);
-        main.postDelayed(() -> {
-            if (generation == round) listen();
-        }, delay);
+        main.postDelayed(listenAgain, delay);
     }
 
     private void listen() {
@@ -178,6 +184,8 @@ public final class OnlinePersianVoice implements RecognitionListener {
         if (transcript.length() > 2500) transcript = transcript.substring(0, 2500);
         awaitingReply = true;
         retries = 0;
+        main.removeCallbacks(responseTimeout);
+        main.postDelayed(responseTimeout, 90_000L);
         events.onTranscript(transcript);
     }
 
