@@ -8,6 +8,14 @@ from artin_13_real_m15_gap_audit import REQUIRED
 
 
 class TestSideDecisions(unittest.TestCase):
+    def test_malformed_private_dossier_rejected_before_market_replay(self):
+        # The source CSV deliberately does not exist: invalid evidence must
+        # fail before the engine tries to read market data.
+        with self.assertRaisesRegex(ValueError, "INVALID_PRIVATE_DOSSIER"):
+            evaluate("/nonexistent/artin-m15.csv", {"routes": []})
+        with self.assertRaisesRegex(ValueError, "INVALID_PRIVATE_DOSSIER"):
+            evaluate("/nonexistent/artin-m15.csv", {"routes": "untrusted"})
+
     def test_both_sides_remain_blocked_without_original_teacher_av(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "m15.csv"
