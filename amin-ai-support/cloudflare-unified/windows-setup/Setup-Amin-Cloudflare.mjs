@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
 import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
+import { ownerAuthorized } from "./owner-authorization.mjs";
 
 const root=path.dirname(fileURLToPath(import.meta.url));
 const worker=path.join(root,"amin-ai-support","cloudflare-unified");
@@ -65,7 +66,7 @@ async function main(){
   const terminal=readline.createInterface({input:process.stdin,output:process.stdout});
   const answer=await terminal.question("Type YES to allow creation of 2 D1 databases and 1 Worker in your Cloudflare account: ");
   terminal.close();
-  if(answer!=="YES")fail("Owner did not authorize deployment.");
+  if(!ownerAuthorized(answer))fail("Owner did not authorize deployment.");
   run(["--version"]);
   run(["login"]);
   run(["whoami"]);
