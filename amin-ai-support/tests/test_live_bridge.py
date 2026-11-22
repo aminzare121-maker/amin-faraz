@@ -283,6 +283,52 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("request key", result["message"])
         await ws.close()
 
+    async def test_chatgpt_plan_owner_only_with_no_fallback(self):
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        with patch("live_bridge.chatgpt_plan_ask") as provider:
+            provider.return_value = {
+                "answer": "پاسخ واقعی مدل آزمایشی", "model": "mock-model",
+                "model_used": True}
+            owner, _ = await self.login(self.alpha["token"])
+            await owner.send(json.dumps({"type": "ask", "id": "own1",
+                                         "project": "alpha", "message": "سؤال"}))
+            accepted = json.loads(await asyncio.wait_for(owner.recv(), 3))
+            answered = json.loads(await asyncio.wait_for(owner.recv(), 3))
+            self.assertEqual(accepted["type"], "accepted")
+            self.assertEqual(answered["provider"], "ChatGPT plan OAuth")
+            self.assertEqual(answered["answer"], "پاسخ واقعی مدل آزمایشی")
+            self.assertTrue(answered["model_used"])
+            self.assertFalse(answered["action_performed"])
+            provider.assert_called_once()
+            await owner.close()
+
+            other, _ = await self.login(self.other["token"])
+            await other.send(json.dumps({"type": "ask", "id": "other1",
+                                         "project": "alpha", "message": "سؤال دیگر"}))
+            await other.recv()  # accepted
+            denied = json.loads(await asyncio.wait_for(other.recv(), 3))
+            self.assertEqual(denied["type"], "error")
+            self.assertIn("owner-only", denied["message"])
+            provider.assert_called_once()
+            await other.close()
+
+    async def test_chatgpt_connection_unavailable_must_not_fake_answer(self):
+        from chatgpt_plan_direct import PlanConnectionUnavailable
+        self.gateway.use_chatgpt_plan = True
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        with patch("live_bridge.chatgpt_plan_ask",
+                   side_effect=PlanConnectionUnavailable("not signed in")):
+            ws, _ = await self.login(self.alpha["token"])
+            await ws.send(json.dumps({"type": "ask", "id": "notlinked",
+                                      "project": "alpha", "message": "سلام"}))
+            await ws.recv()  # accepted
+            result = json.loads(await asyncio.wait_for(ws.recv(), 3))
+            self.assertEqual(result["type"], "error")
+            self.assertFalse(result["chatgpt_connected"])
+            self.assertIn("no paid fallback", result["message"])
+            await ws.close()
+
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
             await run_server(self.engine, "0.0.0.0", 0)
