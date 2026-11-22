@@ -60,6 +60,8 @@ public final class MainActivity extends Activity {
     private EditText liveToken;
     private EditText liveProject;
     private EditText liveJob;
+    private Spinner liveTarget;
+    private Spinner liveOperation;
     private TextView liveStatus;
     private LiveSocketClient liveClient;
     private static final int VOICE_REQUEST = 2401;
@@ -295,6 +297,18 @@ public final class MainActivity extends Activity {
         liveProject = edit("شناسه نرم‌افزار برای کانال زنده", false);
         liveProject.setSingleLine(true);
         root.addView(liveProject);
+        root.addView(text("محیطی که نتیجه باید برای آن آماده شود:", 14, false));
+        liveTarget = new Spinner(this);
+        liveTarget.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"بدون محیط مشخص", "گوشی اندروید", "ویندوز", "وب", "مخزن GitHub"}));
+        root.addView(liveTarget);
+        root.addView(text("نوع درخواست:", 14, false));
+        liveOperation = new Spinner(this);
+        liveOperation.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"پاسخ", "ساخت برنامه", "اصلاح برنامه", "تحلیل", "آماده‌سازی انتشار"}));
+        root.addView(liveOperation);
         Button startLive = button("اتصال زنده به موتور");
         startLive.setOnClickListener(v -> connectLive());
         root.addView(startLive);
@@ -1022,9 +1036,13 @@ public final class MainActivity extends Activity {
                         + "قبولی ساخت یا اجرای نهایی فقط پس از ارائه شواهد است. ارسال شود؟")
                 .setPositiveButton("تأیید و ارسال", (d, which) -> {
                     try {
+                        String[] destinations = {"none", "android", "windows", "web", "github"};
+                        String[] operations = {"answer", "build", "repair", "analyze", "release"};
                         liveClient.work(
                                 LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
-                                message);
+                                message,
+                                destinations[liveTarget.getSelectedItemPosition()],
+                                operations[liveOperation.getSelectedItemPosition()]);
                         liveMessage("کار در صف زنده ثبت می‌شود؛ منتظر شناسه و وضعیت هستیم.");
                     } catch (Exception problem) {
                         liveMessage("ثبت کار ناموفق: " + problem.getMessage());
