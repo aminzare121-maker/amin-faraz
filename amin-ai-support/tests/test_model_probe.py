@@ -71,7 +71,8 @@ class ModelProbeTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
         result = probe_model({"AMIN_MODEL_BASE_URL": "https://example.org/v1",
-                              "AMIN_MODEL_NAME": "placeholder"},
+                              "AMIN_MODEL_NAME": "placeholder",
+                              "AMIN_ZERO_PAYMENT_MODE": "off"},
                              opener=lambda req, timeout: FakeResponse())
         self.assertEqual(result["status"], "non_persian_response")
         self.assertFalse(result["persian_output"])
@@ -91,7 +92,8 @@ class ModelProbeTests(unittest.TestCase):
             raise HTTPError(request.full_url, 401, "hidden upstream detail", {}, None)
         result = probe_model({"AMIN_MODEL_BASE_URL": "https://example.org/v1",
                               "AMIN_MODEL_NAME": "placeholder",
-                              "AMIN_MODEL_API_KEY": "never-expose-me"}, opener=fail)
+                              "AMIN_MODEL_API_KEY": "never-expose-me",
+                              "AMIN_ZERO_PAYMENT_MODE": "off"}, opener=fail)
         self.assertEqual(result["http_status"], 401)
         self.assertNotIn("never-expose-me", json.dumps(result))
 

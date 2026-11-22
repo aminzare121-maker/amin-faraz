@@ -32,7 +32,7 @@ class RemoteModelPrivacyTests(unittest.TestCase):
                           "excerpt": "Developer-only project information"}]
         self.external_env = {
             "AMIN_MODEL_BASE_URL": "https://model.example.net/v1",
-            "AMIN_MODEL_NAME": "a-model", "AMIN_MODEL_API_KEY": ""
+            "AMIN_MODEL_NAME": "a-model", "AMIN_MODEL_API_KEY": "", "AMIN_ZERO_PAYMENT_MODE": "off"
         }
 
     def call(self, evidence=None, role="customer", external_consent=False):

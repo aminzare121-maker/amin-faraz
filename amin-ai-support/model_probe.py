@@ -15,6 +15,7 @@ from time import monotonic
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
+from zero_payment_policy import permits_model_url
 
 # No project files, customer data, or private source code are sent in this probe.
 PROMPT = "این یک آزمایش اتصال است. لطفاً یک جمله کوتاه به زبان فارسی بنویس."
@@ -51,6 +52,10 @@ def probe_model(env=None, opener=None) -> dict:
     except (ValueError, OverflowError):
         return {"configured": True, "responded": False, "persian_output": False,
                 "status": "invalid_configuration", "claim": "No live model tested"}
+    if not permits_model_url(base_url, env):
+        return {"configured": True, "responded": False, "persian_output": False,
+                "status": "blocked_by_zero_payment_mode",
+                "claim": "External models disabled by owner local-only policy"}
     endpoint = base_url + "/chat/completions"
     body = json.dumps({
         "model": model, "temperature": 0.1, "max_tokens": 100,
