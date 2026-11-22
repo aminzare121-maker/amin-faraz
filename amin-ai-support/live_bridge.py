@@ -35,6 +35,8 @@ except ImportError:
 MSG_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 JOB_ID = re.compile(r"^[a-f0-9]{32}$")
 LIVE_PROTOCOL = "amin.live.v1"
+ALLOWED_TARGETS = {"android", "windows", "web", "github", "none"}
+ALLOWED_OPERATIONS = {"answer", "build", "repair", "analyze", "release"}
 
 
 class LiveJobs:
@@ -49,6 +51,8 @@ class LiveJobs:
                 token_id TEXT NOT NULL,
                 question TEXT NOT NULL,
                 status TEXT NOT NULL,
+                target_environment TEXT NOT NULL DEFAULT 'none',
+                requested_operation TEXT NOT NULL DEFAULT 'answer',
                 repo TEXT NOT NULL DEFAULT '',
                 issue_number INTEGER NOT NULL DEFAULT 0,
                 request_id TEXT NOT NULL DEFAULT '',
@@ -58,16 +62,24 @@ class LiveJobs:
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )""")
+            cols = {r[1] for r in db.execute("PRAGMA table_info(amin_live_work)")}
+            if "target_environment" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN target_environment TEXT NOT NULL DEFAULT 'none'")
+            if "requested_operation" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN requested_operation TEXT NOT NULL DEFAULT 'answer'")
             db.execute("CREATE INDEX IF NOT EXISTS amin_live_owner ON amin_live_work(token_id,project_id)")
 
     def connect(self):
         return sqlite3.connect(str(self.db_path), timeout=20)
 
-    def new(self, project, token_id, question):
+    def new(self, project, token_id, question, target_environment="none", requested_operation="answer"):
+        if target_environment not in ALLOWED_TARGETS or requested_operation not in ALLOWED_OPERATIONS:
+            raise ValueError("Unknown environment or operation")
         ident = uuid4().hex
         with self.connect() as db:
-            db.execute("INSERT INTO amin_live_work(id,project_id,token_id,question,status)"
-                       " VALUES(?,?,?,?,?)", (ident, project, token_id, question, "queued"))
+            db.execute("INSERT INTO amin_live_work(id,project_id,token_id,question,status,target_environment,requested_operation)"
+                       " VALUES(?,?,?,?,?,?,?)", (ident, project, token_id, question, "queued",
+                                                target_environment, requested_operation))
         return ident
 
     def read(self, ident, project, token_id):
@@ -76,12 +88,14 @@ class LiveJobs:
         with self.connect() as db:
             row = db.execute(
                 "SELECT status,repo,issue_number,request_id,answer,needs_human,"
-                "action_performed FROM amin_live_work WHERE id=? AND project_id=? AND token_id=?",
+                "action_performed,target_environment,requested_operation FROM amin_live_work "
+                "WHERE id=? AND project_id=? AND token_id=?",
                 (ident, project, token_id)).fetchone()
         if not row:
             return None
         return dict(zip(("status", "repo", "issue_number", "request_id",
-                         "answer", "needs_human", "action_performed"), row), id=ident,
+                         "answer", "needs_human", "action_performed",
+                         "target_environment", "requested_operation"), row), id=ident,
                     project=project)
 
     def change(self, ident, status, **fields):
@@ -182,6 +196,11 @@ class LiveGateway:
                     if action == "work" and command.get("consent") is not True:
                         await self.send(socket, "error", ident, message="Explicit work consent required")
                         continue
+                    if action == "work" and (
+                        command.get("target_environment", "none") not in ALLOWED_TARGETS or
+                        command.get("requested_operation", "answer") not in ALLOWED_OPERATIONS):
+                        await self.send(socket, "error", ident, message="Unknown target or operation")
+                        continue
                 active_ids.add(ident)
                 task = asyncio.create_task(
                     self.perform(socket, access, command),
@@ -248,8 +267,11 @@ class LiveGateway:
         if units == "exhausted":
             await self.send(socket, "error", ident, message="Work quota exhausted")
             return
+        target = command.get("target_environment", "none")
+        operation = command.get("requested_operation", "answer")
         job_id = await asyncio.to_thread(
-            self.jobs.new, project, access["token_id"], command["message"].strip())
+            self.jobs.new, project, access["token_id"], command["message"].strip(),
+            target, operation)
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="queued", action_performed=False)
         if not self.repo or not self.github_token:
@@ -264,7 +286,9 @@ class LiveGateway:
             try:
                 # Only the configured *verified private* repository is used.
                 bridge = GitHubPrivateBridge(self.repo, self.github_token)
-                result = await asyncio.to_thread(bridge.submit, project, command["message"])
+                result = await asyncio.to_thread(
+                    bridge.submit, project, command["message"], "live_gateway",
+                    target, operation)
             except (ValueError, RuntimeError):
                 if units not in {"unmetered", "exhausted"}:
                     await asyncio.to_thread(self.engine.quotas.refund, access["token_id"], "ticket", units)
@@ -277,6 +301,7 @@ class LiveGateway:
                                 request_id=result["request_id"])
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="github_dispatched", issue_number=result["issue_number"],
+                        target_environment=target, requested_operation=operation,
                         chatgpt_invoked=False, action_performed=False)
         job = await asyncio.to_thread(self.jobs.read, job_id, project, access["token_id"])
         await self.watch(socket, ident, job)
