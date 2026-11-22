@@ -23,7 +23,7 @@ try {
     }
     while ($true) {
         Write-Host ""
-        Write-Host "1-ارسال خصوصی | 2-فهرست | 3-پاسخ | 4-تأیید یادگیری | 0-خروج"
+        Write-Host "1-ارسال خصوصی | 2-فهرست | 3-پاسخ | 4-تأیید یادگیری | 5-رویداد ChatGPT Work | 0-خروج"
         $choice = Read-Host "انتخاب"
         switch ($choice) {
             "1" {
@@ -54,6 +54,40 @@ try {
                         & python $client --repo $Repo approve --issue $number --id $rid --project $project
                     }
                 } else { Write-Host "شماره Issue معتبر نیست." }
+            }
+            "5" {
+                Write-Host "این کار PR خصوصی می‌سازد؛ اتصال وظیفهٔ ChatGPT Work باید قبلاً جداگانه فعال شده باشد."
+                Write-Host "نیازمند اجازهٔ Issues:read و Contents:write و Pull requests:write در توکن GitHub."
+                $number = Read-Host "شماره Issue خصوصی"
+                $rid = Read-Host "شناسه 32 رقمی درخواست"
+                if ($number -match '^[1-9][0-9]*
+            default { Write-Host "گزینه نامعتبر است." }
+        }
+        if ($choice -eq "0") { break }
+    }
+}
+finally {
+    Remove-Item Env:\AMIN_PRIVATE_GITHUB_TOKEN -ErrorAction SilentlyContinue
+    Remove-Item Env:\PYTHONIOENCODING -ErrorAction SilentlyContinue
+    Write-Host "توکن خصوصی نشست از متغیر محیطی پاک شد."
+}
+ -and $rid -match '^[a-f0-9]{32}
+            default { Write-Host "گزینه نامعتبر است." }
+        }
+        if ($choice -eq "0") { break }
+    }
+}
+finally {
+    Remove-Item Env:\AMIN_PRIVATE_GITHUB_TOKEN -ErrorAction SilentlyContinue
+    Remove-Item Env:\PYTHONIOENCODING -ErrorAction SilentlyContinue
+    Write-Host "توکن خصوصی نشست از متغیر محیطی پاک شد."
+}
+) {
+                    $yes = Read-Host "ایجاد PR خصوصی برای رویداد ChatGPT Work را تأیید می‌کنی؟ (yes/no)"
+                    if ($yes -eq "yes") {
+                        & python $client --repo $Repo trigger-work --issue $number --id $rid
+                    }
+                } else { Write-Host "شناسهٔ Issue یا درخواست معتبر نیست." }
             }
             "0" { break }
             default { Write-Host "گزینه نامعتبر است." }
