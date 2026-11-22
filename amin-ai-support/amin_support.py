@@ -23,6 +23,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse, urlsplit
 from model_probe import validate_base_url
+from zero_payment_policy import permits_model_url
 from urllib.request import Request, urlopen
 from tickets import TicketStore
 from github_evidence import update_provenance
@@ -231,6 +232,10 @@ def model_completion(question: str, project: dict, evidence: list[dict], hint: s
     # or project evidence. Validate URL structure and require opt-in at both
     # the operator and the individual request for external HTTPS services.
     base_url = validate_base_url(base_url)
+    if not permits_model_url(base_url):
+        # Owner zero-payment mode is ON by default. Refuse any remote
+        # provider even if operator and customer granted remote-data consent.
+        return None
     hostname = urlsplit(base_url).hostname
     local_only = hostname in {"127.0.0.1", "localhost", "::1"}
     if not local_only:
