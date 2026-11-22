@@ -850,7 +850,8 @@ public final class MainActivity extends Activity {
                     ghCheck.setEnabled(true);
                     ghNotifiedRequestId = "";
                     setStatus("درخواست در مخزن خصوصی ثبت شد؛ شماره Issue: " + issue
-                            + ". اکنون منتظر پاسخ عامل متصل به ChatGPT است.");
+                            + ". اجرای GitHub Actions و دریافت پاسخ هنوز تأیید نشده است؛ "
+                            + "اگر اجرای مخزن خصوصی در GitHub شکست بخورد، این درخواست بی‌پاسخ می‌ماند.");
                 });
             } catch (Exception e) {
                 ui.post(() -> {
@@ -943,7 +944,8 @@ public final class MainActivity extends Activity {
                         acceptArtifact(response.optJSONObject("artifact"));
                         setStatus("پاسخ از مخزن خصوصی دریافت شد. صحت اجرای عملیات باید جدا بررسی شود.");
                     } else {
-                        setStatus("پاسخ هنوز در Issue خصوصی ثبت نشده است.");
+                        setStatus("هنوز پاسخی در Issue خصوصی نیست. "
+                                + "ثبت Issue به‌تنهایی به معنای اجرای GitHub Actions یا ChatGPT نیست.");
                     }
                 });
             } catch (Exception e) {
@@ -1020,7 +1022,8 @@ public final class MainActivity extends Activity {
                         answer.setText(latestAnswer);
                         if (voiceReplies.isChecked()) speakPersian(latestAnswer);
                         acceptArtifact(response.optJSONObject("artifact"));
-                        setStatus("پاسخ جدید از GitHub خصوصی دریافت شد؛ صحت اجرای آن مستقل بررسی شود.");
+                        setStatus("پاسخ مستندات از GitHub خصوصی دریافت شد؛ "
+                            + "اجرای ChatGPT یا ساخت کد باید مستقل تأیید شود.");
                     }
                 });
             } catch (Exception ignored) {

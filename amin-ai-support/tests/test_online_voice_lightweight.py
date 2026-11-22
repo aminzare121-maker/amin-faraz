@@ -33,6 +33,12 @@ class LightweightVoiceTests(unittest.TestCase):
         self.assertIn("SpeechRecognizer", source)
         self.assertNotIn("Model(", source)
 
+    def test_private_github_issue_does_not_claim_chatgpt_or_workflow_started(self):
+        activity = (JAVA / "MainActivity.java").read_text("utf8")
+        self.assertIn("اجرای GitHub Actions و دریافت پاسخ هنوز تأیید نشده", activity)
+        self.assertIn("ثبت Issue به‌تنهایی به معنای اجرای GitHub Actions یا ChatGPT نیست", activity)
+        self.assertNotIn("اکنون منتظر پاسخ عامل متصل به ChatGPT است", activity)
+
     def test_event_worker_has_registered_project_without_duplicate(self):
         worker = (ROOT / "amin-ai-support/instant_issue_worker.py").read_text("utf8")
         self.assertNotIn('config["projects"].append', worker)
