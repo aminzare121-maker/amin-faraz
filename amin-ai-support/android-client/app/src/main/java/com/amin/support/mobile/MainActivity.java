@@ -854,7 +854,10 @@ public final class MainActivity extends Activity {
                 });
             } catch (Exception e) {
                 ui.post(() -> { if (active && requestVersion == version)
-                    setStatus("ثبت مستقیم ناموفق: " + e.getMessage()); });
+                    setStatus("ثبت مستقیم ناموفق: " + e.getMessage());
+                    if (onlineVoice != null && onlineVoice.isEnabled())
+                        onlineVoice.requestUnavailable("ارسال درخواست به GitHub خصوصی ناموفق بود.");
+                }); });
             }
         });
     }
@@ -1096,6 +1099,7 @@ public final class MainActivity extends Activity {
 
     private void startOnlineVoice() {
         voiceReplies.setChecked(true);
+        if (speech != null) speech.stop();
         onlineVoice.start();
         if (onlineVoice.isEnabled()) {
             onlineVoiceToggle.setText("توقف مکالمهٔ پیوستهٔ فارسی");
@@ -1182,6 +1186,8 @@ public final class MainActivity extends Activity {
         }
         if (!speechReady || speech == null) {
             setStatus("موتور گفتار فارسی روی گوشی حاضر نیست. متن همچنان قابل مشاهده است.");
+            if (onlineVoice != null && onlineVoice.isEnabled())
+                onlineVoice.requestUnavailable("بدون صدای فارسی روی گوشی، پاسخ فقط به شکل متن دریافت شد.");
             return;
         }
         String safe = value.length() > 3700 ? value.substring(0, 3700) : value;
