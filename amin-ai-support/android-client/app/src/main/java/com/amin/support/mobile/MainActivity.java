@@ -277,6 +277,13 @@ public final class MainActivity extends Activity {
         Button ghSend = button("ارسال سؤال به صف GitHub خصوصی");
         ghSend.setOnClickListener(v -> confirmDirectGitHub());
         root.addView(ghSend);
+        Button ghChatGPT = button("ارجاع درخواست خصوصی به ChatGPT Work");
+        ghChatGPT.setOnClickListener(v -> confirmChatGPTWorkEvent());
+        root.addView(ghChatGPT);
+        root.addView(text("این دکمه یک Pull Request در مخزن خصوصی ایجاد می‌کند. "
+                + "فقط اگر قبلاً یک وظیفه رویدادمحور GitHub در ChatGPT Work "
+                + "فعال کرده باشی، ممکن است ChatGPT آن را دریافت کند. "
+                + "این روش Codex یا کلید OpenAI API به کار نمی‌برد.", 13, false));
         ghCheck = button("دریافت پاسخ از GitHub خصوصی");
         ghCheck.setEnabled(false);
         ghCheck.setOnClickListener(v -> checkDirectGitHub());
@@ -760,6 +767,62 @@ public final class MainActivity extends Activity {
                     setStatus("ثبت مستقیم ناموفق: " + e.getMessage()); });
             }
         });
+    }
+
+    private void confirmChatGPTWorkEvent() {
+        if (ghIssueNumber < 1 || !ghRequestId.matches("[a-f0-9]{32}")) {
+            setStatus("ابتدا یک سؤال در Issue خصوصی ثبت کن.");
+            return;
+        }
+        if (!GitHubDirectVault.available(this)) {
+            setStatus("ابتدا اتصال GitHub خصوصی را برقرار کن.");
+            return;
+        }
+        if (!GitHubDirectVault.repo(this).equalsIgnoreCase(
+                ghRepo.getText().toString().trim())) {
+            setStatus("مخزن تغییر کرده است؛ ابتدا اتصال را دوباره تأیید کن.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("رویداد ChatGPT Work در GitHub خصوصی")
+                .setMessage("برای درخواست موجود یک شاخه و Pull Request خصوصی ایجاد می‌شود؛ "
+                        + "برای این کار توکن GitHub به مجوزهای Contents:write و "
+                        + "Pull requests:write نیاز دارد. متن سؤال فقط در Issue خصوصی "
+                        + "باقی می‌ماند. اتصال به ChatGPT Work باید جداگانه در حساب "
+                        + "ChatGPT فعال شده باشد. این عمل ChatGPT را خودکار فعال نمی‌کند. "
+                        + "موافقی؟")
+                .setPositiveButton("ایجاد رویداد خصوصی", (dialog, which) -> {
+                    final int issue = ghIssueNumber;
+                    final String id = ghRequestId;
+                    final String repo = GitHubDirectVault.repo(this);
+                    final String credential;
+                    try { credential = GitHubDirectVault.token(this); }
+                    catch (Exception error) {
+                        setStatus("کلید خصوصی GitHub قابل خواندن نیست."); return;
+                    }
+                    int requestVersion = ++version;
+                    setStatus("در حال ایجاد Pull Request خصوصی برای ChatGPT Work...");
+                    background.execute(() -> {
+                        try {
+                            JSONObject event = new GitHubDirectBridge(repo, credential)
+                                    .triggerChatGPTWork(issue, id);
+                            ui.post(() -> {
+                                if (!active || requestVersion != version) return;
+                                setStatus("رویداد Pull Request شمارهٔ "
+                                        + event.optInt("pull_request_number")
+                                        + " ایجاد شد؛ دریافت توسط ChatGPT هنوز تأیید نشده. "
+                                        + "اگر وظیفهٔ Work فعال باشد، پاسخ را از Issue دریافت کن.");
+                            });
+                        } catch (Exception error) {
+                            ui.post(() -> {
+                                if (active && requestVersion == version)
+                                    setStatus("ایجاد رویداد ChatGPT Work ناموفق: " + error.getMessage());
+                            });
+                        }
+                    });
+                })
+                .setNegativeButton("انصراف", (dialog, which) -> {})
+                .show();
     }
 
     private void checkDirectGitHub() {
