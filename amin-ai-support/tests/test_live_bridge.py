@@ -14,10 +14,10 @@ from unittest.mock import patch
 
 from websockets.asyncio.client import connect
 from websockets.asyncio.server import serve
-from websockets.exceptions import ConnectionClosed
+from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 from amin_support import SupportEngine
-from live_bridge import LiveGateway, run_server
+from live_bridge import LiveGateway, run_server, trusted_browser_origins
 
 
 class GatewayTests(unittest.IsolatedAsyncioTestCase):
@@ -144,6 +144,36 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(rows[-1]["action_performed"])
             self.assertTrue(rows[-1]["needs_human"])
             await ws.close()
+
+    async def test_browser_origin_is_rejected_before_auth_when_untrusted(self):
+        origins = trusted_browser_origins(True)
+        server = await serve(self.gateway.handler, "127.0.0.1", 0, origins=origins)
+        url = "ws://127.0.0.1:" + str(server.sockets[0].getsockname()[1])
+        try:
+            with self.assertRaises(InvalidStatus):
+                async with connect(url, origin="http://attacker.example"):
+                    self.fail("Untrusted web origin must not reach authentication")
+            async with connect(url, origin="http://localhost:8765") as ws:
+                await ws.send(json.dumps({"type": "auth", "token": self.alpha["token"]}))
+                response = json.loads(await asyncio.wait_for(ws.recv(), 3))
+                self.assertEqual(response["type"], "ready")
+            async with connect(url) as ws:
+                await ws.send(json.dumps({"type": "auth", "token": self.alpha["token"]}))
+                response = json.loads(await asyncio.wait_for(ws.recv(), 3))
+                self.assertEqual(response["type"], "ready")
+        finally:
+            server.close()
+            await server.wait_closed()
+
+    async def test_origin_allowlist_has_strict_validation(self):
+        self.assertEqual(trusted_browser_origins(False), [None])
+        self.assertIn("https://safe.example", trusted_browser_origins(False, "https://safe.example"))
+        self.assertNotIn("http://attacker.example", trusted_browser_origins(True))
+        for value in ("*", "http://remote.example", "https://user:pw@example.com",
+                      "https://example.com/path", "https://example.com/?key=secret",
+                      "https://evil.example#fragment"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                trusted_browser_origins(False, value)
 
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
