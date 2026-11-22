@@ -132,6 +132,7 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
                         "needs_human": True, "action_performed": False}
         self.gateway.repo = "owner/private"
         self.gateway.github_token = "fake-server-side-only"
+        self.gateway.owner_token_id = self.alpha["token_id"]
         self.gateway.poll_seconds = 2
         with patch("live_bridge.GitHubPrivateBridge", FakePrivateGitHub):
             ws, _ = await self.login(self.alpha["token"])
