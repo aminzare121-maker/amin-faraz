@@ -52,6 +52,12 @@ public final class MainActivity extends Activity {
     private EditText ghRepo;
     private EditText ghToken;
     private EditText ghProject;
+    private EditText liveWss;
+    private EditText liveToken;
+    private EditText liveProject;
+    private EditText liveJob;
+    private TextView liveStatus;
+    private LiveSocketClient liveClient;
     private Button ghCheck;
     private int ghIssueNumber = 0;
     private String ghRequestId = "";
@@ -105,6 +111,10 @@ public final class MainActivity extends Activity {
         ghToken.setHint(GitHubDirectVault.available(this)
                 ? "توکن قبلی رمزگذاری شده؛ در صورت عدم تغییر مخزن خالی بگذار"
                 : "توکن محدود GitHub مخصوص مخزن خصوصی");
+        liveWss.setText(getPreferences(MODE_PRIVATE).getString("live_wss", ""));
+        liveProject.setText(getPreferences(MODE_PRIVATE).getString("live_project", "support"));
+        liveJob.setText(getPreferences(MODE_PRIVATE).getString("live_job", ""));
+
 
     }
 
@@ -225,6 +235,43 @@ public final class MainActivity extends Activity {
         Button ghClear = button("حذف کلید اتصال GitHub از گوشی");
         ghClear.setOnClickListener(v -> clearDirectGitHub());
         root.addView(ghClear);
+
+        root.addView(section("گفت‌وگوی دوطرفه زنده (WSS)"));
+        root.addView(text("در این حالت درخواست‌ها و وضعیت کار به‌طور هم‌زمان در یک اتصال زنده "
+                + "ردوبدل می‌شوند؛ نیازی به زمان‌بندی ساعتی نیست. موتور باید روی "
+                + "رایانه یا سرور قابل‌دسترسی فعال و دارای گواهی HTTPS معتبر باشد. "
+                + "این کانال مستقیماً به چت شخصی ChatGPT متصل نیست.", 14, false));
+        liveWss = edit("wss://your-support-server.example:8766", false);
+        liveWss.setSingleLine(true);
+        root.addView(liveWss);
+        liveToken = edit("کلید اختصاصی کانال زنده (یا خالی برای استفاده از کلید موتور)", false);
+        liveToken.setSingleLine(true);
+        liveToken.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        root.addView(liveToken);
+        liveProject = edit("شناسه نرم‌افزار برای کانال زنده", false);
+        liveProject.setSingleLine(true);
+        root.addView(liveProject);
+        Button startLive = button("اتصال زنده به موتور");
+        startLive.setOnClickListener(v -> connectLive());
+        root.addView(startLive);
+        Button askLive = button("ارسال سؤال هم‌زمان");
+        askLive.setOnClickListener(v -> sendLiveQuestion());
+        root.addView(askLive);
+        Button workLive = button("درخواست ساخت یا اجرای برنامه");
+        workLive.setOnClickListener(v -> confirmLiveWork());
+        root.addView(workLive);
+        liveJob = edit("شناسه کار برای پیگیری بدون قطع ارتباط", false);
+        liveJob.setSingleLine(true);
+        root.addView(liveJob);
+        Button resumeLive = button("پیگیری کار روی کانال زنده");
+        resumeLive.setOnClickListener(v -> resumeLiveWork());
+        root.addView(resumeLive);
+        Button stopLive = button("قطع کانال زنده");
+        stopLive.setOnClickListener(v -> disconnectLive());
+        root.addView(stopLive);
+        liveStatus = text("کانال زنده متصل نیست.", 14, false);
+        liveStatus.setTextIsSelectable(true);
+        root.addView(liveStatus);
 
         root.addView(section("محدودیت نسخه آزمایشی"));
         root.addView(text(
@@ -778,6 +825,135 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private void liveMessage(String value) {
+        if (active && liveStatus != null) liveStatus.setText(value);
+    }
+
+    private void connectLive() {
+        final String endpoint, secret, project;
+        try {
+            endpoint = LiveEndpointPolicy.requireWss(liveWss.getText().toString());
+            project = LiveEndpointPolicy.project(liveProject.getText().toString().trim());
+            String entered = liveToken.getText().toString().trim();
+            secret = SupportEndpoint.validateToken(
+                    entered.isEmpty() ? TokenVault.token(this) : entered);
+        } catch (Exception problem) {
+            liveMessage("تنظیمات اتصال زنده معتبر نیست: " + problem.getMessage());
+            return;
+        }
+        disconnectLive();
+        liveMessage("در حال اتصال و احراز هویت WSS...");
+        getPreferences(MODE_PRIVATE).edit()
+                .putString("live_wss", endpoint).putString("live_project", project).apply();
+        try {
+            liveClient = new LiveSocketClient(endpoint, secret, new LiveSocketClient.Listener() {
+                @Override public void onMessage(JSONObject event) {
+                    ui.post(() -> {
+                        if (!active) return;
+                        String type = event.optString("type", "");
+                        if ("ready".equals(type)) {
+                            liveToken.setText("");
+                            liveMessage("کانال دوطرفه وصل شد. پروژه مجاز: "
+                                    + event.optString("project", "?")
+                                    + ". اتصال شخصی ChatGPT هنوز به این کانال اضافه نشده.");
+                        } else if ("answer".equals(type)) {
+                            latestAnswer = event.optString("answer", "");
+                            answer.setText(latestAnswer);
+                            liveMessage("پاسخ زنده دریافت شد؛ عملیات اجرایی انجام نشده.");
+                        } else if ("work_state".equals(type)) {
+                            String jobId = event.optString("id_of_job", "");
+                            if (jobId.matches("[a-f0-9]{32}")) {
+                                liveJob.setText(jobId);
+                                getPreferences(MODE_PRIVATE).edit().putString("live_job", jobId).apply();
+                            }
+                            String state = event.optString("status", "");
+                            if (event.has("answer")) {
+                                latestAnswer = event.optString("answer", "");
+                                answer.setText(latestAnswer);
+                            }
+                            liveMessage("وضعیت ساخت/اجرا: " + state
+                                    + (event.optBoolean("action_performed", false)
+                                            ? "؛ اجرای عملیات گزارش شده (نیازمند بررسی)"
+                                            : "؛ انجام عملیات هنوز تأیید نشده"));
+                        } else if ("accepted".equals(type)) {
+                            liveMessage("درخواست پذیرفته شد؛ کانال برای پرسش‌های بعدی باز است.");
+                        } else if ("progress".equals(type)) {
+                            liveMessage(event.optString("message", event.optString("status")));
+                        } else if ("error".equals(type)) {
+                            liveMessage("خطای درخواست زنده: " + event.optString("message", ""));
+                        }
+                    });
+                }
+                @Override public void onClosed(String description) {
+                    ui.post(() -> liveMessage(description));
+                }
+            });
+        } catch (Exception failure) {
+            liveMessage("اتصال برقرار نشد: " + failure.getMessage());
+        }
+    }
+
+    private void sendLiveQuestion() {
+        try {
+            if (liveClient == null) throw new IllegalStateException("ابتدا اتصال زنده را برقرار کن");
+            String requestId = liveClient.ask(
+                    LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                    question.getText().toString().trim());
+            liveMessage("سؤال " + requestId + " در کانال زنده ارسال شد.");
+        } catch (Exception problem) {
+            liveMessage("ارسال سؤال ناموفق: " + problem.getMessage());
+        }
+    }
+
+    private void confirmLiveWork() {
+        if (liveClient == null || !liveClient.isReady()) {
+            liveMessage("ابتدا کانال زنده را متصل کن.");
+            return;
+        }
+        String message = question.getText().toString().trim();
+        if (message.isEmpty() || message.length() > 2500) {
+            liveMessage("متن درخواست ساخت باید بین ۱ و ۲۵۰۰ نویسه باشد.");
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("ارسال درخواست ساخت/اجرا")
+                .setMessage("این دستور در موتور خصوصی ثبت می‌شود؛ در صورت تنظیم "
+                        + "مخزن خصوصی به GitHub ارجاع می‌شود. "
+                        + "قبولی ساخت یا اجرای نهایی فقط پس از ارائه شواهد است. ارسال شود؟")
+                .setPositiveButton("تأیید و ارسال", (d, which) -> {
+                    try {
+                        liveClient.work(
+                                LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                                message);
+                        liveMessage("کار در صف زنده ثبت می‌شود؛ منتظر شناسه و وضعیت هستیم.");
+                    } catch (Exception problem) {
+                        liveMessage("ثبت کار ناموفق: " + problem.getMessage());
+                    }
+                })
+                .setNegativeButton("انصراف", (d, which) -> {})
+                .show();
+    }
+
+    private void resumeLiveWork() {
+        try {
+            if (liveClient == null) throw new IllegalStateException("کانال زنده برقرار نیست");
+            liveClient.resume(
+                    LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
+                    LiveEndpointPolicy.jobId(liveJob.getText().toString().trim()));
+            liveMessage("درخواست پیگیری زنده ارسال شد.");
+        } catch (Exception problem) {
+            liveMessage("پیگیری ناموفق: " + problem.getMessage());
+        }
+    }
+
+    private void disconnectLive() {
+        if (liveClient != null) {
+            liveClient.close();
+            liveClient = null;
+        }
+        liveMessage("کانال زنده قطع شد.");
+    }
+
     private void clearConnection() {
         try {
             TokenVault.clear(this);
@@ -826,6 +1002,7 @@ public final class MainActivity extends Activity {
         active = false;
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
+        disconnectLive();
         ++version;
         background.shutdownNow();
         super.onDestroy();
