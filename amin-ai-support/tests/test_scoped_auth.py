@@ -133,6 +133,19 @@ class ProjectScopedHttpTests(unittest.TestCase):
                       "serve", "--host", "0.0.0.0", "--port", "0"])
         self.assertNotEqual(err.exception.code, 0)
 
+    def test_nonlocal_requires_real_tls_even_if_scoped_keys_exist(self):
+        self.engine.access.issue("alpha")
+        with self.assertRaises(SystemExit) as error:
+            main(["--config", str(self.config), "--db", str(self.db),
+                  "serve", "--host", "0.0.0.0", "--port", "0"])
+        self.assertNotEqual(error.exception.code, 0)
+
+    def test_proxy_scoped_mode_can_be_enforced_on_loopback(self):
+        alpha = self.engine.access.issue("alpha")
+        base = self.serve(scoped_only=True)
+        self.assertEqual(self.error_code(base, "/api/projects", "old-global-secret"), 401)
+        self.assertEqual(self.request(base, "/api/projects", alpha["token"])[0], 200)
+
     def test_token_issue_is_only_local_trusted_cli_not_public_api(self):
         base = self.serve(scoped_only=True)
         alpha = self.engine.access.issue("alpha")
