@@ -25,20 +25,28 @@ RELEASE_APK = re.compile(r"/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/releases/download/"
 
 
 def validated_delivery(raw):
-    if not isinstance(raw, dict) or raw.get("environment") != "android":
+    if not isinstance(raw, dict) or raw.get("environment") not in {"android", "windows"}:
         return None
+    environment = raw["environment"]
     url, digest = raw.get("url"), raw.get("sha256")
     if not isinstance(url, str) or len(url) > 400 or not isinstance(digest, str):
         return None
-    parsed = urlsplit(url)
-    if (parsed.scheme != "https" or parsed.netloc != "github.com"
-            or parsed.query or parsed.fragment or "%" in parsed.path
-            or ".." in parsed.path or not RELEASE_APK.fullmatch(parsed.path)
-            or not re.fullmatch(r"[a-fA-F0-9]{64}", digest)):
-        return None
-    return {"environment": "android", "url": url, "sha256": digest.lower(),
+    if environment == "windows":
+        try:
+            from windows_delivery import validate_release
+            validate_release(url, digest)
+        except (ValueError, TypeError):
+            return None
+    else:
+        parsed = urlsplit(url)
+        if (parsed.scheme != "https" or parsed.netloc != "github.com"
+                or parsed.query or parsed.fragment or "%" in parsed.path
+                or ".." in parsed.path or not RELEASE_APK.fullmatch(parsed.path)
+                or not re.fullmatch(r"[a-fA-F0-9]{64}", digest)):
+            return None
+    return {"environment": environment, "url": url, "sha256": digest.lower(),
             "user_approval_required": True, "download_verified": False,
-            "installed": False}
+            "installed": False, "executed": False}
 
 
 class NoRedirect(HTTPRedirectHandler):
