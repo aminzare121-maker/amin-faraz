@@ -81,6 +81,10 @@ public final class MainActivity extends Activity {
     private OnlinePersianVoice onlineVoice;
     private Button onlineVoiceToggle;
     private Spinner voiceModeSelector;
+    private Spinner voicePersonaSelector;
+    private int voiceSequence = 0;
+    private String voiceBatchPrefix = "";
+    private String voiceFinalUtterance = "";
     private TextToSpeech speech;
     private boolean speechReady = false;
     private CheckBox voiceReplies;
@@ -183,12 +187,19 @@ public final class MainActivity extends Activity {
                     @Override public void onStart(String utteranceId) {}
                     @Override public void onDone(String utteranceId) {
                         ui.post(() -> {
-                            if (active && onlineVoice != null) onlineVoice.replyFinished();
+                            if (!active || !utteranceId.equals(voiceFinalUtterance)) return;
+                            voiceFinalUtterance = "";
+                            voiceBatchPrefix = "";
+                            if (onlineVoice != null) onlineVoice.replyFinished();
                         });
                     }
                     @Override public void onError(String utteranceId) {
                         ui.post(() -> {
-                            if (active && onlineVoice != null) onlineVoice.replyFinished();
+                            if (!active || voiceBatchPrefix.isEmpty()
+                                    || !utteranceId.startsWith(voiceBatchPrefix)) return;
+                            cancelVoicePlayback();
+                            if (onlineVoice != null) onlineVoice.requestUnavailable(
+                                    "موتور صدای فارسی بخشی از پاسخ را نتوانست پخش کند.");
                         });
                     }
                 });
@@ -287,12 +298,25 @@ public final class MainActivity extends Activity {
         voiceModeSelector.setSelection(Math.max(0, Math.min(2,
                 getPreferences(MODE_PRIVATE).getInt("voice_recognition_mode", 0))));
         root.addView(voiceModeSelector);
+        root.addView(text("شخصیت صدای امین: لحن و مکث‌های اصلاح‌شده برای فارسی، "
+                + "با استفاده از موتور گفتار موجود گوشی. این یک مدل عصبی اختصاصیِ آموزش‌دیده نیست.",
+                14, false));
+        voicePersonaSelector = new Spinner(this);
+        voicePersonaSelector.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"امین — روان و مکالمه‌ای", "امین — آرام و شمرده"}));
+        voicePersonaSelector.setSelection(Math.max(0, Math.min(1,
+                getPreferences(MODE_PRIVATE).getInt("amin_voice_persona", 0))));
+        root.addView(voicePersonaSelector);
+        Button previewAminVoice = button("آزمایش صدای فارسی امین با متن نمونه");
+        previewAminVoice.setOnClickListener(v -> speakPersian(AminVoicePersona.DEMO));
+        root.addView(previewAminVoice);
         onlineVoiceToggle = button("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
         onlineVoiceToggle.setOnClickListener(v -> toggleOnlineVoice());
         root.addView(onlineVoiceToggle);
         Button interruptVoice = button("قطع صدای پاسخ و شنیدن دستور جدید");
         interruptVoice.setOnClickListener(v -> {
-            if (speech != null) speech.stop();
+            cancelVoicePlayback();
             if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replyFinished();
         });
         root.addView(interruptVoice);
@@ -312,7 +336,7 @@ public final class MainActivity extends Activity {
         root.addView(speakAnswer);
         Button silence = button("توقف گفتار");
         silence.setOnClickListener(v -> {
-            if (speech != null) speech.stop();
+            cancelVoicePlayback();
             if (onlineVoice != null) onlineVoice.stop();
             if (voiceModeSelector != null) voiceModeSelector.setEnabled(true);
             if (onlineVoiceToggle != null)
@@ -1097,7 +1121,7 @@ public final class MainActivity extends Activity {
         if (onlineVoice == null) return;
         if (onlineVoice.isEnabled()) {
             onlineVoice.stop();
-            if (speech != null) speech.stop();
+            cancelVoicePlayback();
             voiceModeSelector.setEnabled(true);
             onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
             return;
@@ -1142,7 +1166,7 @@ public final class MainActivity extends Activity {
         onlineVoice.setPreferredMode(mode);
         configurePersianVoice();
         voiceReplies.setChecked(true);
-        if (speech != null) speech.stop();
+        cancelVoicePlayback();
         onlineVoice.start();
         if (onlineVoice.isEnabled()) {
             voiceModeSelector.setEnabled(false);
@@ -1166,6 +1190,13 @@ public final class MainActivity extends Activity {
 
     private void configurePersianVoice() {
         if (speech == null) return;
+        int support = speech.setLanguage(new Locale("fa", "IR"));
+        speechReady = support != TextToSpeech.LANG_MISSING_DATA
+                && support != TextToSpeech.LANG_NOT_SUPPORTED;
+        if (!speechReady) {
+            setStatus("هیچ موتور صدای فارسی در گوشی شناسایی نشده است.");
+            return;
+        }
         // Prefer best available Persian voice, including installed cloud voices.
         // No extra models are embedded or downloaded by this application.
         Voice best = null;
@@ -1201,7 +1232,8 @@ public final class MainActivity extends Activity {
                 speechReady = true;
             }
         }
-        speech.setSpeechRate(0.97f);
+        speech.setSpeechRate(AminVoicePersona.rate(voicePersonaSelector == null
+                ? 0 : voicePersonaSelector.getSelectedItemPosition()));
     }
 
     private void startVoiceInput() {
@@ -1244,22 +1276,64 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private void cancelVoicePlayback() {
+        // Invalidates every callback from an interrupted or superseded batch.
+        voiceFinalUtterance = "";
+        voiceBatchPrefix = "";
+        voiceSequence++;
+        if (speech != null) speech.stop();
+    }
+
     private void speakPersian(String value) {
         if (value == null || value.trim().isEmpty()) {
             setStatus("متنی برای خواندن وجود ندارد.");
             return;
         }
+        configurePersianVoice(); // Also enforces explicit offline-only voice consent.
         if (!speechReady || speech == null) {
-            setStatus("موتور گفتار فارسی روی گوشی حاضر نیست. متن همچنان قابل مشاهده است.");
+            setStatus("موتور گفتار فارسی متناسب با حالت انتخابی روی گوشی حاضر نیست.");
             if (onlineVoice != null && onlineVoice.isEnabled())
-                onlineVoice.requestUnavailable("بدون صدای فارسی روی گوشی، پاسخ فقط به شکل متن دریافت شد.");
+                onlineVoice.requestUnavailable("پاسخ متنی دریافت شد، اما صدای فارسی در دسترس نیست.");
             return;
         }
-        String safe = value.length() > 3700 ? value.substring(0, 3700) : value;
+        int style = voicePersonaSelector == null
+                ? 0 : voicePersonaSelector.getSelectedItemPosition();
+        java.util.List<AminVoicePersona.Phrase> phrases = AminVoicePersona.plan(value, style);
+        if (phrases.isEmpty()) {
+            setStatus("متن قابل تلفظی در پاسخ وجود ندارد.");
+            return;
+        }
+        getPreferences(MODE_PRIVATE).edit().putInt("amin_voice_persona", style).apply();
+        cancelVoicePlayback();
+        voiceBatchPrefix = "amin_voice_" + voiceSequence + "_";
+        voiceFinalUtterance = voiceBatchPrefix + "end";
+        speech.setSpeechRate(AminVoicePersona.rate(style));
+        speech.setPitch(AminVoicePersona.pitch(style));
         if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replySpeaking();
-        int queued = speech.speak(safe, TextToSpeech.QUEUE_FLUSH, null, "amin_voice_reply");
-        if (queued == TextToSpeech.ERROR && onlineVoice != null)
-            onlineVoice.requestUnavailable("پخش صدای فارسی روی این گوشی در دسترس نیست.");
+        boolean success = true;
+        for (int i = 0; i < phrases.size(); i++) {
+            AminVoicePersona.Phrase phrase = phrases.get(i);
+            String utterance = i == phrases.size() - 1
+                    ? voiceFinalUtterance : voiceBatchPrefix + i;
+            int queued = speech.speak(phrase.text,
+                    i == 0 ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD,
+                    null, utterance);
+            if (queued == TextToSpeech.ERROR) {
+                success = false;
+                break;
+            }
+            if (phrase.pauseMs > 0 && i < phrases.size() - 1) {
+                // Best effort: Android TTS providers vary in silence support.
+                speech.playSilentUtterance(phrase.pauseMs, TextToSpeech.QUEUE_ADD,
+                        voiceBatchPrefix + "pause_" + i);
+            }
+        }
+        if (!success) {
+            cancelVoicePlayback();
+            setStatus("اجرای صدای فارسی روی موتور انتخاب‌شده ناموفق بود.");
+            if (onlineVoice != null && onlineVoice.isEnabled())
+                onlineVoice.requestUnavailable("پخش پاسخ ناموفق بود؛ ادامهٔ شنیدن از سر گرفته شد.");
+        }
     }
 
     private void acceptArtifact(JSONObject artifact) {
