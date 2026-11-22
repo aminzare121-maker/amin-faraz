@@ -101,13 +101,29 @@ async function main(){
     health=resp.ok?await resp.json():null;
   }catch(e){report("Unable to test the live endpoint from this computer: "+e.message);}
   if(!health?.configured)fail("Live Cloudflare AI/D1 bindings unverified. Private key saved locally for recovery; do NOT claim success.");
+  // A healthy deployment is not necessarily an answering AI service: authenticate
+  // with the newly issued owner key and require a real model response.
+  let liveChat;
+  try {
+    const response=await fetch(endpoint+"/api/chat",{
+      method:"POST",
+      headers:{"Authorization":"Bearer "+owner,"Content-Type":"application/json"},
+      body:JSON.stringify({project:"support",message:"لطفاً فقط به فارسی بگو ۷ منهای ۳ چند می‌شود.",external_model_consent:true}),
+      signal:AbortSignal.timeout(45000)
+    });
+    liveChat=response.ok?await response.json():null;
+    if(!response.ok)report("Cloudflare model chat HTTP status: "+response.status);
+  }catch(e){report("Cloudflare live model chat not reachable: "+e.message);}
+  if(liveChat?.model_used!==true||typeof liveChat.answer!=="string"||!liveChat.answer.trim())
+    fail("The deployed model did not answer. Keys are in the local PRIVATE file for recovery, but setup is NOT accepted.");
+  report("SUCCESS: HTTPS owner authentication AND real Cloudflare model response verified. Phone and voice remain untested.");
   notePrivate("PRIVATE AMIN AI OWNER ACCESS - DO NOT SHARE\n"+
-    "STATUS: Cloudflare /api/health configured=true (real chat still requires a question)\n"+
+    "STATUS: /api/health configured AND actual owner /api/chat model_used=true\n"+
     "Server HTTPS URL:\n"+endpoint+"\nOwner key for mobile app:\n"+owner+
     "\nAdmin key for /owner console (NEVER put in mobile):\n"+admin+
     "\nCustomer enrollment secret (SERVER ONLY):\n"+enrollment+
     "\nCustomer billing and Google Pay charges: OFF\n");
-  report("Cloudflare AI endpoint configured: "+endpoint);
+  report("Cloudflare HTTPS AI chat verified: "+endpoint);
   report("PRIVATE mobile owner key saved to: "+privatePath);
   report("Paste endpoint and owner key into the 2 fields on your phone.");
   spawnSync("notepad.exe",[privatePath],{stdio:"ignore",shell:false});
