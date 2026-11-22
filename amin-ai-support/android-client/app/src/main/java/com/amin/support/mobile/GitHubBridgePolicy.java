@@ -46,7 +46,9 @@ public final class GitHubBridgePolicy {
     public static boolean isTrustedReply(String author, String expectedOwner, String body,
                                          String requestId) {
         if (author == null || expectedOwner == null || body == null || requestId == null) return false;
-        if (!author.toLowerCase(Locale.ROOT).equals(expectedOwner.toLowerCase(Locale.ROOT))) return false;
+        String sender = author.toLowerCase(Locale.ROOT);
+        String owner = expectedOwner.toLowerCase(Locale.ROOT);
+        if (!sender.equals(owner) && !sender.equals("github-actions[bot]")) return false;
         return body.startsWith("AMIN_CHAT_REPLY_V1\n") && requestId.matches("[a-f0-9]{32}");
     }
 }
