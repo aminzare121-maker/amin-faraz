@@ -103,6 +103,8 @@ jobs:
             amin-ai-support/android-client/app/src/main/java/com/amin/support/mobile/CheckoutPolicy.java \
             amin-ai-support/android-client/tests/CheckoutPolicyTest.java
           java -cp "$RUNNER_TEMP/amin-mobile-jvm" com.amin.support.mobile.CheckoutPolicyTest
+      - name: Check chat response visibility and optional voice layout
+        run: python3 amin-ai-support/android-client/tests/test_mobile_screen_order.py
       - name: Build actual installable Android app
         working-directory: amin-ai-support/android-client
         run: gradle --no-daemon --stacktrace :app:assembleDebug
