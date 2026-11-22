@@ -64,7 +64,7 @@ public final class MainActivity extends Activity {
             if (ghIssueNumber > 0 && GitHubDirectVault.available(MainActivity.this) && !directPollBusy) {
                 pollDirectQuietly();
             }
-            ui.postDelayed(this, 120_000L);
+            ui.postDelayed(this, 10_000L);
         }
     };
     private Spinner projects;
@@ -717,7 +717,7 @@ public final class MainActivity extends Activity {
     private void pollDirectQuietly() {
         final int issue = ghIssueNumber;
         final String rid = ghRequestId;
-        if (issue <= 0 || !rid.matches("[a-f0-9]{32}")) return;
+        if (issue <= 0 || !rid.matches("[a-f0-9]{32}") || rid.equals(ghNotifiedRequestId)) return;
         final String repo = GitHubDirectVault.repo(this);
         final String credential;
         try { credential = GitHubDirectVault.token(this); }
