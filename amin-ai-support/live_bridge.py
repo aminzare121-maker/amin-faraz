@@ -158,8 +158,9 @@ class LiveGateway:
                 if action not in {"ask", "work", "resume"}:
                     await self.send(socket, "error", ident, message="Unsupported operation")
                     continue
+                route = "chat" if action == "ask" else "ticket"
                 if (command.get("project") != access["project_id"] or
-                        not self.limits.allow(access["token_id"], action, 30 if action == "ask" else 8)):
+                        not self.limits.allow(access["token_id"], route, 30 if action == "ask" else 8)):
                     await self.send(socket, "error", ident, message="Project denied or rate limit exceeded")
                     continue
                 if len(outstanding) >= 8 or ident in active_ids:
@@ -197,6 +198,11 @@ class LiveGateway:
         project = access["project_id"]
         try:
             if action == "ask":
+                units = await asyncio.to_thread(
+                    self.engine.quotas.reserve, access["token_id"], "chat")
+                if units == "exhausted":
+                    await self.send(socket, "error", ident, message="Chat quota exhausted")
+                    return
                 await self.send(socket, "accepted", ident, mode="answer", status="working")
                 async with self.sem:
                     result = await asyncio.to_thread(
@@ -212,7 +218,9 @@ class LiveGateway:
                 if job is None:
                     await self.send(socket, "error", ident, message="Job not found")
                     return
-                await self.send(socket, "work_state", ident, **job)
+                await self.send(socket, "work_state", ident,
+                                id_of_job=job["id"],
+                                **{key: value for key, value in job.items() if key != "id"})
                 if job["status"] == "github_dispatched":
                     await self.watch(socket, ident, job)
         except asyncio.CancelledError:
@@ -225,6 +233,11 @@ class LiveGateway:
     async def run_work(self, socket, access, command):
         ident = command["id"]
         project = access["project_id"]
+        units = await asyncio.to_thread(
+            self.engine.quotas.reserve, access["token_id"], "ticket")
+        if units == "exhausted":
+            await self.send(socket, "error", ident, message="Work quota exhausted")
+            return
         job_id = await asyncio.to_thread(
             self.jobs.new, project, access["token_id"], command["message"].strip())
         await self.send(socket, "work_state", ident, id_of_job=job_id,
