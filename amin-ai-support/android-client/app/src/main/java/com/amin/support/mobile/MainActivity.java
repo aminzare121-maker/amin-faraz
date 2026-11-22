@@ -1,6 +1,7 @@
 package com.amin.support.mobile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -51,6 +53,10 @@ public final class MainActivity extends Activity {
     private TextView answer;
     private Button connect;
     private Button send;
+    private CheckBox autoHandoff;
+    private Button checkHandoff;
+    private String latestHandoffId = "";
+    private String latestHandoffProject = "";
     private String latestAnswer = "";
     private ScrollView scroll;
     private boolean active = true;
@@ -69,6 +75,9 @@ public final class MainActivity extends Activity {
         status.setText(TokenVault.hasToken(this)
                 ? "کلید رمزگذاری‌شده موجود است. برای دریافت فهرست نرم‌افزارها اتصال را بزن."
                 : "برای آغاز، نشانی HTTPS موتور و کلید دسترسی نرم‌افزار را ثبت کن.");
+        latestHandoffId = getPreferences(MODE_PRIVATE).getString("handoff_id", "");
+        latestHandoffProject = getPreferences(MODE_PRIVATE).getString("handoff_project", "");
+        if (checkHandoff != null) checkHandoff.setEnabled(!latestHandoffId.isEmpty());
     }
 
     private View createContent() {
@@ -140,6 +149,23 @@ public final class MainActivity extends Activity {
             setStatus("پاسخ در کلیپ‌بورد کپی شد؛ هنگام اشتراک‌گذاری مراقب اطلاعات خصوصی باش.");
         });
         root.addView(copy);
+
+        root.addView(section("ارجاع به هوش مرکزی و پیگیری درخواست"));
+        root.addView(text("اگر پاسخی قطعی یا ابزار لازم موجود نباشد، درخواست با رضایت تو "
+                + "در موتور خصوصی ثبت می‌شود. GitHub عمومی فقط شناسه بی‌نام می‌بیند؛ "
+                + "ارسال به ChatGPT فعلاً خودکار نیست و به عامل مجاز نیاز دارد.", 14, false));
+        autoHandoff = new CheckBox(this);
+        autoHandoff.setText("وقتی موتور شواهد کافی ندارد، با رضایت من خودکار به صف ارجاع بده"
+                + " (ممکن است از سهمیه تیکت کم شود)");
+        autoHandoff.setChecked(false);
+        root.addView(autoHandoff);
+        Button forward = button("ارجاع این درخواست با تأیید من");
+        forward.setOnClickListener(v -> confirmHandoff());
+        root.addView(forward);
+        checkHandoff = button("بررسی نتیجه آخرین درخواست");
+        checkHandoff.setEnabled(false);
+        checkHandoff.setOnClickListener(v -> checkHandoff());
+        root.addView(checkHandoff);
 
         root.addView(section("محدودیت نسخه آزمایشی"));
         root.addView(text(
@@ -337,6 +363,9 @@ public final class MainActivity extends Activity {
                     answer.setText(formatted);
                     send.setEnabled(true);
                     setStatus("پاسخ دریافت شد. بدون ذخیره دائمی مکالمه در این گوشی.");
+                    if (human && autoHandoff.isChecked()) {
+                        submitHandoff(selectedProject, message);
+                    }
                     scroll.post(() -> scroll.fullScroll(View.FOCUS_DOWN));
                 });
             } catch (Exception failure) {
@@ -351,9 +380,113 @@ public final class MainActivity extends Activity {
         });
     }
 
+    private void confirmHandoff() {
+        int selection = projects.getSelectedItemPosition() - 1;
+        if (selection < 0 || selection >= projectIds.size()) {
+            setStatus("ابتدا اتصال و نرم‌افزار را انتخاب کن.");
+            return;
+        }
+        String message = question.getText().toString().trim();
+        if (message.isEmpty() || message.length() > 2500) {
+            setStatus("متن درخواست باید بین ۱ تا ۲۵۰۰ نویسه باشد.");
+            return;
+        }
+        String project = projectIds.get(selection);
+        new AlertDialog.Builder(this)
+                .setTitle("اجازه ثبت و ارجاع درخواست")
+                .setMessage("متن درخواست در حافظه خصوصی موتور ذخیره می‌شود. "
+                        + "در مخزن عمومی GitHub فقط شناسه بی‌نام ثبت می‌شود. "
+                        + "ارسال خودکار متن به ChatGPT فعال نیست. "
+                        + "این درخواست ممکن است از سهمیه تیکت کم کند. تأیید می‌کنی؟")
+                .setNegativeButton("انصراف", (d, w) -> {})
+                .setPositiveButton("تأیید و ارسال", (d, w) -> submitHandoff(project, message))
+                .show();
+    }
+
+    private void submitHandoff(String project, String message) {
+        final String address = TokenVault.endpoint(this);
+        final String secret;
+        try {
+            secret = TokenVault.token(this);
+        } catch (Exception e) {
+            setStatus("کلید اتصال در دسترس نیست.");
+            return;
+        }
+        setStatus("در حال ثبت درخواست در صف خصوصی...");
+        int id = ++version;
+        background.execute(() -> {
+            try {
+                JSONObject reply = new SupportApi(address, secret).handoff(project, message);
+                String requestId = reply.optString("id", "");
+                if (!requestId.matches("[a-f0-9]{32}")) {
+                    throw new IllegalStateException("شناسه معتبر ارجاع دریافت نشد.");
+                }
+                String githubState = reply.optString("github_state", "not_configured");
+                ui.post(() -> {
+                    if (!active || id != version) return;
+                    latestHandoffId = requestId;
+                    latestHandoffProject = project;
+                    getPreferences(MODE_PRIVATE).edit()
+                            .putString("handoff_id", requestId)
+                            .putString("handoff_project", project).apply();
+                    checkHandoff.setEnabled(true);
+                    setStatus("درخواست ثبت شد: " + requestId.substring(0, 12)
+                            + " | وضعیت GitHub: " + githubState
+                            + ". پاسخ هنوز توسط هوش مرکزی بررسی نشده است.");
+                });
+            } catch (Exception error) {
+                ui.post(() -> { if (active && id == version) setStatus(explain(error)); });
+            }
+        });
+    }
+
+    private void checkHandoff() {
+        if (latestHandoffId.isEmpty() || latestHandoffProject.isEmpty()) {
+            setStatus("درخواست ثبت‌شده‌ای برای پیگیری وجود ندارد.");
+            return;
+        }
+        final String address = TokenVault.endpoint(this);
+        final String secret;
+        try {
+            secret = TokenVault.token(this);
+        } catch (Exception e) {
+            setStatus("ابتدا اتصال امن را دوباره تنظیم کن.");
+            return;
+        }
+        final String requestId = latestHandoffId;
+        final String project = latestHandoffProject;
+        setStatus("در حال بررسی وضعیت درخواست...");
+        int id = ++version;
+        background.execute(() -> {
+            try {
+                JSONObject result = new SupportApi(address, secret).handoffStatus(project, requestId);
+                ui.post(() -> {
+                    if (!active || id != version) return;
+                    String state = result.optString("status", "pending");
+                    if ("answered".equals(state)) {
+                        String reviewedAnswer = result.optString("answer", "");
+                        latestAnswer = reviewedAnswer;
+                        answer.setText(reviewedAnswer);
+                        setStatus("پاسخ بررسی‌شده برای درخواست " + requestId.substring(0, 12)
+                                + " دریافت شد. افزودن به حافظه نیازمند تأیید جداگانه است.");
+                    } else {
+                        setStatus("درخواست " + requestId.substring(0, 12)
+                                + " هنوز در صف بررسی است؛ این وضعیت به معنی اجرای ChatGPT نیست.");
+                    }
+                });
+            } catch (Exception error) {
+                ui.post(() -> { if (active && id == version) setStatus(explain(error)); });
+            }
+        });
+    }
+
     private void clearConnection() {
         try {
             TokenVault.clear(this);
+            getPreferences(MODE_PRIVATE).edit().clear().apply();
+            latestHandoffId = "";
+            latestHandoffProject = "";
+            if (checkHandoff != null) checkHandoff.setEnabled(false);
             ++version;
             server.setText("");
             token.setText("");
