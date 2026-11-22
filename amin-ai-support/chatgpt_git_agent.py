@@ -73,18 +73,21 @@ def sse_completed_response(lines):
             completed = result
 
     for raw in lines:
-        line = raw.decode("utf8") if isinstance(raw, bytes) else raw
-        total += len(line)
+        chunk = raw.decode("utf8") if isinstance(raw, bytes) else raw
+        total += len(chunk)
         if total > 3_500_000:
             raise PlanConnectionUnavailable("Model event stream is too large")
-        clean = line.rstrip("\r\n")
-        if clean.startswith("data:"):
-            event_data.append(clean[5:].lstrip())
-        elif not clean and event_data:
-            blob = "\n".join(event_data)
-            event_data.clear()
-            if blob != "[DONE]":
-                take(blob)
+        # HTTPResponse yields single lines, whereas test transports may return
+        # complete SSE frames in a single chunk. Both must be equivalent.
+        for line in chunk.splitlines():
+            clean = line.rstrip("\r\n")
+            if clean.startswith("data:"):
+                event_data.append(clean[5:].lstrip())
+            elif not clean and event_data:
+                blob = "\n".join(event_data)
+                event_data.clear()
+                if blob != "[DONE]":
+                    take(blob)
     if event_data:
         blob = "\n".join(event_data)
         if blob != "[DONE]":
