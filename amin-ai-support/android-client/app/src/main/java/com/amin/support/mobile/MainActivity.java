@@ -1496,8 +1496,12 @@ public final class MainActivity extends Activity {
                                         .putString("live_wss", endpoint)
                                         .putString("live_project", project).apply();
                                 liveToken.setText("");
-                                liveMessage("کانال دوطرفه امن متصل است؛ کلید فقط برای همین نشانی ذخیره شد. "
-                                        + "ChatGPT شخصی هنوز به کانال اضافه نشده.");
+                                liveMessage("اتصال امن WSS برقرار است؛ "
+                                        + (event.optBoolean("neural_voice_ready", false)
+                                          ? "موتور صدای عصبی فارسی روی میزبان آنلاین آماده گزارش شده است."
+                                          : "موتور صدای عصبی فارسی روی میزبان آنلاین فعال نیست. "
+                                            + "از صدای موجود اندروید استفاده می‌شود.")
+                                        + " اتصال واقعی مدل ChatGPT جداگانه بررسی می‌شود.");
                             } catch (Exception failure) {
                                 liveMessage("ذخیره امن کلید ممکن نشد؛ اتصال قطع شد.");
                                 disconnectLive();
@@ -1505,8 +1509,31 @@ public final class MainActivity extends Activity {
                         } else if ("answer".equals(type)) {
                             latestAnswer = event.optString("answer", "");
                             answer.setText(latestAnswer);
-                            if (voiceReplies.isChecked()) speakPersian(latestAnswer);
-                            liveMessage("پاسخ زنده دریافت شد؛ عملیات اجرایی انجام نشده.");
+                            boolean pending = event.optBoolean("voice_pending", false)
+                                    && event.optString("id", "").equals(neuralPendingId)
+                                    && !neuralPendingId.isEmpty();
+                            if (pending) {
+                                neuralPendingText = latestAnswer;
+                                scheduleNeuralTimeout(neuralPendingId);
+                                liveMessage("پاسخ متنی رسید؛ موتور عصبی فارسی در حال تولید صدای واقعی است.");
+                            } else {
+                                if (event.optString("id", "").equals(neuralPendingId))
+                                    clearNeuralVoice(true);
+                                if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                                liveMessage("پاسخ زنده دریافت شد؛ صدا از اندروید پخش می‌شود.");
+                            }
+                        } else if ("voice_frame".equals(type)) {
+                            String id = event.optString("id", "");
+                            if (!id.isEmpty() && id.equals(neuralPendingId)) {
+                                scheduleNeuralTimeout(id);
+                                neuralVoicePlayer.accept(event);
+                            }
+                        } else if ("voice_error".equals(type)) {
+                            String id = event.optString("id", "");
+                            if (!id.isEmpty() && id.equals(neuralPendingId)) {
+                                neuralVoicePlayer.remoteFailure(id,
+                                        "صدای عصبی روی میزبان آنلاین در دسترس نیست.");
+                            }
                         } else if ("work_state".equals(type)) {
                             String jobId = event.optString("id_of_job", "");
                             if (jobId.matches("[a-f0-9]{32}")) {
@@ -1535,13 +1562,25 @@ public final class MainActivity extends Activity {
                         } else if ("progress".equals(type)) {
                             liveMessage(event.optString("message", event.optString("status")));
                         } else if ("error".equals(type)) {
+                            if (event.optString("id", "").equals(neuralPendingId)) {
+                                clearNeuralVoice(true);
+                                if (onlineVoice != null && onlineVoice.isEnabled())
+                                    onlineVoice.requestUnavailable("پاسخ آنلاین قابل دریافت نبود.");
+                            }
                             liveMessage("خطای درخواست زنده: " + event.optString("message", ""));
                         }
                     });
                 }
                 @Override public void onClosed(String description) {
                     ui.post(() -> {
-                        if (attempt == liveGeneration) liveMessage(description);
+                        if (attempt != liveGeneration) return;
+                        if (!neuralPendingId.isEmpty()) {
+                            clearNeuralVoice(true);
+                            if (onlineVoice != null && onlineVoice.isEnabled())
+                                onlineVoice.requestUnavailable(
+                                        "کانال صوتی قطع شد؛ پاسخ هوشمند تازه دریافت نشد.");
+                        }
+                        liveMessage(description);
                     });
                 }
             });
@@ -1693,6 +1732,7 @@ public final class MainActivity extends Activity {
     }
 
     private void disconnectLive() {
+        clearNeuralVoice(true);
         ++liveGeneration; // Prevent callbacks from stale WSS connections.
         if (liveClient != null) {
             liveClient.close();
@@ -1752,6 +1792,10 @@ public final class MainActivity extends Activity {
         resumed = false;
         ui.removeCallbacks(githubDirectPoll);
         disconnectLive();
+        if (neuralVoicePlayer != null) {
+            neuralVoicePlayer.close();
+            neuralVoicePlayer = null;
+        }
         if (onlineVoice != null) {
             onlineVoice.stop();
             onlineVoice = null;
