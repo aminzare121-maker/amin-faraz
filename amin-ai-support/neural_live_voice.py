@@ -167,7 +167,7 @@ class PiperPersianVoice:
             if style == 1 and index < len(parts) - 1:
                 # Deliberate Persian narration adds restrained phrase pauses;
                 # do not alter the licensed model's timbre or fake voice pitch.
-                silence = b"\\x00\\x00" * int(SAMPLE_RATE * 0.16)
+                silence = bytes((0, 0)) * int(SAMPLE_RATE * 0.16)
                 pcm += silence
                 duration = round(duration + 0.16, 3)
                 if len(pcm) > MAX_AUDIO_BYTES:
