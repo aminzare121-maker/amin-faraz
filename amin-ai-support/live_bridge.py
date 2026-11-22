@@ -82,6 +82,7 @@ class LiveJobs:
                 project_id TEXT NOT NULL,
                 token_id TEXT NOT NULL,
                 question TEXT NOT NULL,
+                request_key TEXT NOT NULL DEFAULT '',
                 status TEXT NOT NULL,
                 target_environment TEXT NOT NULL DEFAULT 'none',
                 requested_operation TEXT NOT NULL DEFAULT 'answer',
@@ -102,7 +103,11 @@ class LiveJobs:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN requested_operation TEXT NOT NULL DEFAULT 'answer'")
             if "artifact_json" not in cols:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN artifact_json TEXT NOT NULL DEFAULT ''")
+            if "request_key" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN request_key TEXT NOT NULL DEFAULT ''")
             db.execute("CREATE INDEX IF NOT EXISTS amin_live_owner ON amin_live_work(token_id,project_id)")
+            db.execute("CREATE UNIQUE INDEX IF NOT EXISTS amin_live_idempotent "
+                       "ON amin_live_work(token_id,project_id,request_key) WHERE request_key != ''")
 
     def connect(self):
         return sqlite3.connect(str(self.db_path), timeout=20)
@@ -116,6 +121,40 @@ class LiveJobs:
                        " VALUES(?,?,?,?,?,?,?)", (ident, project, token_id, question, "queued",
                                                 target_environment, requested_operation))
         return ident
+
+    def new_once(self, project, token_id, question, target_environment="none",
+                 requested_operation="answer", request_key=""):
+        """Atomically accept a client request at most once per token and project.
+
+        A fresh key makes a fresh job. Replaying the SAME key returns its previous
+        durable id and never submits another Issue/PR. Legacy clients without a
+        key keep the previous behavior for backward compatibility.
+        """
+        if not request_key:
+            return self.new(project, token_id, question, target_environment,
+                            requested_operation), True
+        if not isinstance(request_key, str) or not JOB_ID.fullmatch(request_key):
+            raise ValueError("Invalid idempotency key")
+        if target_environment not in ALLOWED_TARGETS or requested_operation not in ALLOWED_OPERATIONS:
+            raise ValueError("Unknown environment or operation")
+        ident = uuid4().hex
+        with self.connect() as db:
+            cursor = db.execute(
+                "INSERT OR IGNORE INTO amin_live_work"
+                "(id,project_id,token_id,question,status,target_environment,"
+                "requested_operation,request_key) VALUES(?,?,?,?,?,?,?,?)",
+                (ident, project, token_id, question, "queued", target_environment,
+                 requested_operation, request_key))
+            actual = db.execute(
+                "SELECT id,question,target_environment,requested_operation "
+                "FROM amin_live_work WHERE project_id=? AND token_id=? AND request_key=?",
+                (project, token_id, request_key)).fetchone()
+        if not actual:
+            raise RuntimeError("Durable idempotency record unavailable")
+        # Reusing a key with a DIFFERENT request is an error, not a silent reroute.
+        if actual[1:] != (question, target_environment, requested_operation):
+            raise ValueError("Request key belongs to a different work request")
+        return actual[0], cursor.rowcount == 1
 
     def read(self, ident, project, token_id):
         if not isinstance(ident, str) or not JOB_ID.fullmatch(ident):
@@ -238,6 +277,11 @@ class LiveGateway:
                     if action == "work" and not isinstance(command.get("chatgpt_work_event", False), bool):
                         await self.send(socket, "error", ident, message="Invalid Work event permission")
                         continue
+                    if action == "work" and ("request_key" in command and
+                            (not isinstance(command["request_key"], str) or
+                             not JOB_ID.fullmatch(command["request_key"]))):
+                        await self.send(socket, "error", ident, message="Invalid work idempotency key")
+                        continue
                     if action == "work" and (
                         command.get("target_environment", "none") not in ALLOWED_TARGETS or
                         command.get("requested_operation", "answer") not in ALLOWED_OPERATIONS):
@@ -314,9 +358,21 @@ class LiveGateway:
             return
         target = command.get("target_environment", "none")
         operation = command.get("requested_operation", "answer")
-        job_id = await asyncio.to_thread(
-            self.jobs.new, project, access["token_id"], command["message"].strip(),
-            target, operation)
+        job_id, created = await asyncio.to_thread(
+            self.jobs.new_once, project, access["token_id"], command["message"].strip(),
+            target, operation, command.get("request_key", ""))
+        if not created:
+            if units not in {"unmetered", "exhausted"}:
+                await asyncio.to_thread(
+                    self.engine.quotas.refund, access["token_id"], "ticket", units)
+            prior = await asyncio.to_thread(
+                self.jobs.read, job_id, project, access["token_id"])
+            await self.send(socket, "work_state", ident, id_of_job=job_id,
+                            status=prior["status"], duplicate_suppressed=True,
+                            action_performed=False, chatgpt_invoked=False)
+            if prior["status"] == "github_dispatched":
+                await self.watch(socket, ident, prior)
+            return
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="queued", action_performed=False)
         if (not self.repo or not self.github_token
