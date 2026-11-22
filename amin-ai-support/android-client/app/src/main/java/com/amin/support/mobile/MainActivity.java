@@ -259,7 +259,7 @@ public final class MainActivity extends Activity {
                 15, false));
 
         root.addView(section("اتصال به موتور هوش"));
-        server = edit("https://your-support-server.example", false);
+        server = edit("آدرس واقعی HTTPS موتور؛ بدون آدرس نمونه", false);
         server.setInputType(InputType.TYPE_CLASS_TEXT
                 | InputType.TYPE_TEXT_VARIATION_URI);
         server.setSingleLine(true);
@@ -301,87 +301,6 @@ public final class MainActivity extends Activity {
         question.setMaxLines(5);
         root.addView(question);
 
-        root.addView(section("مکالمه صوتی و نوشتاری"));
-        root.addView(text("نسخهٔ سبک آنلاین: هیچ مدل سنگین صدایی داخل APK نیست. "
-                + "تشخیص و پخش فارسی از سرویس‌های گفتار Android استفاده می‌کند؛ "
-                + "بسته به موتور نصب‌شده، پردازش صدا ممکن است به ارائه‌دهندهٔ آن منتقل شود. "
-                + "برای پاسخ هوشمند، اتصال WSS یا مخزن خصوصی GitHubِ مجاز لازم است؛ "
-                + "صرف ثبت درخواست در GitHub به معنی اجرای ChatGPT نیست.", 14, false));
-        root.addView(text("حالت گفتار: اینترنتی، آفلاین با امکانات موجود گوشی، یا خودکار. "
-                + "آفلاین فقط شنیدن و خواندن پاسخ است؛ تولید پاسخ تازهٔ ChatGPT اینترنت می‌خواهد.", 14, false));
-        voiceModeSelector = new Spinner(this);
-        voiceModeSelector.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"آنلاین: کیفیت بهترین صدای فارسی موجود",
-                        "آفلاین: فقط امکانات نصب‌شدهٔ گوشی (بدون دانلود مدل)",
-                        "خودکار: ترجیح آفلاین و سپس آنلاین"}));
-        voiceModeSelector.setSelection(Math.max(0, Math.min(2,
-                getPreferences(MODE_PRIVATE).getInt("voice_recognition_mode", 0))));
-        root.addView(voiceModeSelector);
-        root.addView(text("شخصیت صدای امین: لحن و مکث‌های اصلاح‌شده برای فارسی، "
-                + "با استفاده از موتور گفتار موجود گوشی. این یک مدل عصبی اختصاصیِ آموزش‌دیده نیست.",
-                14, false));
-        voicePersonaSelector = new Spinner(this);
-        voicePersonaSelector.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"امین — روان و مکالمه‌ای", "امین — آرام و شمرده"}));
-        voicePersonaSelector.setSelection(Math.max(0, Math.min(1,
-                getPreferences(MODE_PRIVATE).getInt("amin_voice_persona", 0))));
-        root.addView(voicePersonaSelector);
-        preferNeuralVoice = new CheckBox(this);
-        preferNeuralVoice.setText("صدای عصبی فارسیِ آنلاین امین، در صورت فعال‌بودن موتور صوتی مجاز "
-                + "(اگر فعال نباشد، صدای اندروید پخش می‌شود)");
-        preferNeuralVoice.setChecked(getPreferences(MODE_PRIVATE)
-                .getBoolean("amin_neural_voice_preferred", true));
-        preferNeuralVoice.setOnCheckedChangeListener((button, checked) ->
-                getPreferences(MODE_PRIVATE).edit()
-                        .putBoolean("amin_neural_voice_preferred", checked).apply());
-        root.addView(preferNeuralVoice);
-        Button previewAminVoice = button("آزمایش صدای فارسی امین با متن نمونه");
-        previewAminVoice.setOnClickListener(v -> speakPersian(AminVoicePersona.DEMO));
-        root.addView(previewAminVoice);
-        onlineVoiceToggle = button("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
-        onlineVoiceToggle.setOnClickListener(v -> toggleOnlineVoice());
-        root.addView(onlineVoiceToggle);
-        Button interruptVoice = button("قطع صدای پاسخ و شنیدن دستور جدید");
-        interruptVoice.setOnClickListener(v -> {
-            boolean awaiting = !neuralPendingId.isEmpty();
-            boolean playingNeural = neuralStarted;
-            clearNeuralVoice(true);
-            cancelVoicePlayback();
-            if (onlineVoice != null && onlineVoice.isEnabled()) {
-                if (playingNeural) onlineVoice.replyFinished();
-                else if (awaiting) onlineVoice.requestUnavailable(
-                        "پاسخ صوتی آنلاین به دستور شما قطع شد؛ آمادهٔ شنیدن بعدی.");
-                else onlineVoice.replyFinished();
-            }
-        });
-        root.addView(interruptVoice);
-        Button mic = button("میکروفون: گفتار فارسی به متن");
-        mic.setOnClickListener(v -> startVoiceInput());
-        root.addView(mic);
-        voiceAutoSend = new CheckBox(this);
-        voiceAutoSend.setText("پس از تشخیص گفتار، سؤال را خودکار در کانال زنده بفرست (اگر متصل است)");
-        voiceAutoSend.setChecked(false);
-        root.addView(voiceAutoSend);
-        voiceReplies = new CheckBox(this);
-        voiceReplies.setText("پاسخ‌ها با صدای فارسی خوانده شوند (اگر صدای فارسی موجود باشد)");
-        voiceReplies.setChecked(false);
-        root.addView(voiceReplies);
-        Button speakAnswer = button("بلندخوانی پاسخ");
-        speakAnswer.setOnClickListener(v -> speakPersian(latestAnswer));
-        root.addView(speakAnswer);
-        Button silence = button("توقف گفتار");
-        silence.setOnClickListener(v -> {
-            clearNeuralVoice(true);
-            cancelVoicePlayback();
-            if (onlineVoice != null) onlineVoice.stop();
-            if (voiceModeSelector != null) voiceModeSelector.setEnabled(true);
-            if (onlineVoiceToggle != null)
-                onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
-        });
-        root.addView(silence);
-
         allowCloudModel = new CheckBox(this);
         allowCloudModel.setText("اجازه می‌دهم متن این سؤال و مدارک مجاز برنامه برای دریافت پاسخ آنلاین به مدل Cloudflare ارسال شوند.");
         allowCloudModel.setChecked(false);
@@ -406,6 +325,100 @@ public final class MainActivity extends Activity {
             setStatus("پاسخ در کلیپ‌بورد کپی شد؛ هنگام اشتراک‌گذاری مراقب اطلاعات خصوصی باش.");
         });
         root.addView(copy);
+
+        root.addView(section("مکالمهٔ صوتی فارسی"));
+        Button voiceSettingsButton = button("نمایش تنظیمات صدا و میکروفون");
+        root.addView(voiceSettingsButton);
+        LinearLayout voiceSettingsPanel = new LinearLayout(this);
+        voiceSettingsPanel.setOrientation(LinearLayout.VERTICAL);
+        voiceSettingsPanel.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        voiceSettingsPanel.setVisibility(View.GONE);
+        voiceSettingsButton.setOnClickListener(v -> {
+            boolean open = voiceSettingsPanel.getVisibility() != View.VISIBLE;
+            voiceSettingsPanel.setVisibility(open ? View.VISIBLE : View.GONE);
+            voiceSettingsButton.setText(open ? "پنهان‌کردن تنظیمات صدا" :
+                    "نمایش تنظیمات صدا و میکروفون");
+        });
+        root.addView(voiceSettingsPanel);
+        voiceSettingsPanel.addView(text("نسخهٔ سبک آنلاین: هیچ مدل سنگین صدایی داخل APK نیست. "
+                + "تشخیص و پخش فارسی از سرویس‌های گفتار Android استفاده می‌کند؛ "
+                + "بسته به موتور نصب‌شده، پردازش صدا ممکن است به ارائه‌دهندهٔ آن منتقل شود. "
+                + "برای پاسخ هوشمند، اتصال WSS یا مخزن خصوصی GitHubِ مجاز لازم است؛ "
+                + "صرف ثبت درخواست در GitHub به معنی اجرای ChatGPT نیست.", 14, false));
+        voiceSettingsPanel.addView(text("حالت گفتار: اینترنتی، آفلاین با امکانات موجود گوشی، یا خودکار. "
+                + "آفلاین فقط شنیدن و خواندن پاسخ است؛ تولید پاسخ تازهٔ ChatGPT اینترنت می‌خواهد.", 14, false));
+        voiceModeSelector = new Spinner(this);
+        voiceModeSelector.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"آنلاین: کیفیت بهترین صدای فارسی موجود",
+                        "آفلاین: فقط امکانات نصب‌شدهٔ گوشی (بدون دانلود مدل)",
+                        "خودکار: ترجیح آفلاین و سپس آنلاین"}));
+        voiceModeSelector.setSelection(Math.max(0, Math.min(2,
+                getPreferences(MODE_PRIVATE).getInt("voice_recognition_mode", 0))));
+        voiceSettingsPanel.addView(voiceModeSelector);
+        voiceSettingsPanel.addView(text("شخصیت صدای امین: لحن و مکث‌های اصلاح‌شده برای فارسی، "
+                + "با استفاده از موتور گفتار موجود گوشی. این یک مدل عصبی اختصاصیِ آموزش‌دیده نیست.",
+                14, false));
+        voicePersonaSelector = new Spinner(this);
+        voicePersonaSelector.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[]{"امین — روان و مکالمه‌ای", "امین — آرام و شمرده"}));
+        voicePersonaSelector.setSelection(Math.max(0, Math.min(1,
+                getPreferences(MODE_PRIVATE).getInt("amin_voice_persona", 0))));
+        voiceSettingsPanel.addView(voicePersonaSelector);
+        preferNeuralVoice = new CheckBox(this);
+        preferNeuralVoice.setText("صدای عصبی فارسیِ آنلاین امین، در صورت فعال‌بودن موتور صوتی مجاز "
+                + "(اگر فعال نباشد، صدای اندروید پخش می‌شود)");
+        preferNeuralVoice.setChecked(getPreferences(MODE_PRIVATE)
+                .getBoolean("amin_neural_voice_preferred", true));
+        preferNeuralVoice.setOnCheckedChangeListener((button, checked) ->
+                getPreferences(MODE_PRIVATE).edit()
+                        .putBoolean("amin_neural_voice_preferred", checked).apply());
+        voiceSettingsPanel.addView(preferNeuralVoice);
+        Button previewAminVoice = button("آزمایش صدای فارسی امین با متن نمونه");
+        previewAminVoice.setOnClickListener(v -> speakPersian(AminVoicePersona.DEMO));
+        voiceSettingsPanel.addView(previewAminVoice);
+        onlineVoiceToggle = button("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
+        onlineVoiceToggle.setOnClickListener(v -> toggleOnlineVoice());
+        voiceSettingsPanel.addView(onlineVoiceToggle);
+        Button interruptVoice = button("قطع صدای پاسخ و شنیدن دستور جدید");
+        interruptVoice.setOnClickListener(v -> {
+            boolean awaiting = !neuralPendingId.isEmpty();
+            boolean playingNeural = neuralStarted;
+            clearNeuralVoice(true);
+            cancelVoicePlayback();
+            if (onlineVoice != null && onlineVoice.isEnabled()) {
+                if (playingNeural) onlineVoice.replyFinished();
+                else if (awaiting) onlineVoice.requestUnavailable(
+                        "پاسخ صوتی آنلاین به دستور شما قطع شد؛ آمادهٔ شنیدن بعدی.");
+                else onlineVoice.replyFinished();
+            }
+        });
+        voiceSettingsPanel.addView(interruptVoice);
+        Button mic = button("میکروفون: گفتار فارسی به متن");
+        mic.setOnClickListener(v -> startVoiceInput());
+        voiceSettingsPanel.addView(mic);
+        voiceAutoSend = new CheckBox(this);
+        voiceAutoSend.setText("پس از تشخیص گفتار، سؤال را خودکار در کانال زنده بفرست (اگر متصل است)");
+        voiceAutoSend.setChecked(false);
+        voiceSettingsPanel.addView(voiceAutoSend);
+        voiceReplies = new CheckBox(this);
+        voiceReplies.setText("پاسخ‌ها با صدای فارسی خوانده شوند (اگر صدای فارسی موجود باشد)");
+        voiceReplies.setChecked(false);
+        voiceSettingsPanel.addView(voiceReplies);
+        Button speakAnswer = button("بلندخوانی پاسخ");
+        speakAnswer.setOnClickListener(v -> speakPersian(latestAnswer));
+        voiceSettingsPanel.addView(speakAnswer);
+        Button silence = button("توقف گفتار");
+        silence.setOnClickListener(v -> {
+            clearNeuralVoice(true);
+            cancelVoicePlayback();
+            if (onlineVoice != null) onlineVoice.stop();
+            if (voiceModeSelector != null) voiceModeSelector.setEnabled(true);
+            if (onlineVoiceToggle != null)
+                onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
+        });
+        voiceSettingsPanel.addView(silence);
 
         root.addView(section("ارجاع به هوش مرکزی و پیگیری درخواست"));
         root.addView(text("اگر پاسخی قطعی یا ابزار لازم موجود نباشد، درخواست با رضایت تو "
@@ -742,7 +755,10 @@ public final class MainActivity extends Activity {
                     if (human && autoHandoff.isChecked()) {
                         submitHandoff(selectedProject, message);
                     }
-                    scroll.post(() -> scroll.fullScroll(View.FOCUS_DOWN));
+                    // Keep the just-received answer visible; scrolling to the document bottom
+                    // used to hide it behind the later GitHub/advanced controls.
+                    scroll.post(() -> scroll.smoothScrollTo(0,
+                            Math.max(0, answer.getTop() - dp(20))));
                 });
             } catch (Exception failure) {
                 ui.post(() -> {
