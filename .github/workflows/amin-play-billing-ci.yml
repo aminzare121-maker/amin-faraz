@@ -1,0 +1,26 @@
+name: Amin Play Billing verified-receipt policy
+on:
+  push:
+    paths:
+      - 'amin-ai-support/play-billing/**'
+      - '.github/workflows/amin-play-billing-ci.yml'
+  pull_request:
+    paths:
+      - 'amin-ai-support/play-billing/**'
+      - '.github/workflows/amin-play-billing-ci.yml'
+permissions:
+  contents: read
+jobs:
+  isolated-purchase-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check service JavaScript and test receipt anti-replay gates
+        run: |
+          node --check amin-ai-support/play-billing/src/index.mjs
+          node --check amin-ai-support/play-billing/src/play-verifier.mjs
+          node --test amin-ai-support/play-billing/test/*.test.mjs
