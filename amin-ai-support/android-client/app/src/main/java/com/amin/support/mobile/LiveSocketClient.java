@@ -94,8 +94,34 @@ public final class LiveSocketClient {
     }
 
     public String work(String project, String message) throws Exception {
+        return work(project, message, "none", "answer");
+    }
+
+    public String work(String project, String message, String target,
+                       String operation) throws Exception {
         requireText(message);
-        return send("work", project, message, null);
+        if (!("none".equals(target) || "android".equals(target) || "windows".equals(target)
+                || "web".equals(target) || "github".equals(target))) {
+            throw new IllegalArgumentException("محیط مقصد معتبر نیست");
+        }
+        if (!("answer".equals(operation) || "build".equals(operation)
+                || "repair".equals(operation) || "analyze".equals(operation)
+                || "release".equals(operation))) {
+            throw new IllegalArgumentException("نوع عملیات معتبر نیست");
+        }
+        if (!ready) throw new IllegalStateException("کانال زنده هنوز آماده نیست");
+        String ident = "a" + ids.incrementAndGet();
+        JSONObject event = new JSONObject();
+        event.put("type", "work");
+        event.put("id", ident);
+        event.put("project", LiveEndpointPolicy.project(project));
+        event.put("message", message);
+        event.put("consent", true);
+        event.put("target_environment", target);
+        event.put("requested_operation", operation);
+        if (!socket.send(event.toString()))
+            throw new IllegalStateException("ارسال درخواست در کانال زنده ناموفق بود");
+        return ident;
     }
 
     public String resume(String project, String jobId) throws Exception {
