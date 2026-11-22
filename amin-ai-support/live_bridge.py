@@ -83,6 +83,7 @@ class LiveJobs:
                 token_id TEXT NOT NULL,
                 question TEXT NOT NULL,
                 request_key TEXT NOT NULL DEFAULT '',
+                chatgpt_work_event INTEGER NOT NULL DEFAULT 0,
                 status TEXT NOT NULL,
                 target_environment TEXT NOT NULL DEFAULT 'none',
                 requested_operation TEXT NOT NULL DEFAULT 'answer',
@@ -105,6 +106,8 @@ class LiveJobs:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN artifact_json TEXT NOT NULL DEFAULT ''")
             if "request_key" not in cols:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN request_key TEXT NOT NULL DEFAULT ''")
+            if "chatgpt_work_event" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN chatgpt_work_event INTEGER NOT NULL DEFAULT 0")
             db.execute("CREATE INDEX IF NOT EXISTS amin_live_owner ON amin_live_work(token_id,project_id)")
             db.execute("CREATE UNIQUE INDEX IF NOT EXISTS amin_live_idempotent "
                        "ON amin_live_work(token_id,project_id,request_key) WHERE request_key != ''")
@@ -123,7 +126,7 @@ class LiveJobs:
         return ident
 
     def new_once(self, project, token_id, question, target_environment="none",
-                 requested_operation="answer", request_key=""):
+                 requested_operation="answer", request_key="", chatgpt_work_event=False):
         """Atomically accept a client request at most once per token and project.
 
         A fresh key makes a fresh job. Replaying the SAME key returns its previous
@@ -142,17 +145,18 @@ class LiveJobs:
             cursor = db.execute(
                 "INSERT OR IGNORE INTO amin_live_work"
                 "(id,project_id,token_id,question,status,target_environment,"
-                "requested_operation,request_key) VALUES(?,?,?,?,?,?,?,?)",
+                "requested_operation,request_key,chatgpt_work_event) VALUES(?,?,?,?,?,?,?,?,?)",
                 (ident, project, token_id, question, "queued", target_environment,
-                 requested_operation, request_key))
+                 requested_operation, request_key, int(chatgpt_work_event)))
             actual = db.execute(
-                "SELECT id,question,target_environment,requested_operation "
+                "SELECT id,question,target_environment,requested_operation,chatgpt_work_event "
                 "FROM amin_live_work WHERE project_id=? AND token_id=? AND request_key=?",
                 (project, token_id, request_key)).fetchone()
         if not actual:
             raise RuntimeError("Durable idempotency record unavailable")
         # Reusing a key with a DIFFERENT request is an error, not a silent reroute.
-        if actual[1:] != (question, target_environment, requested_operation):
+        if actual[1:] != (question, target_environment,
+                             requested_operation, int(chatgpt_work_event)):
             raise ValueError("Request key belongs to a different work request")
         return actual[0], cursor.rowcount == 1
 
@@ -277,6 +281,11 @@ class LiveGateway:
                     if action == "work" and not isinstance(command.get("chatgpt_work_event", False), bool):
                         await self.send(socket, "error", ident, message="Invalid Work event permission")
                         continue
+                    if (action == "work" and command.get("chatgpt_work_event") is True
+                            and not command.get("request_key")):
+                        await self.send(socket, "error", ident,
+                                        message="ChatGPT Work event requires a 128-bit request key")
+                        continue
                     if action == "work" and ("request_key" in command and
                             (not isinstance(command["request_key"], str) or
                              not JOB_ID.fullmatch(command["request_key"]))):
@@ -360,7 +369,8 @@ class LiveGateway:
         operation = command.get("requested_operation", "answer")
         job_id, created = await asyncio.to_thread(
             self.jobs.new_once, project, access["token_id"], command["message"].strip(),
-            target, operation, command.get("request_key", ""))
+            target, operation, command.get("request_key", ""),
+            command.get("chatgpt_work_event", False))
         if not created:
             if units not in {"unmetered", "exhausted"}:
                 await asyncio.to_thread(
