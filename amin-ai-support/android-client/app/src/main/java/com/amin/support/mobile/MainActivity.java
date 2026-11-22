@@ -54,6 +54,18 @@ public final class MainActivity extends Activity {
     private Button ghCheck;
     private int ghIssueNumber = 0;
     private String ghRequestId = "";
+    private String ghNotifiedRequestId = "";
+    private boolean resumed = false;
+    private boolean directPollBusy = false;
+    private final Runnable githubDirectPoll = new Runnable() {
+        @Override public void run() {
+            if (!active || !resumed) return;
+            if (ghIssueNumber > 0 && GitHubDirectVault.available(MainActivity.this) && !directPollBusy) {
+                pollDirectQuietly();
+            }
+            ui.postDelayed(this, 120_000L);
+        }
+    };
     private Spinner projects;
     private TextView status;
     private TextView answer;
@@ -610,6 +622,7 @@ public final class MainActivity extends Activity {
                             .putString("direct_gh_request_id", rid)
                             .putString("direct_gh_project", project).apply();
                     ghCheck.setEnabled(true);
+                    ghNotifiedRequestId = "";
                     setStatus("درخواست در مخزن خصوصی ثبت شد؛ شماره Issue: " + issue
                             + ". اکنون منتظر پاسخ عامل متصل به ChatGPT است.");
                 });
@@ -652,6 +665,52 @@ public final class MainActivity extends Activity {
         });
     }
 
+    private void pollDirectQuietly() {
+        final int issue = ghIssueNumber;
+        final String rid = ghRequestId;
+        if (issue <= 0 || !rid.matches("[a-f0-9]{32}")) return;
+        final String repo = GitHubDirectVault.repo(this);
+        final String credential;
+        try { credential = GitHubDirectVault.token(this); }
+        catch (Exception ignored) { return; }
+        directPollBusy = true;
+        background.execute(() -> {
+            try {
+                JSONObject response = new GitHubDirectBridge(repo, credential).status(issue, rid);
+                ui.post(() -> {
+                    directPollBusy = false;
+                    if (!active || !resumed || issue != ghIssueNumber
+                            || !rid.equals(ghRequestId) || !GitHubDirectVault.available(this)) return;
+                    if ("answered".equals(response.optString("status"))
+                            && !rid.equals(ghNotifiedRequestId)) {
+                        ghNotifiedRequestId = rid;
+                        latestAnswer = response.optString("answer", "");
+                        answer.setText(latestAnswer);
+                        setStatus("پاسخ جدید از GitHub خصوصی دریافت شد؛ صحت اجرای آن مستقل بررسی شود.");
+                    }
+                });
+            } catch (Exception ignored) {
+                // Network unavailable: do not claim completion or display stale data.
+                ui.post(() -> directPollBusy = false);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resumed = true;
+        ui.removeCallbacks(githubDirectPoll);
+        ui.postDelayed(githubDirectPoll, 2_000L);
+    }
+
+    @Override
+    protected void onPause() {
+        resumed = false;
+        ui.removeCallbacks(githubDirectPoll);
+        super.onPause();
+    }
+
     private void clearDirectGitHub() {
         try {
             GitHubDirectVault.clear(this);
@@ -660,6 +719,7 @@ public final class MainActivity extends Activity {
                     .remove("direct_gh_project").apply();
             ghIssueNumber = 0;
             ghRequestId = "";
+            ghNotifiedRequestId = "";
             ghRepo.setText("");
             ghToken.setText("");
             ghCheck.setEnabled(false);
@@ -715,6 +775,8 @@ public final class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         active = false;
+        resumed = false;
+        ui.removeCallbacks(githubDirectPoll);
         ++version;
         background.shutdownNow();
         super.onDestroy();
