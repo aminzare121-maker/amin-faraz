@@ -74,14 +74,14 @@ class TestIntegratedEntryBridge(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"INVALID_SOURCE_BAR"):
             evaluate(self.path,as_of=1800002700)
 
-    def test_unclosed_bar_is_rejected_even_with_untrusted_approval(self):
-        with self.assertRaisesRegex(ValueError,"UNCLOSED_OR_FUTURE_SOURCE_BAR"):
+    def test_untrusted_approval_rejected_before_market_clock(self):
+        # Reject invalid evidence before any bar replay or market clock check.
+        with self.assertRaisesRegex(ValueError,"INVALID_PRIVATE_DOSSIER:INCOMPLETE_PRIVATE_DOSSIER"):
             evaluate(self.path,{"trading_authorized":True},as_of=1800001799)
 
     def test_private_approval_flag_cannot_authorize(self):
-        result=evaluate(self.path,{"trading_authorized":True},as_of=1800001800)
-        self.assertEqual(result["independent_engine"]["orders_created"],0)
-        self.assertFalse(result["evidence_gate"]["trade_authorized"])
+        with self.assertRaisesRegex(ValueError,"INVALID_PRIVATE_DOSSIER:INCOMPLETE_PRIVATE_DOSSIER"):
+            evaluate(self.path,{"trading_authorized":True},as_of=1800001800)
 
 if __name__=="__main__":
     unittest.main()
