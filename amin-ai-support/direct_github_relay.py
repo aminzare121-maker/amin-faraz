@@ -73,7 +73,12 @@ class GitHubPrivateBridge:
             raise RuntimeError("Issues disabled")
         return repo
 
-    def submit(self, project: str, message: str, device: str = "windows"):
+    def submit(self, project: str, message: str, device: str = "windows",
+               target_environment: str = "none", requested_operation: str = "answer"):
+        if target_environment not in {"none", "android", "windows", "web", "github"}:
+            raise ValueError("Invalid destination environment")
+        if requested_operation not in {"answer", "build", "repair", "analyze", "release"}:
+            raise ValueError("Invalid operation")
         if not re.fullmatch(r"[a-z][a-z0-9_-]{1,50}", project):
             raise ValueError("Invalid project")
         if not message or len(message) > 2500:
@@ -83,6 +88,9 @@ class GitHubPrivateBridge:
         body = "AMIN_CHAT_BRIDGE_V1\n" + json.dumps({
             "request_id": request_id, "project": project, "device": device,
             "question": message.strip(), "consent": True,
+            "target_environment": target_environment,
+            "requested_operation": requested_operation,
+            "execution_authorized": False,
             "result_required": "AMIN_CHAT_REPLY_V1"}, ensure_ascii=False)
         result = self.request("POST", "/issues", {
             "title": "[Amin private support] " + request_id[:12], "body": body})
