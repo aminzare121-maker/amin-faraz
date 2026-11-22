@@ -107,7 +107,7 @@ class GitHubPrivateBridge:
             raise RuntimeError("Request ID mismatch")
         comments = self.request("GET", f"/issues/{issue}/comments?per_page=100")
         for comment in reversed(comments):
-            if (comment.get("user") or {}).get("login", "").casefold() != owner:
+            if (comment.get("user") or {}).get("login", "").casefold() not in {owner, "github-actions[bot]"}:
                 continue
             raw = comment.get("body") or ""
             reply_marker = "AMIN_CHAT_REPLY_V1\n"
