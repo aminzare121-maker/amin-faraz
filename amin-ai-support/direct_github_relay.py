@@ -126,6 +126,34 @@ class GitHubPrivateBridge:
                     "issue_number": issue, "answer": answer}
         return {"status": "pending", "request_id": request_id, "issue_number": issue}
 
+    def approve(self, issue: int, request_id: str, project: str):
+        """Explicit user acceptance: private, per-project, no self-training."""
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{1,50}", project):
+            raise ValueError("Invalid project")
+        result = self.status(issue, request_id)
+        if result["status"] != "answered":
+            raise RuntimeError("Only answered requests can be approved")
+        original = self.request("GET", f"/issues/{issue}")
+        envelope = json.loads(original["body"].split("\n", 1)[1])
+        if envelope.get("project") != project:
+            raise RuntimeError("Project mismatch")
+        previous = self.request("GET", f"/issues/{issue}/comments?per_page=100")
+        marker = "AMIN_LESSON_APPROVED_V1\n"
+        for comment in previous:
+            if ((comment.get("user") or {}).get("login", "").casefold()
+                    == self.repo.split("/")[0].casefold()
+                    and (comment.get("body") or "").startswith(marker)):
+                try:
+                    details = json.loads(comment["body"][len(marker):])
+                except ValueError:
+                    continue
+                if details.get("request_id") == request_id and details.get("project") == project:
+                    return {"approved": True, "already_approved": True}
+        body = marker + json.dumps({"request_id": request_id, "project": project,
+                                    "approved": True}, ensure_ascii=False)
+        self.request("POST", f"/issues/{issue}/comments", {"body": body})
+        return {"approved": True, "already_approved": False}
+
     def list_requests(self):
         self.require_private()
         result = self.request("GET", "/issues?state=all&per_page=100")
@@ -155,6 +183,10 @@ def main(argv=None):
     submit.add_argument("--project", required=True)
     submit.add_argument("--message", required=True)
     sub.add_parser("list")
+    approve = sub.add_parser("approve")
+    approve.add_argument("--issue", type=int, required=True)
+    approve.add_argument("--id", required=True)
+    approve.add_argument("--project", required=True)
     status = sub.add_parser("status")
     status.add_argument("--issue", type=int, required=True)
     status.add_argument("--id", required=True)
@@ -165,6 +197,7 @@ def main(argv=None):
         if args.command == "verify": result = {"private": bridge.require_private()["private"]}
         elif args.command == "submit": result = bridge.submit(args.project, args.message)
         elif args.command == "list": result = {"requests": bridge.list_requests()}
+        elif args.command == "approve": result = bridge.approve(args.issue, args.id, args.project)
         else: result = bridge.status(args.issue, args.id)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
