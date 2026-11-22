@@ -64,6 +64,8 @@ public final class MainActivity extends Activity {
     private Spinner liveTarget;
     private Spinner liveOperation;
     private CheckBox liveWorkChatGPT;
+    private CheckBox liveAuthorizeGitHubWrite;
+    private CheckBox liveAuthorizePublicRepo;
     private TextView liveStatus;
     private Button verifiedApkInstall;
     private String availableApkUrl = "";
@@ -328,6 +330,16 @@ public final class MainActivity extends Activity {
                 + "(نیازمند اتصال رویدادمحور مجاز در حساب ChatGPT و مجوز GitHub)");
         liveWorkChatGPT.setChecked(false);
         root.addView(liveWorkChatGPT);
+        liveAuthorizeGitHubWrite = new CheckBox(this);
+        liveAuthorizeGitHubWrite.setText("به مدل متصل‌شده اجازهٔ اصلاح فایل در شاخهٔ جدا و ایجاد "
+                + "Pull Request پیش‌نویس بده (بدون ادغام یا نصب خودکار)");
+        liveAuthorizeGitHubWrite.setChecked(false);
+        root.addView(liveAuthorizeGitHubWrite);
+        liveAuthorizePublicRepo = new CheckBox(this);
+        liveAuthorizePublicRepo.setText("مجوز جداگانه برای مخزن عمومیِ تعیین‌شده توسط مالک "
+                + "(فقط اگر تنظیمات امن میزبان نیز اجازه دهد)");
+        liveAuthorizePublicRepo.setChecked(false);
+        root.addView(liveAuthorizePublicRepo);
         Button startLive = button("اتصال زنده به موتور");
         startLive.setOnClickListener(v -> connectLive());
         root.addView(startLive);
@@ -1183,6 +1195,12 @@ public final class MainActivity extends Activity {
                                 answer.setText(latestAnswer);
                                 if (voiceReplies.isChecked()) speakPersian(latestAnswer);
                             }
+                            JSONObject agentResult = event.optJSONObject("agent_result");
+                            if (agentResult != null && agentResult.has("answer")) {
+                                latestAnswer = agentResult.optString("answer", "");
+                                answer.setText(latestAnswer);
+                                if (voiceReplies.isChecked()) speakPersian(latestAnswer);
+                            }
                             liveMessage("وضعیت ساخت/اجرا: " + state
                                     + (event.optBoolean("action_performed", false)
                                             ? "؛ اجرای عملیات گزارش شده (نیازمند بررسی)"
@@ -1234,8 +1252,14 @@ public final class MainActivity extends Activity {
                 .setMessage("این دستور در موتور خصوصی ثبت می‌شود؛ در صورت تنظیم "
                         + "مخزن خصوصی به GitHub ارجاع می‌شود. "
                         + (liveWorkChatGPT.isChecked()
-                            ? "همچنین رویداد Pull Request خصوصی برای ChatGPT Work ساخته می‌شود؛ "
-                              + "دریافت توسط ChatGPT نیازمند وظیفهٔ فعال و مجوزهای حساب است. "
+                            ? "همچنین رویداد Pull Request خصوصی برای ChatGPT Work ساخته می‌شود. "
+                            : "")
+                        + (liveAuthorizeGitHubWrite.isChecked()
+                            ? "مجوز ویرایش فایل در شاخهٔ جدا و ثبت PR پیش‌نویس داده می‌شود؛ "
+                              + "بدون ادغام در main یا نصب خودکار. "
+                            : "")
+                        + (liveAuthorizePublicRepo.isChecked()
+                            ? "مخزن عمومیِ از پیش تعیین‌شده نیز مجاز است؛ فایل‌های خصوصی را منتقل نکن. "
                             : "")
                         + "قبولی ساخت یا اجرای نهایی فقط پس از ارائه شواهد است. ارسال شود؟")
                 .setPositiveButton("تأیید و ارسال", (d, which) -> {
@@ -1247,7 +1271,9 @@ public final class MainActivity extends Activity {
                                 message,
                                 destinations[liveTarget.getSelectedItemPosition()],
                                 operations[liveOperation.getSelectedItemPosition()],
-                                liveWorkChatGPT.isChecked());
+                                liveWorkChatGPT.isChecked(),
+                                liveAuthorizeGitHubWrite.isChecked(),
+                                liveAuthorizePublicRepo.isChecked());
                         liveMessage("کار در صف زنده ثبت می‌شود؛ منتظر شناسه و وضعیت هستیم.");
                     } catch (Exception problem) {
                         liveMessage("ثبت کار ناموفق: " + problem.getMessage());
