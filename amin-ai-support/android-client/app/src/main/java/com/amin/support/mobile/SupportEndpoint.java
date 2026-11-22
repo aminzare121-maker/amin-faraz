@@ -50,7 +50,8 @@ public final class SupportEndpoint {
     }
 
     public static String apiUrl(String endpoint, String route) {
-        if (!"/api/projects".equals(route) && !"/api/chat".equals(route)) {
+        if (!"/api/projects".equals(route) && !"/api/chat".equals(route)
+                && !"/api/handoff".equals(route)) {
             throw new IllegalArgumentException("مسیر API مجاز نیست.");
         }
         return normalize(endpoint) + route;

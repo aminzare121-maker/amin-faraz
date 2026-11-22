@@ -40,8 +40,33 @@ public final class SupportApi {
         return exchange("/api/chat", payload);
     }
 
+    public JSONObject handoff(String projectId, String question) throws Exception {
+        if (projectId == null || !projectId.matches("[a-z][a-z0-9_-]{1,50}")
+                || question == null || question.trim().isEmpty() || question.length() > 2500) {
+            throw new IllegalArgumentException("درخواست ارجاع معتبر نیست.");
+        }
+        JSONObject payload = new JSONObject();
+        payload.put("project", projectId);
+        payload.put("message", question.trim());
+        payload.put("consent", true);
+        payload.put("external_model_consent", false);
+        return exchange("/api/handoff", payload);
+    }
+
+    public JSONObject handoffStatus(String projectId, String requestId) throws Exception {
+        if (projectId == null || !projectId.matches("[a-z][a-z0-9_-]{1,50}")
+                || requestId == null || !requestId.matches("[a-f0-9]{32}")) {
+            throw new IllegalArgumentException("شناسه پیگیری معتبر نیست.");
+        }
+        return exchange("/api/handoff", null, "?id=" + requestId + "&project=" + projectId);
+    }
+
     private JSONObject exchange(String route, JSONObject payload) throws Exception {
-        URL target = new URL(SupportEndpoint.apiUrl(endpoint, route));
+        return exchange(route, payload, "");
+    }
+
+    private JSONObject exchange(String route, JSONObject payload, String query) throws Exception {
+        URL target = new URL(SupportEndpoint.apiUrl(endpoint, route) + query);
         HttpsURLConnection conn = (HttpsURLConnection) target.openConnection();
         conn.setInstanceFollowRedirects(false); // Never forward a bearer token.
         conn.setConnectTimeout(10000);

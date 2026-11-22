@@ -21,11 +21,12 @@ import tempfile
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urlparse, urlsplit, parse_qs
 from model_probe import validate_base_url
 from zero_payment_policy import permits_model_url
 from urllib.request import Request, urlopen
 from tickets import TicketStore
+from handoff import HandoffStore, publish_private_marker
 from github_evidence import update_provenance
 from program_registry import ProgramStore, DEFAULT_STYLE, style_instructions
 from access_control import ScopedAccess
@@ -316,6 +317,7 @@ class SupportEngine:
         self._static_projects = load_projects(config_path)
         self.refresh_programs()
         self.tickets = self.knowledge.tickets
+        self.handoffs = HandoffStore(db_path)
         self.access = ScopedAccess(db_path)
         self.quotas = OwnerQuotas(db_path)
 
@@ -484,11 +486,30 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                             for x in eligible]
                 self.send_json(200, {"projects": projects})
                 return
+            if path == "/api/handoff":
+                principal = self.principal()
+                if principal is None:
+                    self.send_json(401, {"error": "Unauthorized"})
+                    return
+                params = parse_qs(urlsplit(self.path).query)
+                ident = params.get("id", [""])[0]
+                project = (principal["project_id"] if principal["project_id"] != "*"
+                           else params.get("project", [""])[0])
+                if project not in engine.projects:
+                    self.send_json(403, {"error": "Project not permitted"})
+                    return
+                requester = principal.get("token_id", "local")
+                record = engine.handoffs.status(project, ident, requester)
+                if record is None:
+                    self.send_json(404, {"error": "Handoff not found"})
+                    return
+                self.send_json(200, record)
+                return
             self.send_json(404, {"error": "Not found"})
 
         def do_POST(self):
             path = urlparse(self.path).path
-            if path not in {"/api/chat", "/api/ticket"}:
+            if path not in {"/api/chat", "/api/ticket", "/api/handoff"}:
                 self.send_json(404, {"error": "Not found"})
                 return
             principal = self.principal()
@@ -508,7 +529,7 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                         principal["project_id"] not in {"*", project}):
                     self.send_json(403, {"error": "Project not permitted"})
                     return
-                route = "ticket" if path == "/api/ticket" else "chat"
+                route = "ticket" if path in {"/api/ticket", "/api/handoff"} else "chat"
                 # Scoped public keys have independent rate budgets. Local
                 # trusted legacy CLI/API behavior is unchanged.
                 if principal["kind"] == "scoped":
@@ -516,13 +537,14 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                     if not scoped_limits.allow(principal["token_id"], route, limit):
                         self.send_json(429, {"error": "Too many requests for this program key"})
                         return
-                if path == "/api/ticket":
+                if path in {"/api/ticket", "/api/handoff"}:
                     if not principal["allow_ticket"]:
                         self.send_json(403, {"error": "Ticket permission required"})
                         return
-                    # Validate consent and message before charging a paid unit.
+                    # No private question is uploaded to PUBLIC GitHub.
+                    # The consent is explicit and applies only to this request.
                     if body.get("consent") is not True:
-                        raise ValueError("Ticket consent required")
+                        raise ValueError("Ticket/handoff consent required")
                     message = body.get("message")
                     if not isinstance(message, str) or not message.strip():
                         raise ValueError("Ticket message is required")
@@ -533,13 +555,24 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                                              "payment_gateway_connected": False})
                         return
                     try:
-                        ticket_id = engine.tickets.submit(project, message, True)
+                        if path == "/api/handoff":
+                            request_id = engine.handoffs.submit(
+                                project, principal.get("token_id", "local"), message, True)
+                        else:
+                            ticket_id = engine.tickets.submit(project, message, True)
                     except Exception:
                         if principal["kind"] == "scoped":
                             engine.quotas.refund(principal["token_id"], "ticket", debit)
                         raise
-                    self.send_json(201, {"id": ticket_id, "project": project,
-                                         "status": "new", "reviewed": False})
+                    if path == "/api/handoff":
+                        github_state = publish_private_marker(engine.handoffs, request_id)
+                        self.send_json(201, {"id": request_id, "project": project,
+                                             "status": "pending", "github_state": github_state,
+                                             "chatgpt_invoked": False,
+                                             "public_text_uploaded": False})
+                    else:
+                        self.send_json(201, {"id": ticket_id, "project": project,
+                                             "status": "new", "reviewed": False})
                 else:
                     if not chat_slots.acquire(blocking=False):
                         self.send_json(503, {"error": "Support model is busy; retry later"})
@@ -600,6 +633,12 @@ def main(argv=None):
     approve_cmd.add_argument("--resolution", required=True)
     approve_cmd.add_argument("--public-problem", default="",
                              help="Reviewer-written generic public problem summary; no private ticket text")
+    handoff_pending = sub.add_parser("handoff-pending", help="List PRIVATE queued requests on trusted local host")
+    handoff_pending.add_argument("--project", required=True)
+    handoff_answer = sub.add_parser("handoff-answer", help="Return a REVIEWED answer to original client")
+    handoff_answer.add_argument("--project", required=True)
+    handoff_answer.add_argument("--id", required=True)
+    handoff_answer.add_argument("--answer", required=True)
     # Trusted local CLI only: the shared-key public API has NO owner/admin
     # onboarding or learning-approval endpoint.
     enroll = sub.add_parser("register-program", help="Register any software and its fixed director")
@@ -728,6 +767,15 @@ def main(argv=None):
         approved = engine.tickets.approve(args.project, args.id,
                                           scrub(args.resolution), scrub(args.public_problem))
         print(json.dumps({"approved": approved, "project": args.project}, ensure_ascii=False))
+    elif args.command == "handoff-pending":
+        if args.project not in engine.projects:
+            parser.error("Unknown program")
+        print(json.dumps(engine.handoffs.pending(args.project), ensure_ascii=False, indent=2))
+    elif args.command == "handoff-answer":
+        if args.project not in engine.projects:
+            parser.error("Unknown program")
+        done = engine.handoffs.answer(args.project, args.id, scrub(args.answer))
+        print(json.dumps({"answered": done, "project": args.project}, ensure_ascii=False))
     elif args.command == "register-program":
         if args.id in engine.projects:
             parser.error("Program id already exists")
