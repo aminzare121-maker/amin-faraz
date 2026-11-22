@@ -1,6 +1,6 @@
 # پل مستقیم مخزن خصوصی هوش امین — Windows PowerShell
 # This script does not upload a secret into GitHub. No external paid model.
-param([string]$Repo = "aminzare121-maker/amin-mt5-review")
+param([string]$Repo = "")
 
 $ErrorActionPreference = "Stop"
 $env:PYTHONIOENCODING = "utf-8"
@@ -14,6 +14,9 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     exit 2
 }
 Write-Host "هوش امین - اتصال به مخزن خصوصی GitHub"
+if ([string]::IsNullOrWhiteSpace($Repo)) {
+    $Repo = Read-Host "مخزن خصوصی خود را به شکل owner/repo بنویس"
+}
 Write-Host "مخزن مقصد: $Repo"
 Write-Host "توکن فقط برای همین جلسه استفاده می‌شود. مخزن باید خصوصی باشد."
 $secure = Read-Host "توکن GitHub با مجوز محدود Issues" -AsSecureString
