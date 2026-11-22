@@ -1,0 +1,66 @@
+name: Extract AOSP ADB Windows components for Amin install diagnosis
+on:
+  push:
+    paths:
+      - ".github/workflows/amin-adb-offline-windows.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/amin-adb-offline-windows.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pack-aosp-adb:
+    runs-on: windows-2022
+    timeout-minutes: 12
+    steps:
+      - name: Locate and validate preinstalled Android ADB on hosted Windows image
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $source = Join-Path $env:ANDROID_HOME 'platform-tools'
+          if (!(Test-Path -LiteralPath (Join-Path $source 'adb.exe') -PathType Leaf)) {
+            throw "ADB not preinstalled at $source; do not fetch from a blocked Google endpoint."
+          }
+          $target = Join-Path $env:RUNNER_TEMP 'platform-tools'
+          New-Item -ItemType Directory -Path $target -Force | Out-Null
+          foreach ($name in @('adb.exe','AdbWinApi.dll','AdbWinUsbApi.dll')) {
+            $file = Join-Path $source $name
+            if (!(Test-Path -LiteralPath $file -PathType Leaf)) {
+              throw "AOSP component absent: $name"
+            }
+            Copy-Item -LiteralPath $file -Destination $target
+          }
+          foreach ($name in @('NOTICE.txt','source.properties','libwinpthread-1.dll')) {
+            $file = Join-Path $source $name
+            if (Test-Path -LiteralPath $file -PathType Leaf) {
+              Copy-Item -LiteralPath $file -Destination $target
+            }
+          }
+          $license = @'
+          The three Android Debug Bridge components are built from Android Open
+          Source Project (AOSP) code, primarily licensed under Apache License 2.0.
+          Source code: https://android.googlesource.com/platform/packages/modules/adb/
+          Windows ADB USB components:
+          https://android.googlesource.com/platform/development/+/refs/heads/main/host/windows/
+          Google SDK packaging is governed by separate terms. This archive contains
+          only the necessary ADB open-source components from the hosted runner.
+          See NOTICE.txt for accompanying license notices and acknowledgements.
+          This archive is for installation diagnostics; it does not uninstall apps,
+          disable device protections, or authorize unknown USB debugging devices.
+          '@
+          Set-Content -LiteralPath (Join-Path $target 'ADB_SOURCE_AND_LICENSE.txt') -Value $license -Encoding utf8
+          $list = foreach ($item in (Get-ChildItem -LiteralPath $target -File)) {
+            "$((Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant())  $($item.Name)"
+          }
+          Set-Content -LiteralPath (Join-Path $target 'SHA256SUMS.txt') -Value $list -Encoding ascii
+          & (Join-Path $target 'adb.exe') version
+          if ($LASTEXITCODE -ne 0) {throw 'ADB self-test failed'}
+          Write-Host "AOSP ADB components: $((Get-ChildItem $target -File | Measure-Object).Count)"
+      - name: Upload portable AOSP ADB (not the full Android SDK)
+        uses: actions/upload-artifact@v4
+        with:
+          name: amin-aosp-adb-windows-offline
+          path: "${{ runner.temp }}/platform-tools/"
+          retention-days: 7
+          if-no-files-found: error
