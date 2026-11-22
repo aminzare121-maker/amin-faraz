@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import ssl
 import sqlite3
 import subprocess
 import sys
@@ -589,6 +590,10 @@ def main(argv=None):
     serve = sub.add_parser("serve", help="Launch local support web UI/API")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
+    serve.add_argument("--scoped-only", action="store_true", default=False,
+                       help="Enforce one-program keys even on loopback, e.g. behind a trusted TLS proxy")
+    serve.add_argument("--tls-cert", type=Path, default=None)
+    serve.add_argument("--tls-key", type=Path, default=None)
     args = parser.parse_args(argv)
     engine = SupportEngine(args.config, args.db)
     if args.command == "serve":
@@ -596,10 +601,20 @@ def main(argv=None):
         non_local = args.host not in {"127.0.0.1", "localhost", "::1"}
         # Non-local listeners never accept global/anonymous API access.
         # HTTPS still must be provided by a trusted TLS reverse proxy.
-        if non_local and not engine.access.active_count():
-            parser.error("Public interface requires at least one scoped customer key")
+        scoped_only = non_local or args.scoped_only
+        if scoped_only and not engine.access.active_count():
+            parser.error("Scoped mode requires at least one active program-scoped key")
+        if non_local and not (args.tls_cert and args.tls_key):
+            parser.error("Non-local interface requires --tls-cert and --tls-key; never send tokens over HTTP")
+        if bool(args.tls_cert) != bool(args.tls_key):
+            parser.error("TLS cert and key must be supplied together")
         server = ThreadingHTTPServer(
-            (args.host, args.port), make_handler(engine, key, scoped_only=non_local))
+            (args.host, args.port), make_handler(engine, key, scoped_only=scoped_only))
+        if args.tls_cert:
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+            context.load_cert_chain(str(args.tls_cert), str(args.tls_key))
+            server.socket = context.wrap_socket(server.socket, server_side=True)
         print(f"Support UI: http://{args.host}:{args.port} (stop with Ctrl+C)", flush=True)
         server.serve_forever()
     elif args.command == "issue-access":
