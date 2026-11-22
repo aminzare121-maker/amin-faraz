@@ -227,6 +227,10 @@ def main(argv=None):
     submit.add_argument("--project", required=True)
     submit.add_argument("--message", required=True)
     sub.add_parser("list")
+    work = sub.add_parser("trigger-work",
+        help="Create a PRIVATE GitHub PR event for separately configured ChatGPT Work")
+    work.add_argument("--issue", type=int, required=True)
+    work.add_argument("--id", required=True)
     approve = sub.add_parser("approve")
     approve.add_argument("--issue", type=int, required=True)
     approve.add_argument("--id", required=True)
@@ -241,6 +245,9 @@ def main(argv=None):
         if args.command == "verify": result = {"private": bridge.require_private()["private"]}
         elif args.command == "submit": result = bridge.submit(args.project, args.message)
         elif args.command == "list": result = {"requests": bridge.list_requests()}
+        elif args.command == "trigger-work":
+            from chatgpt_work_event import prepare_work_event
+            result = prepare_work_event(bridge, args.issue, args.id)
         elif args.command == "approve": result = bridge.approve(args.issue, args.id, args.project)
         else: result = bridge.status(args.issue, args.id)
         print(json.dumps(result, ensure_ascii=False, indent=2))

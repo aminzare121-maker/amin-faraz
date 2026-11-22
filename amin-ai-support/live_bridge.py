@@ -23,6 +23,7 @@ from urllib.parse import urlsplit
 
 from amin_support import DEFAULT_CONFIG, DEFAULT_DB, SupportEngine
 from direct_github_relay import GitHubPrivateBridge
+from chatgpt_work_event import prepare_work_event
 from request_limits import SlidingLimits
 
 try:
@@ -234,6 +235,9 @@ class LiveGateway:
                     if action == "work" and command.get("consent") is not True:
                         await self.send(socket, "error", ident, message="Explicit work consent required")
                         continue
+                    if action == "work" and not isinstance(command.get("chatgpt_work_event", False), bool):
+                        await self.send(socket, "error", ident, message="Invalid Work event permission")
+                        continue
                     if action == "work" and (
                         command.get("target_environment", "none") not in ALLOWED_TARGETS or
                         command.get("requested_operation", "answer") not in ALLOWED_OPERATIONS):
@@ -348,6 +352,24 @@ class LiveGateway:
                         status="github_dispatched", issue_number=result["issue_number"],
                         target_environment=target, requested_operation=operation,
                         chatgpt_invoked=False, action_performed=False)
+        if command.get("chatgpt_work_event") is True:
+            # One user-confirmed work request -> private Issue -> private PR event.
+            # DOES NOT prove an eligible ChatGPT Work task is installed/running.
+            try:
+                work_event = await asyncio.to_thread(
+                    prepare_work_event, bridge, result["issue_number"], result["request_id"])
+                await self.send(socket, "progress", ident,
+                                status="chatgpt_work_event_created",
+                                pull_request_number=work_event["pull_request_number"],
+                                chatgpt_invoked=False,
+                                chatgpt_task_configured=False,
+                                message="Private PR event emitted; ChatGPT Work connection remains unverified")
+            except (ValueError, RuntimeError, KeyError):
+                # Do not lose the private Issue or mistakenly claim model execution.
+                await self.send(socket, "progress", ident,
+                                status="chatgpt_work_event_failed",
+                                chatgpt_invoked=False,
+                                message="Private Issue saved, but Work PR event could not be created")
         job = await asyncio.to_thread(self.jobs.read, job_id, project, access["token_id"])
         await self.watch(socket, ident, job)
 

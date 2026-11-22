@@ -175,6 +175,47 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 trusted_browser_origins(False, value)
 
+    async def test_one_request_emits_private_work_pr_event_without_claiming_chatgpt_ran(self):
+        dispatched = []
+        class FakePrivateGitHub:
+            def __init__(self, repo, token):
+                self.repo, self.token = repo, token
+            def submit(self, project, question, device, target, operation):
+                dispatched.append((project, question, target, operation))
+                return {"issue_number": 8, "request_id": "a"*32}
+            def status(self, issue, req_id):
+                return {"status": "answered", "answer": "Response stored in private Issue",
+                        "needs_human": True, "action_performed": False}
+        def fake_pr_event(bridge, issue, request_id):
+            self.assertEqual(issue, 8)
+            self.assertEqual(request_id, "a"*32)
+            self.assertEqual(bridge.repo, "owner/private")
+            return {"pull_request_number": 13, "chatgpt_invoked": False}
+        self.gateway.repo = "owner/private"
+        self.gateway.github_token = "test-server-side-only"
+        self.gateway.owner_token_id = self.alpha["token_id"]
+        self.gateway.poll_seconds = 2
+        with patch("live_bridge.GitHubPrivateBridge", FakePrivateGitHub), patch(
+                "live_bridge.prepare_work_event", side_effect=fake_pr_event) as trigger:
+            ws, _ = await self.login(self.alpha["token"])
+            await ws.send(json.dumps({
+                "type": "work", "id": "request1", "project": "alpha",
+                "message": "Build Android app", "consent": True,
+                "target_environment": "android", "requested_operation": "build",
+                "chatgpt_work_event": True}))
+            rows = [json.loads(await asyncio.wait_for(ws.recv(), timeout=5))
+                    for _ in range(4)]
+            self.assertEqual([x["status"] for x in rows],
+                             ["queued", "github_dispatched",
+                              "chatgpt_work_event_created", "needs_action"])
+            self.assertEqual(rows[2]["pull_request_number"], 13)
+            self.assertFalse(rows[2]["chatgpt_invoked"])
+            self.assertFalse(rows[2]["chatgpt_task_configured"])
+            self.assertFalse(rows[-1]["action_performed"])
+            self.assertEqual(len(dispatched), 1)
+            trigger.assert_called_once()
+            await ws.close()
+
     async def test_remote_socket_refuses_plaintext(self):
         with self.assertRaisesRegex(ValueError, "TLS"):
             await run_server(self.engine, "0.0.0.0", 0)
