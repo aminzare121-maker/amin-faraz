@@ -23,4 +23,5 @@ jobs:
         run: |
           node --check amin-ai-support/managed-subscriptions/src/rules.mjs
           node --check amin-ai-support/managed-subscriptions/src/worker.mjs
+          node --check amin-ai-support/managed-subscriptions/src/tron-watch.mjs
           node --test amin-ai-support/managed-subscriptions/tests/*.test.mjs

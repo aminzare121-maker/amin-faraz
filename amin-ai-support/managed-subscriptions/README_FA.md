@@ -34,3 +34,12 @@
 - https://support.google.com/googleplay/android-developer/answer/9858738
 - https://developers.cloudflare.com/d1/
 - https://developers.cloudflare.com/workers/
+
+## الحاقیه: تطبیق خودکار واقعی تتر روی شبکه TRON
+- ناظر مستقل بلاک‌چین در `src/tron-watch.mjs` پیاده‌سازی شد. هر پنج دقیقه حداکثر شش فاکتور دارای ادعای تراکنش را بررسی می‌کند؛ هیچ پرداختی ارسال نمی‌کند.
+- قیمت تأمین‌کننده همچنان باید از API معتبر دریافت شود و شارژ Google Pay مالک بدون اجازه و مجوز پرداخت خودکار نیست.
+- صرف یک نتیجه TRONSCAN یا فیش کافی نیست: از TronGrid انتقال TRC20 با **قرارداد واقعی USDT**، مقصد دقیق، مبلغ صحیح، TXID یکسان و بلاک واقعی خوانده می‌شود؛ سپس از `walletsolidity/gettransactionbyid`، `gettransactioninfobyid` و `getnowblock` موفقیت اجرای قرارداد و حداقل ۲۰ بلاک نهایی بعد از تراکنش کنترل می‌شود. بدون تأیید، سفارش همچنان منتظر می‌ماند.
+- `TRONGRID_API_KEY` را فقط به‌صورت Secret تنظیم کنید. بدون این کلید، پرچم‌های تأیید واقعی مقصد و رضایت صرافی و Cloudflare Worker فعال، سرویس هیچ وصولی را تأیید نمی‌کند.
+- **مهم:** تراکنش به آدرس آبان‌تتر لزوماً اعتبار حساب صرافی را ثابت نمی‌کند. تا وقتی صرافی پذیرش واریز شخص ثالث را رسماً تأیید نکند، نباید مقصد حساب صرافی را برای دریافت مشتریان نمایش داد.
+- اعتبارسنجی با دادهٔ ساختگی در GitHub فقط آزمون نرم‌افزار است؛ تراکنش واقعی و ادغام صرافی هنوز آزمایش نشده.
+- مرجع: https://developers.tron.network/docs/get-trc20-transaction-history و https://developers.tron.network/docs/api-signature-and-broadcast-flow

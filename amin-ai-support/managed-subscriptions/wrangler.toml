@@ -12,3 +12,7 @@ PAYMENT_RECEIVER_CONSENT = "0"
 binding = "DB"
 database_name = "amin-managed-subscriptions"
 database_id = "REPLACE_WITH_REAL_D1_ID"
+
+# A public Cloudflare Worker can reconcile verified TRON transfers every five minutes.
+[triggers]
+crons = ["*/5 * * * *"]
