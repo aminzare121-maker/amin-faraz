@@ -18,6 +18,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse, urlsplit
@@ -27,6 +28,7 @@ from tickets import TicketStore
 from github_evidence import update_provenance
 from program_registry import ProgramStore, DEFAULT_STYLE, style_instructions
 from access_control import ScopedAccess
+from request_limits import SlidingLimits
 
 HOME = Path(__file__).resolve().parent
 DEFAULT_CONFIG = HOME / "projects.json"
@@ -413,6 +415,9 @@ def diagnose_source(project: dict, root: Path) -> dict:
 
 def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False):
     ui = (HOME / "web" / "index.html").read_bytes()
+    scoped_limits = SlidingLimits()
+    # Avoid exhausting a small CPU-hosted LLM with concurrent requests.
+    chat_slots = threading.BoundedSemaphore(2)
 
     class Handler(BaseHTTPRequestHandler):
         def send_json(self, status: int, payload: dict):
@@ -496,6 +501,14 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                         principal["project_id"] not in {"*", project}):
                     self.send_json(403, {"error": "Project not permitted"})
                     return
+                route = "ticket" if path == "/api/ticket" else "chat"
+                # Scoped public keys have independent rate budgets. Local
+                # trusted legacy CLI/API behavior is unchanged.
+                if principal["kind"] == "scoped":
+                    limit = 8 if route == "ticket" else 30
+                    if not scoped_limits.allow(principal["token_id"], route, limit):
+                        self.send_json(429, {"error": "Too many requests for this program key"})
+                        return
                 if path == "/api/ticket":
                     if not principal["allow_ticket"]:
                         self.send_json(403, {"error": "Ticket permission required"})
@@ -505,8 +518,15 @@ def make_handler(engine: SupportEngine, api_key: str, scoped_only: bool = False)
                     self.send_json(201, {"id": ticket_id, "project": project,
                                          "status": "new", "reviewed": False})
                 else:
-                    response = engine.answer(project, body.get("message", ""),
-                                             external_consent=body.get("external_model_consent") is True)
+                    if not chat_slots.acquire(blocking=False):
+                        self.send_json(503, {"error": "Support model is busy; retry later"})
+                        return
+                    try:
+                        response = engine.answer(
+                            project, body.get("message", ""),
+                            external_consent=body.get("external_model_consent") is True)
+                    finally:
+                        chat_slots.release()
                     self.send_json(200, response)
             except (ValueError, TypeError, json.JSONDecodeError) as exc:
                 self.send_json(400, {"error": str(exc)})
