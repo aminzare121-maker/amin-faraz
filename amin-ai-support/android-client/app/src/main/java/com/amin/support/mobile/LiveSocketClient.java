@@ -139,6 +139,9 @@ public final class LiveSocketClient {
         event.put("consent", true);
         event.put("target_environment", target);
         event.put("requested_operation", operation);
+        // Stable for this submission; a network retry can safely reuse it.
+        // Android sends a unique 128-bit key, never an incremental socket id.
+        event.put("request_key", java.util.UUID.randomUUID().toString().replace("-", ""));
         // Explicit opt-in: one request may create a private Issue and PR event.
         // The PR event does NOT prove ChatGPT Work has run.
         event.put("chatgpt_work_event", chatgptWorkEvent);
