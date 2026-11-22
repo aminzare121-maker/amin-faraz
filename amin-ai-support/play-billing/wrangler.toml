@@ -1,0 +1,16 @@
+name = "amin-play-billing"
+main = "src/index.mjs"
+compatibility_date = "2026-11-22"
+workers_dev = true
+
+# DO NOT deploy before Google verifies a legally eligible merchant account.
+# This Worker cannot receive or hold payouts; Google Play Console does that.
+[vars]
+AMIN_MERCHANT_READY = "0"
+PLAY_PACKAGE_NAME = "com.amin.support.mobile"
+PLAY_SUBSCRIPTION_ID = "amin_support_monthly"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "amin-play-billing"
+database_id = "REPLACE_WITH_REAL_D1_ID"
