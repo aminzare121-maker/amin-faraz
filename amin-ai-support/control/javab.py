@@ -22,6 +22,31 @@ REPO = "aminzare121-maker/amin-faraz"
 ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{7,79}$")
 SHA_PATTERN = re.compile(r"^[a-f0-9]{40}$")
 STATUSES = {"in_progress", "failed", "blocked", "passed"}
+REJECT_TAG = "JAVAB_REJECTED_V1"
+SAFE_REJECTION_MESSAGES = {
+    "Report cannot cross task or project boundaries":
+        "گزارش با شمارهٔ وظیفه یا نام پروژه در همین Issue یکسان نیست. task_id و project را اصلاح کن.",
+    "Invalid phase":
+        "فیلد phase در گزارش وجود ندارد یا یکی از مراحل مجاز نیست؛ گزارش اجرا نشده است.",
+    "Unexpected message format":
+        "قالب گزارش باید با JAVAB_REPORT_V1 آغاز شود؛ دستور جدیدی صادر نشده است.",
+}
+
+
+def rejected_report(error: ProtocolError) -> str:
+    """Diagnostic only: no directive, no leaked event data, never automatic execution."""
+    payload = {
+        "protocol": REJECT_TAG,
+        "accepted": False,
+        "automatically_executed": False,
+        "approved_for_production": False,
+        "reason_fa": SAFE_REJECTION_MESSAGES.get(
+            str(error),
+            "گزارش اعتبارسنجی نشد. قالب و فیلدهای الزامی را در همین Issue بررسی کن."
+        ),
+    }
+    return REJECT_TAG + "\n" + json.dumps(payload, ensure_ascii=False, indent=2)
+
 
 
 def tagged_json(raw: str, tag: str, limit: int) -> dict:
@@ -138,7 +163,14 @@ def main():
     args = parser.parse_args()
     policy = policy_data()
     event = json.loads(args.event.read_text(encoding="utf-8"))
-    task, report = parse_report(event, policy)
+    try:
+        task, report = parse_report(event, policy)
+    except ProtocolError as error:
+        # Fail closed. Give the owner a sanitized reason in the SAME issue only.
+        # Workflow will post this diagnostic while retaining a failed run result.
+        args.output.write_text(rejected_report(error), encoding="utf-8")
+        print("Javab rejected an invalid report; no directive generated")
+        raise SystemExit(2) from None
     ci_verified = verify_ci(report, policy)
     directive = directive_for(task, report, policy, ci_verified)
     args.output.write_text(DIRECTIVE_TAG + "\n" +

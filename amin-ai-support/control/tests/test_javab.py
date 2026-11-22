@@ -1,11 +1,14 @@
 import json
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from continuation import ProtocolError, policy_data
-from javab import (TASK_TAG, REPORT_TAG, parse_report, directive_for, parse_task)
+from javab import (TASK_TAG, REPORT_TAG, REJECT_TAG, rejected_report,
+                   parse_report, directive_for, parse_task)
 
 
 class JavabTests(unittest.TestCase):
@@ -120,6 +123,43 @@ class JavabTests(unittest.TestCase):
         event["comment"]["body"] = "JAVAB_DIRECTIVE_V1\n{}"
         with self.assertRaises(ProtocolError):
             parse_report(event, self.policy)
+
+    def test_rejection_is_diagnostic_not_executable(self):
+        event = self.event(number=101)
+        body = json.loads(event["comment"]["body"].split("\n", 1)[1])
+        body["task_id"] = 102
+        body["summary"] = "SECRET_USER_CONTENT_MUST_NOT_ECHO"
+        event["comment"]["body"] = REPORT_TAG + "\n" + json.dumps(body)
+        try:
+            parse_report(event, self.policy)
+        except ProtocolError as error:
+            diagnostic = rejected_report(error)
+        else:
+            self.fail("Cross-task report must be rejected")
+        self.assertTrue(diagnostic.startswith(REJECT_TAG + "\n"))
+        payload = json.loads(diagnostic.split("\n", 1)[1])
+        self.assertFalse(payload["accepted"])
+        self.assertFalse(payload["automatically_executed"])
+        self.assertNotIn("next_action_fa", diagnostic)
+        self.assertNotIn("SECRET_USER_CONTENT_MUST_NOT_ECHO", diagnostic)
+        self.assertNotIn("task_id", payload)
+
+    def test_cli_rejection_exits_nonzero_but_writes_safe_reason(self):
+        event = self.event()
+        body = json.loads(event["comment"]["body"].split("\n", 1)[1])
+        body.pop("phase")
+        event["comment"]["body"] = REPORT_TAG + "\n" + json.dumps(body)
+        with tempfile.TemporaryDirectory() as directory:
+            event_file = Path(directory) / "event.json"
+            output_file = Path(directory) / "directive.txt"
+            event_file.write_text(json.dumps(event), encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parents[1] / "javab.py"),
+                 "--event", str(event_file), "--output", str(output_file)],
+                capture_output=True, text=True, timeout=15)
+            self.assertEqual(result.returncode, 2)
+            self.assertTrue(output_file.read_text(encoding="utf-8").startswith(REJECT_TAG + "\n"))
+            self.assertNotIn("JAVAB_DIRECTIVE_V1", output_file.read_text(encoding="utf-8"))
 
     def test_report_failure_does_not_skip_phase(self):
         task, report = parse_report(self.event(status="failed"), self.policy)
