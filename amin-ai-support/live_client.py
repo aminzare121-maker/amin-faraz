@@ -14,6 +14,7 @@ import secrets
 from pathlib import Path
 from urllib.parse import urlsplit
 from windows_delivery import deliver, validate_release
+from windows_neural_speaker import WindowsNeuralSpeaker, WindowsVoiceUnavailable
 
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed
@@ -36,16 +37,34 @@ def safe_url(raw: str) -> str:
 async def run(url, token):
     if not TOKEN.fullmatch(token):
         raise ValueError("Program-scoped client token required")
-    async with connect(safe_url(url), max_size=16000, open_timeout=12) as ws:
+    async with connect(safe_url(url), max_size=1_050_000, open_timeout=12) as ws:
         await ws.send(json.dumps({"type": "auth", "token": token}))
         ready = json.loads(await asyncio.wait_for(ws.recv(), timeout=12))
         if ready.get("type") != "ready":
             raise RuntimeError("Live handshake failed")
         project = ready["project"]
         print("Connected to scoped live project:", project, flush=True)
-        print("Commands: ask <text>, work windows build <text>, resume <job-id>, deliver, quit", flush=True)
+        print("Commands: ask <text>, ask-voice <text>, work windows build <text>, resume <job-id>, deliver, quit", flush=True)
         ident = 0
         most_recent_artifact = None
+        sound_tasks = set()
+        sound_lock = asyncio.Lock()
+        try:
+            speaker = WindowsNeuralSpeaker()
+        except WindowsVoiceUnavailable:
+            speaker = None
+
+        async def play_neural(packet):
+            if speaker is None: return
+            async with sound_lock:
+                try:
+                    ended = await asyncio.to_thread(speaker.accept, packet)
+                    if ended:
+                        print("\\n[VOICE FINISHED] Played all verified neural PCM packets.", flush=True)
+                except WindowsVoiceUnavailable as error:
+                    print("\\n[VOICE FAILED] " + str(error), flush=True)
+                except OSError:
+                    print("\\n[VOICE FAILED] Windows audio device unavailable", flush=True)
 
         async def read_updates():
             nonlocal most_recent_artifact
@@ -54,6 +73,15 @@ async def run(url, token):
                 kind = message.get("type")
                 if kind == "answer":
                     print("\n[ANSWER] " + message.get("answer", ""), flush=True)
+                    if message.get("voice_pending"):
+                        print("[VOICE] Neural Persian synthesis on authorized online host started.",flush=True)
+                elif kind == "voice_frame":
+                    if speaker is not None and message.get("id") == speaker.request_id:
+                        task = asyncio.create_task(play_neural(message))
+                        sound_tasks.add(task)
+                        task.add_done_callback(sound_tasks.discard)
+                elif kind == "voice_error":
+                    print("\n[VOICE UNAVAILABLE] Server neural voice failed; text is available.", flush=True)
                 elif kind == "work_state":
                     print("\n[WORK] status=" + str(message.get("status"))
                           + " job_id=" + str(message.get("id_of_job", ""))
@@ -100,8 +128,8 @@ async def run(url, token):
                     except (ValueError, OSError, RuntimeError) as problem:
                         print("[DELIVERY FAILED] " + str(problem))
                     continue
-                if kind not in {"ask", "work", "resume"} or not data.strip():
-                    print("Use: ask <text> | work windows build <text> | resume <jobid> | deliver | quit")
+                if kind not in {"ask", "ask-voice", "work", "resume"} or not data.strip():
+                    print("Use: ask <text> | ask-voice <text> | work windows build <text> | resume <jobid> | deliver | quit")
                     continue
                 if kind == "work":
                     target, sep, remainder = data.partition(" ")
@@ -128,11 +156,19 @@ async def run(url, token):
                     print("Invalid job id")
                     continue
                 ident += 1
-                message = {"type": kind, "id": "pc" + str(ident), "project": project}
+                message = {"type": "ask" if kind == "ask-voice" else kind,
+                           "id": "pc" + str(ident), "project": project}
                 if kind == "resume":
                     message["job_id"] = data.strip()
                 else:
                     message["message"] = data.strip()
+                if kind == "ask-voice":
+                    if speaker is None:
+                        print("Neural WAV memory playback is available on Windows only.")
+                        continue
+                    speaker.begin(message["id"])
+                    message["neural_voice"] = True
+                    message["voice_style"] = 0
                 if kind == "work":
                     message["message"] = requested
                     message["target_environment"] = target
@@ -148,6 +184,8 @@ async def run(url, token):
         finally:
             reader.cancel()
             await asyncio.gather(reader, return_exceptions=True)
+            if sound_tasks:
+                await asyncio.gather(*sound_tasks, return_exceptions=True)
 
 
 def main(argv=None):
