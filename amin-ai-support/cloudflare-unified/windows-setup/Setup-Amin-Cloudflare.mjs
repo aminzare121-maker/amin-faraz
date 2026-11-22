@@ -4,8 +4,9 @@ import os from "node:os";
 import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
 import readline from "node:readline/promises";
+import { fileURLToPath } from "node:url";
 
-const root=path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,"$1"));
+const root=path.dirname(fileURLToPath(import.meta.url));
 const worker=path.join(root,"amin-ai-support","cloudflare-unified");
 const billing=path.join(root,"amin-ai-support","managed-subscriptions");
 const privateDir=path.join(process.env.LOCALAPPDATA||os.homedir(),"AminAI");
