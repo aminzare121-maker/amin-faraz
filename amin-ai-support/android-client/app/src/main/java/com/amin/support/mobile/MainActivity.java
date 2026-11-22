@@ -82,6 +82,12 @@ public final class MainActivity extends Activity {
     private Button onlineVoiceToggle;
     private Spinner voiceModeSelector;
     private Spinner voicePersonaSelector;
+    private CheckBox preferNeuralVoice;
+    private NeuralVoicePlayer neuralVoicePlayer;
+    private String neuralPendingId = "";
+    private String neuralPendingText = "";
+    private boolean neuralStarted = false;
+    private Runnable neuralTimeout;
     private int voiceSequence = 0;
     private String voiceBatchPrefix = "";
     private String voiceFinalUtterance = "";
@@ -124,6 +130,7 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         setTitle("هوش پشتیبان امین");
         setContentView(createContent());
+        neuralVoicePlayer = new NeuralVoicePlayer(this);
         onlineVoice = new OnlinePersianVoice(this, new OnlinePersianVoice.Events() {
             @Override public void onTranscript(String words) {
                 if (!active) return;
@@ -131,9 +138,11 @@ public final class MainActivity extends Activity {
                 // The user explicitly opted into continuous submission in startOnlineVoice().
                 if (liveClient != null && liveClient.isReady()) {
                     try {
-                        liveClient.ask(
+                        boolean requested = shouldRequestNeuralVoice();
+                        String id = liveClient.ask(
                                 LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
-                                words);
+                                words, requested, voicePersonaSelector.getSelectedItemPosition());
+                        if (requested) beginNeuralVoice(id);
                         setStatus("درخواست صوتی به کانال زنده ارسال شد؛ منتظر پاسخ واقعی هستیم.");
                     } catch (Exception error) {
                         onlineVoice.requestUnavailable("ارسال صوتی در کانال زنده ناموفق بود.");
@@ -308,6 +317,15 @@ public final class MainActivity extends Activity {
         voicePersonaSelector.setSelection(Math.max(0, Math.min(1,
                 getPreferences(MODE_PRIVATE).getInt("amin_voice_persona", 0))));
         root.addView(voicePersonaSelector);
+        preferNeuralVoice = new CheckBox(this);
+        preferNeuralVoice.setText("صدای عصبی فارسیِ آنلاین امین، در صورت فعال‌بودن موتور صوتی مجاز "
+                + "(اگر فعال نباشد، صدای اندروید پخش می‌شود)");
+        preferNeuralVoice.setChecked(getPreferences(MODE_PRIVATE)
+                .getBoolean("amin_neural_voice_preferred", true));
+        preferNeuralVoice.setOnCheckedChangeListener((button, checked) ->
+                getPreferences(MODE_PRIVATE).edit()
+                        .putBoolean("amin_neural_voice_preferred", checked).apply());
+        root.addView(preferNeuralVoice);
         Button previewAminVoice = button("آزمایش صدای فارسی امین با متن نمونه");
         previewAminVoice.setOnClickListener(v -> speakPersian(AminVoicePersona.DEMO));
         root.addView(previewAminVoice);
@@ -316,8 +334,16 @@ public final class MainActivity extends Activity {
         root.addView(onlineVoiceToggle);
         Button interruptVoice = button("قطع صدای پاسخ و شنیدن دستور جدید");
         interruptVoice.setOnClickListener(v -> {
+            boolean awaiting = !neuralPendingId.isEmpty();
+            boolean playingNeural = neuralStarted;
+            clearNeuralVoice(true);
             cancelVoicePlayback();
-            if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replyFinished();
+            if (onlineVoice != null && onlineVoice.isEnabled()) {
+                if (playingNeural) onlineVoice.replyFinished();
+                else if (awaiting) onlineVoice.requestUnavailable(
+                        "پاسخ صوتی آنلاین به دستور شما قطع شد؛ آمادهٔ شنیدن بعدی.");
+                else onlineVoice.replyFinished();
+            }
         });
         root.addView(interruptVoice);
         Button mic = button("میکروفون: گفتار فارسی به متن");
@@ -336,6 +362,7 @@ public final class MainActivity extends Activity {
         root.addView(speakAnswer);
         Button silence = button("توقف گفتار");
         silence.setOnClickListener(v -> {
+            clearNeuralVoice(true);
             cancelVoicePlayback();
             if (onlineVoice != null) onlineVoice.stop();
             if (voiceModeSelector != null) voiceModeSelector.setEnabled(true);
@@ -1121,6 +1148,7 @@ public final class MainActivity extends Activity {
         if (onlineVoice == null) return;
         if (onlineVoice.isEnabled()) {
             onlineVoice.stop();
+            clearNeuralVoice(true);
             cancelVoicePlayback();
             voiceModeSelector.setEnabled(true);
             onlineVoiceToggle.setText("شروع مکالمهٔ پیوستهٔ فارسی (با اجازهٔ میکروفون)");
@@ -1166,6 +1194,7 @@ public final class MainActivity extends Activity {
         onlineVoice.setPreferredMode(mode);
         configurePersianVoice();
         voiceReplies.setChecked(true);
+        clearNeuralVoice(true);
         cancelVoicePlayback();
         onlineVoice.start();
         if (onlineVoice.isEnabled()) {
@@ -1521,12 +1550,84 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private boolean shouldRequestNeuralVoice() {
+        return preferNeuralVoice != null && preferNeuralVoice.isChecked()
+                && voiceModeSelector != null &&
+                voiceModeSelector.getSelectedItemPosition() != VoiceModePolicy.DEVICE_OFFLINE;
+    }
+
+    private void clearNeuralVoice(boolean stopAudio) {
+        if (neuralTimeout != null) {
+            ui.removeCallbacks(neuralTimeout);
+            neuralTimeout = null;
+        }
+        neuralPendingId = "";
+        neuralPendingText = "";
+        neuralStarted = false;
+        if (stopAudio && neuralVoicePlayer != null) neuralVoicePlayer.stop();
+    }
+
+    private void beginNeuralVoice(String requestId) {
+        clearNeuralVoice(true);
+        neuralPendingId = requestId;
+        neuralVoicePlayer.begin(requestId, new NeuralVoicePlayer.Callbacks() {
+            @Override public void onFirstAudio() {
+                if (!active || !requestId.equals(neuralPendingId)) return;
+                neuralStarted = true;
+                if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replySpeaking();
+                liveMessage("صدای عصبی واقعی فارسیِ امین در حال پخش است.");
+            }
+            @Override public void onFinished() {
+                if (!active || !requestId.equals(neuralPendingId)) return;
+                clearNeuralVoice(false);
+                if (onlineVoice != null && onlineVoice.isEnabled()) onlineVoice.replyFinished();
+            }
+            @Override public void onFailure(String reason, boolean playedSomeAudio) {
+                if (!active || !requestId.equals(neuralPendingId)) return;
+                String textFallback = neuralPendingText;
+                clearNeuralVoice(true);
+                liveMessage(reason + (playedSomeAudio
+                        ? " بخشی از صدا پخش شد؛ برای جلوگیری از تکرار، دوباره از اول نمی‌خوانم."
+                        : " از صدای فارسی اندروید استفاده می‌کنم."));
+                if (!playedSomeAudio && !textFallback.isEmpty()) {
+                    if (voiceReplies.isChecked()) speakPersian(textFallback);
+                    else if (onlineVoice != null) onlineVoice.requestUnavailable(reason);
+                } else if (onlineVoice != null && onlineVoice.isEnabled()) {
+                    if (playedSomeAudio) onlineVoice.replyFinished();
+                    else onlineVoice.requestUnavailable(reason);
+                }
+            }
+        });
+    }
+
+    private void scheduleNeuralTimeout(String id) {
+        if (neuralTimeout != null) ui.removeCallbacks(neuralTimeout);
+        neuralTimeout = () -> {
+            if (!active || !id.equals(neuralPendingId)) return;
+            boolean partial = neuralStarted;
+            String fallback = neuralPendingText;
+            clearNeuralVoice(true);
+            liveMessage("موتور صدای عصبی به‌موقع پاسخ نداد؛ "
+                    + (partial ? "پخش متوقف شد." : "بازگشت به صدای اندروید."));
+            if (!partial && voiceReplies.isChecked() && !fallback.isEmpty()) {
+                speakPersian(fallback);
+            } else if (onlineVoice != null && onlineVoice.isEnabled()) {
+                if (partial) onlineVoice.replyFinished();
+                else onlineVoice.requestUnavailable("صدا در دسترس نیست.");
+            }
+        };
+        ui.postDelayed(neuralTimeout, neuralStarted ? 45_000 : 28_000);
+    }
+
     private void sendLiveQuestion() {
         try {
             if (liveClient == null) throw new IllegalStateException("ابتدا اتصال زنده را برقرار کن");
+            boolean requested = shouldRequestNeuralVoice() && voiceReplies.isChecked();
             String requestId = liveClient.ask(
                     LiveEndpointPolicy.project(liveProject.getText().toString().trim()),
-                    question.getText().toString().trim());
+                    question.getText().toString().trim(),
+                    requested, voicePersonaSelector.getSelectedItemPosition());
+            if (requested) beginNeuralVoice(requestId);
             liveMessage("سؤال " + requestId + " در کانال زنده ارسال شد.");
         } catch (Exception problem) {
             liveMessage("ارسال سؤال ناموفق: " + problem.getMessage());
