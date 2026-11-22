@@ -26,6 +26,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Block paid GitHub runner classes in all repository workflows
+        run: python amin-ai-support/audit_free_github.py
       - name: Compile source
         run: python -m py_compile amin-ai-support/amin_support.py
       - name: Run offline tests
