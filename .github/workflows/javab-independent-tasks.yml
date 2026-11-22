@@ -34,14 +34,37 @@ jobs:
         with:
           persist-credentials: false
       - name: Generate scoped instruction
+        id: generate
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python3 amin-ai-support/control/javab.py             --event "$GITHUB_EVENT_PATH"             --output "$RUNNER_TEMP/javab-directive.txt"
+          python3 amin-ai-support/control/javab.py \
+            --event "$GITHUB_EVENT_PATH" \
+            --output "$RUNNER_TEMP/javab-directive.txt"
       - name: Reply to the same task (not another issue)
+        if: steps.generate.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TASK_ISSUE: ${{ github.event.issue.number }}
         run: |
-          gh issue comment "$TASK_ISSUE" --repo "$GH_REPO"             --body-file "$RUNNER_TEMP/javab-directive.txt"
+          gh issue comment "$TASK_ISSUE" --repo "$GH_REPO" \
+            --body-file "$RUNNER_TEMP/javab-directive.txt"
+      - name: Explain rejected report in the same issue (never as a directive)
+        if: steps.generate.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TASK_ISSUE: ${{ github.event.issue.number }}
+        run: |
+          if test -s "$RUNNER_TEMP/javab-directive.txt" &&
+             grep -qx 'JAVAB_REJECTED_V1' <(head -n 1 "$RUNNER_TEMP/javab-directive.txt"); then
+            gh issue comment "$TASK_ISSUE" --repo "$GH_REPO" \
+              --body-file "$RUNNER_TEMP/javab-directive.txt"
+          else
+            echo "Unexpected failure: no safe diagnostic produced."
+          fi
+      - name: Keep invalid reports marked as failed
+        if: steps.generate.outcome == 'failure'
+        run: exit 1
