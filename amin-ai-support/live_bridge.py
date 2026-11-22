@@ -25,6 +25,8 @@ from amin_support import DEFAULT_CONFIG, DEFAULT_DB, SupportEngine
 from direct_github_relay import GitHubPrivateBridge
 from chatgpt_work_event import prepare_work_event
 from chatgpt_plan_direct import ask as chatgpt_plan_ask, PlanConnectionUnavailable
+from chatgpt_git_agent import run_agent as run_chatgpt_git_agent
+from github_agent_tools import AgentToolError
 from request_limits import SlidingLimits
 
 try:
@@ -85,6 +87,9 @@ class LiveJobs:
                 question TEXT NOT NULL,
                 request_key TEXT NOT NULL DEFAULT '',
                 chatgpt_work_event INTEGER NOT NULL DEFAULT 0,
+                github_write_authorized INTEGER NOT NULL DEFAULT 0,
+                github_public_authorized INTEGER NOT NULL DEFAULT 0,
+                agent_result_json TEXT NOT NULL DEFAULT '',
                 status TEXT NOT NULL,
                 target_environment TEXT NOT NULL DEFAULT 'none',
                 requested_operation TEXT NOT NULL DEFAULT 'answer',
@@ -109,6 +114,12 @@ class LiveJobs:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN request_key TEXT NOT NULL DEFAULT ''")
             if "chatgpt_work_event" not in cols:
                 db.execute("ALTER TABLE amin_live_work ADD COLUMN chatgpt_work_event INTEGER NOT NULL DEFAULT 0")
+            if "github_write_authorized" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN github_write_authorized INTEGER NOT NULL DEFAULT 0")
+            if "github_public_authorized" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN github_public_authorized INTEGER NOT NULL DEFAULT 0")
+            if "agent_result_json" not in cols:
+                db.execute("ALTER TABLE amin_live_work ADD COLUMN agent_result_json TEXT NOT NULL DEFAULT ''")
             db.execute("CREATE INDEX IF NOT EXISTS amin_live_owner ON amin_live_work(token_id,project_id)")
             db.execute("CREATE UNIQUE INDEX IF NOT EXISTS amin_live_idempotent "
                        "ON amin_live_work(token_id,project_id,request_key) WHERE request_key != ''")
@@ -127,7 +138,8 @@ class LiveJobs:
         return ident
 
     def new_once(self, project, token_id, question, target_environment="none",
-                 requested_operation="answer", request_key="", chatgpt_work_event=False):
+                 requested_operation="answer", request_key="", chatgpt_work_event=False,
+                 github_write_authorized=False, github_public_authorized=False):
         """Atomically accept a client request at most once per token and project.
 
         A fresh key makes a fresh job. Replaying the SAME key returns its previous
@@ -146,18 +158,22 @@ class LiveJobs:
             cursor = db.execute(
                 "INSERT OR IGNORE INTO amin_live_work"
                 "(id,project_id,token_id,question,status,target_environment,"
-                "requested_operation,request_key,chatgpt_work_event) VALUES(?,?,?,?,?,?,?,?,?)",
+                "requested_operation,request_key,chatgpt_work_event,github_write_authorized,"
+                "github_public_authorized) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
                 (ident, project, token_id, question, "queued", target_environment,
-                 requested_operation, request_key, int(chatgpt_work_event)))
+                 requested_operation, request_key, int(chatgpt_work_event),
+                 int(github_write_authorized), int(github_public_authorized)))
             actual = db.execute(
-                "SELECT id,question,target_environment,requested_operation,chatgpt_work_event "
+                "SELECT id,question,target_environment,requested_operation,chatgpt_work_event,"
+                "github_write_authorized,github_public_authorized "
                 "FROM amin_live_work WHERE project_id=? AND token_id=? AND request_key=?",
                 (project, token_id, request_key)).fetchone()
         if not actual:
             raise RuntimeError("Durable idempotency record unavailable")
         # Reusing a key with a DIFFERENT request is an error, not a silent reroute.
         if actual[1:] != (question, target_environment,
-                             requested_operation, int(chatgpt_work_event)):
+                             requested_operation, int(chatgpt_work_event),
+                             int(github_write_authorized), int(github_public_authorized)):
             raise ValueError("Request key belongs to a different work request")
         return actual[0], cursor.rowcount == 1
 
@@ -167,19 +183,21 @@ class LiveJobs:
         with self.connect() as db:
             row = db.execute(
                 "SELECT status,repo,issue_number,request_id,answer,needs_human,"
-                "action_performed,target_environment,requested_operation,artifact_json FROM amin_live_work "
+                "action_performed,target_environment,requested_operation,artifact_json,agent_result_json "
+                "FROM amin_live_work "
                 "WHERE id=? AND project_id=? AND token_id=?",
                 (ident, project, token_id)).fetchone()
         if not row:
             return None
         return dict(zip(("status", "repo", "issue_number", "request_id",
                          "answer", "needs_human", "action_performed",
-                         "target_environment", "requested_operation", "artifact_json"), row), id=ident,
+                         "target_environment", "requested_operation", "artifact_json",
+                         "agent_result_json"), row), id=ident,
                     project=project)
 
     def change(self, ident, status, **fields):
         keys = {"repo", "issue_number", "request_id", "answer", "needs_human",
-                "action_performed", "artifact_json"}
+                "action_performed", "artifact_json", "agent_result_json"}
         if any(k not in keys for k in fields):
             raise ValueError("Unsafe state field")
         fields = {"status": status, **fields}
@@ -201,6 +219,16 @@ class LiveGateway:
         # Explicit opt-in only. This is personal plan usage for the OWNER,
         # not a shared unlimited AI subscription for all customers.
         self.use_chatgpt_plan = os.environ.get("AMIN_SIWC_ENABLE") == "1"
+        self.use_github_agent = os.environ.get("AMIN_SIWC_AGENT_ENABLE") == "1"
+        self.agent_token = os.environ.get("AMIN_AGENT_GITHUB_TOKEN", "")
+        try:
+            mapping = json.loads(os.environ.get("AMIN_AGENT_PROJECT_REPOS_JSON", "{}"))
+        except (ValueError, TypeError):
+            raise ValueError("Invalid authorized project-repository mapping") from None
+        if not isinstance(mapping, dict):
+            raise ValueError("Authorized project repository mapping must be an object")
+        self.agent_project_repos = mapping
+        self.agent_public_optin = os.environ.get("AMIN_AGENT_ALLOW_PUBLIC") == "1"
         self.poll_seconds = max(2, int(poll_seconds))
         self.limits = SlidingLimits()
         self.sem = asyncio.Semaphore(8)
@@ -290,6 +318,18 @@ class LiveGateway:
                     if action == "work" and not isinstance(command.get("chatgpt_work_event", False), bool):
                         await self.send(socket, "error", ident, message="Invalid Work event permission")
                         continue
+                    if action == "work" and (
+                        not isinstance(command.get("authorize_github_write", False), bool) or
+                        not isinstance(command.get("authorize_public_repo", False), bool)):
+                        await self.send(socket, "error", ident,
+                                        message="Invalid GitHub execution permission")
+                        continue
+                    if (action == "work" and (command.get("authorize_github_write", False)
+                         or command.get("authorize_public_repo", False))
+                         and not command.get("request_key")):
+                        await self.send(socket, "error", ident,
+                                        message="GitHub execution requires a unique request key")
+                        continue
                     if (action == "work" and command.get("chatgpt_work_event") is True
                             and not command.get("request_key")):
                         await self.send(socket, "error", ident,
@@ -372,9 +412,11 @@ class LiveGateway:
                     await self.send(socket, "error", ident, message="Job not found")
                     return
                 payload = {key: value for key, value in job.items()
-                           if key not in {"id", "artifact_json"}}
+                           if key not in {"id", "artifact_json", "agent_result_json"}}
                 if job.get("artifact_json"):
                     payload["artifact"] = json.loads(job["artifact_json"])
+                if job.get("agent_result_json"):
+                    payload["agent_result"] = json.loads(job["agent_result_json"])
                 await self.send(socket, "work_state", ident,
                                 id_of_job=job["id"], **payload)
                 if job["status"] == "github_dispatched":
@@ -399,7 +441,9 @@ class LiveGateway:
         job_id, created = await asyncio.to_thread(
             self.jobs.new_once, project, access["token_id"], command["message"].strip(),
             target, operation, command.get("request_key", ""),
-            command.get("chatgpt_work_event", False))
+            command.get("chatgpt_work_event", False),
+            command.get("authorize_github_write", False),
+            command.get("authorize_public_repo", False))
         if not created:
             if units not in {"unmetered", "exhausted"}:
                 await asyncio.to_thread(
@@ -414,6 +458,9 @@ class LiveGateway:
             return
         await self.send(socket, "work_state", ident, id_of_job=job_id,
                         status="queued", action_performed=False)
+        if self.use_github_agent:
+            await self.run_agent_work(socket, access, command, job_id, units)
+            return
         if (not self.repo or not self.github_token
                 or not self.owner_token_id
                 or access["token_id"] != self.owner_token_id):
@@ -467,6 +514,65 @@ class LiveGateway:
                                 message="Private Issue saved, but Work PR event could not be created")
         job = await asyncio.to_thread(self.jobs.read, job_id, project, access["token_id"])
         await self.watch(socket, ident, job)
+
+    async def run_agent_work(self, socket, access, command, job_id, units):
+        """Run the user-authorized SIWC agent; never fall back to paid API/Work."""
+        ident = command["id"]
+        project = access["project_id"]
+        repo = self.agent_project_repos.get(project)
+        if (not self.use_chatgpt_plan or
+                not self.owner_token_id or access["token_id"] != self.owner_token_id or
+                not isinstance(repo, str) or not repo or not self.agent_token):
+            await asyncio.to_thread(self.jobs.change, job_id, "agent_needs_setup")
+            if units not in {"unmetered", "exhausted"}:
+                await asyncio.to_thread(
+                    self.engine.quotas.refund, access["token_id"], "ticket", units)
+            await self.send(socket, "work_state", ident, id_of_job=job_id,
+                            status="agent_needs_setup", chatgpt_invoked=False,
+                            action_performed=False,
+                            message="Owner ChatGPT plan login and a scoped project GitHub repo are required")
+            return
+        if command.get("chatgpt_work_event"):
+            await asyncio.to_thread(self.jobs.change, job_id, "agent_conflicting_modes")
+            await self.send(socket, "work_state", ident, id_of_job=job_id,
+                            status="agent_conflicting_modes", action_performed=False,
+                            message="Direct ChatGPT agent cannot also route to ChatGPT Work")
+            return
+        writable = command.get("authorize_github_write") is True
+        public = command.get("authorize_public_repo") is True and self.agent_public_optin
+        await asyncio.to_thread(self.jobs.change, job_id, "chatgpt_running", repo=repo)
+        await self.send(socket, "work_state", ident, id_of_job=job_id,
+                        status="chatgpt_running", repo=repo, action_performed=False,
+                        chatgpt_invoked=False)
+        try:
+            async with self.sem:
+                result = await asyncio.to_thread(
+                    run_chatgpt_git_agent, command["message"], repo, self.agent_token,
+                    job_id, allow_write=writable, allow_public=public)
+        except PlanConnectionUnavailable:
+            status = "chatgpt_login_or_quota_blocked"
+        except (AgentToolError, RuntimeError, ValueError):
+            status = "agent_execution_failed"
+        else:
+            # Only an observed GitHub commit counts as a source change.
+            status = result["status"]
+            safe_result = {key: value for key, value in result.items()
+                           if key not in {"token", "access_token"}}
+            await asyncio.to_thread(self.jobs.change, job_id, status,
+                                    answer=result.get("answer", ""),
+                                    action_performed=int(result.get("action_performed", False)),
+                                    needs_human=int(not (
+                                        status == "draft_pr_created" and result.get("tests_passed"))),
+                                    agent_result_json=json.dumps(safe_result, ensure_ascii=False))
+            await self.send(socket, "work_state", ident,
+                            id_of_job=job_id, status=status, agent_result=safe_result,
+                            action_performed=result.get("action_performed", False),
+                            chatgpt_invoked=result.get("model_used", False))
+            return
+        await asyncio.to_thread(self.jobs.change, job_id, status)
+        await self.send(socket, "work_state", ident,
+                        id_of_job=job_id, status=status, action_performed=False,
+                        chatgpt_invoked=False)
 
     async def watch(self, socket, ident, job):
         issue = int(job["issue_number"])
