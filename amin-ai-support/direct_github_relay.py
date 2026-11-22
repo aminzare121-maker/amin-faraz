@@ -21,7 +21,7 @@ ID_PATTERN = re.compile(r"[a-f0-9]{32}\Z")
 API = "https://api.github.com/repos/"
 MAX_BYTES = 256000
 RELEASE_APK = re.compile(r"/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/releases/download/"
-                         r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.apk\\Z")
+                         r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\.apk\Z")
 
 
 def validated_delivery(raw):
