@@ -18,6 +18,8 @@ public final class GitHubBridgePolicyTest {
         String id = "a".repeat(32);
         ok(GitHubBridgePolicy.isTrustedReply("Owner", "owner",
                 "AMIN_CHAT_REPLY_V1\n{}", id), "owner only");
+        ok(GitHubBridgePolicy.isTrustedReply("github-actions[bot]", "owner",
+                "AMIN_CHAT_REPLY_V1\\n{}", id), "verified GitHub Actions bot");
         ok(!GitHubBridgePolicy.isTrustedReply("other", "owner",
                 "AMIN_CHAT_REPLY_V1\n{}", id), "reject non-owner");
         ok(!GitHubBridgePolicy.isTrustedReply("owner", "owner",
