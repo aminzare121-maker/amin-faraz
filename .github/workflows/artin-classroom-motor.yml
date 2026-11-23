@@ -18,6 +18,8 @@ on:
       - 'test_artin_per_bar_dossier_integration.py'
       - 'test_artin_13_per_bar_integrated_entry.py'
       - 'research/artin-independent-engine/entry_engine.py'
+      - 'research/artin-independent-engine/run_engine.py'
+      - 'research/artin-independent-engine/test_paper_preflight_late_events.py'
       - 'research/artin-independent-engine/artin_decision_boundary.py'
       - 'research/artin-independent-engine/test_artin_decision_boundary.py'
       - 'test_artin_classroom_motor.py'
@@ -107,6 +109,9 @@ jobs:
       - name: Test same-session source interval identity (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_source_interval_identity.py -v
+      - name: Test preflight of later paper management and close events
+        shell: bash
+        run: python -m unittest discover -s project/research/artin-independent-engine -p test_paper_preflight_late_events.py -v
       - name: Test fail-closed entry exit risk arbitration (synthetic software tests only)
         shell: bash
         run: python -m unittest discover -s project/research/artin-independent-engine -p test_artin_decision_boundary.py -v
