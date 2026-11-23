@@ -53,6 +53,27 @@ def validate_paper_events(case,observation):
                 raise ValueError('Paper fill requires finite exact lots and fill_price') from exc
             if lots<=0 or fill_price<=0:
                 raise ValueError('Paper fill requires positive lots and fill_price')
+        if event['event']=='manage':
+            if not isinstance(event.get('label'),str) or not event['label'].strip():
+                raise ValueError('Paper management requires a label')
+            try:
+                stop=money(event['new_stop'])
+            except (KeyError,ValueError,ArithmeticError) as exc:
+                raise ValueError('Paper management requires a finite exact stop') from exc
+            if stop<=0:raise ValueError('Paper management stop must be positive')
+            trigger=event.get('trigger')
+            if not isinstance(trigger,dict) or type(trigger.get('known_at')) is not int or not isinstance(trigger.get('source'),str) or not trigger['source'].strip():
+                raise ValueError('Paper management requires sourced trigger')
+            if trigger['known_at']<0 or trigger['known_at']>at:
+                raise ValueError('Paper management trigger cannot come from the future')
+        if event['event']=='close':
+            for key in ('exit_fill','actual_round_trip_fee'):
+                if event.get(key) is not None:
+                    try:amount=money(event[key])
+                    except (ValueError,ArithmeticError) as exc:
+                        raise ValueError('Paper close requires exact finite accounting') from exc
+                    if (key=='exit_fill' and amount<=0) or (key=='actual_round_trip_fee' and amount<0):
+                        raise ValueError('Paper close requires positive fill and nonnegative fee')
         last_at=at;last_known=known
 
 def run_paper_trade(engine,case,observation):
