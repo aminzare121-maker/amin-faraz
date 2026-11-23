@@ -74,15 +74,19 @@ class TestIntegratedEntryBridge(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"INVALID_SOURCE_BAR"):
             evaluate(self.path,as_of=1800002700)
 
-    def test_direct_entry_rejects_missing_m15_candle(self):
+    def test_direct_entry_segments_missing_m15_candle_without_orders(self):
         # Direct engine callers must enforce the same causal continuity as MT5 intake.
         with self.path.open("w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
             w.writerow(("timestamp", "open", "high", "low", "close"))
             w.writerow((1800000000, 4000, 4002, 3999, 4001))
             w.writerow((1800001800, 4001, 4003, 4000, 4002))
-        with self.assertRaisesRegex(ValueError, "DISCONTINUOUS_M15_ENTRY_REPLAY"):
-            evaluate(self.path, as_of=1800002700)
+        result = evaluate(self.path, as_of=1800002700)
+        self.assertEqual(result["causal_segments"], 2)
+        self.assertEqual(result["gap_boundaries"], [{"previous_open":1800000000,"next_open":1800001800,"missing_m15_slots":1}])
+        self.assertEqual(result["independent_engine"]["orders_created"], 0)
+        self.assertEqual(result["teacher_approved_entries"], 0)
+        self.assertEqual(result["decision_arbitration"]["decision"], "BLOCKED")
 
     def test_untrusted_approval_rejected_before_market_clock(self):
         # Reject invalid evidence before any bar replay or market clock check.
