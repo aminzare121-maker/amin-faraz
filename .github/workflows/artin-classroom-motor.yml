@@ -15,6 +15,7 @@ on:
       - 'artin_mt5_to_13_route_readonly.py'
       - 'test_artin_mt5_to_13_route_readonly.py'
       - 'test_artin_per_bar_side_decisions.py'
+      - 'test_artin_per_bar_dossier_integration.py'
       - 'test_artin_13_per_bar_integrated_entry.py'
       - 'research/artin-independent-engine/entry_engine.py'
       - 'research/artin-independent-engine/artin_decision_boundary.py'
@@ -100,6 +101,9 @@ jobs:
       - name: Test private dossier citation identity through real entry engine (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_dossier_identity_integrated_entry.py -v
+      - name: Test private dossier through M15 per-bar decision bridge (no orders)
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_per_bar_dossier_integration.py -v
       - name: Test same-session source interval identity (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_source_interval_identity.py -v
