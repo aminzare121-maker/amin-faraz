@@ -74,6 +74,16 @@ class TestIntegratedEntryBridge(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"INVALID_SOURCE_BAR"):
             evaluate(self.path,as_of=1800002700)
 
+    def test_direct_entry_rejects_missing_m15_candle(self):
+        # Direct engine callers must enforce the same causal continuity as MT5 intake.
+        with self.path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(("timestamp", "open", "high", "low", "close"))
+            w.writerow((1800000000, 4000, 4002, 3999, 4001))
+            w.writerow((1800001800, 4001, 4003, 4000, 4002))
+        with self.assertRaisesRegex(ValueError, "DISCONTINUOUS_M15_ENTRY_REPLAY"):
+            evaluate(self.path, as_of=1800002700)
+
     def test_untrusted_approval_rejected_before_market_clock(self):
         # Reject invalid evidence before any bar replay or market clock check.
         with self.assertRaisesRegex(ValueError,"INVALID_PRIVATE_DOSSIER:INCOMPLETE_PRIVATE_DOSSIER"):
