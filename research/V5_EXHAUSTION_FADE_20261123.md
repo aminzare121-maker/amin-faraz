@@ -1,0 +1,9 @@
+# V5 exhaustion fade — 2026-11-23
+
+Research only; no broker orders. New hypothesis: after three consecutive directional M15 closes, displacement >2.2 times lagged ATR(24) and latest tick volume >1.25 times prior 24-bar median, fade at next open. Stop 1.1 ATR, target 1.4 stop, maximum five bars, stop-first OHLC handling. Capital $1000 reset independently for training and test; variable lots risk <=1% capital, 0.01 lot increments, max 0.10 lot; assumed 1 lot=100 oz. Cost model: recorded spread points interpreted as 0.01 USD, plus $0.20/oz slippage and $7/lot commission. These assumptions are unverified against broker contract.
+
+Training before 2026-06-15: baseline opportunities 353, rejected 203, trades 150, gross gains $607.37, gross losses -$603.58, costs $91.26, net -$87.47, closed drawdown $179.74, days >=$50: 0. Guard opportunities 371, rejected 275, trades 96, gains $351.72, losses -$404.38, costs $56.06, net -$108.72, drawdown $145.15, days >=$50: 0.
+
+Holdout from 2026-06-15: baseline opportunities 233, rejected 63, trades 170, gross gains $768.41, gross losses -$682.58, costs $110.70, net -$24.88, closed drawdown $122.77, days >=$50: 0. Guard opportunities 269, rejected 200, trades 69, gains $270.14, losses -$305.07, costs $40.59, net -$75.52, drawdown $99.53, days >=$50: 0. Guard excludes ATR >1.5 times lagged median, spread >32 points, or displacement >4 ATR. Opportunity count differs due to occupied trade windows.
+
+Decision: REJECT both as profit strategies. Guard reduces drawdown but worsens net profit. No demo or real orders. Local complete script: v5_exhaustion_fade_20261123.py; local ledger: v5_exhaustion_fade_20261123.json. Neither private CSV nor local artifacts committed. Independent GitHub CI not executed. OHLC cannot establish tick-level adverse excursion.
