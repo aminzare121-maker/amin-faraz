@@ -63,9 +63,10 @@ class PerBarDossierIntegrationTests(unittest.TestCase):
             source.write_text("timestamp,open,high,low,close\\n900,4000,4002,3999,4001\\n".replace("\\n", "\n"))
             dossier = fixture()
             dossier["routes"][0]["citation_intervals"][0]["index"] = 25
-            result = evaluate(str(source), dossier)
-            self.assertEqual(result["evidence_gate"]["reason"], "INVALID_SOURCE_INTERVAL")
-            self.assertEqual(result["trades_executed"], 0)
+            # Invalid source identity must abort before any market replay,
+            # not return a normal-looking decision result.
+            with self.assertRaisesRegex(ValueError, "INVALID_PRIVATE_DOSSIER:INVALID_SOURCE_INTERVAL"):
+                evaluate(str(source), dossier)
 
 
 if __name__ == "__main__":
