@@ -37,6 +37,15 @@ def validate_paper_events(case,observation):
             raise ValueError('Paper event requires provenance')
         if event.get('event') not in ('fill_entry','quote','manage','close'):
             raise ValueError('Unsupported paper event type')
+        # Validate quote geometry before any earlier paper event can be replayed.
+        # A crossed or malformed later quote must reject the entire batch.
+        if event['event']=='quote':
+            try:
+                bid=money(event['bid']);ask=money(event['ask'])
+            except (KeyError,ValueError,ArithmeticError) as exc:
+                raise ValueError('Paper quote requires finite exact bid and ask') from exc
+            if bid<=0 or ask<=0 or bid>ask:
+                raise ValueError('Paper quote must have positive bid <= ask')
         last_at=at;last_known=known
 
 def run_paper_trade(engine,case,observation):
