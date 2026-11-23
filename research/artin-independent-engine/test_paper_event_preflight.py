@@ -27,6 +27,14 @@ class PaperEventPreflightTests(unittest.TestCase):
                 run_document(self.document(events))
             evaluate.assert_not_called()
 
+    def test_invalid_later_fill_fails_before_evaluation(self):
+        events=[{'event':'fill_entry','at':10,'known_at':10,'source':'broker','lots':'0.01','fill_price':'4000'},
+                {'event':'fill_entry','at':11,'known_at':11,'source':'broker','lots':'NaN','fill_price':'4001'}]
+        with patch('run_engine.Engine.evaluate',side_effect=AssertionError('partial replay')) as evaluate:
+            with self.assertRaisesRegex(ValueError,'finite exact lots'):
+                run_document(self.document(events))
+            evaluate.assert_not_called()
+
     def test_unsourced_later_event_fails_before_evaluation(self):
         events=[{'event':'fill_entry','at':10,'known_at':10,'source':'broker'},
                 {'event':'quote','at':11,'known_at':11,'source':''}]
