@@ -25,6 +25,7 @@ def evaluate(path, dossier=None, *, as_of=None):
         raise ValueError('INVALID_PRIVATE_DOSSIER:'+str(evidence.get('reason')))
     rows=list(csv.DictReader(open(path,encoding="utf-8-sig")))
     bars=[]
+    gap_boundaries=[]
     for row in rows:
         t=int(row.get("timestamp") or row.get("time"))
         if t>10**11:t//=1000
@@ -33,10 +34,12 @@ def evaluate(path, dossier=None, *, as_of=None):
                 or not 0<l<=min(o,c)<=max(o,c)<=h
                 or (bars and t<=bars[-1][0])):
             raise ValueError("INVALID_SOURCE_BAR")
-        # Direct callers must not bypass the collector's M15 continuity gate.
-        # A missing candle makes multi-bar patterns causally ambiguous.
+        # Broker closures and missing M15 candles create new causal segments.
+        # Never infer a multi-bar teacher setup across a gap. This bridge
+        # evaluates only same-bar market facts; all teacher predicates remain
+        # absent and every route is blocked. Preserve gaps for audit.
         if bars and t - bars[-1][0] != 900:
-            raise ValueError('DISCONTINUOUS_M15_ENTRY_REPLAY')
+            gap_boundaries.append((bars[-1][0], t))
         if as_of is not None and t + 900 > as_of:
             raise ValueError('UNCLOSED_OR_FUTURE_SOURCE_BAR')
         bars.append((t,o,h,l,c))
@@ -137,6 +140,8 @@ def evaluate(path, dossier=None, *, as_of=None):
                                     "executable":False,"replayed_teacher_cases":0},
             "side_decision_evaluations":len(bars)*len(REQUIRED)*2,
             "causal_close_clock_checked":as_of is not None,
+            "causal_segments":len(gap_boundaries)+1,
+            "gap_boundaries":[{"previous_open":a,"next_open":b,"missing_m15_slots":(b-a)//900-1} for a,b in gap_boundaries],
             "source_identity_conflicts":source_conflicts,
             "evidence_gate":{"decision":evidence["decision"],"reason":evidence["reason"],
                              "trade_authorized":False},
