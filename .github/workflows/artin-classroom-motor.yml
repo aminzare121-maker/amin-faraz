@@ -6,6 +6,9 @@ on:
     paths:
       - 'artin_classroom_motor.py'
       - 'artin_13_per_bar_teacher_bridge.py'
+      - 'artin_mt5_collector_to_entry_bridge.py'
+      - 'test_artin_mt5_collector_to_entry_bridge.py'
+      - 'artin_mt5_shadow_bridge.py'
       - 'artin_dossier_decision_gate.py'
       - 'test_artin_dossier_identity_integrated_entry.py'
       - 'test_artin_source_interval_identity.py'
@@ -91,6 +94,9 @@ jobs:
       - name: Test real entry-engine integration for all 13 routes and both sides (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_13_per_bar_integrated_entry.py -v
+      - name: Test collector CSV to independent entry engine (no orders)
+        shell: bash
+        run: python -m unittest discover -s project -p test_artin_mt5_collector_to_entry_bridge.py -v
       - name: Test private dossier citation identity through real entry engine (no orders)
         shell: bash
         run: python -m unittest discover -s project -p test_artin_dossier_identity_integrated_entry.py -v
