@@ -36,8 +36,8 @@ class PaperEventPreflightTests(unittest.TestCase):
             evaluate.assert_not_called()
 
     def test_unsourced_later_event_fails_before_evaluation(self):
-        events=[{'event':'fill_entry','at':10,'known_at':10,'source':'broker'},
-                {'event':'quote','at':11,'known_at':11,'source':''}]
+        events=[{'event':'fill_entry','at':10,'known_at':10,'source':'broker','lots':'0.01','fill_price':'4000'},
+                {'event':'quote','at':11,'known_at':11,'source':'','bid':'4001','ask':'4002'}]
         with patch('run_engine.Engine.evaluate',side_effect=AssertionError('partial replay')) as evaluate:
             with self.assertRaisesRegex(ValueError,'provenance'):
                 run_document(self.document(events))
