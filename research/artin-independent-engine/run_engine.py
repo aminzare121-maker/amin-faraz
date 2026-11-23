@@ -46,6 +46,13 @@ def validate_paper_events(case,observation):
                 raise ValueError('Paper quote requires finite exact bid and ask') from exc
             if bid<=0 or ask<=0 or bid>ask:
                 raise ValueError('Paper quote must have positive bid <= ask')
+        if event['event']=='fill_entry':
+            try:
+                lots=money(event['lots']);fill_price=money(event['fill_price'])
+            except (KeyError,ValueError,ArithmeticError) as exc:
+                raise ValueError('Paper fill requires finite exact lots and fill_price') from exc
+            if lots<=0 or fill_price<=0:
+                raise ValueError('Paper fill requires positive lots and fill_price')
         last_at=at;last_known=known
 
 def run_paper_trade(engine,case,observation):
