@@ -33,6 +33,10 @@ def evaluate(path, dossier=None, *, as_of=None):
                 or not 0<l<=min(o,c)<=max(o,c)<=h
                 or (bars and t<=bars[-1][0])):
             raise ValueError("INVALID_SOURCE_BAR")
+        # Direct callers must not bypass the collector's M15 continuity gate.
+        # A missing candle makes multi-bar patterns causally ambiguous.
+        if bars and t - bars[-1][0] != 900:
+            raise ValueError('DISCONTINUOUS_M15_ENTRY_REPLAY')
         if as_of is not None and t + 900 > as_of:
             raise ValueError('UNCLOSED_OR_FUTURE_SOURCE_BAR')
         bars.append((t,o,h,l,c))
