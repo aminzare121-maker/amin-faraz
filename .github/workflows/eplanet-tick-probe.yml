@@ -154,17 +154,7 @@ jobs:
           $output = Join-Path $files 'amin_probe.csv'
           $lines = @('[Common]','KeepPrivate=0','NewsEnable=0','[Experts]','Enabled=0','AllowLiveTrading=0','AllowDllImport=0','[StartUp]','Script=AminReadOnlyTickProbe','Symbol=XAUUSD.st','Period=M15','ShutdownTerminal=1')
           if ($env:DEMO_LOGIN -and $env:DEMO_PASSWORD -and $env:DEMO_SERVER) {
-            if ($env:DEMO_LOGIN -notmatch '^\d+
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: eplanet-tick-probe-report
-          path: |
-            probe.json
-            native_probe.csv
-          if-no-files-found: warn
-          retention-days: 7
- -or $env:DEMO_SERVER -match '[\r\n]' -or $env:DEMO_PASSWORD -match '[\r\n]') { throw 'Invalid secret format' }
+            if ($env:DEMO_LOGIN -notmatch '^\d+$' -or $env:DEMO_SERVER -match '[\r\n]' -or $env:DEMO_PASSWORD -match '[\r\n]') { throw 'Invalid secret format' }
             $lines = @('[Common]',('Login='+$env:DEMO_LOGIN),('Password='+$env:DEMO_PASSWORD),('Server='+$env:DEMO_SERVER)) + $lines[1..($lines.Count-1)]
           } else { Write-Host 'No dedicated demo credentials configured; native probe can only use an existing authorized session.' }
           try {
@@ -182,6 +172,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: eplanet-tick-probe-report
-          path: probe.json
+          path: |
+            probe.json
+            native_probe.csv
           if-no-files-found: warn
           retention-days: 7
