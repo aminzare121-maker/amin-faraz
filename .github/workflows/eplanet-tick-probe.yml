@@ -10,7 +10,7 @@ permissions:
 jobs:
   probe:
     runs-on: windows-latest
-    timeout-minutes: 18
+    timeout-minutes: 25
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -100,6 +100,83 @@ jobs:
           '@ | Set-Content -Encoding utf8 probe.py
           python probe.py
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Native MQL5 fallback without Python IPC
+        if: failure() && env.MT5_TERMINAL != ''
+        shell: pwsh
+        env:
+          DEMO_LOGIN: ${{ secrets.EPLANET_DEMO_LOGIN }}
+          DEMO_PASSWORD: ${{ secrets.EPLANET_DEMO_INVESTOR_PASSWORD }}
+          DEMO_SERVER: ${{ secrets.EPLANET_DEMO_SERVER }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Split-Path $env:MT5_TERMINAL
+          Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+          $editor = Join-Path $root 'metaeditor64.exe'
+          if (-not (Test-Path $editor)) { throw 'Native compiler unavailable' }
+          $scripts = Join-Path $root 'MQL5\Scripts'
+          $files = Join-Path $root 'MQL5\Files'
+          New-Item -ItemType Directory -Force -Path $scripts,$files | Out-Null
+          $source = Join-Path $scripts 'AminReadOnlyTickProbe.mq5'
+          @'
+          #property strict
+          void Save(string status,int count,long first,long last,int error)
+          {
+             int h=FileOpen("amin_probe.csv",FILE_WRITE|FILE_CSV|FILE_ANSI,',');
+             if(h==INVALID_HANDLE) return;
+             FileWrite(h,"status","count","first_time_msc","last_time_msc","error","orders_sent");
+             FileWrite(h,status,count,first,last,error,0);
+             FileClose(h);
+          }
+          void OnStart()
+          {
+             for(int i=0;i<60 && !IsStopped() && !TerminalInfoInteger(TERMINAL_CONNECTED);i++) Sleep(1000);
+             if(!TerminalInfoInteger(TERMINAL_CONNECTED)) { Save("no_connected_broker_session",0,0,0,0); return; }
+             string broker=AccountInfoString(ACCOUNT_COMPANY)+" "+AccountInfoString(ACCOUNT_SERVER);
+             StringToLower(broker);
+             if(AccountInfoInteger(ACCOUNT_TRADE_MODE)!=ACCOUNT_TRADE_MODE_DEMO || StringFind(broker,"eplanet")<0)
+             { Save("not_verified_eplanet_demo",0,0,0,0); return; }
+             if(!SymbolSelect("XAUUSD.st",true)) { Save("symbol_unavailable",0,0,0,GetLastError()); return; }
+             ulong from=(ulong)StringToTime("2026.11.12 00:00")*1000;
+             ulong to=from+86400000-1;
+             MqlTick ticks[];
+             ResetLastError();
+             int n=CopyTicksRange("XAUUSD.st",ticks,COPY_TICKS_ALL,from,to);
+             int err=GetLastError();
+             if(n<=0) { Save("no_ticks_returned",n,0,0,err); return; }
+             Save("sample_received_not_full_coverage",n,ticks[0].time_msc,ticks[n-1].time_msc,err);
+          }
+          '@ | Set-Content -Encoding unicode $source
+          $log = Join-Path $env:RUNNER_TEMP 'amin-compile.log'
+          $compiler = Start-Process -FilePath $editor -ArgumentList @('/portable', ('/compile:"' + $source + '"'), ('/log:"' + $log + '"')) -PassThru
+          if (-not $compiler.WaitForExit(60000)) { $compiler.Kill(); throw 'Native compilation timed out' }
+          if (-not (Test-Path (Join-Path $scripts 'AminReadOnlyTickProbe.ex5'))) { if (Test-Path $log) { Get-Content $log -Tail 15 }; throw 'Native script compilation failed' }
+          $cfg = Join-Path $env:RUNNER_TEMP 'amin-native.ini'
+          $output = Join-Path $files 'amin_probe.csv'
+          $lines = @('[Common]','KeepPrivate=0','NewsEnable=0','[Experts]','Enabled=0','AllowLiveTrading=0','AllowDllImport=0','[StartUp]','Script=AminReadOnlyTickProbe','Symbol=XAUUSD.st','Period=M15','ShutdownTerminal=1')
+          if ($env:DEMO_LOGIN -and $env:DEMO_PASSWORD -and $env:DEMO_SERVER) {
+            if ($env:DEMO_LOGIN -notmatch '^\d+
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eplanet-tick-probe-report
+          path: |
+            probe.json
+            native_probe.csv
+          if-no-files-found: warn
+          retention-days: 7
+ -or $env:DEMO_SERVER -match '[\r\n]' -or $env:DEMO_PASSWORD -match '[\r\n]') { throw 'Invalid secret format' }
+            $lines = @('[Common]',('Login='+$env:DEMO_LOGIN),('Password='+$env:DEMO_PASSWORD),('Server='+$env:DEMO_SERVER)) + $lines[1..($lines.Count-1)]
+          } else { Write-Host 'No dedicated demo credentials configured; native probe can only use an existing authorized session.' }
+          try {
+            $lines | Set-Content -Encoding unicode $cfg
+            $proc=Start-Process -FilePath $env:MT5_TERMINAL -ArgumentList @('/portable',('/config:"'+$cfg+'"')) -PassThru
+            for($i=0;$i -lt 100 -and -not (Test-Path $output);$i++) { Start-Sleep -Seconds 2 }
+            if(Test-Path $output) { Copy-Item $output native_probe.csv; Get-Content native_probe.csv }
+            else { 'status,orders_sent' + "`n" + 'native_script_not_executed_or_no_chart,0' | Set-Content native_probe.csv; Write-Host 'Native script result missing; account/chart startup not verified' }
+          } finally {
+            Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+            Remove-Item $cfg -Force -ErrorAction SilentlyContinue
+          }
       - name: Preserve only non-sensitive diagnostic metadata
         if: always()
         uses: actions/upload-artifact@v4
