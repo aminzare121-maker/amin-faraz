@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <queries><package android:name="net.metaquotes.metatrader5"/></queries>
  <application android:label="واسط قیمت امین" android:allowBackup="false" android:supportsRtl="true" android:theme="@android:style/Theme.Material.Light.NoActionBar">
   <activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
   <service android:name=".QuoteService" android:label="خواندن قیمت نمایان MT5 (امین)" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true">
