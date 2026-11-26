@@ -9,17 +9,17 @@ import java.io.*;
 public final class MainActivity extends Activity {
  private TextView status;
  private final Handler h=new Handler(Looper.getMainLooper());
- private final Runnable refresh=new Runnable(){public void run(){status.setText((QuoteService.armed?"ثبت روشن":"ثبت خاموش")+"\n"+QuoteService.status);h.postDelayed(this,400);}};
+ private final Runnable refresh=new Runnable(){public void run(){status.setText((QuoteService.armed?"ثبت روشن":"ثبت خاموش")+"\n"+QuoteService.status+"\nآخرین نتیجه: "+QuoteService.lastRead+"\nتعداد ثبت این نشست: "+QuoteService.count);h.postDelayed(this,400);}};
  private void button(LinearLayout l,String text,View.OnClickListener listener){Button b=new Button(this);b.setText(text);b.setOnClickListener(listener);l.addView(b);}
  @Override public void onCreate(Bundle state){super.onCreate(state);
   LinearLayout l=new LinearLayout(this);l.setOrientation(LinearLayout.VERTICAL);l.setPadding(24,24,24,24);
   ScrollView s=new ScrollView(this);s.addView(l);setContentView(s);
-  TextView t=new TextView(this);t.setText("واسط قیمت امین — نسخه آزمایشی\nفقط XAUUSD.st روی صفحه قیمت‌های MT5. با مجوز دسترسی‌پذیری، فقط جفت قیمت دارای برچسب معتبر ثبت می‌شود. این برنامه تاریخچه بروکر را نمی‌خواند و تیک کامل تولید نمی‌کند. زمان ثبت، زمان گوشی است. بدون اینترنت، بدون رمز و بدون معامله.");t.setTextSize(17);l.addView(t);
+  TextView t=new TextView(this);t.setText("واسط قیمت امین — نسخه آزمایشی ۰٫۲\nفقط XAUUSD.st روی صفحه قیمت‌های MT5. با مجوز دسترسی‌پذیری، جفت قیمت دارای برچسب یا دو قیمت هم‌ردیف معتبر ثبت می‌شود. این برنامه تاریخچه بروکر را نمی‌خواند و تیک کامل تولید نمی‌کند. زمان ثبت، زمان گوشی است. بدون اینترنت، بدون رمز و بدون معامله.");t.setTextSize(17);l.addView(t);
   status=new TextView(this);status.setTextSize(18);l.addView(status);
   button(l,"۱. فعال‌سازی مجوز دسترسی‌پذیری",v->startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
   button(l,"۲. شروع ثبت دستی",v->{
    if(!QuoteService.connected){Toast.makeText(this,"ابتدا سرویس واسط قیمت امین را فعال کن",Toast.LENGTH_LONG).show();return;}
-   QuoteService.armed=true;QuoteService.count=0;QuoteService.status="صفحه قیمت‌های MT5 را باز کن";
+   QuoteService.armed=true;QuoteService.count=0;QuoteService.lastRead="منتظر اولین خواندن";QuoteService.status="صفحه قیمت‌های MT5 را باز کن";
   });
   button(l,"توقف ثبت",v->{QuoteService.armed=false;QuoteService.status="متوقف شد";});
   button(l,"باز کردن متاتریدر",v->{Intent i=getPackageManager().getLaunchIntentForPackage(QuoteService.PKG);if(i!=null)startActivity(i);else Toast.makeText(this,"MT5 را از صفحه گوشی باز کن",Toast.LENGTH_SHORT).show();});
