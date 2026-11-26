@@ -28,8 +28,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+      - uses: android-actions/setup-android@v3
       - name: Ensure Android SDK
-        run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
+        run: |
+          set -e
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          test -f "$ANDROID_HOME/platforms/android-34/android.jar"
+          test -x "$ANDROID_HOME/build-tools/34.0.0/apksigner"
       - name: Build signed debug APK
         run: gradle --no-daemon :app:assembleDebug
       - name: Verify APK and report checksum
