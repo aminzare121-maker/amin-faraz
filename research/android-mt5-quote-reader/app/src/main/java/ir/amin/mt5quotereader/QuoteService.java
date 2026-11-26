@@ -2,6 +2,7 @@ package ir.amin.mt5quotereader;
 import android.accessibilityservice.AccessibilityService;
 import android.app.KeyguardManager;
 import android.os.*;
+import android.graphics.Rect;
 import android.view.accessibility.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -12,16 +13,17 @@ public final class QuoteService extends AccessibilityService {
  static volatile boolean connected=false,armed=false;
  static volatile String status="سرویس هنوز فعال نیست";
  static volatile long count=0;
+ static volatile String lastRead="هنوز نتیجه خواندن ثبت نشده";
  private final Handler handler=new Handler(Looper.getMainLooper());
  private String last="";
  private long lastAt=0;
- private final Runnable loop=new Runnable(){public void run(){try{sample();}catch(Exception e){status="خواندن ناموفق؛ داده ثبت نشد";}finally{if(connected)handler.postDelayed(this,250);}}};
+ private final Runnable loop=new Runnable(){public void run(){try{sample();}catch(Exception e){status="خواندن ناموفق؛ داده ثبت نشد";lastRead=status;}finally{if(connected)handler.postDelayed(this,250);}}};
  @Override protected void onServiceConnected(){super.onServiceConnected();connected=true;armed=false;status="آماده؛ شروع دستی لازم است";handler.removeCallbacks(loop);handler.post(loop);}
  @Override public void onAccessibilityEvent(AccessibilityEvent event){} // polling is scoped to active MT5 window
  @Override public void onInterrupt(){armed=false;status="متوقف شد";}
  @Override public void onDestroy(){connected=false;armed=false;handler.removeCallbacks(loop);super.onDestroy();}
  private static String str(CharSequence x){return x==null?"":x.toString();}
- private static QuoteParser.Field field(AccessibilityNodeInfo x){return new QuoteParser.Field(x.getViewIdResourceName(),str(x.getText()),str(x.getContentDescription()));}
+ private static QuoteParser.Field field(AccessibilityNodeInfo x){Rect r=new Rect();x.getBoundsInScreen(r);return new QuoteParser.Field(x.getViewIdResourceName(),str(x.getText()),str(x.getContentDescription()),r.left,r.top,r.right,r.bottom);}
  private static boolean collect(AccessibilityNodeInfo node,List<QuoteParser.Field> fields,int depth,int[] budget){
   if(node==null)return true;
   if(depth>8||--budget[0]<0)return false;
@@ -36,7 +38,7 @@ public final class QuoteService extends AccessibilityService {
  }
  private QuoteParser.Quote row(AccessibilityNodeInfo n){
   AccessibilityNodeInfo parent=n.getParent();
-  for(int depth=0;depth<3&&parent!=null;depth++){
+  for(int depth=0;depth<6&&parent!=null;depth++){
    AccessibilityNodeInfo next=null;
    try {
     // Do not inspect an entire window as a single quote row.
@@ -44,7 +46,7 @@ public final class QuoteService extends AccessibilityService {
     if(next==null)return null;
     List<QuoteParser.Field> fields=new ArrayList<>();
     if(collect(parent,fields,0,new int[]{64})){
-     QuoteParser.Quote q=QuoteParser.parse(fields);
+     QuoteParser.Quote q=QuoteParser.parseVisibleRow(fields);
      if(q!=null){next.recycle();return q;}
     }
    }finally{parent.recycle();}
@@ -62,7 +64,7 @@ public final class QuoteService extends AccessibilityService {
   try{
    if(!PKG.equals(str(root.getPackageName()))){status="منتظر صفحه فعال متاتریدر";last="";return;}
    List<AccessibilityNodeInfo> nodes=root.findAccessibilityNodeInfosByText(QuoteParser.SYMBOL);
-   if(nodes==null||nodes.isEmpty()){status="نماد XAUUSD.st در صفحه قابل خواندن پیدا نشد";last="";return;}
+   if(nodes==null||nodes.isEmpty()){status="نماد XAUUSD.st در صفحه قابل خواندن پیدا نشد";lastRead=status;last="";return;}
    QuoteParser.Quote found=null;boolean ambiguous=false;
    try{
     for(AccessibilityNodeInfo node:nodes){
@@ -74,7 +76,7 @@ public final class QuoteService extends AccessibilityService {
      }
     }
    }finally{for(AccessibilityNodeInfo node:nodes)node.recycle();}
-   if(found==null||ambiguous){status="نماد دیده شد، اما Bid/Ask با برچسب معتبر قابل استخراج نیست";last="";return;}
+   if(found==null||ambiguous){status="نماد دیده شد؛ جفت قیمت معتبر در ردیف قابل خواندن نیست";lastRead=status;last="";return;}
    String pair=found.bid.toPlainString()+","+found.ask.toPlainString();
    long now=System.currentTimeMillis();
    status="قیمت نمایان: "+pair+" | ثبت‌های این نشست: "+count;
@@ -86,7 +88,7 @@ public final class QuoteService extends AccessibilityService {
     if(f.length()==0)out.write("observed_device_epoch_ms,symbol,bid,ask,source\n".getBytes(StandardCharsets.UTF_8));
     out.write((now+","+QuoteParser.SYMBOL+","+pair+",MT5_ANDROID_VISIBLE_UI_NOT_TICK\n").getBytes(StandardCharsets.UTF_8));
    }
-   last=pair;lastAt=now;count++;status="قیمت نمایان: "+pair+" | ثبت‌های این نشست: "+count;
+   last=pair;lastAt=now;count++;status="قیمت نمایان: "+pair+" | ثبت‌های این نشست: "+count;lastRead=status;
   }finally{root.recycle();}
  }
 }
