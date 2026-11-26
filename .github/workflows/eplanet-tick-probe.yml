@@ -1,0 +1,179 @@
+name: Eplanet public Windows tick acquisition probe
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/eplanet-tick-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official Eplanet MT5 terminal and Python bridge
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $url = 'https://download.metatrader.com/cdn/web/eplanet.brokers.ltd/mt5/eplanet5setup.exe'
+          $exe = Join-Path $env:RUNNER_TEMP 'eplanet5setup.exe'
+          $dest = Join-Path $env:RUNNER_TEMP 'EplanetMT5'
+          Invoke-WebRequest -Uri $url -OutFile $exe
+          $sig = Get-AuthenticodeSignature $exe
+          if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch 'MetaQuotes') { throw 'Installer publisher/signature not verified' }
+          $p = Start-Process -FilePath $exe -ArgumentList @('/auto', "/path:`"$dest`"") -PassThru
+          $terminal = $null
+          for ($i=0; $i -lt 60; $i++) {
+            if (Test-Path (Join-Path $dest 'terminal64.exe')) { $terminal = Join-Path $dest 'terminal64.exe'; break }
+            $found = Get-ChildItem -Path $env:ProgramFiles -Filter terminal64.exe -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match 'eplanet' } | Select-Object -First 1
+            if ($found) { $terminal = $found.FullName; break }
+            Start-Sleep -Seconds 3
+          }
+          if (-not $terminal) { throw 'Official terminal not found after installer attempt' }
+          "MT5_TERMINAL=$terminal" >> $env:GITHUB_ENV
+          Write-Host ("Terminal file version: " + (Get-Item $terminal).VersionInfo.FileVersion)
+          Write-Host ("Runner session: " + (Get-Process -Id $PID).SessionId)
+          Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+          Start-Sleep -Seconds 5
+          python -m pip install MetaTrader5
+          if ($LASTEXITCODE -ne 0) { throw 'Python MT5 bridge installation failed' }
+      - name: Read-only connection and one-day tick probe
+        shell: pwsh
+        run: |
+          @'
+          import os, json, datetime, hashlib, sys, subprocess, time, ctypes
+          import MetaTrader5 as mt5
+          from pathlib import Path
+          report = {"symbol":"XAUUSD.st", "source":"Eplanet only", "raw_ticks_published":False, "orders_sent":0}
+          def stop(reason):
+              report["status"]=reason
+              Path("probe.json").write_text(json.dumps(report,indent=2),encoding="utf-8")
+              print(json.dumps(report))
+              sys.exit(1)
+          try:
+              report["bridge_version"]=mt5.__version__
+              report["attempts"]=[]
+              terminal=os.environ["MT5_TERMINAL"]
+              for portable in (True, False):
+                  args=[terminal]+(["/portable"] if portable else [])
+                  proc=subprocess.Popen(args, cwd=str(Path(terminal).parent))
+                  time.sleep(25)
+                  attempt={"portable":portable,"process_alive":proc.poll() is None}
+                  ok=mt5.initialize(terminal, portable=portable, timeout=120000)
+                  attempt["initialized"]=bool(ok)
+                  attempt["error_code"]=mt5.last_error()[0]
+                  report["attempts"].append(attempt)
+                  print(json.dumps(attempt),flush=True)
+                  if ok:
+                      break
+                  mt5.shutdown()
+                  subprocess.run(["taskkill","/F","/IM","terminal64.exe"],capture_output=True)
+                  time.sleep(5)
+              else:
+                  stop("terminal_initialization_failed_both_modes")
+              terminal_info=mt5.terminal_info()
+              report["connected"]=bool(terminal_info and terminal_info.connected)
+              if not report["connected"]:
+                  stop("no_connected_broker_session")
+              info=mt5.account_info()
+              if info is None:
+                  stop("no_authorized_demo_session")
+              if info.trade_mode != mt5.ACCOUNT_TRADE_MODE_DEMO or "eplanet" not in (info.server+" "+info.company).lower():
+                  stop("not_verified_eplanet_demo")
+              if not mt5.symbol_select("XAUUSD.st", True):
+                  stop("requested_symbol_unavailable")
+              start=datetime.datetime(2026,11,12,tzinfo=datetime.timezone.utc)
+              end=start+datetime.timedelta(days=1)
+              ticks=mt5.copy_ticks_range("XAUUSD.st",start,end-datetime.timedelta(milliseconds=1),mt5.COPY_TICKS_ALL)
+              if ticks is None or len(ticks)==0:
+                  report["mt5_error_code"]=mt5.last_error()[0]
+                  stop("no_ticks_returned")
+              report.update({"status":"sample_received_not_full_coverage", "count":len(ticks), "first_time_msc":int(ticks["time_msc"][0]),"last_time_msc":int(ticks["time_msc"][-1]),"sha256":hashlib.sha256(ticks.tobytes()).hexdigest(), "invalid_bid_ask":int(((ticks["bid"]<=0)|(ticks["ask"]<ticks["bid"])).sum())})
+              Path("probe.json").write_text(json.dumps(report,indent=2),encoding="utf-8")
+              print(json.dumps(report))
+          finally:
+              mt5.shutdown()
+          '@ | Set-Content -Encoding utf8 probe.py
+          python probe.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Native MQL5 fallback without Python IPC
+        if: failure() && env.MT5_TERMINAL != ''
+        shell: pwsh
+        env:
+          DEMO_LOGIN: ${{ secrets.EPLANET_DEMO_LOGIN }}
+          DEMO_PASSWORD: ${{ secrets.EPLANET_DEMO_INVESTOR_PASSWORD }}
+          DEMO_SERVER: ${{ secrets.EPLANET_DEMO_SERVER }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Split-Path $env:MT5_TERMINAL
+          Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+          $editor = Join-Path $root 'metaeditor64.exe'
+          if (-not (Test-Path $editor)) { throw 'Native compiler unavailable' }
+          $scripts = Join-Path $root 'MQL5\Scripts'
+          $files = Join-Path $root 'MQL5\Files'
+          New-Item -ItemType Directory -Force -Path $scripts,$files | Out-Null
+          $source = Join-Path $scripts 'AminReadOnlyTickProbe.mq5'
+          @'
+          #property strict
+          void Save(string status,int count,long first,long last,int error)
+          {
+             int h=FileOpen("amin_probe.csv",FILE_WRITE|FILE_CSV|FILE_ANSI,',');
+             if(h==INVALID_HANDLE) return;
+             FileWrite(h,"status","count","first_time_msc","last_time_msc","error","orders_sent");
+             FileWrite(h,status,count,first,last,error,0);
+             FileClose(h);
+          }
+          void OnStart()
+          {
+             for(int i=0;i<60 && !IsStopped() && !TerminalInfoInteger(TERMINAL_CONNECTED);i++) Sleep(1000);
+             if(!TerminalInfoInteger(TERMINAL_CONNECTED)) { Save("no_connected_broker_session",0,0,0,0); return; }
+             string broker=AccountInfoString(ACCOUNT_COMPANY)+" "+AccountInfoString(ACCOUNT_SERVER);
+             StringToLower(broker);
+             if(AccountInfoInteger(ACCOUNT_TRADE_MODE)!=ACCOUNT_TRADE_MODE_DEMO || StringFind(broker,"eplanet")<0)
+             { Save("not_verified_eplanet_demo",0,0,0,0); return; }
+             if(!SymbolSelect("XAUUSD.st",true)) { Save("symbol_unavailable",0,0,0,GetLastError()); return; }
+             ulong from=(ulong)StringToTime("2026.11.12 00:00")*1000;
+             ulong to=from+86400000-1;
+             MqlTick ticks[];
+             ResetLastError();
+             int n=CopyTicksRange("XAUUSD.st",ticks,COPY_TICKS_ALL,from,to);
+             int err=GetLastError();
+             if(n<=0) { Save("no_ticks_returned",n,0,0,err); return; }
+             Save("sample_received_not_full_coverage",n,ticks[0].time_msc,ticks[n-1].time_msc,err);
+          }
+          '@ | Set-Content -Encoding unicode $source
+          $log = Join-Path $env:RUNNER_TEMP 'amin-compile.log'
+          $compiler = Start-Process -FilePath $editor -ArgumentList @('/portable', ('/compile:"' + $source + '"'), ('/log:"' + $log + '"')) -PassThru
+          if (-not $compiler.WaitForExit(60000)) { $compiler.Kill(); throw 'Native compilation timed out' }
+          if (-not (Test-Path (Join-Path $scripts 'AminReadOnlyTickProbe.ex5'))) { if (Test-Path $log) { Get-Content $log -Tail 15 }; throw 'Native script compilation failed' }
+          $cfg = Join-Path $env:RUNNER_TEMP 'amin-native.ini'
+          $output = Join-Path $files 'amin_probe.csv'
+          $lines = @('[Common]','KeepPrivate=0','NewsEnable=0','[Experts]','Enabled=0','AllowLiveTrading=0','AllowDllImport=0','[StartUp]','Script=AminReadOnlyTickProbe','Symbol=XAUUSD.st','Period=M15','ShutdownTerminal=1')
+          if ($env:DEMO_LOGIN -and $env:DEMO_PASSWORD -and $env:DEMO_SERVER) {
+            if ($env:DEMO_LOGIN -notmatch '^\d+$' -or $env:DEMO_SERVER -match '[\r\n]' -or $env:DEMO_PASSWORD -match '[\r\n]') { throw 'Invalid secret format' }
+            $lines = @('[Common]',('Login='+$env:DEMO_LOGIN),('Password='+$env:DEMO_PASSWORD),('Server='+$env:DEMO_SERVER)) + $lines[1..($lines.Count-1)]
+          } else { Write-Host 'No dedicated demo credentials configured; native probe can only use an existing authorized session.' }
+          try {
+            $lines | Set-Content -Encoding unicode $cfg
+            $proc=Start-Process -FilePath $env:MT5_TERMINAL -ArgumentList @('/portable',('/config:"'+$cfg+'"')) -PassThru
+            for($i=0;$i -lt 100 -and -not (Test-Path $output);$i++) { Start-Sleep -Seconds 2 }
+            if(Test-Path $output) { Copy-Item $output native_probe.csv; Get-Content native_probe.csv }
+            else { 'status,orders_sent' + "`n" + 'native_script_not_executed_or_no_chart,0' | Set-Content native_probe.csv; Write-Host 'Native script result missing; account/chart startup not verified' }
+          } finally {
+            Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+            Remove-Item $cfg -Force -ErrorAction SilentlyContinue
+          }
+      - name: Preserve only non-sensitive diagnostic metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eplanet-tick-probe-report
+          path: |
+            probe.json
+            native_probe.csv
+          if-no-files-found: warn
+          retention-days: 7
