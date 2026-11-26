@@ -10,7 +10,7 @@ permissions:
 jobs:
   probe:
     runs-on: windows-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - uses: actions/setup-python@v5
         with:
@@ -35,13 +35,17 @@ jobs:
           }
           if (-not $terminal) { throw 'Official terminal not found after installer attempt' }
           "MT5_TERMINAL=$terminal" >> $env:GITHUB_ENV
+          Write-Host ("Terminal file version: " + (Get-Item $terminal).VersionInfo.FileVersion)
+          Write-Host ("Runner session: " + (Get-Process -Id $PID).SessionId)
+          Get-Process terminal64 -ErrorAction SilentlyContinue | Stop-Process -Force
+          Start-Sleep -Seconds 5
           python -m pip install MetaTrader5
           if ($LASTEXITCODE -ne 0) { throw 'Python MT5 bridge installation failed' }
       - name: Read-only connection and one-day tick probe
         shell: pwsh
         run: |
           @'
-          import os, json, datetime, hashlib, sys
+          import os, json, datetime, hashlib, sys, subprocess, time, ctypes
           import MetaTrader5 as mt5
           from pathlib import Path
           report = {"symbol":"XAUUSD.st", "source":"Eplanet only", "raw_ticks_published":False, "orders_sent":0}
@@ -51,9 +55,30 @@ jobs:
               print(json.dumps(report))
               sys.exit(1)
           try:
-              if not mt5.initialize(os.environ["MT5_TERMINAL"], portable=True, timeout=60000):
-                  report["mt5_error_code"]=mt5.last_error()[0]
-                  stop("terminal_initialization_failed")
+              report["bridge_version"]=mt5.__version__
+              report["attempts"]=[]
+              terminal=os.environ["MT5_TERMINAL"]
+              for portable in (True, False):
+                  args=[terminal]+(["/portable"] if portable else [])
+                  proc=subprocess.Popen(args, cwd=str(Path(terminal).parent))
+                  time.sleep(25)
+                  attempt={"portable":portable,"process_alive":proc.poll() is None}
+                  ok=mt5.initialize(terminal, portable=portable, timeout=120000)
+                  attempt["initialized"]=bool(ok)
+                  attempt["error_code"]=mt5.last_error()[0]
+                  report["attempts"].append(attempt)
+                  print(json.dumps(attempt),flush=True)
+                  if ok:
+                      break
+                  mt5.shutdown()
+                  subprocess.run(["taskkill","/F","/IM","terminal64.exe"],capture_output=True)
+                  time.sleep(5)
+              else:
+                  stop("terminal_initialization_failed_both_modes")
+              terminal_info=mt5.terminal_info()
+              report["connected"]=bool(terminal_info and terminal_info.connected)
+              if not report["connected"]:
+                  stop("no_connected_broker_session")
               info=mt5.account_info()
               if info is None:
                   stop("no_authorized_demo_session")
