@@ -1,0 +1,7 @@
+plugins { id 'com.android.application' version '8.5.2' }
+android {
+ namespace 'ir.amin.mt5quotereader'
+ compileSdk 34
+ defaultConfig { applicationId 'ir.amin.mt5quotereader'; minSdk 26; targetSdk 34; versionCode 2; versionName '0.2-research' }
+ compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}

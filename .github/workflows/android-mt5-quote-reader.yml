@@ -1,0 +1,63 @@
+name: Android MT5 visible quote reader APK
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/android-mt5-quote-reader/**'
+      - '.github/workflows/android-mt5-quote-reader.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: research/android-mt5-quote-reader
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Test conservative parser
+        run: |
+          mkdir -p /tmp/amin-parser
+          javac -encoding UTF-8 -d /tmp/amin-parser app/src/main/java/ir/amin/mt5quotereader/QuoteParser.java tests/ParserTest.java
+          java -cp /tmp/amin-parser ir.amin.mt5quotereader.ParserTest
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+      - name: Ensure Android SDK using runner's existing tools
+        run: |
+          set -e
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          if [ ! -f "$ANDROID_HOME/platforms/android-34/android.jar" ] || [ ! -x "$ANDROID_HOME/build-tools/34.0.0/apksigner" ]; then
+            "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platforms;android-34" "build-tools;34.0.0"
+          fi
+          test -f "$ANDROID_HOME/platforms/android-34/android.jar"
+          test -x "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+      - name: Build signed debug APK
+        run: gradle --no-daemon :app:assembleDebug
+      - name: Verify APK and report checksum
+        run: |
+          "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+          sha256sum app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amin-mt5-visible-quote-reader-debug
+          path: research/android-mt5-quote-reader/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Export Android SDK signature tool for local owner signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apksigner-tool-34
+          path: /usr/local/lib/android/sdk/build-tools/34.0.0/lib/apksigner.jar
+          if-no-files-found: error
+          retention-days: 7
